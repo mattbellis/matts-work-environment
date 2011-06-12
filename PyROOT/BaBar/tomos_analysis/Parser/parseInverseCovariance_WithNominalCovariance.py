@@ -1003,7 +1003,6 @@ for i in range(0,numUsIs):
     for j in range(0,numUsIs):
         UsIsInvCovMatrix[i][j] = scipyInvCovMatrix[i,j]
         UsIsDirectInvCovMatrix[i][j] = scipyDirectInvCovMatrix[i,j]
-
 #        UsIsInvCovMatrix[i][j] = scipyInvCovMatrix[i][j]
 
 print "---------------------------------------------------------"
