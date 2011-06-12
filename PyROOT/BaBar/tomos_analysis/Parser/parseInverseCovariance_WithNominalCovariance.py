@@ -971,6 +971,18 @@ print "UsIs Direct Covariance Matrix:"
 print "---------------------------------------------------------"
 printSquareMatrix(UsIsDirectCovMatrix,False)
 
+################################################################################
+# Try scaling the cov matrix?  Bellis
+################################################################################
+print " ---------- Matt's debug ---------- Bellis "
+for i in range(0,26):
+    for j in range(0,26):
+        num = -999.99999999999999
+        if UsIsCorMatrix[i][j]!=0.0 and nominalUsIsCorrMatrixStat[i][j]!=0:
+            num = nominalUsIsCorrMatrixStat[i][j]/UsIsCorMatrix[i][j]
+            UsIsDirectCovMatrix[i][j] /= num
+################################################################################
+
 
 numpyCovMatrix = numpy.array(UsIsCovMatrix)
 scipyCovMatrix = mat(numpyCovMatrix)
@@ -1029,7 +1041,7 @@ elif FIT_TO_DIRECT_MATRIX:
             if UsIsCovMatrix[i][j]!=0.0:
                 othernum = nominalUsIsCovMatrixStat[i][j]/UsIsCovMatrix[i][j]
             #print "%10.5f %10.5f %10.5f\t%10.5f %10.5f %10.5f" % (scipyTotNomInvCovMatrix[i][j],scipyDirectInvCovMatrix[i][j],othernum,nominalUsIsCorrMatrixStat[i][j],UsIsCorMatrix[i][j], num)
-            print "%10.5f %10.5f %10.5f\t%10.5f %10.5f %10.5f" % (nominalUsIsCovMatrixStat[i][j],UsIsCovMatrix[i][j],othernum,nominalUsIsCorrMatrixStat[i][j],UsIsCorMatrix[i][j], num)
+            print "%10.5f %10.5f %10.5f\t%10.5f %10.5f %10.5f" % (nominalUsIsCovMatrixStat[i][j],UsIsDirectCovMatrix[i][j],othernum,nominalUsIsCorrMatrixStat[i][j],UsIsCorMatrix[i][j], num)
 
             '''
             ########## Testing out if this makes a difference ##########
