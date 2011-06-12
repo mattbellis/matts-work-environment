@@ -1016,7 +1016,6 @@ print "---------------------------------------------------------"
 printSquareMatrix(UsIsDirectInvCovMatrix,False)
 
 
-
 if FIT_TO_NOMINAL:
     UIVarVals = nominalUIVarVals
     scipyInvCovMatrix = scipyTotNomInvCovMatrix
