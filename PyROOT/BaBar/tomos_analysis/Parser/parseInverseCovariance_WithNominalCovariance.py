@@ -1024,9 +1024,19 @@ elif FIT_TO_DIRECT_MATRIX:
             num = -999.99999999999999
             if UsIsCorMatrix[i][j]!=0.0:
                 num = nominalUsIsCorrMatrixStat[i][j]/UsIsCorMatrix[i][j]
-            othernum = scipyTotNomInvCovMatrix[i][j]/scipyDirectInvCovMatrix[i][j]
-            print "%10.5f %10.5f %10.5f\t%10.5f %10.5f %10.5f" % (scipyTotNomInvCovMatrix[i][j],scipyDirectInvCovMatrix[i][j],othernum,nominalUsIsCorrMatrixStat[i][j],UsIsCorMatrix[i][j], num)
+            #othernum = scipyTotNomInvCovMatrix[i][j]/scipyDirectInvCovMatrix[i][j]
+            othernum = -999.999999999
+            if UsIsCovMatrix[i][j]!=0.0:
+                othernum = nominalUsIsCovMatrixStat[i][j]/UsIsCovMatrix[i][j]
+            #print "%10.5f %10.5f %10.5f\t%10.5f %10.5f %10.5f" % (scipyTotNomInvCovMatrix[i][j],scipyDirectInvCovMatrix[i][j],othernum,nominalUsIsCorrMatrixStat[i][j],UsIsCorMatrix[i][j], num)
+            print "%10.5f %10.5f %10.5f\t%10.5f %10.5f %10.5f" % (nominalUsIsCovMatrixStat[i][j],UsIsCovMatrix[i][j],othernum,nominalUsIsCorrMatrixStat[i][j],UsIsCorMatrix[i][j], num)
 
+            '''
+            ########## Testing out if this makes a difference ##########
+            # Fails #
+            if UsIsCovMatrix[i][j]!=0.0:
+                scipyInvCovMatrix[i][j] /= othernum
+            '''
 
 
 
