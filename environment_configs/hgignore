@@ -1,3 +1,6 @@
+# use glob syntax.
+syntax: glob
+
 *.pyc
 *.pdf
 *.ps
