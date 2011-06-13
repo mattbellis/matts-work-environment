@@ -1003,7 +1003,6 @@ for i in range(0,numUsIs):
     for j in range(0,numUsIs):
         UsIsInvCovMatrix[i][j] = scipyInvCovMatrix[i,j]
         UsIsDirectInvCovMatrix[i][j] = scipyDirectInvCovMatrix[i,j]
-
 #        UsIsInvCovMatrix[i][j] = scipyInvCovMatrix[i][j]
 
 print "---------------------------------------------------------"
@@ -1015,7 +1014,6 @@ print "---------------------------------------------------------"
 print "UsIs Direct Inverse Covariance Matrix:"
 print "---------------------------------------------------------"
 printSquareMatrix(UsIsDirectInvCovMatrix,False)
-
 
 
 if FIT_TO_NOMINAL:
