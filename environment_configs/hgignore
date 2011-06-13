@@ -1,0 +1,13 @@
+*.pyc
+*.pdf
+*.ps
+*.eps
+*.root
+*.log
+*.dat
+*.o
+*.so
+*.la
+*/.svn/*
+*/.git/*
+*/CVS
