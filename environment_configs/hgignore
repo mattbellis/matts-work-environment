@@ -1,16 +1,23 @@
 # use glob syntax.
 syntax: glob
 
-*.pyc
-*.pdf
-*.ps
-*.eps
 *.root
-*.log
-*.dat
+*.pyc
 *.o
 *.so
+*.a
 *.la
+
+*.dat
+*.log
+
+*.pdf
+*.eps
+*.ps
+*.png
+*.jpg
+*.gif
+
 */.svn/*
 */.git/*
 */CVS
