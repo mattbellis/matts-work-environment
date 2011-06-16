@@ -67,7 +67,7 @@ int main() {
     // Create our TMVA factory and an output file.
     ////////////////////////////////////////////////////////////////////////////
     TFile *fout =new TFile("TMVA.root","RECREATE");
-    TMVA::Factory factory("Analysis", fout, "");
+    TMVA::Factory factory("Analysis", fout, "!V:!Silent:Color:DrawProgressBar:Transformations=I;D;P;G,D:AnalysisType=Classification");
     factory.SetVerbose();
 
     ////////////////////////////////////////////////////////////////////////////
@@ -95,7 +95,7 @@ int main() {
     ////////////////////////////////////////////////////////////////////////////
     factory.PrepareTrainingAndTestTree("", "");
 
-    //factory.BookMethod(TMVA::Types::kCuts,"Cuts","!H:!V:FitMethod=MC:EffSel:SampleSize=200000:VarProp=FSmart");
+    factory.BookMethod(TMVA::Types::kCuts,"Cuts","!H:!V:FitMethod=MC:EffSel:SampleSize=10000:VarProp=FSmart");
     //factory.BookMethod(TMVA::Types::kLD,"LD","H:!V:VarTransform=None:CreateMVAPdfs:PDFInterpolMVAPdf=Spline2:NbinsMVAPdf=50:NsmoothMVAPdf=10");
     factory.BookMethod(TMVA::Types::kLikelihood,"Likelihood","H:!V:!TransformOutput:PDFInterpol=Spline2:NSmoothSig[0]=20:NSmoothBkg[0]=20:NSmoothBkg[1]=10:NSmooth=1:NAvEvtPerBin=50");
 
