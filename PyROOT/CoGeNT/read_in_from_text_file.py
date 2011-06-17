@@ -27,7 +27,7 @@ def main():
     x.setRange("sub_x1",0.5,0.9)
     #x.setRange("sub_x1",1.6,3.0)
     x.setRange("sub_x2",0.5,3.0)
-    x.setRange("sub_x3",0.0,0.5)
+    x.setRange("sub_x3",0.0,0.4)
 
     for i in range(0,6):
         name = "sub_t%d" % (i)
