@@ -1,0 +1,23 @@
+# use glob syntax.
+syntax: glob
+
+*.root
+*.pyc
+*.o
+*.so
+*.a
+*.la
+
+*.dat
+*.log
+
+*.pdf
+*.eps
+*.ps
+*.png
+*.jpg
+*.gif
+
+*/.svn/*
+*/.git/*
+*/CVS
