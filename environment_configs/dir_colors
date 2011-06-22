@@ -49,7 +49,7 @@ EIGHTBIT 1
 # 40=black 41=red 42=green 43=yellow 44=blue 45=magenta 46=cyan 47=white
 NORMAL 00	# global default, although everything should be something.
 FILE 00 	# normal file
-DIR 00;34 	# directory
+DIR 00;43 	# directory
 #DIR 01;41 	# directory
 LINK 01;36 	# symbolic link
 FIFO 40;33	# pipe
