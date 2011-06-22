@@ -27,12 +27,12 @@ def main():
     x.setRange("sub_x1",0.5,0.9)
     #x.setRange("sub_x1",1.6,3.0)
     x.setRange("sub_x2",0.5,3.0)
-    x.setRange("sub_x3",0.0,0.4)
+    x.setRange("sub_x3",0.0,0.5)
 
-    for i in range(0,6):
+    for i in range(0,tbins):
         name = "sub_t%d" % (i)
-        lo = i*365.0/6.0;
-        hi = (i+1)*365.0/6.0;
+        lo = i*tmax/tbins;
+        hi = (i+1)*tmax/tbins;
         t.setRange(name,lo,hi)
 
     ############################################################################
@@ -71,7 +71,7 @@ def main():
 
     data_reduced_t = []
     data_reduced_t_x = []
-    for i in range(0,6):
+    for i in range(0,tbins):
         tname = "sub_t%d" % (i)
         data_reduced_t.append(data.reduce(RooFit.CutRange(tname)))
         data_reduced_t_x.append([])
@@ -90,7 +90,7 @@ def main():
     # x
     x.setBins(240)
     xframes = []
-    for i in xrange(6):
+    for i in xrange(tbins):
         xframes.append([])
         for j in xrange(4):
             xframes[i].append(x.frame(RooFit.Title("Plot of ionization energy")))
@@ -132,7 +132,7 @@ def main():
     # Make canvases.
     ############################################################################
     can_x = []
-    for i in range(0,2):
+    for i in range(0,int((tbins-1)/3+1)):
         name = "can_x_%s" % (i)
         can_x.append(TCanvas(name,name,10+10*i,10+10*i,1200,900))
         can_x[i].SetFillColor(0)
@@ -142,11 +142,17 @@ def main():
     can_t.SetFillColor(0)
     can_t.Divide(2,2)
 
-    for i in xrange(6):
+    for i in xrange(tbins):
         for j in xrange(4):
             pad_index = (i%3)*4+(j+1)
             can_x[i/3].cd(pad_index)
             xframes[i][j].GetXaxis().SetRangeUser(0.0,3.0)
+            if j==0:
+                xframes[i][j].GetYaxis().SetRangeUser(0.0,30.0)
+            elif j==1:
+                xframes[i][j].GetYaxis().SetRangeUser(0.0,16.0)
+            elif j==2:
+                xframes[i][j].GetYaxis().SetRangeUser(0.0,20.0)
             xframes[i][j].Draw()
             gPad.Update()
 
