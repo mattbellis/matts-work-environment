@@ -1,0 +1,10 @@
+Mrxvt.saveLines:       2000
+#Mrxvt.geometry:        160x45
+Mrxvt.geometry:        100x20
+Mrxvt.background:      black
+Mrxvt.foreground:      white
+#Mrxvt.background:      white
+#Mrxvt.foreground:      black
+Mrxvt.font:             10x20
+#-bg black -fg white -fn 10x20
+

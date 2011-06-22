@@ -1,0 +1,149 @@
+#!/usr/bin/ruby1.8
+
+
+##  CoherenceRule class ##
+class CoherenceRule
+  attr_accessor :rule
+
+  def initialize(rule)
+    @rule = rule
+  end
+
+  def to_s
+    puts "\t" + rule
+  end
+end
+
+##  ParameterRule class ##
+class ParameterRule
+  attr_accessor :rule, :freedom, :range, :startingValue, :func, :derivative
+
+  def initialize(rule, freedom, range, startingValue, func, derivative)
+    @rule = rule
+    @freedom = freedom
+    @range = range
+    @startingValue = startingValue
+    @func = func
+    @derivative = derivative
+  end
+
+  def to_s
+    puts "\t" + rule + " " + freedom + " " + range + " " + startingValue + " " + func + " " + derivative
+  end
+
+  def dumpForList
+    puts freedom + "\t" + range + "\t" + startingValue + "\t" + rule
+  end
+
+  def dumpForLikelihoodFunction
+    puts "\t" + rule + "\t" + func + "\t" + derivative
+  end
+
+end
+
+
+## Amp Rule ##
+class AmpRule
+  attr_accessor :rule, :coherenceRule, :parRules
+
+  def initialize
+    @rule = ""
+    @coherenceRule = ""
+    @parRules = [""]
+  end
+
+  def to_s
+    parRules.each do |r|
+      r.to_s
+    end
+    coherenceRule.to_s
+  end
+
+end
+
+
+## Clas amp ##
+class Amp
+  attr_accessor :name, :rule, :matchesRule
+
+  def initialize(name)
+    @name = name
+    @rule = AmpRule.new
+    @matchesRule = false
+  end
+
+  def dumpForLikelihoodFunction
+    puts name
+    puts rule.parRules.size
+    rule.parRules.each do |rp|
+        rp.dumpForLikelihoodFunction
+    end
+  end
+
+  def matchRule(testRule)
+    # Define the tag/value structure of the amp, as well
+    # as the rule
+    ampRe =  /([\w]+)=([\+\w.-]+)[:".amps"]/
+    ruleRe = /([\w]+)=([\+\w.-]+)/
+    @matchesRule = false
+    #puts rule.rule + "\t" + name
+    # Loop over the tags in the rule
+    testRule.rule.scan(ruleRe).each do |j|
+      foundOne = false
+      # Loop over the tags in the amp and try to match up
+      # both the tag and value
+      name.scan(ampRe).each do |i|
+        if i[0] == j[0] && i[1].rindex(j[1]) != nil 
+          foundOne = true
+          break
+        end
+      end
+      if foundOne
+        @matchesRule = true
+      else
+        @matchesRule = false
+        break
+      end
+    end
+    if matchesRule
+      @rule = testRule
+      setFromRule(rule)
+    end
+  end
+
+  ## To set the values from a rule
+  def setFromRule(r)
+    @rule = r
+    # Define the tag/value structure of the amp, as well
+    # as the rule
+    ampRe =  /([\w]+)=([\+\w.-]+)[:".amps"]/
+    count = 0
+    #rule.parRules.each do |parRules|
+    while count < rule.parRules.size 
+      dummy = ""
+      # Loop over the par rules terms
+      rule.parRules[count].rule.split('.').each do |x|
+        foundOne = false
+        # Loop over the amp name and grab what we will
+        name.scan(ampRe).each do |i|
+          if i[0] == x
+            dummy += i[1] + "."
+            foundOne = true
+          end
+        end
+        if !foundOne
+          dummy += x + "."
+        end
+      end
+      # Set the new names
+      @rule.parRules[count].rule = dummy.chop
+      count+=1
+    end
+  end
+
+  def to_s
+  end
+end
+
+
+
