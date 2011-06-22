@@ -46,7 +46,9 @@ USE_COLOR = False
 # Change this if I want to fit to nominal
 ################################################################################
 FIT_TO_NOMINAL = False
-USENOMSTATONLY = True
+#FIT_TO_NOMINAL = True
+#USENOMSTATONLY = True
+USENOMSTATONLY = False
 
 ################################################################################
 # False if I want to calculate my own matrix
@@ -69,6 +71,9 @@ NUMREPITITIONS = 10
 #NUMREPITITIONS = 1
 
 CONSTRAIN_UPP = True
+##### Original value ########
+#G_EPSILON = 0.0001
+##### Matt Bellis change ######
 G_EPSILON = 0.0001
 
 RANDSEED = 100
@@ -844,6 +849,10 @@ printSquareMatrix(nominalUsIsCovMatrixSyst,USE_COLOR)
 nominalUIVarVals = []
 for i in range(0,numUsIs):
     nominalUIVarVals.append(nominalNonHumanReadableDict[UIVars[i]][0])
+    print ' ------ Matts debug UIVars fill Nominal------- '
+    print UIVars[i]
+    print nominalNonHumanReadableDict[UIVars[i]][0]
+    print ' ------ Matts debug UIVars fill ------- '
 
 
 numpyNomStatCovMatrix = numpy.array(nominalUsIsCovMatrixStat)
@@ -955,6 +964,11 @@ for i in range(0,numUsIs):
 UIVarVals = []
 for i in range(0,numUsIs):
     UIVarVals.append(varVals[UIVarMasterIndex[UIVars[i]]])
+    print ' ------ Matts debug UIVars fill standard ------- '
+    print UIVars[i]
+    print UIVarMasterIndex[UIVars[i]]
+    print varVals[UIVarMasterIndex[UIVars[i]]]
+    print ' ------ Matts debug UIVars fill ------- '
 
 print "---------------------------------------------------------"
 print "UsIs Correlation Matrix:"
@@ -974,6 +988,7 @@ printSquareMatrix(UsIsDirectCovMatrix,False)
 ################################################################################
 # Try scaling the cov matrix?  Bellis
 ################################################################################
+'''
 print " ---------- Matt's debug ---------- Bellis "
 for i in range(0,26):
     for j in range(0,26):
@@ -981,6 +996,7 @@ for i in range(0,26):
         if UsIsCorMatrix[i][j]!=0.0 and nominalUsIsCorrMatrixStat[i][j]!=0:
             num = nominalUsIsCorrMatrixStat[i][j]/UsIsCorMatrix[i][j]
             UsIsDirectCovMatrix[i][j] /= num
+'''
 ################################################################################
 
 
@@ -1028,6 +1044,7 @@ if FIT_TO_NOMINAL:
     #scipyInvCovMatrix = scipyTotNomInvCovMatrix
 elif FIT_TO_DIRECT_MATRIX:
     scipyInvCovMatrix = scipyDirectInvCovMatrix
+    '''
     print " ---------- Matt's debug ---------- Bellis "
     for i in range(0,26):
         for j in range(0,26):
@@ -1041,14 +1058,19 @@ elif FIT_TO_DIRECT_MATRIX:
             #print "%10.5f %10.5f %10.5f\t%10.5f %10.5f %10.5f" % (scipyTotNomInvCovMatrix[i][j],scipyDirectInvCovMatrix[i][j],othernum,nominalUsIsCorrMatrixStat[i][j],UsIsCorMatrix[i][j], num)
             print "%10.5f %10.5f %10.5f\t%10.5f %10.5f %10.5f" % (nominalUsIsCovMatrixStat[i][j],UsIsDirectCovMatrix[i][j],othernum,nominalUsIsCorrMatrixStat[i][j],UsIsCorMatrix[i][j], num)
 
-            '''
             ########## Testing out if this makes a difference ##########
             # Fails #
             if UsIsCovMatrix[i][j]!=0.0:
                 scipyInvCovMatrix[i][j] /= othernum
-            '''
+    '''
 
 
+print " -------- Matt's debug scipy -----------"
+print scipyInvCovMatrix
+print " -------- Matt's debug scipy -----------"
+print " -------- Matt's debug uivarvals -----------"
+print UIVarVals 
+print " -------- Matt's debug uivarvals -----------"
 
 
 ################################################################################
@@ -1181,6 +1203,7 @@ def calcChi2(cur_alpha,cur_beta,cur_Tp,cur_Tm,cur_Tz,cur_Pp,cur_Pm):
     diffVec = mat(tempVec)
 
     chi2 = diffVec * scipyInvCovMatrix * diffVec.T
+    #print chi2
     chi2 = chi2[0,0]
 
     return chi2, curUPpVal
@@ -1227,7 +1250,9 @@ def fcn( npar, gin, f, par, iflag ):
      chisq = float(chisq)
      if CONSTRAIN_UPP:
          epsilon = G_EPSILON
-         chisq = chisq + ((UPp_scan-1.0)/epsilon)**2
+         constraint = ((UPp_scan-1.0)/epsilon)**2
+         #print "MYCHI2: %f %f %f" % (chisq, constraint,chisq+constraint)
+         chisq += constraint
 
 #     print UPp_scan
 #     print chisq
@@ -1375,6 +1400,7 @@ def testfit(initVector):
                                   Tz_temp,
                                   Pp_temp,
                                   Pm_temp)
+    #tempchisq = float(tempchisq)
     tempchisq = float(tempchisq)
     if CONSTRAIN_UPP:
         tempepsilon = G_EPSILON
