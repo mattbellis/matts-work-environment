@@ -27,7 +27,7 @@ def main():
     x.setRange("sub_x1",0.5,0.9)
     #x.setRange("sub_x1",1.6,3.0)
     x.setRange("sub_x2",0.5,3.0)
-    x.setRange("sub_x3",0.0,0.4)
+    x.setRange("sub_x3",0.0,0.5)
 
     for i in range(0,tbins):
         name = "sub_t%d" % (i)
@@ -148,7 +148,9 @@ def main():
             can_x[i/3].cd(pad_index)
             xframes[i][j].GetXaxis().SetRangeUser(0.0,3.0)
             if j==0:
-                xframes[i][j].GetYaxis().SetRangeUser(0.0,90.0)
+                xframes[i][j].GetYaxis().SetRangeUser(0.0,30.0)
+            elif j==1:
+                xframes[i][j].GetYaxis().SetRangeUser(0.0,16.0)
             elif j==2:
                 xframes[i][j].GetYaxis().SetRangeUser(0.0,20.0)
             xframes[i][j].Draw()
