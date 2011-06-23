@@ -1,15 +1,118 @@
-#!/usr/bin/env python
+#########!/usr/bin/env python
 
 # import some modules
 import os
 import sys
 import math
-from math import *
 from optparse import OptionParser
 
-# For TMVA
-from array import array
+from color_palette import set_palette
 
+from ROOT import TLorentzVector
+
+PROTON_MASS = 0.938272
+PIC_MASS = 0.13957
+KC_MASS = 0.493677
+
+################################################################################
+################################################################################
+def calc_lambdac_masses(ntrks,E,px,py,pz,Q):
+
+    masses = []
+    charges = []
+    lambdacs = []
+
+    npos = 0
+    nneg = 0
+
+    pos_indices = []
+    neg_indices = []
+
+    proton = TLorentzVector()
+    pip = TLorentzVector()
+    Km = TLorentzVector()
+    lambdac = TLorentzVector()
+
+    if ntrks>=3:
+
+        for i in xrange(ntrks):
+
+            if Q[i]>0:
+                pos_indices.append(i)
+            elif Q[i]<0:
+                neg_indices.append(i)
+
+        npos = len(pos_indices)
+        nneg = len(neg_indices)
+
+        if npos>=2 and nneg>=1:
+
+            # Search for the Lambdac+
+            # Loop over the positive particles
+            for n,i in enumerate(pos_indices):
+
+                for n_plus_one in range(n+1,npos):
+
+                    # Loop over the negative particles
+                    for k in neg_indices:
+
+                        j = pos_indices[n_plus_one]
+
+                        Km.SetXYZM(px[k],py[k],pz[k],KC_MASS)
+
+                        # Try both combinations of pi+ and proton.
+                        for c in range(0,2):
+                            if c==0:
+                                proton.SetXYZM(px[i],py[i],pz[i],PROTON_MASS)
+                                pip.SetXYZM(px[j],py[j],pz[j],PIC_MASS)
+                            else:
+                                proton.SetXYZM(px[j],py[j],pz[j],PROTON_MASS)
+                                pip.SetXYZM(px[i],py[i],pz[i],PIC_MASS)
+
+
+                            lambdac = proton+pip+Km
+                            lambdacs.append(lambdac)
+
+                            masses.append(lambdac.M())
+                            charges.append(+1)
+
+        if npos>=1 and nneg>=2:
+
+            # Search for the Lambdac+
+            # Loop over the positive particles
+            for n,i in enumerate(neg_indices):
+
+                for n_plus_one in range(n+1,nneg):
+
+                    # Loop over the negative particles
+                    for k in pos_indices:
+
+                        j = neg_indices[n_plus_one]
+
+                        Km.SetXYZM(px[k],py[k],pz[k],KC_MASS)
+
+                        # Try both combinations of pi+ and proton.
+                        for c in range(0,2):
+                            if c==0:
+                                proton.SetXYZM(px[i],py[i],pz[i],PROTON_MASS)
+                                pip.SetXYZM(px[j],py[j],pz[j],PIC_MASS)
+                            else:
+                                proton.SetXYZM(px[j],py[j],pz[j],PROTON_MASS)
+                                pip.SetXYZM(px[i],py[i],pz[i],PIC_MASS)
+
+
+                            lambdac = proton+pip+Km
+                            lambdacs.append(lambdac)
+
+                            masses.append(lambdac.M())
+                            charges.append(-1)
+
+
+
+    return masses, charges, lambdacs
+
+################################################################################
+################################################################################
 
 def main():
     ################################################################################
@@ -20,9 +123,9 @@ def main():
     cuts_to_text = []
     #########################################
     parser = OptionParser()
-    parser.add_option("-t", "--type", dest="type", default="mc", \
+    parser.add_option("-t", "--type", dest="type", default="generic", \
             help="Display TYPE of histograms", metavar="TYPE")
-    parser.add_option("-n", "--ntuplename", dest="ntuplename", default="T", \
+    parser.add_option("-n", "--ntuplename", dest="ntuplename", default="ntp1", \
             help="Name of the ntuple to grab (ntp1)", metavar="NTUPLENAME")
     parser.add_option("-b", "--batch", action="store_true", dest="batch", \
             default=False, help="Run in batch mode and exit")
@@ -53,7 +156,7 @@ def main():
     max = 1e9
     numntuples = 1
     ncuts = 32
-    type = "mc"
+    type = "generic"
     ntuplename = "ntp1"
     tag = ""
     plot_ext = ""
@@ -87,8 +190,8 @@ def main():
     cm2microns = 1e4
 
     numhistos = 24
-    if (type == "mc"):
-      numhistos = 2
+    if (type == "generic"):
+      numhistos = 7
     elif (type == "kin"):
       numhistos = 4
     elif (type == "vtx"):
@@ -101,16 +204,11 @@ def main():
     #################
     # Remember where we are
     #################
-    home = os.environ["HOME"]
-    pwd = os.environ["HOME"] + "/PyRoot/dilepTreeHistoCreator/"
+    pwd = os.getcwd()
 
     import ROOT
-    from ROOT import *
-
-    import myPIDselector
-    from myPIDselector import *
-
-    from color_palette import *
+    from ROOT import TFile, gStyle, TChain, TTree
+    from ROOT import TCanvas, gPad, TLegend
 
     #gStyle.SetOptStat(111111)
     gStyle.SetOptStat(0)
@@ -121,7 +219,7 @@ def main():
     # Import the histos def file
     ##########################################
     histos_to_dump_to_text = []
-    if type == "mc":
+    if type == "generic":
         histos_to_dump_to_text = []
     elif type == "kin":
         histos_to_dump_to_text = []
@@ -141,8 +239,10 @@ def main():
 
     #########################################
     #########################################
-    from histos_def import *
+    from histos_def import myHistos
 
+    print type
+    print numhistos
     h = myHistos(type, numntuples, numhistos, ncuts)
     #########################################
     #########################################
@@ -154,7 +254,7 @@ def main():
     print args
     ngoodfiles = 0
     filenames = []
-#ntuplename = sys.argv[1]
+    #ntuplename = sys.argv[1]
     t = []
     for i in range(0, numntuples):
         t.append(TChain(ntuplename))
@@ -247,6 +347,9 @@ def main():
         if max < nentries:
             nentries = int(max) 
 
+        initial_4vec = TLorentzVector()
+        Brec_4vec = TLorentzVector()
+
         # Allow to start at something other than 0. 
         for n in range(0,nentries):
 
@@ -255,6 +358,32 @@ def main():
               print "Event number " + str(n) + " out of " + str(nentries)
 
             t[i].GetEntry(n)
+
+            SBtrkI = t[i].SBtrkI
+            RBmes = t[i].RBmes
+            RBdeltaE = t[i].RBdeltaE
+
+            RBpxLab = t[i].RBpxLab
+            RBpyLab = t[i].RBpyLab
+            RBpzLab = t[i].RBpzLab
+            RBeLab =  t[i].RBeLab
+
+            UpsPLab = t[i].UpsPLab
+            UpsELab =  t[i].UpsELab
+
+            initial_4vec.SetXYZT(0.0,0.0,UpsPLab,UpsELab)
+            Brec_4vec.SetXYZT(RBpxLab,RBpyLab,RBpzLab,RBeLab)
+
+            #print "%f %f %f" % (initial_4vec.Rho(), initial_4vec.E(), initial_4vec.M())
+
+            # Get the signal side tracks
+            px = t[i].SBtrkPxLab
+            py = t[i].SBtrkPyLab
+            pz = t[i].SBtrkPzLab
+            E  = t[i].SBtrkELab
+            Q  = t[i].SBtrkQ # Charge?
+
+            lambdac_masses, lambdac_charges, lambdacs = calc_lambdac_masses(SBtrkI,E,px,py,pz,Q)
 
             #####################################################
             # Try the dummy cuts
@@ -272,12 +401,14 @@ def main():
             soft_pi_cut = False
 
             #####################################################
+            '''
             if type=="vtx" or type=='vtx2D' or type=='vtx_compare':
 
                 #mass2Nu1 = t[i].mass2Nu1;
                 #mass2Nu2 = t[i].mass2Nu2;
 
                 #soft_pi_cut = mass2Nu1<3.5 and mass2Nu2<3.5
+            '''
 
             #####################################################
             # 0 out the cuts 
@@ -291,22 +422,36 @@ def main():
                     cuts[c] = True
                     if first_time:
                         cut_text.append("No cuts")
-                '''
                 elif c==1:
-                    cuts[c] = cuts[c-1] and soft_pi_cut and dstar_truth[0] and dstar_truth[1]
+                    cuts[c] = cuts[c-1] and SBtrkI>=3
                     if first_time:
                         cut_text.append("Soft pi cut")
                 elif c==2:
-                    cuts[c] = cuts[c-1] and sp_truth[0] and sp_truth[1] and lep_truth[0] and lep_truth[1]
+                    cuts[c] = cuts[c-1] and RBmes>5.27
                     if first_time:
                         cut_text.append("Soft pion and lepton truth matched")
-                '''
 
                 # Fill the histos
                 if cuts[c]:
-                    if type == "mc":
-                        h[i][0][c].Fill(0.1)
-                        h[i][1][c].Fill(-0.1)
+                    if type == "generic":
+                        h[i][0][c].Fill(SBtrkI)
+                        h[i][1][c].Fill(RBmes)
+                        h[i][2][c].Fill(RBdeltaE)
+                        nlambdas = len(lambdacs)
+                        for lm in range(0,nlambdas):
+                            m = lambdac_masses[lm]
+                            q = lambdac_charges[lm]
+                            l = lambdacs[lm]
+                            if m>2.26 and m<2.31:
+                                h[i][3][c].Fill(m)
+                                h[i][4][c].Fill(q)
+                                #print l.M()
+                                mm = initial_4vec - Brec_4vec - l
+                                #print (initial_4vec - Brec_4vec).M()
+                                mass2 = mm.M2()
+                                mass = mm.M()
+                                h[i][5][c].Fill(mass2)
+                                h[i][6][c].Fill(mass)
 
 
                 ######################################################
@@ -324,10 +469,10 @@ def main():
             first_time = False
 
             
-################################################################################
-################################################################################
-# Finished looping over all the events.
-################################################################################
+    ################################################################################
+    ################################################################################
+    #    Finished looping over all the events.
+    ################################################################################
           
     if cuts_to_text:
         for j in range(0,len(textout)):
@@ -335,11 +480,11 @@ def main():
             print "Closing textfile...."
             print textout[j]
             
-################################################################################
-################################################################################
-# Make the canvases
-################################################################################
-################################################################################
+    ################################################################################
+    ################################################################################
+    # Make the canvases
+    ################################################################################
+    ################################################################################
     if not cuts_to_text:
 
         text = []
@@ -353,7 +498,7 @@ def main():
             ######################################################
             # For the non 2d stuff
             ######################################################
-            if type=="mc" or type=="kin" or type=="vtx" or type=="vtx_compare":
+            if type=="generic" or type=="kin" or type=="vtx" or type=="vtx_compare":
                 for j in range(0, numhistos):
                     name = "can" + str(i) + "_" + str(j)
                     candum = TCanvas(name, name, 10+10*j, 10+10*j, 600, 400)
@@ -398,7 +543,7 @@ def main():
                     gPad.Update()
 
                     if options.plot_ext:
-                        name = "%s/LeptBc_bellis/Plots/bnvTreeHistoCreator/Plots/%s_%s_%s.%s" % (home, can[i][j].GetName(), type, options.tag, options.plot_ext)
+                        name = "%s/Plots/%s_%s_%s.%s" % (pwd, can[i][j].GetName(), type, options.tag, options.plot_ext)
                         can[i][j].SaveAs(name)
 
 
@@ -445,7 +590,7 @@ def main():
                         gPad.Update()
 
                         if options.plot_ext:
-                            name = "%s/LeptBc_bellis/Plots/bnvTreeHistoCreator/Plots/%s_%s_%s.%s" % (home, can[i][j].GetName(), type, options.tag, options.plot_ext)
+                            name = "%s/Plots/%s_%s_%s.%s" % (pwd, can[i][j].GetName(), type, options.tag, options.plot_ext)
                             can[i][j].SaveAs(name)
 
     else:
@@ -457,8 +602,8 @@ def main():
         print "Opening " + outname
         textcutout =open( outname , "w+")
 
-################################################################################
-################################################################################
+    ################################################################################
+    ################################################################################
 
         # Dump the stats on the cuts
         for i in range(0, numntuples):
@@ -482,14 +627,14 @@ def main():
                 print output
                 textcutout.write(output)
         textcutout.close()
+    
+    ################################################################################
+    ################################################################################
 
-################################################################################
-################################################################################
-
-############################ 
-# Save the histos
-############################
-#if options.rootfilename!=None:
+    ############################ 
+    # Save the histos
+    ############################
+    #if options.rootfilename!=None:
     if 1:
         rname = "%s/rootFiles/%s_%s_%s.root" % \
               (pwd,ntuplename,type,options.tag)
@@ -505,7 +650,7 @@ def main():
 
 
 
-## wait for input to keep the GUI (which lives on a ROOT event dispatcher) alive
+    ## wait for input to keep the GUI (which lives on a ROOT event dispatcher) alive
     if (not batchMode):
         if __name__ == '__main__':
             rep = ''
@@ -514,6 +659,9 @@ def main():
                 if 1 < len(rep):
                     rep = rep[0]
                                                                                                                                                                                                 
+################################################################################
+################################################################################
+
 
 ################################################################################
 # python style to define the main function
