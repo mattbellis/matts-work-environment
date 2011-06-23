@@ -1,7 +1,7 @@
 import ROOT
 from ROOT import *
 
-def myHistos(type="mc", imax=1, jmax=4, kmax=2):
+def myHistos(type="generic", imax=1, jmax=4, kmax=2):
     h = []
 
     xtitle = []
@@ -13,9 +13,14 @@ def myHistos(type="mc", imax=1, jmax=4, kmax=2):
     ylo = []
     yhi = []
 
-    if ( type == "mc" ):
-        nxbins.append(100); xlo.append(-0.2); xhi.append(0.2); xtitle.append("MC vertex 0 mm"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-0.2); xhi.append(0.2); xtitle.append("MC vertex 1 mm"); ytitle.append("Entries")
+    if ( type == "generic" ):
+        nxbins.append(21); xlo.append(-0.5); xhi.append(20.5); xtitle.append("# of tracks on signal side"); ytitle.append("Entries")
+        nxbins.append(100); xlo.append(5.2); xhi.append(5.3); xtitle.append("m_{ES} tag B"); ytitle.append("Entries")
+        nxbins.append(100); xlo.append(-0.2); xhi.append(0.2); xtitle.append("#Delta E tag B"); ytitle.append("Entries")
+        nxbins.append(100); xlo.append(1.5); xhi.append(3.0); xtitle.append("#Lambda_{c} mass Signal side"); ytitle.append("Entries")
+        nxbins.append(3); xlo.append(-1.5); xhi.append(1.5); xtitle.append("#Lambda_{c} charge Signal side"); ytitle.append("Entries")
+        nxbins.append(100); xlo.append(-5); xhi.append(5); xtitle.append("Missing mass squared #Lambda_{c} hypothesis"); ytitle.append("Entries")
+        nxbins.append(100); xlo.append(-5); xhi.append(5); xtitle.append("Missing mass #Lambda_{c} hypothesis"); ytitle.append("Entries")
 
     elif ( type == "kin" ):
         nxbins.append(140); xlo.append(0.0); xhi.append(7.0); xtitle.append("p1cm"); ytitle.append("Entries")
@@ -23,60 +28,6 @@ def myHistos(type="mc", imax=1, jmax=4, kmax=2):
         nxbins.append(140); xlo.append(0.0); xhi.append(7.0); xtitle.append("p1lab"); ytitle.append("Entries")
         nxbins.append(140); xlo.append(0.0); xhi.append(7.0); xtitle.append("p2lab"); ytitle.append("Entries")
 
-    elif ( type == "vtx_compare" ):
-        nxbins.append(100); xlo.append(-4000.0); xhi.append(4000.0); xtitle.append("MC #Delta V_{z} (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-4000.0); xhi.append(4000.0); xtitle.append("lep #Delta V_{z} (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-4000.0); xhi.append(4000.0); xtitle.append("lep #pi #Delta V_{z} (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-4000.0); xhi.append(4000.0); xtitle.append("lep #pi (TF) #Delta V_{z} (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(4000.0); xtitle.append("MC |#Delta V| (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(4000.0); xtitle.append("lep |#Delta V| (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(4000.0); xtitle.append("lep #pi |#Delta V| (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(4000.0); xtitle.append("lep #pi (TF) |#Delta V| (#mu m)"); ytitle.append("Entries")
-        nxbins.append(130); xlo.append(-10.0); xhi.append(3.0); xtitle.append("M^{2}(#nu_{1}) (GeV^{2}/c^{4})"); ytitle.append("Entries")
-        nxbins.append(130); xlo.append(-10.0); xhi.append(3.0); xtitle.append("M^{2}(#nu_{2}) (GeV^{2}/c^{4})"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(2.0); xtitle.append("|p|(#pi_{1}) (GeV/c)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(2.0); xtitle.append("|p|(#pi_{2}) (GeV/c)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-2000.0); xhi.append(2000.0); xtitle.append("lep #Delta V_{z} residual (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-2000.0); xhi.append(2000.0); xtitle.append("lep #pi #Delta V_{z} residual (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-2000.0); xhi.append(2000.0); xtitle.append("lep #pi (TF) #Delta V_{z} residual (#mu m)"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-2000.0); xhi.append(2000.0); xtitle.append("lep #pi (TF-old) #Delta V_{z} residual (#mu m)"); ytitle.append("Entries")
-
-    elif ( type == "vtx" ):
-        nxbins.append(100); xlo.append(0.0); xhi.append(4000.0); xtitle.append("MC vtx1 X"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(4000.0); xtitle.append("MC vtx1 Y"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-4.0); xhi.append(3.0); xtitle.append("MC vtx1 Z"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(3.0); xtitle.append("MC vtx1 |r|"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.3); xhi.append(0.4); xtitle.append("MC vtx1 r_{xy}"); ytitle.append("Entries")
-
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.4); xtitle.append("MC vtx2 X"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.4); xtitle.append("MC vtx2 Y"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-4.0); xhi.append(3.0); xtitle.append("MC vtx2 Z"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(3.0); xtitle.append("MC vtx2 |r|"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.3); xhi.append(0.4); xtitle.append("MC vtx2 r_{xy}"); ytitle.append("Entries")
-
-        nxbins.append(100); xlo.append(-100.03); xhi.append(100.03); xtitle.append("MC vtx #Delta X"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-0.03); xhi.append(0.03); xtitle.append("MC vtx #Delta Y"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-0.3); xhi.append(0.3); xtitle.append("MC vtx #Delta Z"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.2); xtitle.append("MC vtx #Delta |r|"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.03); xtitle.append("MC vtx #Delta r_{xy}"); ytitle.append("Entries")
-
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.4); xtitle.append("vtx1 X"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.4); xtitle.append("vtx1 Y"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-4.0); xhi.append(3.0); xtitle.append("vtx1 Z"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(3.0); xtitle.append("vtx1 |r|"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.3); xhi.append(0.4); xtitle.append("vtx1 r_{xy}"); ytitle.append("Entries")
-
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.4); xtitle.append("vtx2 X"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.4); xtitle.append("vtx2 Y"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-4.0); xhi.append(3.0); xtitle.append("vtx2 Z"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(3.0); xtitle.append("vtx2 |r|"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.3); xhi.append(0.4); xtitle.append("vtx2 r_{xy}"); ytitle.append("Entries")
-
-        nxbins.append(100); xlo.append(-0.03); xhi.append(0.03); xtitle.append("vtx #Delta X"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-0.03); xhi.append(0.03); xtitle.append("vtx #Delta Y"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(-0.3); xhi.append(0.3); xtitle.append("vtx #Delta Z"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.2); xtitle.append("vtx #Delta |r|"); ytitle.append("Entries")
-        nxbins.append(100); xlo.append(0.0); xhi.append(0.03); xtitle.append("vtx #Delta r_{xy}"); ytitle.append("Entries")
 
     elif (type=='vtx2D'):
         nxbins.append(100);xlo.append(0.0);xhi.append(2000.0);xtitle.append("MC vtx1 X");nybins.append(100);ylo.append(2000.0);yhi.append(4000.0);ytitle.append("MC vtx1 Y")
@@ -101,7 +52,7 @@ def myHistos(type="mc", imax=1, jmax=4, kmax=2):
 
                 name = "h" + type + str(i) + "_" + str(j) + "_" + str(k)
                 hdum = None
-                if type=="mc" or type=="kin" or type=="vtx" or type=="vtx_compare":
+                if type=="generic" or type=="kin" or type=="vtx" or type=="vtx_compare":
                     hdum = TH1D(name, name, nxbins[j], xlo[j], xhi[j])
                 else:
                     hdum = TH2D(name, name, nxbins[j], xlo[j], xhi[j], nybins[j], ylo[j], yhi[j])
