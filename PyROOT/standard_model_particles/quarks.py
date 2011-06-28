@@ -43,7 +43,7 @@ border = 8
 
 highlightColor = 3
 highlightForceColor = 5
-highlightBorder = 13
+highlightBorder = 3
 
 texf = TLatex(0.90,0.455,"Force Carriers")
 texf.SetTextColor(forceColor)
@@ -91,7 +91,8 @@ pad = TPad("pad", "pad",0.15,0.11,0.85,0.79)
 pad.Draw()
 gPad.Update()
 pad.cd()
-pad.Divide(4,4,0.0003,0.0003)
+pad.SetFillColor(1)
+pad.Divide(4,4,0.005,0.005)
 
 pad.cd(1) 
 gPad.SetFillColor(quarkColor)   
