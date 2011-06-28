@@ -8,6 +8,6 @@ from epem_different_stuff import *
 tag = "_blk_bkg"
 
 # Lambda C
-for i in range(0,5):
+for i in range(18,21):
     print i
     epem_B_lambdac("epem_different_stuff"+tag,i)
