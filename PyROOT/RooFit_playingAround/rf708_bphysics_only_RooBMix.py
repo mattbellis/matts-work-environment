@@ -47,20 +47,20 @@ Adel = RooRealVar ("Adel","2Re(l)/[1+abs(l)**2]",0.7)
 DG = RooFormulaVar ("DG","Delta Gamma","@1/@0",RooArgList(tau,DGbG))
 
 # Construct coefficient functions for sin,cos,sinh modulations of decay distribution
-#fsin = RooFormulaVar ("fsin","fsin","@0*@1*(1-2*@2)",RooArgList(Amix,tagFlav,w,mixState))
-#fcos = RooFormulaVar ("fcos","fcos","@0*@1*(1-2*@2)",RooArgList(Adir,tagFlav,w,mixState))
-#fsinh = RooFormulaVar ("fsinh","fsinh","@0",RooArgList(Adel))
+fsin = RooFormulaVar ("fsin","fsin","@0*@1*(1-2*@2)",RooArgList(Amix,tagFlav,w,mixState))
+fcos = RooFormulaVar ("fcos","fcos","@0*@1*(1-2*@2)",RooArgList(Adir,tagFlav,w,mixState))
+fsinh = RooFormulaVar ("fsinh","fsinh","@0",RooArgList(Adel))
 
 #fsin = RooFormulaVar ("fsin","fsin","0*@0",RooArgList(mixState,tagFlav))
 #fcos = RooFormulaVar ("fcos","fcos","@0",RooArgList(mixState,tagFlav))
 #fsinh = RooFormulaVar ("fsinh","fsinh","0*@0",RooArgList(mixState,tagFlav))
 
-fcos = RooFormulaVar ("fcos","fcos","@0",RooArgList(mixState,tagFlav))
+#fcos = RooFormulaVar ("fcos","fcos","@0",RooArgList(mixState,tagFlav))
 ################################################################################
 
 # Construct generic B decay pdf using above user coefficients
-#bcpg = RooBDecay ("bcpg","bcpg",dt,tau,DG,RooFit.RooConst(1),fsinh,fcos,fsin,dm,tm,RooBDecay.DoubleSided)
-bcpg = RooBDecay ("bcpg","bcpg",dt,tau,DG,RooFit.RooConst(1),RooFit.RooConst(0),fcos,RooFit.RooConst(0),dm,tm,RooBDecay.DoubleSided)
+bcpg = RooBDecay ("bcpg","bcpg",dt,tau,DG,RooFit.RooConst(1),fsinh,fcos,fsin,dm,tm,RooBDecay.DoubleSided)
+#bcpg = RooBDecay ("bcpg","bcpg",dt,tau,DG,RooFit.RooConst(1),RooFit.RooConst(0),fcos,RooFit.RooConst(0),dm,tm,RooBDecay.DoubleSided)
 
 
 
@@ -72,6 +72,8 @@ data4 = bcpg.generate(RooArgSet(dt,tagFlav,mixState),10000)
 
 # Plot B0 and B0bar tagged data separately 
 frame6 = dt.frame(RooFit.Title("B decay distribution with CPV(Im(l)=0.7,Re(l)=0.7,|l|=1,dG/G=0.5) (B0/B0bar)"))   
+frame7 = dt.frame(RooFit.Title("B decay distribution with CPV(Im(l)=0.7,Re(l)=0.7,|l|=1,dG/G=0.5) (B0/B0bar)"))   
+frame8 = dt.frame(RooFit.Title("B decay distribution with CPV(Im(l)=0.7,Re(l)=0.7,|l|=1,dG/G=0.5) (B0/B0bar)"))   
 
 #data4.plotOn(frame6,Cut("tagFlav==tagFlav.B0")) 
 #bcpg.plotOn(frame6,Slice(tagFlav,"B0")) 
@@ -84,13 +86,36 @@ print "Printing PDF asymmetry......"
 #bcpg.plotOn(frame6,RooFit.ProjWData(RooArgSet(mixState),data4,kTRUE),RooFit.Asymmetry(mixState))
 bcpg.plotOn(frame6,RooFit.ProjWData(RooArgSet(mixState),data4,kTRUE),RooFit.Asymmetry(mixState))
 
+data4.plotOn(frame7,RooFit.Asymmetry(tagFlav))
+print "Printing PDF asymmetry......" 
+bcpg.plotOn(frame7,RooFit.ProjWData(RooArgSet(tagFlav),data4,kTRUE),RooFit.Asymmetry(tagFlav))
+
+mixState.setRange("mixed","mixed") ;
+
+data_reduced = data4.reduce(RooFit.CutRange("mixed"))
+data_reduced.plotOn(frame8,RooFit.Asymmetry(tagFlav))
+
+print "Printing PDF asymmetry......" 
+bcpg.plotOn(frame8,RooFit.ProjWData(RooArgSet(tagFlav),data_reduced,kTRUE),RooFit.Asymmetry(tagFlav))
+
 
 c = TCanvas("rf708_bphysics","rf708_bphysics",1200,800) 
-c.Divide(1,1) 
+c.Divide(2,2) 
+
 c.cd(1)  
 gPad.SetLeftMargin(0.15)  
 frame6.GetYaxis().SetTitleOffset(1.6)  
 frame6.Draw() 
+
+c.cd(2)  
+gPad.SetLeftMargin(0.15)  
+frame7.GetYaxis().SetTitleOffset(1.6)  
+frame7.Draw() 
+
+c.cd(3)  
+gPad.SetLeftMargin(0.15)  
+frame8.GetYaxis().SetTitleOffset(1.6)  
+frame8.Draw() 
 
 
 ################################################################################
