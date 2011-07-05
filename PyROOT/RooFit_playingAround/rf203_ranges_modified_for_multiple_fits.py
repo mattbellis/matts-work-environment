@@ -31,7 +31,8 @@ px = RooPolynomial("px","px",x)
 f = RooRealVar("f","f",0.,1.) 
 model = RooAddPdf("model","model",RooArgList(gx,px),RooArgList(f)) 
 
-for n in range(0,1000):
+#for n in range(0,1000):
+for n in range(0,1):
     
     # Generated 10000 events in (x,y) from p.d.f. model
     modelData = model.generate(RooArgSet(x),10000) # RooDataSet
