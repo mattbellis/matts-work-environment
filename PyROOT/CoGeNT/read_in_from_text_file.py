@@ -136,7 +136,7 @@ def main():
         name = "can_x_%s" % (i)
         can_x.append(TCanvas(name,name,10+10*i,10+10*i,1200,900))
         can_x[i].SetFillColor(0)
-        can_x[i].Divide(4,3)
+        can_x[i].Divide(4,4)
 
     can_t = TCanvas("can_t","can_t",200,200,1200,600)
     can_t.SetFillColor(0)
@@ -144,7 +144,9 @@ def main():
 
     for i in xrange(tbins):
         for j in xrange(4):
-            pad_index = (i%3)*4+(j+1)
+            #pad_index = (i%3)*4+(j+1)
+            #can_x[i/3].cd(pad_index)
+            pad_index = i+1
             can_x[i/3].cd(pad_index)
             xframes[i][j].GetXaxis().SetRangeUser(0.0,3.0)
             if j==0:
