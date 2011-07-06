@@ -4,6 +4,8 @@
 ################################################################################
 def amp_to_energy(amplitude, calibration=0):
 
+    energy = 0
+
     if calibration==0:
 
         # Used for the low-energy channel
