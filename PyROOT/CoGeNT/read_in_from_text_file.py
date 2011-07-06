@@ -46,7 +46,10 @@ def main():
     # 102-107
     # 306-308
     ############################################################################
-    dead_days = [[68,74], [102,107],[306,308]]
+    #dead_days = [[68,74], [102,107],[306,308]]
+    #dead_days = [[2,100],[390,480]]
+    dead_days = [[100,100]]
+    #dead_days = [[60,60], [100,100],[200,200]]
     n_good_spots = len(dead_days)+1
     good_ranges = []
     fit_range = ""
@@ -76,6 +79,21 @@ def main():
     print fit_range 
 
     #exit(0)
+
+    ############################################################################
+    # Get the pdf
+    ############################################################################
+    my_pars,sub_pdfs,total_pdf = simple_modulation(t)
+    total_pdf.Print("v")
+
+    rrv_dum = RooRealVar("rrv_dum","rrv_dum",10)
+    pars_dict = {}
+    for p in my_pars:
+        if type(p)==type(rrv_dum):
+            pars_dict[p.GetName()] = p
+            pars_dict[p.GetName()].setConstant(False)
+
+
 
     ############################################################################
     # Read in from a text file.
@@ -108,6 +126,8 @@ def main():
 
             data_total.add(myset)
 
+    #data_total = total_pdf.generate(RooArgSet(x,t),36000)
+
     ############################################################################
     # Make sure the data is in the live time of the experiment.
     ############################################################################
@@ -118,8 +138,6 @@ def main():
     print "total entries: %d" % (data_total.numEntries())
     print "fit   entries: %d" % (data.numEntries())
 
-    #data = total_pdf.generate(RooArgSet(x,t),500) # Gives good agreement with plot
-    #data = total_pdf.generate(RooArgSet(x,t),4000)
     data_reduced = []
     for i in range(0,4):
         cut_name = "sub_x%d" % (i)
@@ -153,29 +171,17 @@ def main():
             #data.plotOn(xframes[i][j])
             data_reduced_t_x[i][j].plotOn(xframes[i][j])
 
+    xframe_main = x.frame(RooFit.Title("Plot of ionization energy"))
+    data.plotOn(xframe_main)
+
     ############################################################################
     # t
+    ############################################################################
     t.setBins(tbins)
     tframes = []
     for i in xrange(4):
         tframes.append(t.frame(RooFit.Title("Plot of ionization energy")))
         data_reduced[i].plotOn(tframes[i])
-
-
-
-    #tot_argset = RooArgSet(total_pdf)
-    #total_pdf.plotOn(xframes[0],RooFit.Components(tot_argset),RooFit.LineColor(8),RooFit.ProjWData(data))
-
-    #bkg_argset = RooArgSet(bkg_exp)
-    #bkg_argset = RooArgSet(bxg)
-    #total_pdf.plotOn(xframes[0],RooFit.Components(bkg_argset),RooFit.LineStyle(2),RooFit.LineColor(4),RooFit.ProjWData(data))
-
-    #sig_argset = RooArgSet(sig_exp)
-    #sig_argset = RooArgSet(sxg)
-    #total_pdf.plotOn(xframes[0],RooFit.Components(sig_argset),RooFit.LineStyle(2),RooFit.LineColor(2),RooFit.ProjWData(data))
-
-    #lxg_argset = RooArgSet(lxg)
-    #total_pdf.plotOn(xframes[0],RooFit.Components(lxg_argset),RooFit.LineStyle(2),RooFit.LineColor(6),RooFit.ProjWData(data))
 
     ############################################################################
     # Make canvases.
@@ -187,20 +193,13 @@ def main():
         can_x[i].SetFillColor(0)
         can_x[i].Divide(4,4)
 
+    can_x_main = TCanvas("can_x_main","can_x_main",100,100,1200,600)
+    can_x_main.SetFillColor(0)
+    can_x_main.Divide(1,1)
+
     can_t = TCanvas("can_t","can_t",200,200,1200,600)
     can_t.SetFillColor(0)
     can_t.Divide(2,2)
-
-    my_pars,sub_pdfs,total_pdf = simple_modulation(t)
-    total_pdf.Print("v")
-
-    rrv_dum = RooRealVar("rrv_dum","rrv_dum",10)
-    pars_dict = {}
-    for p in my_pars:
-        if type(p)==type(rrv_dum):
-            pars_dict[p.GetName()] = p
-            pars_dict[p.GetName()].setConstant(False)
-
 
 
     for i in xrange(tbins):
@@ -220,6 +219,11 @@ def main():
             gPad.Update()
 
 
+    can_x_main.cd(1)
+    xframe_main.GetXaxis().SetRangeUser(0.0,3.0)
+    xframe_main.GetYaxis().SetRangeUser(0.0,600.0)
+    xframe_main.Draw()
+    gPad.Update()
 
     fit_results = []
     for i in xrange(4):
@@ -228,36 +232,42 @@ def main():
         #if 1:
         if i==1:
 
-            pars_dict["mod_off"].setVal(50)
+            pars_dict["mod_off"].setVal(10.0)
             #pars_dict["mod_off"].setConstant(True)
 
             pars_dict["nsig"].setVal(644)
             #pars_dict["nsig"].setConstant(True)
 
-            #pars_dict["mod_amp"].setVal(10)
+            pars_dict["mod_amp"].setVal(3.0)
             #pars_dict["mod_amp"].setConstant(True)
 
             pars_dict["mod_freq"].setVal(6.28/365.0)
-            pars_dict["mod_freq"].setConstant(True)
+            #pars_dict["mod_freq"].setConstant(True)
 
-            pars_dict["mod_phase"].setVal(0.0)
+            #pars_dict["mod_phase"].setVal(-(1.0/4.0)*6.28/365.0)
+            pars_dict["mod_phase"].setVal(-2.4)
             #pars_dict["mod_phase"].setConstant(True)
 
             fit_result = total_pdf.fitTo(data_reduced[i],
                     RooFit.Save(True),
                     RooFit.Strategy(True),
                     RooFit.Range(fit_range),
-                    #RooFit.Range("good_days_1"),
-                    #RooFit.Range("good_days_0,good_days_1,good_days_2,good_days_3"),
-                    #RooFit.NormRange(fit_range),
-                    RooFit.Extended(True))
+                    RooFit.Extended(True)
+                    )
 
-            #total_pdf.plotOn(tframes[i], RooFit.ProjWData(data_reduced[i],True))
-            total_pdf.plotOn(tframes[i], RooFit.ProjWData(data_reduced[i],True),RooFit.Range(fit_range))
+            argset = RooArgSet(total_pdf)
+            total_pdf.plotOn(tframes[i], RooFit.Components(argset), RooFit.ProjWData(data_reduced[i],True),RooFit.Range(fit_range))
+            #total_pdf.plotOn(tframes[i], RooFit.ProjWData(data_reduced[i],True),RooFit.Range(fit_range))
             #total_pdf.plotOn(tframes[i], RooFit.ProjWData(data_reduced[i],True),RooFit.Range("good_days_0,good_days_1,good_days_2,good_days_3"))
             #total_pdf.plotOn(tframes[i], RooFit.ProjWData(data_reduced[i],True),RooFit.Range("good_days_1"))
             fit_result.Print("v")
             fit_results.append(fit_result)
+
+            #temp_data = total_pdf.generate(RooArgSet(t),644)
+            #temp_data.plotOn(tframes[i],RooFit.MarkerColor(kRed))
+
+            chi2 = tframes[i].chiSquare()
+
 
 
         tframes[i].Draw()
@@ -268,6 +278,7 @@ def main():
 
     print fit_range
 
+    print "chi2: %f" % (chi2)
     print "\n"
     for i in xrange(4):
         print "entries: %d" % (data_reduced[i].numEntries())

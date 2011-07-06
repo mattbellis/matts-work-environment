@@ -114,24 +114,24 @@ def cogent_pdf():
 ################################################################################
 # Simple modulation
 ################################################################################
-def simple_modulation(t):
+def simple_modulation(t,tag=""):
 
 
-    mod_off = RooRealVar("mod_off","Modulation offset",10)
+    mod_off = RooRealVar("mod_off","Modulation offset",10,2.0,1000)
     mod_phase = RooRealVar("mod_phase","Modulation phase",10)
     mod_freq = RooRealVar("mod_freq","Modulation frequency",10)
-    mod_amp = RooRealVar("mod_amp","Modulation amplitude",10)
+    mod_amp = RooRealVar("mod_amp","Modulation amplitude",10,0,1000)
 
     #sig_mod = RooGenericPdf("sig_mod","2.0+sin(6.26*t/365.0)",RooArgList(t))
-    sig_mod = RooGenericPdf("sig_mod","mod_off + mod_amp*sin(mod_freq*t + mod_phase)",RooArgList(t,mod_off,mod_phase,mod_freq,mod_amp))
+    sig_mod = RooGenericPdf("sig_mod","mod_amp*(mod_off + sin(mod_freq*t + mod_phase))",RooArgList(t,mod_phase,mod_freq,mod_off,mod_amp))
     #sig_mod = RooGenericPdf("sig_mod","mod_amp*sin(mod_freq*t + mod_phase)",RooArgList(t,mod_phase,mod_freq,mod_amp))
 
     nsig = RooRealVar("nsig","nsig",200,0,6000)
 
     total_pdf = RooExtendPdf("total_pdf","Total PDF",sig_mod,nsig)
 
-    #pars = [mod_off, mod_phase, mod_freq, mod_amp, nsig]
-    pars = [mod_phase, mod_freq, mod_amp, mod_off, nsig]
+    pars = [mod_off, mod_phase, mod_freq, mod_amp, nsig]
+    #pars = [mod_phase, mod_freq, mod_amp, nsig]
 
     sub_pdfs = [sig_mod]
 
