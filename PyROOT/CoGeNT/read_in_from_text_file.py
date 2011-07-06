@@ -34,9 +34,10 @@ def main():
     x.setRange("sub_x0",0.0,3.0)
     x.setRange("sub_x1",0.5,0.9)
     #x.setRange("sub_x1",1.6,3.0)
-    x.setRange("sub_x2",0.5,3.0)
+    #x.setRange("sub_x2",0.5,3.0)
+    x.setRange("sub_x2",0.4,0.5)
     #x.setRange("sub_x2",0.5,1.5)
-    x.setRange("sub_x3",0.0,0.5)
+    x.setRange("sub_x3",0.0,0.4)
 
     bin_width = tmax/tbins
     for i in range(0,tbins):
@@ -72,7 +73,7 @@ def main():
             hi = dead_days[i][0]
         elif i==n_good_spots-1:
             lo = dead_days[i-1][1]+1
-            hi = tmax+1
+            hi = 458+1
         else:
             lo = dead_days[i-1][1]+1
             hi = dead_days[i][0]
@@ -273,10 +274,10 @@ def main():
             #pars_dict["mod_amp"].setConstant(True)
 
             pars_dict["mod_freq"].setVal(6.28/365.0)
-            pars_dict["mod_freq"].setConstant(True)
+            #pars_dict["mod_freq"].setConstant(True)
 
             pars_dict["mod_phase"].setVal(-2.5)
-            pars_dict["mod_phase"].setConstant(True)
+            #pars_dict["mod_phase"].setConstant(True)
 
             fit_result = total_pdf.fitTo(data_reduced[i],
                     RooFit.Save(True),
