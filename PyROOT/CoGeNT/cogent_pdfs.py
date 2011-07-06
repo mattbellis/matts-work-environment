@@ -6,7 +6,7 @@ from ROOT import *
 ################################################################################
 # Fit to some number of cosmogenic peak
 ################################################################################
-def cosmogenic_peak():
+def cosmogenic_peaks(x):
 
     peak_means = [1.3, 1.0, 1.2, 1.4]
     peak_nums  = [100, 40,  8,   3]
@@ -14,6 +14,9 @@ def cosmogenic_peak():
     calib_sigmas = []
     calib_gaussians = []
     calib_norms = []
+
+    pars = []
+    sub_funcs = []
 
     rooadd_string = ""
     rooadd_funcs = RooArgList()
@@ -25,13 +28,13 @@ def cosmogenic_peak():
         calib_means.append(RooRealVar(name,name,p,0.5,1.6))
 
         name = "calib_sigmas_%s" % (i)
-        calib_sigmas.append(RooRealVar(name,name,0.100,0.0,1.0))
+        calib_sigmas.append(RooRealVar(name,name,0.077,0.0,1.0))
 
         name = "calib_norms_%s" % (i)
         calib_norms.append(RooRealVar(name,name,peak_nums[i],0.0,10000.0))
 
         name = "cg_%s" % (i)
-        calib_gaussians.append(RooLandau(name,name,x,calib_means[i],calib_sigmas[i]))
+        calib_gaussians.append(RooGaussian(name,name,x,calib_means[i],calib_sigmas[i]))
 
         if i==0:
             rooadd_string = "%s" % (name)
@@ -41,33 +44,54 @@ def cosmogenic_peak():
         rooadd_funcs.add(calib_gaussians[i])
         rooadd_norms.add(calib_norms[i])
 
-    name = "total_calib_peaks_%s" % (i)
-    total_calib_peaks = RooAddPdf(name,rooadd_string,rooadd_funcs,rooadd_norms)
+    pars += calib_means
+    pars += calib_sigmas
+    pars += calib_norms
 
-    pars = [c, dm, w, dw] + conv_pars
-    return pars, conv_sub_funcs, func
+    sub_funcs += calib_gaussians
+
+    name = "cosmogenic_peaks_%s" % (i)
+    cosmogenic_pdf = RooAddPdf(name,rooadd_string,rooadd_funcs,rooadd_norms)
+
+    return pars, sub_funcs, cosmogenic_pdf
 
 
 ################################################################################
 
 ################################################################################
 ################################################################################
-def cogent_pdf():
+def cogent_pdf(x,t):
+
+    pars = []
+    sub_funcs = []
     
+    ############################################################################
+    # Grab the cosmogenic peaks
+    ############################################################################
+    cosmogenic_pars, cosmogenic_sub_funcs, cosmogenic_pdf = cosmogenic_peaks(x)
+
+    pars += cosmogenic_pars
+    sub_funcs += cosmogenic_sub_funcs
+
+    ############################################################################
     # Define the exponential background
+    ############################################################################
     bkg_slope = RooRealVar("bkg_slope","Exponential slope of the background",-0.5,-10.0,0.0)
     bkg_exp = RooExponential("bkg_exp","Exponential PDF for bkg",x,bkg_slope)
 
+    pars.append(bkg_slope)
+    sub_funcs.append(bkg_exp)
+
+    ############################################################################
     # Define the exponential signal
+    ############################################################################
     sig_slope = RooRealVar("sig_slope","Exponential slope of the signal",-4.5,-10.0,0.0)
     sig_exp = RooExponential("sig_exp","Exponential PDF for sig",x,sig_slope)
 
-    # Define the calibration peak
-    #calib_mean = RooRealVar("calib_mean","Landau mean of the calibration peak",1.2,1.0,1.5);
-    #calib_sigma = RooRealVar("calib_sigma","Landau sigma of the calibration peak",0.001,0.0,1.0)
-    #calib_landau = RooLandau("calib_landau","Landau PDF for calibration peak",x,calib_mean,calib_sigma)
+    pars.append(sig_slope)
+    sub_funcs.append(sig_exp)
 
-
+    '''
     ############################################################################
     # Set up the modulation terms.
     ############################################################################
@@ -89,24 +113,29 @@ def cogent_pdf():
     sig_prod = RooProdPdf("sig_prod","sig_exp*sig_mod",RooArgList(sig_exp,sig_mod))
     #sig_prod = sxg
     #sig_prod = sig_exp
+    '''
 
     ############################################################################
     # Form the total PDF.
     ############################################################################
-    nbkg = RooRealVar("nbkg","nbkg",200,0,6000)
+    nbkg = RooRealVar("nbkg_e","nbkg_e",200,0,6000)
     #ncalib = RooRealVar("ncalib","ncalib",50,0,6000)
-    ncalib = RooRealVar("ncalib","ncalib",200,0,6000)
-    nsig = RooRealVar("nsig","nsig",200,0,6000)
+    ncalib = RooRealVar("ncalib_e","ncalib_e",200,0,6000)
+    nsig = RooRealVar("nsig_e","nsig_e",200,0,6000)
 
     #total_pdf = RooAddPdf("total_pdf","bkg_exp+sig_exp+calib_landau",RooArgList(bkg_exp,sig_exp,calib_landau),RooArgList(nbkg,nsig,ncalib))
     #total_pdf = RooAddPdf("total_pdf","bxg+sxg+lxg",RooArgList(bxg,sxg,lxg),RooArgList(nbkg,nsig,ncalib))
     #total_pdf = RooAddPdf("total_pdf","bxg+sig_prod+lxg",RooArgList(bxg,sig_prod,lxg),RooArgList(nbkg,nsig,ncalib))
-    #total_pdf = RooAddPdf("total_pdf","bxg+sig_prod+total_calib_peaks",RooArgList(bxg,sig_prod,total_calib_peaks),RooArgList(nbkg,nsig,ncalib))
-    total_pdf = RooAddPdf("total_pdf","bkg_exp+sig_prod+total_calib_peaks",RooArgList(bkg_exp,sig_prod,total_calib_peaks),RooArgList(nbkg,nsig,ncalib))
+    #total_pdf = RooAddPdf("total_pdf","bxg+sig_prod+cosmogenic_pdf",RooArgList(bxg,sig_prod,cosmogenic_pdf),RooArgList(nbkg,nsig,ncalib))
 
+    #total_pdf = RooAddPdf("total_pdf","bkg_exp+sig_prod+cosmogenic_pdf",RooArgList(bkg_exp,sig_prod,cosmogenic_pdf),RooArgList(nbkg,nsig,ncalib))
 
-    pars = [c, dm, w, dw] + conv_pars
-    return pars, conv_sub_funcs, func
+    #total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg,nsig,ncalib))
+    total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp",RooArgList(bkg_exp,sig_exp),RooArgList(nbkg,nsig))
+
+    pars += [nbkg, nsig, ncalib]
+
+    return pars, sub_funcs, total_energy_pdf
 
 
 

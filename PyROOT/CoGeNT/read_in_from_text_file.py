@@ -15,12 +15,16 @@ def main():
 
     tmax = 480;
     tbins = 16;
-    #tbins = 160;
+    #tbins = 64;
     ############################################################################
     # Define the variables and ranges
+    # 
+    # Note that the days start at 1 and not 0. 
     ############################################################################
     x = RooRealVar("x","ionization energy (keVee)",0.0,12.0);
-    t = RooRealVar("t","time",0.0,tmax)
+    #x = RooRealVar("x","ionization energy (keVee)",0.0,3.0);
+    t = RooRealVar("t","time",1.0,tmax+1)
+    #t = RooRealVar("t","time",5.0,tmax+5)
     
     myset = RooArgSet()
     myset.add(x)
@@ -34,10 +38,11 @@ def main():
     #x.setRange("sub_x2",0.5,1.5)
     x.setRange("sub_x3",0.0,0.5)
 
+    bin_width = tmax/tbins
     for i in range(0,tbins):
         name = "sub_t%d" % (i)
-        lo = i*tmax/tbins;
-        hi = (i+1)*tmax/tbins;
+        lo = i*bin_width + 1;
+        hi = (i+1)*bin_width + 1;
         t.setRange(name,lo,hi)
 
     ############################################################################
@@ -46,9 +51,9 @@ def main():
     # 102-107
     # 306-308
     ############################################################################
-    #dead_days = [[68,74], [102,107],[306,308]]
+    dead_days = [[68,74], [102,107],[306,308]]
     #dead_days = [[2,100],[390,480]]
-    dead_days = [[100,100]]
+    #dead_days = [[100,100]]
     #dead_days = [[60,60], [100,100],[200,200]]
     n_good_spots = len(dead_days)+1
     good_ranges = []
@@ -67,7 +72,7 @@ def main():
             hi = dead_days[i][0]
         elif i==n_good_spots-1:
             lo = dead_days[i-1][1]+1
-            hi = tmax
+            hi = tmax+1
         else:
             lo = dead_days[i-1][1]+1
             hi = dead_days[i][0]
@@ -111,12 +116,16 @@ def main():
 
             energy = amp_to_energy(amplitude,0)
 
-            time_days = (t_sec-first_event)/(24.0*3600.0) + 1
+            time_days = (t_sec-first_event)/(24.0*3600.0) + 1.0
 
-            #print "%f %f" % (time_days, energy)
+            '''
+            if energy>0.4999 and energy<0.9001:
+                print "%f %f" % (time_days, energy)
+            '''
 
             x.setVal(energy)
             t.setVal(time_days)
+
             if time_days>=68 and time_days<75:
                 print time_days
             elif time_days>=102 and time_days<108:
@@ -125,6 +134,9 @@ def main():
                 print time_days
 
             data_total.add(myset)
+
+            if time_days > 990:
+                exit(0);
 
     #data_total = total_pdf.generate(RooArgSet(x,t),36000)
 
@@ -163,6 +175,7 @@ def main():
     ############################################################################
     # x
     x.setBins(240)
+    #x.setBins(60)
     xframes = []
     for i in xrange(tbins):
         xframes.append([])
@@ -220,6 +233,24 @@ def main():
 
 
     can_x_main.cd(1)
+
+    #peak_pars,peak_sub_func,peak_pdf = cosmogenic_peaks(x)
+    cogent_pars,cogent_sub_funcs,cogent_energy_pdf = cogent_pdf(x,t)
+    print
+    print cogent_pars
+    for p in cogent_pars:
+        print p
+    print 
+    print cogent_sub_funcs
+    for p in cogent_sub_funcs:
+        print p
+    print 
+    print cogent_energy_pdf 
+    print 
+
+    #peak_pdf.plotOn(xframe_main)
+    #cogent_energy_pdf.plotOn(xframe_main)
+
     xframe_main.GetXaxis().SetRangeUser(0.0,3.0)
     xframe_main.GetYaxis().SetRangeUser(0.0,600.0)
     xframe_main.Draw()
@@ -242,11 +273,10 @@ def main():
             #pars_dict["mod_amp"].setConstant(True)
 
             pars_dict["mod_freq"].setVal(6.28/365.0)
-            #pars_dict["mod_freq"].setConstant(True)
+            pars_dict["mod_freq"].setConstant(True)
 
-            #pars_dict["mod_phase"].setVal(-(1.0/4.0)*6.28/365.0)
-            pars_dict["mod_phase"].setVal(-2.4)
-            #pars_dict["mod_phase"].setConstant(True)
+            pars_dict["mod_phase"].setVal(-2.5)
+            pars_dict["mod_phase"].setConstant(True)
 
             fit_result = total_pdf.fitTo(data_reduced[i],
                     RooFit.Save(True),
