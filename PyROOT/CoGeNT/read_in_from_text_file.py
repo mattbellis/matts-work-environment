@@ -34,10 +34,15 @@ def main():
     x.setRange("sub_x0",0.0,3.0)
     x.setRange("sub_x1",0.5,0.9)
     #x.setRange("sub_x1",1.6,3.0)
-    #x.setRange("sub_x2",0.5,3.0)
-    x.setRange("sub_x2",0.4,0.5)
+    x.setRange("sub_x2",0.5,3.0)
+    #x.setRange("sub_x2",0.4,0.5)
     #x.setRange("sub_x2",0.5,1.5)
     x.setRange("sub_x3",0.0,0.4)
+
+    x.setRange("good_days_0",0.5,3.0)
+    x.setRange("good_days_1",0.5,3.0)
+    x.setRange("good_days_2",0.5,3.0)
+    x.setRange("good_days_3",0.5,3.0)
 
     bin_width = tmax/tbins
     for i in range(0,tbins):
@@ -237,23 +242,66 @@ def main():
 
     #peak_pars,peak_sub_func,peak_pdf = cosmogenic_peaks(x)
     cogent_pars,cogent_sub_funcs,cogent_energy_pdf = cogent_pdf(x,t)
-    print
-    print cogent_pars
-    for p in cogent_pars:
-        print p
-    print 
-    print cogent_sub_funcs
-    for p in cogent_sub_funcs:
-        print p
-    print 
-    print cogent_energy_pdf 
-    print 
 
-    #peak_pdf.plotOn(xframe_main)
-    #cogent_energy_pdf.plotOn(xframe_main)
+    # Make a dictionary out of the pars and sub_funcs
+    cogent_pars_dict = {}
+    for p in cogent_pars:
+        cogent_pars_dict[p.GetName()] = p
+        cogent_pars_dict[p.GetName()].setConstant(True)
+
+    # 
+    cogent_sub_funcs_dict = {}
+    for p in cogent_sub_funcs:
+        cogent_sub_funcs_dict[p.GetName()] = p
+
+    ############################################################################
+    # Try fitting the energy spectrum
+    ############################################################################
+
+    cogent_pars_dict["nsig_e"].setVal(4000.0)
+    cogent_pars_dict["nsig_e"].setConstant(False)
+
+    cogent_pars_dict["nbkg_e"].setVal(200.0)
+    cogent_pars_dict["nbkg_e"].setConstant(False)
+
+    cogent_pars_dict["ncosmogenics_e"].setVal(1013.0)
+    cogent_pars_dict["ncosmogenics_e"].setConstant(False)
+
+    cogent_pars_dict["sig_slope"].setVal(-7.5)
+    cogent_pars_dict["sig_slope"].setConstant(False)
+
+    #e_fit_range = "%s,%s" % ("sub_x2",fit_range)
+
+    #cogent_energy_pdf.fitTo(data,RooFit.Range("sub_x2"))
+    #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
+
+    e_fit_results = cogent_energy_pdf.fitTo(data,
+            RooFit.Range(fit_range),
+            RooFit.Save(True),
+            RooFit.Extended(True)
+            )
+
+    #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range))
+    cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
+    #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(e_fit_range))
+    #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
+
+    #'''
+    for s in cogent_sub_funcs_dict:
+        if "cg_" in s:
+            argset = RooArgSet(cogent_sub_funcs_dict[s])
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+    for s in cogent_sub_funcs_dict:
+        if "_exp" in s:
+            argset = RooArgSet(cogent_sub_funcs_dict[s])
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(36),RooFit.LineStyle(3))
+    #'''
+
+
+
 
     xframe_main.GetXaxis().SetRangeUser(0.0,3.0)
-    xframe_main.GetYaxis().SetRangeUser(0.0,600.0)
+    xframe_main.GetYaxis().SetRangeUser(0.0,200.0)
     xframe_main.Draw()
     gPad.Update()
 
@@ -307,7 +355,10 @@ def main():
     for f in fit_results:
         f.Print("v")
 
+    e_fit_results.Print("v")
+
     print fit_range
+    #print e_fit_range
 
     print "chi2: %f" % (chi2)
     print "\n"
