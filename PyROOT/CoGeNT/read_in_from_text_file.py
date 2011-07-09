@@ -16,14 +16,15 @@ def main():
     tmax = 480;
     tbins = 16;
     #tbins = 64;
+    t_bin_width = tmax/tbins
     ############################################################################
     # Define the variables and ranges
     # 
     # Note that the days start at 1 and not 0. 
     ############################################################################
     x = RooRealVar("x","ionization energy (keVee)",0.0,12.0);
-    #x = RooRealVar("x","ionization energy (keVee)",0.0,3.0);
     t = RooRealVar("t","time",1.0,tmax+1)
+    #x = RooRealVar("x","ionization energy (keVee)",0.0,3.0);
     #t = RooRealVar("t","time",5.0,tmax+5)
     
     myset = RooArgSet()
@@ -31,25 +32,30 @@ def main():
     myset.add(t)
     data_total = RooDataSet("data_total","data_total",myset)
 
-    x.setRange("sub_x0",0.0,3.0)
-    x.setRange("sub_x1",0.5,0.9)
-    #x.setRange("sub_x1",1.6,3.0)
-    x.setRange("sub_x2",0.5,3.0)
-    #x.setRange("sub_x2",0.4,0.5)
-    #x.setRange("sub_x2",0.5,1.5)
-    x.setRange("sub_x3",0.0,0.4)
+    x_ranges = [[0.0,3.0],
+                [0.5,0.9],
+                [0.5,3.0],
+                [0.0,0.4]
+                ]
 
     x.setRange("good_days_0",0.5,3.0)
     x.setRange("good_days_1",0.5,3.0)
     x.setRange("good_days_2",0.5,3.0)
     x.setRange("good_days_3",0.5,3.0)
 
-    bin_width = tmax/tbins
-    for i in range(0,tbins):
-        name = "sub_t%d" % (i)
-        lo = i*bin_width + 1;
-        hi = (i+1)*bin_width + 1;
-        t.setRange(name,lo,hi)
+    for i,r in enumerate(x_ranges):
+
+        name = "sub_x%d" % (i)
+        x.setRange(name,r[0],r[1])
+
+        for j in range(0,tbins):
+
+            name = "sub_t%d_x%d" % (j,i)
+            lo = j*t_bin_width + 1;
+            hi = (j+1)*t_bin_width + 1;
+            t.setRange(name,lo,hi)
+
+            x.setRange(name,r[0],r[1])
 
     ############################################################################
     # Dead time Days: 
@@ -61,9 +67,13 @@ def main():
     #dead_days = [[2,100],[390,480]]
     #dead_days = [[100,100]]
     #dead_days = [[60,60], [100,100],[200,200]]
+
     n_good_spots = len(dead_days)+1
+
     good_ranges = []
+
     fit_range = ""
+
     for i in range(0,n_good_spots):
 
         name = "good_days_%d" % (i)
@@ -161,18 +171,22 @@ def main():
         cut_name = "sub_x%d" % (i)
         data_reduced.append(data.reduce(RooFit.CutRange(cut_name)))
 
-    data_reduced_t = []
+    #data_reduced_t = []
     data_reduced_t_x = []
     for i in range(0,tbins):
-        tname = "sub_t%d" % (i)
-        data_reduced_t.append(data.reduce(RooFit.CutRange(tname)))
         data_reduced_t_x.append([])
-        data_temp = data.reduce(RooFit.CutRange(tname))
+        for j in range(0,4):
+            tname = "sub_t%d_x%d" % (i,j)
+            #data_reduced_t.append(data.reduce(RooFit.CutRange(tname)))
+            #data_reduced_t_x.append([])
+            data_reduced_t_x[i].append(data.reduce(RooFit.CutRange(tname)))
+
+        ''''
         for j in range(0,4):
             xname = "sub_x%d" % (j)
             #data_reduced_t_x[i].append(data.reduce(RooFit.CutRange(tname),RooFit.CutRange(xname)))
             data_reduced_t_x[i].append(data_temp.reduce(RooFit.CutRange(xname)))
-
+        '''
 
 
 
@@ -202,6 +216,9 @@ def main():
         tframes.append(t.frame(RooFit.Title("Plot of ionization energy")))
         data_reduced[i].plotOn(tframes[i])
 
+    tframe_main = t.frame(RooFit.Title("Days"))
+    #data.plotOn(tframe_main)
+
     ############################################################################
     # Make canvases.
     ############################################################################
@@ -214,7 +231,7 @@ def main():
 
     can_x_main = TCanvas("can_x_main","can_x_main",100,100,1200,600)
     can_x_main.SetFillColor(0)
-    can_x_main.Divide(1,1)
+    can_x_main.Divide(2,1)
 
     can_t = TCanvas("can_t","can_t",200,200,1200,600)
     can_t.SetFillColor(0)
@@ -238,7 +255,6 @@ def main():
             gPad.Update()
 
 
-    can_x_main.cd(1)
 
     #peak_pars,peak_sub_func,peak_pdf = cosmogenic_peaks(x)
     cogent_pars,cogent_sub_funcs,cogent_energy_pdf = cogent_pdf(x,t)
@@ -286,24 +302,58 @@ def main():
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(e_fit_range))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
 
+    #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
+
     #'''
     for s in cogent_sub_funcs_dict:
         if "cg_" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
             cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+            #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+
     for s in cogent_sub_funcs_dict:
         if "_exp" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
             cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(36),RooFit.LineStyle(3))
+
+    for s in cogent_sub_funcs_dict:
+        if "cosmogenic_norms_" in s:
+            print s
+            argset = RooArgSet(cogent_sub_funcs_dict[s])
+            cogent_sub_funcs_dict[s].plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
     #'''
 
 
 
 
+    can_x_main.cd(1)
     xframe_main.GetXaxis().SetRangeUser(0.0,3.0)
     xframe_main.GetYaxis().SetRangeUser(0.0,200.0)
     xframe_main.Draw()
     gPad.Update()
+
+    can_x_main.cd(2)
+    #tframe_main.GetXaxis().SetRangeUser(0.0,3.0)
+    #tframe_main.GetYaxis().SetRangeUser(0.0,200.0)
+    tframe_main.Draw()
+    gPad.Update()
+
+    # Try plotting on some of the tbins
+    for i in xrange(tbins):
+        for j in xrange(4):
+            
+            if j==2:
+                pad_index = i+1
+                can_x[j].cd(pad_index)
+
+                sub_fit_range = "sub_t%d_x%d" % (i,j)
+
+                cogent_energy_pdf.plotOn(xframes[i][j],RooFit.Range(sub_fit_range), RooFit.NormRange(sub_fit_range))
+                xframes[i][j].Draw()
+                gPad.Update()
+
+
+
 
     fit_results = []
     for i in xrange(4):
