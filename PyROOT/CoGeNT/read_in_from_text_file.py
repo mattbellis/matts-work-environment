@@ -317,7 +317,7 @@ def main():
             cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(36),RooFit.LineStyle(3))
 
     for s in cogent_sub_funcs_dict:
-        if "cosmogenic_norms_" in s:
+        if "cosmogenic_pdfs_" in s:
             print s
             argset = RooArgSet(cogent_sub_funcs_dict[s])
             cogent_sub_funcs_dict[s].plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))

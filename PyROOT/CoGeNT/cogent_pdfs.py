@@ -33,6 +33,7 @@ def cosmogenic_peaks(x,t):
     cosmogenic_decay_constants = []
     cosmogenic_decay_pdfs = []
     cosmogenic_N0 = []
+    cosmogenic_pdfs = []
 
     pars = []
     sub_funcs = []
@@ -47,7 +48,7 @@ def cosmogenic_peaks(x,t):
         sigma = cosmogenic_data_dict[p][6]
         #norm = cosmogenic_data_dict[p][0]*cosmogenic_data_dict[p][2]/1000.0
         #norm = cosmogenic_data_dict[p][3]
-        norm = cosmogenic_data_dict[p][4]
+        norm = cosmogenic_data_dict[p][4]/1000.0
         half_life = cosmogenic_data_dict[p][7]
         #half_life = 2.0
 
@@ -56,6 +57,9 @@ def cosmogenic_peaks(x,t):
 
         name = "cosmogenic_sigmas_%s" % (i)
         cosmogenic_sigmas.append(RooRealVar(name,name,sigma,0.0,1.0))
+
+        name = "cg_%s" % (i)
+        cosmogenic_gaussians.append(RooGaussian(name,name,x,cosmogenic_means[i],cosmogenic_sigmas[i]))
 
         ############################################################################
         # Define the exponential decay of the normalization term.
@@ -69,25 +73,24 @@ def cosmogenic_peaks(x,t):
         name = "cosmogenic_decay_pdfs_%s" % (i)
         cosmogenic_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[i]))
 
-        #name = "cosmogenic_norms_%s" % (i)
-        #cosmogenic_norms.append(RooRealVar(name,name,norm,0.0,10000.0))
-
         name = "cosmogenic_N0_%s" % (i)
         cosmogenic_N0.append(RooRealVar(name,name,norm,0.0,10000.0))
 
-        name = "cosmogenic_norms_%s" % (i)
-        #cosmogenic_norms.append(RooFormulaVar(name,"@0*@1",RooArgList(cosmogenic_N0[i],cosmogenic_decay_pdfs[i])))
-        cosmogenic_norms.append(RooFormulaVar(name,"@0",RooArgList(cosmogenic_decay_pdfs[i])))
+        name = "cosmogenic_pdfs_%s" % (i)
+        #cosmogenic_pdfs.append(RooFormulaVar(name,"@0*@1",RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i])))
+        cosmogenic_pdfs.append(RooProdPdf(name,name,RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i])))
 
-        name = "cg_%s" % (i)
-        cosmogenic_gaussians.append(RooGaussian(name,name,x,cosmogenic_means[i],cosmogenic_sigmas[i]))
+        #name = "cosmogenic_norms_%s" % (i)
+        #cosmogenic_norms.append(RooFormulaVar(name,"@0*@1",RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i])))
+        #cosmogenic_norms.append(RooFormulaVar(name,"@0*@1",RooArgList(cosmogenic_N0[i],cosmogenic_decay_pdfs[i])))
+        #cosmogenic_norms.append(RooFormulaVar(name,"@0",RooArgList(cosmogenic_decay_pdfs[i])))
 
         if i==0:
             rooadd_string = "%s" % (name)
         else:
             rooadd_string = "%s+%s" % (rooadd_string,name)
 
-        rooadd_funcs.add(cosmogenic_gaussians[i])
+        rooadd_funcs.add(cosmogenic_pdfs[i])
         #rooadd_norms.add(cosmogenic_norms[i])
         rooadd_norms.add(cosmogenic_N0[i])
 
@@ -99,7 +102,7 @@ def cosmogenic_peaks(x,t):
     pars += cosmogenic_N0
 
     sub_funcs += cosmogenic_gaussians
-    sub_funcs += cosmogenic_norms
+    sub_funcs += cosmogenic_pdfs
     sub_funcs += cosmogenic_decay_pdfs 
 
     name = "cg_total"
