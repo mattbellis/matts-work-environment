@@ -47,8 +47,9 @@ def cosmogenic_peaks(x,t):
         sigma = cosmogenic_data_dict[p][6]
         #norm = cosmogenic_data_dict[p][0]*cosmogenic_data_dict[p][2]/1000.0
         #norm = cosmogenic_data_dict[p][3]
-        norm = cosmogenic_data_dict[p][4]/1000.0
+        norm = cosmogenic_data_dict[p][4]
         half_life = cosmogenic_data_dict[p][7]
+        #half_life = 2.0
 
         name = "cosmogenic_means_%s" % (i)
         cosmogenic_means.append(RooRealVar(name,name,mean,0.5,1.6))
@@ -76,7 +77,7 @@ def cosmogenic_peaks(x,t):
 
         name = "cosmogenic_norms_%s" % (i)
         #cosmogenic_norms.append(RooFormulaVar(name,"@0*@1",RooArgList(cosmogenic_N0[i],cosmogenic_decay_pdfs[i])))
-        cosmogenic_norms.append(RooFormulaVar(name,"@1",RooArgList(cosmogenic_decay_pdfs[i])))
+        cosmogenic_norms.append(RooFormulaVar(name,"@0",RooArgList(cosmogenic_decay_pdfs[i])))
 
         name = "cg_%s" % (i)
         cosmogenic_gaussians.append(RooGaussian(name,name,x,cosmogenic_means[i],cosmogenic_sigmas[i]))
