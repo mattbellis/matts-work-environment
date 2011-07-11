@@ -47,7 +47,7 @@ def bbbar_ss_loop(outfilename, index=0):
 
     # Set the style of the fermions based on if they are the same generation
     # or not.
-    if index==0:
+    if index==0 or index==5:
         styles0 = [CYAN,THICK3]
         styles1 = [CYAN,THICK3]
     else:
@@ -57,8 +57,8 @@ def bbbar_ss_loop(outfilename, index=0):
     ############################################################################
     if index==0:
 
-        f0 = Fermion(vtx1, l0out).addLabel(r"$\ell$",pos=1.10,displace=0.01).setStyles(styles0)
-        f1 = Fermion(vtx1, l1out).addLabel(r"$\ell'$",pos=1.10,displace=0.01).setStyles(styles1)
+        f0 = Fermion(vtx1, l0out).addLabel(r"$\ell^-$",pos=1.10,displace=0.01).setStyles(styles0)
+        f1 = Fermion(vtx1, l1out).addLabel(r"$\ell^+$",pos=1.10,displace=0.01).setStyles(styles1)
 
         #f0 = Fermion(l0in, l0out).addLabel(r"$\ell$",pos=1.20,displace=0.01).setStyles(styles0)
         #f1 = Fermion(l1in, l1out).addLabel(r"$\ell'$",pos=1.20,displace=0.01).setStyles(styles1)
@@ -67,8 +67,8 @@ def bbbar_ss_loop(outfilename, index=0):
 
     elif index==1:
 
-        f0 = Fermion(l0in, l0out).addLabel(r"$\ell$",pos=1.20,displace=0.01).setStyles(styles0)
-        f1 = Fermion(l1in, l1out).addLabel(r"$\ell'$",pos=1.20,displace=0.01).setStyles(styles1)
+        f0 = Fermion(l0in, l0out).addLabel(r"$\ell^-$",pos=1.20,displace=0.01).setStyles(styles0)
+        f1 = Fermion(l1in, l1out).addLabel(r"$\ell^{'+}$",pos=1.20,displace=0.01).setStyles(styles1)
 
         H0 = Higgs(vtx1, l0in).addLabel(r"$\bar{\ell}$",pos=0.50,displace=-0.25)
         H1 = Higgs(vtx1, l1in).addLabel(r"$\bar{\ell}'$",pos=0.50,displace=0.25)
@@ -77,8 +77,8 @@ def bbbar_ss_loop(outfilename, index=0):
 
     elif index==2:
 
-        f0 = Fermion(l0in, l0out).addLabel(r"$\ell$",pos=1.20,displace=0.01).setStyles(styles0)
-        f1 = Fermion(l1in, l1out).addLabel(r"$\ell'$",pos=1.20,displace=0.01).setStyles(styles1)
+        f0 = Fermion(l0in, l0out).addLabel(r"$\ell^-$",pos=1.20,displace=0.01).setStyles(styles0)
+        f1 = Fermion(l1in, l1out).addLabel(r"$\ell^{'+}$",pos=1.20,displace=0.01).setStyles(styles1)
 
         ss0 = Fermion(vtx1, l0in).addLabel(r"$\tilde{\chi}^+$",pos=0.50,displace=-0.25)
         ss1 = Fermion(vtx1, l1in).addLabel(r"$\tilde{\chi}^-$",pos=0.50,displace=0.25)
@@ -87,8 +87,8 @@ def bbbar_ss_loop(outfilename, index=0):
 
     elif index==3:
 
-        f0 = Fermion(Point(l0in.x()+0.5,l0in.y()), l0out).addLabel(r"$\ell$",pos=1.20,displace=0.01).setStyles(styles0)
-        f1 = Fermion(Point(l1in.x()+0.5,l1in.y()), l1out).addLabel(r"$\ell'$",pos=1.20,displace=0.01).setStyles(styles1)
+        f0 = Fermion(Point(l0in.x()+0.5,l0in.y()), l0out).addLabel(r"$\ell^-$",pos=1.20,displace=0.01).setStyles(styles0)
+        f1 = Fermion(Point(l1in.x()+0.5,l1in.y()), l1out).addLabel(r"$\ell^{'+}$",pos=1.20,displace=0.01).setStyles(styles1)
 
         h0 = Higgs(l0in, Point(l0in.x()+0.5,l0in.y())).addLabel(r"$H$",pos=0.5,displace=-0.15)
         g0 = Photon(l1in, Point(l1in.x()+0.5,l1in.y())).addLabel(r"$\gamma/Z$",pos=0.5,displace=0.15).setAmplitude(0.1)
@@ -97,17 +97,20 @@ def bbbar_ss_loop(outfilename, index=0):
         ss1 = Fermion(vtx1, l1in).addLabel(r"$\tilde{\chi}^-$",pos=0.50,displace=0.25)
 
         top = Fermion(l0in, l1in).addLabel(r"$t$",pos=0.50,displace=+0.10)
-        ell = Fermion(Point(l0in.x()+0.5,l0in.y()), Point(l1in.x()+0.5,l1in.y())).addLabel(r"$\ell$",pos=0.50,displace=-0.0)
+        ell = Fermion(Point(l0in.x()+0.5,l0in.y()), Point(l1in.x()+0.5,l1in.y())).addLabel(r"$\ell^-$",pos=0.50,displace=-0.0)
 
     elif index==4:
 
-        f0 = Fermion(vtx1, l0out).addLabel(r"$\ell$",pos=1.10,displace=0.01).setStyles(styles0)
-        f1 = Fermion(vtx1, l1out).addLabel(r"$\ell'$",pos=1.10,displace=0.01).setStyles(styles1)
+        f0 = Fermion(vtx1, l0out).addLabel(r"$\ell^-$",pos=1.10,displace=0.01).setStyles(styles0)
+        f1 = Fermion(vtx1, l1out).addLabel(r"$\ell^{'+}$",pos=1.10,displace=0.01).setStyles(styles1)
 
     elif index==5 or index==6:
 
-        f0 = Fermion(l0in, l0out).addLabel(r"$\ell$",pos=1.20,displace=0.01).setStyles(styles0)
-        f1 = Fermion(l1in, l1out).addLabel(r"$\ell'$",pos=1.20,displace=0.01).setStyles(styles1)
+        f0 = Fermion(l0in, l0out).addLabel(r"$\ell^-$",pos=1.20,displace=0.01).setStyles(styles0)
+        if index==5:
+            f1 = Fermion(l1in, l1out).addLabel(r"$\ell^{+}$",pos=1.20,displace=0.01).setStyles(styles1)
+        else:
+            f1 = Fermion(l1in, l1out).addLabel(r"$\ell^{'+}$",pos=1.20,displace=0.01).setStyles(styles1)
 
         nu0 = Fermion(vtx1, l0in).addLabel(r"$\nu$",pos=0.50,displace=-0.25).setStyles([CYAN,THICK3])
 
