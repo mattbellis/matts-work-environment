@@ -8,6 +8,8 @@ syntax: glob
 *.a
 *.la
 
+*.swp
+
 *.dat
 *.log
 
