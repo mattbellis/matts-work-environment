@@ -49,8 +49,8 @@ def epem_lfv_charm(outfilename, stage=0):
     ep_in = Point(3, 0)
     ep_out = Point(0.15, 0)
 
-    em = Fermion(em_in, em_out).addLabel(fermion_names[0][0], pos=-0.05, displace=0.01).addArrow(1.05)
-    ep = Fermion(ep_in, ep_out).addLabel(fermion_names[0][1], pos=-0.10, displace=0.00).addArrow(1.05)
+    em = Fermion(em_in, em_out).addLabel(fermion_names[0][0], pos=-0.05, displace=-0.10).addArrow(1.05)
+    ep = Fermion(ep_in, ep_out).addLabel(fermion_names[0][1], pos=-0.10, displace=+0.10).addArrow(1.05)
     ############################################################################
 
     ##### Fermions
@@ -72,7 +72,7 @@ def epem_lfv_charm(outfilename, stage=0):
     f1_out = Point(f1_x_out, f1_y_out)
 
     if stage>0:
-        f1 = Fermion(f1_in, f1_out).addLabel(fermion_names[name_index][0], pos=1.00, displace=0.18).addArrow(1.05).setStyles([CARNATIONPINK,THICK3])
+        f1 = Fermion(f1_in, f1_out).addLabel(fermion_names[name_index][0], pos=0.75, displace=0.10).addArrow(1.05).setStyles([CARNATIONPINK,THICK3])
 
     if stage>1:
         f4 = Fermion(Point(f1_x+0.1,f1_y-0.15), Point(f1_x_out+0.1,f1_y_out-0.15)).addLabel(fermion_names[-1][1], pos=1.05, displace=-0.18).addArrow(1.05).setStyles([APRICOT,THICK1])
@@ -90,13 +90,9 @@ def epem_lfv_charm(outfilename, stage=0):
             fin = Point(xin, yin)
             fout = Point(xout, yout)
             if stage<=19:
-                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([CYAN,THICK2]))
+                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([GRAY,THICK1]))
             else:
-                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([CYAN,THICK2]).addLabel(fragmentation_names[1][k], pos=1.09, displace=-0.10))
-            '''
-            if stage>1:
-                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([CYAN,THICK2]))
-            '''
+                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([GRAY,THICK1]).addLabel(fragmentation_names[1][k], pos=1.09, displace=-0.10))
 
     ############################################################################
     # Fermion 2
@@ -113,13 +109,13 @@ def epem_lfv_charm(outfilename, stage=0):
     f2_out = Point(f2_x_out,f2_y_out)
 
     if stage>0:
-        f2 = Fermion(f2_in, f2_out).addLabel(fermion_names[name_index][1], pos=1.05, displace=0.18).addArrow(1.05).setStyles([CARNATIONPINK,THICK3])
+        f2 = Fermion(f2_in, f2_out).addLabel(fermion_names[name_index][1], pos=0.75, displace=0.10).addArrow(1.05).setStyles([CARNATIONPINK,THICK3])
 
     if stage>1:
         f4 = Fermion(Point(f2_x-0.1,f2_y+0.15), Point(f2_x_out-0.1,f2_y_out+0.15)).addLabel(fermion_names[-1][0], pos=1.05, displace=-0.18).addArrow(1.05).setStyles([APRICOT,THICK1])
 
     if stage in fragmentation_images:
-        frag_angle = [350, 20, 60, 80]
+        frag_angle = [10, 40, 70]
         frags = []
 
         for k,a in enumerate(frag_angle):
@@ -133,12 +129,12 @@ def epem_lfv_charm(outfilename, stage=0):
             fin = Point(xin, yin)
             fout = Point(xout, yout)
 
-            if stage<4 or (stage==4 and k!=1):
-                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([CYAN,THICK2]))
+            if stage<4 or (stage==4 and k!=0):
+                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([GRAY,THICK1]))
             else:
-                frags.append(Fermion(fin, fout).addArrow(1.05).setStyles([CYAN,THICK3]).addLabel(r"$D/D_{s}/\Lambda_c$", pos=0.69, displace=+0.20))
+                frags.append(Fermion(fin, fout).addArrow(1.05).setStyles([FORESTGREEN,THICK3]).addLabel(r"$D/D_{s}/\Lambda_c$", pos=0.69, displace=+0.25))
 
-                d_frag_angle = [-10,30,80]
+                d_frag_angle = [-10,20,60]
                 d_frag_names = [r"$h$", r"$\ell$", r"$\ell$"]
 
                 for kd,ad in enumerate(d_frag_angle):
@@ -153,9 +149,9 @@ def epem_lfv_charm(outfilename, stage=0):
                     dfout = Point(xout, yout)
 
                     if kd==0:
-                        frags.append(Higgs(dfin, dfout).addArrow(1.05).setStyles([CYAN,THICK2]).addLabel(d_frag_names[kd], pos=1.09, displace=+0.10))
+                        frags.append(Fermion(dfin, dfout).addArrow(1.05).setStyles([SKYBLUE,THICK3]).addLabel(d_frag_names[kd], pos=1.09, displace=+0.10))
                     else:
-                        frags.append(Higgs(dfin, dfout).addArrow(1.05).setStyles([YELLOW,THICK2]).addLabel(d_frag_names[kd], pos=1.09, displace=+0.10))
+                        frags.append(Fermion(dfin, dfout).addArrow(1.05).setStyles([YELLOW,THICK3]).addLabel(d_frag_names[kd], pos=1.09, displace=+0.10))
 
     # Print the file
     outfilename = "%s_%d.pdf" % (outfilename,stage)
