@@ -178,16 +178,16 @@ for i in range(0, num_variables):
 
     gr[i].GetXaxis().SetNdivisions(8)
     gr[i].GetXaxis().SetLabelSize(0.06)
-    gr[i].GetXaxis().CenterTitle()
-    gr[i].GetXaxis().SetTitleSize(0.09)
-    gr[i].GetXaxis().SetTitleOffset(0.8)
+    #gr[i].GetXaxis().CenterTitle()
+    gr[i].GetXaxis().SetTitleSize(0.06)
+    gr[i].GetXaxis().SetTitleOffset(0.9)
     gr[i].GetXaxis().SetTitle("e^{+} e^{-} CM energy (GeV)")
 
     gr[i].GetYaxis().SetNdivisions(8)
     gr[i].GetYaxis().SetLabelSize(0.06)
-    gr[i].GetYaxis().CenterTitle()
-    gr[i].GetYaxis().SetTitleSize(0.09)
-    gr[i].GetYaxis().SetTitleOffset(1.1)
+    #gr[i].GetYaxis().CenterTitle()
+    gr[i].GetYaxis().SetTitleSize(0.06)
+    gr[i].GetYaxis().SetTitleOffset(0.8)
     gr[i].GetYaxis().SetTitle("Hadronic cross section (nb)")
 
     gr[i].SetMarkerStyle(20)
@@ -201,54 +201,87 @@ for i in range(0, num_variables):
     gr[i].SetMinimum(0)
     gr[i].SetFillColor(colors[i])
 
+legend = []
+hdum = TH1F()
+for i in range(0,num_canvases):
+    legend.append(TLegend(0.85,0.65,0.99,0.99))
+    if i>0:
+        legend[i].AddEntry(gr[1],"u#bar{u}/d#bar{d}","f")
+        if i==1:
+            legend[i].AddEntry(hdum,"","")
+            legend[i].AddEntry(hdum,"","")
+            legend[i].AddEntry(hdum,"","")
+    if i>1:
+        legend[i].AddEntry(gr[2],"s#bar{s}","f")
+        if i==2:
+            legend[i].AddEntry(hdum,"","")
+            legend[i].AddEntry(hdum,"","")
+    if i>2:
+        legend[i].AddEntry(gr[3],"c#bar{c}","f")
+        if i==3:
+            legend[i].AddEntry(hdum,"","")
+    if i>3:
+        legend[i].AddEntry(gr[0],"b#bar{b}","f")
 
 ################################################################################
 # Draw the histograms 
 ################################################################################
 i=0
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].SetLineColor(0)
 gr[0].SetMarkerColor(0)
 gr[0].GetXaxis().SetRangeUser(9.3,9.6)
 gr[0].Draw("ap")
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 i=1
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[1].SetMarkerColor(colors[1])
 gr[1].GetXaxis().SetRangeUser(9.3,9.6)
 gr[0].Draw("ap")
 gr[1].Draw("p")
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 i=2
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[1].GetXaxis().SetRangeUser(9.3,9.6)
 gr[0].Draw("ap")
 gr[1].Draw("p")
 gr[2].Draw("p")
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 i=3
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[1].GetXaxis().SetRangeUser(9.3,9.6)
 gr[0].Draw("ap")
 gr[1].Draw("p")
 gr[2].Draw("p")
 gr[3].Draw("p")
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 i=4
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].SetMarkerColor(colors[0])
 gr[0].SetLineColor(colors[0])
@@ -258,11 +291,14 @@ gr[1].Draw("p")
 gr[2].Draw("p")
 gr[3].Draw("p")
 gr[0].Draw("p")
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 i=5
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("ap")
@@ -270,7 +306,10 @@ gr[1].Draw("p")
 gr[2].Draw("p")
 gr[3].Draw("p")
 gr[0].Draw("p")
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 coords = [[9.5,16.5],
           [9.931,11.26],
@@ -295,7 +334,7 @@ for j in range(0,4):
 
 i=6
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("ap")
@@ -305,12 +344,15 @@ gr[3].Draw("p")
 gr[0].Draw("p")
 for t in text[0]:
     t.Draw()
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 
 i=7
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].GetXaxis().SetRangeUser(9.9,10.7)
 gr[0].Draw("ap")
@@ -320,7 +362,10 @@ gr[3].Draw("p")
 gr[0].Draw("p")
 for t in text[1]:
     t.Draw()
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 
 ana_coords = [[9.90,19.0],
@@ -349,8 +394,9 @@ for j in range(0,3):
         elif i==1:
             ana_text[j][i].AddText("LFV/LNV")
             ana_text[j][i].AddText("Charm hadrons")
-            arrow[j].append(TArrow(x0+0.05,y0-0.1,10.55,3.4,0.02,"|>"))
-            arrow[j][2].SetLineColor(4)
+            arrow[j].append(TArrow(x0+0.05,y0-0.1,10.58,2.5,0.02,"|>"))
+            arrow[j][2].SetLineColor(1)
+            arrow[j][2].SetFillColor(5)
 
         elif i==2:
             ana_text[j][i].AddText("BNV/LNV")
@@ -365,7 +411,7 @@ for j in range(0,3):
 
 i=8
 can[i].cd(1) # 
-gPad.SetBottomMargin(0.20)
+gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].GetXaxis().SetRangeUser(9.9,10.7)
 gr[0].Draw("ap")
@@ -378,10 +424,12 @@ for t in text[1]:
 for t in ana_text[0]:
     t.Draw()
 for t in arrow[0]:
-    t.SetLineWidth(2)
-    t.SetFillColor(1)
+    t.SetLineWidth(3)
     t.Draw()
+legend[i].Draw()
 gPad.Update()
+name = "Plots/upsilon_xsec_%d.eps" % (i)
+can[i].SaveAs(name)
 
 ###############################################################################
 # Save the histograms as .ps files. 
@@ -389,7 +437,7 @@ gPad.Update()
 ###############################################################################
 '''
 for i in range(0, num_canvases):
-  name = "Plots/can_formatting_exercise_%d.eps" % (i)
+  name = "Plots/upsilon_xsec_%d.eps" % (i)
   can[i].SaveAs(name)
 '''
 
