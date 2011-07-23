@@ -34,7 +34,7 @@ def bbbar_ss_loop(outfilename, index=0):
 
     if index==4:
         Zgamma = Photon(vtx0,vtx1).addLabel(r"$Z/Z'$")
-    elif index==5 or index==6:
+    elif index==5 or index==6 or index==1:
         Zgamma = Photon(vtx0,vtx1).addLabel(r"$Z$")
     else:
         Zgamma = Photon(vtx0,vtx1).addLabel(r"$\gamma /Z$")

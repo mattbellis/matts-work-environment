@@ -201,23 +201,71 @@ for i in range(0, num_variables):
     gr[i].SetMinimum(0)
     gr[i].SetFillColor(colors[i])
 
+
+h_cs = []
+h_cs_stack = []
+npts = 2500
+for i in range(0, num_variables-1):
+    name = "h_cs_%d" % (i,) # Each histogram must have a unique name
+    h_cs.append(TH1F(name,"",npts,9.0,11.5))
+
+    name = "h_cs_stack_%d" % (i,) # Each histogram must have a unique name
+    h_cs_stack.append(THStack(name,""))
+
+    # Set some formatting options
+    h_cs[i].SetMinimum(0)
+
+    h_cs[i].GetXaxis().SetNdivisions(8)
+    h_cs[i].GetXaxis().SetLabelSize(0.06)
+    #h_cs[i].GetXaxis().CenterTitle()
+    h_cs[i].GetXaxis().SetTitleSize(0.06)
+    h_cs[i].GetXaxis().SetTitleOffset(0.9)
+    h_cs[i].GetXaxis().SetTitle("e^{+} e^{-} CM energy (GeV)")
+
+    h_cs[i].GetYaxis().SetNdivisions(8)
+    h_cs[i].GetYaxis().SetLabelSize(0.06)
+    #h_cs[i].GetYaxis().CenterTitle()
+    h_cs[i].GetYaxis().SetTitleSize(0.06)
+    h_cs[i].GetYaxis().SetTitleOffset(0.8)
+    h_cs[i].GetYaxis().SetTitle("Hadronic cross section (nb)")
+
+    h_cs[i].SetMarkerStyle(20)
+    h_cs[i].SetMarkerColor(colors[i+1])
+
+    if i==0:
+        h_cs[i].SetMarkerSize(1.0)
+    else:
+        h_cs[i].SetMarkerSize(1.5)
+
+    h_cs[i].SetMinimum(0)
+    h_cs[i].SetFillColor(colors[i+1])
+
+    for j in range(0,npts):
+        h_cs[i].SetBinContent(j+1,qqbar_xsecs[i])
+
+    for j in range(0,i+1):
+        h_cs_stack[i].Add(h_cs[j])
+
+
+
+
 legend = []
 hdum = TH1F()
 for i in range(0,num_canvases):
     legend.append(TLegend(0.85,0.65,0.99,0.99))
     if i>0:
-        legend[i].AddEntry(gr[1],"u#bar{u}/d#bar{d}","f")
+        legend[i].AddEntry(h_cs[0],"u#bar{u}/d#bar{d}","f")
         if i==1:
             legend[i].AddEntry(hdum,"","")
             legend[i].AddEntry(hdum,"","")
             legend[i].AddEntry(hdum,"","")
     if i>1:
-        legend[i].AddEntry(gr[2],"s#bar{s}","f")
+        legend[i].AddEntry(h_cs[1],"s#bar{s}","f")
         if i==2:
             legend[i].AddEntry(hdum,"","")
             legend[i].AddEntry(hdum,"","")
     if i>2:
-        legend[i].AddEntry(gr[3],"c#bar{c}","f")
+        legend[i].AddEntry(h_cs[2],"c#bar{c}","f")
         if i==3:
             legend[i].AddEntry(hdum,"","")
     if i>3:
@@ -232,8 +280,9 @@ gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].SetLineColor(0)
 gr[0].SetMarkerColor(0)
-gr[0].GetXaxis().SetRangeUser(9.3,9.6)
+gr[0].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("ap")
+#h_cs[0].Draw("same")
 legend[i].Draw()
 gPad.Update()
 name = "Plots/upsilon_xsec_%d.eps" % (i)
@@ -244,9 +293,9 @@ can[i].cd(1) #
 gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[1].SetMarkerColor(colors[1])
-gr[1].GetXaxis().SetRangeUser(9.3,9.6)
+gr[1].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("ap")
-gr[1].Draw("p")
+h_cs_stack[0].Draw("same")
 legend[i].Draw()
 gPad.Update()
 name = "Plots/upsilon_xsec_%d.eps" % (i)
@@ -256,10 +305,10 @@ i=2
 can[i].cd(1) # 
 gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
-gr[1].GetXaxis().SetRangeUser(9.3,9.6)
+gr[1].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("ap")
-gr[1].Draw("p")
-gr[2].Draw("p")
+h_cs_stack[1].Draw("same")
+#gr[2].Draw("p")
 legend[i].Draw()
 gPad.Update()
 name = "Plots/upsilon_xsec_%d.eps" % (i)
@@ -269,11 +318,9 @@ i=3
 can[i].cd(1) # 
 gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
-gr[1].GetXaxis().SetRangeUser(9.3,9.6)
 gr[0].Draw("ap")
-gr[1].Draw("p")
-gr[2].Draw("p")
-gr[3].Draw("p")
+h_cs_stack[2].Draw("same")
+h_cs_stack[2].GetXaxis().SetRangeUser(9.3,11.5)
 legend[i].Draw()
 gPad.Update()
 name = "Plots/upsilon_xsec_%d.eps" % (i)
@@ -285,11 +332,10 @@ gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].SetMarkerColor(colors[0])
 gr[0].SetLineColor(colors[0])
-gr[0].GetXaxis().SetRangeUser(9.3,9.6)
+gr[0].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("ap")
-gr[1].Draw("p")
-gr[2].Draw("p")
-gr[3].Draw("p")
+h_cs_stack[2].Draw("same")
+h_cs_stack[2].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("p")
 legend[i].Draw()
 gPad.Update()
@@ -302,9 +348,8 @@ gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("ap")
-gr[1].Draw("p")
-gr[2].Draw("p")
-gr[3].Draw("p")
+h_cs_stack[2].Draw("same")
+h_cs_stack[2].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("p")
 legend[i].Draw()
 gPad.Update()
@@ -338,9 +383,8 @@ gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("ap")
-gr[1].Draw("p")
-gr[2].Draw("p")
-gr[3].Draw("p")
+h_cs_stack[2].Draw("same")
+h_cs_stack[2].GetXaxis().SetRangeUser(9.3,11.5)
 gr[0].Draw("p")
 for t in text[0]:
     t.Draw()
@@ -356,9 +400,7 @@ gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].GetXaxis().SetRangeUser(9.9,10.7)
 gr[0].Draw("ap")
-gr[1].Draw("p")
-gr[2].Draw("p")
-gr[3].Draw("p")
+h_cs_stack[2].Draw("same")
 gr[0].Draw("p")
 for t in text[1]:
     t.Draw()
@@ -394,9 +436,9 @@ for j in range(0,3):
         elif i==1:
             ana_text[j][i].AddText("LFV/LNV")
             ana_text[j][i].AddText("Charm hadrons")
-            arrow[j].append(TArrow(x0+0.05,y0-0.1,10.58,2.5,0.02,"|>"))
+            arrow[j].append(TArrow(x0+0.05,y0-0.1,10.58,3.5,0.02,"|>"))
             arrow[j][2].SetLineColor(1)
-            arrow[j][2].SetFillColor(5)
+            arrow[j][2].SetFillColor(4)
 
         elif i==2:
             ana_text[j][i].AddText("BNV/LNV")
@@ -415,10 +457,7 @@ gPad.SetBottomMargin(0.12)
 gPad.SetTopMargin(0.05)
 gr[0].GetXaxis().SetRangeUser(9.9,10.7)
 gr[0].Draw("ap")
-gr[1].Draw("p")
-gr[2].Draw("p")
-gr[3].Draw("p")
-gr[0].Draw("p")
+h_cs_stack[2].Draw("same")
 for t in text[1]:
     t.Draw()
 for t in ana_text[0]:
