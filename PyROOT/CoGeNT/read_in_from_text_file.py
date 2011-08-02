@@ -22,9 +22,10 @@ def main():
     # 
     # Note that the days start at 1 and not 0. 
     ############################################################################
-    x = RooRealVar("x","ionization energy (keVee)",0.0,12.0);
+    #x = RooRealVar("x","ionization energy (keVee)",0.0,12.0);
     t = RooRealVar("t","time",1.0,tmax+1)
     #x = RooRealVar("x","ionization energy (keVee)",0.0,3.0);
+    x = RooRealVar("x","ionization energy (keVee)",0.5,3.0);
     #t = RooRealVar("t","time",5.0,tmax+5)
     
     myset = RooArgSet()
@@ -97,6 +98,7 @@ def main():
         t.setRange(name,lo,hi)
 
 
+    print "fit_range ---------------------- "
     print fit_range 
 
     #exit(0)
@@ -149,7 +151,9 @@ def main():
             elif time_days>=306 and time_days<309:
                 print time_days
 
-            data_total.add(myset)
+            # For diagnostics.
+            if energy>=0.5 and energy<=3.0:
+                data_total.add(myset)
 
             if time_days > 990:
                 exit(0);
@@ -160,8 +164,10 @@ def main():
     # Make sure the data is in the live time of the experiment.
     ############################################################################
     data = data_total.reduce(RooFit.CutRange(good_ranges[0]))
+    print "fit   entries: %d" % (data.numEntries())
     for i in range(1,n_good_spots):
         data.append(data_total.reduce(RooFit.CutRange(good_ranges[i])))
+        print "fit   entries: %d" % (data.numEntries())
 
     print "total entries: %d" % (data_total.numEntries())
     print "fit   entries: %d" % (data.numEntries())
@@ -194,8 +200,9 @@ def main():
     # Make frames 
     ############################################################################
     # x
-    x.setBins(240)
+    #x.setBins(240)
     #x.setBins(60)
+    x.setBins(50)
     xframes = []
     for i in xrange(tbins):
         xframes.append([])
@@ -217,7 +224,7 @@ def main():
         data_reduced[i].plotOn(tframes[i])
 
     tframe_main = t.frame(RooFit.Title("Days"))
-    #data.plotOn(tframe_main)
+    data.plotOn(tframe_main)
 
     ############################################################################
     # Make canvases.
@@ -258,6 +265,7 @@ def main():
 
     #peak_pars,peak_sub_func,peak_pdf = cosmogenic_peaks(x)
     cogent_pars,cogent_sub_funcs,cogent_energy_pdf = cogent_pdf(x,t)
+    #exit()
 
     # Make a dictionary out of the pars and sub_funcs
     cogent_pars_dict = {}
@@ -274,60 +282,77 @@ def main():
     # Try fitting the energy spectrum
     ############################################################################
 
-    cogent_pars_dict["nsig_e"].setVal(4000.0)
+    cogent_pars_dict["nsig_e"].setVal(525.0)
     cogent_pars_dict["nsig_e"].setConstant(False)
 
-    cogent_pars_dict["nbkg_e"].setVal(200.0)
+    cogent_pars_dict["nbkg_e"].setVal(800.0)
     cogent_pars_dict["nbkg_e"].setConstant(False)
 
-    cogent_pars_dict["ncosmogenics_e"].setVal(1013.0)
-    cogent_pars_dict["ncosmogenics_e"].setConstant(False)
+    cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
+    cogent_pars_dict["ncosmogenics_e"].setConstant(True)
 
-    cogent_pars_dict["sig_slope"].setVal(-7.5)
-    cogent_pars_dict["sig_slope"].setConstant(False)
+    cogent_pars_dict["sig_slope"].setVal(-4.5)
+    cogent_pars_dict["sig_slope"].setConstant(True)
 
     #e_fit_range = "%s,%s" % ("sub_x2",fit_range)
 
     #cogent_energy_pdf.fitTo(data,RooFit.Range("sub_x2"))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
 
+    #'''
     e_fit_results = cogent_energy_pdf.fitTo(data,
             RooFit.Range(fit_range),
             RooFit.Save(True),
             RooFit.Extended(True)
             )
+    #'''
 
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range))
     cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(e_fit_range))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
 
-    #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
+    cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
 
-    #'''
+    #cogent_sub_funcs_dict["cg_total"].plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range))
+
+    '''
     for s in cogent_sub_funcs_dict:
         if "cg_" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
             cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
             #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+    '''
 
+    #'''
+    for s in cogent_sub_funcs_dict:
+        if "cg_total" in s:
+            argset = RooArgSet(cogent_sub_funcs_dict[s])
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+            #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+    #'''
+
+
+    #'''
     for s in cogent_sub_funcs_dict:
         if "_exp" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(36),RooFit.LineStyle(3))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range),RooFit.Components(argset),RooFit.LineColor(36),RooFit.LineStyle(3))
+    #'''
 
+    '''
     for s in cogent_sub_funcs_dict:
         if "cosmogenic_pdfs_" in s:
             print s
             argset = RooArgSet(cogent_sub_funcs_dict[s])
             cogent_sub_funcs_dict[s].plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
-    #'''
+    '''
 
 
 
 
     can_x_main.cd(1)
-    xframe_main.GetXaxis().SetRangeUser(0.0,3.0)
+    #xframe_main.GetXaxis().SetRangeUser(0.0,3.0)
     xframe_main.GetYaxis().SetRangeUser(0.0,200.0)
     xframe_main.Draw()
     gPad.Update()
@@ -348,7 +373,7 @@ def main():
 
                 sub_fit_range = "sub_t%d_x%d" % (i,j)
 
-                cogent_energy_pdf.plotOn(xframes[i][j],RooFit.Range(sub_fit_range), RooFit.NormRange(sub_fit_range))
+                #cogent_energy_pdf.plotOn(xframes[i][j],RooFit.Range(sub_fit_range), RooFit.NormRange(sub_fit_range))
                 xframes[i][j].Draw()
                 gPad.Update()
 
@@ -359,7 +384,7 @@ def main():
     for i in xrange(4):
         can_t.cd(i+1)
 
-        #if 1:
+        #if 0:
         if i==1:
 
             pars_dict["mod_off"].setVal(10.0)

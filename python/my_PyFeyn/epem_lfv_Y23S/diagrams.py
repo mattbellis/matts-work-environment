@@ -145,10 +145,10 @@ def epem_lfv_y23s(outfilename, stage=0):
                 frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([GRAY,THICK1]).addLabel(frag_names[k], pos=1.18, displace=-0.00))
             elif stage==3 and k==0:
                 frags.append(Fermion(fin, fout).addArrow(1.05).setStyles([FORESTGREEN,THICK3]).addLabel(frag_names[k], pos=0.69, displace=+0.25))
-            elif stage==4 and k!=0:
+            elif stage==4 and k!=0 and k!=1:
                 frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([GRAY,THICK1]).addLabel(frag_names[k], pos=1.18, displace=+0.00))
             elif stage==4 and k==0:
-                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([SKYBLUE,THICK3]).addLabel(r"$\rho/a_1$", pos=0.69, displace=+0.25))
+                frags.append(Higgs(fin, fout).addArrow(1.05).setStyles([SKYBLUE,THICK3]).addLabel(r"$\rho^-/a_1^-$", pos=0.69, displace=+0.25))
 
                 d_frag_angle = [-10,20,60]
                 d_frag_names = [r"$\pi$", r"$\pi$", r"$\pi$"]

@@ -53,12 +53,15 @@ frame_x.Draw()
 gPad.Update()
 
 can.cd(2)
+rargset = RooArgSet(total)
+total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(3))
 rargset = RooArgSet(prod0)
 total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(4))
 rargset = RooArgSet(prod1)
 total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(2))
 frame_t.Draw()
 gPad.Update()
+
 
 ############################################################################
 rep = ''

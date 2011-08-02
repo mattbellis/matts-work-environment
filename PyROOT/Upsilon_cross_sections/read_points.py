@@ -447,6 +447,8 @@ for j in range(0,3):
 
         ana_text[j][i].SetTextColor(0)
         ana_text[j][i].SetFillColor(1)
+        if i==1:
+            ana_text[j][i].SetFillColor(4)
         ana_text[j][i].SetBorderSize(0)
 
 
