@@ -64,9 +64,10 @@ def main():
     # 102-107
     # 306-308
     ############################################################################
-    dead_days = [[68,74], [102,107],[306,308]]
+    #dead_days = [[68,74], [102,107],[306,308]]
+
     #dead_days = [[2,100],[390,480]]
-    #dead_days = [[100,100]]
+    dead_days = [[100,100]]
     #dead_days = [[60,60], [100,100],[200,200]]
 
     n_good_spots = len(dead_days)+1
@@ -96,6 +97,11 @@ def main():
 
         print "%s %d %d" % (name,lo,hi)
         t.setRange(name,lo,hi)
+
+        ########################################
+        # Do I need to do this?
+        ########################################
+        x.setRange(name,0.5,3.0)
 
 
     print "fit_range ---------------------- "
@@ -158,7 +164,7 @@ def main():
             if time_days > 990:
                 exit(0);
 
-    #data_total = total_pdf.generate(RooArgSet(x,t),36000)
+    #data_total = total_pdf.generate(RooArgSet(x,t),2200)
 
     ############################################################################
     # Make sure the data is in the live time of the experiment.
@@ -291,7 +297,7 @@ def main():
     cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
     cogent_pars_dict["ncosmogenics_e"].setConstant(True)
 
-    cogent_pars_dict["sig_slope"].setVal(-4.5)
+    cogent_pars_dict["sig_slope"].setVal(-2.5)
     cogent_pars_dict["sig_slope"].setConstant(True)
 
     #e_fit_range = "%s,%s" % ("sub_x2",fit_range)
@@ -312,7 +318,7 @@ def main():
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(e_fit_range))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
 
-    cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
+    #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
 
     #cogent_sub_funcs_dict["cg_total"].plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range))
 
@@ -320,15 +326,18 @@ def main():
     for s in cogent_sub_funcs_dict:
         if "cg_" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(3),RooFit.LineStyle(2))
             #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
     '''
 
     #'''
     for s in cogent_sub_funcs_dict:
+        print s
         if "cg_total" in s:
+            print "Plotting !!!!!!!!!!!!!!!"
+            print s
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2))
             #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
     #'''
 
@@ -364,6 +373,7 @@ def main():
     gPad.Update()
 
     # Try plotting on some of the tbins
+    '''
     for i in xrange(tbins):
         for j in xrange(4):
             
@@ -377,10 +387,12 @@ def main():
                 xframes[i][j].Draw()
                 gPad.Update()
 
+    '''
 
 
 
     fit_results = []
+    '''
     for i in xrange(4):
         can_t.cd(i+1)
 
@@ -427,18 +439,23 @@ def main():
         tframes[i].Draw()
         gPad.Update()
 
+    '''
+
+    '''
     for f in fit_results:
         f.Print("v")
+    '''
 
+    cogent_energy_pdf.Print("v")
     e_fit_results.Print("v")
+    
 
     print fit_range
     #print e_fit_range
 
-    print "chi2: %f" % (chi2)
-    print "\n"
+    #print "\nchi2: %f" % (chi2)
     for i in xrange(4):
-        print "entries: %d" % (data_reduced[i].numEntries())
+        print "%d entries: %d" % (i, data_reduced[i].numEntries())
 
 
     ############################################################################
