@@ -27,6 +27,9 @@ def main():
     #x = RooRealVar("x","ionization energy (keVee)",0.0,3.0);
     x = RooRealVar("x","ionization energy (keVee)",0.5,3.0);
     #t = RooRealVar("t","time",5.0,tmax+5)
+
+    x.setRange("FULL",0.5,3.0)
+    t.setRange("FULL",1.0,tmax+1)
     
     myset = RooArgSet()
     myset.add(x)
@@ -64,10 +67,10 @@ def main():
     # 102-107
     # 306-308
     ############################################################################
-    #dead_days = [[68,74], [102,107],[306,308]]
+    dead_days = [[68,74], [102,107],[306,308]]
 
     #dead_days = [[2,100],[390,480]]
-    dead_days = [[100,100]]
+    #dead_days = [[100,100]]
     #dead_days = [[60,60], [100,100],[200,200]]
 
     n_good_spots = len(dead_days)+1
@@ -101,7 +104,7 @@ def main():
         ########################################
         # Do I need to do this?
         ########################################
-        x.setRange(name,0.5,3.0)
+        #x.setRange(name,0.5,3.0)
 
 
     print "fit_range ---------------------- "
@@ -164,7 +167,26 @@ def main():
             if time_days > 990:
                 exit(0);
 
+    #peak_pars,peak_sub_func,peak_pdf = cosmogenic_peaks(x)
+    cogent_pars,cogent_sub_funcs,cogent_energy_pdf = cogent_pdf(x,t)
+    #exit()
+
+    # Make a dictionary out of the pars and sub_funcs
+    cogent_pars_dict = {}
+    for p in cogent_pars:
+        cogent_pars_dict[p.GetName()] = p
+        cogent_pars_dict[p.GetName()].setConstant(True)
+
+    # 
+    cogent_sub_funcs_dict = {}
+    for p in cogent_sub_funcs:
+        cogent_sub_funcs_dict[p.GetName()] = p
+
+    cogent_pars_dict["nsig_e"].setVal(525.0)
+    cogent_pars_dict["nbkg_e"].setVal(800.0)
+    cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
     #data_total = total_pdf.generate(RooArgSet(x,t),2200)
+    #data_total = cogent_energy_pdf.generate(RooArgSet(x,t),2200)
 
     ############################################################################
     # Make sure the data is in the live time of the experiment.
@@ -269,36 +291,21 @@ def main():
 
 
 
-    #peak_pars,peak_sub_func,peak_pdf = cosmogenic_peaks(x)
-    cogent_pars,cogent_sub_funcs,cogent_energy_pdf = cogent_pdf(x,t)
-    #exit()
-
-    # Make a dictionary out of the pars and sub_funcs
-    cogent_pars_dict = {}
-    for p in cogent_pars:
-        cogent_pars_dict[p.GetName()] = p
-        cogent_pars_dict[p.GetName()].setConstant(True)
-
-    # 
-    cogent_sub_funcs_dict = {}
-    for p in cogent_sub_funcs:
-        cogent_sub_funcs_dict[p.GetName()] = p
-
     ############################################################################
     # Try fitting the energy spectrum
     ############################################################################
 
     cogent_pars_dict["nsig_e"].setVal(525.0)
-    cogent_pars_dict["nsig_e"].setConstant(False)
+    cogent_pars_dict["nsig_e"].setConstant(True)
 
     cogent_pars_dict["nbkg_e"].setVal(800.0)
-    cogent_pars_dict["nbkg_e"].setConstant(False)
+    cogent_pars_dict["nbkg_e"].setConstant(True)
 
     cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
     cogent_pars_dict["ncosmogenics_e"].setConstant(True)
 
-    cogent_pars_dict["sig_slope"].setVal(-2.5)
-    cogent_pars_dict["sig_slope"].setConstant(True)
+    #cogent_pars_dict["sig_slope"].setVal(-2.5)
+    #cogent_pars_dict["sig_slope"].setConstant(True)
 
     #e_fit_range = "%s,%s" % ("sub_x2",fit_range)
 
@@ -309,12 +316,19 @@ def main():
     e_fit_results = cogent_energy_pdf.fitTo(data,
             RooFit.Range(fit_range),
             RooFit.Save(True),
-            RooFit.Extended(True)
+            #RooFit.Extended(True)
             )
     #'''
 
+    #cogent_energy_pdf.plotOn(xframe_main, RooFit.Range(fit_range))
+    #cogent_energy_pdf.plotOn(xframe_main)
+    #cogent_energy_pdf.plotOn(xframe_main, RooFit.Range(fit_range), RooFit.NormRange(fit_range))
+    cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+    #cogent_energy_pdf.plotOn(tframe_main, RooFit.Range(fit_range), RooFit.NormRange(fit_range))
+    cogent_energy_pdf.plotOn(tframe_main, RooFit.Range("FULL"), RooFit.NormRange("FULL"))
+
+    #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range))
-    cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(e_fit_range))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
 
@@ -322,13 +336,14 @@ def main():
 
     #cogent_sub_funcs_dict["cg_total"].plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range))
 
-    '''
+    #'''
     for s in cogent_sub_funcs_dict:
         if "cg_" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(3),RooFit.LineStyle(2))
+           # cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(3),RooFit.LineStyle(2))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
             #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
-    '''
+    #'''
 
     #'''
     for s in cogent_sub_funcs_dict:
@@ -337,8 +352,7 @@ def main():
             print "Plotting !!!!!!!!!!!!!!!"
             print s
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2))
-            #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
     #'''
 
 
@@ -346,7 +360,8 @@ def main():
     for s in cogent_sub_funcs_dict:
         if "_exp" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange(fit_range),RooFit.Components(argset),RooFit.LineColor(36),RooFit.LineStyle(3))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(36),RooFit.LineStyle(3),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.Range(fit_range),RooFit.LineColor(36),RooFit.LineStyle(3))
     #'''
 
     '''
@@ -354,7 +369,9 @@ def main():
         if "cosmogenic_pdfs_" in s:
             print s
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_sub_funcs_dict[s].plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+            #cogent_sub_funcs_dict[s].plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+            #cogent_sub_funcs_dict[s].plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
+            cogent_sub_funcs_dict[s].plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
     '''
 
 
@@ -447,7 +464,7 @@ def main():
     '''
 
     cogent_energy_pdf.Print("v")
-    e_fit_results.Print("v")
+    #e_fit_results.Print("v")
     
 
     print fit_range
