@@ -324,8 +324,8 @@ def main():
     #cogent_energy_pdf.plotOn(xframe_main)
     #cogent_energy_pdf.plotOn(xframe_main, RooFit.Range(fit_range), RooFit.NormRange(fit_range))
     cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("FULL"),RooFit.NormRange("FULL"))
-    #cogent_energy_pdf.plotOn(tframe_main, RooFit.Range(fit_range), RooFit.NormRange(fit_range))
-    cogent_energy_pdf.plotOn(tframe_main, RooFit.Range("FULL"), RooFit.NormRange("FULL"))
+    cogent_energy_pdf.plotOn(tframe_main, RooFit.Range(fit_range), RooFit.NormRange(fit_range))
+    #cogent_energy_pdf.plotOn(tframe_main, RooFit.Range("FULL"), RooFit.NormRange("FULL"))
 
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range))

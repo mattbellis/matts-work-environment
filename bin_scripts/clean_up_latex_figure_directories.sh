@@ -25,7 +25,7 @@ foreach dir ( "figures" "tmva_figures" "roofit_figures" )
 
         mv $dir $dir.BAK
         mv $new_dir $dir
-        rm -rf $dir.BAK
+        #rm -rf $dir.BAK
       
        endif
 
