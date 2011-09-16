@@ -1,0 +1,38 @@
+# This is the CMU file.
+# Just a trial file. 
+
+% DATASET dataset
+
+# Treat the magnetic multipoles differently
+class<channel=s:mp=M*>
+{
+  parameter  [ gP.mod.channel.isospin.jp, free , (0, 6.28) ,  0.01, cos(x),   -sin(x)]
+  parameter  [ gP.phase.channel.isospin.jp, free , (0,6.28) ,  0.01, exp(i*x), i*exp(i*x)]
+  parameter  [ gD.mod.channel.isospin.jp.final_state.L.S, free, (-10,10), 0.01, x,   1]
+  coherence  [   mz_g.mz_i.mz_f.dataset.final_state ]
+}
+
+# Treat the electric multipoles differently
+class<channel=s:mp=E*>
+{
+  parameter  [ gP.mod.channel.isospin.jp,  free , (0,6.28) ,  0.01, sin(x),   cos(x)]
+  parameter  [ gP.phase.channel.isospin.jp, free , (0,6.28) ,  0.01, exp(i*x), i*exp(i*x)]
+  parameter  [ gD.mod.channel.isospin.jp.final_state.L.S,   free, (-10,10), 0.01, x,   1]
+  coherence  [   mz_g.mz_i.mz_f.dataset.final_state ]
+}
+
+# This is for s-channel amplitudes with J=1/2 and only one coupling
+class<channel=s:jp=1*>
+{
+  parameter  [ gP.mod.channel.isospin.jp,                free , (-10,10) ,  0.01, x,   1]
+  parameter  [ gP.phase.channel.isospin.jp,              fixed , 0.0 ,  0.00, exp(i*x), i*exp(i*x)]
+  coherence  [   mz_g.mz_i.mz_f.dataset.final_state ]
+}
+
+class<channel=t>
+{
+  parameter  [ gP.mod.channel.jp.propagator.lorentz,free , (-10,10) ,  0.01, x,   1]
+  coherence  [   mz_g.mz_i.mz_f.dataset.final_state ]
+}
+
+
