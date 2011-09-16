@@ -5,8 +5,11 @@ from ROOT import *
 x = RooRealVar("x","ionization energy (keVee)",0.0,12.0);
 t = RooRealVar("t","time",1.0,500)
 
-t.setRange("range0",1.0,400.0)
+t.setRange("range0",1.0,200.0)
 x.setRange("range0",0.0,12.0)
+
+t.setRange("range1",200.0,500.0)
+x.setRange("range1",0.0,12.0)
 
 t.setRange("FULL",1.0,500.0)
 x.setRange("FULL",0.0,12.0)
@@ -23,7 +26,7 @@ mean1 = RooRealVar("mean1","mean1",7)
 sigma1 = RooRealVar("sigma1","sigma1",0.5)
 gauss1 = RooGaussian("gauss1","gauss1",x,mean1,sigma1)
 
-slope_x = RooRealVar("slope_x","slope_x",-0.5)
+slope_x = RooRealVar("slope_x","slope_x",-0.3)
 decay_x = RooExponential("decay_x","decay_x",x,slope_x)
 
 ################################################################################
@@ -49,9 +52,22 @@ t.setBins(50)
 frame_x = x.frame(RooFit.Title("x"))
 frame_t = t.frame(RooFit.Title("t"))
 
-data = total.generate(RooArgSet(x,t),1000)
+data = total.generate(RooArgSet(x,t),2500)
 
-results = total.fitTo(data,RooFit.Save(True),RooFit.Range("range0"),RooFit.Extended(True))
+
+n0.setVal(1000)
+n0.setConstant(False)
+
+n1.setVal(500)
+n1.setConstant(False)
+
+n2.setVal(1000)
+n2.setConstant(False)
+
+fit_range = "range0,range1"
+#fit_range = "FULL"
+
+results = total.fitTo(data,RooFit.Save(True),RooFit.Range(fit_range),RooFit.Extended(True))
 results.Print("v")
 
 data.plotOn(frame_x)
@@ -61,31 +77,39 @@ can = TCanvas("can","can",10,10,1000,600)
 can.SetFillColor(0)
 can.Divide(2,1)
 
+################################################################################
+
 can.cd(1)
+rargset = RooArgSet(total)
+total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(3),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+
 rargset = RooArgSet(prod0)
-total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(4),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(4),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
 
 rargset = RooArgSet(prod1)
-total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(2),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(2),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
 
 rargset = RooArgSet(decay_x)
-total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(22),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
-
-rargset = RooArgSet(total)
-total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(3),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(22),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
 
 frame_x.Draw()
 gPad.Update()
 
+################################################################################
+
 can.cd(2)
 rargset = RooArgSet(total)
-total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(3))
+total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(3),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+
 rargset = RooArgSet(prod0)
-total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(4))
+total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(4),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+
 rargset = RooArgSet(prod1)
-total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(2))
+total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(2),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+
 rargset = RooArgSet(decay_x)
-total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(22))
+total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(22),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+
 frame_t.Draw()
 gPad.Update()
 

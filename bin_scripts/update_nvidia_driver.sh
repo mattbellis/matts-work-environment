@@ -16,11 +16,21 @@
 #sudo apt-get install nvidia-glx/unstable nvidia-xconfig/unstable xserver-xorg/unstable
 #sudo dpkg-reconfigure xserver-xorg
 
+# For laptop
+#sudo apt-get remove nvidia-glx nvidia-glx-dev nvidia-kernel-dkms
+#sudo apt-get install nvidia-kernel-dkms
+#sudo apt-get install nvidia-vdpau-driver/unstable
+#sudo apt-get install nvidia-glx/unstable libgl1-nvidia-glx/unstable nvidia-xconfig/unstable xserver-xorg/unstable
+#sudo nvidia-xconfig
+
+# For desktop
+# Seems to work with 2.6.32
+# nvidia driver 280
 sudo apt-get remove nvidia-glx nvidia-glx-dev nvidia-kernel-dkms
-sudo apt-get install nvidia-kernel-dkms
-#sudo apt-get install nvidia-glx/unstable nvidia-glx-dev/unstable nvidia-xconfig/unstable xserver-xorg/unstable
-#sudo apt-get install nvidia-glx libgl1-nvidia-glx nvidia-xconfig xserver-xorg
+sudo apt-get install nvidia-kernel-dkms/unstable
 sudo apt-get install nvidia-vdpau-driver/unstable
-sudo apt-get install nvidia-glx/unstable libgl1-nvidia-glx/unstable nvidia-xconfig/unstable xserver-xorg/unstable
+#sudo apt-get install nvidia-glx/unstable nvidia-glx-dev/unstable libgl1-nvidia-glx/unstable nvidia-xconfig/unstable xserver-xorg/unstable
+sudo apt-get install nvidia-glx/unstable libgl1-nvidia-glx/unstable nvidia-alternative/unstable nvidia-xconfig/unstable xserver-xorg/unstable
+#nvidia-kernel-280.13/unstable 
 sudo nvidia-xconfig
 
