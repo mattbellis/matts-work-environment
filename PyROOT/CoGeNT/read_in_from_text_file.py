@@ -304,8 +304,8 @@ def main():
     cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
     cogent_pars_dict["ncosmogenics_e"].setConstant(True)
 
-    #cogent_pars_dict["sig_slope"].setVal(-2.5)
-    #cogent_pars_dict["sig_slope"].setConstant(True)
+    cogent_pars_dict["sig_slope"].setVal(-4.5)
+    cogent_pars_dict["sig_slope"].setConstant(True)
 
     #e_fit_range = "%s,%s" % ("sub_x2",fit_range)
 
@@ -323,8 +323,11 @@ def main():
     #cogent_energy_pdf.plotOn(xframe_main, RooFit.Range(fit_range))
     #cogent_energy_pdf.plotOn(xframe_main)
     #cogent_energy_pdf.plotOn(xframe_main, RooFit.Range(fit_range), RooFit.NormRange(fit_range))
-    cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("FULL"),RooFit.NormRange("FULL"))
-    cogent_energy_pdf.plotOn(tframe_main, RooFit.Range(fit_range), RooFit.NormRange(fit_range))
+    cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+
+    rargset = RooArgSet(cogent_energy_pdf)
+    cogent_energy_pdf.plotOn(tframe_main, RooFit.Components(rargset), RooFit.Range(fit_range), RooFit.NormRange("FULL"))
+    #cogent_energy_pdf.plotOn(tframe_main, RooFit.Components(rargset))
     #cogent_energy_pdf.plotOn(tframe_main, RooFit.Range("FULL"), RooFit.NormRange("FULL"))
 
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range), RooFit.NormRange(fit_range))
@@ -342,6 +345,7 @@ def main():
             argset = RooArgSet(cogent_sub_funcs_dict[s])
            # cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(3),RooFit.LineStyle(2))
             cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
             #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
     #'''
 
@@ -353,15 +357,18 @@ def main():
             print s
             argset = RooArgSet(cogent_sub_funcs_dict[s])
             cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
     #'''
 
 
     #'''
+    count = 0
     for s in cogent_sub_funcs_dict:
         if "_exp" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(36),RooFit.LineStyle(3),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
-            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.Range(fit_range),RooFit.LineColor(36),RooFit.LineStyle(3))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(26+count),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(26+count),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+            count += 10
     #'''
 
     '''
@@ -464,7 +471,7 @@ def main():
     '''
 
     cogent_energy_pdf.Print("v")
-    #e_fit_results.Print("v")
+    e_fit_results.Print("v")
     
 
     print fit_range
