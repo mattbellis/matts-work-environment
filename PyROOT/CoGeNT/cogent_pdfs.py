@@ -151,15 +151,29 @@ def cogent_pdf(x,t):
     # Define the exponential background
     ############################################################################
     bkg_slope = RooRealVar("bkg_slope","Exponential slope of the background",-0.0,-10.0,0.0)
-    bkg_slope_t = RooRealVar("bkg_slope_t","Exponential slope of the background t",0.0,-100.0,0.0)
     #bkg_exp = RooExponential("bkg_exp","Exponential PDF for bkg",x,bkg_slope)
     bkg_exp_x = RooExponential("bkg_exp_x","Exponential PDF for bkg x",x,bkg_slope)
-    bkg_exp_t = RooExponential("bkg_exp_t","Exponential PDF for bkg t",t,bkg_slope_t)
+
+    bkg_slope_t = RooRealVar("bkg_slope_t","Exponential slope of the background t",0.0,-100.0,0.0)
+    #bkg_exp_t = RooExponential("bkg_exp_t","Exponential PDF for bkg t",t,bkg_slope_t)
+
+    bkg_mod_frequency = RooRealVar("bkg_mod_frequency","Background modulation frequency",0.0)
+    bkg_mod_offset = RooRealVar("bkg_mod_offset","Background modulation offset",2)
+    bkg_mod_phase = RooRealVar("bkg_mod_phase","Background modulation phase",0.0)
+    bkg_mod_amp = RooRealVar("bkg_mod_amp","Background modulation amplitude",1.0)
+
+    bkg_exp_t = RooGenericPdf("bkg_exp_t","Background modulation","bkg_mod_offset+bkg_mod_amp*sin((bkg_mod_frequency*t) + bkg_mod_phase)",RooArgList(bkg_mod_offset,bkg_mod_amp,bkg_mod_frequency,bkg_mod_phase,t)) ;
 
     bkg_exp = RooProdPdf("bkg_exp","bkg_exp_x*bkg_exp_t",RooArgList(bkg_exp_x,bkg_exp_t))
 
     #pars.append(bkg_slope)
     #sub_funcs.append(bkg_exp)
+
+    pars.append(bkg_mod_frequency)
+    pars.append(bkg_mod_amp)
+    pars.append(bkg_mod_phase)
+    pars.append(bkg_mod_offset)
+
 
     pars.append(bkg_slope)
     pars.append(bkg_slope_t)
@@ -177,17 +191,19 @@ def cogent_pdf(x,t):
     sig_slope_t = RooRealVar("sig_slope_t","Exponential slope of the signal t",-0.00001,-100.0,0.0)
     #sig_exp_t = RooExponential("sig_exp_t","Exponential PDF for sig t",t,sig_slope_t)
 
-    sig_mod_frequency = RooRealVar("sig_mod_frequency","Signal modulation frequency",0.017)
-    sig_mod_amp = RooRealVar("sig_mod_amp","Signal modulation amp",3)
-    sig_mod_phase = RooRealVar("sig_mod_phase","Signal modulation phase",0)
+    sig_mod_frequency = RooRealVar("sig_mod_frequency","Signal modulation frequency",0.00)
+    sig_mod_offset = RooRealVar("sig_mod_offset","Signal modulation phase",2.0)
+    sig_mod_phase = RooRealVar("sig_mod_phase","Signal modulation phase",0.0)
+    sig_mod_amp = RooRealVar("sig_mod_amp","Signal modulation amp",1.0)
 
-    sig_exp_t = RooGenericPdf("sig_exp_t","Signal modulation","sig_mod_amp+sin(sig_mod_frequency*t + sig_mod_phase)",RooArgList(sig_mod_amp,sig_mod_frequency,sig_mod_phase,t)) ;
+    sig_exp_t = RooGenericPdf("sig_exp_t","Signal modulation","sig_mod_offset+sig_mod_amp*sin((sig_mod_frequency*t) + sig_mod_phase)",RooArgList(sig_mod_offset,sig_mod_amp,sig_mod_frequency,sig_mod_phase,t)) ;
 
     sig_exp = RooProdPdf("sig_exp","sig_exp_x*sig_exp_t",RooArgList(sig_exp_x,sig_exp_t))
 
     pars.append(sig_mod_frequency)
     pars.append(sig_mod_amp)
     pars.append(sig_mod_phase)
+    pars.append(sig_mod_offset)
 
     pars.append(sig_slope)
     pars.append(sig_slope_t)

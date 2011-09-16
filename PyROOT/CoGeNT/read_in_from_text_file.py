@@ -3,6 +3,8 @@
 import sys
 from ROOT import *
 
+from math import *
+
 from cogent_utilities import *
 from cogent_pdfs import *
 
@@ -10,6 +12,13 @@ from cogent_pdfs import *
 ################################################################################
 ################################################################################
 def main():
+
+    ############################################
+    RooMsgService.instance().Print()
+    RooMsgService.instance().deleteStream(1)
+    RooMsgService.instance().Print()
+    ############################################
+
 
     first_event = 2750361.2 # seconds
 
@@ -35,6 +44,7 @@ def main():
     myset.add(x)
     myset.add(t)
     data_total = RooDataSet("data_total","data_total",myset)
+    data_acc_corr = RooDataSet("data_acc_corr","data_acc_corr",myset)
 
     x_ranges = [[0.0,3.0],
                 [0.5,0.9],
@@ -133,6 +143,10 @@ def main():
     infilename = sys.argv[1]
     infile = open(infilename)
 
+    save_file_name = "default"
+    if len(sys.argv)>=3:
+        save_file_name = sys.argv[2]
+
     for line in infile:
         
         vals = line.split()
@@ -199,6 +213,8 @@ def main():
 
     print "total entries: %d" % (data_total.numEntries())
     print "fit   entries: %d" % (data.numEntries())
+
+    #hacc_corr = TH1F("hacc_corr","hacc_corr",tbins,1,tmax+1)
 
     data_reduced = []
     for i in range(0,4):
@@ -296,16 +312,33 @@ def main():
     ############################################################################
 
     cogent_pars_dict["nsig_e"].setVal(525.0)
-    cogent_pars_dict["nsig_e"].setConstant(True)
+    cogent_pars_dict["nsig_e"].setConstant(False)
 
     cogent_pars_dict["nbkg_e"].setVal(800.0)
-    cogent_pars_dict["nbkg_e"].setConstant(True)
+    cogent_pars_dict["nbkg_e"].setConstant(False)
 
     cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
     cogent_pars_dict["ncosmogenics_e"].setConstant(True)
 
     cogent_pars_dict["sig_slope"].setVal(-4.5)
-    cogent_pars_dict["sig_slope"].setConstant(True)
+    cogent_pars_dict["sig_slope"].setConstant(False)
+
+
+
+    yearly_mod = 2*pi/365.0
+    cogent_pars_dict["sig_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["sig_mod_frequency"].setConstant(True)
+    cogent_pars_dict["bkg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["bkg_mod_frequency"].setConstant(True)
+
+    cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(False)
+    #cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(False)
+    #cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(True)
+    cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
+
+    cogent_pars_dict["sig_mod_amp"].setVal(1.0); cogent_pars_dict["sig_mod_amp"].setConstant(False)
+    #cogent_pars_dict["bkg_mod_amp"].setVal(1.0); cogent_pars_dict["bkg_mod_amp"].setConstant(False)
+    #cogent_pars_dict["sig_mod_amp"].setVal(0.0); cogent_pars_dict["sig_mod_amp"].setConstant(True)
+    cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
+
 
     #e_fit_range = "%s,%s" % ("sub_x2",fit_range)
 
@@ -315,8 +348,8 @@ def main():
     #'''
     e_fit_results = cogent_energy_pdf.fitTo(data,
             RooFit.Range(fit_range),
+            RooFit.Extended(True),
             RooFit.Save(True),
-            #RooFit.Extended(True)
             )
     #'''
 
@@ -344,8 +377,8 @@ def main():
         if "cg_" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
            # cogent_energy_pdf.plotOn(xframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(3),RooFit.LineStyle(2))
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
-            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(2),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
             #cogent_energy_pdf.plotOn(tframe_main,RooFit.Range(fit_range),RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(3))
     #'''
 
@@ -356,8 +389,8 @@ def main():
             print "Plotting !!!!!!!!!!!!!!!"
             print s
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
-            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
     #'''
 
 
@@ -366,8 +399,8 @@ def main():
     for s in cogent_sub_funcs_dict:
         if "_exp" in s:
             argset = RooArgSet(cogent_sub_funcs_dict[s])
-            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(26+count),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
-            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(26+count),RooFit.LineStyle(1),RooFit.Range("FULL"),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(26+count),RooFit.LineStyle(1),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
+            cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(26+count),RooFit.LineStyle(1),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
             count += 10
     #'''
 
@@ -395,6 +428,10 @@ def main():
     #tframe_main.GetYaxis().SetRangeUser(0.0,200.0)
     tframe_main.Draw()
     gPad.Update()
+
+    for file_type in ['png','pdf','eps']:
+        outfile = "%s.%s" % (save_file_name,file_type)
+        can_x_main.SaveAs(outfile)
 
     # Try plotting on some of the tbins
     '''
@@ -472,6 +509,7 @@ def main():
 
     cogent_energy_pdf.Print("v")
     e_fit_results.Print("v")
+    print "neg log likelihood: %f" % (e_fit_results.minNll())
     
 
     print fit_range
