@@ -8,3 +8,15 @@ Mrxvt.foreground:      white
 Mrxvt.font:             10x20
 #-bg black -fg white -fn 10x20
 
+NIU_lecture_notes.initProfileList:  1,2,3,4
+Mrxvt.profile1.workingDirectory:       ~/current_lecture/lecture_notes
+Mrxvt.profile2.workingDirectory:       ~/current_lecture/lecture_notes
+Mrxvt.profile3.workingDirectory:       ~/current_lecture/lecture_notes
+Mrxvt.profile4.workingDirectory:       ~/current_lecture/lecture_notes/figures
+
+NIU_lecture_slides.initProfileList:  5,6,7,8
+Mrxvt.profile5.workingDirectory:       ~/current_lecture/slides/
+Mrxvt.profile6.workingDirectory:       ~/current_lecture/slides/
+Mrxvt.profile7.workingDirectory:       ~/current_lecture/slides/
+Mrxvt.profile8.workingDirectory:       ~/current_lecture/slides/figures
+
