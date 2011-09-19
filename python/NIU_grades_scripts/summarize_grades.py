@@ -18,6 +18,8 @@ def main():
     hw_indices = []
     hw_grades = [] 
     hw_max_pts = []
+    hw_add = []
+    hw_sub = []
     q_indices = []
     names = []
 
@@ -37,6 +39,11 @@ def main():
         if line_num==2:
             for index in hw_indices:
                 hw_max_pts.append(float(row[index]))
+                if row[index+1]=='':
+                    hw_add.append(0.0)
+                else:
+                    hw_add.append(float(row[index+1]))
+                hw_sub.append(float(row[index+2]))
                 hw_grades.append([])
 
         # Grab the hw info
@@ -49,6 +56,12 @@ def main():
                 grade = 0
                 if index<row_len and row[index]!='':
                     grade = 100.0*float(row[index])/norm
+                # Check for late grades
+                elif index<row_len and row[index+2]!='':
+                    grade = 100.0*float(row[index+2])/norm
+                    grade -= hw_sub[j]
+
+                grade +=  hw_add[j]
 
                 hw_grades[j].append(grade)
                 print grade
@@ -106,10 +119,14 @@ def main():
         colors = ['r','b','g','c','y']
         h = []
         for i,hpts in enumerate(hw_pts):
-            hist(hpts,bins=20,facecolor=colors[i],range=(0,100))
+            hist(hpts,bins=22,facecolor=colors[i],range=(0,110))
 
         subplots[k].set_xlabel(title, fontsize=14, weight='bold')
         subplots[k].set_ylim(0,20)
+
+    for i,f in enumerate(figs):
+        name = "hw_dist_%d" % (i)
+        f.savefig(name)
 
     plt.show()
 
