@@ -1,0 +1,19 @@
+#!/bin/tcsh
+
+set lecture = $1
+
+cd
+if ( -d ~/NIU/Phys_283_Modern_Physics/Fall_2011/my_lectures/lecture_$lecture ) then
+
+    rm -f current_lecture 
+    ln -s ~/NIU/Phys_283_Modern_Physics/Fall_2011/my_lectures/lecture_$lecture current_lecture 
+
+else
+
+    echo "Directory doesn't exist!"
+
+endif
+
+mrxvt -name NIU_lecture_notes &
+mrxvt -name NIU_lecture_slides &
+
