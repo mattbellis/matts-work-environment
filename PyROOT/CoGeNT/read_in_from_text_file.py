@@ -26,6 +26,8 @@ def main():
     tbins = 16;
     #tbins = 64;
     t_bin_width = tmax/tbins
+
+    lo_energy = 0.50
     ############################################################################
     # Define the variables and ranges
     # 
@@ -34,10 +36,10 @@ def main():
     #x = RooRealVar("x","ionization energy (keVee)",0.0,12.0);
     t = RooRealVar("t","time",1.0,tmax+1)
     #x = RooRealVar("x","ionization energy (keVee)",0.0,3.0);
-    x = RooRealVar("x","ionization energy (keVee)",0.5,3.0);
+    x = RooRealVar("x","ionization energy (keVee)",lo_energy,3.0);
     #t = RooRealVar("t","time",5.0,tmax+5)
 
-    x.setRange("FULL",0.5,3.0)
+    x.setRange("FULL",lo_energy,3.0)
     t.setRange("FULL",1.0,tmax+1)
     
     myset = RooArgSet()
@@ -47,15 +49,15 @@ def main():
     data_acc_corr = RooDataSet("data_acc_corr","data_acc_corr",myset)
 
     x_ranges = [[0.0,3.0],
-                [0.5,0.9],
-                [0.5,3.0],
+                [lo_energy,0.9],
+                [lo_energy,3.0],
                 [0.0,0.4]
                 ]
 
-    x.setRange("good_days_0",0.5,3.0)
-    x.setRange("good_days_1",0.5,3.0)
-    x.setRange("good_days_2",0.5,3.0)
-    x.setRange("good_days_3",0.5,3.0)
+    x.setRange("good_days_0",lo_energy,3.0)
+    x.setRange("good_days_1",lo_energy,3.0)
+    x.setRange("good_days_2",lo_energy,3.0)
+    x.setRange("good_days_3",lo_energy,3.0)
 
     for i,r in enumerate(x_ranges):
 
@@ -114,7 +116,7 @@ def main():
         ########################################
         # Do I need to do this?
         ########################################
-        #x.setRange(name,0.5,3.0)
+        #x.setRange(name,lo_energy,3.0)
 
 
     print "fit_range ---------------------- "
@@ -175,7 +177,7 @@ def main():
                 print time_days
 
             # For diagnostics.
-            if energy>=0.5 and energy<=3.0:
+            if energy>=lo_energy and energy<=3.0:
                 data_total.add(myset)
 
             if time_days > 990:
@@ -509,10 +511,11 @@ def main():
 
     cogent_energy_pdf.Print("v")
     e_fit_results.Print("v")
+    e_fit_results.correlationMatrix().Print("v")
     print "neg log likelihood: %f" % (e_fit_results.minNll())
     
 
-    print fit_range
+    #print fit_range
     #print e_fit_range
 
     #print "\nchi2: %f" % (chi2)
