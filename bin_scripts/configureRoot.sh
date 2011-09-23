@@ -1,4 +1,6 @@
-./configure linux    	--prefix=/usr/local \
+#./configure linux \
+./configure linuxx8664gcc \
+                      --prefix=/usr/local \
                       --with-cern-libdir=/usr/lib \
                       --enable-mathcore \
                       --enable-mathmore \

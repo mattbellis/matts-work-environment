@@ -6,90 +6,18 @@ alias ls 	'ls --color=auto'
 
 limit coredumpsize 102400 # limit size to 100M
 
-setenv CVSROOT bellis@cvs.jlab.org:/group/clas/clas_cvs
-setenv CVS_RSH ssh
-
-setenv CLAS_LOCATION $HOME
-setenv CLAS_ROOT $HOME/clas
-setenv BUILDS $CLAS_ROOT/builds
-setenv CLAS_BUILD $CLAS_ROOT/builds
-setenv TOP_DIR $CLAS_BUILD
-setenv CLAS_PARMS $CLAS_ROOT/parms
-setenv CLAS_PACK $CLAS_BUILD/packages
-setenv CLAS_CMS $CLAS_PACK/cms
-setenv CLAS_LIB $CLAS_BUILD/lib/Linux
-setenv CLAS_SLIB $CLAS_BUILD/slib/Linux
-setenv CLAS_BIN $CLAS_BUILD/bin/Linux
-setenv CLAS_SCRIPTS $CLAS_PACK/scripts
-setenv CLAS_TOOLS $CLAS_ROOT/tools
-
-#setenv ROOTSYS /usr/local/lib/root/
-# LD_LIBRARY_PATH $ROOTSYS/lib
 
 setenv MYSQL_INCLUDE_PATH /usr/include/mysql
 setenv MYSQL_LIB_PATH /usr/lib/mysql
 setenv CLASTOOL `pwd`
 
-#setenv CERN 	  	$HOME/cern
-#setenv CERN_LEVEL 2003
-#setenv CERN_ROOT 	$CERN/$CERN_LEVEL
-#setenv CVSCOSRC 	$CERN_ROOT/src
-
-setenv CERN $HOME/cern/
-setenv CERN_LEVEL 2006
-setenv CERN_ROOT $CERN/$CERN_LEVEL
-setenv CERN_LIB $CERN/$CERN_LEVEL/lib
-setenv CVSCOSRC 	$HOME/src/2006/
-
-#setenv ROOTSYS 	/usr/local
-#setenv LD_LIBRARY_PATH 	/usr/local/lib/root
 setenv LD_LIBRARY_PATH 	/usr/lib/root
 
-setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${CLAS_BIN}:${CLAS_SCRIPTS}:${PATH}:${CVSCOSRC}:${CERN_ROOT}/bin:${CVSCOSRC}/src/scripts/"
-
-# COBRASYS is where your local copy of COBRA is located
-setenv COBRASYS ${CLAS_PACK}/utilities/cobra 
-setenv PATH ${PATH}:${COBRASYS}/bin
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${COBRASYS}/lib
-setenv LD_LIBRARY_PATH ${HOME}/CMU/src/pwa++/lib/:${LD_LIBRARY_PATH}
-
-setenv PATH ${PATH}:${HOME}/CMU/src/pwa++/bin/
+setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${PATH}:"
 
 ## Needed to add this for latex2html to work...oh well.
 setenv RGBDEF /etc/X11/rgb.txt
 
-#setenv RUBYLIB /home/bellis/CMU/ruby-minuit
-
-setenv OS `/bin/uname -s`
-setenv ARCH `/bin/uname -p`
-setenv OSNAME ${OS}-${ARCH}
-setenv JANA_HOME ${HOME}/CMU/halld/JANA
-setenv HALLD_HOME ${HOME}/CMU/halld/
-setenv JANA_PLUGIN_PATH ${HALLD_HOME}/lib/${OSNAME}
-setenv JANA_CALIB_URL file:///$HALLD_HOME/calib/
-
-#setenv JAVA_HOME /usr/lib/kaffe/pthreads/jre/
-#setenv JAVAROOT /usr/lib/kaffe/pthreads/jre/
-#setenv JAVA_HOME /home/bellis/SDK/jdk
-#setenv JAVAROOT /home/bellis/SDK/jdk
-#setenv PATH "${JAVA_HOME}/bin:${PATH}"
-
-setenv XERCESCROOT /usr/ 
-setenv XERCES_INCLUDE /usr/include 
-setenv XERCES_LIB /usr/lib
-
-#setenv PATH ${PATH}:${JANA_HOME}/bin/${OSNAME}:${HALLD_HOME}/bin:${HALLD_HOME}/bin/${OSNAME}:${HALLD_EXTERNALPACKAGES}/bin:${HALLD_EXTERNALPACKAGES}/bin/${OSNAME}:${ROOTSYS}/bin:${CERN}/${CERN_LEVEL}/bin
-setenv PATH ${PATH}:${JANA_HOME}/bin/${OSNAME}:${HALLD_HOME}/bin:${HALLD_HOME}/bin/${OSNAME}:${CERN}/${CERN_LEVEL}/bin
-setenv LD_LIBRARY_PATH /home/bellis/CMU/src/qft++/lib:${LD_LIBRARY_PATH}:${XERCES_LIB}:/home/bellis/src/TMVA/lib/:.
-
-
-setenv PATH ${PATH}:/home/bellis/CMU/src/ruby-pwa/bin/
-setenv RUBYLIB /home/bellis/CMU/src/ruby-minuit:/home/bellis/CMU/src/ruby-pwa
-setenv RUBYINC /usr/lib/ruby/1.8/i486-linux/
-
-# Python stuff
-#setenv LD_LIBRARY_PATH $ROOTSYS/lib:$PYTHONDIR/lib:$LD_LIBRARY_PATH
-#setenv PYTHONPATH /usr/local/lib/root/
 setenv PYTHONPATH /usr/local/lib/root/:${HOME}/libs/
 
 setenv SVN_EDITOR vi
