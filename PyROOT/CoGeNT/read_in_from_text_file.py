@@ -19,7 +19,6 @@ def main():
     RooMsgService.instance().Print()
     ############################################
 
-
     first_event = 2750361.2 # seconds
 
     tmax = 480;
@@ -79,9 +78,9 @@ def main():
     # 102-107
     # 306-308
     ############################################################################
-    dead_days = [[68,74], [102,107],[306,308]]
+    #dead_days = [[68,74], [102,107],[306,308]]
 
-    #dead_days = [[2,100],[390,480]]
+    dead_days = [[50,200],[280,320]]
     #dead_days = [[100,100]]
     #dead_days = [[60,60], [100,100],[200,200]]
 
@@ -325,6 +324,9 @@ def main():
     cogent_pars_dict["sig_slope"].setVal(-4.5)
     cogent_pars_dict["sig_slope"].setConstant(False)
 
+    cogent_pars_dict["ncosmogenics_e"].setVal(400)
+    cogent_pars_dict["ncosmogenics_e"].setConstant(False)
+
 
 
     yearly_mod = 2*pi/365.0
@@ -347,13 +349,24 @@ def main():
     #cogent_energy_pdf.fitTo(data,RooFit.Range("sub_x2"))
     #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
 
-    #'''
+    #nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(kTRUE),RooFit.Range(fit_range))
+    nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(kTRUE))
+    #fit_func = RooFormulaVar("fit_func","nll + log_gc",RooArgList(nll,pars_d["log_gc"]))
+    fit_func = RooFormulaVar("fit_func","nll",RooArgList(nll))
+    m = RooMinuit(fit_func)
+    m.setVerbose(kFALSE)
+    m.migrad()
+    m.hesse()
+    e_fit_results = m.save()
+
+
+    '''
     e_fit_results = cogent_energy_pdf.fitTo(data,
             RooFit.Range(fit_range),
             RooFit.Extended(True),
             RooFit.Save(True),
             )
-    #'''
+    '''
 
     #cogent_energy_pdf.plotOn(xframe_main, RooFit.Range(fit_range))
     #cogent_energy_pdf.plotOn(xframe_main)
