@@ -34,6 +34,7 @@ def cosmogenic_peaks(x,t,num_days):
     cosmogenic_decay_pdfs = []
     cosmogenic_N0 = []
     cosmogenic_pdfs = []
+    cosmogenic_uncertainties = []
 
     pars = []
     sub_funcs = []
@@ -62,6 +63,9 @@ def cosmogenic_peaks(x,t,num_days):
         norm = num_tot_decays*(1.0-exp(num_days*decay_constant))
         print "norm: %6.3f %6.3f %6.3f %6.3f" % (mean,sigma,num_tot_decays,norm)
 
+        uncert = num_tot_decays*cosmogenic_data_dict[p][2]/100.0
+        cosmogenic_uncertainties.append(uncert)
+
         total_num_cosmogenics  += norm
 
         ########################################################################
@@ -86,19 +90,11 @@ def cosmogenic_peaks(x,t,num_days):
         name = "cosmogenic_decay_pdfs_%s" % (i)
         cosmogenic_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[i]))
 
-        #name = "cosmogenic_N0_%s" % (i)
-        #cosmogenic_N0.append(RooRealVar(name,name,norm,0.0,10000.0))
-
         name = "cosmogenic_pdfs_%s" % (i)
-        #cosmogenic_pdfs.append(RooFormulaVar(name,"@0*@1",RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i])))
         cosmogenic_pdfs.append(RooProdPdf(name,name,RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i])))
 
         name = "cosmogenic_norms_%s" % (i)
         cosmogenic_norms.append(RooRealVar(name,name,norm))
-        #name = "cosmogenic_norms_%s" % (i)
-        #cosmogenic_norms.append(RooFormulaVar(name,"@0*@1",RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i])))
-        #cosmogenic_norms.append(RooFormulaVar(name,"@0*@1",RooArgList(cosmogenic_N0[i],cosmogenic_decay_pdfs[i])))
-        #cosmogenic_norms.append(RooFormulaVar(name,"@0",RooArgList(cosmogenic_decay_pdfs[i])))
 
         if i==0:
             rooadd_string = "%s" % (name)
@@ -108,14 +104,12 @@ def cosmogenic_peaks(x,t,num_days):
         rooadd_funcs.add(cosmogenic_pdfs[i])
         rooadd_norms.add(cosmogenic_norms[i])
 
-        #rooadd_norms.add(cosmogenic_N0[i])
+    #ncosmogenics_e = RooRealVar("ncosmogenics_e","ncosmogenics_e",50,0,600000)
 
     pars += cosmogenic_means
     pars += cosmogenic_sigmas
     pars += cosmogenic_norms
     pars += cosmogenic_decay_constants 
-    #pars += cosmogenic_decay_pdfs
-    #pars += cosmogenic_N0
 
     sub_funcs += cosmogenic_gaussians
     sub_funcs += cosmogenic_pdfs
