@@ -78,11 +78,16 @@ def main():
     # 102-107
     # 306-308
     ############################################################################
-    #dead_days = [[68,74], [102,107],[306,308]]
+    dead_days = [[68,74], [102,107],[306,308]]
+    month_ranges = [[61,90], [91,120],[301,330]]
 
-    dead_days = [[50,200],[280,320]]
+    #dead_days = [[50,200],[280,320]]
     #dead_days = [[100,100]]
     #dead_days = [[60,60], [100,100],[200,200]]
+
+    acceptance_correction_factor = []
+    for d in dead_days:
+        acceptance_correction_factor.append(30.0/((30.0-(d[1]-d[0]))))
 
     n_good_spots = len(dead_days)+1
 
@@ -115,28 +120,13 @@ def main():
         ########################################
         # Do I need to do this?
         ########################################
-        #x.setRange(name,lo_energy,3.0)
+        x.setRange(name,lo_energy,3.0)
 
 
     print "fit_range ---------------------- "
     print fit_range 
 
     #exit(0)
-
-    ############################################################################
-    # Get the pdf
-    ############################################################################
-    my_pars,sub_pdfs,total_pdf = simple_modulation(t)
-    total_pdf.Print("v")
-
-    rrv_dum = RooRealVar("rrv_dum","rrv_dum",10)
-    pars_dict = {}
-    for p in my_pars:
-        if type(p)==type(rrv_dum):
-            pars_dict[p.GetName()] = p
-            pars_dict[p.GetName()].setConstant(False)
-
-
 
     ############################################################################
     # Read in from a text file.
@@ -200,7 +190,6 @@ def main():
     cogent_pars_dict["nsig_e"].setVal(525.0)
     cogent_pars_dict["nbkg_e"].setVal(800.0)
     cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
-    #data_total = total_pdf.generate(RooArgSet(x,t),2200)
     #data_total = cogent_energy_pdf.generate(RooArgSet(x,t),2200)
 
     ############################################################################
@@ -215,31 +204,10 @@ def main():
     print "total entries: %d" % (data_total.numEntries())
     print "fit   entries: %d" % (data.numEntries())
 
-    #hacc_corr = TH1F("hacc_corr","hacc_corr",tbins,1,tmax+1)
-
     data_reduced = []
     for i in range(0,4):
         cut_name = "sub_x%d" % (i)
         data_reduced.append(data.reduce(RooFit.CutRange(cut_name)))
-
-    #data_reduced_t = []
-    data_reduced_t_x = []
-    for i in range(0,tbins):
-        data_reduced_t_x.append([])
-        for j in range(0,4):
-            tname = "sub_t%d_x%d" % (i,j)
-            #data_reduced_t.append(data.reduce(RooFit.CutRange(tname)))
-            #data_reduced_t_x.append([])
-            data_reduced_t_x[i].append(data.reduce(RooFit.CutRange(tname)))
-
-        ''''
-        for j in range(0,4):
-            xname = "sub_x%d" % (j)
-            #data_reduced_t_x[i].append(data.reduce(RooFit.CutRange(tname),RooFit.CutRange(xname)))
-            data_reduced_t_x[i].append(data_temp.reduce(RooFit.CutRange(xname)))
-        '''
-
-
 
     ############################################################################
     # Make frames 
@@ -248,65 +216,39 @@ def main():
     #x.setBins(240)
     #x.setBins(60)
     x.setBins(50)
-    xframes = []
-    for i in xrange(tbins):
-        xframes.append([])
-        for j in xrange(4):
-            xframes[i].append(x.frame(RooFit.Title("Plot of ionization energy")))
-            #data.plotOn(xframes[i][j])
-            data_reduced_t_x[i][j].plotOn(xframes[i][j])
-
     xframe_main = x.frame(RooFit.Title("Plot of ionization energy"))
     data.plotOn(xframe_main)
 
-    ############################################################################
-    # t
-    ############################################################################
     t.setBins(tbins)
-    tframes = []
-    for i in xrange(4):
-        tframes.append(t.frame(RooFit.Title("Plot of ionization energy")))
-        data_reduced[i].plotOn(tframes[i])
-
     tframe_main = t.frame(RooFit.Title("Days"))
     data.plotOn(tframe_main)
+
+    hacc_corr = TH1F("hacc_corr","hacc_corr",16,1.0,481)
+    nentries = data.numEntries()
+    for i in xrange(nentries):
+        argset = data.get(i)
+        tmp = argset.getRealValue("t")
+        correction = 1.0
+        for c,m in zip(acceptance_correction_factor,month_ranges):
+            if tmp>m[0] and tmp<=m[1]:
+                correction = c
+                #print "%f %f %f %f" % (tmp,m[0],m[1],correction)
+
+        #print "%f %f %f %f" % (tmp,m[0],m[1],correction)
+        hacc_corr.Fill(tmp,correction)
+
+    hacc_corr.SetMarkerSize(0.8)
+    hacc_corr.SetMarkerStyle(20)
+    hacc_corr.SetMarkerColor(2)
+    hacc_corr.SetLineColor(1)
+
 
     ############################################################################
     # Make canvases.
     ############################################################################
-    can_x = []
-    for i in range(0,4):
-        name = "can_x_%s" % (i)
-        can_x.append(TCanvas(name,name,10+10*i,10+10*i,1200,900))
-        can_x[i].SetFillColor(0)
-        can_x[i].Divide(4,4)
-
     can_x_main = TCanvas("can_x_main","can_x_main",100,100,1200,600)
     can_x_main.SetFillColor(0)
     can_x_main.Divide(2,1)
-
-    can_t = TCanvas("can_t","can_t",200,200,1200,600)
-    can_t.SetFillColor(0)
-    can_t.Divide(2,2)
-
-
-    for i in xrange(tbins):
-        for j in xrange(4):
-            #pad_index = (i%3)*4+(j+1)
-            #can_x[i/3].cd(pad_index)
-            pad_index = i+1
-            can_x[j].cd(pad_index)
-            xframes[i][j].GetXaxis().SetRangeUser(0.0,3.0)
-            if j==0:
-                xframes[i][j].GetYaxis().SetRangeUser(0.0,30.0)
-            elif j==1:
-                xframes[i][j].GetYaxis().SetRangeUser(0.0,16.0)
-            elif j==2:
-                xframes[i][j].GetYaxis().SetRangeUser(0.0,20.0)
-            xframes[i][j].Draw()
-            gPad.Update()
-
-
 
     ############################################################################
     # Try fitting the energy spectrum
@@ -315,7 +257,7 @@ def main():
     cogent_pars_dict["nsig_e"].setVal(525.0)
     cogent_pars_dict["nsig_e"].setConstant(False)
 
-    cogent_pars_dict["nbkg_e"].setVal(800.0)
+    cogent_pars_dict["nbkg_e"].setVal(700.0)
     cogent_pars_dict["nbkg_e"].setConstant(False)
 
     cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
@@ -334,39 +276,34 @@ def main():
     cogent_pars_dict["bkg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["bkg_mod_frequency"].setConstant(True)
 
     cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(False)
-    #cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(False)
+    cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(False)
     #cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(True)
-    cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
+    #cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
 
     cogent_pars_dict["sig_mod_amp"].setVal(1.0); cogent_pars_dict["sig_mod_amp"].setConstant(False)
-    #cogent_pars_dict["bkg_mod_amp"].setVal(1.0); cogent_pars_dict["bkg_mod_amp"].setConstant(False)
+    cogent_pars_dict["bkg_mod_amp"].setVal(1.0); cogent_pars_dict["bkg_mod_amp"].setConstant(False)
     #cogent_pars_dict["sig_mod_amp"].setVal(0.0); cogent_pars_dict["sig_mod_amp"].setConstant(True)
-    cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
+    #cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
 
-
-    #e_fit_range = "%s,%s" % ("sub_x2",fit_range)
-
-    #cogent_energy_pdf.fitTo(data,RooFit.Range("sub_x2"))
-    #cogent_energy_pdf.plotOn(xframe_main,RooFit.Range("sub_x2"))
-
-    #nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(kTRUE),RooFit.Range(fit_range))
-    nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(kTRUE))
+    nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(fit_range))
     #fit_func = RooFormulaVar("fit_func","nll + log_gc",RooArgList(nll,pars_d["log_gc"]))
     fit_func = RooFormulaVar("fit_func","nll",RooArgList(nll))
     m = RooMinuit(fit_func)
-    m.setVerbose(kFALSE)
-    m.migrad()
-    m.hesse()
-    e_fit_results = m.save()
+    m.setVerbose(False)
+    m.setStrategy(2)
+    #m.migrad()
+    #m.hesse()
+    #e_fit_results = m.save()
 
-
-    '''
+    #'''
     e_fit_results = cogent_energy_pdf.fitTo(data,
             RooFit.Range(fit_range),
             RooFit.Extended(True),
             RooFit.Save(True),
             )
-    '''
+    #'''
+
+    #fit_range = "FULL"
 
     #cogent_energy_pdf.plotOn(xframe_main, RooFit.Range(fit_range))
     #cogent_energy_pdf.plotOn(xframe_main)
@@ -399,10 +336,10 @@ def main():
 
     #'''
     for s in cogent_sub_funcs_dict:
-        print s
+        #print s
         if "cg_total" in s:
-            print "Plotting !!!!!!!!!!!!!!!"
-            print s
+            #print "Plotting !!!!!!!!!!!!!!!"
+            #print s
             argset = RooArgSet(cogent_sub_funcs_dict[s])
             cogent_energy_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
             cogent_energy_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(2),RooFit.LineStyle(1),RooFit.Range(fit_range),RooFit.NormRange("FULL"))
@@ -430,8 +367,6 @@ def main():
     '''
 
 
-
-
     can_x_main.cd(1)
     #xframe_main.GetXaxis().SetRangeUser(0.0,3.0)
     xframe_main.GetYaxis().SetRangeUser(0.0,200.0)
@@ -442,87 +377,14 @@ def main():
     #tframe_main.GetXaxis().SetRangeUser(0.0,3.0)
     #tframe_main.GetYaxis().SetRangeUser(0.0,200.0)
     tframe_main.Draw()
+    hacc_corr.Draw("samee")
     gPad.Update()
 
     for file_type in ['png','pdf','eps']:
         outfile = "%s.%s" % (save_file_name,file_type)
         can_x_main.SaveAs(outfile)
 
-    # Try plotting on some of the tbins
-    '''
-    for i in xrange(tbins):
-        for j in xrange(4):
-            
-            if j==2:
-                pad_index = i+1
-                can_x[j].cd(pad_index)
-
-                sub_fit_range = "sub_t%d_x%d" % (i,j)
-
-                #cogent_energy_pdf.plotOn(xframes[i][j],RooFit.Range(sub_fit_range), RooFit.NormRange(sub_fit_range))
-                xframes[i][j].Draw()
-                gPad.Update()
-
-    '''
-
-
-
-    fit_results = []
-    '''
-    for i in xrange(4):
-        can_t.cd(i+1)
-
-        #if 0:
-        if i==1:
-
-            pars_dict["mod_off"].setVal(10.0)
-            #pars_dict["mod_off"].setConstant(True)
-
-            pars_dict["nsig"].setVal(644)
-            #pars_dict["nsig"].setConstant(True)
-
-            pars_dict["mod_amp"].setVal(3.0)
-            #pars_dict["mod_amp"].setConstant(True)
-
-            pars_dict["mod_freq"].setVal(6.28/365.0)
-            #pars_dict["mod_freq"].setConstant(True)
-
-            pars_dict["mod_phase"].setVal(-2.5)
-            #pars_dict["mod_phase"].setConstant(True)
-
-            fit_result = total_pdf.fitTo(data_reduced[i],
-                    RooFit.Save(True),
-                    RooFit.Strategy(True),
-                    RooFit.Range(fit_range),
-                    RooFit.Extended(True)
-                    )
-
-            argset = RooArgSet(total_pdf)
-            total_pdf.plotOn(tframes[i], RooFit.Components(argset), RooFit.ProjWData(data_reduced[i],True),RooFit.Range(fit_range))
-            #total_pdf.plotOn(tframes[i], RooFit.ProjWData(data_reduced[i],True),RooFit.Range(fit_range))
-            #total_pdf.plotOn(tframes[i], RooFit.ProjWData(data_reduced[i],True),RooFit.Range("good_days_0,good_days_1,good_days_2,good_days_3"))
-            #total_pdf.plotOn(tframes[i], RooFit.ProjWData(data_reduced[i],True),RooFit.Range("good_days_1"))
-            fit_result.Print("v")
-            fit_results.append(fit_result)
-
-            #temp_data = total_pdf.generate(RooArgSet(t),644)
-            #temp_data.plotOn(tframes[i],RooFit.MarkerColor(kRed))
-
-            chi2 = tframes[i].chiSquare()
-
-
-
-        tframes[i].Draw()
-        gPad.Update()
-
-    '''
-
-    '''
-    for f in fit_results:
-        f.Print("v")
-    '''
-
-    cogent_energy_pdf.Print("v")
+    #cogent_energy_pdf.Print("v")
     e_fit_results.Print("v")
     e_fit_results.correlationMatrix().Print("v")
     print "neg log likelihood: %f" % (e_fit_results.minNll())

@@ -132,15 +132,16 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     x.setBins(50);
     t.setBins(50);
     
-    RooPlot *frame_x[4];
-    RooPlot *frame_t[4];
-    for (int i=0;i<4;i++)
+    RooPlot *frame_x[5];
+    RooPlot *frame_t[5];
+    for (int i=0;i<5;i++)
     {
         char title[256];
         if (i==0)      sprintf(title,"No range specified");
         else if (i==1) sprintf(title,"Range:FULL, NormRange:FULL");
         else if (i==2) sprintf(title,"Range:fit_range, NormRange:FULL");
         else if (i==3) sprintf(title,"Range:fit_range, NormRange:fit_range");
+        else if (i==4) sprintf(title,"Range:FULL, NormRange:fit_range");
 
         frame_x[i] = x.frame(Title(title));
         frame_t[i] = t.frame(Title(title));
@@ -191,7 +192,7 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     ////////////////////////////////////////////////////////////////////////////
     TCanvas *can = new TCanvas("can","can",10,10,1000,900);
     can->SetFillColor(0);
-    can->Divide(2,4);
+    can->Divide(2,5);
 
 
     total->plotOn(frame_x[0]);
@@ -206,7 +207,10 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     total->plotOn(frame_x[3],Range(fit_range),NormRange(fit_range));
     total->plotOn(frame_t[3],Range(fit_range),NormRange(fit_range));
 
-    for (int i=0;i<4;i++)
+    total->plotOn(frame_x[4],Range("FULL"),NormRange(fit_range));
+    total->plotOn(frame_t[4],Range("FULL"),NormRange(fit_range));
+
+    for (int i=0;i<5;i++)
     {
         can->cd((i*2)+1);
         frame_x[i]->Draw();
