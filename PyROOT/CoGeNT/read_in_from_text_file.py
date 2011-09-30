@@ -79,6 +79,7 @@ def main():
     # 306-308
     ############################################################################
     dead_days = [[68,74], [102,107],[306,308]]
+    #dead_days = [[0,1]]
     month_ranges = [[61,90], [91,120],[301,330]]
 
     #dead_days = [[50,200],[280,320]]
@@ -189,7 +190,7 @@ def main():
 
     cogent_pars_dict["nsig_e"].setVal(525.0)
     cogent_pars_dict["nbkg_e"].setVal(800.0)
-    cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
+    #cogent_pars_dict["ncosmogenics"].setVal(681.563)
     #data_total = cogent_energy_pdf.generate(RooArgSet(x,t),2200)
 
     ############################################################################
@@ -260,14 +261,14 @@ def main():
     cogent_pars_dict["nbkg_e"].setVal(700.0)
     cogent_pars_dict["nbkg_e"].setConstant(False)
 
-    cogent_pars_dict["ncosmogenics_e"].setVal(681.563)
-    cogent_pars_dict["ncosmogenics_e"].setConstant(True)
+    #cogent_pars_dict["ncosmogenics"].setVal(681.563)
+    #cogent_pars_dict["ncosmogenics"].setConstant(True)
 
     cogent_pars_dict["sig_slope"].setVal(-4.5)
     cogent_pars_dict["sig_slope"].setConstant(False)
 
-    cogent_pars_dict["ncosmogenics_e"].setVal(400)
-    cogent_pars_dict["ncosmogenics_e"].setConstant(False)
+    #cogent_pars_dict["ncosmogenics"].setVal(400)
+    #cogent_pars_dict["ncosmogenics"].setConstant(False)
 
 
 
@@ -384,7 +385,7 @@ def main():
         outfile = "%s.%s" % (save_file_name,file_type)
         can_x_main.SaveAs(outfile)
 
-    #cogent_energy_pdf.Print("v")
+    cogent_energy_pdf.Print("v")
     e_fit_results.Print("v")
     e_fit_results.correlationMatrix().Print("v")
     print "neg log likelihood: %f" % (e_fit_results.minNll())
