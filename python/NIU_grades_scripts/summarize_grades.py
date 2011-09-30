@@ -14,7 +14,10 @@ def main():
     filename = sys.argv[1]
     infile = csv.reader(open(filename, 'rb'), delimiter=',', quotechar='#')
 
-    g = Grade('quiz', 10,100,5,10,'True','10/3/11')
+    #g = Grade('quiz', 10,100,5,10,'True','10/3/11')
+
+    grade_titles = ["Quizzes", "Homeworks","Exam 1", "Exam 2", "Final exam", "Final grade"]
+    student_grades = [[],[],[],[],[],[]]
 
     # Grade weighting
     final_grade_weighting = [0.10,0.20,0.20,0.20,0.30]
@@ -75,10 +78,15 @@ def main():
                 if g.subtract_index<len(row) and g.subtract_index>=0 and row[g.subtract_index]!='':
                     g.set_subtract(float(row[g.subtract_index]))
 
+        if line_num==3:
+            for g in grade_file_infos:
+                g.set_internal_index(row[g.grade_index])
+
         # Grab the hw info
         if line_num>=4:
             row_len = len(row)
             student_name = [row[2],row[3]]
+            email = "z%s.students.niu.edu" % (row[1])
 
             cg = Course_grades()
 
@@ -87,22 +95,27 @@ def main():
 
                 score = 0
                 is_late = False
+                internal_index = -1
                 if g.grade_index<row_len and row[g.grade_index]!='':
                     score = float(row[g.grade_index])
                 # Check for late grades
                 elif g.subtract_index>=0 and g.subtract_index<row_len and row[g.subtract_index]!='':
+                    print student_name[0]
                     print g.subtract_index
                     print row[g.subtract_index]
                     score = float(row[g.subtract_index])
                     is_late = True
 
-                grade = Grade(g.grade_type,score,g.max_grade,g.add,g.subtract,is_late,g.date)
-                print "%s %3.1f" % (grade.grade_type, grade.score)
+                print student_name[0]
+                print is_late
+                #print g.internal_index
+                grade = Grade(g.grade_type,g.internal_index,score,g.max_grade,g.add,g.subtract,is_late,g.date)
+                #print "%s %3.1f" % (grade.grade_type, grade.score)
 
                 cg.add_grade(grade,grade.grade_type)
 
 
-            s = Student(student_name, cg)
+            s = Student(student_name,cg,email)
             students.append(s)
 
 
@@ -113,69 +126,49 @@ def main():
     # Print out the summary
     ############################################################################
     for s in students:
-        averages = [-1, -1, -1, -1, -1]
-        output = "%s %s\n" % (s.student_name[1], s.student_name[0])
-
-        for i,g in enumerate(s.grades.quizzes):
-            output +=  "\tQuiz %2d %7.2f/%3.2f\n" % (i,g.grade_sum(),g.max_score)
-        avg = calc_average_of_grades(s.grades.quizzes, 'False')
-        averages[0] = avg
-        output += "\tQuiz avg: %4.2f\n" % (avg)
-
-        for i,g in enumerate(s.grades.hw):
-            output +=  "\tHW %2d %7.2f/%3.2f\n" % (i,g.grade_sum(),g.max_score)
-        avg = calc_average_of_grades(s.grades.hw, 'False')
-        averages[1] = avg
-        output += "\tHW avg: %4.2f\n" % (avg)
-
-
-        tot = 0.0
-        tot_wt = 0.0
-        for g,w in zip(averages,final_grade_weighting):
-            if g>=0:
-                tot += g*w
-                tot_wt += w
-        output += "\tFinal grade: %4.2f\n" % (tot/tot_wt)
-            
+        averages, output = s.summary_output(final_grade_weighting)
         print output
 
-    exit()
+        for i,a in enumerate(averages):
+            student_grades[i].append(a)
 
-    print hw_grades[-1]
+    #exit()
+
     ############################################################################
     # Start parsing the grades.
     ############################################################################
     figs = []
     subplots = []
-    for k,assignment in enumerate(hw_grades):
+    for k,assignment in enumerate(student_grades):
         figs.append(plt.figure(figsize=(8, 6), dpi=100, facecolor='w', edgecolor='k'))
         subplots.append(figs[k].add_subplot(1,1,1))
 
-        title = "HW #%d" % (k+1)
-        if k == num_hws:
-            title = "Average"
+        title = "%s" % (grade_titles[k])
 
+        #print assignment
+        if len(assignment)>0:
+            hw_pts = [[],[],[],[],[]]
+            for grade in assignment:
+                if grade>=90:
+                    hw_pts[0].append(grade)
+                elif grade>=80 and grade<90:
+                    hw_pts[1].append(grade)
+                elif grade>=70 and grade<80:
+                    hw_pts[2].append(grade)
+                elif grade>=60 and grade<70:
+                    hw_pts[3].append(grade)
+                else:
+                    hw_pts[4].append(grade)
 
-        hw_pts = [[],[],[],[],[]]
-        for grade in assignment:
-            if grade>=90:
-                hw_pts[0].append(grade)
-            elif grade>=80 and grade<90:
-                hw_pts[1].append(grade)
-            elif grade>=70 and grade<80:
-                hw_pts[2].append(grade)
-            elif grade>=60 and grade<70:
-                hw_pts[3].append(grade)
-            else:
-                hw_pts[4].append(grade)
+            colors = ['r','b','g','c','y']
+            h = []
+            for i,hpts in enumerate(hw_pts):
+                #print hpts
+                if len(hpts)>0:
+                    hist(hpts,bins=22,facecolor=colors[i],range=(0,110))
 
-        colors = ['r','b','g','c','y']
-        h = []
-        for i,hpts in enumerate(hw_pts):
-            hist(hpts,bins=22,facecolor=colors[i],range=(0,110))
-
-        subplots[k].set_xlabel(title, fontsize=14, weight='bold')
-        subplots[k].set_ylim(0,20)
+            subplots[k].set_xlabel(title, fontsize=14, weight='bold')
+            subplots[k].set_ylim(0,25)
 
     for i,f in enumerate(figs):
         name = "hw_dist_%d" % (i)
