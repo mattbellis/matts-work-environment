@@ -23,6 +23,7 @@ class Grade_file_info:
         self.grade_type = grade_type
         self.date = ''
         self.grade_index = -1
+        self.internal_index = -1
         self.max_grade = 100.0
         self.add_index = -1
         self.subtract_index = -1
@@ -34,6 +35,9 @@ class Grade_file_info:
 
     def set_grade_index(self, grade_index):
         self.grade_index = grade_index
+
+    def set_internal_index(self, internal_index):
+        self.internal_index = internal_index
 
     def set_max_grade(self, max_grade):
         self.max_grade = max_grade
@@ -55,8 +59,9 @@ class Grade_file_info:
 
 ################################################################################
 class Grade:
-    def __init__(self, grade_type, score, max_score, added, subtracted, late, date):
+    def __init__(self, grade_type, internal_index, score, max_score, added, subtracted, late, date):
         self.grade_type = grade_type
+        self.internal_index = internal_index
         self.score = score
         self.max_score = max_score
         self.added = added
@@ -65,25 +70,32 @@ class Grade:
         self.date = date
 
     def grade_sum(self):
-        ret = self.score + self.added - self.subtracted
+        ret = self.score + self.added
+        if self.late:
+            ret -= self.subtracted
         return ret
 
     def grade_pct(self):
         ret = self.grade_sum()/self.max_score
         return ret
 
+    def summary_output(self):
+        ret = "%5.1f   -   %5.1f" % (100.0*self.grade_pct(),self.score)
+        if self.late:
+            ret += " (an additional -%4.1f for being late)" % (self.subtracted)
+        ret += " out of a possible %5.1f" % (self.max_score)
+        return ret
 ################################################################################
 class Course_grades:
     def __init__(self):
-        self.hw = []
         self.quizzes = []
+        self.hw = []
         self.exam1 = []
         self.exam2 = []
         self.final_exam = []
 
     def add_grade(self, grade, grade_type):
-        print "here"
-        print grade_type
+        
         if grade_type=='quiz' or grade_type=='Quiz' or grade_type=='Q' or grade_type=='q':
             self.quizzes.append(grade)
         elif grade_type=='HW' or grade_type=='hw' or grade_type=='homework' or grade_type=='Homework':
@@ -97,7 +109,54 @@ class Course_grades:
 
 ################################################################################
 class Student:
-    def __init__(self, student_name, grades):
+    def __init__(self, student_name, grades, email=None):
         self.student_name = student_name
+        self.email = email
         self.grades = grades
+
+    def summary_output(self,final_grade_weighting=[0.2,0.2,0.2,0.2,0.2]):
+
+        averages = [-1, -1, -1, -1, -1]
+        ret = "-----------------------------------\n"
+        ret += "%s %s\n" % (self.student_name[1], self.student_name[0])
+
+        # Quizzes
+        ret += " -----\nQuizzes\n -----\n"
+        for g in self.grades.quizzes:
+            ret +=  "%-7s %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+        avg = calc_average_of_grades(self.grades.quizzes, 'False')
+        averages[0] = avg
+        ret += "\tQuiz avg: %4.2f\n" % (avg)
+
+        # HW
+        ret += " -----\nHomeworks\n -----\n"
+        for g in self.grades.hw:
+            ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+        avg = calc_average_of_grades(self.grades.hw, 'False')
+        averages[1] = avg
+        ret += "\tHW   avg: %4.2f\n" % (avg)
+
+        # HW
+        ret += " -----\nExam 1\n -----\n"
+        for g in self.grades.exam1:
+            ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+        avg = calc_average_of_grades(self.grades.exam1, 'False')
+        averages[2] = avg
+        ret += "\tExam 1  : %4.2f\n" % (avg)
+
+        tot = 0.0
+        tot_wt = 0.0
+        for g,w in zip(averages,final_grade_weighting):
+            if g>=0:
+                tot += g*w
+                tot_wt += w
+        final = tot/tot_wt
+        ret += " -------\n\tFinal grade: %4.2f\n" % (final)
+
+        averages.append(final)
+
+        return averages, ret
+
+
+
 
