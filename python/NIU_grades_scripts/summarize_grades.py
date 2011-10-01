@@ -14,6 +14,10 @@ def main():
     filename = sys.argv[1]
     infile = csv.reader(open(filename, 'rb'), delimiter=',', quotechar='#')
 
+    password = None
+    if len(sys.argv)>=3:
+        password = sys.argv[2]
+
     #g = Grade('quiz', 10,100,5,10,'True','10/3/11')
 
     grade_titles = ["Quizzes", "Homeworks","Exam 1", "Exam 2", "Final exam", "Final grade"]
@@ -100,14 +104,14 @@ def main():
                     score = float(row[g.grade_index])
                 # Check for late grades
                 elif g.subtract_index>=0 and g.subtract_index<row_len and row[g.subtract_index]!='':
-                    print student_name[0]
-                    print g.subtract_index
-                    print row[g.subtract_index]
+                    #print student_name[0]
+                    #print g.subtract_index
+                    #print row[g.subtract_index]
                     score = float(row[g.subtract_index])
                     is_late = True
 
-                print student_name[0]
-                print is_late
+                #print student_name[0]
+                #print is_late
                 #print g.internal_index
                 grade = Grade(g.grade_type,g.internal_index,score,g.max_grade,g.add,g.subtract,is_late,g.date)
                 #print "%s %3.1f" % (grade.grade_type, grade.score)
@@ -128,6 +132,10 @@ def main():
     for s in students:
         averages, output = s.summary_output(final_grade_weighting)
         print output
+        subject = "PHYS 283 weekly grade summary"
+        msg_body = output
+        if password is not None:
+            email_grade_summaries('bellis@slac.stanford.edu','matthew.bellis@gmail.com',subject,msg_body,password)
 
         for i,a in enumerate(averages):
             student_grades[i].append(a)
