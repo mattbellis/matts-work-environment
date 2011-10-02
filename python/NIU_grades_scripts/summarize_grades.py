@@ -90,7 +90,7 @@ def main():
         if line_num>=4:
             row_len = len(row)
             student_name = [row[2],row[3]]
-            email = "z%s.students.niu.edu" % (row[1])
+            email = "z%07d@students.niu.edu" % (int(row[1]))
 
             cg = Course_grades()
 
@@ -131,11 +131,29 @@ def main():
     ############################################################################
     for s in students:
         averages, output = s.summary_output(final_grade_weighting)
-        print output
+
+        ########################################################################
+        # For sending out the grades
+        ########################################################################
         subject = "PHYS 283 weekly grade summary"
         msg_body = output
+
+        ########################################################################
+        # For testing
+        ########################################################################
+        #subject = "Test of PHYS 283 grade summary email system."
+        #msg_body = "Hi %s %s,\n\n" % (s.student_name[1],s.student_name[0])
+        #msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades for PHYS283."
+        #msg_body += "If I've matched up your name with this email address, "
+        #msg_body += "could you please either email me back or let me know in class on Monday."
+        #msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well."
+        #msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
+
+        print msg_body
+        print s.email
         if password is not None:
-            email_grade_summaries('bellis@slac.stanford.edu','matthew.bellis@gmail.com',subject,msg_body,password)
+            #email_grade_summaries('bellis@slac.stanford.edu','matthew.bellis@gmail.com',subject,msg_body,password)
+            email_grade_summaries(s.email,'matthew.bellis@gmail.com',subject,msg_body,password)
 
         for i,a in enumerate(averages):
             student_grades[i].append(a)
