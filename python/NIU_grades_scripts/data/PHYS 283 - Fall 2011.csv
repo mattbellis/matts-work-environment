@@ -14,11 +14,11 @@ Number,zID,Last name,First name,Grade basis,Units,Program,Plan,Year,1,2,1,Added,
 10,1586862,Castillo,Javier Enrique,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,,10,56,,,10,,,75,60,,,10,86,,,130
 11,1625308,Dunsmoor,Adam Thomas,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Senior,5,10,71,,,10,78,,,,,,10,,,,99
 12,1564972,Elliott,Andrew David,Graded,3,Ugrad Engineering & Eng Tech -,Biomedical Engineering,Junior,10,10,53,,,10,73,,,60,,,10,98,,,120
-13,132265,Emrich,Amanda Catherine,Graded,3,Postbacc Ugrad Engr & Eng Tech -,Biomedical Engineering,Post-Bacc,10,10,66,,,10,77,,,60,,,10,100,,,142
+13,078030,Emrich,Amanda Catherine,Graded,3,Postbacc Ugrad Engr & Eng Tech -,Biomedical Engineering,Post-Bacc,10,10,66,,,10,77,,,60,,,10,100,,,142
 14,1625085,Epps,Aaron Lee,Graded,3,Ugrad Liberal Arts -,Professional Physics,Senior,10,10,70,,,10,80,,,60,,,10,100,,,164
 15,1625163,Fleeman,Brennan Leonard,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,10,10,,,,,77,,,60,,,,100,,,113
 16,1581515,Garcia Jr,Eliezer,Graded,3,Ugrad Engineering & Eng Tech -,Electrical Engineering,Senior,5,10,68,,,10,62,,,,,,10,94,,,101
-17,1578382,Garcia,Jaime,Graded,3,Ugrad Engineering & Eng Tech -,Electrical Engineering,Junior,10,10,51,,,2,54,,,58,,,5,,,,116
+17,1578382,Garcia,Jaime,Graded,3,Ugrad Engineering & Eng Tech -,Electrical Engineering,Junior,10,10,51,,,2,54,,,58,,,5,97,,,116
 18,1558727,Ghani Syed,Ali T,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Senior,10,10,73,,,10,80,,,60,,,10,96,,,131
 19,1574105,Glocker,Rutger Hans,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr/Military Science,Junior,10,10,63,,,10,69,,,46,,,10,,,,152
 20,1636094,Goll,Joshua Roberts,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,10,10,69,,,10,78,,,60,,,10,100,,,157
@@ -34,13 +34,13 @@ Number,zID,Last name,First name,Grade basis,Units,Program,Plan,Year,1,2,1,Added,
 30,1650868,Kingery,James Edward,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,10,10,67,,,10,69,,,60,,,10,100,,,154
 31,1650776,Kolka,Zachary Andrew,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,10,10,69,,,10,70,,,55,,,10,95,,,140
 32,1595872,Krejci,Adam Lee,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Sophomore,10,10,62,,,10,72,,,60,,,10,100,,,144
-33,124888,McClure,Jonathan Christian,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,10,10,58,,,10,70,,,50,,,10,100,,,162
+33,061143,McClure,Jonathan Christian,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,10,10,58,,,10,70,,,50,,,10,100,,,162
 34,1589625,Melanson,Christopher Bryan,Graded,3,Ugrad Engineering & Eng Tech -,Mechanical Engineering,Junior,10,10,53,,,10,51,,,23,,,10,,,,134
 35,1631583,Mertens,Brendan Scott,Graded,3,Ugrad Engineering & Eng Tech -,Chemistry/Biomedical Engineering,Senior,5,10,67,,,10,76,,,53,,,10,100,,,113
 36,1576333,Moran I,Alex Joseph,Graded,3,Ugrad Engineering & Eng Tech -,Biomedical Engineering,Sophomore,10,10,73,,,10,,,80,60,,,10,100,,,108
 37,1544847,Munar,Michael Armand,Graded,3,Ugrad Liberal Arts -,Applied Physics,Junior,,,,,,,,,,,,,,,,,129
 38,1660433,Newman,Jonathan Michael,Graded,3,Ugrad Liberal Arts -,Physics-Secondary Teaching,Junior,10,10,57,,,10,48,,,54,,,5,87,,,140
-39,1656270,Nigro,Erik Matthew,Graded,3,Ugrad Liberal Arts -,Applied Physics,Sophomore,10,10,73,,,10,61,,,48,,,10,,,,141
+39,1656270,Nigro,Erik Matthew,Graded,3,Ugrad Liberal Arts -,Applied Physics,Sophomore,10,10,73,,,10,61,,,48,,,10,,,,144
 40,1626306,Pandey,Bibek Raj,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,5,10,71,,,2,79,,,60,,,5,100,,,72
 41,1655966,Peterson,Ryan James,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Junior,10,10,62,,,10,67,,,31,,,10,100,,,150
 42,1610007,Reed,Travis Glenn,Graded,3,Ugrad Engineering & Eng Tech -,Electrical and Computer Engr,Sophomore,10,10,60,,,10,76,,,55,,,10,96,,,147
