@@ -5,20 +5,39 @@ import csv
 from pylab import *
 import matplotlib.pyplot as plt
 from grade_utilities import *
+import argparse
 
 ################################################################################
 # main
 ################################################################################
 def main():
 
-    filename = sys.argv[1]
+    ############################################################################
+    # Parse the arguments
+    ############################################################################
+    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser.add_argument('input_file_name', type=str, default=None, 
+            help='Input file name')
+    parser.add_argument('--dump-names', dest='dump_names', action='store_true',
+            default=False,
+            help='Dump the names of the students and an index for each.')
+    parser.add_argument('--password', dest='password', default=None, 
+            help='Password for mail server.')
+    parser.add_argument('--student', dest='student', default=None, type=int,
+            help='Student name to dump info for or email.')
+
+    args = parser.parse_args()
+
+    ############################################################################
+
+    if args.input_file_name is None:
+        print "Must pass in an input file name!"
+        parser.print_help()
+
+    filename = args.input_file_name
     infile = csv.reader(open(filename, 'rb'), delimiter=',', quotechar='#')
 
-    password = None
-    if len(sys.argv)>=3:
-        password = sys.argv[2]
-
-    #g = Grade('quiz', 10,100,5,10,'True','10/3/11')
+    ############################################################################
 
     grade_titles = ["Quizzes", "Homeworks","Exam 1", "Exam 2", "Final exam", "Final grade"]
     student_grades = [[],[],[],[],[],[]]
@@ -90,7 +109,7 @@ def main():
         if line_num>=4:
             row_len = len(row)
             student_name = [row[2],row[3]]
-            email = "z%07d@students.niu.edu" % (int(row[1]))
+            email = "z%s@students.niu.edu" % (row[1])
 
             cg = Course_grades()
 
@@ -129,7 +148,7 @@ def main():
     ############################################################################
     # Print out the summary
     ############################################################################
-    for s in students:
+    for i,s in enumerate(students):
         averages, output = s.summary_output(final_grade_weighting)
 
         ########################################################################
@@ -149,11 +168,25 @@ def main():
         #msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well."
         #msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
 
-        print msg_body
-        print s.email
-        if password is not None:
-            #email_grade_summaries('bellis@slac.stanford.edu','matthew.bellis@gmail.com',subject,msg_body,password)
-            email_grade_summaries(s.email,'matthew.bellis@gmail.com',subject,msg_body,password)
+        #print msg_body
+        #print s.email
+        if args.dump_names:
+            print "%d %-20s, %-20s\t%20s" % (i,s.student_name[0],s.student_name[1],s.email)
+
+        if args.student == i:
+            print s.email
+            print msg_body
+
+        if args.password is not None:
+            do_email = False
+            if args.student is None:
+                do_email = True
+            elif args.student == i:
+                do_email = True
+
+            if do_email:
+                #email_grade_summaries('bellis@slac.stanford.edu','matthew.bellis@gmail.com',subject,msg_body,args.password)
+                email_grade_summaries(s.email,'matthew.bellis@gmail.com',subject,msg_body,args.password)
 
         for i,a in enumerate(averages):
             student_grades[i].append(a)
