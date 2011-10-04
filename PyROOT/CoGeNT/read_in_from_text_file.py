@@ -175,13 +175,17 @@ def main():
 
     #peak_pars,peak_sub_func,peak_pdf = cosmogenic_peaks(x)
     cogent_pars,cogent_sub_funcs,cogent_energy_pdf = cogent_pdf(x,t)
+    print "0--------------"
+    cogent_energy_pdf.Print("v")
+    print "90--------------"
     #exit()
 
     # Make a dictionary out of the pars and sub_funcs
     cogent_pars_dict = {}
     for p in cogent_pars:
-        cogent_pars_dict[p.GetName()] = p
-        cogent_pars_dict[p.GetName()].setConstant(True)
+        if p.GetName().find("gaussian_constraint_")<0:
+            cogent_pars_dict[p.GetName()] = p
+            cogent_pars_dict[p.GetName()].setConstant(True)
 
     # 
     cogent_sub_funcs_dict = {}
@@ -270,6 +274,9 @@ def main():
     #cogent_pars_dict["ncosmogenics"].setVal(400)
     #cogent_pars_dict["ncosmogenics"].setConstant(False)
 
+    #cogent_pars_dict["cosmogenic_norms_calc_0"].setVal(500.0)
+    cogent_pars_dict["cosmogenic_norms_calc_0"].setConstant(False)
+
 
 
     yearly_mod = 2*pi/365.0
@@ -286,12 +293,12 @@ def main():
     #cogent_pars_dict["sig_mod_amp"].setVal(0.0); cogent_pars_dict["sig_mod_amp"].setConstant(True)
     #cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
 
-    nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(fit_range))
-    #fit_func = RooFormulaVar("fit_func","nll + log_gc",RooArgList(nll,pars_d["log_gc"]))
-    fit_func = RooFormulaVar("fit_func","nll",RooArgList(nll))
-    m = RooMinuit(fit_func)
-    m.setVerbose(False)
-    m.setStrategy(2)
+    #nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(fit_range))
+    ##fit_func = RooFormulaVar("fit_func","nll + log_gc",RooArgList(nll,pars_d["log_gc"]))
+    #fit_func = RooFormulaVar("fit_func","nll",RooArgList(nll))
+    #m = RooMinuit(fit_func)
+    #m.setVerbose(False)
+    #m.setStrategy(2)
     #m.migrad()
     #m.hesse()
     #e_fit_results = m.save()

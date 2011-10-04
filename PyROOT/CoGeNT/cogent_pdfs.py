@@ -114,13 +114,15 @@ def cosmogenic_peaks(x,t,num_days):
         ############################################################################
         # Define the Gaussian constraints. 
         ############################################################################
-        name = "gaussian_constraint_form_%d" % (i)
-        gc_f = RooFormulaVar(name,name,"(1.0/2401.0)*exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
-        gc_f.Print("v")
-        cosmogenic_gaussian_constraints_formula.append(gc_f)
+        #name = "gaussian_constraint_form_%d" % (i)
+        #gc_f = RooFormulaVar(name,name,"(1.0/2401.0)*exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
+        #gc_f.Print("v")
+        #cosmogenic_gaussian_constraints_formula.append(gc_f)
 
         name = "gaussian_constraint_%d" % (i)
-        gc = RooGenericPdf(name,name,"@0",RooArgList(gc_f))
+        #gc = RooGenericPdf(name,name,"(1.0/2401.0)*exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
+        gc = RooFormulaVar(name,name,"(1.0/2401.0)*exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
+        #gc = RooGenericPdf(name,name,"@0",RooArgList(gc_f))
         gc.Print("v")
         cosmogenic_gaussian_constraints.append(gc)
 
@@ -156,6 +158,7 @@ def cosmogenic_peaks(x,t,num_days):
     pars += cosmogenic_means
     pars += cosmogenic_sigmas
     pars += cosmogenic_norms
+    pars += cosmogenic_norms_calc
     pars += cosmogenic_decay_constants 
     pars += cosmogenic_uncertainties
 
@@ -163,8 +166,9 @@ def cosmogenic_peaks(x,t,num_days):
     sub_funcs += cosmogenic_gaussians
     sub_funcs += cosmogenic_pdfs
     sub_funcs += cosmogenic_decay_pdfs 
-    sub_funcs += cosmogenic_gaussian_constraints
-    sub_funcs += cosmogenic_gaussian_constraints_formula
+    #sub_funcs += cosmogenic_gaussian_constraints
+    pars += cosmogenic_gaussian_constraints
+    #sub_funcs += cosmogenic_gaussian_constraints_formula
 
     name = "cg_total"
     cosmogenic_pdf = RooAddPdf(name,rooadd_string,rooadd_funcs,rooadd_norms)
@@ -298,11 +302,30 @@ def cogent_pdf(x,t):
 
     #total_pdf = RooAddPdf("total_pdf","bkg_exp+sig_prod+cosmogenic_pdf",RooArgList(bkg_exp,sig_prod,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
 
-    total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
     #total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp",RooArgList(bkg_exp,sig_exp),RooArgList(nbkg_e,nsig_e))
+
+    ################# Trying Gaussian constraint ###############
+    gc0 = None
+    #for c in cosmogenic_sub_funcs:
+    for c in cosmogenic_pars:
+        if c.GetName() == "gaussian_constraint_0":
+            gc0 = c
+
+    print "HHHHHHHHHHHHHHHHHHHHHH"
+    print gc0
+    gc0.Print("v")
+    print "Val: %f" % (gc0.getVal())
+
+    print " ------------------------------------------------- "
+    total_energy_temp = RooAddPdf("total_energy_temp","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
+    print " ------------------------------------------------- "
+    #total_energy_pdf = RooGenericPdf("total_energy_pdf","@0*@1",RooArgList(total_energy_temp,gc0))
+    total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
+    print " ------------------------------------------------- "
 
     #pars += [nbkg_e, nsig_e, ncosmogenics]
     pars += [nbkg_e, nsig_e]
+    sub_funcs += [gc0,total_energy_temp]
 
     return pars, sub_funcs, total_energy_pdf
 
