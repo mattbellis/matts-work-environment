@@ -160,13 +160,13 @@ def main():
         ########################################################################
         # For testing
         ########################################################################
-        #subject = "Test of PHYS 283 grade summary email system."
-        #msg_body = "Hi %s %s,\n\n" % (s.student_name[1],s.student_name[0])
-        #msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades for PHYS283."
-        #msg_body += "If I've matched up your name with this email address, "
-        #msg_body += "could you please either email me back or let me know in class on Monday."
-        #msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well."
-        #msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
+        subject = "Test of PHYS 283 grade summary email system."
+        msg_body = "Hi %s %s,\n\n" % (s.student_name[1],s.student_name[0])
+        msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades for PHYS283."
+        msg_body += "If I've matched up your name with this email address, "
+        msg_body += "could you please either email me back or let me know in class on Monday."
+        msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well."
+        msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
 
         #print msg_body
         #print s.email
