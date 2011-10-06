@@ -275,7 +275,7 @@ def main():
     #cogent_pars_dict["ncosmogenics"].setConstant(False)
 
     #cogent_pars_dict["cosmogenic_norms_calc_0"].setVal(500.0)
-    cogent_pars_dict["cosmogenic_norms_calc_0"].setConstant(False)
+    cogent_pars_dict["cosmogenic_norms_0"].setConstant(False)
 
 
 
@@ -293,7 +293,8 @@ def main():
     #cogent_pars_dict["sig_mod_amp"].setVal(0.0); cogent_pars_dict["sig_mod_amp"].setConstant(True)
     #cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
 
-    #nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(fit_range))
+    ##nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(fit_range),RooFit.SplitRange(True))
+    #nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(fit_range),RooFit.SplitRange(True))
     ##fit_func = RooFormulaVar("fit_func","nll + log_gc",RooArgList(nll,pars_d["log_gc"]))
     #fit_func = RooFormulaVar("fit_func","nll",RooArgList(nll))
     #m = RooMinuit(fit_func)
@@ -306,7 +307,7 @@ def main():
     #'''
     e_fit_results = cogent_energy_pdf.fitTo(data,
             RooFit.Range(fit_range),
-            RooFit.Extended(True),
+            #RooFit.Extended(True),
             RooFit.Save(True),
             )
     #'''
