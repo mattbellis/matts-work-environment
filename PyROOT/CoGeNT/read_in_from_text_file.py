@@ -27,6 +27,7 @@ def main():
     t_bin_width = tmax/tbins
 
     lo_energy = 0.50
+    hi_energy = 3.20
     ############################################################################
     # Define the variables and ranges
     # 
@@ -34,11 +35,11 @@ def main():
     ############################################################################
     #x = RooRealVar("x","ionization energy (keVee)",0.0,12.0);
     t = RooRealVar("t","time",1.0,tmax+1)
-    #x = RooRealVar("x","ionization energy (keVee)",0.0,3.0);
-    x = RooRealVar("x","ionization energy (keVee)",lo_energy,3.0);
+    #x = RooRealVar("x","ionization energy (keVee)",0.0,hi_energy);
+    x = RooRealVar("x","ionization energy (keVee)",lo_energy,hi_energy);
     #t = RooRealVar("t","time",5.0,tmax+5)
 
-    x.setRange("FULL",lo_energy,3.0)
+    x.setRange("FULL",lo_energy,hi_energy)
     t.setRange("FULL",1.0,tmax+1)
     
     myset = RooArgSet()
@@ -47,16 +48,16 @@ def main():
     data_total = RooDataSet("data_total","data_total",myset)
     data_acc_corr = RooDataSet("data_acc_corr","data_acc_corr",myset)
 
-    x_ranges = [[0.0,3.0],
+    x_ranges = [[0.0,hi_energy],
                 [lo_energy,0.9],
-                [lo_energy,3.0],
+                [lo_energy,hi_energy],
                 [0.0,0.4]
                 ]
 
-    x.setRange("good_days_0",lo_energy,3.0)
-    x.setRange("good_days_1",lo_energy,3.0)
-    x.setRange("good_days_2",lo_energy,3.0)
-    x.setRange("good_days_3",lo_energy,3.0)
+    x.setRange("good_days_0",lo_energy,hi_energy)
+    x.setRange("good_days_1",lo_energy,hi_energy)
+    x.setRange("good_days_2",lo_energy,hi_energy)
+    x.setRange("good_days_3",lo_energy,hi_energy)
 
     for i,r in enumerate(x_ranges):
 
@@ -105,6 +106,7 @@ def main():
         else:
             fit_range += "%s" % (name)
 
+
         if i==0:
             lo = 1
             hi = dead_days[i][0]
@@ -121,7 +123,7 @@ def main():
         ########################################
         # Do I need to do this?
         ########################################
-        x.setRange(name,lo_energy,3.0)
+        x.setRange(name,lo_energy,hi_energy)
 
 
     print "fit_range ---------------------- "
@@ -167,7 +169,7 @@ def main():
                 print time_days
 
             # For diagnostics.
-            if energy>=lo_energy and energy<=3.0:
+            if energy>=lo_energy and energy<=hi_energy:
                 data_total.add(myset)
 
             if time_days > 990:
@@ -220,7 +222,8 @@ def main():
     # x
     #x.setBins(240)
     #x.setBins(60)
-    x.setBins(50)
+    #x.setBins(50)
+    x.setBins(100)
     xframe_main = x.frame(RooFit.Title("Plot of ionization energy"))
     data.plotOn(xframe_main)
 
@@ -274,8 +277,17 @@ def main():
     #cogent_pars_dict["ncosmogenics"].setVal(400)
     #cogent_pars_dict["ncosmogenics"].setConstant(False)
 
-    #cogent_pars_dict["cosmogenic_norms_calc_0"].setVal(500.0)
-    cogent_pars_dict["cosmogenic_norms_0"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_0"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_1"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_2"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_3"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_4"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_5"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_6"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_7"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_8"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_9"].setConstant(False)
+    #cogent_pars_dict["cosmogenic_norms_10"].setConstant(False)
 
 
 
@@ -284,14 +296,48 @@ def main():
     cogent_pars_dict["bkg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["bkg_mod_frequency"].setConstant(True)
 
     cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(False)
-    cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(False)
+    #cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(False)
     #cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(True)
-    #cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
+    cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
 
     cogent_pars_dict["sig_mod_amp"].setVal(1.0); cogent_pars_dict["sig_mod_amp"].setConstant(False)
-    cogent_pars_dict["bkg_mod_amp"].setVal(1.0); cogent_pars_dict["bkg_mod_amp"].setConstant(False)
+    #cogent_pars_dict["bkg_mod_amp"].setVal(1.0); cogent_pars_dict["bkg_mod_amp"].setConstant(False)
     #cogent_pars_dict["sig_mod_amp"].setVal(0.0); cogent_pars_dict["sig_mod_amp"].setConstant(True)
-    #cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
+    cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
+
+    ############################################################################
+    # Construct the RooNLLVar list
+    ############################################################################
+    print "Creating the NLL variable"
+    nllList = RooArgSet()
+    temp_list = []
+    print nllList
+    #nll = None
+    print good_ranges
+    for i,r in enumerate(good_ranges):
+        name = "nll_%s" % (r)
+        #nllComp = RooNLLVar(name,name,cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(r))
+        #nllComp.Print("v")
+        #temp_list.append(RooNLLVar(name,name,cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(r)))
+        temp_list.append(RooNLLVar(name,name,cogent_energy_pdf,data,RooFit.Range(r)))
+        print name
+        #nllList.add(nllComp)
+        nllList.add(temp_list[i])
+        print name
+        nllList.Print()
+
+    nll = RooAddition("nll","-log(likelihood)",nllList,True);
+
+    m = RooMinuit(nll)
+
+    m.setVerbose(False)
+    m.setStrategy(2)
+    m.migrad()
+    m.hesse()
+    e_fit_results = m.save()
+
+    #cogent_pars_dict["nsig_e"].setVal(4.0*cogent_pars_dict["nsig_e"].getVal())
+    #cogent_pars_dict["nbkg_e"].setVal(4.0*cogent_pars_dict["nbkg_e"].getVal())
 
     ##nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(fit_range),RooFit.SplitRange(True))
     #nll = RooNLLVar("nll","nll",cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(fit_range),RooFit.SplitRange(True))
@@ -304,13 +350,15 @@ def main():
     #m.hesse()
     #e_fit_results = m.save()
 
-    #'''
+    #exit(1)
+
+    '''
     e_fit_results = cogent_energy_pdf.fitTo(data,
             RooFit.Range(fit_range),
             #RooFit.Extended(True),
             RooFit.Save(True),
             )
-    #'''
+    '''
 
     #fit_range = "FULL"
 
@@ -377,8 +425,9 @@ def main():
 
 
     can_x_main.cd(1)
-    #xframe_main.GetXaxis().SetRangeUser(0.0,3.0)
-    xframe_main.GetYaxis().SetRangeUser(0.0,200.0)
+    #xframe_main.GetXaxis().SetRangeUser(0.0,hi_energy)
+    #xframe_main.GetYaxis().SetRangeUser(0.0,200.0)
+    xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_main.Draw()
     gPad.Update()
 
@@ -406,6 +455,20 @@ def main():
     for i in xrange(4):
         print "%d entries: %d" % (i, data_reduced[i].numEntries())
 
+    days = 0.0
+    phase = cogent_pars_dict["sig_mod_phase"].getVal()
+    if phase>=0:
+        days = 365 - (phase/(2*pi))*365 + (365/4.0)
+    else:
+        days = (phase/(2*pi))*365 + (365/4.0)
+    print "sig phase: %f (rad) %f (days)" % (phase, days)
+
+    phase = cogent_pars_dict["bkg_mod_phase"].getVal()
+    if phase>=0:
+        days = 365 - (phase/(2*pi))*365 + (365/4.0)
+    else:
+        days = (phase/(2*pi))*365 + (365/4.0)
+    print "bkg phase: %f (rad) %f (days)" % (phase, days)
 
     ############################################################################
     rep = ''
