@@ -167,7 +167,7 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     n2.setConstant(kFALSE);
 
     // Set things up in case we call RooMinuit
-    RooNLLVar nll = RooNLLVar("nll","nll",*total,*data_reduce,Extended(kTRUE),Range(fit_range));
+    RooNLLVar nll = RooNLLVar("nll","nll",*total,*data_reduce,Extended(kTRUE),Range(fit_range),SplitRange(kTRUE));
     RooFormulaVar fit_func = RooFormulaVar("fit_func","nll",RooArgList(nll));
     RooMinuit m = RooMinuit(fit_func);
 
