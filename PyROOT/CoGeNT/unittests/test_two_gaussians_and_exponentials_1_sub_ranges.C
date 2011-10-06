@@ -49,7 +49,7 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     ////////////////////////////////////////////////////////////////////////////
     // Set the seed so our results are reproducible.
     ////////////////////////////////////////////////////////////////////////////
-    RooRandom::randomGenerator().SetSeed(100);
+    RooRandom::randomGenerator()->SetSeed(100);
 
     ////////////////////////////////////////////////////////////////////////////
     // Over what range are we fitting?
@@ -115,6 +115,10 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     RooDataSet* data = total->generate(RooArgSet(x,t),2500);
 
     RooDataSet* data_reduce = (RooDataSet*)data->reduce(CutRange("FULL"));
+    RooDataSet* data_reduce0 = (RooDataSet*)data->reduce(CutRange("range0"));
+    RooDataSet* data_reduce1 = (RooDataSet*)data->reduce(CutRange("range1"));
+    RooDataSet* data_reduce2 = (RooDataSet*)data->reduce(CutRange("range2"));
+    RooDataSet* data_reduce3 = (RooDataSet*)data->reduce(CutRange("range3"));
     if (fit_subranges==1)
     {
         data_reduce = (RooDataSet*)data->reduce(CutRange("range0"));
@@ -168,9 +172,23 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
 
     // Set things up in case we call RooMinuit
     //RooNLLVar nll = RooNLLVar("nll","nll",*total,*data_reduce,Extended(kTRUE),Range(fit_range),SplitRange(kTRUE));
-    RooNLLVar nll = RooNLLVar("nll","nll",*total,*data_reduce,Range(fit_range),SplitRange(kTRUE));
-    RooFormulaVar fit_func = RooFormulaVar("fit_func","nll",RooArgList(nll));
-    RooMinuit m = RooMinuit(fit_func);
+    //RooNLLVar nll = RooNLLVar("nll","nll",*total,*data_reduce,Extended(kTRUE),Range(fit_range));
+
+    // Try this like in the RooAbsPdf code
+    RooArgList nllList ;
+    //RooAbsReal* nllComp = new RooNLLVar("nll_0","-log(likelihood)",*this,data,projDeps,ext,token,addCoefRangeName,numcpu,kFALSE,verbose,splitr,cloneData) ;
+    RooAbsReal* nllComp0 = new RooNLLVar("nll_range0","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range0"),SplitRange(kTRUE));
+    //RooAbsReal* nllComp0 = new RooNLLVar("nll_range0","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range0"));
+    nllList.add(*nllComp0) ;
+    RooAbsReal* nllComp1 = new RooNLLVar("nll_range1","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range1"),SplitRange(kTRUE));
+    //RooAbsReal* nllComp1 = new RooNLLVar("nll_range1","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range1"));
+    nllList.add(*nllComp1) ;
+    nll = new RooAddition("nll","-log(likelihood)",nllList,kTRUE);
+
+    //RooFormulaVar fit_func = RooFormulaVar("fit_func","nll",RooArgList(nll));
+    //RooFormulaVar fit_func = RooFormulaVar("fit_func","@0",RooArgList(*nll));
+    RooAddition *fit_func = new RooAddition(*nll);
+    RooMinuit m = RooMinuit(*fit_func);
 
     ////////////////////////////////////////////////////////////////////////////
     // Fit with either RooMinuit or the fitTo member function of the PDF.
@@ -179,7 +197,7 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     if (!use_roominuit)
     {
         //results = total->fitTo(*data_reduce,Save(kTRUE),Range(fit_range),Extended(kTRUE));
-        results = total->fitTo(*data_reduce,Save(kTRUE),Range(fit_range));
+        results = total->fitTo(*data_reduce,Save(kTRUE),Range(fit_range),Extended(kTRUE));
     }
     else
     {
@@ -229,6 +247,7 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     results->Print("v");
 
     int nentries = data_reduce->numEntries();
+    //int nentries = data_reduce0->numEntries() + data_reduce1->numEntries();
     printf("num entries in dataset: %d\n",nentries);
     printf("fit results:\n");
     printf("\tn0: %6.2f\n",n0.getVal());

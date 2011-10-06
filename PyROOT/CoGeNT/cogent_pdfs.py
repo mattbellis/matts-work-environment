@@ -305,27 +305,38 @@ def cogent_pdf(x,t):
     #total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp",RooArgList(bkg_exp,sig_exp),RooArgList(nbkg_e,nsig_e))
 
     ################# Trying Gaussian constraint ###############
-    gc0 = None
-    #for c in cosmogenic_sub_funcs:
-    for c in cosmogenic_pars:
-        if c.GetName() == "gaussian_constraint_0":
-            gc0 = c
-
-    print "HHHHHHHHHHHHHHHHHHHHHH"
-    print gc0
-    gc0.Print("v")
-    print "Val: %f" % (gc0.getVal())
-
     print " ------------------------------------------------- "
     total_energy_temp = RooAddPdf("total_energy_temp","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
+
+    gc0 = None
+    gc_s = []
+    generic_list = RooArgList(total_energy_temp)
+    generic_string = "@0"
+    #for c in cosmogenic_sub_funcs:
+    count = 1
+    for c in cosmogenic_pars:
+        name = "gaussian_constraint_" 
+        if c.GetName().find(name)>=0:
+            gc_s.append(c)
+            generic_string += "*@%d" % (count)
+            generic_list.add(c)
+            c.Print("v")
+            print "Val: %f" % (c.getVal())
+            count += 1
+
+    print "HHHHHHHHHHHHHHHHHHHHHH"
+
     print " ------------------------------------------------- "
     #total_energy_pdf = RooGenericPdf("total_energy_pdf","@0*@1",RooArgList(total_energy_temp,gc0))
+    #total_energy_pdf = RooGenericPdf("total_energy_pdf",generic_string,generic_list)
+
+    ########### Standard pdf without Gaussian constraint ####################
     total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
     print " ------------------------------------------------- "
 
     #pars += [nbkg_e, nsig_e, ncosmogenics]
     pars += [nbkg_e, nsig_e]
-    sub_funcs += [gc0,total_energy_temp]
+    sub_funcs += [total_energy_temp]
 
     return pars, sub_funcs, total_energy_pdf
 
