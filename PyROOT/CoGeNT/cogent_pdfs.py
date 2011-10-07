@@ -320,8 +320,8 @@ def cogent_pdf(x,t):
             gc_s.append(c)
             generic_string += "*@%d" % (count)
             generic_list.add(c)
-            c.Print("v")
-            print "Val: %f" % (c.getVal())
+            #c.Print("v")
+            #print "Val: %f" % (c.getVal())
             count += 1
 
     print "HHHHHHHHHHHHHHHHHHHHHH"

@@ -319,7 +319,9 @@ def main():
         #nllComp = RooNLLVar(name,name,cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(r))
         #nllComp.Print("v")
         #temp_list.append(RooNLLVar(name,name,cogent_energy_pdf,data,RooFit.Extended(True),RooFit.Range(r)))
-        temp_list.append(RooNLLVar(name,name,cogent_energy_pdf,data,RooFit.Range(r)))
+        #temp_list.append(RooNLLVar(name,name,cogent_energy_pdf,data,RooFit.Range(r)))
+        #RooAbsReal* nllComp0 = new RooNLLVar("nll_range0","-log(likelihood)",*total,*data_reduce,kTRUE,"range0",0,1,kFALSE,kFALSE,kFALSE,kFALSE);
+        temp_list.append(RooNLLVar(name,name,cogent_energy_pdf,data,True,r,"",1,False,False,False,False))
         print name
         #nllList.add(nllComp)
         nllList.add(temp_list[i])
@@ -331,7 +333,7 @@ def main():
     m = RooMinuit(nll)
 
     m.setVerbose(False)
-    m.setStrategy(2)
+    #m.setStrategy(2)
     m.migrad()
     m.hesse()
     e_fit_results = m.save()
@@ -460,14 +462,14 @@ def main():
     if phase>=0:
         days = 365 - (phase/(2*pi))*365 + (365/4.0)
     else:
-        days = (phase/(2*pi))*365 + (365/4.0)
+        days = (phase/(2*pi))*365 + (365/2.0)
     print "sig phase: %f (rad) %f (days)" % (phase, days)
 
     phase = cogent_pars_dict["bkg_mod_phase"].getVal()
     if phase>=0:
         days = 365 - (phase/(2*pi))*365 + (365/4.0)
     else:
-        days = (phase/(2*pi))*365 + (365/4.0)
+        days = (phase/(2*pi))*365 + (365/2.0)
     print "bkg phase: %f (rad) %f (days)" % (phase, days)
 
     ############################################################################
