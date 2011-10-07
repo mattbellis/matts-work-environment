@@ -77,7 +77,7 @@ def cosmogenic_peaks(x,t,num_days):
         ########################################################################
         # Define the Gaussian constraints using the uncertainty
         ########################################################################
-        uncert = num_tot_decays*cosmogenic_data_dict[p][2]/100.0
+        uncert = num_tot_decays*cosmogenic_data_dict[p][1]/100.0
         print "uncertainty: %f" % (uncert)
 
         name = "cosmogenic_uncertainties_%s" % (i)
@@ -121,9 +121,10 @@ def cosmogenic_peaks(x,t,num_days):
 
         name = "gaussian_constraint_%d" % (i)
         #gc = RooGenericPdf(name,name,"(1.0/2401.0)*exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
-        gc = RooFormulaVar(name,name,"(1.0/2401.0)*exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
+        #gc = RooFormulaVar(name,name,"exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
+        gc = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
         #gc = RooGenericPdf(name,name,"@0",RooArgList(gc_f))
-        gc.Print("v")
+        #gc.Print("v")
         cosmogenic_gaussian_constraints.append(gc)
 
         name = "cosmogenic_pdfs_%s" % (i)
@@ -324,15 +325,15 @@ def cogent_pdf(x,t):
             #print "Val: %f" % (c.getVal())
             count += 1
 
-    print "HHHHHHHHHHHHHHHHHHHHHH"
+    #print "HHHHHHHHHHHHHHHHHHHHHH"
 
-    print " ------------------------------------------------- "
+    #print " ------------------------------------------------- "
     #total_energy_pdf = RooGenericPdf("total_energy_pdf","@0*@1",RooArgList(total_energy_temp,gc0))
     #total_energy_pdf = RooGenericPdf("total_energy_pdf",generic_string,generic_list)
 
     ########### Standard pdf without Gaussian constraint ####################
     total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
-    print " ------------------------------------------------- "
+    #print " ------------------------------------------------- "
 
     #pars += [nbkg_e, nsig_e, ncosmogenics]
     pars += [nbkg_e, nsig_e]

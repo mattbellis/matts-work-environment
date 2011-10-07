@@ -5,6 +5,8 @@ from ROOT import *
 
 from math import *
 
+from datetime import datetime,timedelta
+
 from cogent_utilities import *
 from cogent_pdfs import *
 
@@ -20,6 +22,7 @@ def main():
     ############################################
 
     first_event = 2750361.2 # seconds
+    start_date = datetime(2009, 12, 4, 0, 0, 0, 0)
 
     tmax = 480;
     tbins = 16;
@@ -27,7 +30,7 @@ def main():
     t_bin_width = tmax/tbins
 
     lo_energy = 0.50
-    hi_energy = 3.20
+    hi_energy = 3.00
     ############################################################################
     # Define the variables and ranges
     # 
@@ -188,6 +191,8 @@ def main():
         if p.GetName().find("gaussian_constraint_")<0:
             cogent_pars_dict[p.GetName()] = p
             cogent_pars_dict[p.GetName()].setConstant(True)
+        else:
+            cogent_pars_dict[p.GetName()] = p
 
     # 
     cogent_sub_funcs_dict = {}
@@ -287,6 +292,8 @@ def main():
     #cogent_pars_dict["cosmogenic_norms_7"].setConstant(False)
     #cogent_pars_dict["cosmogenic_norms_8"].setConstant(False)
     #cogent_pars_dict["cosmogenic_norms_9"].setConstant(False)
+
+    #cogent_pars_dict["cosmogenic_norms_10"].setVal(10.0)
     #cogent_pars_dict["cosmogenic_norms_10"].setConstant(False)
 
 
@@ -295,15 +302,15 @@ def main():
     cogent_pars_dict["sig_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["sig_mod_frequency"].setConstant(True)
     cogent_pars_dict["bkg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["bkg_mod_frequency"].setConstant(True)
 
-    cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(False)
-    #cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(False)
-    #cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(True)
-    cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
+    #cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(False)
+    cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(False)
+    cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(True)
+    #cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
 
-    cogent_pars_dict["sig_mod_amp"].setVal(1.0); cogent_pars_dict["sig_mod_amp"].setConstant(False)
-    #cogent_pars_dict["bkg_mod_amp"].setVal(1.0); cogent_pars_dict["bkg_mod_amp"].setConstant(False)
-    #cogent_pars_dict["sig_mod_amp"].setVal(0.0); cogent_pars_dict["sig_mod_amp"].setConstant(True)
-    cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
+    #cogent_pars_dict["sig_mod_amp"].setVal(1.0); cogent_pars_dict["sig_mod_amp"].setConstant(False)
+    cogent_pars_dict["bkg_mod_amp"].setVal(1.0); cogent_pars_dict["bkg_mod_amp"].setConstant(False)
+    cogent_pars_dict["sig_mod_amp"].setVal(0.0); cogent_pars_dict["sig_mod_amp"].setConstant(True)
+    #cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
 
     ############################################################################
     # Construct the RooNLLVar list
@@ -328,7 +335,31 @@ def main():
         print name
         nllList.Print()
 
+    # Add in the Gaussian constraint
+    gc_s = []
+    generic_list = RooArgList()
+    generic_string = "@0"
+    count = 1
+    #print cogent_pars_dict
+    for c in cogent_pars_dict:
+        name = "gaussian_constraint"
+        #print "Looping over %s" % (c)
+        if c.find(name)>=0:
+            gc_s.append(c)
+            generic_string += "+@%d" % (count)
+            generic_list.add(cogent_pars_dict[c])
+            nllList.add(cogent_pars_dict[c])
+            #c.Print("v")
+            #print "Val: %f" % (c.getVal())
+            count += 1
+
+
+    print generic_list
+    generic_list.Print()
+
     nll = RooAddition("nll","-log(likelihood)",nllList,True);
+
+    nll.Print("v")
 
     m = RooMinuit(nll)
 
@@ -440,6 +471,11 @@ def main():
     hacc_corr.Draw("samee")
     gPad.Update()
 
+    '''
+    for c in cogent_pars_dict:
+        print "%s %f" % (c,cogent_pars_dict[c].getVal())
+    '''
+
     for file_type in ['png','pdf','eps']:
         outfile = "%s.%s" % (save_file_name,file_type)
         can_x_main.SaveAs(outfile)
@@ -464,6 +500,9 @@ def main():
     else:
         days = (phase/(2*pi))*365 + (365/2.0)
     print "sig phase: %f (rad) %f (days)" % (phase, days)
+    phase_peak = timedelta(days=int(days))
+    phase_peak_date = start_date + phase_peak
+    print phase_peak_date.strftime("%B %d, %Y")
 
     phase = cogent_pars_dict["bkg_mod_phase"].getVal()
     if phase>=0:
@@ -471,6 +510,9 @@ def main():
     else:
         days = (phase/(2*pi))*365 + (365/2.0)
     print "bkg phase: %f (rad) %f (days)" % (phase, days)
+    phase_peak = timedelta(days=int(days))
+    phase_peak_date = start_date + phase_peak
+    print phase_peak_date.strftime("%B %d, %Y")
 
     ############################################################################
     rep = ''
