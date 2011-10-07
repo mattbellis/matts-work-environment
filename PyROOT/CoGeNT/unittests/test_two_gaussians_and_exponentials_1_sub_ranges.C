@@ -177,11 +177,16 @@ void test_two_gaussians_and_exponentials_1_sub_ranges(int fit_subranges=0, bool 
     // Try this like in the RooAbsPdf code
     RooArgList nllList ;
     //RooAbsReal* nllComp = new RooNLLVar("nll_0","-log(likelihood)",*this,data,projDeps,ext,token,addCoefRangeName,numcpu,kFALSE,verbose,splitr,cloneData) ;
-    RooAbsReal* nllComp0 = new RooNLLVar("nll_range0","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range0"),SplitRange(kTRUE));
+    //RooAbsReal* nllComp0 = new RooNLLVar("nll_range0","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range0"),SumCoefRange(""));
+    //RooAbsReal* nllComp0 = new RooNLLVar("nll_range0","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range0"),CloneData(kFALSE));
+    //RooAbsReal* nllComp1 = new RooNLLVar("nll_range1","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range1"));
+    RooAbsReal* nllComp0 = new RooNLLVar("nll_range0","-log(likelihood)",*total,*data_reduce,kTRUE,"range0",0,1,kFALSE,kFALSE,kFALSE,kFALSE);
     //RooAbsReal* nllComp0 = new RooNLLVar("nll_range0","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range0"));
     nllList.add(*nllComp0) ;
-    RooAbsReal* nllComp1 = new RooNLLVar("nll_range1","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range1"),SplitRange(kTRUE));
+    //RooAbsReal* nllComp1 = new RooNLLVar("nll_range1","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range1"),SumCoefRange(""));
+    //RooAbsReal* nllComp1 = new RooNLLVar("nll_range1","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range1"),CloneData(kFALSE),interleave(kFALSE));
     //RooAbsReal* nllComp1 = new RooNLLVar("nll_range1","-log(likelihood)",*total,*data_reduce,Extended(kTRUE),Range("range1"));
+    RooAbsReal* nllComp1 = new RooNLLVar("nll_range1","-log(likelihood)",*total,*data_reduce,kTRUE,"range1",0,1,kFALSE,kFALSE,kFALSE,kFALSE);
     nllList.add(*nllComp1) ;
     nll = new RooAddition("nll","-log(likelihood)",nllList,kTRUE);
 
