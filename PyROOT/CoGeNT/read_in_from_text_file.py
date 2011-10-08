@@ -31,6 +31,11 @@ def main():
     parser.add_argument('--add-gc', dest='add_gc', action='store_true', 
             default=False, help='Add a Gaussian constraint for the \
             uncertainties on the number of events in each cosmogenic peak.')
+    parser.add_argument('--gc-flag', dest='gc_flag', type=int,
+            default=0, help='Which Gaussian constraint.\n\
+                    \t0: Errors on expected numbers of events.\n\
+                    \t1: Sqrt(N) where N is expected number of events.\n\
+                    \t2: Adding both in quadrature.')
     parser.add_argument('--sig-mod', dest='sig_mod', action='store_true', 
             default=False, help='Let the signal have an annual modulation.')
     parser.add_argument('--bkg-mod', dest='bkg_mod', action='store_true', 
@@ -45,7 +50,7 @@ def main():
             default=False, help='Use the RooAbsPdf::fitTo() member function, \
             rather than RooMinuit. For debugging purposes. This option will \
             fit without the Gaussian constraints.')
-    parser.add_argument('--tag', dest='tag', default='default', 
+    parser.add_argument('--tag', dest='tag', default='cogent', 
             help='Tag to use to name output files and plots.')
     parser.add_argument('--verbose', '-v', dest='verbose', action='store_true', 
             default=False, help='Print out extra debug info.')
@@ -221,7 +226,7 @@ def main():
     # Grab the PDF 
     ############################################################################
 
-    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.verbose)
+    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.verbose)
 
     # DEBUG
     if args.verbose:
@@ -443,10 +448,11 @@ def main():
     fit_norm_range_xplot = "FULL"
     fit_norm_range_tplot = "FULL"
 
+    # Plot the total PDF
     cogent_fit_pdf.plotOn(xframe_main,RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
     cogent_fit_pdf.plotOn(tframe_main,RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
 
-    # Plot the PDFs for the cosmogenic peaks.
+    # Plot the different components of the PDFs for the cosmogenic peaks.
     count = 0
     for s in cogent_sub_funcs_dict:
         argset = RooArgSet(cogent_sub_funcs_dict[s])
@@ -454,29 +460,31 @@ def main():
         line_style = 1
         color = 1
         if "cg_" in s:
-            line_style = 2;  color = 2;
+            line_width = 1; line_style = 2;  color = 2;
             plot_pdf = True
-        elif "cg_total" in s:
-            line_style = 1;  color = 2;
+        elif "cosmogenic_total" in s:
+            line_width = 2; line_style = 1;  color = 2;
             plot_pdf = True
         elif "_exp" in s:
-            line_style = 1;  color = 26+count;
+            line_width = 2; line_style = 1;  color = 26+count;
             count += 10
             plot_pdf = True
 
         if plot_pdf:
-            cogent_fit_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
-            cogent_fit_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
+            cogent_fit_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
+            cogent_fit_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
 
     ########################################################################
     # Draw the frames onto the canvas.
     ########################################################################
     cans[0].cd(1)
+    xframe_main.GetXaxis().SetLimits(0.5,hi_energy)
     xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_main.Draw()
     gPad.Update()
 
     cans[0].cd(2)
+    tframe_main.GetYaxis().SetRangeUser(0.0,200.0)
     tframe_main.Draw()
     hacc_corr.Draw("samee") # The dead-time corrected histogram.
     gPad.Update()
@@ -490,8 +498,13 @@ def main():
     save_file_name = "%s" % args.tag
     if args.sig_mod:
         save_file_name += "_sig_mod"
-    if args.sig_mod:
+    if args.bkg_mod:
         save_file_name += "_bkg_mod"
+    if args.add_gc:
+        save_file_name += "_add_gc%d" % (args.gc_flag)
+
+    save_file_name += "_elo%d" % (int(10*args.e_lo))
+
     for file_type in ['png','pdf','eps']:
 
         outfile = "Plots/%s.%s" % (save_file_name,file_type)
