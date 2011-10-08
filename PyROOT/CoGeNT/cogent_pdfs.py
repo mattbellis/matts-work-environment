@@ -5,7 +5,7 @@ from ROOT import *
 ################################################################################
 # Build the PDFs for the cosmogenic peaks.
 ################################################################################
-def cosmogenic_peaks(x,t,num_days,verbose=False):
+def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
 
     ############################################################################
     # Hard coded this from the data given out by Juan Collar.
@@ -16,8 +16,8 @@ def cosmogenic_peaks(x,t,num_days,verbose=False):
             "Ga 68": [520.15,5.1139,0.11000,57.217,52.828,1.1936,0.076426,271.00,0.0000],
             "Zn 65": [2117.8,2.2287,0.10800,228.72,211.18,1.0961,0.075877,244.00,0.0058000],
             "Ni 56": [16.200,23.457,0.10200,1.6524,1.5257,0.92560,0.074906,5.9000,0.39000],
-            "Co 56/58": [100.25,44.88,0.10200,10.226,9.4412,0.84610,0.074449,71.000,0.78600],
-            "Co 57": [27.500,381.09,0.10200,2.8050,2.5899,0.84610,0.074449,271.00,0.78600],
+            "Co 56/58": [100.25,8.0,0.10200,10.226,9.4412,0.84610,0.074449,71.000,0.78600],
+            "Co 57": [27.500,8.0,0.10200,2.8050,2.5899,0.84610,0.074449,271.00,0.78600],
             "Fe 55": [459.20,11.629,0.10600,48.675,44.942,0.76900,0.074003,996.00,0.96000],
             "Mn 54": [223.90,9.3345,0.10200,22.838,21.086,0.69460,0.073570,312.00,1.0000],
             "Cr 51": [31.500,15.238,0.10100,3.1815,2.9375,0.62820,0.073182,28.000,1.0000],
@@ -70,13 +70,31 @@ def cosmogenic_peaks(x,t,num_days,verbose=False):
         num_tot_decays = cosmogenic_data_dict[p][4]
         norm = num_tot_decays*(1.0-exp(num_days*decay_constant))
 
+        # Check to see if the the low range of the energy has shifted. If so, 
+        # we need to compensate for the truncation of the PDF (Gaussian)
+        if e_lo is not None:
+            func = "Gaus(x,%f,%f)" % (mean, sigma)
+            g = TF1("Test Gaussian",func,0,3.0)
+            frac = g.Integral(e_lo,3.0)/g.Integral(0.0,3.0)
+            norm *= frac
+
+            if verbose:
+                print "frac: %f" % (frac)
+
         total_num_cosmogenics  += norm
 
         ########################################################################
         # Define the Gaussian constraints using the uncertainty
         ########################################################################
-        uncert = norm*cosmogenic_data_dict[p][1]/100.0
-        #uncert = sqrt(norm)
+        uncert = 1.0
+        uncert_from_file = norm*cosmogenic_data_dict[p][1]/100.0
+        if gc_flag==0: # Uncertainty from file (CoGeNT study)
+            uncert = uncert_from_file
+        elif gc_flag==1: # Sqrt(N)
+            uncert = sqrt(norm)
+        elif gc_flag==2: #Both terms added in quadrature
+            uncert = sqrt(norm + uncert_from_file*uncert_from_file)
+
         if verbose:
             print "norm: %6.3f %6.3f %6.3f %6.3f +/-%6.3f" % (mean,sigma,num_tot_decays,norm,uncert)
 
@@ -163,7 +181,7 @@ def cosmogenic_peaks(x,t,num_days,verbose=False):
     sub_funcs += cosmogenic_decay_pdfs 
 
     # Add up all the individual peaks.
-    name = "cg_total"
+    name = "cosmogenic_total"
     cosmogenic_pdf = RooAddPdf(name,rooadd_string,rooadd_funcs,rooadd_norms)
 
     print "total_num_cosmogenics: %f" % (total_num_cosmogenics)
@@ -175,7 +193,7 @@ def cosmogenic_peaks(x,t,num_days,verbose=False):
 
 ################################################################################
 ################################################################################
-def cogent_pdf(x,t,verbose=False):
+def cogent_pdf(x,t,gc_flag=0,e_lo=None,verbose=False):
 
     pars = []
     sub_funcs = []
@@ -183,7 +201,7 @@ def cogent_pdf(x,t,verbose=False):
     ############################################################################
     # Grab the cosmogenic peaks
     ############################################################################
-    cosmogenic_pars, cosmogenic_sub_funcs, cosmogenic_pdf = cosmogenic_peaks(x,t,458,verbose)
+    cosmogenic_pars, cosmogenic_sub_funcs, cosmogenic_pdf = cosmogenic_peaks(x,t,458,gc_flag,e_lo,verbose)
     ncosmogenics = None
     for c in cosmogenic_sub_funcs:
         if c.GetName()=="ncosmogenics":
