@@ -2,12 +2,14 @@
 
 from ROOT import *
 
-
 ################################################################################
-# Fit to some number of cosmogenic peak
+# Build the PDFs for the cosmogenic peaks.
 ################################################################################
-def cosmogenic_peaks(x,t,num_days):
+def cosmogenic_peaks(x,t,num_days,verbose=False):
 
+    ############################################################################
+    # Hard coded this from the data given out by Juan Collar.
+    ############################################################################
     cosmogenic_data_dict = {
             "As 73": [125.45,33.479,0.11000,13.799,12.741,1.4143,0.077656,80.000,0.0000],
             "Ge 68": [6070.7,1.3508,0.11400,692.06,638.98,1.2977,0.077008,271.00,0.0000],
@@ -21,10 +23,6 @@ def cosmogenic_peaks(x,t,num_days):
             "Cr 51": [31.500,15.238,0.10100,3.1815,2.9375,0.62820,0.073182,28.000,1.0000],
             "V 49": [161.46,12.263,0.10000,16.146,14.908,0.56370,0.072803,330.00,1.0000],
             }
-
-
-    #peak_means = [1.3, 1.0, 1.2, 1.4]
-    #peak_nums  = [50, 20,  8,   3]
 
     cosmogenic_means = []
     cosmogenic_sigmas = []
@@ -64,21 +62,23 @@ def cosmogenic_peaks(x,t,num_days):
         decay_constant = -1.0*log(2)/half_life
         #decay_constant = -0.001
 
+        ########################################################################
         # Note the the value stored in the file/dictionary for the number of atoms,
         # is for (I think) the number of atoms expected to decay from Dec 4th, 'til
         # the end of time. So compensate for the number of days running.
+        ########################################################################
         num_tot_decays = cosmogenic_data_dict[p][4]
         norm = num_tot_decays*(1.0-exp(num_days*decay_constant))
-        print "norm: %6.3f %6.3f %6.3f %6.3f" % (mean,sigma,num_tot_decays,norm)
 
         total_num_cosmogenics  += norm
-
 
         ########################################################################
         # Define the Gaussian constraints using the uncertainty
         ########################################################################
-        uncert = num_tot_decays*cosmogenic_data_dict[p][1]/100.0
-        print "uncertainty: %f" % (uncert)
+        uncert = norm*cosmogenic_data_dict[p][1]/100.0
+        #uncert = sqrt(norm)
+        if verbose:
+            print "norm: %6.3f %6.3f %6.3f %6.3f +/-%6.3f" % (mean,sigma,num_tot_decays,norm,uncert)
 
         name = "cosmogenic_uncertainties_%s" % (i)
         cosmogenic_uncertainties.append(RooRealVar(name,name,uncert))
@@ -114,25 +114,18 @@ def cosmogenic_peaks(x,t,num_days):
         ############################################################################
         # Define the Gaussian constraints. 
         ############################################################################
-        #name = "gaussian_constraint_form_%d" % (i)
-        #gc_f = RooFormulaVar(name,name,"(1.0/2401.0)*exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
-        #gc_f.Print("v")
-        #cosmogenic_gaussian_constraints_formula.append(gc_f)
-
         name = "gaussian_constraint_%d" % (i)
-        #gc = RooGenericPdf(name,name,"(1.0/2401.0)*exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
-        #gc = RooFormulaVar(name,name,"exp((-(@0-@1)*(@0-@1))/(@2*@2))",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
         gc = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
-        #gc = RooGenericPdf(name,name,"@0",RooArgList(gc_f))
-        #gc.Print("v")
         cosmogenic_gaussian_constraints.append(gc)
 
+        if verbose:
+            gc.Print("v")
+
+        ############################################################################
+        # Build up the PDFs for each decay.
+        ############################################################################
         name = "cosmogenic_pdfs_%s" % (i)
-        print "name: %s" % (name)
         cosmogenic_pdfs.append(RooProdPdf(name,name,RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i])))
-        #cosmogenic_pdfs.append(RooProdPdf(name,name,RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i],cosmogenic_gaussian_constraints[i])))
-        #cosmogenic_pdfs.append(RooProdPdf(name,name,RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i],cosmogenic_gaussians[i])))
-        print "name: %s" % (name)
 
         if i==0:
             rooadd_string = "%s" % (name)
@@ -151,10 +144,10 @@ def cosmogenic_peaks(x,t,num_days):
         ncos_formula_list.add(cosmogenic_norms[i])
 
 
-    #ncosmogenics = RooRealVar("ncosmogenics","ncosmogenics",50,0,600000)
+    # Form the total number of cosmogenics from the sum of the individual peaks.
     ncosmogenics = RooFormulaVar("ncosmogenics","ncosmogenics",ncos_formula,ncos_formula_list)
-    ncosmogenics.Print()
-    #res_sigma = RooFormulaVar("res_sigma","0.10 + 0.05*sin(6.26*t/365.0)",RooArgList(t))
+    if verbose:
+        ncosmogenics.Print()
 
     pars += cosmogenic_means
     pars += cosmogenic_sigmas
@@ -162,15 +155,14 @@ def cosmogenic_peaks(x,t,num_days):
     pars += cosmogenic_norms_calc
     pars += cosmogenic_decay_constants 
     pars += cosmogenic_uncertainties
+    pars += cosmogenic_gaussian_constraints
 
     sub_funcs += [ncosmogenics]
     sub_funcs += cosmogenic_gaussians
     sub_funcs += cosmogenic_pdfs
     sub_funcs += cosmogenic_decay_pdfs 
-    #sub_funcs += cosmogenic_gaussian_constraints
-    pars += cosmogenic_gaussian_constraints
-    #sub_funcs += cosmogenic_gaussian_constraints_formula
 
+    # Add up all the individual peaks.
     name = "cg_total"
     cosmogenic_pdf = RooAddPdf(name,rooadd_string,rooadd_funcs,rooadd_norms)
 
@@ -183,7 +175,7 @@ def cosmogenic_peaks(x,t,num_days):
 
 ################################################################################
 ################################################################################
-def cogent_pdf(x,t):
+def cogent_pdf(x,t,verbose=False):
 
     pars = []
     sub_funcs = []
@@ -191,7 +183,7 @@ def cogent_pdf(x,t):
     ############################################################################
     # Grab the cosmogenic peaks
     ############################################################################
-    cosmogenic_pars, cosmogenic_sub_funcs, cosmogenic_pdf = cosmogenic_peaks(x,t,442)
+    cosmogenic_pars, cosmogenic_sub_funcs, cosmogenic_pdf = cosmogenic_peaks(x,t,458,verbose)
     ncosmogenics = None
     for c in cosmogenic_sub_funcs:
         if c.GetName()=="ncosmogenics":
@@ -205,11 +197,9 @@ def cogent_pdf(x,t):
     # Define the exponential background
     ############################################################################
     bkg_slope = RooRealVar("bkg_slope","Exponential slope of the background",-0.0,-10.0,0.0)
-    #bkg_exp = RooExponential("bkg_exp","Exponential PDF for bkg",x,bkg_slope)
     bkg_exp_x = RooExponential("bkg_exp_x","Exponential PDF for bkg x",x,bkg_slope)
 
     bkg_slope_t = RooRealVar("bkg_slope_t","Exponential slope of the background t",0.0,-100.0,0.0)
-    #bkg_exp_t = RooExponential("bkg_exp_t","Exponential PDF for bkg t",t,bkg_slope_t)
 
     bkg_mod_frequency = RooRealVar("bkg_mod_frequency","Background modulation frequency",0.0)
     bkg_mod_offset = RooRealVar("bkg_mod_offset","Background modulation offset",2)
@@ -220,14 +210,10 @@ def cogent_pdf(x,t):
 
     bkg_exp = RooProdPdf("bkg_exp","bkg_exp_x*bkg_exp_t",RooArgList(bkg_exp_x,bkg_exp_t))
 
-    #pars.append(bkg_slope)
-    #sub_funcs.append(bkg_exp)
-
     pars.append(bkg_mod_frequency)
     pars.append(bkg_mod_amp)
     pars.append(bkg_mod_phase)
     pars.append(bkg_mod_offset)
-
 
     pars.append(bkg_slope)
     pars.append(bkg_slope_t)
@@ -239,11 +225,9 @@ def cogent_pdf(x,t):
     # Define the exponential signal
     ############################################################################
     sig_slope = RooRealVar("sig_slope","Exponential slope of the signal",-4.5,-10.0,0.0)
-    #sig_exp = RooExponential("sig_exp","Exponential PDF for sig",x,sig_slope)
     sig_exp_x = RooExponential("sig_exp_x","Exponential PDF for sig x",x,sig_slope)
 
     sig_slope_t = RooRealVar("sig_slope_t","Exponential slope of the signal t",-0.00001,-100.0,0.0)
-    #sig_exp_t = RooExponential("sig_exp_t","Exponential PDF for sig t",t,sig_slope_t)
 
     sig_mod_frequency = RooRealVar("sig_mod_frequency","Signal modulation frequency",0.00)
     sig_mod_offset = RooRealVar("sig_mod_offset","Signal modulation phase",2.0)
@@ -265,115 +249,17 @@ def cogent_pdf(x,t):
     sub_funcs.append(sig_exp_t)
     sub_funcs.append(sig_exp)
 
-    '''
-    ############################################################################
-    # Set up the modulation terms.
-    ############################################################################
-    #sig_mod = RooExponential("sig_mod","Exponential PDF for mod",t,sig_slope)
-    sig_mod = RooGenericPdf("sig_mod","2.0+sin(6.26*t/365.0)",RooArgList(t))
-
-    # Define the resolution function to convolve with all of these
-    res_mean =  RooRealVar("res_mean","Mean of the Gaussian resolution function",0)
-    #res_sigma = RooRealVar("res_sigma","Sigma of the Gaussian resolution function",0.05)
-    res_sigma = RooFormulaVar("res_sigma","0.10 + 0.05*sin(6.26*t/365.0)",RooArgList(t))
-    res_gaussian = RooGaussModel("res_gaussian","Resolution function (Gaussian)",x,res_mean,res_sigma)
-
-    # Construct the smeared functions (pdf (x) gauss)
-    lxg = RooFFTConvPdf("lxg","cosmogenic_landau (X) res_gaussian",x,cosmogenic_landau,res_gaussian)
-    bxg = RooFFTConvPdf("bxg","bkg_exp (X) res_gaussian",x,bkg_exp,res_gaussian)
-    sxg = RooFFTConvPdf("sxg","sig_exp (X) res_gaussian",x,sig_exp,res_gaussian)
-
-    #sig_prod = RooProdPdf("sig_prod","sxg*sig_mod",RooArgList(sxg,sig_mod))
-    sig_prod = RooProdPdf("sig_prod","sig_exp*sig_mod",RooArgList(sig_exp,sig_mod))
-    #sig_prod = sxg
-    #sig_prod = sig_exp
-    '''
-
     ############################################################################
     # Form the total PDF.
     ############################################################################
-    nbkg_e = RooRealVar("nbkg_e","nbkg_e",200,0,600000)
-    #ncosmogenics = RooRealVar("ncosmogenics","ncosmogenics",50,0,600000)
-    nsig_e = RooRealVar("nsig_e","nsig_e",200,0,600000)
+    nbkg = RooRealVar("nbkg","nbkg",200,0,600000)
+    nsig = RooRealVar("nsig","nsig",200,0,600000)
 
-    #total_pdf = RooAddPdf("total_pdf","bkg_exp+sig_exp+cosmogenic_landau",RooArgList(bkg_exp,sig_exp,cosmogenic_landau),RooArgList(nbkg_e,nsig_e,ncosmogenics))
-    #total_pdf = RooAddPdf("total_pdf","bxg+sxg+lxg",RooArgList(bxg,sxg,lxg),RooArgList(nbkg_e,nsig_e,ncosmogenics))
-    #total_pdf = RooAddPdf("total_pdf","bxg+sig_prod+lxg",RooArgList(bxg,sig_prod,lxg),RooArgList(nbkg_e,nsig_e,ncosmogenics))
-    #total_pdf = RooAddPdf("total_pdf","bxg+sig_prod+cosmogenic_pdf",RooArgList(bxg,sig_prod,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
+    total_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg,nsig,ncosmogenics))
 
-    #total_pdf = RooAddPdf("total_pdf","bkg_exp+sig_prod+cosmogenic_pdf",RooArgList(bkg_exp,sig_prod,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
+    pars += [nbkg, nsig]
 
-    #total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp",RooArgList(bkg_exp,sig_exp),RooArgList(nbkg_e,nsig_e))
-
-    ################# Trying Gaussian constraint ###############
-    print " ------------------------------------------------- "
-    total_energy_temp = RooAddPdf("total_energy_temp","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
-
-    gc0 = None
-    gc_s = []
-    generic_list = RooArgList(total_energy_temp)
-    generic_string = "@0"
-    #for c in cosmogenic_sub_funcs:
-    count = 1
-    for c in cosmogenic_pars:
-        name = "gaussian_constraint_" 
-        if c.GetName().find(name)>=0:
-            gc_s.append(c)
-            generic_string += "*@%d" % (count)
-            generic_list.add(c)
-            #c.Print("v")
-            #print "Val: %f" % (c.getVal())
-            count += 1
-
-    #print "HHHHHHHHHHHHHHHHHHHHHH"
-
-    #print " ------------------------------------------------- "
-    #total_energy_pdf = RooGenericPdf("total_energy_pdf","@0*@1",RooArgList(total_energy_temp,gc0))
-    #total_energy_pdf = RooGenericPdf("total_energy_pdf",generic_string,generic_list)
-
-    ########### Standard pdf without Gaussian constraint ####################
-    total_energy_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg_e,nsig_e,ncosmogenics))
-    #print " ------------------------------------------------- "
-
-    #pars += [nbkg_e, nsig_e, ncosmogenics]
-    pars += [nbkg_e, nsig_e]
-    sub_funcs += [total_energy_temp]
-
-    return pars, sub_funcs, total_energy_pdf
-
-
-
-
-################################################################################
-# Simple modulation
-################################################################################
-def simple_modulation(t,tag=""):
-
-
-    mod_off = RooRealVar("mod_off","Modulation offset",10,2.0,1000)
-    mod_phase = RooRealVar("mod_phase","Modulation phase",10)
-    mod_freq = RooRealVar("mod_freq","Modulation frequency",10)
-    mod_amp = RooRealVar("mod_amp","Modulation amplitude",10,0,1000)
-
-    #sig_mod = RooGenericPdf("sig_mod","2.0+sin(6.26*t/365.0)",RooArgList(t))
-    sig_mod = RooGenericPdf("sig_mod","mod_amp*(mod_off + sin(mod_freq*t + mod_phase))",RooArgList(t,mod_phase,mod_freq,mod_off,mod_amp))
-    #sig_mod = RooGenericPdf("sig_mod","mod_amp*sin(mod_freq*t + mod_phase)",RooArgList(t,mod_phase,mod_freq,mod_amp))
-
-    nsig = RooRealVar("nsig","nsig",200,0,6000)
-
-    total_pdf = RooExtendPdf("total_pdf","Total PDF",sig_mod,nsig)
-
-    pars = [mod_off, mod_phase, mod_freq, mod_amp, nsig]
-    #pars = [mod_phase, mod_freq, mod_amp, nsig]
-
-    sub_pdfs = [sig_mod]
-
-    return pars, sub_pdfs, total_pdf
-
-
-
-
-
+    return pars,sub_funcs,total_pdf
 
 
 
