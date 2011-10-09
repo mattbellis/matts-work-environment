@@ -9,6 +9,7 @@ rm -rf matts-work-environment/,hgignore
 rm -rf .mrxvtrc
 rm -rf .vimrc
 rm -rf .hgrc
+rm -rf .conkyrc
 
 ######### Link files ############
 ln -s matts-work-environment/environment_configs/cshrc .cshrc
@@ -18,5 +19,6 @@ ln -s matts-work-environment/environment_configs/hgignore matts-work-environment
 ln -s matts-work-environment/environment_configs/mrxvtrc .mrxvtrc
 ln -s matts-work-environment/environment_configs/vimrc .vimrc
 ln -s matts-work-environment/environment_configs/hgrc .hgrc
+ln -s matts-work-environment/environment_configs/conkyrc .conkyrc
 
 
