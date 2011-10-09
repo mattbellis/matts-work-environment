@@ -32,13 +32,16 @@ def main():
             default=False, help='Add a Gaussian constraint for the \
             uncertainties on the number of events in each cosmogenic peak.')
     parser.add_argument('--gc-flag', dest='gc_flag', type=int,
-            default=0, help='Which Gaussian constraint.\n\
+            default=2, help='Which Gaussian constraint.\n\
                     \t0: Errors on expected numbers of events.\n\
                     \t1: Sqrt(N) where N is expected number of events.\n\
-                    \t2: Adding both in quadrature.')
+                    \t2: Adding both in quadrature.\n\
+                    \t Default: 2')
     parser.add_argument('--sig-mod', dest='sig_mod', action='store_true', 
             default=False, help='Let the signal have an annual modulation.')
     parser.add_argument('--bkg-mod', dest='bkg_mod', action='store_true', 
+            default=False, help='Let the background have an annual modulation.')
+    parser.add_argument('--cg-mod', dest='cg_mod', action='store_true', 
             default=False, help='Let the background have an annual modulation.')
     parser.add_argument('--e-lo', dest='e_lo', type=float, default=0.5,
             help='Set the lower limit for the energy range to use.')
@@ -74,7 +77,7 @@ def main():
     print "INFO: e_lo %2.1f" % (args.e_lo)
     print "INFO: signal_modulation %d" % (args.sig_mod)
     print "INFO: background_modulation %d" % (args.bkg_mod)
-    print "INFO: background_modulation %d" % (args.bkg_mod)
+    print "INFO: cosmogenic_modulation %d" % (args.cg_mod)
     print "INFO: add_gc %d" % (args.add_gc)
     print "INFO: gc_flag %d" % (args.gc_flag)
 
@@ -364,6 +367,7 @@ def main():
     yearly_mod = 2*pi/365.0
     cogent_pars_dict["sig_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["sig_mod_frequency"].setConstant(True)
     cogent_pars_dict["bkg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["bkg_mod_frequency"].setConstant(True)
+    cogent_pars_dict["cg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["cg_mod_frequency"].setConstant(True)
 
     # Let the signal modulate: float phase offset and amplitude.
     if args.sig_mod:
@@ -380,6 +384,13 @@ def main():
     else:
         cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
         cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
+
+    if args.cg_mod:
+        cogent_pars_dict["cg_mod_phase"].setVal(0.0); cogent_pars_dict["cg_mod_phase"].setConstant(False)
+        cogent_pars_dict["cg_mod_amp"].setVal(1.0); cogent_pars_dict["cg_mod_amp"].setConstant(False)
+    else:
+        cogent_pars_dict["cg_mod_phase"].setVal(0.0); cogent_pars_dict["cg_mod_phase"].setConstant(True)
+        cogent_pars_dict["cg_mod_amp"].setVal(0.0); cogent_pars_dict["cg_mod_amp"].setConstant(True)
 
     ############################################################################
     # Construct the RooNLLVar to pass into RooMinuit. 
@@ -474,7 +485,7 @@ def main():
         elif "cosmogenic_total" in s:
             line_width = 2; line_style = 1;  color = 2;
             plot_pdf = True
-        elif "_exp" in s:
+        elif "_exp" in s and "exp_decay" not in s:
             line_width = 2; line_style = 1;  color = 26+count;
             count += 10
             plot_pdf = True
@@ -509,6 +520,8 @@ def main():
         save_file_name += "_sig_mod"
     if args.bkg_mod:
         save_file_name += "_bkg_mod"
+    if args.cg_mod:
+        save_file_name += "_cg_mod"
     if args.add_gc:
         save_file_name += "_add_gc%d" % (args.gc_flag)
 
@@ -530,13 +543,15 @@ def main():
 
     # Dump the phase info
     days = 0.0
-    for i in range(0,2):
+    for i in range(0,3):
         phase = None
         phase_string = None
         if i==0:
             phase_string = "sig"
-        else:
+        elif i==1:
             phase_string = "bkg"
+        else:
+            phase_string = "cg"
         name = "%s_mod_phase" % (phase_string)
         phase = cogent_pars_dict[name].getVal()
         if phase>=0:

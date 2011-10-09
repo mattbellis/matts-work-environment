@@ -16,8 +16,8 @@ from math import *
 ################################################################################
 def main():
 
-    par_names = ['nbkg', 'nsig', 'sig_slope', 'bkg_mod_amp', 'bkg_mod_phase', 'sig_mod_amp', 'sig_mod_phase']
-    info_flags = ['e_lo', 'signal_modulation', 'background_modulation', 'background_modulation', 'add_gc', 'gc_flag']
+    par_names = ['nbkg', 'nsig', 'sig_slope', 'cg_mod_amp', 'cg_mod_phase', 'bkg_mod_amp', 'bkg_mod_phase', 'sig_mod_amp', 'sig_mod_phase']
+    info_flags = ['e_lo', 'signal_modulation', 'background_modulation', 'cosmogenic_modulation', 'add_gc', 'gc_flag']
 
     values = []
     nlls = []

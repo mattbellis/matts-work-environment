@@ -30,6 +30,7 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
     cosmogenic_norms = []
     cosmogenic_norms_calc = []
     cosmogenic_decay_constants = []
+    cosmogenic_exp_decay_pdfs = []
     cosmogenic_decay_pdfs = []
     cosmogenic_N0 = []
     cosmogenic_pdfs = []
@@ -50,6 +51,18 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
 
     ncos_formula = ""
     ncos_formula_list = RooArgList()
+
+    ############################################################################
+    # Create a modulation term for the cosmogenic peaks.
+    ############################################################################
+    cg_mod_frequency = RooRealVar("cg_mod_frequency","Cosmogenic peak modulation frequency",1.0)
+    cg_mod_offset = RooRealVar("cg_mod_offset","Cosmogenic peak modulation offset",2)
+    cg_mod_phase = RooRealVar("cg_mod_phase","Cosmogenic peak modulation phase",0.0)
+    cg_mod_amp = RooRealVar("cg_mod_amp","Cosmogenic peak modulation amplitude",0.0)
+
+    cosmogenic_mod_t = RooGenericPdf("cosmogenic_mod_t","Cosmogenic peak modulation","cg_mod_offset+cg_mod_amp*sin((cg_mod_frequency*t) + cg_mod_phase)",RooArgList(cg_mod_offset,cg_mod_amp,cg_mod_frequency,cg_mod_phase,t)) ;
+
+    ############################################################################
 
     for i,p in enumerate(cosmogenic_data_dict):
 
@@ -120,9 +133,20 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
         name = "cosmogenic_decay_constants_%s" % (i)
         cosmogenic_decay_constants.append(RooRealVar(name,name,decay_constant))
 
-        name = "cosmogenic_decay_pdfs_%s" % (i)
-        cosmogenic_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[i]))
+        name = "cosmogenic_exp_decay_pdfs_%s" % (i)
+        cosmogenic_exp_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[i]))
 
+        name = "cosmogenic_decay_pdfs_%s" % (i)
+        function = "cosmogenic_decay_pdfs_%s+cosmogenic_mod_t" % (i)
+        cosmogenic_decay_pdfs.append(RooProdPdf(name,function,RooArgList(cosmogenic_exp_decay_pdfs[i],cosmogenic_mod_t)))
+
+        # Use this if you don't want to add the modulation term.
+        #name = "cosmogenic_decay_pdfs_%s" % (i)
+        #cosmogenic_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[i]))
+
+        ########################################################################
+        # Define the normalization terms based on the number of expected events.
+        ########################################################################
         name = "cosmogenic_norms_%s" % (i)
         cosmogenic_norms.append(RooRealVar(name,name,norm))
 
@@ -178,11 +202,18 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
     sub_funcs += [ncosmogenics]
     sub_funcs += cosmogenic_gaussians
     sub_funcs += cosmogenic_pdfs
+    sub_funcs += cosmogenic_exp_decay_pdfs 
     sub_funcs += cosmogenic_decay_pdfs 
+
 
     # Add up all the individual peaks.
     name = "cosmogenic_total"
     cosmogenic_pdf = RooAddPdf(name,rooadd_string,rooadd_funcs,rooadd_norms)
+
+    pars += [cg_mod_frequency,cg_mod_offset,cg_mod_phase,cg_mod_amp]
+    sub_funcs += [cosmogenic_mod_t]
+
+    ############################################################################
 
     print "total_num_cosmogenics: %f" % (total_num_cosmogenics)
 
