@@ -5,13 +5,13 @@
 # Do some studies to look at the different errors for the Gaussian constraint
 ################################################################################
 foreach flag(0 1 2)
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod --e-lo 0.5 --e-bins 108 --add-gc --gc-flag $flag           > log_elo5_sig_mod_add_gc_gc_flag$flag.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod --e-lo 0.5 --e-bins 108 --add-gc --gc-flag $flag           > log_elo5_bkg_mod_add_gc_gc_flag$flag.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod --bkg-mod --e-lo 0.5 --e-bins 108 --add-gc --gc-flag $flag > log_elo5_bkg_and_sig_mod_add_gc_gc_flag$flag.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --e-lo 0.5 --e-bins 108 --add-gc --gc-flag $flag                     > log_elo5_no_mod_add_gc_gc_flag$flag.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod --e-lo 0.5 --e-bins 108 --add-gc --gc-flag $flag           > log_elo5_sig_mod_add_gc_gc_flag$flag.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod --e-lo 0.5 --e-bins 108 --add-gc --gc-flag $flag           > log_elo5_bkg_mod_add_gc_gc_flag$flag.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod --bkg-mod --e-lo 0.5 --e-bins 108 --add-gc --gc-flag $flag > log_elo5_bkg_and_sig_mod_add_gc_gc_flag$flag.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --e-lo 0.5 --e-bins 108 --add-gc --gc-flag $flag                     > log_elo5_no_mod_add_gc_gc_flag$flag.log
 end
 
-exit
+#exit
 
 
 ################################################################################
