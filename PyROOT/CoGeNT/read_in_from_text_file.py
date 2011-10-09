@@ -89,7 +89,7 @@ def main():
     # Max day for plotting
     tmax = 480;
     # When plotting the time, use this for binning.
-    tbins = 16;
+    tbins = 32;
     t_bin_width = tmax/tbins
 
     # Energy fitting range.
@@ -292,7 +292,7 @@ def main():
     # Make a histogram where we correct the time projection of the data for the
     # dead times.
     ########################################################################
-    hacc_corr = TH1F("hacc_corr","hacc_corr",16,1.0,481)
+    hacc_corr = TH1F("hacc_corr","hacc_corr",tbins,1.0,481)
     nentries = data.numEntries()
     for i in xrange(nentries):
         argset = data.get(i)
@@ -484,9 +484,9 @@ def main():
     gPad.Update()
 
     cans[0].cd(2)
-    tframe_main.GetYaxis().SetRangeUser(0.0,200.0)
+    tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
     tframe_main.Draw()
-    hacc_corr.Draw("samee") # The dead-time corrected histogram.
+    #hacc_corr.Draw("samee") # The dead-time corrected histogram.
     gPad.Update()
 
     ########################################################################
