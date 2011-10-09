@@ -24,6 +24,7 @@ set bins = (108 104 100 96 92)
 
 set tags = (5 6 7 8 9)
 
+#foreach ecut( 0.5 )
 foreach ecut( 0.5 0.6 0.7 0.8 0.9 )
 
     python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod            --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_sig_mod.log

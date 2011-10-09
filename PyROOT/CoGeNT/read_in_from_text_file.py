@@ -57,7 +57,6 @@ def main():
     parser.add_argument('--batch', '-b', dest='batch', action='store_true', 
             default=False, help='Run in batch mode.')
 
-
     args = parser.parse_args()
 
     ############################################################################
@@ -68,6 +67,16 @@ def main():
 
     infile_name = args.input_file_name
     ############################################################################
+
+    ############################################################################
+    # Print out some info so we can parse out a log file.
+    ############################################################################
+    print "INFO: e_lo %2.1f" % (args.e_lo)
+    print "INFO: signal_modulation %d" % (args.sig_mod)
+    print "INFO: background_modulation %d" % (args.bkg_mod)
+    print "INFO: background_modulation %d" % (args.bkg_mod)
+    print "INFO: add_gc %d" % (args.add_gc)
+    print "INFO: gc_flag %d" % (args.gc_flag)
 
     ############################################################################
     # Add this to suppress a lot of the warnings from RooFit.
@@ -89,7 +98,7 @@ def main():
     # Max day for plotting
     tmax = 480;
     # When plotting the time, use this for binning.
-    tbins = 32;
+    tbins = 16;
     t_bin_width = tmax/tbins
 
     # Energy fitting range.
@@ -486,7 +495,7 @@ def main():
     cans[0].cd(2)
     tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
     tframe_main.Draw()
-    #hacc_corr.Draw("samee") # The dead-time corrected histogram.
+    hacc_corr.Draw("samee") # The dead-time corrected histogram.
     gPad.Update()
 
     ########################################################################
