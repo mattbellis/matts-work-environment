@@ -24,6 +24,9 @@ def main():
     file_info = []
     for i,file_name in enumerate(sys.argv):
 
+        #print file_name
+        #print len(nlls)
+
         if i>0:
 
             values.append({})
@@ -59,8 +62,9 @@ def main():
 
 
 
-    print nlls
-    print file_info
+    #print "NLLS"
+    #print nlls
+    #print file_info
 
     x = []
     y = []
@@ -68,7 +72,7 @@ def main():
     yerr = []
     count = 1
     for val in values:
-        print val
+        #print val
         for v in val:
             if v=='nsig':
                 #x.append(count)
@@ -79,25 +83,33 @@ def main():
 
         count += 1
 
-    nlls_for_summary = [0.0, 0.0, 0.0, 0.0]
-    values_for_summary = [None, None, None, None]
+    nlls_for_summary = [0.0, 0.0, 0.0, 0.0, 0.0]
+    values_for_summary = [None, None, None, None, None]
+    print "----------_"
+    print file_info
+    print len(nlls_for_summary)
+    print len(nlls)
+    print "----------_"
     for i,f in enumerate(file_info):
 
-        if f['signal_modulation']==0 and f['background_modulation']==0:
+        if f['signal_modulation']==0 and f['background_modulation']==0 and f['cosmogenic_modulation']==0:
             nlls_for_summary[0] = nlls[i]
             values_for_summary[0] = values[i]
-        elif f['signal_modulation']==0 and f['background_modulation']==1:
+        elif f['signal_modulation']==0 and f['background_modulation']==1 and f['cosmogenic_modulation']==0:
             nlls_for_summary[1] = nlls[i]
             values_for_summary[1] = values[i]
-        elif f['signal_modulation']==1 and f['background_modulation']==0:
+        elif f['signal_modulation']==1 and f['background_modulation']==0 and f['cosmogenic_modulation']==0:
             nlls_for_summary[2] = nlls[i]
             values_for_summary[2] = values[i]
-        elif f['signal_modulation']==1 and f['background_modulation']==1:
+        elif f['signal_modulation']==1 and f['background_modulation']==1 and f['cosmogenic_modulation']==0:
             nlls_for_summary[3] = nlls[i]
             values_for_summary[3] = values[i]
+        elif f['signal_modulation']==1 and f['background_modulation']==1 and f['cosmogenic_modulation']==1:
+            nlls_for_summary[4] = nlls[i]
+            values_for_summary[4] = values[i]
     
-    fit_names = ['none','bkg','sig','sig and bkg']
-    dofs = [3, 5, 5, 7]
+    fit_names = ['none','bkg','sig','sig and bkg','sig and bkg and cosmo']
+    dofs = [3, 5, 5, 7, 9]
     print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
     print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
     print "\\frame\n{"
