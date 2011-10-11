@@ -28,17 +28,19 @@ set tags = (5 6 7 8 9)
 #foreach ecut( 0.5 )
 foreach ecut( 0.5 0.6 0.7 0.8 0.9 )
 
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod            --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_sig_mod.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod            --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_bkg_mod.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod --sig-mod  --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_bkg_and_sig_mod.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --cg-mod --bkg-mod --sig-mod  --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_bkg_and_sig_and_cg_mod.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b                      --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_no_mod.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod            --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_sig_mod.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod            --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_bkg_mod.log
+    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --cg-mod            --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_cg_mod.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod --sig-mod  --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_bkg_and_sig_mod.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --cg-mod --bkg-mod --sig-mod  --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_bkg_and_sig_and_cg_mod.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b                      --e-lo $ecut --e-bins $bins[$count]   > log_elo"$tags[$count]"_no_mod.log
 
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod            --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_sig_mod_add_gc_flag2.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod            --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_bkg_mod_add_gc_flag2.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod --sig-mod  --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_bkg_and_sig_mod_add_gc_flag2.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --cg-mod --bkg-mod --sig-mod  --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_bkg_and_sig_and_cg_mod_add_gc_flag2.log
-    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b                      --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_no_mod_add_gc_flag2.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --sig-mod            --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_sig_mod_add_gc_flag2.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod            --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_bkg_mod_add_gc_flag2.log
+    python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --cg-mod            --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_cg_mod_add_gc_flag2.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --bkg-mod --sig-mod  --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_bkg_and_sig_mod_add_gc_flag2.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b --cg-mod --bkg-mod --sig-mod  --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_bkg_and_sig_and_cg_mod_add_gc_flag2.log
+    #python2.7 read_in_from_text_file.py data/before_fire_LG.dat -b                      --e-lo $ecut --e-bins $bins[$count] --gc-flag 2 --add-gc > log_elo"$tags[$count]"_no_mod_add_gc_flag2.log
 
     @ count += 1
 
