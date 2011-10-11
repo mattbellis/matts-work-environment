@@ -5,6 +5,8 @@ import sys
 import numpy as np
 import matplotlib.pyplot as plt
 
+import scipy.stats.stats as stats
+
 from math import *
 
 ################################################################################
@@ -16,7 +18,8 @@ from math import *
 ################################################################################
 def main():
 
-    par_names = ['nbkg', 'nsig', 'sig_slope', 'cg_mod_amp', 'cg_mod_phase', 'bkg_mod_amp', 'bkg_mod_phase', 'sig_mod_amp', 'sig_mod_phase']
+    par_names = ['nbkg', 'nsig', 'sig_slope', 'bkg_mod_amp', 'sig_mod_amp', 'cg_mod_amp', 'bkg_mod_phase', 'sig_mod_phase', 'cg_mod_phase']
+    par_names_for_table = ['$N_{bkg}$', '$N_{sig}$', '$\\alpha$', '$A_{bkg}$', '$A_{sig}$', '$A_{cg}$', '$\phi_{bkg}$', '$\phi_{sig}$', '$\phi_{cg}$']
     info_flags = ['e_lo', 'signal_modulation', 'background_modulation', 'cosmogenic_modulation', 'add_gc', 'gc_flag']
 
     values = []
@@ -83,74 +86,162 @@ def main():
 
         count += 1
 
-    nlls_for_summary = [0.0, 0.0, 0.0, 0.0, 0.0]
-    values_for_summary = [None, None, None, None, None]
-    print "----------_"
-    print file_info
-    print len(nlls_for_summary)
-    print len(nlls)
-    print "----------_"
+    nlls_for_summary = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+    values_for_summary = [None, None, None, None, None, None]
+    #print "----------_"
+    #print file_info
+    #print len(nlls_for_summary)
+    #print len(nlls)
+    #print "----------_"
     for i,f in enumerate(file_info):
 
         if f['signal_modulation']==0 and f['background_modulation']==0 and f['cosmogenic_modulation']==0:
             nlls_for_summary[0] = nlls[i]
             values_for_summary[0] = values[i]
-        elif f['signal_modulation']==0 and f['background_modulation']==1 and f['cosmogenic_modulation']==0:
+        elif f['signal_modulation']==1 and f['background_modulation']==0 and f['cosmogenic_modulation']==0:
             nlls_for_summary[1] = nlls[i]
             values_for_summary[1] = values[i]
-        elif f['signal_modulation']==1 and f['background_modulation']==0 and f['cosmogenic_modulation']==0:
+        elif f['signal_modulation']==0 and f['background_modulation']==1 and f['cosmogenic_modulation']==0:
             nlls_for_summary[2] = nlls[i]
             values_for_summary[2] = values[i]
-        elif f['signal_modulation']==1 and f['background_modulation']==1 and f['cosmogenic_modulation']==0:
+        elif f['signal_modulation']==0 and f['background_modulation']==0 and f['cosmogenic_modulation']==1:
             nlls_for_summary[3] = nlls[i]
             values_for_summary[3] = values[i]
-        elif f['signal_modulation']==1 and f['background_modulation']==1 and f['cosmogenic_modulation']==1:
+        elif f['signal_modulation']==1 and f['background_modulation']==1 and f['cosmogenic_modulation']==0:
             nlls_for_summary[4] = nlls[i]
             values_for_summary[4] = values[i]
+        elif f['signal_modulation']==1 and f['background_modulation']==1 and f['cosmogenic_modulation']==1:
+            nlls_for_summary[5] = nlls[i]
+            values_for_summary[5] = values[i]
     
-    fit_names = ['none','bkg','sig','sig and bkg','sig and bkg and cosmo']
-    dofs = [3, 5, 5, 7, 9]
-    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-    print "\\frame\n{"
-    print "\\frametitle{Relative significance of modulation hypothesis}"
-    print "\\large"
-    print "\\begin{table}"
-    caption = "low energy: %2.1f, Gaussian constraint: %d" % (file_info[0]['e_lo'],file_info[0]['add_gc'])
-    print "\\caption{%s}" % (caption)
-    print "\\begin{tabular}{l c r r r}"
-    print "Modulation & dof & $-\\ln\\mathcal{L}$ & $\\Delta -\\ln\\mathcal{L}$ & $\\sqrt{2.0\\times \\Delta -\\ln \\mathcal{L}}$ \\\\"
-    print "\\hline"
+    fit_names = ['none','sig','bkg','cos', 'sig, bkg','sig, bkg, cos']
+    quantities = ["Modulation", "dof", "$-\\ln\\mathcal{L}$", "$\\Delta \\ln\\mathcal{L}$", "$\\sqrt{2\\Delta \\ln \\mathcal{L}}$"]
+    dofs = [3, 5, 5, 5, 7, 9]
+    output = "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+    output += "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+    output += "\\frame\n{\n"
+    output += "\\frametitle{Relative significance of modulation hypothesis}\n"
+    #output += "\\normalsize\n"
+    output += "\\begin{table}\n"
+    caption = "low energy: %2.1f" % (file_info[0]['e_lo'])
+    if file_info[0]['add_gc'] == 1:
+        caption += ", cosmogenic systematics added (+11 \#dof)"
+    else:
+        caption += "\\textcolor{black}{, cosmogenic systematics added (+11 \#dof)}"
+    output += "\\caption{%s}\n" % (caption)
+
+    #output += "\\begin{tabular}{l c r r r r r}\n"
+    #output += "Modulation & dof & $-\\ln\\mathcal{L}$ & $\\Delta \\ln\\mathcal{L}$ & $\\sqrt{2\\Delta \\ln \\mathcal{L}}$ & $D_{\\rm none}(\\%)$& $D_{\\rm sig}(\\%)$  \\\\\n"
+    ############ Don't display the -LL
+    output += "\\begin{tabular}{l c r r  r r}\n"
+    output += "Modulation & dof & $\\Delta \\ln\\mathcal{L}$ & $\\sqrt{2\\Delta \\ln \\mathcal{L}}$ & $D_{\\rm none}(\\%)$& $D_{\\rm sig}(\\%)$  \\\\\n"
+
+    output += "\\hline\n"
+    count = 0
     for d,name,n in zip(dofs,fit_names,nlls_for_summary):
-        difference = n-nlls_for_summary[0]
-        significance = sqrt(-2.0*difference)
-        print "%s & %d & %5.2f &  %4.2f & %4.2f \\\\" % (name,d,n,difference,significance)
-    print "\\end{tabular}"
-    print "\\end{table}"
-    print "}"
-    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-    print "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
+        difference0 = nlls_for_summary[0] - n
+        significance0 = sqrt(2.0*difference0)
+        nested0 = stats.chisqprob(2.0*difference0,d-dofs[0])
+
+        if count==0:
+            significance0 = None
+            difference0 = None
+            nested0 = None
+
+        difference1 = None
+        significance1 = None
+        nested1 = None
+        if count>=4:
+            difference1 = nlls_for_summary[1] - n
+            significance1 = sqrt(2.0*abs(difference1))
+            nested1 = stats.chisqprob(2.0*difference1,d-dofs[1])
+
+        #print nested0*100.0
+        #print nested1*100.0
+
+        #output += "%s & %d & %5.1f " % (name,d,n)
+        ######### Don't display the -LL
+        output += "%s & %d " % (name,d)
+
+        if difference0 is None:
+            output += "& " 
+        else:
+            output += "& %4.1f" % (difference0)
+
+        if significance0 is None:
+            output += "& " 
+        else:
+            output += "& %4.1f" % (significance0)
+
+        if nested0 is None:
+            output += "& " 
+        else:
+            output += "& %3.1f" % (100.0*nested0)
+
+        if nested1 is None:
+            output += "& " 
+        else:
+            output += "& %3.1f" % (100.0*nested1)
+
+
+        output += " \\\\\n" 
+
+        if count==1:
+            output += "\\hline\n"
+
+        count += 1
+
+    output += "\\end{tabular}\n"
+    output += "\\end{table}\n"
+    output += "}\n"
+    output += "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+    output += "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
+
+    print output
 
     output = "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
     output += "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
     output += "\\frame\n{\n"
-    output += "\\frametitle{Relative significance of modulation hypothesis}\n"
+    output += "\\frametitle{Parameter values from different fits}\n"
+    output += '\\tiny\n'
     output += "\\begin{table}\n"
-    caption = "low energy: %2.1f, Gaussian constraint: %d" % (file_info[0]['e_lo'],file_info[0]['add_gc'])
+    caption = "low energy: %2.1f" % (file_info[0]['e_lo'])
+    if file_info[0]['add_gc'] == 1:
+        caption += ", cosmogenic systematics added (+11 \#dof)"
+    else:
+        caption += "\\textcolor{black}{, cosmogenic systematics added (+11 \#dof)}"
+    
     output += "\\caption{%s}\n" % (caption)
-    output += "\\begin{tabular}{l c c c c}\n"
-    output += " & \\multicolumn{4}{c}{Modulation}\\\\ \n"
-    output += "Parameter & None & Background & Signal & Both \\\\\n"
-    output += "\\hline\n"
-    for par in par_names:
-        output += "%-20s  " % (par.replace('_','\_'))
-        for val in values_for_summary:
-            #print val
-            if val is not None and par in val:
-                output += " & %7.2f $\pm$ %5.2f   " % (val[par][0],val[par][1])
-            else:
-                output += " &    "
-        output += " \\\\ \n"
+    output += "\\begin{tabular}{l c c c c c c }\n"
+    
+    for j in xrange(2):
+        start = 0; stop = 6
+        if j==1:
+            start = 6; stop = 9
+            output += " & & & "
+        for i,p in enumerate(par_names_for_table):
+            if i>=start and i<stop:
+                output += " & %s" % p
+        output += " \\\\\n"
+        
+        output += "\\hline\n"
+        count = 0
+        for name,val in zip(fit_names,values_for_summary):
+            output += "%-20s  " % (name)
+            if j==1:
+                output += " & & & "
+            for i,par in enumerate(par_names):
+                if i>=start and i<stop:
+                    if val is not None and par in val:
+                        output += " & %8.2f $\pm$ %5.2f   " % (val[par][0],val[par][1])
+                    else:
+                        output += " &    "
+            output += " \\\\ \n"
+            count += 1
+
+        if j==0:
+            output += "\\hline\n"
+
     output += "\\end{tabular}\n"
     output += "\\end{table}\n"
     output += "}\n"
