@@ -21,6 +21,9 @@ def main():
     parser.add_argument('--dump-names', dest='dump_names', action='store_true',
             default=False,
             help='Dump the names of the students and an index for each.')
+    parser.add_argument('--dump-grades', dest='dump_grades', action='store_true',
+            default=False,
+            help='Dump the grades for all the students.')
     parser.add_argument('--password', dest='password', default=None, 
             help='Password for mail server.')
     parser.add_argument('--student', dest='student', default=None, type=int,
@@ -172,6 +175,10 @@ def main():
         #print s.email
         if args.dump_names:
             print "%d %-20s, %-20s\t%20s" % (i,s.student_name[0],s.student_name[1],s.email)
+
+        if args.dump_grades:
+            print s.email
+            print msg_body
 
         if args.student == i:
             print s.email
