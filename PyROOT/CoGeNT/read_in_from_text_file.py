@@ -51,7 +51,7 @@ def main():
             help='Set the lower limit for the energy range to use.')
     parser.add_argument('--e-hi', dest='e_hi', type=float, default=3.2,
             help='Set the upper limit for the energy range to use.')
-    parser.add_argument('--e-bins', dest='e_bins', type=int, default=100,
+    parser.add_argument('--e-bins', dest='e_bins', type=int, default=None,
             help='Set the number of bins to use for energy plotting.')
     parser.add_argument('--use-fitto', dest='use_fitto', action='store_true', 
             default=False, help='Use the RooAbsPdf::fitTo() member function, \
@@ -63,10 +63,16 @@ def main():
             default=False, help='Print out extra debug info.')
     parser.add_argument('--batch', '-b', dest='batch', action='store_true', 
             default=False, help='Run in batch mode.')
+    parser.add_argument('--myhelp', dest='help', action='store_true', 
+            default=False, help='Print help options.')
 
     args = parser.parse_args()
 
     ############################################################################
+
+    if args.help:
+        parser.print_help()
+        exit(-1)
 
     if args.input_file_name is None:
         print "Must pass in an input file name!"
@@ -113,7 +119,9 @@ def main():
     # Energy fitting range.
     lo_energy = args.e_lo
     hi_energy = args.e_hi
-    xbins = args.e_bins
+    xbins = int((hi_energy-lo_energy)/0.025) + 1
+    if args.e_bins is not None:
+        xbins = args.e_bins
     ############################################################################
 
     ############################################################################
@@ -537,6 +545,7 @@ def main():
         save_file_name += "_add_gc%d" % (args.gc_flag)
 
     save_file_name += "_elo%d" % (int(10*args.e_lo))
+    save_file_name += "_ehi%d" % (int(10*args.e_hi))
 
     for file_type in ['png','pdf','eps']:
 
