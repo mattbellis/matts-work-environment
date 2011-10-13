@@ -245,6 +245,8 @@ def main():
         print "Here's the PDF!"
         cogent_fit_pdf.Print("v")
 
+    #exit(-1)
+
     ########################################################################
     # Make dictionaries for the pars and sub_funcs.
     ########################################################################
