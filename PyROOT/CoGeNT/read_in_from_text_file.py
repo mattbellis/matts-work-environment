@@ -85,6 +85,7 @@ def main():
     # Print out some info so we can parse out a log file.
     ############################################################################
     print "INFO: e_lo %2.1f" % (args.e_lo)
+    print "INFO: e_hi %2.1f" % (args.e_hi)
     print "INFO: no_signal %d" % (args.no_sig)
     print "INFO: no_cosmogenic %d" % (args.no_cg)
     print "INFO: signal_modulation %d" % (args.sig_mod)
