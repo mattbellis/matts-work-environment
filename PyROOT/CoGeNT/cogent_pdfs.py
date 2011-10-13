@@ -110,6 +110,8 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
             uncert_from_file = norm*cosmogenic_data_dict[p][1]/100.0
             if gc_flag==0: # Uncertainty from file (CoGeNT study)
                 uncert = uncert_from_file
+                # For debugging
+                #uncert = 0.01*norm
             elif gc_flag==1: # Sqrt(N)
                 uncert = sqrt(norm)
             elif gc_flag==2: #Both terms added in quadrature
