@@ -37,6 +37,10 @@ def main():
                     \t1: Sqrt(N) where N is expected number of events.\n\
                     \t2: Adding both in quadrature.\n\
                     \t Default: 2')
+    parser.add_argument('--no-sig', dest='no_sig', action='store_true', 
+            default=False, help="Don't have a signal component to the PDF.")
+    parser.add_argument('--no-cg', dest='no_cg', action='store_true', 
+            default=False, help="Don't have a cosmogenic component to the PDF.")
     parser.add_argument('--sig-mod', dest='sig_mod', action='store_true', 
             default=False, help='Let the signal have an annual modulation.')
     parser.add_argument('--bkg-mod', dest='bkg_mod', action='store_true', 
@@ -75,6 +79,8 @@ def main():
     # Print out some info so we can parse out a log file.
     ############################################################################
     print "INFO: e_lo %2.1f" % (args.e_lo)
+    print "INFO: no_signal %d" % (args.no_sig)
+    print "INFO: no_cosmogenic %d" % (args.no_cg)
     print "INFO: signal_modulation %d" % (args.sig_mod)
     print "INFO: background_modulation %d" % (args.bkg_mod)
     print "INFO: cosmogenic_modulation %d" % (args.cg_mod)
@@ -238,7 +244,7 @@ def main():
     # Grab the PDF 
     ############################################################################
 
-    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.verbose)
+    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_sig,args.no_cg,args.verbose)
 
     # DEBUG
     if args.verbose:
@@ -341,14 +347,15 @@ def main():
     # Set some of the parameters before we start the fit.
     ############################################################################
 
-    cogent_pars_dict["nsig"].setVal(525.0)
-    cogent_pars_dict["nsig"].setConstant(False)
-
     cogent_pars_dict["nbkg"].setVal(700.0)
     cogent_pars_dict["nbkg"].setConstant(False)
 
-    cogent_pars_dict["sig_slope"].setVal(-4.5)
-    cogent_pars_dict["sig_slope"].setConstant(False)
+    if not args.no_sig:
+        cogent_pars_dict["nsig"].setVal(525.0)
+        cogent_pars_dict["nsig"].setConstant(False)
+
+        cogent_pars_dict["sig_slope"].setVal(-4.5)
+        cogent_pars_dict["sig_slope"].setConstant(False)
 
     if args.add_gc:
         cogent_pars_dict["cosmogenic_norms_0"].setConstant(False)
@@ -487,9 +494,11 @@ def main():
         elif "cosmogenic_total" in s:
             line_width = 2; line_style = 1;  color = 2;
             plot_pdf = True
+        elif "bkg_exp" in s and "exp_decay" not in s:
+            line_width = 2; line_style = 1;  color = 7
+            plot_pdf = True
         elif "_exp" in s and "exp_decay" not in s:
-            line_width = 2; line_style = 1;  color = 26+count;
-            count += 10
+            line_width = 2; line_style = 1;  color = 3
             plot_pdf = True
 
         if plot_pdf:
@@ -500,13 +509,13 @@ def main():
     # Draw the frames onto the canvas.
     ########################################################################
     cans[0].cd(1)
-    xframe_main.GetXaxis().SetLimits(0.5,hi_energy)
+    xframe_main.GetXaxis().SetLimits(0.5,3.2)
     xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_main.Draw()
     gPad.Update()
 
     cans[0].cd(2)
-    tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
+    #tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
     tframe_main.Draw()
     hacc_corr.Draw("samee") # The dead-time corrected histogram.
     gPad.Update()
