@@ -367,7 +367,14 @@ def main():
         cogent_pars_dict["sig_slope"].setConstant(False)
 
     if args.add_gc:
-        cogent_pars_dict["cosmogenic_norms_0"].setConstant(False)
+        # Before freeing up the yields in the cosmogenic peaks, make
+        # sure that peak wasn't cut out by the energy cut.
+        for p in cogent_pars_dict:
+            if "cosmogenic_norms_" in p and not "cosmogenic_norms_calc" in p:
+                cogent_pars_dict[p].setConstant(False)
+            elif "cosmogenic_norms_calc" in p:
+                cogent_pars_dict[p].setConstant(True)
+        '''
         cogent_pars_dict["cosmogenic_norms_1"].setConstant(False)
         cogent_pars_dict["cosmogenic_norms_2"].setConstant(False)
         cogent_pars_dict["cosmogenic_norms_3"].setConstant(False)
@@ -378,6 +385,7 @@ def main():
         cogent_pars_dict["cosmogenic_norms_8"].setConstant(False)
         cogent_pars_dict["cosmogenic_norms_9"].setConstant(False)
         cogent_pars_dict["cosmogenic_norms_10"].setConstant(False)
+        '''
 
     ########################################################################
 
@@ -576,14 +584,16 @@ def main():
         name = "%s_mod_phase" % (phase_string)
         phase = cogent_pars_dict[name].getVal()
         if phase>=0:
-            days = 365 - (phase/(2*pi))*365 + (365/4.0)
+            #days = 365 - (phase/(2*pi))*365 + (365/4.0)
+            days = (-abs(degrees(0.66)/360.0) + 0.25 )*365.0
         else:
-            days = (phase/(2*pi))*365 + (365/2.0)
+            days = (abs(degrees(phase)/360.0) + 0.25 )*365.0
+            #days = (phase/(2*pi))*365 + (365/2.0)
         print "%s phase: %7.2f (rad) %3f (days)" % (phase_string, phase, days)
         # Convert phase peak to a day of the year.
         phase_peak = timedelta(days=int(days))
         phase_peak_date = start_date + phase_peak
-        print phase_peak_date.strftime("%B %d, %Y")
+        print phase_peak_date.strftime("\t\t%B %d, %Y")
 
     ############################################################################
     # Keep the gui alive unless batch mode or we hit the appropriate key.

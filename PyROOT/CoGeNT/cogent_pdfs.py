@@ -157,10 +157,10 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
             # Define the normalization terms based on the number of expected events.
             ########################################################################
             name = "cosmogenic_norms_%s" % (i)
-            cosmogenic_norms.append(RooRealVar(name,name,norm))
+            cosmogenic_norms.append(RooRealVar(name,name,norm,0,1000))
 
             name = "cosmogenic_norms_calc_%s" % (i)
-            cosmogenic_norms_calc.append(RooRealVar(name,name,norm))
+            cosmogenic_norms_calc.append(RooRealVar(name,name,norm,0,1000))
 
             ############################################################################
             # Define the Gaussian constraints. 
