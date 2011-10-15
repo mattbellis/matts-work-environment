@@ -11,7 +11,7 @@ mod_options = [[''],['--sig-mod'],['--bkg-mod'],['--cg-mod'],['--bkg-mod --sig-m
 mod_flag = [0,1,2,3,4,5,6]
 
 
-lo_ecut = 0.5
+lo_ecut = 1.5
 
 hi_ecut = 0.8
 
@@ -39,23 +39,37 @@ while ( lo_ecut<2.8 and hi_ecut<3.2 ):
         if lo_ecut<1.5:
             cmd += ['--gc-flag','2','--add-gc']
 
+        run_fit = True
         if lo_ecut<1.5 and i!=0:
             cmd += mod
+        elif lo_ecut<1.5 and i==0:
+            cmd 
         elif lo_ecut>=1.5 and (i==0 or i==2):
-            cmd += mod
+            cmd += ['--no-sig','--no-cg']
+            if i==2:
+                cmd += mod
+        else:
+            run_fit = False
 
         cmd += ['--e-lo',lo_ecut_s]
         cmd += ['--e-hi',hi_ecut_s]
 
-        print cmd
+        if run_fit:
+            outfile = open(log_file_name,"w")
+            #print cmd
+            output = ""
+            for c in cmd:
+                output += "%s " % (c)
+            output += "\n\n\n"
+            outfile.write(output)
+            print output
 
-        output = sp.Popen(cmd, stdout=sp.PIPE).communicate()[0]
-        outfile = open(log_file_name,"w")
-        outfile.write(output)
-        outfile.close()
+            output = sp.Popen(cmd, stdout=sp.PIPE).communicate()[0]
+            outfile.write(output)
+            outfile.close()
 
-        #print output
+            #print output
 
-        #exit(0)
+            #exit(0)
 
     lo_ecut += 0.1
