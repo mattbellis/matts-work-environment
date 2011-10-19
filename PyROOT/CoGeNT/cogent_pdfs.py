@@ -64,6 +64,7 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
 
     ############################################################################
 
+    n_good_cosmo = 0
     for i,p in enumerate(cosmogenic_data_dict):
 
         mean = cosmogenic_data_dict[p][5]
@@ -94,100 +95,121 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
             if verbose:
                 print "frac: %f" % (frac)
 
-        total_num_cosmogenics  += norm
+        use_this_cosmo_peak = True
+        if norm<0.1:
+            use_this_cosmo_peak = False
+            norm = 0.0
 
-        ########################################################################
-        # Define the Gaussian constraints using the uncertainty
-        ########################################################################
-        uncert = 1.0
-        uncert_from_file = norm*cosmogenic_data_dict[p][1]/100.0
-        if gc_flag==0: # Uncertainty from file (CoGeNT study)
-            uncert = uncert_from_file
-        elif gc_flag==1: # Sqrt(N)
-            uncert = sqrt(norm)
-        elif gc_flag==2: #Both terms added in quadrature
-            uncert = sqrt(norm + uncert_from_file*uncert_from_file)
+        if use_this_cosmo_peak:
+            total_num_cosmogenics  += norm
 
-        if verbose:
-            print "norm: %6.3f %6.3f %6.3f %6.3f +/-%6.3f" % (mean,sigma,num_tot_decays,norm,uncert)
+            ########################################################################
+            # Define the Gaussian constraints using the uncertainty
+            ########################################################################
+            uncert = 1.0
+            uncert_from_file = norm*cosmogenic_data_dict[p][1]/100.0
+            if gc_flag==0: # Uncertainty from file (CoGeNT study)
+                uncert = uncert_from_file
+                # For debugging
+                #uncert = 0.01*norm
+            elif gc_flag==1: # Sqrt(N)
+                uncert = sqrt(norm)
+            elif gc_flag==2: #Both terms added in quadrature
+                uncert = sqrt(norm + uncert_from_file*uncert_from_file)
 
-        name = "cosmogenic_uncertainties_%s" % (i)
-        cosmogenic_uncertainties.append(RooRealVar(name,name,uncert))
+            if verbose:
+                print "norm: %6.3f %6.3f %6.3f %6.3f +/-%6.3f" % (mean,sigma,num_tot_decays,norm,uncert)
 
-        ########################################################################
-        # Define the Gaussian peaks
-        ########################################################################
-        name = "cosmogenic_means_%s" % (i)
-        cosmogenic_means.append(RooRealVar(name,name,mean,0.5,1.6))
+            name = "cosmogenic_uncertainties_%s" % (i)
+            cosmogenic_uncertainties.append(RooRealVar(name,name,uncert))
 
-        name = "cosmogenic_sigmas_%s" % (i)
-        cosmogenic_sigmas.append(RooRealVar(name,name,sigma,0.0,1.0))
+            ########################################################################
+            # Define the Gaussian peaks
+            ########################################################################
+            name = "cosmogenic_means_%s" % (i)
+            cosmogenic_means.append(RooRealVar(name,name,mean,0.5,1.6))
 
-        name = "cg_%s" % (i)
-        cosmogenic_gaussians.append(RooGaussian(name,name,x,cosmogenic_means[i],cosmogenic_sigmas[i]))
+            name = "cosmogenic_sigmas_%s" % (i)
+            cosmogenic_sigmas.append(RooRealVar(name,name,sigma,0.0,1.0))
 
-        ############################################################################
-        # Define the exponential decay of the normalization term.
-        ############################################################################
+            name = "cg_%s" % (i)
+            cosmogenic_gaussians.append(RooGaussian(name,name,x,cosmogenic_means[n_good_cosmo],cosmogenic_sigmas[n_good_cosmo]))
 
-        name = "cosmogenic_decay_constants_%s" % (i)
-        cosmogenic_decay_constants.append(RooRealVar(name,name,decay_constant))
+            ############################################################################
+            # Define the exponential decay of the normalization term.
+            ############################################################################
 
-        name = "cosmogenic_exp_decay_pdfs_%s" % (i)
-        cosmogenic_exp_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[i]))
+            name = "cosmogenic_decay_constants_%s" % (i)
+            cosmogenic_decay_constants.append(RooRealVar(name,name,decay_constant))
 
-        name = "cosmogenic_decay_pdfs_%s" % (i)
-        function = "cosmogenic_decay_pdfs_%s+cosmogenic_mod_t" % (i)
-        cosmogenic_decay_pdfs.append(RooProdPdf(name,function,RooArgList(cosmogenic_exp_decay_pdfs[i],cosmogenic_mod_t)))
+            name = "cosmogenic_exp_decay_pdfs_%s" % (i)
+            cosmogenic_exp_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[n_good_cosmo]))
 
-        # Use this if you don't want to add the modulation term.
-        #name = "cosmogenic_decay_pdfs_%s" % (i)
-        #cosmogenic_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[i]))
+            name = "cosmogenic_decay_pdfs_%s" % (i)
+            function = "cosmogenic_decay_pdfs_%s+cosmogenic_mod_t" % (i)
+            cosmogenic_decay_pdfs.append(RooProdPdf(name,function,RooArgList(cosmogenic_exp_decay_pdfs[n_good_cosmo],cosmogenic_mod_t)))
 
-        ########################################################################
-        # Define the normalization terms based on the number of expected events.
-        ########################################################################
-        name = "cosmogenic_norms_%s" % (i)
-        cosmogenic_norms.append(RooRealVar(name,name,norm))
+            # Use this if you don't want to add the modulation term.
+            #name = "cosmogenic_decay_pdfs_%s" % (i)
+            #cosmogenic_decay_pdfs.append(RooExponential(name,name,t,cosmogenic_decay_constants[n_good_cosmo]))
 
-        name = "cosmogenic_norms_calc_%s" % (i)
-        cosmogenic_norms_calc.append(RooRealVar(name,name,norm))
+            ########################################################################
+            # Define the normalization terms based on the number of expected events.
+            ########################################################################
+            name = "cosmogenic_norms_%s" % (i)
+            cosmogenic_norms.append(RooRealVar(name,name,norm,0,1000))
 
-        ############################################################################
-        # Define the Gaussian constraints. 
-        ############################################################################
-        name = "gaussian_constraint_%d" % (i)
-        gc = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(cosmogenic_norms_calc[i],cosmogenic_norms[i],cosmogenic_uncertainties[i]))
-        cosmogenic_gaussian_constraints.append(gc)
+            name = "cosmogenic_norms_calc_%s" % (i)
+            cosmogenic_norms_calc.append(RooRealVar(name,name,norm,0,1000))
 
-        if verbose:
-            gc.Print("v")
+            ############################################################################
+            # Define the Gaussian constraints. 
+            ############################################################################
+            name = "gaussian_constraint_%d" % (i)
+            gc = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(cosmogenic_norms_calc[n_good_cosmo],cosmogenic_norms[n_good_cosmo],cosmogenic_uncertainties[n_good_cosmo]))
+            cosmogenic_gaussian_constraints.append(gc)
 
-        ############################################################################
-        # Build up the PDFs for each decay.
-        ############################################################################
-        name = "cosmogenic_pdfs_%s" % (i)
-        cosmogenic_pdfs.append(RooProdPdf(name,name,RooArgList(cosmogenic_gaussians[i],cosmogenic_decay_pdfs[i])))
+            if verbose:
+                gc.Print("v")
 
-        if i==0:
-            rooadd_string = "%s" % (name)
-        else:
-            rooadd_string = "%s+%s" % (rooadd_string,name)
+            ############################################################################
+            # Build up the PDFs for each decay.
+            ############################################################################
+            name = "cosmogenic_pdfs_%s" % (i)
+            cosmogenic_pdfs.append(RooProdPdf(name,name,RooArgList(cosmogenic_gaussians[n_good_cosmo],cosmogenic_decay_pdfs[n_good_cosmo])))
+    
+            # If there are more than a few events left in the peak, 
+            # then use this decay for the total.
+            if n_good_cosmo==0:
+                rooadd_string = "%s" % (name)
+            else:
+                rooadd_string = "%s+%s" % (rooadd_string,name)
 
-        rooadd_funcs.add(cosmogenic_pdfs[i])
-        rooadd_norms.add(cosmogenic_norms[i])
+            rooadd_funcs.add(cosmogenic_pdfs[n_good_cosmo])
+            rooadd_norms.add(cosmogenic_norms[n_good_cosmo])
 
-        # Use this to calculate the number of events from the cosmogenic decays.
-        if i==0:
-            ncos_formula += "@0"
-        else:
-            ncos_formula += "+@%d" % (i)
+            # Use this to calculate the number of events from the cosmogenic decays.
+            if n_good_cosmo==0:
+                ncos_formula += "@0"
+            else:
+                ncos_formula += "+@%d" % (n_good_cosmo)
 
-        ncos_formula_list.add(cosmogenic_norms[i])
+            ncos_formula_list.add(cosmogenic_norms[n_good_cosmo])
+
+            n_good_cosmo += 1
 
 
+    # Add up all the individual peaks.
     # Form the total number of cosmogenics from the sum of the individual peaks.
-    ncosmogenics = RooFormulaVar("ncosmogenics","ncosmogenics",ncos_formula,ncos_formula_list)
+    ncosmogenics = None
+    cosmogenic_pdf = None
+    if n_good_cosmo > 0:
+        ncosmogenics = RooFormulaVar("ncosmogenics","ncosmogenics",ncos_formula,ncos_formula_list)
+        cosmogenic_pdf = RooAddPdf("cosmogenic_total",rooadd_string,rooadd_funcs,rooadd_norms)
+    else:
+        ncosmogenics = RooFit.RooConst(0)
+        cosmogenic_pdf = RooGenericPdf("cosmogenic_total","x",RooArgList(x))
+
     if verbose:
         ncosmogenics.Print()
 
@@ -206,9 +228,6 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
     sub_funcs += cosmogenic_decay_pdfs 
 
 
-    # Add up all the individual peaks.
-    name = "cosmogenic_total"
-    cosmogenic_pdf = RooAddPdf(name,rooadd_string,rooadd_funcs,rooadd_norms)
 
     pars += [cg_mod_frequency,cg_mod_offset,cg_mod_phase,cg_mod_amp]
     sub_funcs += [cosmogenic_mod_t]
@@ -224,7 +243,7 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
 
 ################################################################################
 ################################################################################
-def cogent_pdf(x,t,gc_flag=0,e_lo=None,verbose=False):
+def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_sig=False,no_cg=False,verbose=False):
 
     pars = []
     sub_funcs = []
@@ -304,7 +323,15 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,verbose=False):
     nbkg = RooRealVar("nbkg","nbkg",200,0,600000)
     nsig = RooRealVar("nsig","nsig",200,0,600000)
 
-    total_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg,nsig,ncosmogenics))
+    total_pdf = None
+    if no_sig and not no_cg:
+        total_pdf = RooAddPdf("total_energy_pdf","bkg_exp+cosmogenic_pdf",RooArgList(bkg_exp,cosmogenic_pdf),RooArgList(nbkg,ncosmogenics))
+    elif not no_sig and no_cg:
+        total_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_pdf",RooArgList(bkg_exp,sig_pdf),RooArgList(nbkg,nsig))
+    elif no_sig and no_cg:
+        total_pdf = RooAddPdf("total_energy_pdf","bkg_exp",RooArgList(bkg_exp),RooArgList(nbkg))
+    else:
+        total_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg,nsig,ncosmogenics))
 
     pars += [nbkg, nsig]
 

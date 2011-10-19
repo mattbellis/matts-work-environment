@@ -37,6 +37,10 @@ def main():
                     \t1: Sqrt(N) where N is expected number of events.\n\
                     \t2: Adding both in quadrature.\n\
                     \t Default: 2')
+    parser.add_argument('--no-sig', dest='no_sig', action='store_true', 
+            default=False, help="Don't have a signal component to the PDF.")
+    parser.add_argument('--no-cg', dest='no_cg', action='store_true', 
+            default=False, help="Don't have a cosmogenic component to the PDF.")
     parser.add_argument('--sig-mod', dest='sig_mod', action='store_true', 
             default=False, help='Let the signal have an annual modulation.')
     parser.add_argument('--bkg-mod', dest='bkg_mod', action='store_true', 
@@ -47,7 +51,7 @@ def main():
             help='Set the lower limit for the energy range to use.')
     parser.add_argument('--e-hi', dest='e_hi', type=float, default=3.2,
             help='Set the upper limit for the energy range to use.')
-    parser.add_argument('--e-bins', dest='e_bins', type=int, default=100,
+    parser.add_argument('--e-bins', dest='e_bins', type=int, default=None,
             help='Set the number of bins to use for energy plotting.')
     parser.add_argument('--use-fitto', dest='use_fitto', action='store_true', 
             default=False, help='Use the RooAbsPdf::fitTo() member function, \
@@ -59,10 +63,16 @@ def main():
             default=False, help='Print out extra debug info.')
     parser.add_argument('--batch', '-b', dest='batch', action='store_true', 
             default=False, help='Run in batch mode.')
+    parser.add_argument('--myhelp', dest='help', action='store_true', 
+            default=False, help='Print help options.')
 
     args = parser.parse_args()
 
     ############################################################################
+
+    if args.help:
+        parser.print_help()
+        exit(-1)
 
     if args.input_file_name is None:
         print "Must pass in an input file name!"
@@ -75,6 +85,9 @@ def main():
     # Print out some info so we can parse out a log file.
     ############################################################################
     print "INFO: e_lo %2.1f" % (args.e_lo)
+    print "INFO: e_hi %2.1f" % (args.e_hi)
+    print "INFO: no_signal %d" % (args.no_sig)
+    print "INFO: no_cosmogenic %d" % (args.no_cg)
     print "INFO: signal_modulation %d" % (args.sig_mod)
     print "INFO: background_modulation %d" % (args.bkg_mod)
     print "INFO: cosmogenic_modulation %d" % (args.cg_mod)
@@ -107,7 +120,9 @@ def main():
     # Energy fitting range.
     lo_energy = args.e_lo
     hi_energy = args.e_hi
-    xbins = args.e_bins
+    xbins = int((hi_energy-lo_energy)/0.025) + 1
+    if args.e_bins is not None:
+        xbins = args.e_bins
     ############################################################################
 
     ############################################################################
@@ -238,12 +253,14 @@ def main():
     # Grab the PDF 
     ############################################################################
 
-    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.verbose)
+    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_sig,args.no_cg,args.verbose)
 
     # DEBUG
     if args.verbose:
         print "Here's the PDF!"
         cogent_fit_pdf.Print("v")
+
+    #exit(-1)
 
     ########################################################################
     # Make dictionaries for the pars and sub_funcs.
@@ -339,17 +356,25 @@ def main():
     # Set some of the parameters before we start the fit.
     ############################################################################
 
-    cogent_pars_dict["nsig"].setVal(525.0)
-    cogent_pars_dict["nsig"].setConstant(False)
-
     cogent_pars_dict["nbkg"].setVal(700.0)
     cogent_pars_dict["nbkg"].setConstant(False)
 
-    cogent_pars_dict["sig_slope"].setVal(-4.5)
-    cogent_pars_dict["sig_slope"].setConstant(False)
+    if not args.no_sig:
+        cogent_pars_dict["nsig"].setVal(525.0)
+        cogent_pars_dict["nsig"].setConstant(False)
+
+        cogent_pars_dict["sig_slope"].setVal(-4.5)
+        cogent_pars_dict["sig_slope"].setConstant(False)
 
     if args.add_gc:
-        cogent_pars_dict["cosmogenic_norms_0"].setConstant(False)
+        # Before freeing up the yields in the cosmogenic peaks, make
+        # sure that peak wasn't cut out by the energy cut.
+        for p in cogent_pars_dict:
+            if "cosmogenic_norms_" in p and not "cosmogenic_norms_calc" in p:
+                cogent_pars_dict[p].setConstant(False)
+            elif "cosmogenic_norms_calc" in p:
+                cogent_pars_dict[p].setConstant(True)
+        '''
         cogent_pars_dict["cosmogenic_norms_1"].setConstant(False)
         cogent_pars_dict["cosmogenic_norms_2"].setConstant(False)
         cogent_pars_dict["cosmogenic_norms_3"].setConstant(False)
@@ -360,6 +385,7 @@ def main():
         cogent_pars_dict["cosmogenic_norms_8"].setConstant(False)
         cogent_pars_dict["cosmogenic_norms_9"].setConstant(False)
         cogent_pars_dict["cosmogenic_norms_10"].setConstant(False)
+        '''
 
     ########################################################################
 
@@ -485,9 +511,11 @@ def main():
         elif "cosmogenic_total" in s:
             line_width = 2; line_style = 1;  color = 2;
             plot_pdf = True
+        elif "bkg_exp" in s and "exp_decay" not in s:
+            line_width = 2; line_style = 1;  color = 7
+            plot_pdf = True
         elif "_exp" in s and "exp_decay" not in s:
-            line_width = 2; line_style = 1;  color = 26+count;
-            count += 10
+            line_width = 2; line_style = 1;  color = 3
             plot_pdf = True
 
         if plot_pdf:
@@ -498,13 +526,13 @@ def main():
     # Draw the frames onto the canvas.
     ########################################################################
     cans[0].cd(1)
-    xframe_main.GetXaxis().SetLimits(0.5,hi_energy)
+    xframe_main.GetXaxis().SetLimits(0.5,3.2)
     xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_main.Draw()
     gPad.Update()
 
     cans[0].cd(2)
-    tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
+    #tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
     tframe_main.Draw()
     hacc_corr.Draw("samee") # The dead-time corrected histogram.
     gPad.Update()
@@ -526,6 +554,7 @@ def main():
         save_file_name += "_add_gc%d" % (args.gc_flag)
 
     save_file_name += "_elo%d" % (int(10*args.e_lo))
+    save_file_name += "_ehi%d" % (int(10*args.e_hi))
 
     for file_type in ['png','pdf','eps']:
 
@@ -555,14 +584,16 @@ def main():
         name = "%s_mod_phase" % (phase_string)
         phase = cogent_pars_dict[name].getVal()
         if phase>=0:
-            days = 365 - (phase/(2*pi))*365 + (365/4.0)
+            #days = 365 - (phase/(2*pi))*365 + (365/4.0)
+            days = (-abs(degrees(0.66)/360.0) + 0.25 )*365.0
         else:
-            days = (phase/(2*pi))*365 + (365/2.0)
+            days = (abs(degrees(phase)/360.0) + 0.25 )*365.0
+            #days = (phase/(2*pi))*365 + (365/2.0)
         print "%s phase: %7.2f (rad) %3f (days)" % (phase_string, phase, days)
         # Convert phase peak to a day of the year.
         phase_peak = timedelta(days=int(days))
         phase_peak_date = start_date + phase_peak
-        print phase_peak_date.strftime("%B %d, %Y")
+        print phase_peak_date.strftime("\t\t%B %d, %Y")
 
     ############################################################################
     # Keep the gui alive unless batch mode or we hit the appropriate key.
