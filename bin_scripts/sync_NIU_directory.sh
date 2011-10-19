@@ -10,10 +10,10 @@ endif
 
 
 if ( $1 == "push" ) then
-    rsync -P -r -u -a -v /home/bellis/BaBar /home/bellis/Jobs  /home/bellis/stuff /home/bellis/NIU /home/bellis/Talks mattbellis.dyndns-home.com:/home/bellis
+    rsync -P -r -u -a -v /home/bellis/papers /home/bellis/BaBar /home/bellis/Jobs  /home/bellis/stuff /home/bellis/NIU /home/bellis/Talks mattbellis.dyndns-home.com:/home/bellis
     #rsync -P -r -u -a -v /home/bellis/NIU /home/bellis/Talks mattbellis.dyndns-home.com:/home/bellis
 else if ( $1 == "pull" ) then
-    rsync -P -r -u -a -v mattbellis.dyndns-home.com:/home/bellis/{Talks,NIU,BaBar,Jobs,stuff} /home/bellis
+    rsync -P -r -u -a -v mattbellis.dyndns-home.com:/home/bellis/{Talks,NIU,BaBar,Jobs,stuff,papers} /home/bellis
     #rsync -P -r -u -a -v mattbellis.dyndns-home.com:/home/bellis/{Talks,NIU} /home/bellis
 else
     echo "First argument must be 'pull' or 'push'"
