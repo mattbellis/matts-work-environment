@@ -1,0 +1,23 @@
+#################################################
+intro1.py - Works!
+
+intro2.py - Line 59.
+            Won't plot the Components of a RooAddPdf.
+            Shows up as a line at y=0. 
+
+intro3.py - Works!
+
+intro4.py - Works!
+
+intro5.py - Works, but is this the way it's supposed to look?
+
+intro6.py - Works!
+
+intro7.py - Works, but sometimes the sumgauss and sumgauss2 functions
+            did not display properly. Needed to add gPad.Update().
+
+intro8.py - Works!
+
+intro9.py - Works!
+
+###################################################
