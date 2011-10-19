@@ -140,7 +140,9 @@ def main():
     count = 0
     for d,name,n in zip(dofs,fit_names,nlls_for_summary):
         difference0 = nlls_for_summary[0] - n
-        significance0 = sqrt(2.0*difference0)
+        significance0 = 0.0
+        if difference0>0:
+            significance0 = sqrt(2.0*difference0)
         nested0 = stats.chisqprob(2.0*difference0,d-dofs[0])
 
         if count==0:
@@ -248,6 +250,17 @@ def main():
     output += "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
     output += "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
     print output
+
+
+    ############################################################################
+    # Run test of Gaussian constraints
+    ############################################################################
+    for vals in values:
+        for v in vals:
+            num = vals[v][0]
+            uncert = vals[v][1]
+            test_val = uncert*uncert/num
+            print "%-20s & %6.2f & %6.2f & %6.2f \\\\" % (v,num,uncert,test_val)
 
     ############################################################################
     # Plot the data
