@@ -134,9 +134,9 @@ def main():
     # 
     # Note that the days start at 1 and not 0. 
     ############################################################################
-    t = RooRealVar("t","time",1.0,tmax+1) # Add the 1 at the end because we 
+    t = RooRealVar("t","Time",1.0,tmax+1,"days") # Add the 1 at the end because we 
                                           # start at 1.
-    x = RooRealVar("x","ionization energy (keVee)",lo_energy,hi_energy);
+    x = RooRealVar("x","Ionization Energy",lo_energy,hi_energy,"keVee");
 
     # Define the FULL energy and time range for plotting later.
     x.setRange("FULL",lo_energy,hi_energy)
@@ -314,11 +314,11 @@ def main():
     # Make frames on which to plot the data and fit results.
     ############################################################################
     x.setBins(xbins)
-    xframe_main = x.frame(RooFit.Title("Plot of ionization energy"))
+    xframe_main = x.frame(RooFit.Title("Ionization Energy"))
     data.plotOn(xframe_main)
 
     t.setBins(tbins)
-    tframe_main = t.frame(RooFit.Title("Days"))
+    tframe_main = t.frame(RooFit.Title("Days since 12/4/2009"))
     data.plotOn(tframe_main)
 
     ########################################################################
@@ -571,8 +571,8 @@ def main():
     if args.talk_plots:
         num_talk_plots = 17
         cans_talk = []
-        xframe_talk = x.frame(RooFit.Title("Plot of ionization energy"))
-        tframe_talk = t.frame(RooFit.Title("Days"))
+        xframe_talk = x.frame(RooFit.Title("Ionization Energy"))
+        tframe_talk = t.frame(RooFit.Title("Days since 12/4/2009"))
         data.plotOn(xframe_talk)
         data.plotOn(tframe_talk)
         for i in range(0,num_talk_plots):
@@ -602,8 +602,8 @@ def main():
 
 
             if i>=num_talk_plots-1:
-                cogent_fit_pdf.plotOn(xframe_main,RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
-                cogent_fit_pdf.plotOn(tframe_main,RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
+                cogent_fit_pdf.plotOn(xframe_talk,RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
+                cogent_fit_pdf.plotOn(tframe_talk,RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
 
             name = "cans_talk%d" % (i)
             cans_talk.append(TCanvas(name,name,100+10*i,100+10*i,1400,600))
