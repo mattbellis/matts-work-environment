@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
+
 
 ################################################################################
 # Build the PDFs for the cosmogenic peaks.

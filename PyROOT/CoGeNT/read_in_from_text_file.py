@@ -4,6 +4,8 @@
 # Import the necessary libraries.
 ################################################################################
 import sys
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
 
 from math import *
@@ -25,7 +27,7 @@ def main():
     ############################################################################
     # Parse the command lines.
     ############################################################################
-    parser = argparse.ArgumentParser(description='Process some integers.')
+    parser = argparse.ArgumentParser()
     parser.add_argument('input_file_name', type=str, default=None, 
             help='Input file name')
     parser.add_argument('--add-gc', dest='add_gc', action='store_true', 
@@ -47,6 +49,8 @@ def main():
             default=False, help='Let the background have an annual modulation.')
     parser.add_argument('--cg-mod', dest='cg_mod', action='store_true', 
             default=False, help='Let the background have an annual modulation.')
+    parser.add_argument('--talk-plots', dest='talk_plots', action='store_true', 
+            default=False, help='Make a bunch of plots for talks.')
     parser.add_argument('--e-lo', dest='e_lo', type=float, default=0.5,
             help='Set the lower limit for the energy range to use.')
     parser.add_argument('--e-hi', dest='e_hi', type=float, default=3.2,
@@ -506,7 +510,7 @@ def main():
         line_style = 1
         color = 1
         if "cg_" in s:
-            line_width = 1; line_style = 2;  color = 2;
+            line_width = 1; line_style = 2;  color = 46;
             plot_pdf = True
         elif "cosmogenic_total" in s:
             line_width = 2; line_style = 1;  color = 2;
@@ -560,6 +564,76 @@ def main():
 
         outfile = "Plots/%s.%s" % (save_file_name,file_type)
         cans[0].SaveAs(outfile)
+
+    ########################################################################
+    # Make a bunch of plots for a talk
+    ########################################################################
+    if args.talk_plots:
+        num_talk_plots = 17
+        cans_talk = []
+        xframe_talk = x.frame(RooFit.Title("Plot of ionization energy"))
+        tframe_talk = t.frame(RooFit.Title("Days"))
+        data.plotOn(xframe_talk)
+        data.plotOn(tframe_talk)
+        for i in range(0,num_talk_plots):
+
+            # Draw the cosmogenic peaks
+            count_cg = 0
+            for s in cogent_sub_funcs_dict:
+                argset = RooArgSet(cogent_sub_funcs_dict[s])
+                plot_pdf = False; line_style = 1; color = 1
+                if "cg_" in s and i>2 and i>=count_cg+2:
+                    line_width = 1; line_style = 2;  color = 46;
+                    plot_pdf = True
+                    count_cg += 1
+                elif "cosmogenic_total" in s and i>=13:
+                    line_width = 2; line_style = 1;  color = 2;
+                    plot_pdf = True
+                elif "bkg_exp" in s and "exp_decay" not in s and i>=14:
+                    line_width = 2; line_style = 1;  color = 7
+                    plot_pdf = True
+                elif "sig_exp" in s and "exp_decay" not in s and i>=15:
+                    line_width = 2; line_style = 1;  color = 3
+                    plot_pdf = True
+
+                if plot_pdf:
+                    cogent_fit_pdf.plotOn(xframe_talk,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
+                    cogent_fit_pdf.plotOn(tframe_talk,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
+
+
+            if i>=num_talk_plots-1:
+                cogent_fit_pdf.plotOn(xframe_main,RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
+                cogent_fit_pdf.plotOn(tframe_main,RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
+
+            name = "cans_talk%d" % (i)
+            cans_talk.append(TCanvas(name,name,100+10*i,100+10*i,1400,600))
+            cans_talk[i].SetFillColor(0)
+            cans_talk[i].Divide(2,1)
+
+            ########################################################################
+            # Draw the frames onto the canvas.
+            ########################################################################
+            cans_talk[i].cd(1)
+            xframe_talk.GetXaxis().SetLimits(0.5,3.2)
+            xframe_talk.GetYaxis().SetRangeUser(0.0,95.0)
+            xframe_talk.Draw()
+            gPad.Update()
+
+            cans_talk[i].cd(2)
+            #tframe_talk.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
+            tframe_talk.Draw()
+            if i>0:
+                hacc_corr.Draw("samee") # The dead-time corrected histogram.
+            gPad.Update()
+
+            for file_type in ['png','pdf','eps']:
+
+                talk_file_name = "%s_talk_%d" % (save_file_name,i)
+                print "Printing %s" % (talk_file_name)
+                outfile = "Plots/%s.%s" % (talk_file_name,file_type)
+                cans_talk[i].SaveAs(outfile)
+
+            ########################################################################
 
     ########################################################################
     # Dump out some more diagnostic info.
