@@ -1,0 +1,31 @@
+#include<cstdlib>
+#include<cstdio>
+#include<iostream>
+
+using namespace std;
+
+int compare (const void * a, const void * b);
+
+////////////////////////////////////////////////////////////////////////////////
+int compare (const void * a, const void * b)
+{
+        return (int)(1000000*(*(float*)a - *(float*)b ));
+}
+////////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+int main()
+{
+    float array[6] = {0.45, 0.22, 0.99, 1.34, 0.16, 0.38};
+
+    qsort(array,6,sizeof(float),compare);
+
+    for (int i=0;i<6;i++)
+    {
+        cerr << array[i] << " ";
+    }
+    cerr << endl;
+
+}
+////////////////////////////////////////////////////////////////////////////////

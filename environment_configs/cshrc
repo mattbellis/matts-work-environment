@@ -1,0 +1,36 @@
+eval `dircolors $HOME/.dir_colors`
+
+alias ls 	'ls --color=auto'
+#alias gmake	'make'
+#eval `dircolors $HOME/.dir_colors`
+
+limit coredumpsize 102400 # limit size to 100M
+
+
+setenv MYSQL_INCLUDE_PATH /usr/include/mysql
+setenv MYSQL_LIB_PATH /usr/lib/mysql
+setenv CLASTOOL `pwd`
+
+setenv LD_LIBRARY_PATH 	/usr/lib/root
+
+setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${PATH}:"
+
+## Needed to add this for latex2html to work...oh well.
+setenv RGBDEF /etc/X11/rgb.txt
+
+setenv PYTHONPATH /usr/local/lib/root/:${HOME}/libs/
+
+setenv SVN_EDITOR vi
+setenv EDITOR vi
+
+# CUDA stuff
+setenv PATH ${PATH}:/usr/local/cuda/bin
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/local/cuda/lib
+
+###### G4 stuff
+#source /home/bellis/src/geant4/geant4.9.0.p01/env.csh
+#setenv G4WORKDIR /home/bellis/g4work
+#setenv LD_LIBRARY_PATH /home/bellis/src/CLHEP/2.0.3.2/CLHEP/lib:$LD_LIBRARY_PATH
+
+# For my beamer stuff
+setenv MY_BEAMER_THEMES ${HOME}/Talks/my_beamer_themes
