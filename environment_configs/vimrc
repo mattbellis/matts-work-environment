@@ -15,6 +15,7 @@
 
 " My keybindings
 ab myitem \begin{itemize}\item XXX\end{itemize}
+ab myframe \frame{\frametitle{XXX}}
 
 filetype indent on
 "colorscheme morning
