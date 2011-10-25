@@ -516,7 +516,7 @@ def main():
             line_width = 2; line_style = 1;  color = 2;
             plot_pdf = True
         elif "bkg_exp" in s and "exp_decay" not in s:
-            line_width = 2; line_style = 1;  color = 7
+            line_width = 2; line_style = 1;  color = 6
             plot_pdf = True
         elif "_exp" in s and "exp_decay" not in s:
             line_width = 2; line_style = 1;  color = 3
@@ -590,7 +590,7 @@ def main():
                     line_width = 2; line_style = 1;  color = 2;
                     plot_pdf = True
                 elif "bkg_exp" in s and "exp_decay" not in s and i>=14:
-                    line_width = 2; line_style = 1;  color = 7
+                    line_width = 2; line_style = 1;  color = 6
                     plot_pdf = True
                 elif "sig_exp" in s and "exp_decay" not in s and i>=15:
                     line_width = 2; line_style = 1;  color = 3
