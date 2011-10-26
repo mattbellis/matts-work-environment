@@ -5,7 +5,7 @@
 ################################################################################
 import sys
 import ROOT
-ROOT.PyConfig.IgnoreCommandLineOptions = True
+#ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
 
 from math import *
@@ -326,6 +326,7 @@ def main():
     # dead times.
     ########################################################################
     hacc_corr = TH1F("hacc_corr","hacc_corr",tbins,1.0,481)
+    hacc_corr.Sumw2()
     nentries = data.numEntries()
     for i in xrange(nentries):
         argset = data.get(i)

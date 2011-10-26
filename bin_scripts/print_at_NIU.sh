@@ -2,6 +2,9 @@
 
 set sides = $1
 
+#set printer = 'nicadd_color'
+set printer = 'nicadd_office'
+
 if ( $sides == 'double' || $sides == 'single' ) then
     echo "Printing..."
 else
@@ -16,9 +19,9 @@ foreach file ($*)
     echo $file
 
     if ( $sides == 'double' ) then
-        lp -dnicadd_color -o sides=two-sided-long-edge $file
+        lp -d$printer -o sides=two-sided-long-edge $file
     else if ( $sides == 'single' ) then
-        lp -dnicadd_color $file
+        lp -d$printer $file
     endif
 
 end
