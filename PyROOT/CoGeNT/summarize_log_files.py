@@ -255,12 +255,14 @@ def main():
     ############################################################################
     # Run test of Gaussian constraints
     ############################################################################
+    '''
     for vals in values:
         for v in vals:
             num = vals[v][0]
             uncert = vals[v][1]
             test_val = uncert*uncert/num
             print "%-20s & %6.2f & %6.2f & %6.2f \\\\" % (v,num,uncert,test_val)
+    '''
 
     ############################################################################
     # Plot the data
