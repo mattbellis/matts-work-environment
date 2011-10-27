@@ -537,7 +537,7 @@ def main():
     gPad.Update()
 
     cans[0].cd(2)
-    #tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
+    tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
     tframe_main.Draw()
     hacc_corr.Draw("samee") # The dead-time corrected histogram.
     gPad.Update()
