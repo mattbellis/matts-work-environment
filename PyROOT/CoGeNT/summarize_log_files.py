@@ -18,9 +18,9 @@ from math import *
 ################################################################################
 def main():
 
-    par_names = ['nbkg', 'nsig', 'sig_slope', 'bkg_mod_amp', 'sig_mod_amp', 'cg_mod_amp', 'bkg_mod_phase', 'sig_mod_phase', 'cg_mod_phase']
-    par_names_for_table = ['$N_{bkg}$', '$N_{sig}$', '$\\alpha$', '$A_{bkg}$', '$A_{sig}$', '$A_{cg}$', '$\phi_{bkg}$', '$\phi_{sig}$', '$\phi_{cg}$']
-    info_flags = ['e_lo', 'signal_modulation', 'background_modulation', 'cosmogenic_modulation', 'add_gc', 'gc_flag']
+    par_names = ['nflat', 'nexp', 'exp_slope', 'flat_mod_amp', 'exp_mod_amp', 'cg_mod_amp', 'flat_mod_phase', 'exp_mod_phase', 'cg_mod_phase']
+    par_names_for_table = ['$N_{flat}$', '$N_{exp}$', '$\\alpha$', '$A_{flat}$', '$A_{exp}$', '$A_{cg}$', '$\phi_{flat}$', '$\phi_{exp}$', '$\phi_{cg}$']
+    info_flags = ['e_lo', 'exponential_modulation', 'flat_modulation', 'cosmogenic_modulation', 'add_gc', 'gc_flag']
 
     values = []
     nlls = []
@@ -77,7 +77,7 @@ def main():
     for val in values:
         #print val
         for v in val:
-            if v=='nsig':
+            if v=='nexp':
                 #x.append(count)
                 x.append(count)
                 y.append(val[v][0])
@@ -95,26 +95,26 @@ def main():
     #print "----------_"
     for i,f in enumerate(file_info):
 
-        if f['signal_modulation']==0 and f['background_modulation']==0 and f['cosmogenic_modulation']==0:
+        if f['exponential_modulation']==0 and f['flat_modulation']==0 and f['cosmogenic_modulation']==0:
             nlls_for_summary[0] = nlls[i]
             values_for_summary[0] = values[i]
-        elif f['signal_modulation']==1 and f['background_modulation']==0 and f['cosmogenic_modulation']==0:
+        elif f['exponential_modulation']==1 and f['flat_modulation']==0 and f['cosmogenic_modulation']==0:
             nlls_for_summary[1] = nlls[i]
             values_for_summary[1] = values[i]
-        elif f['signal_modulation']==0 and f['background_modulation']==1 and f['cosmogenic_modulation']==0:
+        elif f['exponential_modulation']==0 and f['flat_modulation']==1 and f['cosmogenic_modulation']==0:
             nlls_for_summary[2] = nlls[i]
             values_for_summary[2] = values[i]
-        elif f['signal_modulation']==0 and f['background_modulation']==0 and f['cosmogenic_modulation']==1:
+        elif f['exponential_modulation']==0 and f['flat_modulation']==0 and f['cosmogenic_modulation']==1:
             nlls_for_summary[3] = nlls[i]
             values_for_summary[3] = values[i]
-        elif f['signal_modulation']==1 and f['background_modulation']==1 and f['cosmogenic_modulation']==0:
+        elif f['exponential_modulation']==1 and f['flat_modulation']==1 and f['cosmogenic_modulation']==0:
             nlls_for_summary[4] = nlls[i]
             values_for_summary[4] = values[i]
-        elif f['signal_modulation']==1 and f['background_modulation']==1 and f['cosmogenic_modulation']==1:
+        elif f['exponential_modulation']==1 and f['flat_modulation']==1 and f['cosmogenic_modulation']==1:
             nlls_for_summary[5] = nlls[i]
             values_for_summary[5] = values[i]
     
-    fit_names = ['none','sig','bkg','cos', 'sig, bkg','sig, bkg, cos']
+    fit_names = ['none','exp','flat','cos', 'exp, flat','exp, flat, cos']
     quantities = ["Modulation", "dof", "$-\\ln\\mathcal{L}$", "$\\Delta \\ln\\mathcal{L}$", "$\\sqrt{2\\Delta \\ln \\mathcal{L}}$"]
     dofs = [3, 5, 5, 5, 7, 9]
     output = "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\n"
@@ -131,10 +131,10 @@ def main():
     output += "\\caption{%s}\n" % (caption)
 
     #output += "\\begin{tabular}{l c r r r r r}\n"
-    #output += "Modulation & dof & $-\\ln\\mathcal{L}$ & $\\Delta \\ln\\mathcal{L}$ & $\\sqrt{2\\Delta \\ln \\mathcal{L}}$ & $D_{\\rm none}(\\%)$& $D_{\\rm sig}(\\%)$  \\\\\n"
+    #output += "Modulation & dof & $-\\ln\\mathcal{L}$ & $\\Delta \\ln\\mathcal{L}$ & $\\sqrt{2\\Delta \\ln \\mathcal{L}}$ & $D_{\\rm none}(\\%)$& $D_{\\rm exp}(\\%)$  \\\\\n"
     ############ Don't display the -LL
     output += "\\begin{tabular}{l c r r  r r}\n"
-    output += "Modulation & dof & $\\Delta \\ln\\mathcal{L}$ & $\\sqrt{2\\Delta \\ln \\mathcal{L}}$ & $D_{\\rm none}(\\%)$& $D_{\\rm sig}(\\%)$  \\\\\n"
+    output += "Modulation & dof & $\\Delta \\ln\\mathcal{L}$ & $\\sqrt{2\\Delta \\ln \\mathcal{L}}$ & $D_{\\rm none}(\\%)$& $D_{\\rm exp}(\\%)$  \\\\\n"
 
     output += "\\hline\n"
     count = 0

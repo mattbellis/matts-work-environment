@@ -7,7 +7,7 @@ import sys
 # Do the bulk of all the fits.
 ################################################################################
 
-mod_options = [[''],['--sig-mod'],['--bkg-mod'],['--cg-mod'],['--bkg-mod --sig-mod'],['--cg-mod --bkg-mod'],['--cg-mod --bkg-mod --sig-mod']]
+mod_options = [[''],['--exp-mod'],['--flat-mod'],['--cg-mod'],['--flat-mod --exp-mod'],['--cg-mod --flat-mod'],['--cg-mod --flat-mod --exp-mod']]
 mod_flag = [0,1,2,3,4,5,6]
 
 
@@ -45,7 +45,7 @@ while ( lo_ecut<2.8 and hi_ecut<3.2 ):
         elif lo_ecut<1.5 and i==0:
             cmd 
         elif lo_ecut>=1.5 and (i==0 or i==2):
-            cmd += ['--no-sig','--no-cg']
+            cmd += ['--no-exp','--no-cg']
             if i==2:
                 cmd += mod
         else:
