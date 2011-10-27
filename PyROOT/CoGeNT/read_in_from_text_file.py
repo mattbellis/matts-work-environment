@@ -39,16 +39,16 @@ def main():
                     \t1: Sqrt(N) where N is expected number of events.\n\
                     \t2: Adding both in quadrature.\n\
                     \t Default: 2')
-    parser.add_argument('--no-sig', dest='no_sig', action='store_true', 
-            default=False, help="Don't have a signal component to the PDF.")
+    parser.add_argument('--no-exp', dest='no_exp', action='store_true', 
+            default=False, help="Don't have a exponential component to the PDF.")
     parser.add_argument('--no-cg', dest='no_cg', action='store_true', 
             default=False, help="Don't have a cosmogenic component to the PDF.")
-    parser.add_argument('--sig-mod', dest='sig_mod', action='store_true', 
-            default=False, help='Let the signal have an annual modulation.')
-    parser.add_argument('--bkg-mod', dest='bkg_mod', action='store_true', 
-            default=False, help='Let the background have an annual modulation.')
+    parser.add_argument('--exp-mod', dest='exp_mod', action='store_true', 
+            default=False, help='Let the exponential have an annual modulation.')
+    parser.add_argument('--flat-mod', dest='flat_mod', action='store_true', 
+            default=False, help='Let the flat term have an annual modulation.')
     parser.add_argument('--cg-mod', dest='cg_mod', action='store_true', 
-            default=False, help='Let the background have an annual modulation.')
+            default=False, help='Let the flat term have an annual modulation.')
     parser.add_argument('--talk-plots', dest='talk_plots', action='store_true', 
             default=False, help='Make a bunch of plots for talks.')
     parser.add_argument('--e-lo', dest='e_lo', type=float, default=0.5,
@@ -90,10 +90,10 @@ def main():
     ############################################################################
     print "INFO: e_lo %2.1f" % (args.e_lo)
     print "INFO: e_hi %2.1f" % (args.e_hi)
-    print "INFO: no_signal %d" % (args.no_sig)
+    print "INFO: no_exponential %d" % (args.no_exp)
     print "INFO: no_cosmogenic %d" % (args.no_cg)
-    print "INFO: signal_modulation %d" % (args.sig_mod)
-    print "INFO: background_modulation %d" % (args.bkg_mod)
+    print "INFO: exponential_modulation %d" % (args.exp_mod)
+    print "INFO: flat_modulation %d" % (args.flat_mod)
     print "INFO: cosmogenic_modulation %d" % (args.cg_mod)
     print "INFO: add_gc %d" % (args.add_gc)
     print "INFO: gc_flag %d" % (args.gc_flag)
@@ -257,7 +257,7 @@ def main():
     # Grab the PDF 
     ############################################################################
 
-    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_sig,args.no_cg,args.verbose)
+    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.verbose)
 
     # DEBUG
     if args.verbose:
@@ -361,15 +361,15 @@ def main():
     # Set some of the parameters before we start the fit.
     ############################################################################
 
-    cogent_pars_dict["nbkg"].setVal(700.0)
-    cogent_pars_dict["nbkg"].setConstant(False)
+    cogent_pars_dict["nflat"].setVal(700.0)
+    cogent_pars_dict["nflat"].setConstant(False)
 
-    if not args.no_sig:
-        cogent_pars_dict["nsig"].setVal(525.0)
-        cogent_pars_dict["nsig"].setConstant(False)
+    if not args.no_exp:
+        cogent_pars_dict["nexp"].setVal(525.0)
+        cogent_pars_dict["nexp"].setConstant(False)
 
-        cogent_pars_dict["sig_slope"].setVal(-4.5)
-        cogent_pars_dict["sig_slope"].setConstant(False)
+        cogent_pars_dict["exp_slope"].setVal(-4.5)
+        cogent_pars_dict["exp_slope"].setConstant(False)
 
     if args.add_gc:
         # Before freeing up the yields in the cosmogenic peaks, make
@@ -396,25 +396,25 @@ def main():
 
     # Fix the modulation to have an annual frequency.
     yearly_mod = 2*pi/365.0
-    cogent_pars_dict["sig_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["sig_mod_frequency"].setConstant(True)
-    cogent_pars_dict["bkg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["bkg_mod_frequency"].setConstant(True)
+    cogent_pars_dict["exp_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["exp_mod_frequency"].setConstant(True)
+    cogent_pars_dict["flat_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["flat_mod_frequency"].setConstant(True)
     cogent_pars_dict["cg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["cg_mod_frequency"].setConstant(True)
 
-    # Let the signal modulate: float phase offset and amplitude.
-    if args.sig_mod:
-        cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(False)
-        cogent_pars_dict["sig_mod_amp"].setVal(1.0); cogent_pars_dict["sig_mod_amp"].setConstant(False)
+    # Let the exponential modulate: float phase offset and amplitude.
+    if args.exp_mod:
+        cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(False)
+        cogent_pars_dict["exp_mod_amp"].setVal(1.0); cogent_pars_dict["exp_mod_amp"].setConstant(False)
     else:
-        cogent_pars_dict["sig_mod_phase"].setVal(0.0); cogent_pars_dict["sig_mod_phase"].setConstant(True)
-        cogent_pars_dict["sig_mod_amp"].setVal(0.0); cogent_pars_dict["sig_mod_amp"].setConstant(True)
+        cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(True)
+        cogent_pars_dict["exp_mod_amp"].setVal(0.0); cogent_pars_dict["exp_mod_amp"].setConstant(True)
 
-    # Let the background modulate: float phase offset and amplitude.
-    if args.bkg_mod:
-        cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(False)
-        cogent_pars_dict["bkg_mod_amp"].setVal(1.0); cogent_pars_dict["bkg_mod_amp"].setConstant(False)
+    # Let the flat modulate: float phase offset and amplitude.
+    if args.flat_mod:
+        cogent_pars_dict["flat_mod_phase"].setVal(0.0); cogent_pars_dict["flat_mod_phase"].setConstant(False)
+        cogent_pars_dict["flat_mod_amp"].setVal(1.0); cogent_pars_dict["flat_mod_amp"].setConstant(False)
     else:
-        cogent_pars_dict["bkg_mod_phase"].setVal(0.0); cogent_pars_dict["bkg_mod_phase"].setConstant(True)
-        cogent_pars_dict["bkg_mod_amp"].setVal(0.0); cogent_pars_dict["bkg_mod_amp"].setConstant(True)
+        cogent_pars_dict["flat_mod_phase"].setVal(0.0); cogent_pars_dict["flat_mod_phase"].setConstant(True)
+        cogent_pars_dict["flat_mod_amp"].setVal(0.0); cogent_pars_dict["flat_mod_amp"].setConstant(True)
 
     if args.cg_mod:
         cogent_pars_dict["cg_mod_phase"].setVal(0.0); cogent_pars_dict["cg_mod_phase"].setConstant(False)
@@ -516,7 +516,7 @@ def main():
         elif "cosmogenic_total" in s:
             line_width = 2; line_style = 1;  color = 2;
             plot_pdf = True
-        elif "bkg_exp" in s and "exp_decay" not in s:
+        elif "flat_exp" in s and "exp_decay" not in s:
             line_width = 2; line_style = 1;  color = 6
             plot_pdf = True
         elif "_exp" in s and "exp_decay" not in s:
@@ -549,10 +549,10 @@ def main():
     # Save the canvas to a few different image formats.
     ########################################################################
     save_file_name = "%s" % args.tag
-    if args.sig_mod:
-        save_file_name += "_sig_mod"
-    if args.bkg_mod:
-        save_file_name += "_bkg_mod"
+    if args.exp_mod:
+        save_file_name += "_exp_mod"
+    if args.flat_mod:
+        save_file_name += "_flat_mod"
     if args.cg_mod:
         save_file_name += "_cg_mod"
     if args.add_gc:
@@ -590,10 +590,10 @@ def main():
                 elif "cosmogenic_total" in s and i>=13:
                     line_width = 2; line_style = 1;  color = 2;
                     plot_pdf = True
-                elif "bkg_exp" in s and "exp_decay" not in s and i>=14:
+                elif "flat_exp" in s and "exp_decay" not in s and i>=14:
                     line_width = 2; line_style = 1;  color = 6
                     plot_pdf = True
-                elif "sig_exp" in s and "exp_decay" not in s and i>=15:
+                elif "exp_exp" in s and "exp_decay" not in s and i>=15:
                     line_width = 2; line_style = 1;  color = 3
                     plot_pdf = True
 
@@ -651,9 +651,9 @@ def main():
         phase = None
         phase_string = None
         if i==0:
-            phase_string = "sig"
+            phase_string = "exp"
         elif i==1:
-            phase_string = "bkg"
+            phase_string = "flat"
         else:
             phase_string = "cg"
         name = "%s_mod_phase" % (phase_string)

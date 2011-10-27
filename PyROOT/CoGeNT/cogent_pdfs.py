@@ -246,7 +246,7 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
 
 ################################################################################
 ################################################################################
-def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_sig=False,no_cg=False,verbose=False):
+def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,verbose=False):
 
     pars = []
     sub_funcs = []
@@ -265,78 +265,78 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_sig=False,no_cg=False,verbose=False):
     sub_funcs += [cosmogenic_pdf]
 
     ############################################################################
-    # Define the exponential background
+    # Define the flat term (we use an exponential for now)
     ############################################################################
-    bkg_slope = RooRealVar("bkg_slope","Exponential slope of the background",-0.0,-10.0,0.0)
-    bkg_exp_x = RooExponential("bkg_exp_x","Exponential PDF for bkg x",x,bkg_slope)
+    flat_slope = RooRealVar("flat_slope","Exponential slope of the flat term",-0.0,-10.0,0.0)
+    flat_exp_x = RooExponential("flat_exp_x","Exponential PDF for flat x",x,flat_slope)
 
-    bkg_slope_t = RooRealVar("bkg_slope_t","Exponential slope of the background t",0.0,-100.0,0.0)
+    flat_slope_t = RooRealVar("flat_slope_t","Exponential slope of the flat term t",0.0,-100.0,0.0)
 
-    bkg_mod_frequency = RooRealVar("bkg_mod_frequency","Background modulation frequency",0.0)
-    bkg_mod_offset = RooRealVar("bkg_mod_offset","Background modulation offset",2)
-    bkg_mod_phase = RooRealVar("bkg_mod_phase","Background modulation phase",0.0)
-    bkg_mod_amp = RooRealVar("bkg_mod_amp","Background modulation amplitude",1.0)
+    flat_mod_frequency = RooRealVar("flat_mod_frequency","Flat term modulation frequency",0.0)
+    flat_mod_offset = RooRealVar("flat_mod_offset","Flat term modulation offset",2)
+    flat_mod_phase = RooRealVar("flat_mod_phase","Flat term modulation phase",0.0)
+    flat_mod_amp = RooRealVar("flat_mod_amp","Flat term modulation amplitude",1.0)
 
-    bkg_exp_t = RooGenericPdf("bkg_exp_t","Background modulation","bkg_mod_offset+bkg_mod_amp*sin((bkg_mod_frequency*t) + bkg_mod_phase)",RooArgList(bkg_mod_offset,bkg_mod_amp,bkg_mod_frequency,bkg_mod_phase,t)) ;
+    flat_exp_t = RooGenericPdf("flat_exp_t","Flat term modulation","flat_mod_offset+flat_mod_amp*sin((flat_mod_frequency*t) + flat_mod_phase)",RooArgList(flat_mod_offset,flat_mod_amp,flat_mod_frequency,flat_mod_phase,t)) ;
 
-    bkg_exp = RooProdPdf("bkg_exp","bkg_exp_x*bkg_exp_t",RooArgList(bkg_exp_x,bkg_exp_t))
+    flat_exp = RooProdPdf("flat_exp","flat_exp_x*flat_exp_t",RooArgList(flat_exp_x,flat_exp_t))
 
-    pars.append(bkg_mod_frequency)
-    pars.append(bkg_mod_amp)
-    pars.append(bkg_mod_phase)
-    pars.append(bkg_mod_offset)
+    pars.append(flat_mod_frequency)
+    pars.append(flat_mod_amp)
+    pars.append(flat_mod_phase)
+    pars.append(flat_mod_offset)
 
-    pars.append(bkg_slope)
-    pars.append(bkg_slope_t)
-    sub_funcs.append(bkg_exp_x)
-    sub_funcs.append(bkg_exp_t)
-    sub_funcs.append(bkg_exp)
+    pars.append(flat_slope)
+    pars.append(flat_slope_t)
+    sub_funcs.append(flat_exp_x)
+    sub_funcs.append(flat_exp_t)
+    sub_funcs.append(flat_exp)
 
     ############################################################################
-    # Define the exponential signal
+    # Define the exponential term (in energy)
     ############################################################################
-    sig_slope = RooRealVar("sig_slope","Exponential slope of the signal",-4.5,-10.0,0.0)
-    sig_exp_x = RooExponential("sig_exp_x","Exponential PDF for sig x",x,sig_slope)
+    exp_slope = RooRealVar("exp_slope","Exponential slope of the exponential term",-4.5,-10.0,0.0)
+    exp_exp_x = RooExponential("exp_exp_x","Exponential PDF for exp x",x,exp_slope)
 
-    sig_slope_t = RooRealVar("sig_slope_t","Exponential slope of the signal t",-0.00001,-100.0,0.0)
+    exp_slope_t = RooRealVar("exp_slope_t","Exponential slope of the exponential term t",-0.00001,-100.0,0.0)
 
-    sig_mod_frequency = RooRealVar("sig_mod_frequency","Signal modulation frequency",0.00)
-    sig_mod_offset = RooRealVar("sig_mod_offset","Signal modulation phase",2.0)
-    sig_mod_phase = RooRealVar("sig_mod_phase","Signal modulation phase",0.0)
-    sig_mod_amp = RooRealVar("sig_mod_amp","Signal modulation amp",1.0)
+    exp_mod_frequency = RooRealVar("exp_mod_frequency","Exponential term modulation frequency",0.00)
+    exp_mod_offset = RooRealVar("exp_mod_offset","Exponential term modulation phase",2.0)
+    exp_mod_phase = RooRealVar("exp_mod_phase","Exponential term modulation phase",0.0)
+    exp_mod_amp = RooRealVar("exp_mod_amp","Exponential term modulation amp",1.0)
 
-    sig_exp_t = RooGenericPdf("sig_exp_t","Signal modulation","sig_mod_offset+sig_mod_amp*sin((sig_mod_frequency*t) + sig_mod_phase)",RooArgList(sig_mod_offset,sig_mod_amp,sig_mod_frequency,sig_mod_phase,t)) ;
+    exp_exp_t = RooGenericPdf("exp_exp_t","Exponential term modulation","exp_mod_offset+exp_mod_amp*sin((exp_mod_frequency*t) + exp_mod_phase)",RooArgList(exp_mod_offset,exp_mod_amp,exp_mod_frequency,exp_mod_phase,t)) ;
 
-    sig_exp = RooProdPdf("sig_exp","sig_exp_x*sig_exp_t",RooArgList(sig_exp_x,sig_exp_t))
+    exp_exp = RooProdPdf("exp_exp","exp_exp_x*exp_exp_t",RooArgList(exp_exp_x,exp_exp_t))
 
-    pars.append(sig_mod_frequency)
-    pars.append(sig_mod_amp)
-    pars.append(sig_mod_phase)
-    pars.append(sig_mod_offset)
+    pars.append(exp_mod_frequency)
+    pars.append(exp_mod_amp)
+    pars.append(exp_mod_phase)
+    pars.append(exp_mod_offset)
 
-    pars.append(sig_slope)
-    pars.append(sig_slope_t)
-    sub_funcs.append(sig_exp_x)
-    sub_funcs.append(sig_exp_t)
-    sub_funcs.append(sig_exp)
+    pars.append(exp_slope)
+    pars.append(exp_slope_t)
+    sub_funcs.append(exp_exp_x)
+    sub_funcs.append(exp_exp_t)
+    sub_funcs.append(exp_exp)
 
     ############################################################################
     # Form the total PDF.
     ############################################################################
-    nbkg = RooRealVar("nbkg","nbkg",200,0,600000)
-    nsig = RooRealVar("nsig","nsig",200,0,600000)
+    nflat = RooRealVar("nflat","nflat",200,0,600000)
+    nexp = RooRealVar("nexp","nexp",200,0,600000)
 
     total_pdf = None
-    if no_sig and not no_cg:
-        total_pdf = RooAddPdf("total_energy_pdf","bkg_exp+cosmogenic_pdf",RooArgList(bkg_exp,cosmogenic_pdf),RooArgList(nbkg,ncosmogenics))
-    elif not no_sig and no_cg:
-        total_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_pdf",RooArgList(bkg_exp,sig_pdf),RooArgList(nbkg,nsig))
-    elif no_sig and no_cg:
-        total_pdf = RooAddPdf("total_energy_pdf","bkg_exp",RooArgList(bkg_exp),RooArgList(nbkg))
+    if no_exp and not no_cg:
+        total_pdf = RooAddPdf("total_energy_pdf","flat_exp+cosmogenic_pdf",RooArgList(flat_exp,cosmogenic_pdf),RooArgList(nflat,ncosmogenics))
+    elif not no_exp and no_cg:
+        total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_pdf",RooArgList(flat_exp,exp_pdf),RooArgList(nflat,nexp))
+    elif no_exp and no_cg:
+        total_pdf = RooAddPdf("total_energy_pdf","flat_exp",RooArgList(flat_exp),RooArgList(nflat))
     else:
-        total_pdf = RooAddPdf("total_energy_pdf","bkg_exp+sig_exp+cosmogenic_pdf",RooArgList(bkg_exp,sig_exp,cosmogenic_pdf),RooArgList(nbkg,nsig,ncosmogenics))
+        total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_exp+cosmogenic_pdf",RooArgList(flat_exp,exp_exp,cosmogenic_pdf),RooArgList(nflat,nexp,ncosmogenics))
 
-    pars += [nbkg, nsig]
+    pars += [nflat, nexp]
 
     return pars,sub_funcs,total_pdf
 

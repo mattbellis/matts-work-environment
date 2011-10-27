@@ -18,9 +18,9 @@ from math import *
 ################################################################################
 def main():
 
-    par_names = ['nbkg', 'nsig', 'sig_slope', 'bkg_mod_amp', 'sig_mod_amp', 'cg_mod_amp', 'bkg_mod_phase', 'sig_mod_phase', 'cg_mod_phase']
-    par_names_for_table = ['$N_{bkg}$', '$N_{sig}$', '$\\alpha$', '$A_{bkg}$', '$A_{sig}$', '$A_{cg}$', '$\phi_{bkg}$', '$\phi_{sig}$', '$\phi_{cg}$']
-    info_flags = ['e_lo', 'signal_modulation', 'background_modulation', 'cosmogenic_modulation', 'add_gc', 'gc_flag']
+    par_names = ['nflat', 'nexp', 'exp_slope', 'flat_mod_amp', 'exp_mod_amp', 'cg_mod_amp', 'flat_mod_phase', 'exp_mod_phase', 'cg_mod_phase']
+    par_names_for_table = ['$N_{flat}$', '$N_{exp}$', '$\\alpha$', '$A_{flat}$', '$A_{exp}$', '$A_{cg}$', '$\phi_{flat}$', '$\phi_{exp}$', '$\phi_{cg}$']
+    info_flags = ['e_lo', 'exponential_modulation', 'flat_modulation', 'cosmogenic_modulation', 'add_gc', 'gc_flag']
 
     values = []
     nlls = []
@@ -80,13 +80,13 @@ def main():
     #print values
     for v in values:
         #print v
-        if v['background_modulation']==0:
+        if v['flat_modulation']==0:
             elo = v['e_lo']
             ehi = v['e_hi']
             nll0 = v['nll']
             for vv in values:
                 #print vv
-                if vv['background_modulation']==1.0 and elo == vv['e_lo'] and ehi == vv['e_hi']:
+                if vv['flat_modulation']==1.0 and elo == vv['e_lo'] and ehi == vv['e_hi']:
                     nll1 = vv['nll']
 
                     width = ehi-elo
