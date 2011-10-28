@@ -621,7 +621,7 @@ def main():
             gPad.Update()
 
             cans_talk[i].cd(2)
-            #tframe_talk.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
+            tframe_talk.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
             tframe_talk.Draw()
             if i>0:
                 hacc_corr.Draw("samee") # The dead-time corrected histogram.
