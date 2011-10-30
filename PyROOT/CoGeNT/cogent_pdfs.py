@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-import ROOT
-ROOT.PyConfig.IgnoreCommandLineOptions = True
+#import ROOT
+#ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
 
 
