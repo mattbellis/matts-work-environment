@@ -4,7 +4,7 @@
 # Import the necessary libraries.
 ################################################################################
 import sys
-import ROOT
+#import ROOT
 #ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
 
@@ -465,13 +465,14 @@ def main():
     ############################################################################
     # Create the neg log likelihood object to pass to RooMinuit
     ############################################################################
-    nll = RooAddition("nll","-log(likelihood)",nllList,True);
+    nll = RooAddition("nll","-log(likelihood)",nllList,True)
 
     # DEBUG
     if args.verbose:
         nll.Print("v")
 
     fit_results = None
+
 
     # Call the fitting routine, based on our command line options.
     if not args.use_fitto:
@@ -530,8 +531,12 @@ def main():
     ########################################################################
     # Draw the frames onto the canvas.
     ########################################################################
+    xmax = 3.2 
+    if (args.e_hi>3.2):
+        xmax = args.e_hi
+
     cans[0].cd(1)
-    xframe_main.GetXaxis().SetLimits(0.5,3.2)
+    xframe_main.GetXaxis().SetLimits(0.5,xmax)
     xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_main.Draw()
     gPad.Update()
@@ -615,7 +620,7 @@ def main():
             # Draw the frames onto the canvas.
             ########################################################################
             cans_talk[i].cd(1)
-            xframe_talk.GetXaxis().SetLimits(0.5,3.2)
+            xframe_talk.GetXaxis().SetLimits(0.5,xmax)
             xframe_talk.GetYaxis().SetRangeUser(0.0,95.0)
             xframe_talk.Draw()
             gPad.Update()
@@ -680,6 +685,8 @@ def main():
             if 1<len(rep):
                 rep = rep[0]
 
+    del nll
+    
 ################################################################################
 ################################################################################
 if __name__ == "__main__":
