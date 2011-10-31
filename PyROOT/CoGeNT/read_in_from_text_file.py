@@ -228,7 +228,7 @@ def main():
             amplitude = float(vals[1])
 
             # Convert the amplitude to an energy using a particular calibration.
-            energy = amp_to_energy(amplitude,0)
+            energy = amp_to_energy(amplitude,1)
 
             # Convert the time in seconds to a day.
             time_days = (t_sec-first_event)/(24.0*3600.0) + 1.0
