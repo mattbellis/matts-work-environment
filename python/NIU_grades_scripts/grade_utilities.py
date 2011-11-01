@@ -10,7 +10,7 @@ from email.mime.text import MIMEText
 
 
 ################################################################################
-def calc_average_of_grades(grades, drop_lowest_score='False'):
+def calc_average_of_grades(grades, drop_lowest_score=False):
     scores = []
     #print grades
     for g in grades:
@@ -25,6 +25,21 @@ def calc_average_of_grades(grades, drop_lowest_score='False'):
     #print scores
     return 100*np.mean(scores)
 
+################################################################################
+def is_lowest_grade(list_of_grades, grade):
+
+    all_scores = []
+    for g in list_of_grades:
+        all_scores.append(g.grade_pct())
+
+    ret = False
+    all_scores.sort()
+    if grade.grade_pct() == all_scores[0]:
+        ret = True
+
+    return ret 
+
+################################################################################
 
 ################################################################################
 class Grade_file_info:
@@ -131,25 +146,40 @@ class Student:
 
         # Quizzes
         ret += " -----\nQuizzes\n -----\n"
+        drop_lowest_score = True
+        picked_a_lowest = False
         for g in self.grades.quizzes:
-            ret +=  "%-7s %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
-        avg = calc_average_of_grades(self.grades.quizzes, 'False')
+            ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+            if drop_lowest_score==True:
+                if is_lowest_grade(self.grades.quizzes,g) and not picked_a_lowest:
+                    ret += "\tlowest score, will not be counted in average."
+                    picked_a_lowest = True
+            ret += "\n"
+        avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
         averages[0] = avg
         ret += "\tQuiz avg: %4.2f\n" % (avg)
 
         # HW
+        drop_lowest_score = True
+        picked_a_lowest = False
         ret += " -----\nHomeworks\n -----\n"
         for g in self.grades.hw:
-            ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
-        avg = calc_average_of_grades(self.grades.hw, 'False')
+            ret +=  "%-7s   %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+            if drop_lowest_score==True:
+                if is_lowest_grade(self.grades.hw,g) and not picked_a_lowest:
+                    ret += "\tlowest score, will not be counted in average."
+                    picked_a_lowest = True
+            ret += "\n"
+        avg = calc_average_of_grades(self.grades.hw, drop_lowest_score)
         averages[1] = avg
         ret += "\tHW   avg: %4.2f\n" % (avg)
 
-        # HW
+        # Exam 1 
+        drop_lowest_score = False
         ret += " -----\nExam 1\n -----\n"
         for g in self.grades.exam1:
             ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
-        avg = calc_average_of_grades(self.grades.exam1, 'False')
+        avg = calc_average_of_grades(self.grades.exam1, drop_lowest_score)
         averages[2] = avg
         ret += "\tExam 1  : %4.2f\n" % (avg)
 

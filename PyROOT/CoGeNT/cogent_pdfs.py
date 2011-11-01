@@ -14,17 +14,17 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
     # Hard coded this from the data given out by Juan Collar.
     ############################################################################
     cosmogenic_data_dict = {
-            "As 73": [125.45,33.479,0.11000,13.799,12.741,1.4143,0.077656,80.000,0.0000],
-            "Ge 68": [6070.7,1.3508,0.11400,692.06,638.98,1.2977,0.077008,271.00,0.0000],
-            "Ga 68": [520.15,5.1139,0.11000,57.217,52.828,1.1936,0.076426,271.00,0.0000],
-            "Zn 65": [2117.8,2.2287,0.10800,228.72,211.18,1.0961,0.075877,244.00,0.0058000],
-            "Ni 56": [16.200,23.457,0.10200,1.6524,1.5257,0.92560,0.074906,5.9000,0.39000],
-            "Co 56/58": [100.25,8.0,0.10200,10.226,9.4412,0.84610,0.074449,71.000,0.78600],
-            "Co 57": [27.500,8.0,0.10200,2.8050,2.5899,0.84610,0.074449,271.00,0.78600],
-            "Fe 55": [459.20,11.629,0.10600,48.675,44.942,0.76900,0.074003,996.00,0.96000],
-            "Mn 54": [223.90,9.3345,0.10200,22.838,21.086,0.69460,0.073570,312.00,1.0000],
-            "Cr 51": [31.500,15.238,0.10100,3.1815,2.9375,0.62820,0.073182,28.000,1.0000],
-            "V 49": [161.46,12.263,0.10000,16.146,14.908,0.56370,0.072803,330.00,1.0000],
+            "As 73": [125.45,33.479,0.11000,13.799,12.741,1.4143,0.077656,80.000,0.0000,11.10,80.0],
+            "Ge 68": [6070.7,1.3508,0.11400,692.06,638.98,1.2977,0.077008,271.00,0.0000,10.37,271.0],
+            "Ga 68": [520.15,5.1139,0.11000,57.217,52.828,1.1936,0.076426,271.00,0.0000,9.66,271.0],
+            "Zn 65": [2117.8,2.2287,0.10800,228.72,211.18,1.0961,0.075877,244.00,0.0058000,8.98,244.0],
+            "Ni 56": [16.200,23.457,0.10200,1.6524,1.5257,0.92560,0.074906,5.9000,0.39000,7.71,5.9],
+            "Co 56/58": [100.25,8.0,0.10200,10.226,9.4412,0.84610,0.074449,71.000,0.78600,7.11,77.0],
+            "Co 57": [27.500,8.0,0.10200,2.8050,2.5899,0.84610,0.074449,271.00,0.78600,7.11,271.0],
+            "Fe 55": [459.20,11.629,0.10600,48.675,44.942,0.76900,0.074003,996.00,0.96000,6.54,996.45],
+            "Mn 54": [223.90,9.3345,0.10200,22.838,21.086,0.69460,0.073570,312.00,1.0000,5.99,312.0],
+            "Cr 51": [31.500,15.238,0.10100,3.1815,2.9375,0.62820,0.073182,28.000,1.0000,5.46,28.0],
+            "V 49": [161.46,12.263,0.10000,16.146,14.908,0.56370,0.072803,330.00,1.0000,4.97,330.0],
             }
 
     cosmogenic_means = []
@@ -70,8 +70,12 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
     n_good_cosmo = 0
     for i,p in enumerate(cosmogenic_data_dict):
 
-        mean = cosmogenic_data_dict[p][5]
-        sigma = cosmogenic_data_dict[p][6]
+        # L-shell peaks
+        #mean = cosmogenic_data_dict[p][5]
+        #sigma = cosmogenic_data_dict[p][6]
+        # K-shell peaks
+        mean = cosmogenic_data_dict[p][9]
+        sigma = 1.5*cosmogenic_data_dict[p][6]
 
         half_life = cosmogenic_data_dict[p][7]
         #half_life = 2.0
@@ -84,12 +88,16 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
         # is for (I think) the number of atoms expected to decay from Dec 4th, 'til
         # the end of time. So compensate for the number of days running.
         ########################################################################
-        num_tot_decays = cosmogenic_data_dict[p][4]
+        # L-shell peaks
+        #num_tot_decays = cosmogenic_data_dict[p][4]
+        # K-shell peaks
+        num_tot_decays = cosmogenic_data_dict[p][0]
         norm = num_tot_decays*(1.0-exp(num_days*decay_constant))
 
         # Check to see if the the low range of the energy has shifted. If so, 
         # we need to compensate for the truncation of the PDF (Gaussian)
-        if e_lo is not None:
+        #if e_lo is not None:
+        if False:
             func = "Gaus(x,%f,%f)" % (mean, sigma)
             g = TF1("Test Gaussian",func,0,3.0)
             frac = g.Integral(e_lo,3.0)/g.Integral(0.0,3.0)

@@ -163,7 +163,7 @@ def main():
     for d in dead_days:
 
         # We've assumed 30-day binning for the dead-time correction.
-        dead_time_correction_factor.append(30.0/((30.0-(d[1]-d[0]))))
+        dead_time_correction_factor.append(30.0/((30.0-(d[1]-d[0] + 1))))
 
     # Add the last one by hand
     dead_time_correction_factor.append(30.0/8.0)
@@ -228,7 +228,7 @@ def main():
             amplitude = float(vals[1])
 
             # Convert the amplitude to an energy using a particular calibration.
-            energy = amp_to_energy(amplitude,1)
+            energy = amp_to_energy(amplitude,2)
 
             # Convert the time in seconds to a day.
             time_days = (t_sec-first_event)/(24.0*3600.0) + 1.0
@@ -335,8 +335,10 @@ def main():
         for c,m in zip(dead_time_correction_factor,month_ranges):
             if tmp>m[0] and tmp<=m[1]:
                 correction = c
+                '''
                 if args.verbose:
                     print "Dead time corrections: %f %f %f %f" % (tmp,m[0],m[1],correction)
+                '''
 
         hacc_corr.Fill(tmp,correction)
 
@@ -423,6 +425,7 @@ def main():
         cogent_pars_dict["cg_mod_phase"].setVal(0.0); cogent_pars_dict["cg_mod_phase"].setConstant(True)
         cogent_pars_dict["cg_mod_amp"].setVal(0.0); cogent_pars_dict["cg_mod_amp"].setConstant(True)
 
+    #exit(-1)
     ############################################################################
     # Construct the RooNLLVar to pass into RooMinuit. 
     # Because we have multiple ranges over which to fit, we need to construct
@@ -537,12 +540,12 @@ def main():
 
     cans[0].cd(1)
     xframe_main.GetXaxis().SetLimits(0.5,xmax)
-    xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
+    #xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_main.Draw()
     gPad.Update()
 
     cans[0].cd(2)
-    tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
+    #tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
     tframe_main.Draw()
     hacc_corr.Draw("samee") # The dead-time corrected histogram.
     gPad.Update()
