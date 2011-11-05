@@ -1,0 +1,7 @@
+<memo name="test">
+
+  <entry name="1">
+    <value one="one">
+  </entry>
+
+</memo>
