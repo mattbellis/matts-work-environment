@@ -1,9 +1,11 @@
 float ang = 0, ang2 = 0, ang3 = 0, ang4 = 0;
 float px = 0, py = 0, pz = 0;
 float flapSpeed = 0.2;
+float width = 800;
+float height = 440;
 
 void setup(){
-    size(800,440,OPENGL);
+    size(width,height,OPENGL);
     noStroke();
 }
 
