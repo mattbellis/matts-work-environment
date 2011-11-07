@@ -3,7 +3,7 @@ float px = 0, py = 0, pz = 0;
 float flapSpeed = 0.2;
 
 void setup(){
-    size(640,360,OPENGL);
+    size(800,440,OPENGL);
     noStroke();
 }
 
@@ -22,7 +22,7 @@ void draw(){
     rotateZ(sin(radians(ang2)) * 65);
 
     // Body
-    fill(153);
+    fill(153,200,200);
     box(20, 100, 20);
 
 
