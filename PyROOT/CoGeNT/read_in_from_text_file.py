@@ -49,6 +49,8 @@ def main():
             default=False, help='Let the flat term have an annual modulation.')
     parser.add_argument('--cg-mod', dest='cg_mod', action='store_true', 
             default=False, help='Let the flat term have an annual modulation.')
+    parser.add_argument('--add-exp2', dest='add_exp2', action='store_true', 
+            default=False, help='Add a second term that is exponential in energy.')
     parser.add_argument('--talk-plots', dest='talk_plots', action='store_true', 
             default=False, help='Make a bunch of plots for talks.')
     parser.add_argument('--e-lo', dest='e_lo', type=float, default=0.5,
@@ -228,7 +230,7 @@ def main():
             amplitude = float(vals[1])
 
             # Convert the amplitude to an energy using a particular calibration.
-            energy = amp_to_energy(amplitude,2)
+            energy = amp_to_energy(amplitude,0)
 
             # Convert the time in seconds to a day.
             time_days = (t_sec-first_event)/(24.0*3600.0) + 1.0
@@ -257,7 +259,7 @@ def main():
     # Grab the PDF 
     ############################################################################
 
-    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.verbose)
+    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
 
     # DEBUG
     if args.verbose:
@@ -425,6 +427,14 @@ def main():
         cogent_pars_dict["cg_mod_phase"].setVal(0.0); cogent_pars_dict["cg_mod_phase"].setConstant(True)
         cogent_pars_dict["cg_mod_amp"].setVal(0.0); cogent_pars_dict["cg_mod_amp"].setConstant(True)
 
+    # Add the 2nd exponential if necessary.
+    cogent_pars_dict["exp2_mod_phase"].setVal(0.0); cogent_pars_dict["exp2_mod_phase"].setConstant(True)
+    cogent_pars_dict["exp2_mod_amp"].setVal(0.0); cogent_pars_dict["exp2_mod_amp"].setConstant(True)
+    cogent_pars_dict["nexp2"].setVal(0.0); cogent_pars_dict["exp2_mod_amp"].setConstant(True)
+    if args.add_exp2:
+        cogent_pars_dict["nexp2"].setVal(100.0); cogent_pars_dict["nexp2"].setConstant(False)
+        cogent_pars_dict["exp2_slope"].setVal(-3.0); cogent_pars_dict["exp2_slope"].setConstant(True)
+
     #exit(-1)
     ############################################################################
     # Construct the RooNLLVar to pass into RooMinuit. 
@@ -523,9 +533,13 @@ def main():
         elif "flat_exp" in s and "exp_decay" not in s:
             line_width = 2; line_style = 1;  color = 6
             plot_pdf = True
-        elif "_exp" in s and "exp_decay" not in s:
+        elif "exp_exp" in s and "exp_decay" not in s:
             line_width = 2; line_style = 1;  color = 3
             plot_pdf = True
+        elif "exp2_exp" in s and "exp_decay" not in s:
+            line_width = 2; line_style = 1;  color = 5
+            plot_pdf = True
+
 
         if plot_pdf:
             cogent_fit_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
@@ -565,6 +579,8 @@ def main():
         save_file_name += "_cg_mod"
     if args.add_gc:
         save_file_name += "_add_gc%d" % (args.gc_flag)
+    if args.add_exp2:
+        save_file_name += "_add_exp2"
 
     save_file_name += "_elo%d" % (int(10*args.e_lo))
     save_file_name += "_ehi%d" % (int(10*args.e_hi))
@@ -603,6 +619,9 @@ def main():
                     plot_pdf = True
                 elif "exp_exp" in s and "exp_decay" not in s and i>=15:
                     line_width = 2; line_style = 1;  color = 3
+                    plot_pdf = True
+                elif "exp2_exp" in s and "exp_decay" not in s and i>=15:
+                    line_width = 2; line_style = 1;  color = 5
                     plot_pdf = True
 
                 if plot_pdf:
