@@ -71,11 +71,11 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
     for i,p in enumerate(cosmogenic_data_dict):
 
         # L-shell peaks
-        #mean = cosmogenic_data_dict[p][5]
-        #sigma = cosmogenic_data_dict[p][6]
+        mean = cosmogenic_data_dict[p][5]
+        sigma = cosmogenic_data_dict[p][6]
         # K-shell peaks
-        mean = cosmogenic_data_dict[p][9]
-        sigma = 1.5*cosmogenic_data_dict[p][6]
+        #mean = cosmogenic_data_dict[p][9]
+        #sigma = 1.5*cosmogenic_data_dict[p][6]
 
         half_life = cosmogenic_data_dict[p][7]
         #half_life = 2.0
@@ -89,9 +89,10 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
         # the end of time. So compensate for the number of days running.
         ########################################################################
         # L-shell peaks
-        #num_tot_decays = cosmogenic_data_dict[p][4]
+        num_tot_decays = cosmogenic_data_dict[p][4]
         # K-shell peaks
-        num_tot_decays = cosmogenic_data_dict[p][0]
+        #num_tot_decays = cosmogenic_data_dict[p][0]
+
         norm = num_tot_decays*(1.0-exp(num_days*decay_constant))
 
         # Check to see if the the low range of the energy has shifted. If so, 
@@ -254,7 +255,7 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
 
 ################################################################################
 ################################################################################
-def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,verbose=False):
+def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,verbose=False):
 
     pars = []
     sub_funcs = []
@@ -329,10 +330,39 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,verbose=False):
     sub_funcs.append(exp_exp)
 
     ############################################################################
+    # Define a second exponential term (in energy)
+    ############################################################################
+    exp2_slope = RooRealVar("exp2_slope","Exponential slope of the exponential term",-4.5,-10.0,0.0)
+    exp2_exp_x = RooExponential("exp2_exp_x","Exponential PDF for exp x",x,exp2_slope)
+
+    exp2_slope_t = RooRealVar("exp2_slope_t","Exponential slope of the exponential term t",-0.00001,-100.0,0.0)
+
+    exp2_mod_frequency = RooRealVar("exp2_mod_frequency","Exponential term modulation frequency",0.00)
+    exp2_mod_offset = RooRealVar("exp2_mod_offset","Exponential term modulation phase",2.0)
+    exp2_mod_phase = RooRealVar("exp2_mod_phase","Exponential term modulation phase",0.0)
+    exp2_mod_amp = RooRealVar("exp2_mod_amp","Exponential term modulation amp",1.0)
+
+    exp2_exp_t = RooGenericPdf("exp2_exp_t","Exponential term modulation","exp2_mod_offset+exp2_mod_amp*sin((exp2_mod_frequency*t) + exp2_mod_phase)",RooArgList(exp2_mod_offset,exp2_mod_amp,exp2_mod_frequency,exp2_mod_phase,t)) ;
+
+    exp2_exp = RooProdPdf("exp2_exp","exp2_exp_x*exp2_exp_t",RooArgList(exp2_exp_x,exp2_exp_t))
+
+    pars.append(exp2_mod_frequency)
+    pars.append(exp2_mod_amp)
+    pars.append(exp2_mod_phase)
+    pars.append(exp2_mod_offset)
+
+    pars.append(exp2_slope)
+    pars.append(exp2_slope_t)
+    sub_funcs.append(exp2_exp_x)
+    sub_funcs.append(exp2_exp_t)
+    sub_funcs.append(exp2_exp)
+
+    ############################################################################
     # Form the total PDF.
     ############################################################################
     nflat = RooRealVar("nflat","nflat",200,0,600000)
     nexp = RooRealVar("nexp","nexp",200,0,600000)
+    nexp2 = RooRealVar("nexp2","nexp2",200,0,600000)
 
     total_pdf = None
     if no_exp and not no_cg:
@@ -341,10 +371,12 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,verbose=False):
         total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_pdf",RooArgList(flat_exp,exp_pdf),RooArgList(nflat,nexp))
     elif no_exp and no_cg:
         total_pdf = RooAddPdf("total_energy_pdf","flat_exp",RooArgList(flat_exp),RooArgList(nflat))
+    elif add_exp2:
+        total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_exp+exp2_exp+cosmogenic_pdf",RooArgList(flat_exp,exp_exp,exp2_exp,cosmogenic_pdf),RooArgList(nflat,nexp,nexp2,ncosmogenics))
     else:
         total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_exp+cosmogenic_pdf",RooArgList(flat_exp,exp_exp,cosmogenic_pdf),RooArgList(nflat,nexp,ncosmogenics))
 
-    pars += [nflat, nexp]
+    pars += [nflat,nexp,nexp2]
 
     return pars,sub_funcs,total_pdf
 
