@@ -24,6 +24,9 @@ def main():
     parser.add_argument('--dump-grades', dest='dump_grades', action='store_true',
             default=False,
             help='Dump the grades for all the students.')
+    parser.add_argument('--gvis', dest='gvis', action='store_true',
+            default=False,
+            help='Dump output for the Google Motion Chart.')
     parser.add_argument('--password', dest='password', default=None, 
             help='Password for mail server.')
     parser.add_argument('--student', dest='student', default=None, type=int,
@@ -153,6 +156,7 @@ def main():
     ############################################################################
     for i,s in enumerate(students):
         averages, output = s.summary_output(final_grade_weighting)
+        gvis_output = s.gvis_output(final_grade_weighting)
 
         ########################################################################
         # For sending out the grades
@@ -184,6 +188,9 @@ def main():
             print s.email
             print msg_body
 
+        if args.gvis:
+            print gvis_output
+
         if args.password is not None:
             do_email = False
             if args.student is None:
@@ -201,7 +208,7 @@ def main():
     #exit()
 
     ############################################################################
-    # Start parsing the grades.
+    # Start plotting the grades.
     ############################################################################
     figs = []
     subplots = []
