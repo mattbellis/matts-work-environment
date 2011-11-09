@@ -197,6 +197,26 @@ class Student:
         return averages, ret
 
 
+    ############################################################################
+    def gvis_output(self,final_grade_weighting=[0.2,0.2,0.2,0.2,0.2]):
+
+        averages = [-1, -1, -1, -1, -1]
+        drop_lowest_score = True
+        picked_a_lowest = False
+        ret = ""
+        for g in self.grades.quizzes:
+            ret += "[\'%s %s\', " % (self.student_name[1], self.student_name[0])
+            ret += "new Date(%s,%d,%s)," % (g.date.split('/')[2], int(g.date.split('/')[0])-1, g.date.split('/')[1])
+            if drop_lowest_score==True:
+                if is_lowest_grade(self.grades.quizzes,g) and not picked_a_lowest:
+                    picked_a_lowest = True
+            avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
+            averages[0] = avg
+            ret += "%3.2f],\n" % (avg)
+
+
+        return ret
+
 
 
 ################################################################################
