@@ -146,7 +146,7 @@ def main():
     
     myset = RooArgSet()
     myset.add(x)
-    myset.add(t)
+    #myset.add(t)
     data_total = RooDataSet("data_total","data_total",myset)
     #data_acc_corr = RooDataSet("data_acc_corr","data_acc_corr",myset)
 
@@ -259,7 +259,10 @@ def main():
     # Grab the PDF 
     ############################################################################
 
-    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
+    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = multiple_gaussians(x,[10.0,10.5,10.1],[0.1,0.1,1.0],[1000,500,100],args.verbose)
+
+    for c in cogent_sub_funcs:
+        c.Print('V')
 
     # DEBUG
     if args.verbose:
@@ -321,7 +324,7 @@ def main():
 
     t.setBins(tbins)
     tframe_main = t.frame(RooFit.Title("Days since 12/4/2009"))
-    data.plotOn(tframe_main)
+    #data.plotOn(tframe_main)
 
     ########################################################################
     # Make a histogram where we correct the time projection of the data for the
@@ -365,75 +368,20 @@ def main():
     # Set some of the parameters before we start the fit.
     ############################################################################
 
-    cogent_pars_dict["nflat"].setVal(700.0)
-    cogent_pars_dict["nflat"].setConstant(False)
+    cogent_pars_dict["gauss_means_0"].setVal(10.45); cogent_pars_dict["gauss_means_0"].setConstant(False)
+    cogent_pars_dict["gauss_sigmas_0"].setVal(0.1); cogent_pars_dict["gauss_sigmas_0"].setConstant(False)
+    cogent_pars_dict["gauss_norms_0"].setVal(100.0); cogent_pars_dict["gauss_norms_0"].setConstant(False)
 
-    if not args.no_exp:
-        cogent_pars_dict["nexp"].setVal(525.0)
-        cogent_pars_dict["nexp"].setConstant(False)
+    cogent_pars_dict["gauss_means_1"].setVal(10.31); cogent_pars_dict["gauss_means_1"].setConstant(False)
+    cogent_pars_dict["gauss_sigmas_1"].setVal(0.1); cogent_pars_dict["gauss_sigmas_1"].setConstant(False)
+    cogent_pars_dict["gauss_norms_1"].setVal(100.0); cogent_pars_dict["gauss_norms_1"].setConstant(False)
 
-        cogent_pars_dict["exp_slope"].setVal(-4.5)
-        cogent_pars_dict["exp_slope"].setConstant(False)
-
-    if args.add_gc:
-        # Before freeing up the yields in the cosmogenic peaks, make
-        # sure that peak wasn't cut out by the energy cut.
-        for p in cogent_pars_dict:
-            if "cosmogenic_norms_" in p and not "cosmogenic_norms_calc" in p:
-                cogent_pars_dict[p].setConstant(False)
-            elif "cosmogenic_norms_calc" in p:
-                cogent_pars_dict[p].setConstant(True)
-        '''
-        cogent_pars_dict["cosmogenic_norms_1"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_2"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_3"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_4"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_5"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_6"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_7"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_8"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_9"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_10"].setConstant(False)
-        '''
+    cogent_pars_dict["gauss_means_2"].setVal(10.31); cogent_pars_dict["gauss_means_2"].setConstant(False)
+    cogent_pars_dict["gauss_sigmas_2"].setVal(1.00); cogent_pars_dict["gauss_sigmas_2"].setConstant(False)
+    cogent_pars_dict["gauss_norms_2"].setVal(100.0); cogent_pars_dict["gauss_norms_2"].setConstant(False)
 
     ########################################################################
 
-    # Fix the modulation to have an annual frequency.
-    yearly_mod = 2*pi/365.0
-    cogent_pars_dict["exp_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["exp_mod_frequency"].setConstant(True)
-    cogent_pars_dict["flat_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["flat_mod_frequency"].setConstant(True)
-    cogent_pars_dict["cg_mod_frequency"].setVal(yearly_mod); cogent_pars_dict["cg_mod_frequency"].setConstant(True)
-
-    # Let the exponential modulate: float phase offset and amplitude.
-    if args.exp_mod:
-        cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(False)
-        cogent_pars_dict["exp_mod_amp"].setVal(1.0); cogent_pars_dict["exp_mod_amp"].setConstant(False)
-    else:
-        cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(True)
-        cogent_pars_dict["exp_mod_amp"].setVal(0.0); cogent_pars_dict["exp_mod_amp"].setConstant(True)
-
-    # Let the flat modulate: float phase offset and amplitude.
-    if args.flat_mod:
-        cogent_pars_dict["flat_mod_phase"].setVal(0.0); cogent_pars_dict["flat_mod_phase"].setConstant(False)
-        cogent_pars_dict["flat_mod_amp"].setVal(1.0); cogent_pars_dict["flat_mod_amp"].setConstant(False)
-    else:
-        cogent_pars_dict["flat_mod_phase"].setVal(0.0); cogent_pars_dict["flat_mod_phase"].setConstant(True)
-        cogent_pars_dict["flat_mod_amp"].setVal(0.0); cogent_pars_dict["flat_mod_amp"].setConstant(True)
-
-    if args.cg_mod:
-        cogent_pars_dict["cg_mod_phase"].setVal(0.0); cogent_pars_dict["cg_mod_phase"].setConstant(False)
-        cogent_pars_dict["cg_mod_amp"].setVal(1.0); cogent_pars_dict["cg_mod_amp"].setConstant(False)
-    else:
-        cogent_pars_dict["cg_mod_phase"].setVal(0.0); cogent_pars_dict["cg_mod_phase"].setConstant(True)
-        cogent_pars_dict["cg_mod_amp"].setVal(0.0); cogent_pars_dict["cg_mod_amp"].setConstant(True)
-
-    # Add the 2nd exponential if necessary.
-    cogent_pars_dict["exp2_mod_phase"].setVal(0.0); cogent_pars_dict["exp2_mod_phase"].setConstant(True)
-    cogent_pars_dict["exp2_mod_amp"].setVal(0.0); cogent_pars_dict["exp2_mod_amp"].setConstant(True)
-    cogent_pars_dict["nexp2"].setVal(0.0); cogent_pars_dict["exp2_mod_amp"].setConstant(True)
-    if args.add_exp2:
-        cogent_pars_dict["nexp2"].setVal(100.0); cogent_pars_dict["nexp2"].setConstant(False)
-        cogent_pars_dict["exp2_slope"].setVal(-3.0); cogent_pars_dict["exp2_slope"].setConstant(True)
 
     #exit(-1)
     ############################################################################
@@ -447,6 +395,7 @@ def main():
     nllList = RooArgSet()
     temp_list = []
 
+    #exit(1)
     # Loop over the ranges and create a RooNLLVar for each.
     for i,r in enumerate(good_ranges):
 
@@ -494,8 +443,8 @@ def main():
         m = RooMinuit(nll)
 
         m.setVerbose(False)
-        #m.migrad()
-        #m.hesse()
+        m.migrad()
+        m.hesse()
         fit_results = m.save()
     else:
         # Set up and call fitTo()
@@ -513,8 +462,9 @@ def main():
     fit_norm_range_xplot = "FULL"
     fit_norm_range_tplot = "FULL"
 
+
     # Plot the total PDF
-    #cogent_fit_pdf.plotOn(xframe_main,RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
+    cogent_fit_pdf.plotOn(xframe_main,RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
     #cogent_fit_pdf.plotOn(tframe_main,RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
 
     # Plot the different components of the PDFs for the cosmogenic peaks.
@@ -527,7 +477,7 @@ def main():
         if "cg_" in s:
             line_width = 1; line_style = 2;  color = 46;
             plot_pdf = True
-        elif "cosmogenic_total" in s:
+        elif "gauss_pdf" in s:
             line_width = 2; line_style = 1;  color = 2;
             plot_pdf = True
         elif "flat_exp" in s and "exp_decay" not in s:
@@ -541,12 +491,10 @@ def main():
             plot_pdf = True
 
 
-        '''
         if plot_pdf:
             cogent_fit_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
-            cogent_fit_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
+            #cogent_fit_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
 
-        '''
     ########################################################################
     # Draw the frames onto the canvas.
     ########################################################################
@@ -674,6 +622,7 @@ def main():
     fit_results.Print("v")
     print "neg log likelihood: %f" % (fit_results.minNll())
 
+    '''
     # Dump the phase info
     days = 0.0
     for i in range(0,3):
@@ -698,6 +647,7 @@ def main():
         phase_peak = timedelta(days=int(days))
         phase_peak_date = start_date + phase_peak
         print phase_peak_date.strftime("\t\t%B %d, %Y")
+    '''
 
     ############################################################################
     # Keep the gui alive unless batch mode or we hit the appropriate key.

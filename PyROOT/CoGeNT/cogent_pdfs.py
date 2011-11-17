@@ -8,6 +8,66 @@ from ROOT import *
 ################################################################################
 # Build the PDFs for the cosmogenic peaks.
 ################################################################################
+def multiple_gaussians(x,means=[],sigmas=[],norms=[],verbose=False):
+
+    npeaks = len(means)
+    
+    if npeaks!=len(sigmas) or npeaks!=len(norms):
+        print "Different numbers of sigmas, means, and peaks!"
+        exit(-1)
+
+    gauss_means = []
+    gauss_sigmas = []
+    gauss_pdfs = []
+    gauss_norms = []
+
+    rooadd_string = ""
+    rooadd_funcs = RooArgList()
+    rooadd_norms = RooArgList()
+    rooadd_norms_calc = RooArgList()
+
+    for i in xrange(npeaks):
+
+        m = means[i]
+        s = sigmas[i]
+        n = norms[i]
+
+        ########################################################################
+        # Define the Gaussian peaks
+        ########################################################################
+        name = "gauss_means_%s" % (i)
+        gauss_means.append(RooRealVar(name,name,m,0.5,14.6))
+
+        name = "gauss_sigmas_%s" % (i)
+        gauss_sigmas.append(RooRealVar(name,name,s,0.0,1.0))
+
+        name = "gauss_pdfs_%s" % (i)
+        gauss_pdfs.append(RooGaussian(name,name,x,gauss_means[i],gauss_sigmas[i]))
+
+        name = "gauss_norms_%s" % (i)
+        gauss_norms.append(RooRealVar(name,name,n,0,100000))
+
+        if i==0:
+            rooadd_string = "%s" % (name)
+        else:
+            rooadd_string = "%s+%s" % (rooadd_string,name)
+
+        rooadd_funcs.add(gauss_pdfs[i])
+        rooadd_norms.add(gauss_norms[i])
+
+    total_gauss_pdf = RooAddPdf("total_gauss_pdf",rooadd_string,rooadd_funcs,rooadd_norms)
+
+    pars = gauss_means
+    pars += gauss_sigmas
+    pars += gauss_norms
+
+    sub_funcs = gauss_pdfs
+
+    return pars, sub_funcs, total_gauss_pdf
+
+################################################################################
+# Build the PDFs for the cosmogenic peaks.
+################################################################################
 def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
 
     ############################################################################
