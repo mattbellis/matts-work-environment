@@ -7,28 +7,31 @@ files = sys.argv[1:-1]
 if len(sys.argv)==2:
     files = [sys.argv[1]]
 for filename in files:
-    print filename
+    #print filename
     f = open(filename)
     x = json.load(f)
 
     # Dump the Types
-    print x.keys()
+    #print x.keys()
     mykey = "Types"
-    mykey = "Associations"
+    #mykey = "Associations"
     types = x[mykey]
     for t in types:
-        print t
+        #print t
         vals = x[mykey][t]
-        output = "%s\n" % (t)
+        output = "%s & &  \\\\ \n" % (t.replace('_','\_'))
         for val in vals:
             for v in val:
-                output += "\t%s"  % (v)
-            output += "\n"
+                output += " & \t%s"  % (v.replace('_','\_'))
+            output += " \\\\ \n"
+        output += " \\hline \n"
         print output
 
+    '''
     #jets = x["Collections"]["Jets_V1"]
     jets = x["Collections"]["BasicClusters_V1"]
     total = 0
     for j in jets:
         total += j[0]
         print total
+    '''
