@@ -131,11 +131,11 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
     for i,p in enumerate(cosmogenic_data_dict):
 
         # L-shell peaks
-        #mean = cosmogenic_data_dict[p][5]
-        #sigma = cosmogenic_data_dict[p][6]
+        mean = cosmogenic_data_dict[p][5]
+        sigma = cosmogenic_data_dict[p][6]
         # K-shell peaks
-        mean = cosmogenic_data_dict[p][9]
-        sigma = 1.5*cosmogenic_data_dict[p][6]
+        #mean = cosmogenic_data_dict[p][9]
+        #sigma = 1.5*cosmogenic_data_dict[p][6]
 
         half_life = cosmogenic_data_dict[p][7]
         #half_life = 2.0
@@ -149,9 +149,9 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
         # the end of time. So compensate for the number of days running.
         ########################################################################
         # L-shell peaks
-        #num_tot_decays = cosmogenic_data_dict[p][4]
+        num_tot_decays = cosmogenic_data_dict[p][4]
         # K-shell peaks
-        num_tot_decays = cosmogenic_data_dict[p][0]
+        #num_tot_decays = cosmogenic_data_dict[p][0]
 
         norm = num_tot_decays*(1.0-exp(num_days*decay_constant))
 
