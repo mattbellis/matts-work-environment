@@ -56,8 +56,11 @@ n = 0
 masses = []
 masses_inv = []
 masses_mm = []
+flight_length = []
+vtx = [0.0,0.0,0.0]
 count = 0
 beam = None
+nvtx = 0
 for line in infile:
     vals = line.split()
     if len(vals)==1:
@@ -78,10 +81,12 @@ for line in infile:
             mass = mass_k
         elif n==1:
             #mass = mass_e
-            mass = mass_k
+            #mass = mass_k
+            mass = mass_p
         elif n==2:
             #mass = mass_k
-            mass = mass_e
+            #mass = mass_e
+            mass = mass_pi
         energy = sqrt(mass*mass + pmag*pmag)
 
         p[n] = np.insert(v3,[0],energy)
@@ -100,20 +105,35 @@ for line in infile:
 
             n=0
             count +=1 
-            if count > 10000000:
+            if count > 10000:
                 break
 
-        #print n
-        #print p
+    elif len(vals)==3:
+
+        x = [float(vals[0]),float(vals[1]),float(vals[2])]
+        v3 = np.array(x)
+
+        vtx[nvtx] = v3
+
+        nvtx += 1
+
+        if nvtx>=3:
+            ############ Do some calculations #######################
+            flight_length.append(magnitude_of_3vec(vtx[0]-vtx[1]))
+
+            nvtx = 0
+
 
 #print masses
 #plt.hist(masses_inv,200,range=(1.0,1.2),histtype='stepfilled')
 #plt.hist(masses_mm,200,range=(1.0,1.2),histtype='stepfilled',alpha=0.5)
 
-H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.0,1.2],[1.0,1.2]])
-extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
-plt.imshow(H,extent=extent,interpolation='nearest',origin='lower')
-plt.colorbar()
+#H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.0,1.2],[1.0,1.2]])
+#extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
+#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower')
+#plt.colorbar()
+
+plt.hist(flight_length,100,range=(0.0,50.0),histtype='stepfilled',alpha=1.0)
 
 plt.show()
 
