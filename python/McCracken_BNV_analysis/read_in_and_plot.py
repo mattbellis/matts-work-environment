@@ -105,7 +105,7 @@ for line in infile:
 
             n=0
             count +=1 
-            if count > 10000:
+            if count > 10000000:
                 break
 
     elif len(vals)==3:
@@ -128,12 +128,16 @@ for line in infile:
 #plt.hist(masses_inv,200,range=(1.0,1.2),histtype='stepfilled')
 #plt.hist(masses_mm,200,range=(1.0,1.2),histtype='stepfilled',alpha=0.5)
 
-#H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.0,1.2],[1.0,1.2]])
-#extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
-#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower')
-#plt.colorbar()
+#plt.cm.coolwarm
+#plt.cool()
+H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.10,1.15],[1.10,1.15]])
+extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
+#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.Spectral)
+#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.seismic)
+plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.coolwarm)
+plt.colorbar()
 
-plt.hist(flight_length,100,range=(0.0,50.0),histtype='stepfilled',alpha=1.0)
+#plt.hist(flight_length,100,range=(0.0,50.0),histtype='stepfilled',alpha=1.0)
 
 plt.show()
 
