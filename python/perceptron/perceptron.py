@@ -4,7 +4,7 @@ class Perceptron:
     def __init__(self):
         """ perceptron initialization """
         self.w = rand(2)*2-1 # weights
-        self.learningRate = 0.1
+        self.learningRate = 0.01
 
     def response(self,x):
         """ perceptron output """
@@ -34,6 +34,7 @@ class Perceptron:
         iteration = 0
         while not learned:
             globalError = 0.0
+            print self.w
             for x in data: # for each sample
                 r = self.response(x)    
                 if x[2] != r: # if we have a wrong response
