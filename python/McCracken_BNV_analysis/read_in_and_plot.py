@@ -45,9 +45,9 @@ def mass_from_special_relativity(v4):
 infile = open(sys.argv[1])
 
 mass_e = 0.000511
-mass_pi = 0.139
-mass_k = 0.494
-mass_p = 0.938
+mass_pi = 0.139570
+mass_k = 0.493677
+mass_p = 0.938272
 
 target = np.array([mass_p,0.0,0.0,0.0])
 
@@ -81,12 +81,12 @@ for line in infile:
             mass = mass_k
         elif n==1:
             #mass = mass_e
-            #mass = mass_k
-            mass = mass_p
+            mass = mass_k
+            #mass = mass_p
         elif n==2:
             #mass = mass_k
-            #mass = mass_e
-            mass = mass_pi
+            mass = mass_e
+            #mass = mass_pi
         energy = sqrt(mass*mass + pmag*pmag)
 
         p[n] = np.insert(v3,[0],energy)
@@ -105,7 +105,7 @@ for line in infile:
 
             n=0
             count +=1 
-            if count > 10000000:
+            if count > 1000000:
                 break
 
     elif len(vals)==3:
@@ -125,17 +125,18 @@ for line in infile:
 
 
 #print masses
-#plt.hist(masses_inv,200,range=(1.0,1.2),histtype='stepfilled')
-#plt.hist(masses_mm,200,range=(1.0,1.2),histtype='stepfilled',alpha=0.5)
+h1 = plt.hist(masses_inv,200,range=(1.0,1.20),histtype='stepfilled',color='grey')
+h2 = plt.hist(masses_mm,200,range=(1.0,1.20),histtype='stepfilled',color='red',alpha=0.5)
+leg1 = plt.legend(('Invariant mass','Missing mass'),loc='upper right')
+#plt.legend([h2],["Missing mass off K"])
 
-#plt.cm.coolwarm
-#plt.cool()
-H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.10,1.15],[1.10,1.15]])
-extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
-#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.Spectral)
-#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.seismic)
-plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.coolwarm)
-plt.colorbar()
+##H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.10,1.15],[1.10,1.15]])
+#H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.00,1.50],[1.00,1.50]])
+#extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
+##plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.Spectral)
+##plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.seismic)
+#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.coolwarm)
+#plt.colorbar()
 
 #plt.hist(flight_length,100,range=(0.0,50.0),histtype='stepfilled',alpha=1.0)
 
