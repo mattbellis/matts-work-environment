@@ -11,9 +11,9 @@ import matplotlib.pyplot as plt
 ################################################################################
 def magnitude_of_3vec(v3):
 
-        magnitude = sqrt(v3[0]*v3[0] + v3[1]*v3[1] + v3[2]*v3[2])
+    magnitude = sqrt(v3[0]*v3[0] + v3[1]*v3[1] + v3[2]*v3[2])
 
-        return magnitude
+    return magnitude
 
 ################################################################################
 # Calculate the mass of a particle using Classical Physics
@@ -49,49 +49,71 @@ mass_pi = 0.139
 mass_k = 0.494
 mass_p = 0.938
 
+target = np.array([mass_p,0.0,0.0,0.0])
+
 p = [0.0, 0.0, 0.0, 0.0, 0.0]
 n = 0
 masses = []
+masses_inv = []
+masses_mm = []
 count = 0
+beam = None
 for line in infile:
     vals = line.split()
-    if len(vals)==5:
+    if len(vals)==1:
+
+        beam_e = float(vals[0])
+        beam = np.array([beam_e, 0.0, 0.0, beam_e])
+
+    elif len(vals)==5:
         #print vals
 
-        vec3 = [float(vals[0]),float(vals[1]),float(vals[2])]
+        #v3 = [float(vals[0]),float(vals[1]),float(vals[2])]
+        x = [float(vals[0]),float(vals[1]),float(vals[2])]
+        v3 = np.array(x)
 
         energy = 0
-        pmag = magnitude_of_3vec(vec3)
+        pmag = magnitude_of_3vec(v3)
         if n==0:
             mass = mass_k
         elif n==1:
-            mass = mass_pi
+            #mass = mass_e
+            mass = mass_k
         elif n==2:
+            #mass = mass_k
             mass = mass_e
         energy = sqrt(mass*mass + pmag*pmag)
 
-        p[n] = [energy] + vec3
+        p[n] = np.insert(v3,[0],energy)
+        #print p[n]
         #print p[n]
 
         n += 1
 
         if n>=3:
             ############ Do some calculations #######################
-            #mass.append(mass_from_special_relativity(p[3],p[4]))
-            p4 = map(sum, zip(p[1],p[2]))
-            #p4 = p[0]
-            #print mass_from_special_relativity(p4)
-            masses.append(mass_from_special_relativity(p4))
+            p4 = beam + target - p[0]
+            masses_mm.append(mass_from_special_relativity(p4))
+
+            p4 = p[1]+p[2]
+            masses_inv.append(mass_from_special_relativity(p4))
 
             n=0
             count +=1 
-            if count > 100000:
+            if count > 10000000:
                 break
 
         #print n
         #print p
 
 #print masses
-plt.hist(masses,100,range=(0.0,2.0),histtype='stepfilled')
+#plt.hist(masses_inv,200,range=(1.0,1.2),histtype='stepfilled')
+#plt.hist(masses_mm,200,range=(1.0,1.2),histtype='stepfilled',alpha=0.5)
+
+H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.0,1.2],[1.0,1.2]])
+extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
+plt.imshow(H,extent=extent,interpolation='nearest',origin='lower')
+plt.colorbar()
+
 plt.show()
 
