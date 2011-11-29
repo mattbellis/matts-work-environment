@@ -125,18 +125,18 @@ for line in infile:
 
 
 #print masses
-h1 = plt.hist(masses_inv,200,range=(1.0,1.20),histtype='stepfilled',color='grey')
-h2 = plt.hist(masses_mm,200,range=(1.0,1.20),histtype='stepfilled',color='red',alpha=0.5)
-leg1 = plt.legend(('Invariant mass','Missing mass'),loc='upper right')
+#h1 = plt.hist(masses_inv,200,range=(1.0,1.20),histtype='stepfilled',color='grey')
+#h2 = plt.hist(masses_mm,200,range=(1.0,1.20),histtype='stepfilled',color='red',alpha=0.5)
+#leg1 = plt.legend(('Invariant mass','Missing mass'),loc='upper right')
 #plt.legend([h2],["Missing mass off K"])
 
-##H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.10,1.15],[1.10,1.15]])
-#H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.00,1.50],[1.00,1.50]])
-#extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
-##plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.Spectral)
-##plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.seismic)
-#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.coolwarm)
-#plt.colorbar()
+#H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.10,1.15],[1.10,1.15]])
+H,xedges,yedges = np.histogram2d(masses_mm,masses_inv,bins=100,range=[[1.00,1.50],[1.00,1.50]])
+extent = [xedges[0], xedges[-1], yedges[0], yedges[-1] ]
+#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.Spectral)
+#plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.seismic)
+plt.imshow(H,extent=extent,interpolation='nearest',origin='lower',cmap=plt.cm.coolwarm)
+plt.colorbar()
 
 #plt.hist(flight_length,100,range=(0.0,50.0),histtype='stepfilled',alpha=1.0)
 
