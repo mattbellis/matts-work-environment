@@ -71,7 +71,7 @@ Mod1 F3 :Exec iceweasel
 Mod1 F4 :Exec mrxvt -font a14 -geometry 140x20 -T "alsamixer" -e alsamixer -V all
 #Mod1 F5 :Exec gkrellm
 Mod1 F5 :Exec conky
-Mod1 F6 :Exec skype
+Mod1 F6 :Exec qasmixer
 
 # open a dialog to run programs
 Mod1 F2 :Exec fbrun
