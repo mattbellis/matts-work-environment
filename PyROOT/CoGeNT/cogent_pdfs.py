@@ -157,8 +157,8 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
 
         # Check to see if the the low range of the energy has shifted. If so, 
         # we need to compensate for the truncation of the PDF (Gaussian)
-        #if e_lo is not None:
-        if False:
+        #if False:
+        if e_lo is not None:
             func = "Gaus(x,%f,%f)" % (mean, sigma)
             g = TF1("Test Gaussian",func,0,3.0)
             frac = g.Integral(e_lo,3.0)/g.Integral(0.0,3.0)
