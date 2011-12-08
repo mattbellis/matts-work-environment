@@ -192,6 +192,15 @@ class Student:
         averages[3] = avg
         ret += "\tExam 2  : %4.2f\n" % (avg)
 
+        # Final Exam 
+        drop_lowest_score = False
+        ret += " -----\nFinal exam\n -----\n"
+        for g in self.grades.final_exam:
+            ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+        avg = calc_average_of_grades(self.grades.final_exam, drop_lowest_score)
+        averages[4] = avg
+        ret += "\tFinal exam  : %4.2f\n" % (avg)
+
         tot = 0.0
         tot_wt = 0.0
         for g,w in zip(averages,final_grade_weighting):

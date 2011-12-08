@@ -3,6 +3,8 @@
 
 /* function to swap array elements */
 
+using namespace std;
+
 void swap (int v[], int i, int j) {
   int t;
 

@@ -230,7 +230,7 @@ def main():
             amplitude = float(vals[1])
 
             # Convert the amplitude to an energy using a particular calibration.
-            energy = amp_to_energy(amplitude,2)
+            energy = amp_to_energy(amplitude,0)
 
             # Convert the time in seconds to a day.
             time_days = (t_sec-first_event)/(24.0*3600.0) + 1.0
@@ -460,6 +460,7 @@ def main():
         
         # DEBUG
         if args.verbose:
+            print "Printing nllList()"
             nllList.Print("v")
 
     # Add in the Gaussian constraint
@@ -482,10 +483,10 @@ def main():
 
     # DEBUG
     if args.verbose:
+        print "Printing nll"
         nll.Print("v")
 
     fit_results = None
-
 
     # Call the fitting routine, based on our command line options.
     if not args.use_fitto:
@@ -494,8 +495,8 @@ def main():
         m = RooMinuit(nll)
 
         m.setVerbose(False)
-        #m.migrad()
-        #m.hesse()
+        m.migrad()
+        m.hesse()
         fit_results = m.save()
     else:
         # Set up and call fitTo()

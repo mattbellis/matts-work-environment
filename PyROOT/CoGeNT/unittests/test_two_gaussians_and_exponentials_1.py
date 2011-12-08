@@ -46,6 +46,9 @@ n1 = RooRealVar("n1","n1",500)
 n2 = RooRealVar("n2","n2",1000)
 
 total = RooAddPdf("total","total",RooArgList(prod0,prod1,decay_x),RooArgList(n0,n1,n2))
+ 
+#nsig = RooRealVar("nsig","nsig",200,0,6000)
+#total1 = RooExtendPdf("total1","total1",total)
 
 x.setBins(50)
 t.setBins(50)
