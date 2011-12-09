@@ -145,16 +145,16 @@ class Student:
         ret += "%s %s\n" % (self.student_name[1], self.student_name[0])
 
         # Quizzes
-        ret += " -----\nQuizzes\n -----\n"
+        #ret += " -----\nQuizzes\n -----\n"
         drop_lowest_score = True
         picked_a_lowest = False
         for g in self.grades.quizzes:
-            ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+            #ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.quizzes,g) and not picked_a_lowest:
-                    ret += "\tlowest score, will not be counted in average."
+                    #ret += "\tlowest score, will not be counted in average."
                     picked_a_lowest = True
-            ret += "\n"
+            #ret += "\n"
         avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
         averages[0] = avg
         ret += "\tQuiz avg: %4.2f\n" % (avg)
@@ -162,41 +162,44 @@ class Student:
         # HW
         drop_lowest_score = True
         picked_a_lowest = False
-        ret += " -----\nHomeworks\n -----\n"
+        #ret += " -----\nHomeworks\n -----\n"
         for g in self.grades.hw:
-            ret +=  "%-7s   %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+            #ret +=  "%-7s   %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.hw,g) and not picked_a_lowest:
-                    ret += "\tlowest score, will not be counted in average."
+                    #ret += "\tlowest score, will not be counted in average."
                     picked_a_lowest = True
-            ret += "\n"
+            #ret += "\n"
         avg = calc_average_of_grades(self.grades.hw, drop_lowest_score)
         averages[1] = avg
         ret += "\tHW   avg: %4.2f\n" % (avg)
 
         # Exam 1 
         drop_lowest_score = False
-        ret += " -----\nExam 1\n -----\n"
+        #ret += " -----\nExam 1\n -----\n"
         for g in self.grades.exam1:
-            ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+            1
+            #ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
         avg = calc_average_of_grades(self.grades.exam1, drop_lowest_score)
         averages[2] = avg
         ret += "\tExam 1  : %4.2f\n" % (avg)
 
         # Exam 2 
         drop_lowest_score = False
-        ret += " -----\nExam 2\n -----\n"
+        #ret += " -----\nExam 2\n -----\n"
         for g in self.grades.exam2:
-            ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+            #ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+            1
         avg = calc_average_of_grades(self.grades.exam2, drop_lowest_score)
         averages[3] = avg
         ret += "\tExam 2  : %4.2f\n" % (avg)
 
         # Final Exam 
         drop_lowest_score = False
-        ret += " -----\nFinal exam\n -----\n"
+        #ret += " -----\nFinal exam\n -----\n"
         for g in self.grades.final_exam:
-            ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
+            1
+            #ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
         avg = calc_average_of_grades(self.grades.final_exam, drop_lowest_score)
         averages[4] = avg
         ret += "\tFinal exam  : %4.2f\n" % (avg)
