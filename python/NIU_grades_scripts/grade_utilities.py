@@ -138,7 +138,7 @@ class Student:
         self.email = email
         self.grades = grades
 
-    def summary_output(self,final_grade_weighting=[0.2,0.2,0.2,0.2,0.2]):
+    def summary_output(self,final_grade_weighting=[0.2,0.2,0.2,0.2,0.2],summarize=False):
 
         averages = [-1, -1, -1, -1, -1]
         ret = "-----------------------------------\n"
