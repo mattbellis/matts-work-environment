@@ -30,6 +30,8 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('input_file_name', type=str, default=None, 
             help='Input file name')
+    parser.add_argument('--calib', dest='calib', type=int,
+            default=0, help='Which calibration to use (0,1,2)')
     parser.add_argument('--add-gc', dest='add_gc', action='store_true', 
             default=False, help='Add a Gaussian constraint for the \
             uncertainties on the number of events in each cosmogenic peak.')
@@ -230,7 +232,7 @@ def main():
             amplitude = float(vals[1])
 
             # Convert the amplitude to an energy using a particular calibration.
-            energy = amp_to_energy(amplitude,2)
+            energy = amp_to_energy(amplitude,args.calib)
 
             # Convert the time in seconds to a day.
             time_days = (t_sec-first_event)/(24.0*3600.0) + 1.0
@@ -357,7 +359,8 @@ def main():
     for i in range(0,1):
 
         name = "cans%d" % (i)
-        cans.append(TCanvas(name,name,100,100,1400,600))
+        #cans.append(TCanvas(name,name,100,100,1400,600))
+        cans.append(TCanvas(name,name,1,1,1200,550))
         cans[i].SetFillColor(0)
         cans[i].Divide(2,1)
 
@@ -432,7 +435,8 @@ def main():
     cogent_pars_dict["exp2_mod_amp"].setVal(0.0); cogent_pars_dict["exp2_mod_amp"].setConstant(True)
     cogent_pars_dict["nexp2"].setVal(0.0); cogent_pars_dict["exp2_mod_amp"].setConstant(True)
     if args.add_exp2:
-        cogent_pars_dict["nexp2"].setVal(100.0); cogent_pars_dict["nexp2"].setConstant(False)
+        #cogent_pars_dict["nexp2"].setVal(600.0); cogent_pars_dict["nexp2"].setConstant(False)
+        cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
         cogent_pars_dict["exp2_slope"].setVal(-3.0); cogent_pars_dict["exp2_slope"].setConstant(True)
 
     #exit(-1)
@@ -460,6 +464,7 @@ def main():
         
         # DEBUG
         if args.verbose:
+            print "Printing nllList()"
             nllList.Print("v")
 
     # Add in the Gaussian constraint
@@ -482,10 +487,10 @@ def main():
 
     # DEBUG
     if args.verbose:
+        print "Printing nll"
         nll.Print("v")
 
     fit_results = None
-
 
     # Call the fitting routine, based on our command line options.
     if not args.use_fitto:

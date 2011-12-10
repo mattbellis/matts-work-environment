@@ -87,7 +87,7 @@ def main():
                     g.set_grade_index(i)
 
                 elif r=='Final Exam' or r=='final exam' or r=='Final exam':
-                    g = Grade_file_info("final")
+                    g = Grade_file_info("final_exam")
                     g.set_grade_index(i)
 
                 if g is not None:
