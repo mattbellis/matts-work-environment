@@ -499,8 +499,8 @@ def main():
         m = RooMinuit(nll)
 
         m.setVerbose(False)
-        #m.migrad()
-        #m.hesse()
+        m.migrad()
+        m.hesse()
         fit_results = m.save()
     else:
         # Set up and call fitTo()
