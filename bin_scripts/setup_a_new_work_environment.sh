@@ -10,6 +10,7 @@ rm -rf .mrxvtrc
 rm -rf .vimrc
 rm -rf .hgrc
 rm -rf .conkyrc
+rm -rf proxy.pac
 
 ######### Link files ############
 ln -s matts-work-environment/environment_configs/cshrc .cshrc
@@ -20,5 +21,6 @@ ln -s matts-work-environment/environment_configs/mrxvtrc .mrxvtrc
 ln -s matts-work-environment/environment_configs/vimrc .vimrc
 ln -s matts-work-environment/environment_configs/hgrc .hgrc
 ln -s matts-work-environment/environment_configs/conkyrc .conkyrc
+ln -s matts-work-environment/environment_configs/proxy.pac proxy.pac
 
 
