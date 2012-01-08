@@ -26,7 +26,7 @@ for i,word in enumerate(words):
         ap.append(words[i+4])
 
     if "Channel:" in word:
-        print word
+        #print word
         channel.append(word.split(":")[1].strip())
 
     if "ESSID" in word:
@@ -39,11 +39,11 @@ for i,word in enumerate(words):
         strength.append(word.split("=")[1].strip())
 
 nsignals = len(cell)
-print cell
-print essid
-print strength
-print ap
-print encryption
+#print cell
+#print essid
+#print strength
+#print ap
+#print encryption
 
 for i in range(0,nsignals):
     output = "%d\t%20s\t%s\t%s\t%s\t%s" % (i,essid[i],strength[i],ap[i],encryption[i],channel[i])
