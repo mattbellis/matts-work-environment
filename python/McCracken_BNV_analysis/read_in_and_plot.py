@@ -97,6 +97,7 @@ for line in infile:
 
         if n>=3:
             ############ Do some calculations #######################
+            print beam
             p4 = beam + target - p[0]
             masses_mm.append(mass_from_special_relativity(p4))
 
