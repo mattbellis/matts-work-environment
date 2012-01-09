@@ -23,6 +23,17 @@ count = 0
 beam = None
 nvtx = 0
 output = ""
+v3 = [0.0, 0.0, 0.0]
+
+'''
+masses = [[mass_k,mass_p,mass_pi],
+          [mass_p,mass_k,mass_pi]]
+'''
+
+masses = [[mass_k,mass_e,mass_k],
+          [mass_e,mass_k,mass_k]]
+
+
 for line in infile:
     vals = line.split()
     if len(vals)==2:
@@ -33,46 +44,42 @@ for line in infile:
     elif len(vals)==5:
         #print vals
 
-        #v3 = [float(vals[0]),float(vals[1]),float(vals[2])]
         x = [float(vals[0]),float(vals[1]),float(vals[2])]
-        v3 = np.array(x)
-
-        energy = 0
-        pmag = magnitude_of_3vec(v3)
-        if n==0:
-            mass = mass_k
-        elif n==1:
-            #mass = mass_e
-            #mass = mass_k
-            mass = mass_p
-        elif n==2:
-            #mass = mass_k
-            #mass = mass_e
-            mass = mass_pi
-        energy = sqrt(mass*mass + pmag*pmag)
-
-        p[n] = np.insert(v3,[0],energy)
+        v3[n] = np.array(x)
 
         n += 1
 
         if n>=3:
+
             ############ Do some calculations #######################
-            p4 = beam + target - p[0] - p[1] - p[2]
-            output += "%f," % (mass_from_special_relativity(p4))
+            for j in xrange(2):
 
-            # Assuming first + particle is a kaon
-            p4 = beam + target - p[0]
-            output += "%f," % (mass_from_special_relativity(p4))
+                #### Go through the two mass hypothesis.
+                for i,mass in enumerate(masses[j]):
 
-            p4 = p[1]+p[2]
-            output += "%f," % (mass_from_special_relativity(p4))
+                    pmag = magnitude_of_3vec(v3[i])
+                    energy = sqrt(mass*mass + pmag*pmag)
+                    p[i] = np.insert(v3[i],[0],energy)
 
-            # Assuming second + particle is a kaon
-            p4 = beam + target - p[1]
-            output += "%f," % (mass_from_special_relativity(p4))
+                ##### Missing mass
+                p4 = beam + target - p[0] - p[1] - p[2]
+                output += "%f," % (mass_from_special_relativity(p4))
 
-            p4 = p[0]+p[2]
-            output += "%f," % (mass_from_special_relativity(p4))
+                # Assuming first + particle is a kaon
+                if j==0:
+                    p4 = beam + target - p[0]
+                    output += "%f," % (mass_from_special_relativity(p4))
+
+                    p4 = p[1]+p[2]
+                    output += "%f," % (mass_from_special_relativity(p4))
+
+                # Assuming second + particle is a kaon
+                elif j==1:
+                    p4 = beam + target - p[1]
+                    output += "%f," % (mass_from_special_relativity(p4))
+
+                    p4 = p[0]+p[2]
+                    output += "%f," % (mass_from_special_relativity(p4))
 
             n=0
             count +=1 
@@ -84,9 +91,9 @@ for line in infile:
     elif len(vals)==3:
 
         x = [float(vals[0]),float(vals[1]),float(vals[2])]
-        v3 = np.array(x)
+        v3vtx = np.array(x)
 
-        vtx[nvtx] = v3
+        vtx[nvtx] = v3vtx
 
         nvtx += 1
 
