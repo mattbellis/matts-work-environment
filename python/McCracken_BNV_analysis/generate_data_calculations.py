@@ -85,7 +85,7 @@ for line in infile:
             count +=1 
             if count%10000==0:
                 print count
-            if count > 1000000:
+            if count > 10000:
                 break
 
     elif len(vals)==3:
@@ -99,7 +99,8 @@ for line in infile:
 
         if nvtx>=4:
             ############ Do some calculations #######################
-            output += "%f\n" % (magnitude_of_3vec(vtx[0]-vtx[1]))
+            output += "%f," % (magnitude_of_3vec(vtx[0]-vtx[2]))
+            output += "%f\n" % (magnitude_of_3vec(vtx[1]-vtx[3]))
 
             nvtx = 0
             outfile.write(output)
