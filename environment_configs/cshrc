@@ -34,3 +34,8 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/local/cuda/lib
 
 # For my beamer stuff
 setenv MY_BEAMER_THEMES ${HOME}/Talks/my_beamer_themes
+
+# For CUDA
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu/
+setenv CUDA_INSTALL_PATH /usr/
+

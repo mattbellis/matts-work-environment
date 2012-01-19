@@ -2,8 +2,8 @@
 
 set sides = $1
 
-#set printer = 'nicadd_color'
-set printer = 'nicadd_office'
+set printer = 'nicadd_color'
+#set printer = 'nicadd_office'
 
 if ( $sides == 'double' || $sides == 'single' ) then
     echo "Printing..."
