@@ -39,7 +39,8 @@ for line in infile:
     # We then add the first value for each line to our ``x" list.
     # Note that we are telling the program to add the value as a ``float", which
     # is just a way that Python stores some numbers.
-    x.append(float(values[0]))
+    if len(values)>=1: # Check that the line is not empty.
+        x.append(float(values[0]))
 
 ################################################################################
 # Finished reading in the values
