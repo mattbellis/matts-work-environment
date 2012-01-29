@@ -40,3 +40,41 @@ def neutron_decay(outfilename, index=0):
 
 
 
+################################################################################
+def neutron_decay_quark_lines(outfilename, index=0):
+  from pyfeyn.user import *
+
+  processOptions()
+  fd = FeynDiagram()
+
+  define_border = []
+  for item in corners:
+    define_border.append(Circle(center=item, radius=0.01, stroke=[color.rgb.black], fill=[color.rgb.black]))
+  ###############
+
+  in1 = Point(-3, -2)
+  in2 = Point(-3, -1.5)
+  in3 = Point(-3, -1)
+  out1 = Point(3, -2)
+  out2 = Point(3, -1.5)
+  out3 = Point(3, -1)
+
+  w_start = Vertex(0, -1, mark=CIRCLE)
+  w_decay = Vertex(1.5, 1, mark=CIRCLE)
+
+  #c1 = Circle(center=w_start, radius=0.2, fill=[pyx.color.cmyk.Yellow], points = [w_start])
+  #c2 = Circle(center=w_decay, radius=0.2, fill=[pyx.color.rgb.green], points = [w_decay])
+
+  decay1 = Point(3,1)
+  decay2 = Point(3,2)
+
+  fa1 = Fermion(in1, out1).addLabel(r"$d$", pos=-0.05, displace=0.01).addLabel(r"$u$", pos=1.05, displace=0.00)
+  fa2 = Fermion(in2, out2).addLabel(r"$d$", pos=-0.05, displace=0.01).addLabel(r"$d$", pos=1.05, displace=0.00)
+  fa3 = Fermion(in3, out3).addLabel(r"$u$", pos=-0.05, displace=0.01).addLabel(r"$u$", pos=1.05, displace=0.00)
+
+  fx  = Photon(w_start, w_decay).addLabel(r"X", pos=0.70 , displace=-0.16)
+  fx_decay2  = Fermion(w_decay, decay2).addLabel(r"\Pep", pos=1.28, displace=0.02)
+
+
+  name = "%s_%d.pdf" % (outfilename,index)
+  fd.draw(name)
