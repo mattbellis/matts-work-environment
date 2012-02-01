@@ -9,6 +9,12 @@ for i in range(0,1):
     neutron_decay(name,i)
 '''
 
-for i in range(0,1):
-    name = "neutron_decay_quark_lines_%s_%d" % (tag,i)
+'''
+for i in range(0,3):
+    name = "neutron_decay_quark_lines_%s" % (tag)
     neutron_decay_quark_lines(name,i)
+'''
+    
+for i in range(0,3):
+    name = "antineutron_decay_quark_lines_%s" % (tag)
+    antineutron_decay_quark_lines(name,i)
