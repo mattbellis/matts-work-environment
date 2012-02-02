@@ -29,10 +29,10 @@ def baryon(outfilename, option=0):
   y0 = -3.0
 
   n_str = []
-  n_str.append(['p',['qu','qu','qd']])
-  n_str.append(['n',['qu','qd','qd']])
-  n_str.append(['gL',['qu','qd','qs']])
-  n_str.append(['cgLp',['qu','qd','qc']])
+  n_str.append(['{\Huge $p$}',['\\textcolor{black}{\Large $u$}','\\textcolor{black}{\Large $u$}','\\textcolor{black}{\Large $d$}']])
+  n_str.append(['{\Huge $n$}',['\\textcolor{black}{\Large $u$}','\\textcolor{black}{\Large $d$}','\\textcolor{black}{\Large $d$}']])
+  n_str.append(['{\Huge $\Lambda$}',['\\textcolor{black}{\Large $u$}','\\textcolor{black}{\Large $d$}','\\textcolor{black}{\Large $s$}']])
+  n_str.append(['{\Huge $\Lambda_c^+$}',['\\textcolor{black}{\Large $u$}','\\textcolor{black}{\Large $d$}','\\textcolor{black}{\Large $c$}']])
 
 
 
@@ -58,7 +58,10 @@ def baryon(outfilename, option=0):
       n_x.append(x0+n_dis[i]*cos(a))
       n_y.append(y0+n_dis[i]*sin(a))
       n_pt = Point(n_x[i],n_y[i])
-      nucleons.append(Circle(center=n_pt, radius=n_r[i], fill=[GREY]).addLabel(r"\P"+n_str[i][0],displace=n_r[i]+0.3,angle=0,size=pyx.text.size.Large))
+      if i<3:
+          nucleons.append(Circle(center=n_pt, radius=n_r[i], fill=[GREY]).addLabel(r""+n_str[i][0],displace=n_r[i]+0.3,angle=0,size=pyx.text.size.Large))
+      else:
+          nucleons.append(Circle(center=n_pt, radius=n_r[i], fill=[GREY]).addLabel(r""+n_str[i][0],displace=2.2,angle=0,size=pyx.text.size.Large))
 
       # Quarks
       x = n_x[i]
@@ -70,9 +73,9 @@ def baryon(outfilename, option=0):
           qy = y + q_dis[i][j]*sin(a)
           q_pt = Point(qx,qy)
           if option>=0:
-              #q.append(Circle(center=q_pt, radius=0.3, fill=[q_color[j]]).addLabel(r"\Pq",displace=0.01,size=pyx.text.size.Large))
+              #q.append(Circle(center=q_pt, radius=0.3, fill=[q_color[j]]).addLabel(r"q",displace=0.01,size=pyx.text.size.Large))
               print n_str[i][1][j]
-              q.append(Circle(center=q_pt, radius=q_rad[i][j], fill=[q_color[j]]).addLabel(r"\P"+n_str[i][1][j],displace=0.01,size=pyx.text.size.Large))
+              q.append(Circle(center=q_pt, radius=q_rad[i][j], fill=[q_color[j]]).addLabel(r""+n_str[i][1][j],displace=0.01,size=pyx.text.size.Large))
       
 
   outfilename = "%s_%d.pdf" % (outfilename,option)
@@ -101,10 +104,10 @@ def meson(outfilename, option=0):
   y0 = -3.0
 
   n_str = []
-  n_str.append(['{\Huge $\pi^+$}',['{\Large $u$}','{\Large $\\bar{d}$}']])
-  n_str.append(['{\Huge $\pi^+$}',['{\Large $d$}','{\Large $\\bar{u}$}']])
-  n_str.append(['{\Huge $J/\psi$}',['{\Large $c$}','{\Large $\\bar{c}$}']])
-  n_str.append(['{\Huge $B^-$}',['{\Large $b$}','{\Large $\\bar{d}$}']])
+  n_str.append(['{\Huge $\pi^+$}',['\\textcolor{black}{\Large $u$}','{\Large $\\bar{d}$}']])
+  n_str.append(['{\Huge $\pi^+$}',['\\textcolor{black}{\Large $d$}','{\Large $\\bar{u}$}']])
+  n_str.append(['{\Huge $J/\psi$}',['\\textcolor{black}{\Large $c$}','{\Large $\\bar{c}$}']])
+  n_str.append(['{\Huge $B^-$}',['\\textcolor{black}{\Large $b$}','{\Large $\\bar{d}$}']])
 
 
 
