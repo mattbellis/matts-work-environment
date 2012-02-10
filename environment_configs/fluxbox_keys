@@ -72,6 +72,7 @@ Mod1 F4 :Exec mrxvt -font a14 -geometry 140x20 -T "alsamixer" -e alsamixer -V al
 #Mod1 F5 :Exec gkrellm
 Mod1 F5 :Exec conky
 Mod1 F6 :Exec qasmixer
+Mod1 F7 :Exec chromium
 
 # open a dialog to run programs
 Mod1 F2 :Exec fbrun
