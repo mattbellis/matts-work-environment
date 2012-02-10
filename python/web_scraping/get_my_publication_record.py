@@ -15,15 +15,16 @@ def download(url):
 
     response = urllib2.urlopen(url)
     html = response.read()
+    print html
     for val in html.split():
         if val.find('export')>=0 and val.find('BibTeX')>=0:
             print val
             new_url = val.split('"')[1]
             print new_url
-            #response = urllib2.urlopen(url)
-            #html = response.read()
-            #print html
-    #outfile.write(html)
+            response = urllib2.urlopen(url)
+            html = response.read()
+            print html
+    outfile.write(html)
 
 
 
