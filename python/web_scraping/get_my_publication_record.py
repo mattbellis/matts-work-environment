@@ -21,10 +21,10 @@ def download(url):
             print val
             new_url = val.split('"')[1]
             print new_url
-            response = urllib2.urlopen(url)
-            html = response.read()
-            print html
-    outfile.write(html)
+            #response = urllib2.urlopen(url)
+            #html = response.read()
+            #print html
+    #outfile.write(html)
 
 
 
