@@ -43,14 +43,14 @@ def b_semilep(outfilename, index):
       l2 = Label(r"{\Large $\bar{D}^+$}", x=4, y=0.6)
 
   if index==0:
-      fa1 = Fermion(in1, out1).addLabel(r"$\bar{b}$", pos=-0.05, displace=0.01).addLabel(r"$\bar{c}$", pos=1.05, displace=0.00)
-      fa2 = Fermion(in2, out2).addLabel(r"$d$", pos=-0.05, displace=0.01).addLabel(r"$d$", pos=1.05, displace=0.00)
+      fa1 = Fermion(in1, out1).addLabel(r"$d$", pos=-0.05, displace=0.01).addLabel(r"$d$", pos=1.05, displace=0.00)
+      fa2 = Fermion(in2, out2).addLabel(r"$\bar{b}$", pos=-0.05, displace=0.01).addLabel(r"$\bar{c}$", pos=1.05, displace=0.00)
       fx  = Photon(out_vtx, xdecay_vtx).addLabel(r"$W^+$",pos=0.5,displace=0.4)
       fx_decay1  = Fermion(xdecay_vtx, decay1).addLabel(r"$\mu^+$", pos=1.23, displace=0.00)
       fx_decay2  = Higgs(xdecay_vtx, decay2).addLabel(r"$\nu_{\mu}$", pos=1.28, displace=0.02)
   elif index==1:
-      fa1 = Fermion(in1, out1).addLabel(r"$b$", pos=-0.05, displace=0.01).addLabel(r"$c$", pos=1.05, displace=0.00)
-      fa2 = Fermion(in2, out2).addLabel(r"$\bar{d}$", pos=-0.05, displace=0.01).addLabel(r"$\bar{d}$", pos=1.05, displace=0.00)
+      fa1 = Fermion(in1, out1).addLabel(r"$\bar{d}$", pos=-0.05, displace=0.01).addLabel(r"$\bar{d}$", pos=1.05, displace=0.00)
+      fa2 = Fermion(in2, out2).addLabel(r"$b$", pos=-0.05, displace=0.01).addLabel(r"$c$", pos=1.05, displace=0.00)
       fx  = Photon(out_vtx, xdecay_vtx).addLabel(r"$W^-$",pos=0.5,displace=0.4)
       fx_decay1  = Fermion(xdecay_vtx, decay1).addLabel(r"$\mu^-$", pos=1.23, displace=0.00)
       fx_decay2  = Higgs(xdecay_vtx, decay2).addLabel(r"$\bar{\nu}_{\mu}$", pos=1.28, displace=0.02)

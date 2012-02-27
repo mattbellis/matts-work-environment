@@ -30,6 +30,11 @@ for i in range(0,len(xpts)):
   xpts[i] = bincenters[i]
   ypts[i] = n[i]
 
+print len(xpts)
+print len(ypts)
+print ypts
+print xpts
+
 p0 = [0.02, 100, 20]
 fitfunc = lambda p, x: (p[0]/p[2])*exp(-((x - p[1])**2)/(2.0*p[2]*p[2]))
 #fitfunc = lambda p, x: p[0]*exp(-((x - p[1])**2)/(2*p[2]*p[2]))
