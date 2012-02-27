@@ -124,10 +124,8 @@ class Course_grades:
             self.quizzes.append(grade)
         elif grade_type=='HW' or grade_type=='hw' or grade_type=='homework' or grade_type=='Homework':
             self.hw.append(grade)
-        elif grade_type=='exam1' or grade_type=='exam_1' or grade_type=='Exam1' or grade_type=='Exam_1':
+        elif grade_type=='exam' or grade_type=='Exam':
             self.exam1.append(grade)
-        elif grade_type=='exam2' or grade_type=='exam_2' or grade_type=='Exam2' or grade_type=='Exam_2':
-            self.exam2.append(grade)
         elif grade_type=='final_exam' or grade_type=='Finalexam' or grade_type=='finalexam' or grade_type=='FinalExam':
             self.final_exam.append(grade)
 
@@ -140,13 +138,14 @@ class Student:
 
     def summary_output(self,final_grade_weighting=[0.2,0.2,0.2,0.2,0.2],summarize=False):
 
-        averages = [-1, -1, -1, -1, -1]
+        averages = [-1, -1, -1, -1]
         ret = "-----------------------------------\n"
         ret += "%s %s\n" % (self.student_name[1], self.student_name[0])
 
         # Quizzes
         #ret += " -----\nQuizzes\n -----\n"
-        drop_lowest_score = True
+        #drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
         for g in self.grades.quizzes:
             #ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
@@ -160,7 +159,7 @@ class Student:
         ret += "\tQuiz avg: %4.2f\n" % (avg)
 
         # HW
-        drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
         #ret += " -----\nHomeworks\n -----\n"
         for g in self.grades.hw:
@@ -184,6 +183,7 @@ class Student:
         averages[2] = avg
         ret += "\tExam 1  : %4.2f\n" % (avg)
 
+        '''
         # Exam 2 
         drop_lowest_score = False
         #ret += " -----\nExam 2\n -----\n"
@@ -193,6 +193,7 @@ class Student:
         avg = calc_average_of_grades(self.grades.exam2, drop_lowest_score)
         averages[3] = avg
         ret += "\tExam 2  : %4.2f\n" % (avg)
+        '''
 
         # Final Exam 
         drop_lowest_score = False
@@ -201,7 +202,7 @@ class Student:
             1
             #ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
         avg = calc_average_of_grades(self.grades.final_exam, drop_lowest_score)
-        averages[4] = avg
+        averages[3] = avg
         ret += "\tFinal exam  : %4.2f\n" % (avg)
 
         tot = 0.0

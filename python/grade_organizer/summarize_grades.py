@@ -45,8 +45,8 @@ def main():
 
     ############################################################################
 
-    grade_titles = ["Quizzes", "Homeworks","Exam 1", "Exam 2", "Final exam", "Final grade"]
-    student_grades = [[],[],[],[],[],[]]
+    grade_titles = ["Quizzes", "Homeworks","Exam", "Final exam", "Final grade"]
+    student_grades = [[],[],[],[],[]]
 
     # Grade weighting
     final_grade_weighting = [0.10,0.20,0.20,0.20,0.30]
@@ -72,14 +72,14 @@ def main():
                     g = Grade_file_info("quiz")
                     g.set_grade_index(i)
 
-                elif r=='HW' or r=='hw':
+                elif r=='HW' or r=='hw' or r=='Homework':
                     g = Grade_file_info("hw")
                     g.set_grade_index(i)
                     g.set_add_index(i+1)
                     g.set_subtract_index(i+2)
                             
-                elif r=='Exam 1' or r=='exam 1':
-                    g = Grade_file_info("exam1")
+                elif r=='Exam':
+                    g = Grade_file_info("exam")
                     g.set_grade_index(i)
 
                 elif r=='Exam 2' or r=='exam 2':
@@ -102,20 +102,26 @@ def main():
             for g in grade_file_infos:
                 g.set_max_grade(float(row[g.grade_index]))
 
+                '''
                 if g.add_index<len(row) and g.add_index>=0 and row[g.add_index]!='':
                     g.set_add(float(row[g.add_index]))
                 if g.subtract_index<len(row) and g.subtract_index>=0 and row[g.subtract_index]!='':
                     g.set_subtract(float(row[g.subtract_index]))
+                '''
 
+        '''
         if line_num==3:
             for g in grade_file_infos:
                 g.set_internal_index(row[g.grade_index])
+        '''
 
         # Grab the hw info
-        if line_num>=4:
+        #if line_num>=4:
+        if line_num>=3:
             row_len = len(row)
             student_name = [row[2],row[3]]
-            email = "z%s@students.niu.edu" % (row[1])
+            #email = "z%s@students.niu.edu" % (row[1])
+            email = row[1]
 
             cg = Course_grades()
 
@@ -155,8 +161,9 @@ def main():
     # Print out the summary
     ############################################################################
     for i,s in enumerate(students):
+        print s.student_name
         averages, output = s.summary_output(final_grade_weighting)
-        gvis_output = s.gvis_output(final_grade_weighting)
+        #gvis_output = s.gvis_output(final_grade_weighting)
 
         ########################################################################
         # For sending out the grades
@@ -202,7 +209,9 @@ def main():
                 #email_grade_summaries('bellis@slac.stanford.edu','matthew.bellis@gmail.com',subject,msg_body,args.password)
                 email_grade_summaries(s.email,'matthew.bellis@gmail.com',subject,msg_body,args.password)
 
+        #print output
         for i,a in enumerate(averages):
+            #print averages
             student_grades[i].append(a)
 
     #exit()
@@ -212,10 +221,12 @@ def main():
     ############################################################################
     figs = []
     subplots = []
+    print student_grades
     for k,assignment in enumerate(student_grades):
         figs.append(plt.figure(figsize=(8, 6), dpi=100, facecolor='w', edgecolor='k'))
         subplots.append(figs[k].add_subplot(1,1,1))
 
+        print grade_titles[k]
         title = "%s" % (grade_titles[k])
 
         #print assignment
@@ -241,7 +252,7 @@ def main():
                     hist(hpts,bins=22,facecolor=colors[i],range=(0,110))
 
             subplots[k].set_xlabel(title, fontsize=14, weight='bold')
-            subplots[k].set_ylim(0,25)
+            #subplots[k].set_ylim(0,25)
 
     for i,f in enumerate(figs):
         name = "hw_dist_%d" % (i)
