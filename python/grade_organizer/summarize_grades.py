@@ -49,7 +49,7 @@ def main():
     student_grades = [[],[],[],[],[]]
 
     # Grade weighting
-    final_grade_weighting = [0.10,0.20,0.20,0.20,0.30]
+    final_grade_weighting = [0.10,0.20,0.40,0.30]
     # Quizzes
     # HWs
     # Exam 1
@@ -161,9 +161,41 @@ def main():
     # Print out the summary
     ############################################################################
     for i,s in enumerate(students):
-        print s.student_name
+        #print s.student_name
         averages, output = s.summary_output(final_grade_weighting)
         #gvis_output = s.gvis_output(final_grade_weighting)
+        nmore_exams = 0
+        if len(s.grades.exams)==1:
+            nmore_exams = 2
+        elif len(s.grades.exams)==2:
+            nmore_exams = 1
+        elif len(s.grades.exams)==3:
+            nmore_exams = 0
+
+        nmore_final_exams = 0
+        if len(s.grades.final_exam)==0:
+            nmore_final_exams = 1
+
+        for j in range(0,nmore_exams):
+            dum_grade = Grade('exam',-1,70.0,100.0,0.0,0.0,False,'3/12/2012')
+            s.grades.exams.append(dum_grade)
+        for j in range(0,nmore_final_exams):
+            dum_grade = Grade('final_exam',-1,70.0,100.0,0.0,0.0,False,'3/12/2012')
+            s.grades.final_exam.append(dum_grade)
+
+        hypothetical_performances = [70.0,80.0,90.0,100.0]
+        hypothetical_final_grades = []
+        for g in (hypothetical_performances):
+            for j in range(0,nmore_exams):
+                dum_grade = Grade('exam',-1,g,100.0,0.0,0.0,False,'3/12/2012')
+                s.grades.exams[(3-nmore_exams)+j] = dum_grade
+            for j in range(0,nmore_final_exams):
+                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'3/12/2012')
+                s.grades.final_exam[0] = dum_grade
+
+            dum_averages, dum_output = s.summary_output(final_grade_weighting)
+            #print dum_averages
+            hypothetical_final_grades.append(dum_averages[-1])
 
         ########################################################################
         # For sending out the grades
@@ -172,15 +204,33 @@ def main():
         msg_body = output
 
         ########################################################################
+        # Tack on the hpotheticals.
+        ########################################################################
+        msg_body += "\n"
+        msg_body += "-----------------------------------------\n"
+        msg_body += "------- Projected performance -----------\n"
+        msg_body += "-----------------------------------------\n"
+        msg_body += "If you receive the following grades on all of the remaining exams AND the final exam,\n"
+        msg_body += "then you would receive the folowing final grade for the class ASSUMING you also\n"
+        msg_body += "maintain the same average on your quizzes and homeworks.\n"
+        msg_body += "\n"
+        for pe,pf in zip(hypothetical_performances,hypothetical_final_grades):
+            msg_body += "Projected exams/final exams: %5.1f (on each exam)  -  Projected final grade: %5.1f\n" % (pe,pf)
+
+
+
+        ########################################################################
         # For testing
         ########################################################################
-        #subject = "Test of PHYS 283 grade summary email system."
-        #msg_body = "Hi %s %s,\n\n" % (s.student_name[1],s.student_name[0])
-        #msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades for PHYS283."
-        #msg_body += "If I've matched up your name with this email address, "
-        #msg_body += "could you please either email me back or let me know in class on Monday."
-        #msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well."
-        #msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
+        '''
+        subject = "Test of PHYS 283 grade summary email system."
+        msg_body = "Hi %s %s,\n\n" % (s.student_name[1],s.student_name[0])
+        msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades for PHYS283. "
+        msg_body += "If I've matched up your name with this email address, "
+        msg_body += "could you please either email me back or let me know in class on Tuesday."
+        msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well."
+        msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
+        '''
 
         #print msg_body
         #print s.email
@@ -221,12 +271,12 @@ def main():
     ############################################################################
     figs = []
     subplots = []
-    print student_grades
+    #print student_grades
     for k,assignment in enumerate(student_grades):
         figs.append(plt.figure(figsize=(8, 6), dpi=100, facecolor='w', edgecolor='k'))
         subplots.append(figs[k].add_subplot(1,1,1))
 
-        print grade_titles[k]
+        #print grade_titles[k]
         title = "%s" % (grade_titles[k])
 
         #print assignment
