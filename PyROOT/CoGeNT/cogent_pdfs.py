@@ -443,8 +443,10 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     total_pdf = None
     if no_exp and not no_cg:
         total_pdf = RooAddPdf("total_energy_pdf","flat_exp+cosmogenic_pdf",RooArgList(flat_exp,cosmogenic_pdf),RooArgList(nflat,ncosmogenics))
+    elif add_exp2 and no_cg:
+        total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_exp+exp2_exp",RooArgList(flat_exp,exp_exp,exp2_exp),RooArgList(nflat,nexp,nexp2))
     elif not no_exp and no_cg:
-        total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_pdf",RooArgList(flat_exp,exp_pdf),RooArgList(nflat,nexp))
+        total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_exp",RooArgList(flat_exp,exp_exp),RooArgList(nflat,nexp))
     elif no_exp and no_cg:
         total_pdf = RooAddPdf("total_energy_pdf","flat_exp",RooArgList(flat_exp),RooArgList(nflat))
     elif add_exp2:
