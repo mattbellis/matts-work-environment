@@ -34,11 +34,11 @@ if [ -n "$1" ]; then
  echo " " >> /tmp/makefile
  echo "$1-handout.pdf:	$1-handout.tex" >> /tmp/makefile
  #echo "	pdflatex $1-handout" >> /tmp/makefile
- echo "	pdflatex $1-handout" >> /tmp/makefile
- #echo "	xelatex $1-handout" >> /tmp/makefile
+ #echo "	pdflatex $1-handout" >> /tmp/makefile
+ echo "	xelatex $1-handout" >> /tmp/makefile
  echo "	bibtex $1-handout" >> /tmp/makefile
- #echo "	xelatex $1-handout" >> /tmp/makefile
- echo "	pdflatex $1-handout" >> /tmp/makefile
+ echo "	xelatex $1-handout" >> /tmp/makefile
+ #echo "	pdflatex $1-handout" >> /tmp/makefile
  echo " " >> /tmp/makefile
  echo "$1-handout.tex:	$1.tex" >> /tmp/makefile
  echo "	sed -e 's/\\documentclass\[/\documentclass[handout,/g' -e 's/\\documentclass{/\documentclass[handout]{/g' $1.tex > $1-handout.tex" >> /tmp/makefile
