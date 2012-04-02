@@ -178,12 +178,20 @@ class Student:
 
         # Exam 1 
         drop_lowest_score = True
+        picked_a_lowest = False
         ret += " -----\nExams\n -----\n"
-        for g in self.grades.exams:
-            1
-            ret +=  "%-7s (%10s) %s\n" % (g.grade_type,g.date,g.summary_output())
+        #print len(self.grades.exams)
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
+        for g in self.grades.exams:
+            ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
+            if drop_lowest_score==True:
+                #print g.grade_pct()
+                #print is_lowest_grade(self.grades.exams,g)
+                if is_lowest_grade(self.grades.exams,g) and not picked_a_lowest:
+                    ret += "\tlowest score, will not be counted in average."
+                    picked_a_lowest = True
+            ret += "\n"
         avg = calc_average_of_grades(self.grades.exams, drop_lowest_score)
         averages[2] = avg
         ret += "\tExams avg: %4.2f\n" % (avg)
