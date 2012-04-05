@@ -4,7 +4,7 @@
 # date        : Jan., 2011
 # discription : generic Makefile for making cuda programs
 #
-BIN               := example_0.x 
+BIN               := example_1.x 
 
 # flags
 #COMMONFLAGS       := -D_DEBUG -O0 -g
@@ -12,7 +12,10 @@ BIN               := example_0.x
 ##$(shell root-config --cflags)
 
 #CUDA_INSTALL_PATH := /opt/cuda/
-CUDA_INSTALL_PATH := /usr/local/cuda/
+#CUDA_INSTALL_PATH := /usr/local/cuda/
+CUDA_INSTALL_PATH := /usr/
+
+SDK_INSTALL_PATH := /home/bellis/NVIDIA_GPU_Computing_SDK
 #INCLUDES          += -I. -I/home/bellis/NVIDIA_GPU_Computing_SDK/C/common/inc/ $(shell root-config --cflags)
 #LIBS              := -L/usr/local/cuda/lib/ $(shell root-config --libs) 
 INCLUDES          += -I. -I/u/br/bellis/CUDA/SDK/C/common/inc/ 
@@ -30,7 +33,7 @@ NVCC              := $(CUDA_INSTALL_PATH)/bin/nvcc -arch sm_11 $(COMMONFLAGS)
 # files
 #CPP_SOURCES       := mytestroot.cpp  
 CPP_SOURCES       := 
-CU_SOURCES        := example_0.cu 
+CU_SOURCES        := example_1.cu 
 HEADERS           := $(wildcard *.h)
 CPP_OBJS          := $(patsubst %.cpp, %.o, $(CPP_SOURCES))
 CU_OBJS           := $(patsubst %.cu, %.cu_o, $(CU_SOURCES))

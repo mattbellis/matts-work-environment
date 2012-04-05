@@ -13,7 +13,9 @@ __global__ void kernel (int *a)
     //a[idx] = blockIdx.x;
 
     // Set equal to the thread Idx
-    a[idx] = threadIdx.x;
+    //a[idx] = threadIdx.x;
+    // Set equal to the Idx
+    a[idx] = idx;
 }
 
 int main()
@@ -71,7 +73,7 @@ int main()
 
     for (int i=0;i<dimx;i++)
     {
-        printf("%d",h_a[i]);
+        printf("%d\n",h_a[i]);
     }
     printf("\n");
 
