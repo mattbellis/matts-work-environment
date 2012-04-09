@@ -49,7 +49,8 @@ plt.ylim(-1,40)
 frame1.axes.get_xaxis().set_visible(False)
 frame1.axes.get_yaxis().set_visible(False)
 
-name = "cuda_calcs_%d.png" % (diag_flag)
+#name = "cuda_calcs_%d.png" % (diag_flag)
+name = "cuda_calcs_%d.eps" % (diag_flag)
 plt.savefig(name)
 
 plt.show()
