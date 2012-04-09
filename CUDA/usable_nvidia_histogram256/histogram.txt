@@ -1,0 +1,7 @@
+release/histogram Starting...
+
+Initializing data...
+...allocating CPU memory.
+...generating input data
+...allocating GPU memory and copying input data
+

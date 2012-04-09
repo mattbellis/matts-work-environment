@@ -1,0 +1,30 @@
+import os 
+
+env = Environment()
+
+# Grab my local environment variable PATH so I can find nvcc
+env = Environment(ENV = {'PATH' : os.environ['PATH']})
+
+env.Append(CUDA_SDK_PATH='/home/bellis/NVIDIA_GPU_Computing_SDK/C/')
+#/nfs/slac/g/ki/ki06/lsst/djbard/LSST/GPU/SDK/C')
+cudaSDKPath = env['CUDA_SDK_PATH']
+
+env.Tool('cuda',toolpath=['./'])
+
+#env.Append(LIBPATH=['/usr/local/cuda/lib', '/nfs/slac/g/ki/ki06/lsst/djbard/GPU/cuda/lib'])
+env['CC'] = ['nvcc']
+
+# This is where cutil lives.
+#env.Append(NVCCFLAGS=['-I'+cudaSDKPath+'/common/inc/','-m64'])
+#env.Append(NVCCFLAGS=['-I'+cudaSDKPath+'/common/inc/', '-m32', '--compiler-options', '-fno-inline', '-Xcompiler', '-D__builtin_stdarg_start=__builtin_va_start', '-DNVCC'])
+env.Append(NVCCFLAGS=['-I'+cudaSDKPath+'/common/inc/', '-m32', '--compiler-options', '-fno-inline', '-Xcompiler', '-D__builtin_stdarg_start=__builtin_va_start'])
+#NVCCFLAGS         := --compiler-options -fno-inline -Xcompiler -D__builtin_stdarg_start=__builtin_va_start
+
+
+env.Program(target='massAp.x', \
+            source=['massAp.cpp', 'massAp_call.cu'],\
+            parse_flags=["!root-config --cflags --libs"])
+
+#env.Program(target='mytestroot_gpu', source=['massAp.cu'])
+
+

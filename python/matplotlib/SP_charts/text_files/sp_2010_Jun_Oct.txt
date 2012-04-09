@@ -1,0 +1,9 @@
+: cacloud      : 488963      : Canada
+: caltech      : 2656085     : USA
+: ccin2p3      : 687520261   : France
+: cu-boulder   : 14500023    : USA
+: slac         : 945309643   : USA
+: uvic2        : 41393124    : Canada
+: westgrid     : 8511704     : Canada
+: Totals       : 1700379803  :
+
