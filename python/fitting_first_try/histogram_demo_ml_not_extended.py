@@ -43,11 +43,15 @@ def fitfunc(p, x):
 def errfunc(p, x, y):
   norm_func = (fitfunc(p, y)).sum()/len(y)
   ret = (-log(fitfunc(p, x) / norm_func) .sum())
+  # Extended
+  #ret = (-log(fitfunc(p, x) / norm_func) .sum()) - pois(p,len(x))
   #print "%f  %f" % (ret, norm_func)
   return ret
 
 #p0 = [100, 15, nevents]
 p0 = [90, 10, nevents]
+
+print "p0[1]: %d" % (nevents)
 
 print "Starting..."
 p1 = fmin(errfunc, p0, args=(data_points, norm_points), maxiter=10000, maxfun=10000)
