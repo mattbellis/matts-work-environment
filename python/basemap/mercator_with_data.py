@@ -13,7 +13,7 @@ m.fillcontinents(color='coral',lake_color='aqua')
 # draw parallels and meridians.
 m.drawparallels(np.arange(-90.,91.,30.))
 m.drawmeridians(np.arange(-180.,181.,60.))
-m.drawmapboundary(fill_color='aqua') 
+m.drawmapboundary(fill_color='black') 
 
 lon, lat = -104.237, 40.125
 xpt,ypt = m(lon,lat)
