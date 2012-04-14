@@ -12,19 +12,23 @@ import math
 m = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80,\
                     llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')
 
-nimages = 2
+nimages = 50
 for i in range(0,nimages):
 
-    m.drawcoastlines()
+    #m.bluemarble()
+    m.etopo()
+
+    #m.drawcoastlines()
     #m.fillcontinents(color='coral',lake_color='aqua')
-    m.fillcontinents(color='black',lake_color='aqua')
+    #m.fillcontinents(color='black',lake_color='aqua')
+    #m.drawmapboundary(fill_color='black')
+    #m.drawcoastlines(color='white',linewidth=1) 
+    #m.drawcountries(color='white') 
+
     # draw parallels and meridians.
     #m.drawparallels(np.arange(-90.,91.,30.))
     #m.drawmeridians(np.arange(-180.,181.,60.))
     #m.drawmapboundary(fill_color='aqua') 
-    m.drawmapboundary(fill_color='black')
-    m.drawcoastlines(color='white',linewidth=1) 
-    m.drawcountries(color='white') 
 
     ############################################################################
     # Coordinates for CERN.
