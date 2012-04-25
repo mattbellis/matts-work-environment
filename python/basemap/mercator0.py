@@ -8,13 +8,14 @@ import matplotlib.pyplot as plt
 # resolution = 'c' means use crude resolution coastlines.
 m = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80,\
                     llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')
+m.etopo()
+
 m.drawcoastlines()
-m.bluemarble()
 #m.fillcontinents(color='coral',lake_color='aqua')
 # draw parallels and meridians.
 m.drawparallels(np.arange(-90.,91.,30.))
 m.drawmeridians(np.arange(-180.,181.,60.))
-m.drawmapboundary(fill_color='aqua') 
+#m.drawmapboundary(fill_color='aqua') 
 plt.title("Mercator Projection")
 plt.savefig('merc.png')
 plt.show()
