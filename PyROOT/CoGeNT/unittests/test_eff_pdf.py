@@ -95,7 +95,6 @@ mean1 = RooRealVar("mean1","mean1",1.3)
 sigma1 = RooRealVar("sigma1","sigma1",0.08)
 gauss1 = RooGaussian("gauss1","gauss1",x,mean1,sigma1)
 
-
 slope0 = RooRealVar("slope0","slope0",-0.005)
 slope1 = RooRealVar("slope1","slope1",-0.02)
 
