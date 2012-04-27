@@ -2,15 +2,20 @@
 
 from ROOT import *
 
-x = RooRealVar("x","ionization energy (keVee)",0.0,4.0)
+#x = RooRealVar("x","ionization energy (keVee)",0.0,4.0)
+x = RooRealVar("x","ionization energy (keVee)",0.0,2.0)
 t = RooRealVar("t","time",1.0,500)
 
 #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 10.0] # Change to 10
 #efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
 
 ######## Same as Nicole's
-Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
-efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
+#Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
+#efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
+
+# Looking for a more dramatic change
+Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 2.0] # Changed to 4.0
+efftrig = [0.21747, 0.37142, 0.41090, 0.53808, 0.55519, 0.56443, 0.56801, 0.56814, 0.55703, 0.558, 0.9, 0.96786]
 
 neff = len(Etrig)
 
@@ -39,7 +44,7 @@ for i in range(0,neff-1):
     nsteps = 0
     while start <= stop: 
         val = y0 + slope*(step*nsteps)
-        print "%f %f %f" % (start,val,slope)
+        #print "%f %f %f" % (start,val,slope)
         bin_centers.append(start)
         bin_heights.append(val)
         start += step
@@ -81,10 +86,9 @@ effPdf = RooEfficiency("effPdf","effPdf",aPdf,cut,"accept")
 
 ################################################################################
 
-
-
 mean0 = RooRealVar("mean0","mean0",0.8)
-sigma0 = RooRealVar("sigma0","sigma0",0.08)
+#sigma0 = RooRealVar("sigma0","sigma0",0.08)
+sigma0 = RooRealVar("sigma0","sigma0",0.28)
 gauss0 = RooGaussian("gauss0","gauss0",x,mean0,sigma0)
 
 mean1 = RooRealVar("mean1","mean1",1.3)
@@ -102,7 +106,8 @@ prod0 = RooProdPdf("prod0","prod0",RooArgList(decay0,gauss0))
 prod1 = RooProdPdf("prod1","prod1",RooArgList(decay1,gauss1))
 
 n0 = RooRealVar("n0","n0",1000)
-n1 = RooRealVar("n1","n1",500)
+#n1 = RooRealVar("n1","n1",500)
+n1 = RooRealVar("n1","n1",1000)
 
 total = RooAddPdf("total","total",RooArgList(prod0,prod1),RooArgList(n0,n1))
 
@@ -112,12 +117,30 @@ frame_x = x.frame(RooFit.Title("x"))
 frame_t = t.frame(RooFit.Title("t"))
 frame_xeff = x.frame(RooFit.Title("xeff"))
 
-data = total.generate(RooArgSet(x,t),1000)
+# Multiply times efficiency.
+modelEffProd = RooEffProd("modelEffProd","modelEffProd",total,effPdf)
+#modelEffProd = RooProdPdf("modelEffProd","modelEffProd",RooArgSet(total),RooFit.Conditional(RooArgSet(effPdf),RooArgSet(cut))) ;
+
+
+#data = total.generate(RooArgSet(x,t),1000)
+data = modelEffProd.generate(RooArgSet(x,t),1000)
+
+n0.setConstant(False)
+n1.setConstant(False)
+sigma0.setConstant(False)
+#fit_results = total.fitTo(data,RooFit.Verbose(True),RooFit.Extended(True),RooFit.Save(True))
+#fit_results = modelEffProd.fitTo(data,RooFit.Verbose(True),RooFit.Extended(True),RooFit.Save(True))
+fit_results = modelEffProd.fitTo(data,RooFit.Verbose(True),RooFit.Save(True))
+
+print fit_results
+fit_results.Print("v")
+
+
 
 data.plotOn(frame_x)
 data.plotOn(frame_t)
 
-can = TCanvas("can","can",10,10,1000,600)
+can = TCanvas("can","can",10,10,1200,400)
 can.SetFillColor(0)
 can.Divide(3,1)
 
@@ -129,9 +152,9 @@ gPad.Update()
 
 can.cd(2)
 rargset = RooArgSet(prod0)
-total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(4))
+modelEffProd.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(4))
 rargset = RooArgSet(prod1)
-total.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(2))
+modelEffProd.plotOn(frame_x,RooFit.Components(rargset),RooFit.LineColor(2))
 frame_x.Draw()
 gPad.Update()
 
