@@ -41,6 +41,8 @@ def main():
                     \t1: Sqrt(N) where N is expected number of events.\n\
                     \t2: Adding both in quadrature.\n\
                     \t Default: 2')
+    parser.add_argument('--turn-off-eff', dest='turn_off_eff', action='store_true', 
+            default=False, help="Don't use the efficiency function.")
     parser.add_argument('--no-exp', dest='no_exp', action='store_true', 
             default=False, help="Don't have a exponential component to the PDF.")
     parser.add_argument('--no-cg', dest='no_cg', action='store_true', 
@@ -261,7 +263,18 @@ def main():
     # Grab the PDF 
     ############################################################################
 
-    cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
+    # This alone works!!!!!
+    #cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
+
+    cogent_pars,cogent_sub_funcs,temp_cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
+
+    cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency(x,t,args.verbose)
+
+    # Add the in the efficiency correction...or not.
+    cogent_fit_pdf = temp_cogent_fit_pdf
+    if not args.turn_off_eff:
+        cogent_fit_pdf = RooEffProd("cogent_fit_pdf","cogent_fit_pdf",temp_cogent_fit_pdf,eff_pdf)
+
 
     # DEBUG
     if args.verbose:
@@ -484,6 +497,7 @@ def main():
     # Create the neg log likelihood object to pass to RooMinuit
     ############################################################################
     nll = RooAddition("nll","-log(likelihood)",nllList,True)
+
 
     # DEBUG
     if args.verbose:
