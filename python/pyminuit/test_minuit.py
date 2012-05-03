@@ -8,6 +8,8 @@ def f(x, y):
 
 m = minuit.Minuit(f, x=10, y=10)
 
+#m.printMode = 1
+
 m.migrad()
 m.fval, m.ncalls, m.edm
 m.values["x"], m.values["y"]
