@@ -334,6 +334,8 @@ def main():
     xframe_main = x.frame(RooFit.Title("Ionization Energy"))
     data.plotOn(xframe_main)
 
+    xframe_eff = x.frame(RooFit.Title("Efficiency"))
+
     t.setBins(tbins)
     tframe_main = t.frame(RooFit.Title("Days since 12/4/2009"))
     data.plotOn(tframe_main)
@@ -369,11 +371,11 @@ def main():
     # Make canvases.
     ############################################################################
     cans = []
-    for i in range(0,1):
+    for i in range(0,2):
 
         name = "cans%d" % (i)
         #cans.append(TCanvas(name,name,100,100,1400,600))
-        cans.append(TCanvas(name,name,1,1,1200,550))
+        cans.append(TCanvas(name,name,10+10*i,10+10*i,1200,550))
         cans[i].SetFillColor(0)
         cans[i].Divide(2,1)
 
@@ -587,6 +589,16 @@ def main():
 
     ########################################################################
 
+    cans[1].cd(1)
+    #argset = RooArgSet(eff_pdf)
+    #cogent_fit_pdf.plotOn(xframe_eff,RooFit.Components(argset))
+    eff_pdf.plotOn(xframe_eff)
+    xframe_eff.GetXaxis().SetLimits(0.5,xmax)
+    #xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
+    xframe_eff.Draw()
+    gPad.Update()
+
+    ########################################################################
 
     ########################################################################
     # Save the canvas to a few different image formats.

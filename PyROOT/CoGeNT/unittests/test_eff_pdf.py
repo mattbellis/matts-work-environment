@@ -14,8 +14,10 @@ t = RooRealVar("t","time",1.0,500)
 #efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
 
 # Looking for a more dramatic change
-Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 2.0] # Changed to 4.0
+Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 4.0] # Changed to 4.0
 efftrig = [0.21747, 0.37142, 0.41090, 0.53808, 0.55519, 0.56443, 0.56801, 0.56814, 0.55703, 0.558, 0.9, 0.96786]
+#Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 2.0] # Changed to 4.0
+#efftrig = [0.11747, 0.17142, 0.11090, 0.13808, 0.75519, 0.26443, 0.26801, 0.26814, 0.25703, 0.558, 0.9, 0.96786]
 
 neff = len(Etrig)
 
@@ -62,7 +64,9 @@ limits[nbins] = bin_centers[i]+0.1
 
 
 # These will hold the values of the bin heights
-scaling = 12.5 # Need to figure out how to do this properly. 
+#scaling = 12.5 # Need to figure out how to do this properly. 
+#scaling = 1.0 # Need to figure out how to do this properly. 
+scaling = 0.02 # Need to figure out how to do this properly. 
 list = RooArgList("list")
 binHeight = []
 for i in range(0,nbins-1):
@@ -73,6 +77,10 @@ for i in range(0,nbins-1):
 
 aPdf = RooParametricStepFunction("aPdf","PSF", x, list, limits, nbins)
 
+data1 = aPdf.generate(RooArgSet(x),2000) 
+kest1 = RooKeysPdf("kest1","kest1",x,data1,RooKeysPdf.MirrorBoth) ;
+
+
 ################################################################################
 # Make the RooEfficiency PDF
 ################################################################################
@@ -82,7 +90,8 @@ cut.defineType("accept",1)
 cut.defineType("reject",0)
 
 # Construct efficiency p.d.f eff(cut|x)
-effPdf = RooEfficiency("effPdf","effPdf",aPdf,cut,"accept") 
+#effPdf = RooEfficiency("effPdf","effPdf",aPdf,cut,"accept") 
+effPdf = RooEfficiency("effPdf","effPdf",kest1,cut,"accept") 
 
 ################################################################################
 
@@ -144,8 +153,10 @@ can.SetFillColor(0)
 can.Divide(3,1)
 
 can.cd(1)
-rargset = RooArgSet(aPdf)
-aPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
+#rargset = RooArgSet(aPdf)
+rargset = RooArgSet(kest1)
+#aPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
+effPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
 frame_xeff.Draw()
 gPad.Update()
 
@@ -159,11 +170,11 @@ gPad.Update()
 
 can.cd(3)
 rargset = RooArgSet(total)
-total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(3))
+modelEffProd.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(3))
 rargset = RooArgSet(prod0)
-total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(4))
+modelEffProd.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(4))
 rargset = RooArgSet(prod1)
-total.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(2))
+modelEffProd.plotOn(frame_t,RooFit.Components(rargset),RooFit.LineColor(2))
 frame_t.Draw()
 gPad.Update()
 
