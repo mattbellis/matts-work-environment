@@ -524,7 +524,8 @@ def efficiency(x,t,verbose=False):
 
 
     # These will hold the values of the bin heights
-    scaling = 12.5 # Need to figure out how to do this properly. 
+    #scaling = 12.5 # Need to figure out how to do this properly. 
+    scaling = 0.5 # Need to figure out how to do this properly. 
     list = RooArgList("list")
     binHeight = []
     for i in range(0,nbins-1):
