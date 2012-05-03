@@ -2,20 +2,20 @@
 
 from ROOT import *
 
-#x = RooRealVar("x","ionization energy (keVee)",0.0,4.0)
-x = RooRealVar("x","ionization energy (keVee)",0.0,2.0)
+x = RooRealVar("x","ionization energy (keVee)",0.0,4.0)
+#x = RooRealVar("x","ionization energy (keVee)",0.0,2.0)
 t = RooRealVar("t","time",1.0,500)
 
 #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 10.0] # Change to 10
 #efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
 
 ######## Same as Nicole's
-#Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
-#efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
+Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
+efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
 
 # Looking for a more dramatic change
-Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 4.0] # Changed to 4.0
-efftrig = [0.21747, 0.37142, 0.41090, 0.53808, 0.55519, 0.56443, 0.56801, 0.56814, 0.55703, 0.558, 0.9, 0.96786]
+#Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 4.0] # Changed to 4.0
+#efftrig = [0.21747, 0.37142, 0.41090, 0.53808, 0.55519, 0.56443, 0.56801, 0.56814, 0.57703, 0.588, 0.9, 0.96786]
 #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 2.0] # Changed to 4.0
 #efftrig = [0.11747, 0.17142, 0.11090, 0.13808, 0.75519, 0.26443, 0.26801, 0.26814, 0.25703, 0.558, 0.9, 0.96786]
 
@@ -35,8 +35,10 @@ for i in range(0,neff-1):
     y1 = efftrig[i+1]
 
     # Once we're above 1 keVee the efficiency is flat.
+    '''
     if x0>1.0:
         step = 1.0
+    '''
 
     #print "%f %f %f %f" % (x0,x1,y0,y1)
     slope = (y1-y0)/(x1-x0)
@@ -66,7 +68,7 @@ limits[nbins] = bin_centers[i]+0.1
 # These will hold the values of the bin heights
 #scaling = 12.5 # Need to figure out how to do this properly. 
 #scaling = 1.0 # Need to figure out how to do this properly. 
-scaling = 0.02 # Need to figure out how to do this properly. 
+scaling = 0.5 # Need to figure out how to do this properly. 
 list = RooArgList("list")
 binHeight = []
 for i in range(0,nbins-1):
@@ -78,7 +80,7 @@ for i in range(0,nbins-1):
 aPdf = RooParametricStepFunction("aPdf","PSF", x, list, limits, nbins)
 
 data1 = aPdf.generate(RooArgSet(x),2000) 
-kest1 = RooKeysPdf("kest1","kest1",x,data1,RooKeysPdf.MirrorBoth) ;
+kest1 = RooKeysPdf("kest1","kest1",x,data1,RooKeysPdf.MirrorBoth)
 
 
 ################################################################################
