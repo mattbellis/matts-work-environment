@@ -495,8 +495,10 @@ def efficiency(x,t,verbose=False):
         y1 = efftrig[i+1]
 
         # Once we're above 1 keVee the efficiency is flat.
+        '''
         if x0>1.0:
             step = 1.0
+        '''
 
         #print "%f %f %f %f" % (x0,x1,y0,y1)
         slope = (y1-y0)/(x1-x0)
@@ -524,8 +526,8 @@ def efficiency(x,t,verbose=False):
 
 
     # These will hold the values of the bin heights
-    #scaling = 12.5 # Need to figure out how to do this properly. 
-    scaling = 0.5 # Need to figure out how to do this properly. 
+    scaling = 12.5 # Need to figure out how to do this properly. 
+    #scaling = 0.5 # Need to figure out how to do this properly. 
     list = RooArgList("list")
     binHeight = []
     for i in range(0,nbins-1):
