@@ -66,9 +66,9 @@ limits[nbins] = bin_centers[i]+0.1
 
 
 # These will hold the values of the bin heights
-#scaling = 12.5 # Need to figure out how to do this properly. 
+scaling = 12.5 # Need to figure out how to do this properly. 
 #scaling = 1.0 # Need to figure out how to do this properly. 
-scaling = 0.5 # Need to figure out how to do this properly. 
+#scaling = 0.5 # Need to figure out how to do this properly. 
 list = RooArgList("list")
 binHeight = []
 for i in range(0,nbins-1):
@@ -92,8 +92,8 @@ cut.defineType("accept",1)
 cut.defineType("reject",0)
 
 # Construct efficiency p.d.f eff(cut|x)
-#effPdf = RooEfficiency("effPdf","effPdf",aPdf,cut,"accept") 
-effPdf = RooEfficiency("effPdf","effPdf",kest1,cut,"accept") 
+effPdf = RooEfficiency("effPdf","effPdf",aPdf,cut,"accept") 
+#effPdf = RooEfficiency("effPdf","effPdf",kest1,cut,"accept") 
 
 ################################################################################
 
@@ -155,10 +155,10 @@ can.SetFillColor(0)
 can.Divide(3,1)
 
 can.cd(1)
-#rargset = RooArgSet(aPdf)
-rargset = RooArgSet(kest1)
-#aPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
-effPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
+rargset = RooArgSet(aPdf)
+aPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
+#rargset = RooArgSet(kest1)
+#effPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
 frame_xeff.Draw()
 gPad.Update()
 
