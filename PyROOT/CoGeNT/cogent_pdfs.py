@@ -396,8 +396,6 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     exp2_exp_x = RooExponential("exp2_exp_x","Exponential PDF for exp x",x,exp2_slope)
 
     exp2_slope_t = RooRealVar("exp2_slope_t","Exponential slope of the exponential term t",-0.00001,-100.0,0.0)
-    #exp2_slope_t_calc = RooRealVar("exp2_slope_t_calc","Exponential slope of the exponential term t calc",-0.00001,-100.0,0.0)
-    #exp2_slope_t_uncert = RooRealVar("exp2_slope_t_uncert","Uncertainty on the exponential slope of the 2nd exponential term",-0.00001,-100.0,0.0)
 
     exp2_mod_frequency = RooRealVar("exp2_mod_frequency","Exponential term modulation frequency",0.00)
     exp2_mod_offset = RooRealVar("exp2_mod_offset","Exponential term modulation phase",2.0)
@@ -408,16 +406,6 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
 
     exp2_exp = RooProdPdf("exp2_exp","exp2_exp_x*exp2_exp_t",RooArgList(exp2_exp_x,exp2_exp_t))
 
-    ############################################################################
-    # Define the Gaussian constraints. 
-    ############################################################################
-    '''
-    name = "gaussian_constraint_exp2_%d" % (i)
-    gc_exp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(exp2_slope_t,exp2_slope_t_calc,exp2_slope_t_uncertainty))
-
-    if verbose:
-        gc.Print("v")
-    '''
 
     pars.append(exp2_mod_frequency)
     pars.append(exp2_mod_amp)
@@ -430,8 +418,23 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     sub_funcs.append(exp2_exp_x)
     sub_funcs.append(exp2_exp_t)
     sub_funcs.append(exp2_exp)
-    #pars.append(exp2_slope_t_calc)
-    #sub_funcs.append(gc_exp2)
+
+
+    ############################################################################
+    # Define the Gaussian constraints. 
+    ############################################################################
+    #'''
+    exp2_slope_t_calc = RooRealVar("exp2_slope_t_calc","Exponential slope of the exponential term t calc",-3.36)
+    exp2_slope_t_uncert = RooRealVar("exp2_slope_t_uncert","Uncertainty on the exponential slope of the 2nd exponential term",0.708)
+    name = "gaussian_constraint_exp2" 
+    gc_exp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(exp2_slope_t,exp2_slope_t_calc,exp2_slope_t_uncert))
+
+    if verbose:
+        gc.Print("v")
+    #'''
+    pars.append(exp2_slope_t_calc)
+    pars.append(exp2_slope_t_uncert)
+    sub_funcs.append(gc_exp2)
 
     ############################################################################
     # Form the total PDF.

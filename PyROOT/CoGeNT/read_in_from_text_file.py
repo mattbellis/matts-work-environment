@@ -453,7 +453,8 @@ def main():
     if args.add_exp2:
         #cogent_pars_dict["nexp2"].setVal(600.0); cogent_pars_dict["nexp2"].setConstant(False)
         cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
-        cogent_pars_dict["exp2_slope"].setVal(-4.0); cogent_pars_dict["exp2_slope"].setConstant(True)
+        cogent_pars_dict["exp2_slope"].setVal(-3.36); cogent_pars_dict["exp2_slope"].setConstant(True)
+        # Need to add in a uncertainty of 0.708
 
     #exit(-1)
     ############################################################################
@@ -495,6 +496,8 @@ def main():
             if c.find(name)>=0:
                 gc_s.append(c)
                 nllList.add(cogent_pars_dict[c])
+        if args.add_exp2:
+            cogent_pars_dict["exp2_slope"].setConstant(False)
 
     ############################################################################
     # Create the neg log likelihood object to pass to RooMinuit
@@ -615,6 +618,7 @@ def main():
         save_file_name += "_cg_mod"
     if args.add_gc:
         save_file_name += "_add_gc%d" % (args.gc_flag)
+
     if args.add_exp2:
         save_file_name += "_add_exp2"
 
