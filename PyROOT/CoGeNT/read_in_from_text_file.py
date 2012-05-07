@@ -268,7 +268,8 @@ def main():
 
     cogent_pars,cogent_sub_funcs,temp_cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
 
-    cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency(x,t,args.verbose)
+    #cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency(x,t,args.verbose)
+    cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency_sigmoid(x,t,args.verbose)
 
     # Add the in the efficiency correction...or not.
     cogent_fit_pdf = temp_cogent_fit_pdf
@@ -424,7 +425,7 @@ def main():
 
     # Let the exponential modulate: float phase offset and amplitude.
     if args.exp_mod:
-        cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(False)
+        cogent_pars_dict["exp_mod_phase"].setVal(-0.7); cogent_pars_dict["exp_mod_phase"].setConstant(False)
         cogent_pars_dict["exp_mod_amp"].setVal(1.0); cogent_pars_dict["exp_mod_amp"].setConstant(False)
     else:
         cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(True)
@@ -452,7 +453,7 @@ def main():
     if args.add_exp2:
         #cogent_pars_dict["nexp2"].setVal(600.0); cogent_pars_dict["nexp2"].setConstant(False)
         cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
-        cogent_pars_dict["exp2_slope"].setVal(-3.0); cogent_pars_dict["exp2_slope"].setConstant(True)
+        cogent_pars_dict["exp2_slope"].setVal(-4.0); cogent_pars_dict["exp2_slope"].setConstant(True)
 
     #exit(-1)
     ############################################################################
@@ -592,7 +593,9 @@ def main():
     cans[1].cd(1)
     #argset = RooArgSet(eff_pdf)
     #cogent_fit_pdf.plotOn(xframe_eff,RooFit.Components(argset))
-    eff_pdf.plotOn(xframe_eff)
+    #argset = RooArgSet(eff_sub_funcs[0])
+    #eff_sub_funcs[0].plotOn(xframe_eff,RooFit.Components(argset))
+    eff_pars[0].plotOn(xframe_eff)
     xframe_eff.GetXaxis().SetLimits(0.5,xmax)
     #xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_eff.Draw()

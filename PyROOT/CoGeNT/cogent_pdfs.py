@@ -472,11 +472,11 @@ def efficiency(x,t,verbose=False):
     #efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
     
     ######## Same as Nicole's
-    Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 3.2] # Changed to 4.0
-    efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
-    
-    #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
+    #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 3.2] # Changed to 4.0
     #efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
+    
+    Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
+    efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
     
     # Looking for a more dramatic change
     #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 2.0] # Changed to 4.0
@@ -529,7 +529,8 @@ def efficiency(x,t,verbose=False):
 
 
     # These will hold the values of the bin heights
-    scaling = 12.5 # Need to figure out how to do this properly. 
+    #scaling = 12.5 # Need to figure out how to do this properly. 
+    scaling = 1.0 # Need to figure out how to do this properly. 
     #scaling = 0.5 # Need to figure out how to do this properly. 
     list = RooArgList("list")
     binHeight = []
@@ -554,5 +555,38 @@ def efficiency(x,t,verbose=False):
     
     # Construct efficiency p.d.f eff(cut|x)
     eff_pdf = RooEfficiency("eff_pdf","eff_pdf",aPdf,cut,"accept") 
+
+    return cut,pars,sub_funcs,eff_pdf
+
+################################################################################
+# Efficiency pdf
+################################################################################
+
+def efficiency_sigmoid(x,t,verbose=False):
+
+    pars = []
+    sub_funcs = []
+
+    max_eff = RooRealVar("max_eff","Maximum efficiency",0.86786)
+    Ethresh = RooRealVar("Ethresh","E_{threshhold}",0.345)
+    sigma = RooRealVar("sigma","sigma",0.241)
+
+    sigmoid = RooFormulaVar("sigmoid","sigmoid","@1/(1+exp((-(@0-@2)/(@3*@2))))",RooArgList(x,max_eff,Ethresh,sigma))
+
+    pars.append(sigmoid)
+    pars.append(max_eff)
+    pars.append(Ethresh)
+    pars.append(sigma)
+
+    ################################################################################
+    # Make the RooEfficiency PDF
+    ################################################################################
+    # Acceptance state cut (1 or 0)
+    cut = RooCategory("cut","cutr")
+    cut.defineType("accept",1)
+    cut.defineType("reject",0)
+    
+    # Construct efficiency p.d.f eff(cut|x)
+    eff_pdf = RooEfficiency("eff_pdf","eff_pdf",sigmoid,cut,"accept") 
 
     return cut,pars,sub_funcs,eff_pdf
