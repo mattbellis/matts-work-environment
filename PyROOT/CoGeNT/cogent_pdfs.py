@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-#import ROOT
-#ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 
 ################################################################################
@@ -424,24 +424,34 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     # Define the Gaussian constraints. 
     ############################################################################
     #'''
-    exp2_slope_t_calc = RooRealVar("exp2_slope_t_calc","Exponential slope of the exponential term t calc",-3.36)
-    exp2_slope_t_uncert = RooRealVar("exp2_slope_t_uncert","Uncertainty on the exponential slope of the 2nd exponential term",0.708)
+    exp2_slope_calc = RooRealVar("exp2_slope_calc","Exponential slope of the exponential term t calc",-3.36)
+    exp2_slope_uncert = RooRealVar("exp2_slope_uncert","Uncertainty on the exponential slope of the 2nd exponential term",0.708)
     name = "gaussian_constraint_exp2" 
-    gc_exp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(exp2_slope_t,exp2_slope_t_calc,exp2_slope_t_uncert))
+    gc_exp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(exp2_slope,exp2_slope_calc,exp2_slope_uncert))
+
+    nexp2 = RooRealVar("nexp2","nexp2",575,0,600000)
+    nexp2_calc = RooRealVar("nexp2_calc","Calculated number of surface events.",575)
+    nexp2_uncert = RooRealVar("nexp2_uncert","Uncertainty on the number of surface events.",22)
+    name = "gaussian_constraint_nexp2" 
+    gc_nexp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(nexp2,nexp2_calc,nexp2_uncert))
 
     if verbose:
         gc.Print("v")
     #'''
-    pars.append(exp2_slope_t_calc)
-    pars.append(exp2_slope_t_uncert)
-    sub_funcs.append(gc_exp2)
+    pars.append(exp2_slope_calc)
+    pars.append(exp2_slope_uncert)
+    pars.append(nexp2)
+    pars.append(nexp2_calc)
+    pars.append(nexp2_uncert)
+
+    pars.append(gc_exp2)
+    pars.append(gc_nexp2)
 
     ############################################################################
     # Form the total PDF.
     ############################################################################
     nflat = RooRealVar("nflat","nflat",200,0,600000)
     nexp = RooRealVar("nexp","nexp",200,0,600000)
-    nexp2 = RooRealVar("nexp2","nexp2",200,0,600000)
 
     total_pdf = None
     if no_exp and not no_cg:
@@ -457,7 +467,7 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     else:
         total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_exp+cosmogenic_pdf",RooArgList(flat_exp,exp_exp,cosmogenic_pdf),RooArgList(nflat,nexp,ncosmogenics))
 
-    pars += [nflat,nexp,nexp2]
+    pars += [nflat,nexp]
 
     return pars,sub_funcs,total_pdf
 
