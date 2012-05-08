@@ -4,8 +4,6 @@
 # Import the necessary libraries.
 ################################################################################
 import sys
-#import ROOT
-#ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
 
 from math import *
@@ -19,6 +17,8 @@ from cogent_utilities import *
 from cogent_pdfs import *
 ################################################################################
 
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ################################################################################
 ################################################################################
@@ -492,13 +492,18 @@ def main():
         # parameters.
         for c in cogent_pars_dict:
 
+            #print cogent_pars_dict[c].GetName()
             name = "gaussian_constraint"
             if c.find(name)>=0:
+                print cogent_pars_dict[c].GetName()
                 gc_s.append(c)
                 nllList.add(cogent_pars_dict[c])
+
         if args.add_exp2:
+            cogent_pars_dict["nexp2"].setConstant(False)
             cogent_pars_dict["exp2_slope"].setConstant(False)
 
+    #exit()
     ############################################################################
     # Create the neg log likelihood object to pass to RooMinuit
     ############################################################################
@@ -714,8 +719,10 @@ def main():
 
     # Dump the phase info
     days = 0.0
+    days_err = 0.0
     for i in range(0,3):
         phase = None
+        phase_err = None
         phase_string = None
         if i==0:
             phase_string = "exp"
@@ -725,17 +732,25 @@ def main():
             phase_string = "cg"
         name = "%s_mod_phase" % (phase_string)
         phase = cogent_pars_dict[name].getVal()
+        phase_err = cogent_pars_dict[name].getError()
         if phase>=0:
             #days = 365 - (phase/(2*pi))*365 + (365/4.0)
             days = (-abs(degrees(0.66)/360.0) + 0.25 )*365.0
+            days_err = (-abs(degrees(0.66)/360.0) + 0.25 )*365.0
         else:
             days = (abs(degrees(phase)/360.0) + 0.25 )*365.0
+            days_err = (abs(degrees(phase_err)/360.0))*365.0
             #days = (phase/(2*pi))*365 + (365/2.0)
         print "%s phase: %7.2f (rad) %3f (days)" % (phase_string, phase, days)
         # Convert phase peak to a day of the year.
         phase_peak = timedelta(days=int(days))
+        phase_peak_err = timedelta(days=int(days_err))
         phase_peak_date = start_date + phase_peak
+        phase_peak_date_hi = start_date + phase_peak + phase_peak_err
+        phase_peak_date_lo = start_date + phase_peak - phase_peak_err
         print phase_peak_date.strftime("\t\t%B %d, %Y")
+        print phase_peak_date_lo.strftime("\t\t%B %d, %Y")
+        print phase_peak_date_hi.strftime("\t\t%B %d, %Y")
 
     ############################################################################
     # Keep the gui alive unless batch mode or we hit the appropriate key.
