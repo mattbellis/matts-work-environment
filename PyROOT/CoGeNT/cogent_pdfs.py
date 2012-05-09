@@ -426,6 +426,7 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     #'''
     exp2_slope_calc = RooRealVar("exp2_slope_calc","Exponential slope of the exponential term t calc",-3.36)
     exp2_slope_uncert = RooRealVar("exp2_slope_uncert","Uncertainty on the exponential slope of the 2nd exponential term",0.708)
+    #exp2_slope_uncert = RooRealVar("exp2_slope_uncert","Uncertainty on the exponential slope of the 2nd exponential term",0.0708)
     name = "gaussian_constraint_exp2" 
     gc_exp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(exp2_slope,exp2_slope_calc,exp2_slope_uncert))
 
