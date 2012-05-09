@@ -286,6 +286,7 @@ def main():
 
     ########################################################################
     # Make dictionaries for the pars and sub_funcs.
+    # Grab the Gaussian constraints.
     ########################################################################
     cogent_pars_dict = {}
     for p in cogent_pars:
@@ -402,19 +403,6 @@ def main():
                 cogent_pars_dict[p].setConstant(False)
             elif "cosmogenic_norms_calc" in p:
                 cogent_pars_dict[p].setConstant(True)
-        '''
-        cogent_pars_dict["cosmogenic_norms_1"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_2"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_3"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_4"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_5"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_6"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_7"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_8"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_9"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_10"].setConstant(False)
-        '''
-
     ########################################################################
 
     # Fix the modulation to have an annual frequency.
