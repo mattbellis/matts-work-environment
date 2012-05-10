@@ -6,8 +6,10 @@ import matplotlib.pyplot as plt
 # of the map.
 # lat_ts is the latitude of true scale.
 # resolution = 'c' means use crude resolution coastlines.
-m = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80,\
-                    llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')
+#m = Basemap(projection='poly',lon_0=-70.0,lat_0=-33.0,\
+        #llcrnrlon=-35.,llcrnrlat=-30,urcrnrlon=80.,urcrnrlat=50.,lat_ts=20,resolution='c')
+m = Basemap(projection='poly',lon_0=-70.0,lat_0=-33.0,\
+                    llcrnrlon=-100.,llcrnrlat=-60,urcrnrlon=-30.,urcrnrlat=-10.,lat_ts=20,resolution='c')
 #m.etopo()
 
 m.drawcoastlines()
