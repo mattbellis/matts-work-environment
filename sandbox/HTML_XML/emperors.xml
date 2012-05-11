@@ -1,0 +1,31 @@
+<emperors>
+  <emperor>
+    <name>Augustus</name>
+    <rule>27BC-14AD</rule>
+    <death>Peaceful</death>
+  </emperor>
+  <emperor>
+    <name>Tiberius</name>
+    <rule>14-37</rule>
+    <death>
+      Murdered by his great-nephew and the commander of his bodyguard
+    </death>
+  </emperor>
+  <emperor>
+    <name>Caligula</name>
+    <rule>37-41</rule>
+    <death>
+      Murdered by the commander of his bodyguard (a different one than the one before)
+    </death>
+  </emperor>
+  <emperor>
+    <name>Claudius</name>
+    <rule>41-54</rule>
+    <death>Poisoned by his fourth wife</death>
+  </emperor>
+  <emperor>
+    <name>Nero</name>
+    <rule>54-68</rule>
+    <death>Suicide after losing the Empire</death>
+  </emperor>
+</emperors>

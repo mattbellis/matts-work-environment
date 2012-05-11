@@ -1,0 +1,14 @@
+import os 
+
+env = Environment()
+
+# Grab my local environment variable PATH so I can find nvcc
+env = Environment(ENV = {'PATH' : os.environ['PATH']})
+
+env['CC'] = ['nvcc']
+
+env.Program(target='calc_separation_and_histogram', source=['calc_separation_and_histogram.cu'])
+env.Program(target='generate_galaxies', source=['generate_galaxies.cc'])
+env.Program(target='calc_separation_and_histogram_lots_of_galaxies', source=['calc_separation_and_histogram_lots_of_galaxies.cu'])
+
+
