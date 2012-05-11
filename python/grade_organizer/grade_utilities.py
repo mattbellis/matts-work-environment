@@ -212,7 +212,8 @@ class Student:
         drop_lowest_score = False
         ret += " -----\nFinal exam\n -----\n"
         for g in self.grades.final_exam:
-            1
+            ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
+            #1
             #ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
         if len(self.grades.final_exam)>=1:
             avg = calc_average_of_grades(self.grades.final_exam, drop_lowest_score)
