@@ -1,8 +1,8 @@
 #!/bin/tcsh 
 
-set machine = "yakut10"
+set machine = "yakut16"
 if ( $1 != "" ) then
-  set machine = $1
+  set machine = "yakut"$1
 endif
 
 ssh bellis@$machine.slac.stanford.edu
