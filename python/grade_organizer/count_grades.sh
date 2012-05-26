@@ -1,16 +1,17 @@
-echo "Exam"
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep 2012 | sort -k4 -n | awk '{if ($4>=90 && $4<200) print $4};' | wc -l
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep 2012 | sort -k4 -n | awk '{if ($4>=80 && $4<90) print $4};' | wc -l
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep 2012 | sort -k4 -n | awk '{if ($4>=70 && $4<80) print $4};' | wc -l
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep 2012 | sort -k4 -n | awk '{if ($4>=60 && $4<70) print $4};' | wc -l
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep 2012 | sort -k4 -n | awk '{if ($4>=0 && $4<60) print $4};' | wc -l
-
+#echo "Exam"
+#set date = '5/3/2012'
+#python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep $date | sort -k4 -n | awk '{if ($4>=90 && $4<200) print $4};' | wc -l
+#python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep $date | sort -k4 -n | awk '{if ($4>=80 && $4<90) print $4};' | wc -l
+#python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep $date | sort -k4 -n | awk '{if ($4>=70 && $4<80) print $4};' | wc -l
+#python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep $date | sort -k4 -n | awk '{if ($4>=60 && $4<70) print $4};' | wc -l
+#python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep exam | grep $date | sort -k4 -n | awk '{if ($4>=0 && $4<60) print $4};' | wc -l
+#
 echo "Final exam"
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k5 -n | awk '{if ($5>=90 && $5<200) print $4};' | wc -l
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k5 -n | awk '{if ($5>=80 && $5<90) print $4};' | wc -l
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k5 -n | awk '{if ($5>=70 && $5<80) print $4};' | wc -l
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k5 -n | awk '{if ($5>=60 && $5<70) print $4};' | wc -l
-python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k5 -n | awk '{if ($5>=0 && $5<60) print $4};' | wc -l
+python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k4 -n | awk '{if ($4>=90 && $4<200) print $4};' | wc -l
+python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k4 -n | awk '{if ($4>=80 && $4<90) print $4};' | wc -l
+python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k4 -n | awk '{if ($4>=70 && $4<80) print $4};' | wc -l
+python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k4 -n | awk '{if ($4>=60 && $4<70) print $4};' | wc -l
+python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep final_exam | sort -k4 -n | awk '{if ($4>=0 && $4<60) print $4};' | wc -l
 
 echo "Final grade"
 python summarize_grades.py data/NIU\ -\ PHYS\ 283\ -\ Spring\ 2012\ -\ Grades\ -\ Course\ grades.csv --dump-grades | grep 'Final grade' | sort -k3 -n | awk '{if ($3>=90 && $3<200) print $3};' | wc -l

@@ -67,6 +67,10 @@ def main():
                 starting_time = time_start
 
             xval = (time_start-starting_time).total_seconds()
+
+            # Uncomment the following line if you are plotting your calibration data.
+            #xval = float(vals[1])
+
             xdata = np.append(xdata,xval)
 
             line_count += 1

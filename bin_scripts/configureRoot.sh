@@ -1,5 +1,5 @@
-#./configure linux \
-./configure linuxx8664gcc \
+#./configure linuxx8664gcc \
+./configure linux \
                       --prefix=/usr/local \
                       --with-cern-libdir=/usr/lib \
                       --enable-mathcore \
@@ -15,5 +15,5 @@
 
 
 
-echo Dont forget to unsetenv TOP_DIR
+#echo Dont forget to unsetenv TOP_DIR
 
