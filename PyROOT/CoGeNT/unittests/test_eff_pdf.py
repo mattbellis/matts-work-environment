@@ -10,14 +10,14 @@ t = RooRealVar("t","time",1.0,500)
 #efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
 
 ######## Same as Nicole's
-Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
-efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
+#Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
+#efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
 
 # Looking for a more dramatic change
 #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 4.0] # Changed to 4.0
 #efftrig = [0.21747, 0.37142, 0.41090, 0.53808, 0.55519, 0.56443, 0.56801, 0.56814, 0.57703, 0.588, 0.9, 0.96786]
-#Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 2.0] # Changed to 4.0
-#efftrig = [0.11747, 0.17142, 0.11090, 0.13808, 0.75519, 0.26443, 0.26801, 0.26814, 0.25703, 0.558, 0.9, 0.96786]
+Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 2.0] # Changed to 4.0
+efftrig = [0.11747, 0.17142, 0.11090, 0.13808, 0.75519, 0.26443, 0.26801, 0.26814, 0.25703, 0.558, 0.9, 0.96786]
 
 neff = len(Etrig)
 
@@ -66,8 +66,8 @@ limits[nbins] = bin_centers[i]+0.1
 
 
 # These will hold the values of the bin heights
-scaling = 12.5 # Need to figure out how to do this properly. 
-#scaling = 1.0 # Need to figure out how to do this properly. 
+#scaling = 12.5 # Need to figure out how to do this properly. 
+scaling = 1.0 # Need to figure out how to do this properly. 
 #scaling = 0.5 # Need to figure out how to do this properly. 
 list = RooArgList("list")
 binHeight = []
@@ -155,8 +155,10 @@ can.SetFillColor(0)
 can.Divide(3,1)
 
 can.cd(1)
-rargset = RooArgSet(aPdf)
-aPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
+#rargset = RooArgSet(aPdf)
+#aPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
+#effPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
+effPdf.plotOn(frame_xeff,RooFit.LineColor(3))
 #rargset = RooArgSet(kest1)
 #effPdf.plotOn(frame_xeff,RooFit.Components(rargset),RooFit.LineColor(3))
 frame_xeff.Draw()

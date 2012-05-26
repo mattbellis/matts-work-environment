@@ -34,10 +34,13 @@ def mass_from_special_relativity(v4):
 
     mass_squared = v4[0]*v4[0] - pmag*pmag
 
+    '''
     if mass_squared>0:
         return np.sqrt(mass_squared)
     else:
         return -np.sqrt(abs(mass_squared))
+    '''
+    return np.sqrt(mass_squared)
 
 ################################################################################
 # Calculate the mass of a particle using Special Relativity
