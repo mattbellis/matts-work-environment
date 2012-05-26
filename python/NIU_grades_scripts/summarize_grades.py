@@ -155,6 +155,8 @@ def main():
     # Print out the summary
     ############################################################################
     for i,s in enumerate(students):
+        print "here"
+        print s.student_name
         averages, output = s.summary_output(final_grade_weighting)
         gvis_output = s.gvis_output(final_grade_weighting)
 

@@ -21,17 +21,22 @@ def calc_points(starting_x, starting_y, nx, ny,diag_flag=0):
 
 fig = plt.figure(figsize=(8,8),dpi=100,facecolor='w',edgecolor='w')
 
-npts = 10
+#npts = 10
+#diag_flag = 1
+#ndiv = 4
+
+npts = 40
 diag_flag = 1
+ndiv = 1
 
 alternate = 0
-for i in range(0,4):
+for i in range(0,ndiv):
     if alternate==0:
         alternate=1
     elif alternate==1:
         alternate=0
 
-    for j in range(0,4):
+    for j in range(0,ndiv):
         xpts,ypts = calc_points(i*npts,j*npts,npts,npts,diag_flag)
 
         if alternate==0:
