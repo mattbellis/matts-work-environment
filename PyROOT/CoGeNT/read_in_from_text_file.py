@@ -4,8 +4,6 @@
 # Import the necessary libraries.
 ################################################################################
 import sys
-#import ROOT
-#ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
 
 from math import *
@@ -19,6 +17,8 @@ from cogent_utilities import *
 from cogent_pdfs import *
 ################################################################################
 
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 ################################################################################
 ################################################################################
@@ -268,7 +268,8 @@ def main():
 
     cogent_pars,cogent_sub_funcs,temp_cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
 
-    cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency(x,t,args.verbose)
+    #cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency(x,t,args.verbose)
+    cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency_sigmoid(x,t,args.verbose)
 
     # Add the in the efficiency correction...or not.
     cogent_fit_pdf = temp_cogent_fit_pdf
@@ -285,6 +286,7 @@ def main():
 
     ########################################################################
     # Make dictionaries for the pars and sub_funcs.
+    # Grab the Gaussian constraints.
     ########################################################################
     cogent_pars_dict = {}
     for p in cogent_pars:
@@ -401,19 +403,6 @@ def main():
                 cogent_pars_dict[p].setConstant(False)
             elif "cosmogenic_norms_calc" in p:
                 cogent_pars_dict[p].setConstant(True)
-        '''
-        cogent_pars_dict["cosmogenic_norms_1"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_2"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_3"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_4"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_5"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_6"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_7"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_8"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_9"].setConstant(False)
-        cogent_pars_dict["cosmogenic_norms_10"].setConstant(False)
-        '''
-
     ########################################################################
 
     # Fix the modulation to have an annual frequency.
@@ -424,7 +413,7 @@ def main():
 
     # Let the exponential modulate: float phase offset and amplitude.
     if args.exp_mod:
-        cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(False)
+        cogent_pars_dict["exp_mod_phase"].setVal(-0.7); cogent_pars_dict["exp_mod_phase"].setConstant(False)
         cogent_pars_dict["exp_mod_amp"].setVal(1.0); cogent_pars_dict["exp_mod_amp"].setConstant(False)
     else:
         cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(True)
@@ -452,7 +441,8 @@ def main():
     if args.add_exp2:
         #cogent_pars_dict["nexp2"].setVal(600.0); cogent_pars_dict["nexp2"].setConstant(False)
         cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
-        cogent_pars_dict["exp2_slope"].setVal(-3.0); cogent_pars_dict["exp2_slope"].setConstant(True)
+        cogent_pars_dict["exp2_slope"].setVal(-3.36); cogent_pars_dict["exp2_slope"].setConstant(True)
+        # Need to add in a uncertainty of 0.708
 
     #exit(-1)
     ############################################################################
@@ -490,11 +480,18 @@ def main():
         # parameters.
         for c in cogent_pars_dict:
 
+            #print cogent_pars_dict[c].GetName()
             name = "gaussian_constraint"
             if c.find(name)>=0:
+                print cogent_pars_dict[c].GetName()
                 gc_s.append(c)
                 nllList.add(cogent_pars_dict[c])
 
+        if args.add_exp2:
+            cogent_pars_dict["nexp2"].setConstant(False)
+            cogent_pars_dict["exp2_slope"].setConstant(False)
+
+    #exit()
     ############################################################################
     # Create the neg log likelihood object to pass to RooMinuit
     ############################################################################
@@ -592,7 +589,9 @@ def main():
     cans[1].cd(1)
     #argset = RooArgSet(eff_pdf)
     #cogent_fit_pdf.plotOn(xframe_eff,RooFit.Components(argset))
-    eff_pdf.plotOn(xframe_eff)
+    #argset = RooArgSet(eff_sub_funcs[0])
+    #eff_sub_funcs[0].plotOn(xframe_eff,RooFit.Components(argset))
+    eff_pars[0].plotOn(xframe_eff)
     xframe_eff.GetXaxis().SetLimits(0.5,xmax)
     #xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_eff.Draw()
@@ -612,6 +611,7 @@ def main():
         save_file_name += "_cg_mod"
     if args.add_gc:
         save_file_name += "_add_gc%d" % (args.gc_flag)
+
     if args.add_exp2:
         save_file_name += "_add_exp2"
 
@@ -707,8 +707,10 @@ def main():
 
     # Dump the phase info
     days = 0.0
+    days_err = 0.0
     for i in range(0,3):
         phase = None
+        phase_err = None
         phase_string = None
         if i==0:
             phase_string = "exp"
@@ -718,17 +720,25 @@ def main():
             phase_string = "cg"
         name = "%s_mod_phase" % (phase_string)
         phase = cogent_pars_dict[name].getVal()
+        phase_err = cogent_pars_dict[name].getError()
         if phase>=0:
             #days = 365 - (phase/(2*pi))*365 + (365/4.0)
             days = (-abs(degrees(0.66)/360.0) + 0.25 )*365.0
+            days_err = (-abs(degrees(0.66)/360.0) + 0.25 )*365.0
         else:
             days = (abs(degrees(phase)/360.0) + 0.25 )*365.0
+            days_err = (abs(degrees(phase_err)/360.0))*365.0
             #days = (phase/(2*pi))*365 + (365/2.0)
         print "%s phase: %7.2f (rad) %3f (days)" % (phase_string, phase, days)
         # Convert phase peak to a day of the year.
         phase_peak = timedelta(days=int(days))
+        phase_peak_err = timedelta(days=int(days_err))
         phase_peak_date = start_date + phase_peak
+        phase_peak_date_hi = start_date + phase_peak + phase_peak_err
+        phase_peak_date_lo = start_date + phase_peak - phase_peak_err
         print phase_peak_date.strftime("\t\t%B %d, %Y")
+        print phase_peak_date_lo.strftime("\t\t%B %d, %Y")
+        print phase_peak_date_hi.strftime("\t\t%B %d, %Y")
 
     ############################################################################
     # Keep the gui alive unless batch mode or we hit the appropriate key.

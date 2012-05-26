@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-#import ROOT
-#ROOT.PyConfig.IgnoreCommandLineOptions = True
 from ROOT import *
+import ROOT
+ROOT.PyConfig.IgnoreCommandLineOptions = True
 
 
 ################################################################################
@@ -396,8 +396,6 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     exp2_exp_x = RooExponential("exp2_exp_x","Exponential PDF for exp x",x,exp2_slope)
 
     exp2_slope_t = RooRealVar("exp2_slope_t","Exponential slope of the exponential term t",-0.00001,-100.0,0.0)
-    #exp2_slope_t_calc = RooRealVar("exp2_slope_t_calc","Exponential slope of the exponential term t calc",-0.00001,-100.0,0.0)
-    #exp2_slope_t_uncert = RooRealVar("exp2_slope_t_uncert","Uncertainty on the exponential slope of the 2nd exponential term",-0.00001,-100.0,0.0)
 
     exp2_mod_frequency = RooRealVar("exp2_mod_frequency","Exponential term modulation frequency",0.00)
     exp2_mod_offset = RooRealVar("exp2_mod_offset","Exponential term modulation phase",2.0)
@@ -408,16 +406,6 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
 
     exp2_exp = RooProdPdf("exp2_exp","exp2_exp_x*exp2_exp_t",RooArgList(exp2_exp_x,exp2_exp_t))
 
-    ############################################################################
-    # Define the Gaussian constraints. 
-    ############################################################################
-    '''
-    name = "gaussian_constraint_exp2_%d" % (i)
-    gc_exp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(exp2_slope_t,exp2_slope_t_calc,exp2_slope_t_uncertainty))
-
-    if verbose:
-        gc.Print("v")
-    '''
 
     pars.append(exp2_mod_frequency)
     pars.append(exp2_mod_amp)
@@ -430,15 +418,41 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     sub_funcs.append(exp2_exp_x)
     sub_funcs.append(exp2_exp_t)
     sub_funcs.append(exp2_exp)
-    #pars.append(exp2_slope_t_calc)
-    #sub_funcs.append(gc_exp2)
+
+
+    ############################################################################
+    # Define the Gaussian constraints. 
+    ############################################################################
+    #'''
+    exp2_slope_calc = RooRealVar("exp2_slope_calc","Exponential slope of the exponential term t calc",-3.36)
+    exp2_slope_uncert = RooRealVar("exp2_slope_uncert","Uncertainty on the exponential slope of the 2nd exponential term",0.708)
+    #exp2_slope_uncert = RooRealVar("exp2_slope_uncert","Uncertainty on the exponential slope of the 2nd exponential term",0.0708)
+    name = "gaussian_constraint_exp2" 
+    gc_exp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(exp2_slope,exp2_slope_calc,exp2_slope_uncert))
+
+    nexp2 = RooRealVar("nexp2","nexp2",575,0,600000)
+    nexp2_calc = RooRealVar("nexp2_calc","Calculated number of surface events.",575)
+    nexp2_uncert = RooRealVar("nexp2_uncert","Uncertainty on the number of surface events.",22)
+    name = "gaussian_constraint_nexp2" 
+    gc_nexp2 = RooFormulaVar(name,name,"((@0-@1)*(@0-@1))/(2*@2*@2)",RooArgList(nexp2,nexp2_calc,nexp2_uncert))
+
+    if verbose:
+        gc.Print("v")
+    #'''
+    pars.append(exp2_slope_calc)
+    pars.append(exp2_slope_uncert)
+    pars.append(nexp2)
+    pars.append(nexp2_calc)
+    pars.append(nexp2_uncert)
+
+    pars.append(gc_exp2)
+    pars.append(gc_nexp2)
 
     ############################################################################
     # Form the total PDF.
     ############################################################################
     nflat = RooRealVar("nflat","nflat",200,0,600000)
     nexp = RooRealVar("nexp","nexp",200,0,600000)
-    nexp2 = RooRealVar("nexp2","nexp2",200,0,600000)
 
     total_pdf = None
     if no_exp and not no_cg:
@@ -454,7 +468,7 @@ def cogent_pdf(x,t,gc_flag=0,e_lo=None,no_exp=False,no_cg=False,add_exp2=False,v
     else:
         total_pdf = RooAddPdf("total_energy_pdf","flat_exp+exp_exp+cosmogenic_pdf",RooArgList(flat_exp,exp_exp,cosmogenic_pdf),RooArgList(nflat,nexp,ncosmogenics))
 
-    pars += [nflat,nexp,nexp2]
+    pars += [nflat,nexp]
 
     return pars,sub_funcs,total_pdf
 
@@ -472,11 +486,11 @@ def efficiency(x,t,verbose=False):
     #efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
     
     ######## Same as Nicole's
-    Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 3.2] # Changed to 4.0
-    efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
-    
-    #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
+    #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 3.2] # Changed to 4.0
     #efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
+    
+    Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.92066, 4.0] # Changed to 4.0
+    efftrig = [0.71747, 0.77142, 0.81090, 0.83808, 0.85519, 0.86443, 0.86801, 0.86814, 0.86703, 0.86786, 0.86786]
     
     # Looking for a more dramatic change
     #Etrig = [0.47278, 0.52254, 0.57231, 0.62207, 0.67184, 0.72159, 0.77134, 0.82116, 0.87091, 0.90, 0.92066, 2.0] # Changed to 4.0
@@ -529,7 +543,8 @@ def efficiency(x,t,verbose=False):
 
 
     # These will hold the values of the bin heights
-    scaling = 12.5 # Need to figure out how to do this properly. 
+    #scaling = 12.5 # Need to figure out how to do this properly. 
+    scaling = 1.0 # Need to figure out how to do this properly. 
     #scaling = 0.5 # Need to figure out how to do this properly. 
     list = RooArgList("list")
     binHeight = []
@@ -554,5 +569,38 @@ def efficiency(x,t,verbose=False):
     
     # Construct efficiency p.d.f eff(cut|x)
     eff_pdf = RooEfficiency("eff_pdf","eff_pdf",aPdf,cut,"accept") 
+
+    return cut,pars,sub_funcs,eff_pdf
+
+################################################################################
+# Efficiency pdf
+################################################################################
+
+def efficiency_sigmoid(x,t,verbose=False):
+
+    pars = []
+    sub_funcs = []
+
+    max_eff = RooRealVar("max_eff","Maximum efficiency",0.86786)
+    Ethresh = RooRealVar("Ethresh","E_{threshhold}",0.345)
+    sigma = RooRealVar("sigma","sigma",0.241)
+
+    sigmoid = RooFormulaVar("sigmoid","sigmoid","@1/(1+exp((-(@0-@2)/(@3*@2))))",RooArgList(x,max_eff,Ethresh,sigma))
+
+    pars.append(sigmoid)
+    pars.append(max_eff)
+    pars.append(Ethresh)
+    pars.append(sigma)
+
+    ################################################################################
+    # Make the RooEfficiency PDF
+    ################################################################################
+    # Acceptance state cut (1 or 0)
+    cut = RooCategory("cut","cutr")
+    cut.defineType("accept",1)
+    cut.defineType("reject",0)
+    
+    # Construct efficiency p.d.f eff(cut|x)
+    eff_pdf = RooEfficiency("eff_pdf","eff_pdf",sigmoid,cut,"accept") 
 
     return cut,pars,sub_funcs,eff_pdf

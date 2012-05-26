@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 # resolution = 'c' means use crude resolution coastlines.
 m = Basemap(projection='merc',llcrnrlat=-80,urcrnrlat=80,\
                     llcrnrlon=-180,urcrnrlon=180,lat_ts=20,resolution='c')
-m.etopo()
+#m.etopo()
 
 m.drawcoastlines()
 #m.fillcontinents(color='coral',lake_color='aqua')
