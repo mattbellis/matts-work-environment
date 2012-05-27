@@ -128,6 +128,11 @@ print len(bad_masses[0][(bad_masses[0]>1.100)*(bad_masses[0]<1.130)])
 print len(bad_masses[1][(bad_masses[1]>-0.004)*(bad_masses[1]<0.004)])
 print len(bad_masses[2][(bad_masses[2]>1.100)*(bad_masses[2]<1.130)])
 
+print "vtx"
+print len(vtxs[0])
+print len(vtxs[0][vtxs[0]>3.0])
+print len(vtxs[1][vtxs[1]>3.0])
+
 lh = []
 
 # Correct assignments
