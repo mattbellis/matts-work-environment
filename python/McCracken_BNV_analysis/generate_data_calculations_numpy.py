@@ -97,6 +97,7 @@ def main():
 
     ############################################################################
     for infile_name in infile_names[0]:
+        print infile_name
         infile = open(infile_name)
 
         for line in infile:
