@@ -25,13 +25,14 @@ count = 0
 beam = None
 nvtx = 0
 
-max_events = 1000
+max_events = 100000
 
 mtitles = []
 mtitles.append(r"Invariant mass of the $\Lambda$ candidate")
 mtitles.append(r'Total missing mass squared')
 mtitles.append(r"Missing mass off the $K^{+}$ candidate")
 
+correct_permutation = [0,0,0]
 for line in infile:
     #vals = line.split()
     vals = np.genfromtxt(StringIO(line),dtype=(float),delimiter=" ")
@@ -44,25 +45,32 @@ for line in infile:
 
     if no_nans:
 
-        if abs(vals[0]-1.115)<abs(vals[3]-1.115):
+        if abs(vals[0]-1.115)<abs(vals[4]-1.115):
             masses[0] = np.append(masses[0],vals[0])
-            bad_masses[0] = np.append(bad_masses[0],vals[3])
+            bad_masses[0] = np.append(bad_masses[0],vals[4])
+            correct_permutation[0] += 1
         else:
-            masses[0] = np.append(masses[0],vals[3])
+            masses[0] = np.append(masses[0],vals[4])
             bad_masses[0] = np.append(bad_masses[0],vals[0])
 
-        if abs(vals[1])<abs(vals[4]):
+        if abs(vals[1])<abs(vals[5]):
             masses[1] = np.append(masses[1],vals[1])
-            bad_masses[1] = np.append(bad_masses[1],vals[4])
+            bad_masses[1] = np.append(bad_masses[1],vals[5])
+            vtxs[0] = np.append(vtxs[0],vals[3])
+            vtxs[1] = np.append(vtxs[1],vals[7])
+            correct_permutation[1] += 1
         else:
-            masses[1] = np.append(masses[1],vals[4])
+            masses[1] = np.append(masses[1],vals[5])
             bad_masses[1] = np.append(bad_masses[1],vals[1])
+            vtxs[0] = np.append(vtxs[0],vals[7])
+            vtxs[1] = np.append(vtxs[1],vals[3])
 
-        if abs(vals[2]-1.115)<abs(vals[5]-1.115):
+        if abs(vals[2]-1.115)<abs(vals[6]-1.115):
             masses[2] = np.append(masses[2],vals[2])
-            bad_masses[2] = np.append(bad_masses[2],vals[5])
+            bad_masses[2] = np.append(bad_masses[2],vals[6])
+            correct_permutation[2] += 1
         else:
-            masses[2] = np.append(masses[2],vals[5])
+            masses[2] = np.append(masses[2],vals[6])
             bad_masses[2] = np.append(bad_masses[2],vals[2])
 
     count +=1 
@@ -73,7 +81,7 @@ for line in infile:
 
 
 print "\n"
-nfigs = 3
+nfigs = 4
 figs = []
 for i in xrange(nfigs):
     name = "fig%d" % (i)
@@ -84,8 +92,11 @@ for i in xrange(nfigs):
     # We'll make this a nfigs x nsubplots_per_fig to store the subplots
     subplots.append([])
     for j in xrange(1,4):
-        # Divide the figure into a 2x2 grid.
-        subplots[i].append(figs[i].add_subplot(1,3,j))
+        if (i<3):
+            subplots[i].append(figs[i].add_subplot(1,3,j))
+        else:
+            if j<3:
+                subplots[i].append(figs[i].add_subplot(1,2,j))
 
     # Adjust the spacing between the subplots, to allow for better
     # readability.
@@ -94,20 +105,28 @@ for i in xrange(nfigs):
 
 
 
+print 'Permutations'
+print correct_permutation
 #print masses
 print 'Masses'
-print len(masses[0])
-print len(masses[1])
-print len(masses[2])
+#print len(masses[0])
+#print len(masses[1])
+#print len(masses[2])
 
 print "Subcategories"
-#m=masses[0]
-print len(masses[0][masses[0]>1.100 and masses[0]<1.130])
+print len(masses[0][(masses[0]>1.100)*(masses[0]<1.130)])
+print len(masses[1][(masses[1]>-0.004)*(masses[1]<0.004)])
+print len(masses[2][(masses[2]>1.100)*(masses[2]<1.130)])
 
 print 'Bad masses'
-print len(bad_masses[0])
-print len(bad_masses[1])
-print len(bad_masses[2])
+#print len(bad_masses[0])
+#print len(bad_masses[1])
+#print len(bad_masses[2])
+
+print "Subcategories"
+print len(bad_masses[0][(bad_masses[0]>1.100)*(bad_masses[0]<1.130)])
+print len(bad_masses[1][(bad_masses[1]>-0.004)*(bad_masses[1]<0.004)])
+print len(bad_masses[2][(bad_masses[2]>1.100)*(bad_masses[2]<1.130)])
 
 lh = []
 
@@ -164,9 +183,13 @@ subplots[2][2].set_ylabel(mtitles[2])
 #figs[2].add_subplot(1,3,3)
 #plt.colorbar()
 
+lh.append(lch.hist_err(vtxs[0],bins=100,range=(0.0,30.00),axes=subplots[3][0]))
+lh.append(lch.hist_err(vtxs[1],bins=100,range=(0.0,30.00),axes=subplots[3][1]))
+
 figs[0].savefig("Plots/fig0.png")
 figs[1].savefig("Plots/fig1.png")
 figs[2].savefig("Plots/fig2.png")
+figs[3].savefig("Plots/fig3.png")
 
 plt.show()
 

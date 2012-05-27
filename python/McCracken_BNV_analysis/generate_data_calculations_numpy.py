@@ -60,7 +60,7 @@ def main():
     for i in xrange(4):
         beam.append(np.array([]))
 
-    print beam
+    #print beam
 
     n = 0
     masses = []
@@ -74,6 +74,7 @@ def main():
     v3 = [0.0, 0.0, 0.0]
 
     if args.hypothesis == 'kppi':
+        print "Using hypothesis kppi"
         masses = [[mass_k,mass_p,mass_pi],
                   [mass_p,mass_k,mass_pi]]
 
@@ -81,13 +82,17 @@ def main():
         masses = [[mass_k,mass_e,mass_k],
                   [mass_e,mass_k,mass_k]]
 
+    elif args.hypothesis == 'kepi':
+        masses = [[mass_k,mass_e,mass_pi],
+                  [mass_e,mass_k,mass_pi]]
+
     ############################################################################
 
     infile_names = args.input_file_name
-    print infile_names
+    #print infile_names
     #outfile_name = "calculated_data_files/%s_hyp_%s.csv" % (infile_name.split('/')[-1].split('.')[0],args.hypothesis)
     outfile_name = "calculated_data_files/%s_hyp_%s.csv" % (infile_names[0][0].split('/')[-1].split('.')[0],args.hypothesis)
-    print outfile_name
+    #print outfile_name
     outfile = open(outfile_name,"w+")
 
     ############################################################################
@@ -142,19 +147,20 @@ def main():
         ############################################################################
         # Finished reading in the data.
         ############################################################################
-        print "Beam stuff: " 
-        print len(beam[0])
-        print beam[0]
+        #print "Beam stuff: " 
+        #print len(beam[0])
+        #print beam[0]
         beam_plus_target = [beam[0]+mass_p,beam[1],beam[2],beam[3]]
-        print beam_plus_target
-        print "end"
-        print p0
+        #print beam_plus_target
+        #print "end"
+        #print p0
         ############ Do some calculations #######################
 
         output += ""
         inv_mass = []
         missing_mass = []
         missing_mass_off_kaon = []
+        flightlen = []
         for j in xrange(2):
 
             #### Go through the two mass hypothesis.
@@ -203,9 +209,14 @@ def main():
             #print p4
             inv_mass.append(mass_from_special_relativity(p4))
 
+            vec = [vtx0[0]-vtx3[0],vtx0[1]-vtx3[1],vtx0[2]-vtx3[2]]
+            flightlen.append(magnitude_of_3vec(vec))
+            vec = [vtx1[0]-vtx2[0],vtx1[1]-vtx2[1],vtx1[2]-vtx2[2]]
+            flightlen.append(magnitude_of_3vec(vec))
+
         output += ""
-        for m0,mm0,mk0,m1,mm1,mk1 in zip(inv_mass[0],missing_mass[0],missing_mass_off_kaon[0],inv_mass[1],missing_mass[1],missing_mass_off_kaon[1]):
-            output = "%f %f %f %f %f %f\n" % (m0,mm0,mk0,m1,mm1,mk1)
+        for m0,mm0,mk0,fl0,m1,mm1,mk1,fl1 in zip(inv_mass[0],missing_mass[0],missing_mass_off_kaon[0],flightlen[0],inv_mass[1],missing_mass[1],missing_mass_off_kaon[1],flightlen[1]):
+            output = "%f %f %f %f %f %f %f %f\n" % (m0,mm0,mk0,fl0,m1,mm1,mk1,fl1)
             outfile.write(output)
 
     ############################################################################
