@@ -86,6 +86,10 @@ def main():
         masses = [[mass_k,mass_e,mass_pi],
                   [mass_e,mass_k,mass_pi]]
 
+    elif args.hypothesis == 'kkmu':
+        masses = [[mass_k,mass_k,mass_mu],
+                  [mass_pi,mass_k,mass_mu]]
+
     ############################################################################
 
     infile_names = args.input_file_name
@@ -162,6 +166,7 @@ def main():
         missing_mass = []
         missing_mass_off_kaon = []
         flightlen = []
+        p4 = None
         for j in xrange(2):
 
             #### Go through the two mass hypothesis.
@@ -178,34 +183,40 @@ def main():
             e2 = np.sqrt(masses[j][2]**2 + pmag2**2)
 
             # Missing mass
-            #'''
             p4 = [ beam_plus_target[0] - e0 - e1 - e2,
                    beam_plus_target[1] - p0[0] - p1[0] - p2[0],
                    beam_plus_target[2] - p0[1] - p1[1] - p2[1],
                    beam_plus_target[3] - p0[2] - p1[2] - p2[2]]
-            #'''
 
             #print p4
             missing_mass.append(mass2_from_special_relativity(p4))
 
             # Missing mass off kaon
-            #'''
-            p4 = [ beam_plus_target[0] - e0,
-                   beam_plus_target[1] - p0[0],
-                   beam_plus_target[2] - p0[1],
-                   beam_plus_target[3] - p0[2]]
-            #'''
+            if j==0:
+                p4 = [ beam_plus_target[0] - e0,
+                       beam_plus_target[1] - p0[0],
+                       beam_plus_target[2] - p0[1],
+                       beam_plus_target[3] - p0[2]]
+            else:
+                p4 = [ beam_plus_target[0] - e1,
+                       beam_plus_target[1] - p1[0],
+                       beam_plus_target[2] - p1[1],
+                       beam_plus_target[3] - p1[2]]
 
             #print p4
             missing_mass_off_kaon.append(mass_from_special_relativity(p4))
 
             # Lambda mass
-            #'''
-            p4 = [ e1 + e2,
-                   p1[0] + p2[0],
-                   p1[1] + p2[1],
-                   p1[2] + p2[2]]
-            #'''
+            if j==0:
+                p4 = [ e1 + e2,
+                       p1[0] + p2[0],
+                       p1[1] + p2[1],
+                       p1[2] + p2[2]]
+            else:
+                p4 = [ e0 + e2,
+                       p0[0] + p2[0],
+                       p0[1] + p2[1],
+                       p0[2] + p2[2]]
 
             #print p4
             inv_mass.append(mass_from_special_relativity(p4))

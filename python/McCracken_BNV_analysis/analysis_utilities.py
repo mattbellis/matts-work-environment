@@ -59,6 +59,7 @@ mass_e = 0.000511
 mass_pi = 0.139570
 mass_k = 0.493677
 mass_p = 0.938272
+mass_mu = 0.105658
 
 target = np.array([mass_p,0.0,0.0,0.0])
 target = np.array([mass_p,0.0,0.0,0.0])
