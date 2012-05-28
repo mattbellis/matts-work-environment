@@ -1,0 +1,2 @@
+python parseInverseCovariance_WithNominalCovariance.py ana32rhoPiToolsSDT_random_toyNum_120_fitID_396.log | grep 'GREPRESULTS'
+#python parseInverseCovariance_WithNominalCovariance.py ana32rhoPiToolsSDT_random_toyNum_120_fitID_396.log | grep -E 'GREPRESULTS|GREPVEC|GREPSTART'
