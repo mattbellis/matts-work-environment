@@ -14,7 +14,7 @@ import lichen.lichen as lch
 ################################################################################
 
 #infile = csv.reader(sys.argv[1],'rb')
-infile = open(sys.argv[1],'r')
+#infile = open(sys.argv[1],'r')
 
 n = 0
 masses = [np.array([]),np.array([]),np.array([])]
@@ -28,11 +28,27 @@ nvtx = 0
 max_events = 10000
 
 mtitles = []
-mtitles.append(r"Invariant mass of the $\Lambda$ candidate")
 mtitles.append(r'Total missing mass squared')
+mtitles.append(r"Invariant mass of the $\Lambda$ candidate")
 mtitles.append(r"Missing mass off the $K^{+}$ candidate")
 
 correct_permutation = [0,0,0]
+infile = np.load(sys.argv[1])
+
+masses = []
+vtxs = []
+for i in xrange(6):
+    masses.append(infile[i])
+for i in xrange(2):
+    vtxs.append(infile[6+i])
+
+masses[0] = masses[0][abs(masses[0]-1.115)<abs(masses[1]-1.115)]
+
+#plt.hist(masses[0],bins=50)
+#plt.show()
+
+exit(1)
+
 for line in infile:
     #vals = line.split()
     vals = np.genfromtxt(StringIO(line),dtype=(float),delimiter=" ")
@@ -48,7 +64,6 @@ for line in infile:
         if abs(vals[0]-1.115)<abs(vals[4]-1.115):
             masses[0] = np.append(masses[0],vals[0])
             bad_masses[0] = np.append(bad_masses[0],vals[4])
-            correct_permutation[0] += 1
         else:
             masses[0] = np.append(masses[0],vals[4])
             bad_masses[0] = np.append(bad_masses[0],vals[0])
@@ -56,7 +71,6 @@ for line in infile:
         if abs(vals[1])<abs(vals[5]):
             masses[1] = np.append(masses[1],vals[1])
             bad_masses[1] = np.append(bad_masses[1],vals[5])
-            correct_permutation[1] += 1
         else:
             masses[1] = np.append(masses[1],vals[5])
             bad_masses[1] = np.append(bad_masses[1],vals[1])
@@ -66,7 +80,6 @@ for line in infile:
             bad_masses[2] = np.append(bad_masses[2],vals[6])
             vtxs[0] = np.append(vtxs[0],vals[3])
             vtxs[1] = np.append(vtxs[1],vals[7])
-            correct_permutation[2] += 1
         else:
             masses[2] = np.append(masses[2],vals[6])
             bad_masses[2] = np.append(bad_masses[2],vals[2])
