@@ -32,7 +32,6 @@ mtitles.append(r"Invariant mass of the $\Lambda$ candidate")
 mtitles.append(r'Total missing mass squared')
 mtitles.append(r"Missing mass off the $K^{+}$ candidate")
 
-correct_permutation = [0,0,0]
 for line in infile:
     #vals = line.split()
     vals = np.genfromtxt(StringIO(line),dtype=(float),delimiter=" ")
@@ -48,15 +47,17 @@ for line in infile:
         if abs(vals[0]-1.115)<abs(vals[4]-1.115):
             masses[0] = np.append(masses[0],vals[0])
             bad_masses[0] = np.append(bad_masses[0],vals[4])
-            correct_permutation[0] += 1
+            vtxs[0] = np.append(vtxs[0],vals[3])
+            vtxs[1] = np.append(vtxs[1],vals[7])
         else:
             masses[0] = np.append(masses[0],vals[4])
             bad_masses[0] = np.append(bad_masses[0],vals[0])
+            vtxs[0] = np.append(vtxs[0],vals[7])
+            vtxs[1] = np.append(vtxs[1],vals[3])
 
         if abs(vals[1])<abs(vals[5]):
             masses[1] = np.append(masses[1],vals[1])
             bad_masses[1] = np.append(bad_masses[1],vals[5])
-            correct_permutation[1] += 1
         else:
             masses[1] = np.append(masses[1],vals[5])
             bad_masses[1] = np.append(bad_masses[1],vals[1])
@@ -64,14 +65,9 @@ for line in infile:
         if abs(vals[2]-1.115)<abs(vals[6]-1.115):
             masses[2] = np.append(masses[2],vals[2])
             bad_masses[2] = np.append(bad_masses[2],vals[6])
-            vtxs[0] = np.append(vtxs[0],vals[3])
-            vtxs[1] = np.append(vtxs[1],vals[7])
-            correct_permutation[2] += 1
         else:
             masses[2] = np.append(masses[2],vals[6])
             bad_masses[2] = np.append(bad_masses[2],vals[2])
-            vtxs[0] = np.append(vtxs[0],vals[7])
-            vtxs[1] = np.append(vtxs[1],vals[3])
 
     count +=1 
     if count>max_events:
@@ -105,14 +101,12 @@ for i in xrange(nfigs):
 
 
 
-print 'Permutations'
-print correct_permutation
 #print masses
 print 'Masses'
 #print len(masses[0])
 #print len(masses[1])
 #print len(masses[2])
-limits = [[1.1060,1.160],[-0.005,0.005],[1.1060,1.160]]
+limits = [[1.060,1.160],[-0.005,0.005],[1.060,1.160]]
 
 nevents = float(len(masses[0]))
 print "nevents: %f" % (nevents)
@@ -123,7 +117,7 @@ print len(masses[1][(masses[1]>limits[1][0])*(masses[1]<limits[1][1])])
 print len(masses[2][(masses[2]>limits[2][0])*(masses[2]<limits[2][1])])
 
 print "\n"
-ngood = len(masses[2][(masses[2]>limits[2][0])*(masses[2]<limits[2][1])*(vtxs[0]>4.0)])
+ngood = len(masses[0][(masses[2]>limits[0][0])*(masses[0]<limits[0][1])*(vtxs[0]>4.0)])
 print "ngood: %f" % (ngood/nevents)
 
 print "\n"
