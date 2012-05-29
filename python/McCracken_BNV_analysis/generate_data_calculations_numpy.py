@@ -116,7 +116,11 @@ def main():
     infile_names = args.input_file_name
     outfile_name = "calculated_data_files/%s_hyp_%s" % (infile_names[0][0].split('/')[-1].split('.')[0],args.hypothesis)
     
-    beam,e0,e1,e2,p0,p1,p2,vtx0,vtx1,vtx2,vtx3 = read_mmcc_inputfiles(infile_names[0])
+    #beam,e0,e1,e2,p0,p1,p2,vtx0,vtx1,vtx2,vtx3 = read_mmcc_inputfiles(infile_names[0])
+    beam,e0,e1,e2,p0,p1,p2,vtx0,vtx1,vtx2,vtx3 = read_mmcc_inputfiles_numpy(infile_names[0])
+
+    #print beam
+    #exit(-1)
 
     ############################################################################
     # Finished reading in the data.

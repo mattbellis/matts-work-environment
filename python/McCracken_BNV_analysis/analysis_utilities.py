@@ -147,3 +147,73 @@ def read_mmcc_inputfiles(infile_names,max_events=1e12):
 
     return beam,e0,e1,e2,p0,p1,p2,vtx0,vtx1,vtx2,vtx3
 
+################################################################################
+# Read in the files from McCracken
+################################################################################
+def read_mmcc_inputfiles_numpy(infile_names,max_events=1e12):
+
+    e0 = np.array([])
+    e1 = np.array([])
+    e2 = np.array([])
+
+    p0 = []
+    p1 = []
+    p2 = []
+    for i in xrange(5):
+        p0.append(np.array([]))
+        p1.append(np.array([]))
+        p2.append(np.array([]))
+
+    vtx0 = []
+    vtx1 = []
+    vtx2 = []
+    vtx3 = []
+    for i in xrange(3):
+        vtx0.append(np.array([]))
+        vtx1.append(np.array([]))
+        vtx2.append(np.array([]))
+        vtx3.append(np.array([]))
+
+    beam_e = 0.0
+    beam = []
+    for i in xrange(4):
+        beam.append(np.array([]))
+    
+    event = [None,None,None,None,None,None,None,None]
+
+    count = 0
+
+    for infile_name in infile_names:
+        print infile_name
+        infile = open(infile_name)
+
+        # Read in the entire content of the file and split it.
+        # Save it as an numpy array.
+        # Also turn it into floats.
+        content = np.array(infile.read().split()).astype('float')
+        nentries = len(content)
+        nevents = nentries/29
+        print "# of entries: %d" % (nentries)
+        print "# of events: %d" % (nevents)
+
+        # Build up an index array to pull out the elements.
+        index = np.arange(0,nentries,29)
+
+        beam[0] = np.append(beam[0],content[index+1])
+        beam[1] = np.append(beam[1],np.zeros(nevents))
+        beam[2] = np.append(beam[2],np.zeros(nevents))
+        beam[3] = np.append(beam[3],content[index+1])
+
+        for j in xrange(5):
+            p0[j] = np.append(p0[j],content[index+(2+j)])
+            p1[j] = np.append(p1[j],content[index+(7+j)])
+            p2[j] = np.append(p2[j],content[index+(12+j)])
+
+        for j in xrange(3):
+            vtx0[j] = np.append(vtx0[j],content[index+(17+j)])
+            vtx1[j] = np.append(vtx1[j],content[index+(20+j)])
+            vtx2[j] = np.append(vtx2[j],content[index+(23+j)])
+            vtx3[j] = np.append(vtx3[j],content[index+(26+j)])
+
+    return beam,e0,e1,e2,p0,p1,p2,vtx0,vtx1,vtx2,vtx3
+
