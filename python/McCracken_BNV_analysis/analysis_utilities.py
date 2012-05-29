@@ -12,6 +12,7 @@ mass_pi = 0.139570
 mass_k = 0.493677
 mass_p = 0.938272
 mass_mu = 0.105658
+mass_L = 1.115683
 
 target = np.array([mass_p,0.0,0.0,0.0])
 target = np.array([mass_p,0.0,0.0,0.0])
@@ -108,19 +109,13 @@ def read_mmcc_inputfiles(infile_names,max_events=1e12):
 
         line = ' '
         while len(line)!=0:
-            #for line in infile:
             line = infile.readline()
-            #event[0] = line.split()
-            #event[0] = np.genfromtxt(StringIO(line),dtype=(float))
             event[0] = np.loadtxt(StringIO(line),dtype=(float))
             good_event = 'nan' not in event[0] and 'inf' not in event[0]
-            #print line
-            #print event[0]
             if len(event[0])==2:
                 for i in xrange(1,8):
                     line = infile.readline()
                     event[i] = np.genfromtxt(StringIO(line),dtype=(float))
-                    #event[i] = infile.readline().split()
                     good_event *= 'nan' not in event[i] and 'inf' not in event[i]
                     
 

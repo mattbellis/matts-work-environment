@@ -11,6 +11,8 @@ import csv
 
 import lichen.lichen as lch
 
+from analysis_utilities import *
+
 ################################################################################
 
 #infile = csv.reader(sys.argv[1],'rb')
@@ -25,6 +27,9 @@ count = 0
 beam = None
 nvtx = 0
 
+limits = [[-0.005,0.005],[1.1060,1.160],[1.1060,1.160]]
+optimal_vals = [0.0,mass_L,mass_L]
+
 max_events = 10000
 
 mtitles = []
@@ -32,67 +37,57 @@ mtitles.append(r'Total missing mass squared')
 mtitles.append(r"Invariant mass of the $\Lambda$ candidate")
 mtitles.append(r"Missing mass off the $K^{+}$ candidate")
 
-correct_permutation = [0,0,0]
+################################################################################
+# Read in the data
+################################################################################
 infile = np.load(sys.argv[1])
 
 masses = []
 vtxs = []
 for i in xrange(6):
     masses.append(infile[i])
+    # Swap out nan and inf
+    masses[i][masses[i]!=masses[i]] = -999
+    print "masses %d: %d" % (i,len(masses[i]))
 for i in xrange(2):
     vtxs.append(infile[6+i])
+    # Swap out nan and inf
+    vtxs[i][vtxs[i]!=vtxs[i]] = -999
+    print "vtxs %d: %d" % (i,len(vtxs[i]))
 
-masses[0] = masses[0][abs(masses[0]-1.115)<abs(masses[1]-1.115)]
+################################################################################
+# Pick which permutation is the ``good" permutation.
+################################################################################
+good_masses = [None,None,None]
+bad_masses = [None,None,None]
+good_vtx = None
+bad_vtx = None
 
-#plt.hist(masses[0],bins=50)
-#plt.show()
+for i in xrange(3):
+    for permutation in xrange(2):
 
-exit(1)
+        i0 = 2*i
+        i1 = (2*i)+1
+        if permutation==1:
+            i0 = (2*i)+1
+            i1 = 2*i
 
-for line in infile:
-    #vals = line.split()
-    vals = np.genfromtxt(StringIO(line),dtype=(float),delimiter=" ")
+        good_masses[i] =           masses[i0][abs(masses[i0]-optimal_vals[i])<abs(masses[i1]-optimal_vals[i])]
+        good_masses[i] = np.append(good_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])<=abs(masses[i0]-optimal_vals[i])])
 
-    no_nans = True
-    for v in vals:
-        if v!=v:
-            no_nans = False
-            break;
+        bad_masses[i] =           masses[i0][abs(masses[i0]-optimal_vals[i])>=abs(masses[i1]-optimal_vals[i])]
+        bad_masses[i] = np.append(bad_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])>=abs(masses[i0]-optimal_vals[i])])
 
-    if no_nans:
+good_vtx =                    vtxs[0][abs(masses[0]-optimal_vals[0])<abs(masses[1]-optimal_vals[0])]
+good_vtx = np.append(good_vtx,vtxs[1][abs(masses[1]-optimal_vals[0])<abs(masses[0]-optimal_vals[0])])
 
-        if abs(vals[0]-1.115)<abs(vals[4]-1.115):
-            masses[0] = np.append(masses[0],vals[0])
-            bad_masses[0] = np.append(bad_masses[0],vals[4])
-        else:
-            masses[0] = np.append(masses[0],vals[4])
-            bad_masses[0] = np.append(bad_masses[0],vals[0])
-
-        if abs(vals[1])<abs(vals[5]):
-            masses[1] = np.append(masses[1],vals[1])
-            bad_masses[1] = np.append(bad_masses[1],vals[5])
-        else:
-            masses[1] = np.append(masses[1],vals[5])
-            bad_masses[1] = np.append(bad_masses[1],vals[1])
-
-        if abs(vals[2]-1.115)<abs(vals[6]-1.115):
-            masses[2] = np.append(masses[2],vals[2])
-            bad_masses[2] = np.append(bad_masses[2],vals[6])
-            vtxs[0] = np.append(vtxs[0],vals[3])
-            vtxs[1] = np.append(vtxs[1],vals[7])
-        else:
-            masses[2] = np.append(masses[2],vals[6])
-            bad_masses[2] = np.append(bad_masses[2],vals[2])
-            vtxs[0] = np.append(vtxs[0],vals[7])
-            vtxs[1] = np.append(vtxs[1],vals[3])
-
-    count +=1 
-    if count>max_events:
-        break
-    if count%10000==0:
-        print count
+bad_vtx =                   vtxs[0][abs(masses[0]-optimal_vals[0])>=abs(masses[1]-optimal_vals[0])]
+bad_vtx = np.append(bad_vtx,vtxs[1][abs(masses[1]-optimal_vals[0])>=abs(masses[0]-optimal_vals[0])])
 
 
+################################################################################
+# Create the empty figures
+################################################################################
 print "\n"
 nfigs = 4
 figs = []
@@ -117,35 +112,30 @@ for i in xrange(nfigs):
     figs[i].subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.30, hspace=None)
 
 
+################################################################################
 
-print 'Permutations'
-print correct_permutation
-#print masses
-print 'Masses'
-#print len(masses[0])
-#print len(masses[1])
-#print len(masses[2])
-limits = [[1.1060,1.160],[-0.005,0.005],[1.1060,1.160]]
+################################################################################
+# Count some numbers
+################################################################################
 
-nevents = float(len(masses[0]))
+nevents = float(len(good_masses[0]))
 print "nevents: %f" % (nevents)
 
-print "Subcategories"
-print len(masses[0][(masses[0]>limits[0][0])*(masses[0]<limits[0][1])])
-print len(masses[1][(masses[1]>limits[1][0])*(masses[1]<limits[1][1])])
-print len(masses[2][(masses[2]>limits[2][0])*(masses[2]<limits[2][1])])
+print 'Good masses in limits'
+print len(good_masses[0][(good_masses[0]>limits[0][0])*(good_masses[0]<limits[0][1])])
+print len(good_masses[1][(good_masses[1]>limits[1][0])*(good_masses[1]<limits[1][1])])
+print len(good_masses[2][(good_masses[2]>limits[2][0])*(good_masses[2]<limits[2][1])])
 
 print "\n"
-ngood = len(masses[2][(masses[2]>limits[2][0])*(masses[2]<limits[2][1])*(vtxs[0]>4.0)])
+ngood = len(good_masses[0][good_vtx>4.0])
+print "ngood: %f" % (ngood/nevents)
+ngood = len(good_masses[1][good_vtx>4.0])
+print "ngood: %f" % (ngood/nevents)
+ngood = len(good_masses[2][good_vtx>4.0])
 print "ngood: %f" % (ngood/nevents)
 
 print "\n"
-print 'Bad masses'
-#print len(bad_masses[0])
-#print len(bad_masses[1])
-#print len(bad_masses[2])
-
-print "Subcategories"
+print 'Bad masses in limits'
 print len(bad_masses[0][(bad_masses[0]>limits[0][0])*(bad_masses[0]<limits[0][1])])
 print len(bad_masses[1][(bad_masses[1]>limits[1][0])*(bad_masses[1]<limits[1][1])])
 print len(bad_masses[2][(bad_masses[2]>limits[2][0])*(bad_masses[2]<limits[2][1])])
@@ -153,70 +143,54 @@ print len(bad_masses[2][(bad_masses[2]>limits[2][0])*(bad_masses[2]<limits[2][1]
 print "\n"
 print "vtx"
 print len(vtxs[0])
-print len(vtxs[0][vtxs[0]>4.0])/float(len(vtxs[0]))
-print len(vtxs[1][vtxs[1]>4.0])/float(len(vtxs[0]))
+print len(good_vtx[good_vtx>4.0])/float(len(vtxs[0]))
+print len(bad_vtx[bad_vtx>4.0])/float(len(vtxs[0]))
 
 lh = []
 
-# Correct assignments
-lh.append(lch.hist_err(masses[0],bins=100,range=(1.0,1.50),axes=subplots[0][0]))
-subplots[0][0].set_xlabel(mtitles[0])
-subplots[0][0].set_xlim(1.0,1.50)
-subplots[0][0].set_ylim(0.0)
+################################################################################
+# Plot them
+################################################################################
+plot_ranges = [(-0.1,0.10),(1.0,1.50),(1.0,1.50)]
 
-lh.append(lch.hist_err(masses[1],bins=100,range=(-0.1,0.10),axes=subplots[0][1]))
-subplots[0][1].set_xlabel(mtitles[1])
-subplots[0][1].set_xlim(-0.1,0.1)
-subplots[0][1].set_ylim(0.0)
+for i in range(0,3):
+    lh.append(lch.hist_err(good_masses[i],bins=100,range=plot_ranges[i],axes=subplots[0][i]))
+    subplots[0][i].set_xlabel(mtitles[0])
+    subplots[0][i].set_xlim(plot_ranges[i])
+    subplots[0][i].set_ylim(0.0)
 
-lh.append(lch.hist_err(masses[2],bins=100,range=(1.0,1.50),axes=subplots[0][2]))
-subplots[0][2].set_xlabel(mtitles[2])
-subplots[0][2].set_xlim(1.0,1.50)
-subplots[0][2].set_ylim(0.0)
-
-# Incorrect assignments
-lh.append(lch.hist_err(bad_masses[0],bins=100,range=(1.0,1.50),axes=subplots[1][0]))
-subplots[1][0].set_xlabel(mtitles[0])
-subplots[1][0].set_xlim(1.0,1.50)
-subplots[1][0].set_ylim(0.0)
+for i in range(0,3):
+    lh.append(lch.hist_err(bad_masses[i],bins=100,range=plot_ranges[i],axes=subplots[1][i]))
+    subplots[1][i].set_xlabel(mtitles[0])
+    subplots[1][i].set_xlim(plot_ranges[i])
+    subplots[1][i].set_ylim(0.0)
 
 
-lh.append(lch.hist_err(bad_masses[1],bins=100,range=(-0.1,0.10),axes=subplots[1][1]))
-subplots[1][1].set_xlabel(mtitles[1])
-subplots[1][1].set_xlim(-0.1,0.1)
-subplots[1][1].set_ylim(0.0)
+lh2d = []
+xindex = [0,0,1]
+yindex = [1,2,2]
 
-lh.append(lch.hist_err(bad_masses[2],bins=100,range=(1.0,1.50),axes=subplots[1][2]))
-subplots[1][2].set_xlabel(mtitles[2])
-subplots[1][2].set_xlim(1.0,1.50)
-subplots[1][2].set_ylim(0.0)
+print len(good_masses[0])
+print len(good_masses[1])
+print len(good_masses[2])
 
-#h3 = subplots[1][0].hist(vtxs[0],100,range=(0.0,20.00),histtype='stepfilled',color='red',alpha=0.5)
-#subplots[1][0].set_xlabel(r"Secondary vertex displacement $p \pi^{-}$")
+print len(bad_masses[0])
+print len(bad_masses[1])
+print len(bad_masses[2])
 
-#h4 = subplots[1][1].hist(vtxs[1],100,range=(0.0,20.00),histtype='stepfilled',color='red',alpha=0.5)
-#subplots[1][1].set_xlabel(r"Secondary vertex displacement $p \pi^{-}$")
+for i in range(0,3):
+    i0 = xindex[i]
+    i1 = yindex[i]
+    lh2d.append(lch.hist_2D(good_masses[i0],good_masses[i1],xbins=100,ybins=100,xrange=plot_ranges[i0],yrange=plot_ranges[i1],axes=subplots[2][i]))
+    subplots[2][i].set_xlabel(mtitles[i0])
+    subplots[2][i].set_ylabel(mtitles[i1])
+    #subplots[2][0].set_aspect('auto')
+    #figs[2].add_subplot(1,3,1)
+    #plt.colorbar(cax=subplots[2][0])
 
-lh2d0 = lch.hist_2D(masses[0],masses[2],xbins=100,ybins=100,xrange=[0.90,1.40],yrange=[0.90,1.40],axes=subplots[2][0])
-subplots[2][0].set_xlabel(mtitles[0])
-subplots[2][0].set_ylabel(mtitles[2])
-#subplots[2][0].set_aspect('auto')
-#figs[2].add_subplot(1,3,1)
-#plt.colorbar(cax=subplots[2][0])
-
-lh2d1 = lch.hist_2D(masses[0],masses[1],xbins=100,ybins=100,xrange=[0.90,1.40],yrange=[-0.10,0.1],axes=subplots[2][1])
-subplots[2][1].set_xlabel(mtitles[0])
-subplots[2][1].set_ylabel(mtitles[1])
-#subplots[2][1].set_aspect('auto')
-#figs[2].add_subplot(1,3,2)
-#plt.colorbar()
-
-lh2d2 = lch.hist_2D(masses[1],masses[2],xbins=100,ybins=100,xrange=[-0.10,0.1],yrange=[0.90,1.40],axes=subplots[2][2])
-subplots[2][2].set_xlabel(mtitles[1])
-subplots[2][2].set_ylabel(mtitles[2])
-#subplots[2][2].set_aspect('auto')
-#figs[2].add_subplot(1,3,3)
-#plt.colorbar()
+################################################################################
+# Flight paths
+################################################################################
 
 lh.append(lch.hist_err(vtxs[0],bins=100,range=(0.0,30.00),axes=subplots[3][0]))
 lh.append(lch.hist_err(vtxs[1],bins=100,range=(0.0,30.00),axes=subplots[3][1]))
