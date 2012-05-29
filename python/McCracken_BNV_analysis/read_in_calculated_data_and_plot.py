@@ -44,6 +44,9 @@ infile = np.load(sys.argv[1])
 
 masses = []
 vtxs = []
+betas = []
+gammas = []
+print len(infile)
 for i in xrange(6):
     masses.append(infile[i])
     # Swap out nan and inf
@@ -54,6 +57,15 @@ for i in xrange(2):
     # Swap out nan and inf
     vtxs[i][vtxs[i]!=vtxs[i]] = -999
     print "vtxs %d: %d" % (i,len(vtxs[i]))
+for i in xrange(5):
+    betas.append(infile[8+i])
+    # Swap out nan and inf
+    betas[i][betas[i]!=betas[i]] = -999
+    print "betas %d: %d" % (i,len(betas[i]))
+    gammas.append(infile[13+i])
+    # Swap out nan and inf
+    gammas[i][gammas[i]!=gammas[i]] = -999
+    print "gammas %d: %d" % (i,len(gammas[i]))
 
 ################################################################################
 # Pick which permutation is the ``good" permutation.
@@ -62,6 +74,8 @@ good_masses = [None,None,None]
 bad_masses = [None,None,None]
 good_vtx = None
 bad_vtx = None
+good_Lbeta = None
+bad_Lbeta = None
 
 for i in xrange(3):
     for permutation in xrange(2):
@@ -72,17 +86,39 @@ for i in xrange(3):
             i0 = (2*i)+1
             i1 = 2*i
 
-        good_masses[i] =           masses[i0][abs(masses[i0]-optimal_vals[i])<abs(masses[i1]-optimal_vals[i])]
-        good_masses[i] = np.append(good_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])<=abs(masses[i0]-optimal_vals[i])])
+        good_masses[i] =                          masses[i0][abs(masses[i0]-optimal_vals[i])<=abs(masses[i1]-optimal_vals[i])]
+        good_masses[i] = np.append(good_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])< abs(masses[i0]-optimal_vals[i])])
 
-        bad_masses[i] =           masses[i0][abs(masses[i0]-optimal_vals[i])>=abs(masses[i1]-optimal_vals[i])]
+        bad_masses[i] =                         masses[i0][abs(masses[i0]-optimal_vals[i])>abs(masses[i1]-optimal_vals[i])]
         bad_masses[i] = np.append(bad_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])>=abs(masses[i0]-optimal_vals[i])])
 
-good_vtx =                    vtxs[0][abs(masses[2]-optimal_vals[1])<abs(masses[2]-optimal_vals[1])]
-good_vtx = np.append(good_vtx,vtxs[1][abs(masses[3]-optimal_vals[1])<abs(masses[3]-optimal_vals[1])])
+    print "masses %d" % (i)
+    print len(good_masses[i])
+    print len(bad_masses[i])
 
-bad_vtx =                   vtxs[0][abs(masses[2]-optimal_vals[1])>=abs(masses[2]-optimal_vals[1])]
-bad_vtx = np.append(bad_vtx,vtxs[1][abs(masses[3]-optimal_vals[1])>=abs(masses[3]-optimal_vals[1])])
+cut0 =     abs(masses[2]-optimal_vals[1])<=abs(masses[3]-optimal_vals[1])
+cut1 =     abs(masses[3]-optimal_vals[1])< abs(masses[2]-optimal_vals[1])
+anticut0 = abs(masses[2]-optimal_vals[1])> abs(masses[3]-optimal_vals[1])
+anticut1 = abs(masses[3]-optimal_vals[1])>=abs(masses[2]-optimal_vals[1])
+
+good_vtx =                    vtxs[0][cut0]
+good_vtx = np.append(good_vtx,vtxs[1][cut1])
+
+bad_vtx =                   vtxs[0][anticut0]
+bad_vtx = np.append(bad_vtx,vtxs[1][anticut1])
+
+good_beta =                     betas[3][cut0]
+good_beta = np.append(good_beta,betas[4][cut1])
+
+bad_beta =                    betas[3][anticut0]
+bad_beta = np.append(bad_beta,betas[4][anticut1])
+
+good_gamma = 1.0/np.sqrt(1.0-(good_beta*good_beta))
+bad_gamma = 1.0/np.sqrt(1.0-(bad_beta*bad_beta))
+
+print "beta"
+print len(good_beta)
+print len(bad_beta)
 
 
 ################################################################################
@@ -127,12 +163,12 @@ print len(good_masses[1][(good_masses[1]>limits[1][0])*(good_masses[1]<limits[1]
 print len(good_masses[2][(good_masses[2]>limits[2][0])*(good_masses[2]<limits[2][1])])
 
 print "\n"
-ngood = len(good_masses[0][good_vtx>4.0])
-print "ngood: %f" % (ngood/nevents)
+#ngood = len(good_masses[0][good_vtx>4.0])
+#print "ngood: %f" % (ngood/nevents)
 ngood = len(good_masses[1][good_vtx>4.0])
 print "ngood: %f" % (ngood/nevents)
-ngood = len(good_masses[2][good_vtx>4.0])
-print "ngood: %f" % (ngood/nevents)
+#ngood = len(good_masses[2][good_vtx>4.0])
+#print "ngood: %f" % (ngood/nevents)
 
 print "\n"
 print 'Bad masses in limits'
@@ -155,13 +191,13 @@ plot_ranges = [(-0.1,0.10),(1.0,1.50),(1.0,1.50)]
 
 for i in range(0,3):
     lh.append(lch.hist_err(good_masses[i],bins=100,range=plot_ranges[i],axes=subplots[0][i]))
-    subplots[0][i].set_xlabel(mtitles[0])
+    subplots[0][i].set_xlabel(mtitles[i])
     subplots[0][i].set_xlim(plot_ranges[i])
     subplots[0][i].set_ylim(0.0)
 
 for i in range(0,3):
     lh.append(lch.hist_err(bad_masses[i],bins=100,range=plot_ranges[i],axes=subplots[1][i]))
-    subplots[1][i].set_xlabel(mtitles[0])
+    subplots[1][i].set_xlabel(mtitles[i])
     subplots[1][i].set_xlim(plot_ranges[i])
     subplots[1][i].set_ylim(0.0)
 
@@ -192,10 +228,22 @@ for i in range(0,3):
 # Flight paths
 ################################################################################
 
-lh.append(lch.hist_err(vtxs[0],bins=100,range=(0.0,30.00),axes=subplots[3][0]))
-lh.append(lch.hist_err(vtxs[1],bins=100,range=(0.0,30.00),axes=subplots[3][1]))
-subplots[3][0].set_ylim(0.0)
-subplots[3][1].set_ylim(0.0)
+#lh.append(lch.hist_err(good_vtx,bins=100,range=(0.0,50.00),axes=subplots[3][0]))
+#lh.append(lch.hist_err(bad_vtx,bins=100,range=(0.0,50.00),axes=subplots[3][1]))
+print good_beta
+print good_gamma
+print len(good_beta)
+print len(bad_beta)
+c = 1.0
+#c = 29.97
+#lh.append(lch.hist_err(good_vtx/(good_beta*good_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[3][0]))
+#lh.append(lch.hist_err(bad_vtx/(bad_beta*bad_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[3][1]))
+lh.append(lch.hist_err(good_vtx*(good_gamma),bins=100,range=(0.0,100.00),axes=subplots[3][0]))
+lh.append(lch.hist_err(bad_vtx*(bad_gamma),bins=100,range=(0.0,100.00),axes=subplots[3][1]))
+#subplots[3][0].set_ylim(0.0)
+#subplots[3][1].set_ylim(0.0)
+
+#subplots[3][0].set_yscale('log')
 
 figs[0].savefig("Plots/fig0.png")
 figs[1].savefig("Plots/fig1.png")
