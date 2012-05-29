@@ -1,0 +1,6 @@
+: cacloud      : 59819055    : Canada
+: ccin2p3      : 71029921    : France
+: cu-boulder   : 35832434    : USA
+: slac         : 988636106   : USA
+: uvic2        : 80265016    : Canada
+: Totals       : 1235582532  :
