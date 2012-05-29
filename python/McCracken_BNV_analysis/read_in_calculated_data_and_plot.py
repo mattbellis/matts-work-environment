@@ -78,11 +78,11 @@ for i in xrange(3):
         bad_masses[i] =           masses[i0][abs(masses[i0]-optimal_vals[i])>=abs(masses[i1]-optimal_vals[i])]
         bad_masses[i] = np.append(bad_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])>=abs(masses[i0]-optimal_vals[i])])
 
-good_vtx =                    vtxs[0][abs(masses[0]-optimal_vals[0])<abs(masses[1]-optimal_vals[0])]
-good_vtx = np.append(good_vtx,vtxs[1][abs(masses[1]-optimal_vals[0])<abs(masses[0]-optimal_vals[0])])
+good_vtx =                    vtxs[0][abs(masses[2]-optimal_vals[1])<abs(masses[2]-optimal_vals[1])]
+good_vtx = np.append(good_vtx,vtxs[1][abs(masses[3]-optimal_vals[1])<abs(masses[3]-optimal_vals[1])])
 
-bad_vtx =                   vtxs[0][abs(masses[0]-optimal_vals[0])>=abs(masses[1]-optimal_vals[0])]
-bad_vtx = np.append(bad_vtx,vtxs[1][abs(masses[1]-optimal_vals[0])>=abs(masses[0]-optimal_vals[0])])
+bad_vtx =                   vtxs[0][abs(masses[2]-optimal_vals[1])>=abs(masses[2]-optimal_vals[1])]
+bad_vtx = np.append(bad_vtx,vtxs[1][abs(masses[3]-optimal_vals[1])>=abs(masses[3]-optimal_vals[1])])
 
 
 ################################################################################
