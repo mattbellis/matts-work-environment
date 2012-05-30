@@ -40,7 +40,8 @@ mtitles.append(r"Missing mass off the $K^{+}$ candidate")
 ################################################################################
 # Read in the data
 ################################################################################
-infile = np.load(sys.argv[1])
+infile_name = sys.argv[1]
+infile = np.load(infile_name)
 
 masses = []
 vtxs = []
@@ -123,6 +124,35 @@ good_beta = np.append(good_beta,lambda_beta[1][cut1])
 bad_beta =                    lambda_beta[0][anticut0]
 bad_beta = np.append(bad_beta,lambda_beta[1][anticut1])
 
+print "cuts"
+print cut0
+print cut1
+# Try to pick out the ``correct" beta.
+good_meas_betas = [[None,None,None],[None,None,None]]
+good_beta0 = [None,None]
+good_beta1 = [None,None]
+good_beta2 = [None,None]
+
+for i in range(0,3):
+    good_meas_betas[0][i] =                                 meas_betas[i][cut0]
+    good_meas_betas[0][i] = np.append(good_meas_betas[0][i],meas_betas[i][cut1])
+    good_meas_betas[1][i] =                                 meas_betas[i][anticut0]
+    good_meas_betas[1][i] = np.append(good_meas_betas[1][i],meas_betas[i][anticut1])
+
+good_beta0[0] =                         beta0[0][cut0]
+good_beta0[0] = np.append(good_beta0[0],beta0[1][cut1])
+good_beta1[0] =                         beta1[0][cut0]
+good_beta1[0] = np.append(good_beta1[0],beta1[1][cut1])
+good_beta2[0] =                         beta2[0][cut0]
+good_beta2[0] = np.append(good_beta2[0],beta2[1][cut1])
+
+good_beta0[1] =                         beta0[0][anticut0]
+good_beta0[1] = np.append(good_beta0[1],beta0[1][anticut1])
+good_beta1[1] =                         beta1[0][anticut0]
+good_beta1[1] = np.append(good_beta1[1],beta1[1][anticut1])
+good_beta2[1] =                         beta2[0][anticut0]
+good_beta2[1] = np.append(good_beta2[1],beta2[1][anticut1])
+
 good_gamma = 1.0/np.sqrt(1.0-(good_beta*good_beta))
 bad_gamma = 1.0/np.sqrt(1.0-(bad_beta*bad_beta))
 
@@ -139,7 +169,10 @@ nfigs = 5
 figs = []
 for i in xrange(nfigs):
     name = "fig%d" % (i)
-    figs.append(plt.figure(figsize=(12,4),dpi=100,facecolor='w',edgecolor='k'))
+    if i==3:
+        figs.append(plt.figure(figsize=(10,9),dpi=100,facecolor='w',edgecolor='k'))
+    else:
+        figs.append(plt.figure(figsize=(12,4),dpi=100,facecolor='w',edgecolor='k'))
 
 subplots = []
 for i in xrange(nfigs):
@@ -158,7 +191,10 @@ for i in xrange(nfigs):
     # Adjust the spacing between the subplots, to allow for better
     # readability.
     #figs[i].subplots_adjust(wspace=0.4,hspace=0.6,bottom=0.2)
-    figs[i].subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.30, hspace=None)
+    if i==3:
+        figs[i].subplots_adjust(left=0.10, bottom=0.10, right=0.97, top=0.97, wspace=0.30, hspace=0.35)
+    else:
+        figs[i].subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.30, hspace=None)
 
 
 ################################################################################
@@ -237,20 +273,35 @@ for i in range(0,3):
     #figs[2].add_subplot(1,3,1)
     #plt.colorbar(cax=subplots[2][0])
 
+btitles = [None,None]
+charge = ['+','+','-']
 for i in range(0,6):
+    pindex = i/2
     index = i%2
+    btitles[0] = r"particle %d (%s): $\beta_{meas} - \beta_{hyp%d}$" % (pindex,charge[pindex],index)
+    btitles[1] = r"particle %d (%s): $\beta_{hyp%d}$" % (pindex,charge[pindex],index)
     if i==0 or i==1:
-        lch.hist_2D(meas_betas[0]-beta0[index],beta0[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
+        lch.hist_2D(good_meas_betas[index][0]-good_beta0[index],good_beta0[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
     elif i==2 or i==3:
-        lch.hist_2D(meas_betas[1]-beta1[index],beta1[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
+        lch.hist_2D(good_meas_betas[index][1]-good_beta1[index],good_beta1[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
     elif i==4 or i==5:
         print len(beta2)
-        lch.hist_2D(meas_betas[2]-beta2[index],beta2[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
+        lch.hist_2D(good_meas_betas[index][2]-good_beta2[index],good_beta2[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
     subplots[3][i].set_xlim(-1.2,1.2)
     subplots[3][i].set_ylim(0,1.2)
+    subplots[3][i].set_xlabel(btitles[0],fontsize=15)
+    subplots[3][i].set_ylabel(btitles[1],fontsize=15)
 ################################################################################
 # Flight paths
 ################################################################################
+
+delta_beta0 = good_meas_betas[0][0]-good_beta0[0]
+delta_beta1 = good_meas_betas[0][1]-good_beta1[0]
+delta_beta2 = good_meas_betas[0][2]-good_beta2[0]
+
+pid_cut = (delta_beta0>-0.04)*(delta_beta1>-0.04)*(delta_beta2>-0.04)
+eff = len(pid_cut[pid_cut==True])/float(len(pid_cut))
+print "pid_cut:  %f"  % (eff)
 
 print good_beta
 print good_gamma
@@ -262,16 +313,21 @@ c = 1.0
 #lh.append(lch.hist_err(bad_vtx/(bad_beta*bad_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[4][1]))
 lh.append(lch.hist_err(good_vtx*(good_gamma),bins=100,range=(0.0,100.00),axes=subplots[4][0]))
 lh.append(lch.hist_err(bad_vtx*(bad_gamma),bins=100,range=(0.0,100.00),axes=subplots[4][1]))
-#subplots[4][0].set_ylim(0.0)
-#subplots[4][1].set_ylim(0.0)
+subplots[4][0].set_xlabel(r"$\Lambda$ flight length (best)",fontsize=20)
+subplots[4][1].set_xlabel(r"$\Lambda$ flight length (worst)",fontsize=20)
+################################################################################
+subplots[4][0].set_xlim(0.0)
+subplots[4][1].set_xlim(0.0)
+subplots[4][0].set_ylim(0.0)
+subplots[4][1].set_ylim(0.0)
 
 #subplots[4][0].set_yscale('log')
 
-figs[0].savefig("Plots/fig0.png")
-figs[1].savefig("Plots/fig1.png")
-figs[2].savefig("Plots/fig2.png")
-figs[3].savefig("Plots/fig3.png")
-figs[4].savefig("Plots/fig4.png")
+basename = infile_name.split('/')[-1].split('.')[0]
+for i in xrange(nfigs):
+    figure_filename = "Plots/%s_%s.png" % (basename,i)
+    print "Saving %s..." % (figure_filename)
+    figs[i].savefig(figure_filename)
 
-plt.show()
+#plt.show()
 
