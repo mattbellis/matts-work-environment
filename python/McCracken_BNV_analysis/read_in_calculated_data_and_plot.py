@@ -44,7 +44,11 @@ infile = np.load(sys.argv[1])
 
 masses = []
 vtxs = []
-betas = []
+beta0 = []
+beta1 = []
+beta2 = []
+lambda_beta = []
+meas_betas = []
 gammas = []
 print len(infile)
 for i in xrange(6):
@@ -54,18 +58,21 @@ for i in xrange(6):
     print "masses %d: %d" % (i,len(masses[i]))
 for i in xrange(2):
     vtxs.append(infile[6+i])
-    # Swap out nan and inf
     vtxs[i][vtxs[i]!=vtxs[i]] = -999
     print "vtxs %d: %d" % (i,len(vtxs[i]))
-for i in xrange(5):
-    betas.append(infile[8+i])
-    # Swap out nan and inf
-    betas[i][betas[i]!=betas[i]] = -999
-    print "betas %d: %d" % (i,len(betas[i]))
-    gammas.append(infile[13+i])
-    # Swap out nan and inf
-    gammas[i][gammas[i]!=gammas[i]] = -999
-    print "gammas %d: %d" % (i,len(gammas[i]))
+for i in xrange(2):
+    beta0.append(infile[8+i])
+    beta0[i][beta0[i]!=beta0[i]] = -999
+    beta1.append(infile[10+i])
+    beta1[i][beta1[i]!=beta1[i]] = -999
+    beta2.append(infile[12+i])
+    beta2[i][beta2[i]!=beta2[i]] = -999
+    lambda_beta.append(infile[14+i])
+    lambda_beta[i][lambda_beta[i]!=lambda_beta[i]] = -999
+for i in xrange(3):
+    meas_betas.append(infile[16+i])
+    meas_betas[i][meas_betas[i]!=meas_betas[i]] = -999
+    print "meas_betas %d: %d" % (i,len(meas_betas[i]))
 
 ################################################################################
 # Pick which permutation is the ``good" permutation.
@@ -101,17 +108,20 @@ cut1 =     abs(masses[3]-optimal_vals[1])< abs(masses[2]-optimal_vals[1])
 anticut0 = abs(masses[2]-optimal_vals[1])> abs(masses[3]-optimal_vals[1])
 anticut1 = abs(masses[3]-optimal_vals[1])>=abs(masses[2]-optimal_vals[1])
 
+#cut0 *=     (meas_betas[0]-beta0[0]>0.04)*(meas_betas[1]-beta1[0]>0.04)*(meas_betas[2]-beta2[0]>0.04)
+#cut1 *=     (meas_betas[0]-beta0[1]>0.04)*(meas_betas[1]-beta1[1]>0.04)*(meas_betas[2]-beta2[1]>0.04)
+
 good_vtx =                    vtxs[0][cut0]
 good_vtx = np.append(good_vtx,vtxs[1][cut1])
 
 bad_vtx =                   vtxs[0][anticut0]
 bad_vtx = np.append(bad_vtx,vtxs[1][anticut1])
 
-good_beta =                     betas[3][cut0]
-good_beta = np.append(good_beta,betas[4][cut1])
+good_beta =                     lambda_beta[0][cut0]
+good_beta = np.append(good_beta,lambda_beta[1][cut1])
 
-bad_beta =                    betas[3][anticut0]
-bad_beta = np.append(bad_beta,betas[4][anticut1])
+bad_beta =                    lambda_beta[0][anticut0]
+bad_beta = np.append(bad_beta,lambda_beta[1][anticut1])
 
 good_gamma = 1.0/np.sqrt(1.0-(good_beta*good_beta))
 bad_gamma = 1.0/np.sqrt(1.0-(bad_beta*bad_beta))
@@ -125,7 +135,7 @@ print len(bad_beta)
 # Create the empty figures
 ################################################################################
 print "\n"
-nfigs = 4
+nfigs = 5
 figs = []
 for i in xrange(nfigs):
     name = "fig%d" % (i)
@@ -135,12 +145,15 @@ subplots = []
 for i in xrange(nfigs):
     # We'll make this a nfigs x nsubplots_per_fig to store the subplots
     subplots.append([])
-    for j in xrange(1,4):
-        if (i<3):
+    if i<3:
+        for j in xrange(1,4):
             subplots[i].append(figs[i].add_subplot(1,3,j))
-        else:
-            if j<3:
-                subplots[i].append(figs[i].add_subplot(1,2,j))
+    elif i==3:
+        for j in xrange(1,7):
+            subplots[i].append(figs[i].add_subplot(3,2,j))
+    else:
+        for j in xrange(1,3):
+            subplots[i].append(figs[i].add_subplot(1,2,j))
 
     # Adjust the spacing between the subplots, to allow for better
     # readability.
@@ -224,31 +237,41 @@ for i in range(0,3):
     #figs[2].add_subplot(1,3,1)
     #plt.colorbar(cax=subplots[2][0])
 
+for i in range(0,6):
+    index = i%2
+    if i==0 or i==1:
+        lch.hist_2D(meas_betas[0]-beta0[index],beta0[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
+    elif i==2 or i==3:
+        lch.hist_2D(meas_betas[1]-beta1[index],beta1[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
+    elif i==4 or i==5:
+        print len(beta2)
+        lch.hist_2D(meas_betas[2]-beta2[index],beta2[index],xbins=200,ybins=200,xrange=(-1.2,1.2),yrange=(0,1.2),axes=subplots[3][i],log=True)
+    subplots[3][i].set_xlim(-1.2,1.2)
+    subplots[3][i].set_ylim(0,1.2)
 ################################################################################
 # Flight paths
 ################################################################################
 
-#lh.append(lch.hist_err(good_vtx,bins=100,range=(0.0,50.00),axes=subplots[3][0]))
-#lh.append(lch.hist_err(bad_vtx,bins=100,range=(0.0,50.00),axes=subplots[3][1]))
 print good_beta
 print good_gamma
 print len(good_beta)
 print len(bad_beta)
 c = 1.0
 #c = 29.97
-#lh.append(lch.hist_err(good_vtx/(good_beta*good_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[3][0]))
-#lh.append(lch.hist_err(bad_vtx/(bad_beta*bad_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[3][1]))
-lh.append(lch.hist_err(good_vtx*(good_gamma),bins=100,range=(0.0,100.00),axes=subplots[3][0]))
-lh.append(lch.hist_err(bad_vtx*(bad_gamma),bins=100,range=(0.0,100.00),axes=subplots[3][1]))
-#subplots[3][0].set_ylim(0.0)
-#subplots[3][1].set_ylim(0.0)
+#lh.append(lch.hist_err(good_vtx/(good_beta*good_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[4][0]))
+#lh.append(lch.hist_err(bad_vtx/(bad_beta*bad_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[4][1]))
+lh.append(lch.hist_err(good_vtx*(good_gamma),bins=100,range=(0.0,100.00),axes=subplots[4][0]))
+lh.append(lch.hist_err(bad_vtx*(bad_gamma),bins=100,range=(0.0,100.00),axes=subplots[4][1]))
+#subplots[4][0].set_ylim(0.0)
+#subplots[4][1].set_ylim(0.0)
 
-#subplots[3][0].set_yscale('log')
+#subplots[4][0].set_yscale('log')
 
 figs[0].savefig("Plots/fig0.png")
 figs[1].savefig("Plots/fig1.png")
 figs[2].savefig("Plots/fig2.png")
 figs[3].savefig("Plots/fig3.png")
+figs[4].savefig("Plots/fig4.png")
 
 plt.show()
 
