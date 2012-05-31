@@ -329,5 +329,5 @@ for i in xrange(nfigs):
     print "Saving %s..." % (figure_filename)
     figs[i].savefig(figure_filename)
 
-#plt.show()
+plt.show()
 
