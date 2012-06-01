@@ -266,7 +266,7 @@ print len(bad_masses[2])
 for i in range(0,3):
     i0 = xindex[i]
     i1 = yindex[i]
-    lh2d.append(lch.hist_2D(good_masses[i0],good_masses[i1],xbins=100,ybins=100,xrange=plot_ranges[i0],yrange=plot_ranges[i1],axes=subplots[2][i]))
+    lh2d.append(lch.hist_2D(good_masses[i0],good_masses[i1],xbins=100,ybins=100,xrange=plot_ranges[i0],yrange=plot_ranges[i1],axes=subplots[2][i],log=True))
     subplots[2][i].set_xlabel(mtitles[i0])
     subplots[2][i].set_ylabel(mtitles[i1])
     #subplots[2][0].set_aspect('auto')
