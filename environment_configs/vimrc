@@ -18,6 +18,7 @@ au BufRead,BufNewFile *.pde set filetype=pde
 " My keybindings
 ab myitem \begin{itemize}\item XXX\end{itemize}
 ab myframe \frame{\frametitle{XXX}}
+ab myeqn \begin{equation}XXX\end{equation}
 
 filetype indent on
 "colorscheme morning
