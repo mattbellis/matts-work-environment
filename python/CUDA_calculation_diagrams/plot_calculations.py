@@ -13,21 +13,21 @@ def calc_points(starting_x, starting_y, nx, ny,diag_flag=0):
                 xpts = np.append(xpts,i+starting_x)
                 ypts = np.append(ypts,j+starting_y)
             elif diag_flag==1:
-                if i<j:
-                    xpts = np.append(xpts,i+starting_x)
-                    ypts = np.append(ypts,j+starting_y)
+                if i>j:
+                    xpts = np.append(xpts,starting_x+i)
+                    ypts = np.append(ypts,ny-j-1+starting_y)
     return xpts,ypts
 ################################################################################
 
 fig = plt.figure(figsize=(8,8),dpi=100,facecolor='w',edgecolor='w')
 
-#npts = 10
-#diag_flag = 1
-#ndiv = 4
+npts = 10
+diag_flag = 0
+ndiv = 4
 
-npts = 40
-diag_flag = 1
-ndiv = 1
+#npts = 40
+#diag_flag = 1
+#ndiv = 1
 
 alternate = 0
 for i in range(0,ndiv):
@@ -55,7 +55,7 @@ frame1.axes.get_xaxis().set_visible(False)
 frame1.axes.get_yaxis().set_visible(False)
 
 #name = "cuda_calcs_%d.png" % (diag_flag)
-name = "cuda_calcs_%d.eps" % (diag_flag)
+name = "cuda_calcs_%d_%d.eps" % (diag_flag,npts)
 plt.savefig(name)
 
 plt.show()
