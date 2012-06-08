@@ -16,12 +16,15 @@ def propagate(x,y,z,px,py,pz,r_extent,z_extent,stepsize=0.01):
 
     r,theta,z = cartesian_to_cylindrical(x,y,z)
 
+    #print "-------"
     while np.abs(z)<half_z and r<r_extent:
         x += px*stepsize
         y += py*stepsize
         z += pz*stepsize
+        #print x,y,z
 
         r,theta,z = cartesian_to_cylindrical(x,y,z)
+        #print r,theta,z 
     
     return x,y,z
 
@@ -169,8 +172,8 @@ print times
 energies = amp_to_energy(amplitudes,0)
 print energies
 
-#plt.figure()
-#plt.hist(energies,bins=500)
+plt.figure()
+plt.hist(energies,bins=500)
 
 
 ################################################################################
@@ -178,9 +181,11 @@ print energies
 ################################################################################
 nsurface = ndata*fractional_volume
 print "nsurface: ",nsurface 
+#nsurface = 2000
 
 # Generate the starting points
 r,theta,z = point_in_detector(nsurface,cogent_r,cogent_z,surface_depth)
+#r,theta,z = point_in_detector(nsurface,cogent_r,cogent_z,0.0)
 x,y,z = cylindrical_to_cartesian(r,theta,z)
 
 ptheta,pphi = random_dir(nsurface) 
@@ -194,20 +199,22 @@ ax1.plot(px,py,pz,'b.',markersize=1)
 
 pathlen = np.array([])
 for x0,y0,z0,ppx,ppy,ppz in zip(x,y,z,px,py,pz):
-    x1,y1,z1 = propagate(x0,y0,z0,ppx,ppy,ppz,r_extent=cogent_r,z_extent=cogent_z,stepsize=0.01)
+    x1,y1,z1 = propagate(x0,y0,z0,ppx,ppy,ppz,r_extent=cogent_r,z_extent=cogent_z,stepsize=0.005)
+    #print cartesian_to_cylindrical(x1,y1,z1)
     pl = np.sqrt((x1-x0)**2 + (y1-y0)**2 + (z1-z0)**2)
     pathlen = np.append(pathlen,pl)
 
 plt.figure()
-plt.hist(pathlen,bins=50)
+plt.hist(pathlen,bins=500)
 
 energy_sample = energies[energies>4.5]
-indices = np.random.random_integers(0,len(energy_sample),nsurface)
+indices = np.random.random_integers(0,len(energy_sample)-1,nsurface)
 energy_subsample = energy_sample[indices]
 
 plt.figure()
-#plt.plot(energy_subsample,pathlen,'.',markersize=1)
-plt.plot(energy_subsample,energy_subsample*pathlen,'.',markersize=1)
+print pathlen
+plt.plot(energy_subsample,pathlen,'.',markersize=1)
+#plt.plot(energy_subsample,energy_subsample*pathlen,'.',markersize=1)
 
 #exit()
 
