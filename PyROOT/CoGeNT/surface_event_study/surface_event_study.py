@@ -199,13 +199,13 @@ ax1.plot(px,py,pz,'b.',markersize=1)
 
 pathlen = np.array([])
 for x0,y0,z0,ppx,ppy,ppz in zip(x,y,z,px,py,pz):
-    x1,y1,z1 = propagate(x0,y0,z0,ppx,ppy,ppz,r_extent=cogent_r,z_extent=cogent_z,stepsize=0.005)
+    x1,y1,z1 = propagate(x0,y0,z0,ppx,ppy,ppz,r_extent=cogent_r,z_extent=cogent_z,stepsize=0.001)
     #print cartesian_to_cylindrical(x1,y1,z1)
     pl = np.sqrt((x1-x0)**2 + (y1-y0)**2 + (z1-z0)**2)
     pathlen = np.append(pathlen,pl)
 
 plt.figure()
-plt.hist(pathlen,bins=500)
+plt.hist(pathlen,bins=1500)
 
 energy_sample = energies[energies>4.5]
 indices = np.random.random_integers(0,len(energy_sample)-1,nsurface)
