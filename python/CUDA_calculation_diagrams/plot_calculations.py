@@ -21,9 +21,13 @@ def calc_points(starting_x, starting_y, nx, ny,diag_flag=0):
 
 fig = plt.figure(figsize=(8,8),dpi=100,facecolor='w',edgecolor='w')
 
-npts = 10
+#npts = 10
+#diag_flag = 0
+#ndiv = 4
+
+npts = 40
 diag_flag = 0
-ndiv = 4
+ndiv = 1
 
 #npts = 40
 #diag_flag = 1

@@ -5,4 +5,5 @@ if ( $1 != "" ) then
   set machine = "yakut"$1
 endif
 
-ssh bellis@$machine.slac.stanford.edu
+echo $machine
+ssh -v bellis@$machine.slac.stanford.edu
