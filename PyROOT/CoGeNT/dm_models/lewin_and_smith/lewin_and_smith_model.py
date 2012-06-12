@@ -164,7 +164,7 @@ for t in range(0,15,1):
     print "norm: %f" % (norm)
 
     mod_x = np.append(mod_x,t)
-    mod_y = np.append(mod_y,roi_y.sum()*bin_width/15.0)
+    mod_y = np.append(mod_y,roi_y.sum()*bin_width)
 
     total_events += roi_y.sum()*bin_width
     print "total events: %f" % (total_events)

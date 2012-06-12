@@ -414,6 +414,7 @@ def main():
     # Let the exponential modulate: float phase offset and amplitude.
     if args.exp_mod:
         cogent_pars_dict["exp_mod_phase"].setVal(-0.7); cogent_pars_dict["exp_mod_phase"].setConstant(False)
+        #cogent_pars_dict["exp_mod_phase"].setVal(-1.7); cogent_pars_dict["exp_mod_phase"].setConstant(True)
         cogent_pars_dict["exp_mod_amp"].setVal(1.0); cogent_pars_dict["exp_mod_amp"].setConstant(False)
     else:
         cogent_pars_dict["exp_mod_phase"].setVal(0.0); cogent_pars_dict["exp_mod_phase"].setConstant(True)
