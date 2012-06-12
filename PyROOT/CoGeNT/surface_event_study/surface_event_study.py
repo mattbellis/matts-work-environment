@@ -169,7 +169,7 @@ index = np.arange(1,ndata*2+1,2)
 print index
 amplitudes = content[index]
 print times
-energies = amp_to_energy(amplitudes,0)
+energies = amp_to_energy(amplitudes,2)
 print energies
 
 plt.figure()
@@ -199,7 +199,7 @@ ax1.plot(px,py,pz,'b.',markersize=1)
 
 pathlen = np.array([])
 for x0,y0,z0,ppx,ppy,ppz in zip(x,y,z,px,py,pz):
-    x1,y1,z1 = propagate(x0,y0,z0,ppx,ppy,ppz,r_extent=cogent_r,z_extent=cogent_z,stepsize=0.001)
+    x1,y1,z1 = propagate(x0,y0,z0,ppx,ppy,ppz,r_extent=cogent_r,z_extent=cogent_z,stepsize=0.01)
     #print cartesian_to_cylindrical(x1,y1,z1)
     pl = np.sqrt((x1-x0)**2 + (y1-y0)**2 + (z1-z0)**2)
     pathlen = np.append(pathlen,pl)

@@ -170,7 +170,7 @@ double tc(double* vstr)
 
 // Velocity distribution integral for a stream
 // vstrE must be stream speed in frame of earth
-// vo is the dispersion of the stream i.e. 
+// v0 is the dispersion of the stream i.e. 
 // f(v)~exp(-(v-vstrE)^2/v0^2)
 double gStream(double vmin, double vstrE, double v0)
 {
@@ -385,6 +385,7 @@ int main(int argc,char** argv)
     {
       Er=1+i*0.1;
       printf("\n%.2E %.8E",Er,dRdErStream(Er, t1, AGe, vSagVec, v0Sag,mDM));
+      //printf("\n%.2E %.8E",Er,dRdErStream(Er, t1, AGe, vSagVec, 0.001,mDM));
     }
 
 
