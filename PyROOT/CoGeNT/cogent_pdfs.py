@@ -149,7 +149,10 @@ def cosmogenic_peaks(x,t,num_days,gc_flag=0,e_lo=None,verbose=False):
         # the end of time. So compensate for the number of days running.
         ########################################################################
         # L-shell peaks
-        num_tot_decays = cosmogenic_data_dict[p][4]
+        #num_tot_decays = cosmogenic_data_dict[p][4]
+        # Use the *uncorrected* number of events.
+        num_tot_decays = cosmogenic_data_dict[p][3]
+
         # K-shell peaks
         #num_tot_decays = cosmogenic_data_dict[p][0]
 

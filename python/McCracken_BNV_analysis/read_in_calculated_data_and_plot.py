@@ -214,7 +214,7 @@ print len(good_masses[2][(good_masses[2]>limits[2][0])*(good_masses[2]<limits[2]
 print "\n"
 #ngood = len(good_masses[0][good_vtx>4.0])
 #print "ngood: %f" % (ngood/nevents)
-ngood = len(good_masses[1][good_vtx>4.0])
+ngood = len(good_masses[1][good_vtx>8.0])
 print "ngood: %f" % (ngood/nevents)
 #ngood = len(good_masses[2][good_vtx>4.0])
 #print "ngood: %f" % (ngood/nevents)
@@ -228,8 +228,8 @@ print len(bad_masses[2][(bad_masses[2]>limits[2][0])*(bad_masses[2]<limits[2][1]
 print "\n"
 print "vtx"
 print len(vtxs[0])
-print len(good_vtx[good_vtx>4.0])/float(len(vtxs[0]))
-print len(bad_vtx[bad_vtx>4.0])/float(len(vtxs[0]))
+print len(good_vtx[good_vtx>8.0])/float(len(vtxs[0]))
+print len(bad_vtx[bad_vtx>8.0])/float(len(vtxs[0]))
 
 lh = []
 

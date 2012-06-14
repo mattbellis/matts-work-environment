@@ -27,14 +27,16 @@ def main():
     amplitudes = content[index]
     energies = amp_to_energy(amplitudes,0)
 
-    fig0 = plt.figure(figsize=(10,5),dpi=100)
-    ax0 = fig0.add_subplot(1,1,1)
     lo = 0.5
     hi = 3.2
-    nbins = 100
+    nbins = 108
     bin_width = (hi-lo)/nbins
     print bin_width
-    #ax0.hist(energies,bins=nbins,range=(lo,hi))
+
+    fig0 = plt.figure(figsize=(10,9),dpi=100)
+    ax0 = fig0.add_subplot(2,1,1)
+    ax0.set_xlim(lo,hi)
+
     lch.hist_err(energies,bins=nbins,range=(lo,hi),axes=ax0)
 
     x = np.linspace(lo,hi,1000)
@@ -46,9 +48,10 @@ def main():
     threshold = 0.345
     sigmoid_sigma = 0.241
     efficiency = sigmoid(x,threshold,sigmoid_sigma,max_val)
-    fig1 = plt.figure()
-    ax1 = fig1.add_subplot(1,1,1) 
-    ax1.plot(x,efficiency,linewidth=3)
+    #fig1 = plt.figure()
+    ax1 = fig0.add_subplot(2,1,2) 
+    ax1.plot(x,efficiency,'r--',linewidth=2)
+    ax1.set_xlim(lo,hi)
     ax1.set_ylim(0.0,1.0)
 
     means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
@@ -60,9 +63,11 @@ def main():
     print lshells
     ytot = np.zeros(1000)
     print means
+    #HG_trigger = 0.94
+    HG_trigger = 1.00
     for n,cp in zip(num_decays_in_dataset,lshells):
         tempy = cp.pdf(x)
-        y = n*cp.pdf(x)*bin_width*efficiency
+        y = n*cp.pdf(x)*bin_width*efficiency/HG_trigger
         print n,integrate.simps(tempy,x=x),integrate.simps(y,x=x)
         ytot += y
         ax0.plot(x,y,'r--',linewidth=2)
@@ -72,45 +77,29 @@ def main():
     # Surface term
     ############################################################################
     surf_expon = stats.expon(scale=1.0)
-    # Normalize to 1.0
-    y = surf_expon.pdf(3.3*x)
-    normalization = integrate.simps(y,x=x)
-    y /= normalization
-    print "exp int: ",integrate.simps(y,x=x)
-    y *= (575.0*bin_width)*efficiency
-    ax0.plot(x,y,'y',linewidth=2)
+    yorg = surf_expon.pdf(3.3*x)
+    y,surf_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=575.0,fmt='y-',axes=ax0,efficiency=efficiency)
     ytot += y
-    #ax0.plot(x,ytot,'b',linewidth=3)
 
     ############################################################################
     # Flat term
     ############################################################################
-    y = np.ones(len(x))
-    normalization = integrate.simps(y,x=x)
-    y /= normalization
-    print "exp flat: ",integrate.simps(y,x=x)
-    y *= 1060.0*bin_width*efficiency
-    ax0.plot(x,y,'m',linewidth=2)
+    yorg = np.ones(len(x))
+    y,flat_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=1060.0,fmt='m-',axes=ax0,efficiency=efficiency)
     ytot += y
-    #ax0.plot(x,ytot,'b',linewidth=3)
+    
 
     ############################################################################
     # WIMP-like term
     ############################################################################
     wimp_expon = stats.expon(scale=1.0)
-    # Normalize to 1.0
-    y = wimp_expon.pdf(2.3*x)
-    normalization = integrate.simps(y,x=x)
-    y /= normalization
-    print "exp wimp: ",integrate.simps(y,x=x)
-    y *= (330.0*bin_width)*efficiency
-    ax0.plot(x,y,'g',linewidth=2)
+    yorg = wimp_expon.pdf(2.3*x)
+    y,wimp_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=330.0,fmt='g-',axes=ax0,efficiency=efficiency)
     ytot += y
-    #ax0.plot(x,ytot,'b',linewidth=3)
-
-    #print ytot
-    #ytot *= eff_func
-    #print ytot
+    
+    ############################################################################
+    # Total-like term
+    ############################################################################
     ax0.plot(x,ytot,'b',linewidth=3)
     
 
