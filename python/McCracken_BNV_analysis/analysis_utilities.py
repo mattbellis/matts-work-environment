@@ -52,7 +52,21 @@ def mass_from_special_relativity(v4):
     else:
         return -np.sqrt(abs(mass_squared))
     '''
-    return np.sqrt(mass_squared)
+    #print v4[0][mass_squared!=mass_squared]
+    #print pmag[mass_squared!=mass_squared]
+    #print mass_squared[mass_squared!=mass_squared]
+    mass_squared[mass_squared!=mass_squared] = 999999
+    print mass_squared[mass_squared!=mass_squared]
+    print mass_squared[mass_squared<=0.0]
+    print len(mass_squared[mass_squared<=0.0])
+
+    mass_squared_sqrt = np.zeros(len(mass_squared))
+    mass_squared_sqrt[mass_squared<0.0] = np.sqrt(-mass_squared[mass_squared<0.0])
+    mass_squared_sqrt[mass_squared>=0.0] = np.sqrt(mass_squared[mass_squared>=0.0])
+
+    #return np.sqrt(mass_squared)
+    print mass_squared_sqrt
+    return mass_squared_sqrt
 
 ################################################################################
 # Calculate the mass of a particle using Special Relativity
