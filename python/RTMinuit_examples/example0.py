@@ -31,11 +31,8 @@ kwd = {}
 kwd['flag']=1
 kwd['fix_flag']=True
 kwd['x']=3.0
-#kwd['fix_x']=False
 kwd['y']=1.0
-#kwd['fix_y']=False
 kwd['z']=4.0
-#kwd['fix_z']=False
 kwd['printlevel']=0
 
 m = Minuit(f,**kwd)
