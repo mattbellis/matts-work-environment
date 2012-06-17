@@ -4,105 +4,123 @@ import scipy.stats as stats
 import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
+from RTMinuit import *
+from cogent_pdfs import *
+
+
 ################################################################################
-# Cosmogenic data
+# Helper function
 ################################################################################
-def lshell_data(days):
-    lshell_data_dict = {
-        "As 73": [125.45,33.479,0.11000,13.799,12.741,1.4143,0.077656,80.000,0.0000,11.10,80.0],
-        "Ge 68": [6070.7,1.3508,0.11400,692.06,638.98,1.2977,0.077008,271.00,0.0000,10.37,271.0],
-        "Ga 68": [520.15,5.1139,0.11000,57.217,52.828,1.1936,0.076426,271.00,0.0000,9.66,271.0],
-        "Zn 65": [2117.8,2.2287,0.10800,228.72,211.18,1.0961,0.075877,244.00,0.0058000,8.98,244.0],
-        "Ni 56": [16.200,23.457,0.10200,1.6524,1.5257,0.92560,0.074906,5.9000,0.39000,7.71,5.9],
-        "Co 56/58": [100.25,8.0,0.10200,10.226,9.4412,0.84610,0.074449,71.000,0.78600,7.11,77.0],
-        "Co 57": [27.500,8.0,0.10200,2.8050,2.5899,0.84610,0.074449,271.00,0.78600,7.11,271.0],
-        "Fe 55": [459.20,11.629,0.10600,48.675,44.942,0.76900,0.074003,996.00,0.96000,6.54,996.45],
-        "Mn 54": [223.90,9.3345,0.10200,22.838,21.086,0.69460,0.073570,312.00,1.0000,5.99,312.0],
-        "Cr 51": [31.500,15.238,0.10100,3.1815,2.9375,0.62820,0.073182,28.000,1.0000,5.46,28.0],
-        "V 49": [161.46,12.263,0.10000,16.146,14.908,0.56370,0.072803,330.00,1.0000,4.97,330.0],
-        }
+class Struct:
+    def __init__(self, **kwds):
+        self.__dict__.update(kwds)
 
-    means = np.array([])
-    sigmas = np.array([])
-    num_tot_decays = np.array([])
-    decay_constants = np.array([])
-    num_decays_in_dataset = np.array([])
+################################################################################
+# Helper fitting function
+################################################################################
+class Minuit_FCN:
+    def __init__(self,data,params):
+        self.data = data
+        self.params = params
+        varnames = ['%s'%i for i in params]
 
-    for i,p in enumerate(lshell_data_dict):
+        self.func_code = Struct(co_argcount=len(params),co_varnames=varnames)
+        self.func_defaults = None # Optional but makes vectorize happy
 
-        means = np.append(means,lshell_data_dict[p][5])
-        sigmas = np.append(sigmas,lshell_data_dict[p][6])
+    def __call__(self,*arg):
+        print "arg: "
+        print arg
+        print self.func_code.co_varnames
+        flag = arg[0]
+        data0 = self.data[0]
+        mc = self.data[1]
 
-        half_life = lshell_data_dict[p][7]
-        decay_constants = np.append(decay_constants,-1.0*np.log(2.0)/half_life)
+        val = emlf_minuit(data0,mc,arg[1:],flag,self.func_code.co_varnames[1:])
 
-        #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
-        # *Before* the efficiency?
-        num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
+        return val
+
+################################################################################
+
+################################################################################
+# Poisson function
+################################################################################
+def pois(mu, k):
+    ret = -mu + k*np.log(mu)
+    return ret
+################################################################################
+
+################################################################################
+def fitfunc(x,p,flag,parnames):
+
+    pn = parnames
+    #mean = p[0]
+    #sigma = p[1]
+    #function = stats.norm(loc=mean,scale=sigma)
+    #ret = function.pdf(x)
+
+    ytot = np.zeros(len(x))
+
+    if flag==0:
         
-        num_decays_in_dataset = np.append(num_decays_in_dataset,num_tot_decays[i]*(1.0-np.exp(days*decay_constants[i])))
+        exp_slope = p[pn.index('exp_slope')]
+        num_exp = p[pn.index('num_exp')]
+        num_flat = p[pn.index('num_flat')]
 
-    return means,sigmas,num_tot_decays,num_decays_in_dataset,decay_constants
+        means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
+        lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
+
+        tot_cp = 0
+        for n,cp in zip(num_decays_in_dataset,lshells):
+            #y = n*cp.pdf(x)*bin_width*efficiency/HG_trigger
+            y = n*cp.pdf(x)
+            tot_cp += n
+            ytot += y
+
+        #p[pn.index('num_lshell')] = tot_cp
+
+        # Surf exponential
+        surf_expon = stats.expon(scale=1.0)
+        y = num_exp*surf_expon.pdf(exp_slope*x)
+        ytot += y 
+
+        # Surf exponential
+        flat_term = 1.0
+        y = num_flat*flat_term
+        ytot += y 
+
+        #print ytot
 
 
-
+    return ytot
 ################################################################################
-# Cosmogenic peaks
-################################################################################
-def lshell_peaks(means,sigmas,numbers):
 
-    npeaks = len(means)
-
-    pdfs = []
-
-    for mean,sigma,number in zip(means,sigmas,numbers):
-        pdf = sp.stats.norm(loc=mean,scale=sigma)
-        pdfs.append(pdf)
-
-    return pdfs
 
 ################################################################################
 # Extended maximum likelihood function for minuit
 ################################################################################
-def emlf_minuit(p):
+def emlf_minuit(data,mc,p,flag,varnames):
 
-    norm_func = (pdf_bmixing(mc_data[i],pars)).sum()/len(mc_data)
+    v = varnames
+    norm_func = (fitfunc(mc,p,flag,v)).sum()/len(mc)
 
-    num = num # Number of events in fit.
+    print p
+    n = 0
+    for name in varnames:
+        if 'num_' in name:
+            n += p[varnames.index(name)]
+    print n
 
-    ret = (-np.log(pdf_bmixing(data[i],pars) / norm_func).sum()) - pois(num,len(data[i]))
+    ret = 0.0
+    if norm_func==0:
+        norm_func = 1000000.0
+
+
+    print len(data)
+    print pois(n,len(data))
+    ret = (-np.log(fitfunc(data,p,flag,v) / norm_func).sum()) - pois(n,len(data))
+    #print ret
 
     return ret
 
-################################################################################
-# Sigmoid function.
-################################################################################
-def sigmoid(x,thresh,sigma,max_val):
-
-    ret = max_val / (1.0 + np.exp(-(x-thresh)/(thresh*sigma)))
-
-    return ret
-
-
-################################################################################
-# Plotting code for pdf
-################################################################################
-def plot_pdf(x,y,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-'):
-
-    # Normalize to 1.0
-    normalization = integrate.simps(y,x=x)
-    y /= normalization
-
-    #print "exp int: ",integrate.simps(y,x=x)
-    y *= (scale*bin_width)*efficiency
-
-    if axes==None:
-        axes=plt.gca()
-
-    plot = axes.plot(x,y,fmt,linewidth=2)
-    #ytot += y
-    #ax0.plot(x,ytot,'b',linewidth=3)
-
-    return y,plot
 
 

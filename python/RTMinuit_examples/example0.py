@@ -31,13 +31,15 @@ kwd = {}
 kwd['flag']=1
 kwd['fix_flag']=True
 kwd['x']=3.0
-kwd['y']=1.0
+kwd['y']=2.0
+kwd['fix_y']=True
 kwd['z']=4.0
 kwd['printlevel']=0
 
 m = Minuit(f,**kwd)
 #m = Minuit(f)
 
+# Doesn't work.
 m.release_all_params()
 
 print "List of free parameters:"
