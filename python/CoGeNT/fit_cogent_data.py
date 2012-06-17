@@ -51,27 +51,49 @@ def main():
     lch.hist_err(energies,bins=nbins,range=(lo,hi),axes=ax0)
 
     ############################################################################
+    # Gen some MC
+    ############################################################################
+    mc = (hi-lo)*np.random.random(40000) + lo
+
+    ############################################################################
+    # Get the efficiency function
+    ############################################################################
+    max_val = 0.86786
+    threshold = 0.345
+    sigmoid_sigma = 0.241
+
+    indices = np.zeros(len(mc),dtype=np.int)
+    for i,pt in enumerate(mc):
+        if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
+            indices[i] = 1
+    mc = mc[indices==1]
+    print len(mc)
+    
+    ############################################################################
     # Fit
     ############################################################################
     means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-    tot_lshells = num_decays_in_dataset.sum()*0.9
+    tot_lshells = num_decays_in_dataset.sum()
 
     myparams = ['flag','exp_slope','num_lshell','num_exp']
     myparams += ['num_flat']
 
-    # Gen some MC
-    mc = (hi-lo)*np.random.random(20000) + lo
+    print "here diagnostics."
+    print len(mc)
+
+    #exit()
+
     f = Minuit_FCN([energies,mc],myparams)
 
     kwd = {}
     kwd['flag']=0
     kwd['fix_flag']=True
-    kwd['exp_slope']=4.3
+    kwd['exp_slope']=5.3
     kwd['num_lshell']=tot_lshells
     kwd['fix_num_lshell']=True
     kwd['num_exp']=900
     kwd['num_flat']=1060
-    kwd['fix_num_flat']=True
+    #kwd['fix_num_flat']=True
 
     m = rtminuit.Minuit(f,**kwd)
 
@@ -91,17 +113,14 @@ def main():
     x = np.linspace(lo,hi,1000)
 
     ############################################################################
-    # Get the efficiency function
-    ############################################################################
-    max_val = 0.86786
-    threshold = 0.345
-    sigmoid_sigma = 0.241
+
+    # Efficiency function
     efficiency = sigmoid(x,threshold,sigmoid_sigma,max_val)
-    #fig1 = plt.figure()
     ax1 = fig0.add_subplot(2,1,2) 
     ax1.plot(x,efficiency,'r--',linewidth=2)
     ax1.set_xlim(lo,hi)
     ax1.set_ylim(0.0,1.0)
+
 
     means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
     #means = np.array([1.2977,1.1])
@@ -127,6 +146,7 @@ def main():
     ############################################################################
     surf_expon = stats.expon(scale=1.0)
     yorg = surf_expon.pdf(values['exp_slope']*x)
+    #yorg = surf_expon.pdf(6.0*x)
     y,surf_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=values['num_exp'],fmt='y-',axes=ax0,efficiency=efficiency)
     ytot += y
 
@@ -159,6 +179,9 @@ def main():
     #m = minuit.Minuit(pdfs.extended_maximum_likelihood_function_minuit,p=p0)
     #print m.values
     #m.migrad()
+
+    plt.figure()
+    lch.hist_err(mc,bins=108,range=(lo,hi))
 
 
 
