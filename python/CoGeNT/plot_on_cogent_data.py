@@ -5,15 +5,11 @@ import matplotlib.pyplot as plt
 import scipy.integrate as integrate
 
 from cogent_utilities import *
-from cogent_pdfs import *
 from fitting_utilities import *
-from plotting_utilities import *
 
 import lichen.lichen as lch
 
-#import minuit
-import RTMinuit as rtminuit
-
+import minuit
 
 pi = np.pi
 
@@ -37,56 +33,11 @@ def main():
     bin_width = (hi-lo)/nbins
     print bin_width
 
-    # Take events only in our selected range
-    energies = energies[energies>lo]
-    energies = energies[energies<hi]
-    print energies
-    print len(energies)
-    #exit()
-
     fig0 = plt.figure(figsize=(10,9),dpi=100)
     ax0 = fig0.add_subplot(2,1,1)
     ax0.set_xlim(lo,hi)
 
     lch.hist_err(energies,bins=nbins,range=(lo,hi),axes=ax0)
-
-    ############################################################################
-    # Fit
-    ############################################################################
-    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-    tot_lshells = num_decays_in_dataset.sum()*0.9
-
-    myparams = ['flag','exp_slope','num_lshell','num_exp']
-    myparams += ['num_flat']
-
-    # Gen some MC
-    mc = (hi-lo)*np.random.random(20000) + lo
-    f = Minuit_FCN([energies,mc],myparams)
-
-    kwd = {}
-    kwd['flag']=0
-    kwd['fix_flag']=True
-    kwd['exp_slope']=4.3
-    kwd['num_lshell']=tot_lshells
-    kwd['fix_num_lshell']=True
-    kwd['num_exp']=900
-    kwd['num_flat']=1060
-    kwd['fix_num_flat']=True
-
-    m = rtminuit.Minuit(f,**kwd)
-
-    print m.free_param
-    print m.fix_param
-
-    m.migrad()
-
-    print m.values,m.errors
-
-    values = m.values # Dictionary
-
-    #exit()
-
-    ############################################################################
 
     x = np.linspace(lo,hi,1000)
 
@@ -126,34 +77,33 @@ def main():
     # Surface term
     ############################################################################
     surf_expon = stats.expon(scale=1.0)
-    yorg = surf_expon.pdf(values['exp_slope']*x)
-    y,surf_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=values['num_exp'],fmt='y-',axes=ax0,efficiency=efficiency)
+    yorg = surf_expon.pdf(3.3*x)
+    y,surf_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=575.0,fmt='y-',axes=ax0,efficiency=efficiency)
     ytot += y
 
     ############################################################################
     # Flat term
     ############################################################################
     yorg = np.ones(len(x))
-    y,flat_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=efficiency)
+    y,flat_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=1060.0,fmt='m-',axes=ax0,efficiency=efficiency)
     ytot += y
     
 
     ############################################################################
     # WIMP-like term
     ############################################################################
-    '''
     wimp_expon = stats.expon(scale=1.0)
     yorg = wimp_expon.pdf(2.3*x)
     y,wimp_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=330.0,fmt='g-',axes=ax0,efficiency=efficiency)
     ytot += y
-    '''
     
     ############################################################################
     # Total-like term
     ############################################################################
     ax0.plot(x,ytot,'b',linewidth=3)
-
     
+
+
 
     #data = [events,deltat_mc]
     #m = minuit.Minuit(pdfs.extended_maximum_likelihood_function_minuit,p=p0)
