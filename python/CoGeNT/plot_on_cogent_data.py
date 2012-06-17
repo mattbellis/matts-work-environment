@@ -6,10 +6,11 @@ import scipy.integrate as integrate
 
 from cogent_utilities import *
 from fitting_utilities import *
+from plotting_utilities import *
 
 import lichen.lichen as lch
 
-import minuit
+#import minuit
 
 pi = np.pi
 

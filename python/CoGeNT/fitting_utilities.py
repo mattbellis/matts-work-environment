@@ -80,12 +80,25 @@ def fitfunc(x,p,flag,parnames):
 
         # Surf exponential
         surf_expon = stats.expon(scale=1.0)
+
+        xnorm = np.linspace(0.5,3.2,1000)
+        ynorm = surf_expon.pdf(exp_slope*xnorm) 
+        normalization = integrate.simps(ynorm,x=xnorm)
+
         y = num_exp*surf_expon.pdf(exp_slope*x)
+        y /= normalization
         ytot += y 
 
         # Surf exponential
         flat_term = 1.0
-        y = num_flat*flat_term
+
+        #xnorm = np.linspace(0.5,3.2,1000)
+        #ynorm = 1.0*np.ones(len(xnorm))
+        #normalization = integrate.simps(ynorm,x=xnorm)
+
+        y = num_flat
+        #y = num_flat*flat_term
+        #y /= normalization
         ytot += y 
 
         #print ytot
@@ -108,12 +121,11 @@ def emlf_minuit(data,mc,p,flag,varnames):
     for name in varnames:
         if 'num_' in name:
             n += p[varnames.index(name)]
-    print n
+    print "tot num: ",n
 
     ret = 0.0
     if norm_func==0:
         norm_func = 1000000.0
-
 
     print len(data)
     print pois(n,len(data))
