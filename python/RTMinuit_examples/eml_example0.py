@@ -123,6 +123,9 @@ def main():
     print m.free_param
     print m.fix_param
 
+    # For maximum likelihood method.
+    m.set_up(0.5)
+
     m.migrad()
 
     print m.values,m.errors
