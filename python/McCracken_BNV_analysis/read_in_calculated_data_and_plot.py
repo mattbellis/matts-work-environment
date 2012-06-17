@@ -20,7 +20,7 @@ from analysis_utilities import *
 
 n = 0
 masses = [np.array([]),np.array([]),np.array([])]
-bad_masses = [np.array([]),np.array([]),np.array([])]
+bad_perm_masses = [np.array([]),np.array([]),np.array([])]
 vtxs = [np.array([]),np.array([])]
 flight_length = []
 count = 0
@@ -78,8 +78,11 @@ for i in xrange(3):
 ################################################################################
 # Pick which permutation is the ``good" permutation.
 ################################################################################
+good_perm_masses = [None,None,None]
+bad_perm_masses = [None,None,None]
 good_masses = [None,None,None]
 bad_masses = [None,None,None]
+good_vtx = None
 good_vtx = None
 bad_vtx = None
 good_Lbeta = None
@@ -94,16 +97,17 @@ for i in xrange(3):
             i0 = (2*i)+1
             i1 = 2*i
 
-        good_masses[i] =                          masses[i0][abs(masses[i0]-optimal_vals[i])<=abs(masses[i1]-optimal_vals[i])]
-        good_masses[i] = np.append(good_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])< abs(masses[i0]-optimal_vals[i])])
+        good_perm_masses[i] =                          masses[i0][abs(masses[i0]-optimal_vals[i])<=abs(masses[i1]-optimal_vals[i])]
+        good_perm_masses[i] = np.append(good_perm_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])< abs(masses[i0]-optimal_vals[i])])
 
-        bad_masses[i] =                         masses[i0][abs(masses[i0]-optimal_vals[i])>abs(masses[i1]-optimal_vals[i])]
-        bad_masses[i] = np.append(bad_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])>=abs(masses[i0]-optimal_vals[i])])
+        bad_perm_masses[i] =                         masses[i0][abs(masses[i0]-optimal_vals[i])>abs(masses[i1]-optimal_vals[i])]
+        bad_perm_masses[i] = np.append(bad_perm_masses[i],masses[i1][abs(masses[i1]-optimal_vals[i])>=abs(masses[i0]-optimal_vals[i])])
 
     print "masses %d" % (i)
-    print len(good_masses[i])
-    print len(bad_masses[i])
+    print len(good_perm_masses[i])
+    print len(bad_perm_masses[i])
 
+# Cut on invariant mass of Lambda candidate to select correct permutation
 cut0 =     abs(masses[2]-optimal_vals[1])<=abs(masses[3]-optimal_vals[1])
 cut1 =     abs(masses[3]-optimal_vals[1])< abs(masses[2]-optimal_vals[1])
 anticut0 = abs(masses[2]-optimal_vals[1])> abs(masses[3]-optimal_vals[1])
@@ -112,17 +116,34 @@ anticut1 = abs(masses[3]-optimal_vals[1])>=abs(masses[2]-optimal_vals[1])
 #cut0 *=     (meas_betas[0]-beta0[0]>0.04)*(meas_betas[1]-beta1[0]>0.04)*(meas_betas[2]-beta2[0]>0.04)
 #cut1 *=     (meas_betas[0]-beta0[1]>0.04)*(meas_betas[1]-beta1[1]>0.04)*(meas_betas[2]-beta2[1]>0.04)
 
-good_vtx =                    vtxs[0][cut0]
-good_vtx = np.append(good_vtx,vtxs[1][cut1])
+print cut0
 
-bad_vtx =                   vtxs[0][anticut0]
-bad_vtx = np.append(bad_vtx,vtxs[1][anticut1])
+good_masses[0] =                       masses[0][cut0==True]
+good_masses[0] = np.append(good_masses[0],masses[1][cut1==True])
+good_masses[1] =                       masses[2][cut0==True]
+good_masses[1] = np.append(good_masses[1],masses[3][cut1==True])
+good_masses[2] =                       masses[4][cut0==True]
+good_masses[2] = np.append(good_masses[2],masses[5][cut1==True])
 
-good_beta =                     lambda_beta[0][cut0]
-good_beta = np.append(good_beta,lambda_beta[1][cut1])
+bad_masses[0] =                      masses[0][anticut0==True]
+bad_masses[0] = np.append(bad_masses[0],masses[1][anticut1==True])
+bad_masses[1] =                      masses[2][anticut0==True]
+bad_masses[1] = np.append(bad_masses[1],masses[3][anticut1==True])
+bad_masses[2] =                      masses[4][anticut0==True]
+bad_masses[2] = np.append(bad_masses[2],masses[5][anticut1==True])
 
-bad_beta =                    lambda_beta[0][anticut0]
-bad_beta = np.append(bad_beta,lambda_beta[1][anticut1])
+
+good_vtx =                    vtxs[0][cut0==True]
+good_vtx = np.append(good_vtx,vtxs[1][cut1==True])
+
+bad_vtx =                   vtxs[0][anticut0==True]
+bad_vtx = np.append(bad_vtx,vtxs[1][anticut1==True])
+
+good_lambda_beta =                     lambda_beta[0][cut0==True]
+good_lambda_beta = np.append(good_lambda_beta,lambda_beta[1][cut1==True])
+
+bad_beta =                    lambda_beta[0][anticut0==True]
+bad_beta = np.append(bad_beta,lambda_beta[1][anticut1==True])
 
 print "cuts"
 print cut0
@@ -134,30 +155,30 @@ good_beta1 = [None,None]
 good_beta2 = [None,None]
 
 for i in range(0,3):
-    good_meas_betas[0][i] =                                 meas_betas[i][cut0]
-    good_meas_betas[0][i] = np.append(good_meas_betas[0][i],meas_betas[i][cut1])
-    good_meas_betas[1][i] =                                 meas_betas[i][anticut0]
-    good_meas_betas[1][i] = np.append(good_meas_betas[1][i],meas_betas[i][anticut1])
+    good_meas_betas[0][i] =                                 meas_betas[i][cut0==True]
+    good_meas_betas[0][i] = np.append(good_meas_betas[0][i],meas_betas[i][cut1==True])
+    good_meas_betas[1][i] =                                 meas_betas[i][anticut0==True]
+    good_meas_betas[1][i] = np.append(good_meas_betas[1][i],meas_betas[i][anticut1==True])
 
-good_beta0[0] =                         beta0[0][cut0]
-good_beta0[0] = np.append(good_beta0[0],beta0[1][cut1])
-good_beta1[0] =                         beta1[0][cut0]
-good_beta1[0] = np.append(good_beta1[0],beta1[1][cut1])
-good_beta2[0] =                         beta2[0][cut0]
-good_beta2[0] = np.append(good_beta2[0],beta2[1][cut1])
+good_beta0[0] =                         beta0[0][cut0==True]
+good_beta0[0] = np.append(good_beta0[0],beta0[1][cut1==True])
+good_beta1[0] =                         beta1[0][cut0==True]
+good_beta1[0] = np.append(good_beta1[0],beta1[1][cut1==True])
+good_beta2[0] =                         beta2[0][cut0==True]
+good_beta2[0] = np.append(good_beta2[0],beta2[1][cut1==True])
 
-good_beta0[1] =                         beta0[0][anticut0]
-good_beta0[1] = np.append(good_beta0[1],beta0[1][anticut1])
-good_beta1[1] =                         beta1[0][anticut0]
-good_beta1[1] = np.append(good_beta1[1],beta1[1][anticut1])
-good_beta2[1] =                         beta2[0][anticut0]
-good_beta2[1] = np.append(good_beta2[1],beta2[1][anticut1])
+good_beta0[1] =                         beta0[0][anticut0==True]
+good_beta0[1] = np.append(good_beta0[1],beta0[1][anticut1==True])
+good_beta1[1] =                         beta1[0][anticut0==True]
+good_beta1[1] = np.append(good_beta1[1],beta1[1][anticut1==True])
+good_beta2[1] =                         beta2[0][anticut0==True]
+good_beta2[1] = np.append(good_beta2[1],beta2[1][anticut1==True])
 
-good_gamma = 1.0/np.sqrt(1.0-(good_beta*good_beta))
+good_lambda_gamma = 1.0/np.sqrt(1.0-(good_lambda_beta*good_lambda_beta))
 bad_gamma = 1.0/np.sqrt(1.0-(bad_beta*bad_beta))
 
 print "beta"
-print len(good_beta)
+print len(good_lambda_beta)
 print len(bad_beta)
 
 
@@ -203,27 +224,27 @@ for i in xrange(nfigs):
 # Count some numbers
 ################################################################################
 
-nevents = float(len(good_masses[0]))
+nevents = float(len(good_perm_masses[0]))
 print "nevents: %f" % (nevents)
 
 print 'Good masses in limits'
-print len(good_masses[0][(good_masses[0]>limits[0][0])*(good_masses[0]<limits[0][1])])
-print len(good_masses[1][(good_masses[1]>limits[1][0])*(good_masses[1]<limits[1][1])])
-print len(good_masses[2][(good_masses[2]>limits[2][0])*(good_masses[2]<limits[2][1])])
+print len(good_perm_masses[0][(good_perm_masses[0]>limits[0][0])*(good_perm_masses[0]<limits[0][1])])
+print len(good_perm_masses[1][(good_perm_masses[1]>limits[1][0])*(good_perm_masses[1]<limits[1][1])])
+print len(good_perm_masses[2][(good_perm_masses[2]>limits[2][0])*(good_perm_masses[2]<limits[2][1])])
 
 print "\n"
-#ngood = len(good_masses[0][good_vtx>4.0])
+#ngood = len(good_perm_masses[0][good_vtx>4.0])
 #print "ngood: %f" % (ngood/nevents)
-ngood = len(good_masses[1][good_vtx>8.0])
+ngood = len(good_perm_masses[1][good_vtx>8.0])
 print "ngood: %f" % (ngood/nevents)
-#ngood = len(good_masses[2][good_vtx>4.0])
+#ngood = len(good_perm_masses[2][good_vtx>4.0])
 #print "ngood: %f" % (ngood/nevents)
 
 print "\n"
 print 'Bad masses in limits'
-print len(bad_masses[0][(bad_masses[0]>limits[0][0])*(bad_masses[0]<limits[0][1])])
-print len(bad_masses[1][(bad_masses[1]>limits[1][0])*(bad_masses[1]<limits[1][1])])
-print len(bad_masses[2][(bad_masses[2]>limits[2][0])*(bad_masses[2]<limits[2][1])])
+print len(bad_perm_masses[0][(bad_perm_masses[0]>limits[0][0])*(bad_perm_masses[0]<limits[0][1])])
+print len(bad_perm_masses[1][(bad_perm_masses[1]>limits[1][0])*(bad_perm_masses[1]<limits[1][1])])
+print len(bad_perm_masses[2][(bad_perm_masses[2]>limits[2][0])*(bad_perm_masses[2]<limits[2][1])])
 
 print "\n"
 print "vtx"
@@ -239,13 +260,13 @@ lh = []
 plot_ranges = [(-0.1,0.10),(1.0,1.50),(1.0,1.50)]
 
 for i in range(0,3):
-    lh.append(lch.hist_err(good_masses[i],bins=100,range=plot_ranges[i],axes=subplots[0][i]))
+    lh.append(lch.hist_err(good_perm_masses[i],bins=100,range=plot_ranges[i],axes=subplots[0][i]))
     subplots[0][i].set_xlabel(mtitles[i])
     subplots[0][i].set_xlim(plot_ranges[i])
     subplots[0][i].set_ylim(0.0)
 
 for i in range(0,3):
-    lh.append(lch.hist_err(bad_masses[i],bins=100,range=plot_ranges[i],axes=subplots[1][i]))
+    lh.append(lch.hist_err(bad_perm_masses[i],bins=100,range=plot_ranges[i],axes=subplots[1][i]))
     subplots[1][i].set_xlabel(mtitles[i])
     subplots[1][i].set_xlim(plot_ranges[i])
     subplots[1][i].set_ylim(0.0)
@@ -255,18 +276,18 @@ lh2d = []
 xindex = [0,0,1]
 yindex = [1,2,2]
 
-print len(good_masses[0])
-print len(good_masses[1])
-print len(good_masses[2])
+print len(good_perm_masses[0])
+print len(good_perm_masses[1])
+print len(good_perm_masses[2])
 
-print len(bad_masses[0])
-print len(bad_masses[1])
-print len(bad_masses[2])
+print len(bad_perm_masses[0])
+print len(bad_perm_masses[1])
+print len(bad_perm_masses[2])
 
 for i in range(0,3):
     i0 = xindex[i]
     i1 = yindex[i]
-    lh2d.append(lch.hist_2D(good_masses[i0],good_masses[i1],xbins=100,ybins=100,xrange=plot_ranges[i0],yrange=plot_ranges[i1],axes=subplots[2][i],log=True))
+    lh2d.append(lch.hist_2D(good_perm_masses[i0],good_perm_masses[i1],xbins=100,ybins=100,xrange=plot_ranges[i0],yrange=plot_ranges[i1],axes=subplots[2][i],log=True))
     subplots[2][i].set_xlabel(mtitles[i0])
     subplots[2][i].set_ylabel(mtitles[i1])
     #subplots[2][0].set_aspect('auto')
@@ -303,23 +324,27 @@ pid_cut = (delta_beta0>-0.04)*(delta_beta1>-0.04)*(delta_beta2>-0.04)
 eff = len(pid_cut[pid_cut==True])/float(len(pid_cut))
 print "pid_cut:  %f"  % (eff)
 
-print good_beta
-print good_gamma
-print len(good_beta)
+print good_lambda_beta
+print good_lambda_gamma
+print len(good_lambda_beta)
 print len(bad_beta)
 c = 1.0
 #c = 29.97
-#lh.append(lch.hist_err(good_vtx/(good_beta*good_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[4][0]))
+#lh.append(lch.hist_err(good_vtx/(good_lambda_beta*good_lambda_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[4][0]))
 #lh.append(lch.hist_err(bad_vtx/(bad_beta*bad_gamma*c),bins=100,range=(0.0,30.00),axes=subplots[4][1]))
-lh.append(lch.hist_err(good_vtx*(good_gamma),bins=100,range=(0.0,100.00),axes=subplots[4][0]))
-lh.append(lch.hist_err(bad_vtx*(bad_gamma),bins=100,range=(0.0,100.00),axes=subplots[4][1]))
+#lh.append(lch.hist_err(good_vtx*(good_lambda_gamma),bins=100,range=(0.0,100.00),axes=subplots[4][0]))
+#lh.append(lch.hist_err(bad_vtx*(bad_gamma),bins=100,range=(0.0,100.00),axes=subplots[4][1]))
+
+h0,xpts0,ypts0,xpts_err0,ypts_err0 = lch.hist_err(good_vtx,bins=100,range=(0.0,100.00),axes=subplots[4][0])
+h1,xpts1,ypts1,xpts_err1,ypts_err1 = lch.hist_err(bad_vtx,bins=100,range=(0.0,100.00),axes=subplots[4][1])
+
 subplots[4][0].set_xlabel(r"$\Lambda$ flight length (best)",fontsize=20)
 subplots[4][1].set_xlabel(r"$\Lambda$ flight length (worst)",fontsize=20)
 ################################################################################
 subplots[4][0].set_xlim(0.0)
 subplots[4][1].set_xlim(0.0)
-subplots[4][0].set_ylim(0.0)
-subplots[4][1].set_ylim(0.0)
+subplots[4][0].set_ylim(0.0,1.1*max(ypts0))
+subplots[4][1].set_ylim(0.0,1.1*max(ypts1))
 
 #subplots[4][0].set_yscale('log')
 
@@ -328,6 +353,41 @@ for i in xrange(nfigs):
     figure_filename = "Plots/%s_%s.png" % (basename,i)
     print "Saving %s..." % (figure_filename)
     figs[i].savefig(figure_filename)
+
+################################################################################
+# Count some values.
+################################################################################
+cut_tot_missing_mass = np.linspace(1.010,0.001,10)
+cut_inv_lambda_mass = np.linspace(1.050,0.005,10)
+cut_flight_len = np.linspace(0.00,20.00,10)
+cut_beta_pid = np.linspace(1.10,0.01,10)
+index = [None,None,None,None,None,None] # 6?
+#print cut_tot_missing_mass =
+tot_events = len(good_masses[0])
+print "tot: ",tot_events
+for c0 in cut_tot_missing_mass:
+    index[0] = abs(good_masses[0]-0.000)<c0
+    for c1 in cut_inv_lambda_mass:
+        index[1] = abs(good_masses[1]-mass_L)<c1
+        for c2 in cut_beta_pid:
+            index[2] = abs(delta_beta0)<c2
+            for c3 in cut_beta_pid:
+                index[3] = abs(delta_beta1)<c3
+                for c4 in cut_beta_pid:
+                    index[4] = abs(delta_beta2)<c4
+                    for c5 in cut_flight_len:
+                        index[5] = good_vtx>c5
+
+                        master_index = index[0]*index[1]*index[2]*index[3]*index[4]*index[5]
+
+                        output = "%4.2f %4.2f %4.2f %4.2f %4.2f %6.2f\t" % (c0,c1,c2,c3,c4,c5) 
+                        remaining_events = len(master_index[master_index==True])
+                        output += "%8.1f %8.1f"  % (tot_events,remaining_events)
+                        print output
+
+
+#pid_cut = (delta_beta0>-0.04)*(delta_beta1>-0.04)*(delta_beta2>-0.04)
+
 
 plt.show()
 
