@@ -28,7 +28,7 @@ myparams = ['flag','x','y','z']
 f = F([1,2,3],myparams)
 
 kwd = {}
-kwd['flag']=1
+kwd['flag']=0
 kwd['fix_flag']=True
 kwd['x']=3.0
 kwd['y']=2.0
