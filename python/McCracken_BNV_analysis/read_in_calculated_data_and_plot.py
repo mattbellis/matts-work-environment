@@ -357,20 +357,33 @@ for i in xrange(nfigs):
 ################################################################################
 # Count some values.
 ################################################################################
-cut_tot_missing_mass = np.linspace(1.010,0.001,10)
-cut_inv_lambda_mass = np.linspace(1.050,0.005,10)
-cut_flight_len = np.linspace(0.00,20.00,10)
-cut_beta_pid = np.linspace(1.10,0.01,10)
+
+outfile_name = "effects_of_cuts/%s" % (infile_name.split('/')[-1].split('.')[0])
+
+nslices = 5
+cut_tot_missing_mass = np.linspace(0.010,0.001,nslices)
+cut_inv_lambda_mass = np.linspace(0.050,0.005,nslices)
+cut_flight_len = np.linspace(0.00,20.00,nslices)
+cut_beta_pid = np.linspace(0.10,0.01,nslices)
 index = [None,None,None,None,None,None] # 6?
-#print cut_tot_missing_mass =
+
+cuts = np.zeros((6,int(nslices**6)))
+tot = np.zeros(int(nslices**6))
+remain = np.zeros(int(nslices**6))
+        
+
 tot_events = len(good_masses[0])
 print "tot: ",tot_events
+i = 0
 for c0 in cut_tot_missing_mass:
     index[0] = abs(good_masses[0]-0.000)<c0
+    print len(index[0][index[0]==True])
     for c1 in cut_inv_lambda_mass:
         index[1] = abs(good_masses[1]-mass_L)<c1
+        print "\t",len(index[1][index[1]==True])
         for c2 in cut_beta_pid:
             index[2] = abs(delta_beta0)<c2
+            #print len(index[2][index[2]==True])
             for c3 in cut_beta_pid:
                 index[3] = abs(delta_beta1)<c3
                 for c4 in cut_beta_pid:
@@ -380,14 +393,29 @@ for c0 in cut_tot_missing_mass:
 
                         master_index = index[0]*index[1]*index[2]*index[3]*index[4]*index[5]
 
-                        output = "%4.2f %4.2f %4.2f %4.2f %4.2f %6.2f\t" % (c0,c1,c2,c3,c4,c5) 
+                        #output = "%4.2f %4.2f %4.2f %4.2f %4.2f %6.2f\t" % (c0,c1,c2,c3,c4,c5) 
                         remaining_events = len(master_index[master_index==True])
-                        output += "%8.1f %8.1f"  % (tot_events,remaining_events)
-                        print output
+                        #output += "%8.1f %8.1f"  % (tot_events,remaining_events)
 
+                        tot[i] = tot_events
+                        remain[i] = remaining_events
+
+                        cuts[0][i] = c0
+                        cuts[1][i] = c1
+                        cuts[2][i] = c2
+                        cuts[3][i] = c3
+                        cuts[4][i] = c4
+                        cuts[5][i] = c5
+
+                        #print output
+
+                        i += 1
+
+outarrays = [cuts,tot,remain]
+np.save(outfile_name,outarrays)
 
 #pid_cut = (delta_beta0>-0.04)*(delta_beta1>-0.04)*(delta_beta2>-0.04)
 
 
-plt.show()
+#plt.show()
 
