@@ -360,16 +360,39 @@ for i in xrange(nfigs):
 
 outfile_name = "effects_of_cuts/%s" % (infile_name.split('/')[-1].split('.')[0])
 
-nslices = 5
-cut_tot_missing_mass = np.linspace(0.010,0.001,nslices)
-cut_inv_lambda_mass = np.linspace(0.050,0.005,nslices)
-cut_flight_len = np.linspace(0.00,20.00,nslices)
-cut_beta_pid = np.linspace(0.10,0.01,nslices)
-index = [None,None,None,None,None,None] # 6?
+# Test cuts 
+#nslices = 2
+#cut_tot_missing_mass = np.linspace(1.010,0.001,nslices)
+#cut_inv_lambda_mass = np.linspace(1.050,0.005,nslices)
+#cut_flight_len = np.linspace(-1.00,10.00,nslices)
+#cut_beta_pid = np.linspace(1.05,0.005,nslices)
+#cut_missing_mass_off_k = np.linspace(1.000,0.040,2)
 
-cuts = np.zeros((6,int(nslices**6)))
-tot = np.zeros(int(nslices**6))
-remain = np.zeros(int(nslices**6))
+# Real cuts
+nslices = 3
+#cut_tot_missing_mass = np.linspace(0.010,0.001,nslices)
+cut_tot_missing_mass = np.array([0.5,0.01,0.05,0.02,0.001])
+#cut_inv_lambda_mass = np.linspace(0.050,0.005,nslices)
+cut_inv_lambda_mass = np.array([0.5,0.05,0.03,0.02,0.01,0.05])
+cut_flight_len = np.linspace(0.00,4.00,nslices)
+#cut_beta_pid = np.linspace(0.05,0.005,nslices)
+#cut_beta_pid = np.array([1.0,0.5,0.4,0.3,0.2,0.1,0.05,0.03,0.01,0.005])
+cut_beta_pid = np.array([1.0,0.5,0.2,0.1,0.05,0.02])
+cut_left_beta = -0.05
+cut_missing_mass_off_k = np.linspace(1.000,0.040,2)
+
+index = [None,None,None,None,None,None,None] # 7?
+ncuts = len(index)
+
+nmatrix = len(cut_tot_missing_mass)*len(cut_inv_lambda_mass)*len(cut_flight_len)*(len(cut_beta_pid)**3)*len(cut_missing_mass_off_k)
+
+print "nmatrix: ",nmatrix
+
+cuts = np.zeros((ncuts,int(nmatrix)))
+tot = np.zeros(int(nmatrix))
+remain = np.zeros(int(nmatrix))
+
+#exit()
         
 
 tot_events = len(good_masses[0])
@@ -377,45 +400,49 @@ print "tot: ",tot_events
 i = 0
 for c0 in cut_tot_missing_mass:
     index[0] = abs(good_masses[0]-0.000)<c0
-    print len(index[0][index[0]==True])
+    print c0
     for c1 in cut_inv_lambda_mass:
         index[1] = abs(good_masses[1]-mass_L)<c1
-        print "\t",len(index[1][index[1]==True])
         for c2 in cut_beta_pid:
-            index[2] = abs(delta_beta0)<c2
-            #print len(index[2][index[2]==True])
+            #index[2] = abs(delta_beta0)<c2
+            index[2]  = delta_beta0<c2
+            index[2] *= delta_beta0>cut_left_beta
             for c3 in cut_beta_pid:
-                index[3] = abs(delta_beta1)<c3
+                #index[3] = abs(delta_beta1)<c3
+                index[3]  = delta_beta1<c3
+                index[3] *= delta_beta1>cut_left_beta
                 for c4 in cut_beta_pid:
-                    index[4] = abs(delta_beta2)<c4
+                    #index[4] = abs(delta_beta2)<c4
+                    index[4]  = delta_beta2<c4
+                    index[4] *= delta_beta2>cut_left_beta
                     for c5 in cut_flight_len:
                         index[5] = good_vtx>c5
+                        for c6 in cut_missing_mass_off_k:
+                            index[6] = abs(good_masses[2]-mass_L)<c6
 
-                        master_index = index[0]*index[1]*index[2]*index[3]*index[4]*index[5]
+                            master_index = index[0]*index[1]*index[2]*index[3]*index[4]*index[5]*index[6]
 
-                        #output = "%4.2f %4.2f %4.2f %4.2f %4.2f %6.2f\t" % (c0,c1,c2,c3,c4,c5) 
-                        remaining_events = len(master_index[master_index==True])
-                        #output += "%8.1f %8.1f"  % (tot_events,remaining_events)
+                            remaining_events = len(master_index[master_index==True])
 
-                        tot[i] = tot_events
-                        remain[i] = remaining_events
+                            tot[i] = tot_events
+                            remain[i] = remaining_events
 
-                        cuts[0][i] = c0
-                        cuts[1][i] = c1
-                        cuts[2][i] = c2
-                        cuts[3][i] = c3
-                        cuts[4][i] = c4
-                        cuts[5][i] = c5
+                            cuts[0][i] = c0
+                            cuts[1][i] = c1
+                            cuts[2][i] = c2
+                            cuts[3][i] = c3
+                            cuts[4][i] = c4
+                            cuts[5][i] = c5
+                            cuts[6][i] = c6
 
-                        #print output
+                            #output = "%4.2f %4.2f %4.2f %4.2f %4.2f %6.2f %4.2f\t" % (c0,c1,c2,c3,c4,c5,c6) 
+                            #output += "%8.1f %8.1f"  % (tot_events,remaining_events)
+                            #print output
 
-                        i += 1
+                            i += 1
 
 outarrays = [cuts,tot,remain]
 np.save(outfile_name,outarrays)
-
-#pid_cut = (delta_beta0>-0.04)*(delta_beta1>-0.04)*(delta_beta2>-0.04)
-
 
 #plt.show()
 

@@ -3,6 +3,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 import scipy.integrate as integrate
+import scipy.stats as stats
 
 from fitting_utilities import *
 from plotting_utilities import *
@@ -15,21 +16,31 @@ import RTMinuit as rtminuit
 pi = np.pi
 
 ################################################################################
-# Read in the CoGeNT data
+# Main
 ################################################################################
 def main():
 
-    lo = 2.0
-    hi = 8.0
-    nbins = 100
-    bin_width = (hi-lo)/nbins
-    print bin_width
+    ranges = [[2.0,8.0],[0.0,400.0]]
+    nbins = [100,100]
+    bin_widths = np.ones(len(ranges))
+    for w,n,r in zip(bin_widths,nbins,ranges):
+        w = (r[1]-r[0])/n
+    print bin_widths
 
     fig0 = plt.figure(figsize=(10,9),dpi=100)
-    ax0 = fig0.add_subplot(2,1,1)
-    ax0.set_xlim(lo,hi)
-    ax1 = fig0.add_subplot(2,1,2) 
-    ax1.set_xlim(lo,hi)
+    ax00 = fig0.add_subplot(2,2,1)
+    ax01 = fig0.add_subplot(2,2,2)
+    ax02 = fig0.add_subplot(2,2,3)
+
+    fig1 = plt.figure(figsize=(10,9),dpi=100)
+    ax10 = fig1.add_subplot(2,2,1)
+    ax11 = fig1.add_subplot(2,2,2)
+    ax12 = fig1.add_subplot(2,2,3)
+
+    #ax2 = fig0.add_subplot(2,2,4)
+    #ax0.set_xlim(lo,hi)
+    #ax1 = fig0.add_subplot(2,1,2) 
+    #ax1.set_xlim(lo,hi)
 
 
     ############################################################################
@@ -37,26 +48,84 @@ def main():
     ############################################################################
     mean = 5.0
     sigma = 0.5
-    xgauss = np.random.normal(mean,sigma,1000)
-    index = xgauss>lo
-    index *= xgauss<hi
-    xgauss = xgauss[index==True]
-    print len(xgauss)
+    nsig = 10000
+    xsig = np.random.normal(mean,sigma,nsig)
+    #index = xsig>ranges[0][0]
+    #index *= xsig<ranges[0][1]
+    #xsig = xsig[index==True]
+    print len(xsig)
 
-    xflat = (hi-lo)*np.random.random(5000) + lo
+    sig_exp_slope = 170.0
+    ygexp = stats.expon(loc=0.0,scale=sig_exp_slope)
+    ysig = ygexp.rvs(nsig)
+    #print ysig
 
-    data = np.array(xgauss)
-    data = np.append(data,xflat)
+
+
+    # Bkg
+    # Exp
+    nbkg = 5000
+    bkg_exp_slope = 3.0
+    xbkg_exp = stats.expon(loc=ranges[0][0],scale=bkg_exp_slope)
+    xbkg = xbkg_exp.rvs(nbkg)
+    #print xbkg
+
+    # Flat
+    ybkg = (ranges[1][1]-ranges[1][0])*np.random.random(nbkg) + ranges[1][0]
+
+    data = np.array([None,None])
+    data[0] = np.array(xsig)
+    data[0] = np.append(data[0],xbkg)
+    data[1] = np.array(ysig)
+    data[1] = np.append(data[1],ybkg)
+
+    # Cut out points outside of region.
+    index = np.ones(len(data[0]),dtype=np.int)
+    for d,r in zip(data,ranges):
+        index *= ((d>r[0])*(d<r[1]))
+
+    print len(data[0])
+    print len(data[1])
+
+    print index[index==0]
+    print "index: ",len(index[index==True])
+    
+    for i in xrange(len(data)):
+        data[i] = data[i][index==True]
+
+    print len(data[0])
+    print len(data[1])
+
+    print ranges
+    hdata  = lch.hist_2D(data[0],data[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax00)
+    hdatay = lch.hist_err(data[1],range=ranges[1],bins=nbins[1],axes=ax01)
+    hdatax = lch.hist_err(data[0],range=ranges[0],bins=nbins[0],axes=ax02)
+    ax02.set_xlim(ranges[0])
+    ax01.set_ylim(0.0)
 
     print data
     print len(data)
-    #exit()
 
     ############################################################################
     # Gen some MC
     ############################################################################
-    mc = (hi-lo)*np.random.random(100000) + lo
-    num_raw_mc = len(mc)
+    nmc = 100000
+    mc = np.array([None,None])
+    for i,r in enumerate(ranges):
+        mc[i] = (r[1]-r[0])*np.random.random(nmc) + r[0]
+
+    print mc
+    print len(mc[0])
+    print len(mc[1])
+
+    hmc  = lch.hist_2D(mc[0],mc[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax10)
+    hmcy = lch.hist_err(mc[1],range=ranges[1],bins=nbins[1],axes=ax11)
+    hmcx = lch.hist_err(mc[0],range=ranges[0],bins=nbins[0],axes=ax12)
+    ax12.set_xlim(ranges[0])
+    ax11.set_ylim(0.0)
+
+    plt.show()
+    exit()
 
     ############################################################################
     # Get the efficiency function
