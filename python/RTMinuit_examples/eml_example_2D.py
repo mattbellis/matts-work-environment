@@ -124,8 +124,8 @@ def main():
     ax12.set_xlim(ranges[0])
     ax11.set_ylim(0.0)
 
-    plt.show()
-    exit()
+    #plt.show()
+    #exit()
 
     ############################################################################
     # Get the efficiency function
@@ -136,6 +136,7 @@ def main():
     sigmoid_sigma = 0.241
 
     
+    '''
     ############################################################################
     # Run through the acceptance.
     ############################################################################
@@ -162,21 +163,35 @@ def main():
     ############################################################################
     lch.hist_err(data,bins=nbins,range=(lo,hi),axes=ax0)
     lch.hist_err(mc,bins=nbins,range=(lo,hi),axes=ax1)
+    '''
 
     ############################################################################
     # Fit
     ############################################################################
 
-    myparams = ['flag','mean','sigma','num_gauss']
-    myparams += ['num_flat']
+    params_dict = {}
+    params_dict['flag'] = {'fix':True,'start_val':1}
+    params_dict['mean'] = {'fix':False,'start_val':4.0}
+    params_dict['sigma'] = {'fix':False,'start_val':1.0}
+    params_dict['sig_y_slope'] = {'fix':False,'start_val':2.0}
+    params_dict['bkg_x_slope'] = {'fix':False,'start_val':2.0}
+    params_dict['num_sig'] = {'fix':False,'start_val':100.0,'range':(10,10000)}
+    params_dict['num_bkg'] = {'fix':False,'start_val':200.0,'range':(10,10000)}
 
-    print "here diagnostics."
-    print len(mc)
+    #myparams = ['flag','mean','sigma','sig_y_slope','bkg_x_slope','num_sig']
+    #myparams += ['num_flat']
+
+    params_names,kwd = dict2kwd(params_dict)
+
+    print kwd
+    print params_names
 
     #exit()
 
-    f = Minuit_FCN([data,mc],myparams)
+    #f = Minuit_FCN([data,mc],myparams)
+    f = Minuit_FCN([data,mc],params_names)
 
+    '''
     kwd = {}
     kwd['flag']=0
     kwd['fix_flag']=True
@@ -186,6 +201,7 @@ def main():
     kwd['num_flat']=1000
     kwd['limit_num_gauss']=(10,100000)
     kwd['limit_num_flat']=(10,100000)
+    '''
 
     m = rtminuit.Minuit(f,**kwd)
 
@@ -194,6 +210,8 @@ def main():
 
     # For maximum likelihood method.
     m.set_up(0.5)
+
+    exit()
 
     m.migrad()
 
