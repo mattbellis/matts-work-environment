@@ -14,6 +14,8 @@ import minuit
 
 pi = np.pi
 
+np.random.seed(100)
+
 ################################################################################
 # Read in the CoGeNT data
 ################################################################################
@@ -129,6 +131,8 @@ def main():
     m.migrad()
 
     print m.values,m.errors
+
+    print minuit_output(m)
 
     values = m.values # Dictionary
 
