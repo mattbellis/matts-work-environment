@@ -10,10 +10,12 @@ from plotting_utilities import *
 
 import lichen.lichen as lch
 
-#import minuit
-import RTMinuit as rtminuit
+import minuit
+#import RTMinuit as rtminuit
 
 pi = np.pi
+
+np.random.seed(100)
 
 ################################################################################
 # Main
@@ -48,7 +50,7 @@ def main():
     ############################################################################
     mean = 5.0
     sigma = 0.5
-    nsig = 10000
+    nsig = 1000
     xsig = np.random.normal(mean,sigma,nsig)
     #index = xsig>ranges[0][0]
     #index *= xsig<ranges[0][1]
@@ -109,7 +111,7 @@ def main():
     ############################################################################
     # Gen some MC
     ############################################################################
-    nmc = 100000
+    nmc = 10000
     mc = np.array([None,None])
     for i,r in enumerate(ranges):
         mc[i] = (r[1]-r[0])*np.random.random(nmc) + r[0]
@@ -173,8 +175,8 @@ def main():
     params_dict['flag'] = {'fix':True,'start_val':1}
     params_dict['mean'] = {'fix':False,'start_val':4.0}
     params_dict['sigma'] = {'fix':False,'start_val':1.0}
-    params_dict['sig_y_slope'] = {'fix':False,'start_val':2.0}
-    params_dict['bkg_x_slope'] = {'fix':False,'start_val':2.0}
+    params_dict['exp_sig_y'] = {'fix':False,'start_val':2.0,'range':(0,1000)}
+    params_dict['exp_bkg_x'] = {'fix':False,'start_val':2.0,'range':(0,1000)}
     params_dict['num_sig'] = {'fix':False,'start_val':100.0,'range':(10,10000)}
     params_dict['num_bkg'] = {'fix':False,'start_val':200.0,'range':(10,10000)}
 
@@ -203,28 +205,40 @@ def main():
     kwd['limit_num_flat']=(10,100000)
     '''
 
-    m = rtminuit.Minuit(f,**kwd)
+    m = minuit.Minuit(f,**kwd)
 
-    print m.free_param
-    print m.fix_param
+    #print m.free_param
+    #print m.fix_param
 
     # For maximum likelihood method.
-    m.set_up(0.5)
+    m.up = 0.5
 
-    exit()
+    m.printMode = 1
 
+    #exit()
+
+    print "About to call Migrad"
     m.migrad()
 
-    print m.values,m.errors
+    print "Finished fit!!\n"
+    #print m.values,m.errors
+    print minuit_output(m)
+
+    print "\n"
+
+    print "nsig: ",len(xsig)
+    print "nbkg: ",len(xbkg)
+    print "nbkg: ",len(data[0])
 
     values = m.values # Dictionary
 
-    print "xgauss: ",len(xgauss)
-    print "xflat: ",len(xflat)
-    print "ngauss: ",values['num_gauss']*(num_raw_mc/float(num_acc_mc))
-    print "nflat: ",values['num_flat']*(num_raw_mc/float(num_acc_mc))
-    print "err_ngauss: ",m.errors['num_gauss']*(num_raw_mc/float(num_acc_mc))
-    print "err_nflat: ",m.errors['num_flat']*(num_raw_mc/float(num_acc_mc))
+    #print "xgauss: ",len(xgauss)
+    #print "xflat: ",len(xflat)
+    #print "ngauss: ",values['num_gauss']*(num_raw_mc/float(num_acc_mc))
+    #print "nflat: ",values['num_flat']*(num_raw_mc/float(num_acc_mc))
+    #print "err_ngauss: ",m.errors['num_gauss']*(num_raw_mc/float(num_acc_mc))
+    #print "err_nflat: ",m.errors['num_flat']*(num_raw_mc/float(num_acc_mc))
+
     #data.sort()
     #print data
     #mc.sort()
