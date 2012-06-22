@@ -8,6 +8,30 @@ from RTMinuit import *
 
 
 ################################################################################
+# Convert dictionary to kwd arguments
+################################################################################
+def dict2kwd(d):
+
+    keys,vals = d.keys(),d.values()
+
+    params_names = d.keys()
+    kwd = {}
+    for k,v in d.iteritems():
+        print k,v
+        kwd[k] = v['start_val']
+        if 'fix' in v and v['fix']==True:
+            new_key = "fix_%s" % (k)
+            kwd[new_key] = True
+        if 'range' in v:
+            new_key = "limit_%s" % (k)
+            kwd[new_key] = v['range']
+
+    if 'num_bkg' in keys:
+        print "YES!",d['num_bkg']
+
+    return params_names,kwd
+
+################################################################################
 # Sigmoid function.
 ################################################################################
 def sigmoid(x,thresh,sigma,max_val):
