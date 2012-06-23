@@ -17,6 +17,7 @@ def plot_pdf(x,y,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-'):
 
     #print "exp int: ",integrate.simps(y,x=x)
     y *= (scale*bin_width)*efficiency
+    print "bin_width: ",bin_width
 
     if axes==None:
         axes=plt.gca()

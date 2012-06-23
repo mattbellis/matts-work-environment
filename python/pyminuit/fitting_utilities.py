@@ -4,9 +4,7 @@ import scipy.stats as stats
 import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
-#from RTMinuit import *
 import minuit
-
 
 ################################################################################
 # Convert dictionary to kwd arguments
