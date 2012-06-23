@@ -11,7 +11,6 @@ from plotting_utilities import *
 import lichen.lichen as lch
 
 import minuit
-#import RTMinuit as rtminuit
 
 pi = np.pi
 
@@ -25,16 +24,16 @@ def main():
     ranges = [[2.0,8.0],[0.0,400.0]]
     nbins = [100,100]
     bin_widths = np.ones(len(ranges))
-    for w,n,r in zip(bin_widths,nbins,ranges):
-        w = (r[1]-r[0])/n
+    for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
+        bin_widths[i] = (r[1]-r[0])/n
     print bin_widths
 
-    fig0 = plt.figure(figsize=(10,9),dpi=100)
+    fig0 = plt.figure(figsize=(7,6),dpi=100)
     ax00 = fig0.add_subplot(2,2,1)
     ax01 = fig0.add_subplot(2,2,2)
     ax02 = fig0.add_subplot(2,2,3)
 
-    fig1 = plt.figure(figsize=(10,9),dpi=100)
+    fig1 = plt.figure(figsize=(7,6),dpi=100)
     ax10 = fig1.add_subplot(2,2,1)
     ax11 = fig1.add_subplot(2,2,2)
     ax12 = fig1.add_subplot(2,2,3)
@@ -243,13 +242,33 @@ def main():
     #print data
     #mc.sort()
     #print mc
+
+    ytot = np.zeros(1000)
+    # Sig
+    xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
+    gauss = stats.norm(loc=values['mean'],scale=values['sigma'])
+    ypts = gauss.pdf(xpts)
+
+    y,sigplot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=values['num_sig'],fmt='y-',axes=ax02)
+    ytot += y
+
+    # Bkg
+    #xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
+    bkg_exp = stats.expon(loc=0.0,scale=values['exp_bkg_x'])
+    ypts = bkg_exp.pdf(xpts)
+
+    y,sigplot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=values['num_bkg'],fmt='g-',axes=ax02)
+    ytot += y
+    #y,sigplot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=100.0,fmt='y-',axes=ax02)
+
+    ax02.plot(xpts,ytot,'b',linewidth=3)
+
     plt.show()
 
     exit()
 
     ############################################################################
 
-    x = np.linspace(lo,hi,1000)
 
     ############################################################################
 
