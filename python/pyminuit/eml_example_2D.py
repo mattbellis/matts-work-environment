@@ -26,23 +26,17 @@ def main():
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
         bin_widths[i] = (r[1]-r[0])/n
-    print bin_widths
+    #print bin_widths
 
-    fig0 = plt.figure(figsize=(7,6),dpi=100)
-    ax00 = fig0.add_subplot(2,2,1)
-    ax01 = fig0.add_subplot(2,2,2)
-    ax02 = fig0.add_subplot(2,2,3)
+    fig0 = plt.figure(figsize=(14,4),dpi=100)
+    ax00 = fig0.add_subplot(1,3,1)
+    ax01 = fig0.add_subplot(1,3,2)
+    ax02 = fig0.add_subplot(1,3,3)
 
-    fig1 = plt.figure(figsize=(7,6),dpi=100)
-    ax10 = fig1.add_subplot(2,2,1)
-    ax11 = fig1.add_subplot(2,2,2)
-    ax12 = fig1.add_subplot(2,2,3)
-
-    #ax2 = fig0.add_subplot(2,2,4)
-    #ax0.set_xlim(lo,hi)
-    #ax1 = fig0.add_subplot(2,1,2) 
-    #ax1.set_xlim(lo,hi)
-
+    fig1 = plt.figure(figsize=(14,4),dpi=100)
+    ax10 = fig1.add_subplot(1,3,1)
+    ax11 = fig1.add_subplot(1,3,2)
+    ax12 = fig1.add_subplot(1,3,3)
 
     ############################################################################
     # Gen some data
@@ -54,14 +48,12 @@ def main():
     #index = xsig>ranges[0][0]
     #index *= xsig<ranges[0][1]
     #xsig = xsig[index==True]
-    print len(xsig)
+    #print len(xsig)
 
     sig_exp_slope = 170.0
     ygexp = stats.expon(loc=0.0,scale=sig_exp_slope)
     ysig = ygexp.rvs(nsig)
     #print ysig
-
-
 
     # Bkg
     # Exp
@@ -80,53 +72,37 @@ def main():
     data[1] = np.array(ysig)
     data[1] = np.append(data[1],ybkg)
 
+    num_org_sig = len(xsig)
+    num_org_bkg = len(xbkg)
+
+    print "num_org_sig: ",num_org_sig
+    print "num_org_bkg: ",num_org_bkg 
+
     # Cut out points outside of region.
     index = np.ones(len(data[0]),dtype=np.int)
     for d,r in zip(data,ranges):
         index *= ((d>r[0])*(d<r[1]))
 
-    print len(data[0])
-    print len(data[1])
+    #print len(data[0])
+    #print len(data[1])
 
-    print index[index==0]
-    print "index: ",len(index[index==True])
+    #print index[index==0]
+    #print "index: ",len(index[index==True])
     
     for i in xrange(len(data)):
         data[i] = data[i][index==True]
 
-    print len(data[0])
-    print len(data[1])
-
-    print ranges
-    hdata  = lch.hist_2D(data[0],data[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax00)
-    hdatay = lch.hist_err(data[1],range=ranges[1],bins=nbins[1],axes=ax01)
-    hdatax = lch.hist_err(data[0],range=ranges[0],bins=nbins[0],axes=ax02)
-    ax02.set_xlim(ranges[0])
-    ax01.set_ylim(0.0)
-
-    print data
-    print len(data)
 
     ############################################################################
     # Gen some MC
     ############################################################################
-    nmc = 10000
+    nmc = 100000
     mc = np.array([None,None])
     for i,r in enumerate(ranges):
         mc[i] = (r[1]-r[0])*np.random.random(nmc) + r[0]
 
-    print mc
-    print len(mc[0])
-    print len(mc[1])
-
-    hmc  = lch.hist_2D(mc[0],mc[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax10)
-    hmcy = lch.hist_err(mc[1],range=ranges[1],bins=nbins[1],axes=ax11)
-    hmcx = lch.hist_err(mc[0],range=ranges[0],bins=nbins[0],axes=ax12)
-    ax12.set_xlim(ranges[0])
-    ax11.set_ylim(0.0)
-
-    #plt.show()
-    #exit()
+    raw_mc = np.array([mc[0],mc[1]])
+    num_raw_mc = len(mc[0])
 
     ############################################################################
     # Get the efficiency function
@@ -137,28 +113,65 @@ def main():
     sigmoid_sigma = 0.241
 
     
-    '''
     ############################################################################
     # Run through the acceptance.
     ############################################################################
     
-    indices = np.zeros(len(data),dtype=np.int)
-    for i,pt in enumerate(data):
+    indices = np.zeros(len(data[0]),dtype=np.int)
+    for i,pt in enumerate(data[0]):
         if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
             indices[i] = 1
-    data = data[indices==1]
+    data[0] = data[0][indices==1]
+    data[1] = data[1][indices==1]
     
-    print "num: data: ",len(data)
+    #print "num: data: ",len(data)
 
-    indices = np.zeros(len(mc),dtype=np.int)
-    for i,pt in enumerate(mc):
+    indices = np.zeros(len(mc[0]),dtype=np.int)
+    for i,pt in enumerate(mc[0]):
         if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
             indices[i] = 1
-    mc = mc[indices==1]
+    mc[0] = mc[0][indices==1]
+    mc[1] = mc[1][indices==1]
     
-    num_acc_mc = len(mc)
-    print "num: mc: ",len(mc)
+    num_acc_mc = len(mc[0])
+    #print "num: mc: ",num_acc_mc
 
+
+    num_acc_sig = len(data[0])
+    num_acc_bkg = len(data[1])
+
+    #print "num_acc_sig: ",num_acc_sig
+    #print "num_acc_bkg: ",num_acc_bkg 
+
+    ############################################################################
+    # Plot the data and MC
+    ############################################################################
+    
+    hdata  = lch.hist_2D(data[0],data[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax02)
+    hdatax = lch.hist_err(data[0],range=ranges[0],bins=nbins[0],axes=ax00)
+    hdatay = lch.hist_err(data[1],range=ranges[1],bins=nbins[1],axes=ax01)
+    ax00.set_xlim(ranges[0])
+    ax01.set_xlim(ranges[1])
+    ax00.set_ylim(0.0)
+    ax01.set_ylim(0.0)
+
+    #print data
+    #print len(data)
+
+    hmc  = lch.hist_2D(mc[0],mc[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax12)
+    hmcx = lch.hist_err(mc[0],range=ranges[0],bins=nbins[0],axes=ax10)
+    hmcy = lch.hist_err(mc[1],range=ranges[1],bins=nbins[1],axes=ax11)
+    ax10.set_xlim(ranges[0])
+    ax11.set_xlim(ranges[1])
+    ax10.set_ylim(0.0)
+    ax11.set_ylim(0.0)
+    ax12.set_xlim(ranges[0])
+    ax12.set_ylim(ranges[1])
+
+    #plt.show()
+    #exit()
+
+    '''
     ############################################################################
     # Plot the data and mc
     ############################################################################
@@ -174,60 +187,32 @@ def main():
     params_dict['flag'] = {'fix':True,'start_val':1}
     params_dict['mean'] = {'fix':False,'start_val':4.0}
     params_dict['sigma'] = {'fix':False,'start_val':1.0}
-    params_dict['exp_sig_y'] = {'fix':False,'start_val':2.0,'range':(0,1000)}
-    params_dict['exp_bkg_x'] = {'fix':False,'start_val':2.0,'range':(0,1000)}
-    params_dict['num_sig'] = {'fix':False,'start_val':100.0,'range':(10,10000)}
-    params_dict['num_bkg'] = {'fix':False,'start_val':200.0,'range':(10,10000)}
-
-    #myparams = ['flag','mean','sigma','sig_y_slope','bkg_x_slope','num_sig']
-    #myparams += ['num_flat']
+    params_dict['exp_sig_y'] = {'fix':False,'start_val':2.0,'limits':(0,1000)}
+    params_dict['exp_bkg_x'] = {'fix':False,'start_val':2.0,'limits':(0,1000)}
+    params_dict['num_sig'] = {'fix':False,'start_val':100.0,'limits':(10,100000)}
+    params_dict['num_bkg'] = {'fix':False,'start_val':200.0,'limits':(10,100000)}
 
     params_names,kwd = dict2kwd(params_dict)
 
-    print kwd
-    print params_names
-
-    #exit()
-
-    #f = Minuit_FCN([data,mc],myparams)
     f = Minuit_FCN([data,mc],params_names)
 
-    '''
-    kwd = {}
-    kwd['flag']=0
-    kwd['fix_flag']=True
-    kwd['mean']=4.0
-    kwd['sigma']=1.0
-    kwd['num_gauss']=1000
-    kwd['num_flat']=1000
-    kwd['limit_num_gauss']=(10,100000)
-    kwd['limit_num_flat']=(10,100000)
-    '''
-
     m = minuit.Minuit(f,**kwd)
-
-    #print m.free_param
-    #print m.fix_param
 
     # For maximum likelihood method.
     m.up = 0.5
 
     m.printMode = 1
 
-    #exit()
-
-    print "About to call Migrad"
     m.migrad()
 
     print "Finished fit!!\n"
-    #print m.values,m.errors
     print minuit_output(m)
 
     print "\n"
 
     print "nsig: ",len(xsig)
     print "nbkg: ",len(xbkg)
-    print "nbkg: ",len(data[0])
+    print "ntotdata: ",len(data[0])
 
     values = m.values # Dictionary
 
@@ -243,25 +228,71 @@ def main():
     #mc.sort()
     #print mc
 
+    print "num_org_sig: ",num_org_sig
+    print "num_org_bkg: ",num_org_bkg 
+
+    print "num_acc_sig: ",num_acc_sig
+    print "num_acc_bkg: ",num_acc_bkg 
+
+    print "num_raw_mc: ",num_raw_mc 
+    print "num_acc_mc: ",num_acc_mc 
+
+    print "nsig: ",values['num_sig'],values['num_sig']*(num_raw_mc/float(num_acc_mc))
+    print "nbkg: ",values['num_bkg'],values['num_bkg']*(num_raw_mc/float(num_acc_mc))
+
+    print "acc_norm_integral: ",fitfunc(mc,m.args,params_names).sum()
+    print "acc_norm_integral/n_acc: ",fitfunc(mc,m.args,params_names).sum()/len(mc[0])
+    print "raw_norm_integral: ",fitfunc(raw_mc,m.args,params_names).sum()
+    print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names).sum()
+    print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names).sum()/len(raw_mc[0])
+    nsig = values['num_sig']
+    norgsig = nsig*(num_raw_mc/float(num_acc_mc))*(1.0/num_raw_mc)*(fitfunc(raw_mc,m.args,params_names).sum())
+    print "norgsig: ",norgsig
+
+    ############################################################################
+    # Plot on the x-projection
+    ############################################################################
     ytot = np.zeros(1000)
-    # Sig
     xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
+
+    # Sig
     gauss = stats.norm(loc=values['mean'],scale=values['sigma'])
     ypts = gauss.pdf(xpts)
 
-    y,sigplot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=values['num_sig'],fmt='y-',axes=ax02)
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=values['num_sig'],fmt='y--',axes=ax00)
     ytot += y
 
     # Bkg
-    #xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
     bkg_exp = stats.expon(loc=0.0,scale=values['exp_bkg_x'])
     ypts = bkg_exp.pdf(xpts)
 
-    y,sigplot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=values['num_bkg'],fmt='g-',axes=ax02)
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=values['num_bkg'],fmt='g--',axes=ax00)
     ytot += y
-    #y,sigplot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=100.0,fmt='y-',axes=ax02)
 
-    ax02.plot(xpts,ytot,'b',linewidth=3)
+    ax00.plot(xpts,ytot,'b',linewidth=3)
+
+    ############################################################################
+    # Plot on the y-projection
+    ############################################################################
+    ytot = np.zeros(1000)
+    xpts = np.linspace(ranges[1][0],ranges[1][1],1000)
+
+    # Sig
+    sig_exp = stats.expon(loc=0.0,scale=values['exp_sig_y'])
+    ypts = sig_exp.pdf(xpts)
+
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=values['num_sig'],fmt='y--',axes=ax01)
+    ytot += y
+
+    # Bkg
+    ypts = np.ones(len(xpts))
+
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=values['num_bkg'],fmt='g--',axes=ax01)
+    ytot += y
+
+    ax01.plot(xpts,ytot,'b',linewidth=3)
+
+    ############################################################################
 
     plt.show()
 
