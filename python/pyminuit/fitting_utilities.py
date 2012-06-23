@@ -35,9 +35,9 @@ def dict2kwd(d):
         if 'fix' in v and v['fix']==True:
             new_key = "fix_%s" % (k)
             kwd[new_key] = True
-        if 'range' in v:
+        if 'limits' in v:
             new_key = "limit_%s" % (k)
-            kwd[new_key] = v['range']
+            kwd[new_key] = v['limits']
 
     ''' 
     if 'num_bkg' in keys:
@@ -103,9 +103,11 @@ def pois(mu, k):
 ################################################################################
 
 ################################################################################
-def fitfunc(data,p,flag,parnames):
+def fitfunc(data,p,parnames):
 
     pn = parnames
+
+    flag = p[pn.index('flag')]
     #mean = p[0]
     #sigma = p[1]
     #function = stats.norm(loc=mean,scale=sigma)
@@ -230,16 +232,11 @@ def emlf_minuit(data,mc,p,varnames):
 
     #print p
     n = 0
-    flag = 0
     for name in varnames:
         if 'num_' in name:
             n += p[varnames.index(name)]
-        if 'flag' in name:
-            flag = p[varnames.index(name)]
-    #print "tot num: ",n
-    #print "flag: ",flag
 
-    norm_func = (fitfunc(mc,p,flag,v)).sum()/len(mc)
+    norm_func = (fitfunc(mc,p,v)).sum()/len(mc)
 
     ret = 0.0
     if norm_func==0:
@@ -248,9 +245,10 @@ def emlf_minuit(data,mc,p,varnames):
     #print "ndata: ",len(data[0])
     #print "nmc  : ",len(mc[0])
     #print pois(n,len(data))
-    #ret = (-np.log(fitfunc(data,p,flag,v) / norm_func).sum()) # - pois(n,len(data))
+    #ret = (-np.log(fitfunc(data,p,v) / norm_func).sum()) # - pois(n,len(data))
 
-    ret = (-np.log(fitfunc(data,p,flag,v))).sum() + len(data)*np.log(norm_func) - pois(n,len(data))
+    #ret = (-np.log(fitfunc(data,p,v))).sum() + len(data)*np.log(norm_func) - pois(n,len(data))
+    ret = (-np.log(fitfunc(data,p,v))).sum() + len(data)*(norm_func) #- pois(n,len(data))
     #print ret
 
     return ret
