@@ -180,6 +180,7 @@ def fitfunc(data,p,parnames):
         # Signal PDF
         ########################################################################
         gauss = stats.norm(loc=mean,scale=sigma)
+        # This already normalized
         sig_exp = stats.expon(loc=0.0,scale=sig_y_slope)
 
         # Normalize
@@ -188,14 +189,14 @@ def fitfunc(data,p,parnames):
         normalization = integrate.simps(ynorm,x=xnorm)
         #print "normalization: ",normalization
 
-        xnorm = np.linspace(0.0,400.0,1000)
-        ynorm = sig_exp.pdf(xnorm) 
-        normalization *= integrate.simps(ynorm,x=xnorm)
+        #xnorm = np.linspace(0.0,400.0,1000)
+        #ynorm = sig_exp.pdf(xnorm) 
+        #normalization *= integrate.simps(ynorm,x=xnorm)
 
         #print "normalization: ",normalization
 
         y = num_sig*gauss.pdf(x)*sig_exp.pdf(y)
-        y /= normalization
+        #y /= normalization
         ytot += y 
 
         ########################################################################
@@ -205,14 +206,17 @@ def fitfunc(data,p,parnames):
         bkg_exp = stats.expon(loc=0.0,scale=bkg_x_slope)
 
         # Normalize
-        xnorm = np.linspace(2.0,8.0,1000)
-        ynorm = bkg_exp.pdf(xnorm)
-        normalization = integrate.simps(ynorm,x=xnorm)
+        # Should be already normalized.
+        #xnorm = np.linspace(2.0,8.0,1000)
+        #ynorm = bkg_exp.pdf(xnorm)
+        #normalization = integrate.simps(ynorm,x=xnorm)
 
+        #y = num_bkg*(1.0/400.0)*bkg_exp.pdf(x)
         y = num_bkg*(1.0/400.0)*bkg_exp.pdf(x)
+        #y = num_bkg*bkg_exp.pdf(x)
         #y = num_flat/6.0
         #y = num_flat*flat_term
-        y /= normalization
+        #y /= normalization
         ytot += y 
 
         #print ytot
@@ -230,13 +234,20 @@ def emlf_minuit(data,mc,p,varnames):
 
     v = varnames
 
+    ndata = len(data[0])
+    nmc   = len(mc[0])
+
+    print ndata,nmc
+
     #print p
+    '''
     n = 0
     for name in varnames:
         if 'num_' in name:
             n += p[varnames.index(name)]
+    '''
 
-    norm_func = (fitfunc(mc,p,v)).sum()/len(mc)
+    norm_func = (fitfunc(mc,p,v)).sum()/nmc
 
     ret = 0.0
     if norm_func==0:
@@ -248,7 +259,8 @@ def emlf_minuit(data,mc,p,varnames):
     #ret = (-np.log(fitfunc(data,p,v) / norm_func).sum()) # - pois(n,len(data))
 
     #ret = (-np.log(fitfunc(data,p,v))).sum() + len(data)*np.log(norm_func) - pois(n,len(data))
-    ret = (-np.log(fitfunc(data,p,v))).sum() + len(data)*(norm_func) #- pois(n,len(data))
+    ret = (-np.log(fitfunc(data,p,v))).sum() + ndata*(norm_func) 
+    #ret = (-np.log(fitfunc(data,p,v))).sum() + n*(norm_func) 
     #print ret
 
     return ret

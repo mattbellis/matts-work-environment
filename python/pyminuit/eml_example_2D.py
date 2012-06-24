@@ -108,10 +108,13 @@ def main():
     # Get the efficiency function
     ############################################################################
     max_val = 0.86786
-    #threshold = 0.345
-    threshold = 4.345
+    threshold = 0.345
     sigmoid_sigma = 0.241
 
+    max_val = 1.000
+    threshold = 0.345
+    sigmoid_sigma = 0.241
+    #threshold = 4.345
     
     ############################################################################
     # Run through the acceptance.
@@ -240,10 +243,12 @@ def main():
     print "nsig: ",values['num_sig'],values['num_sig']*(num_raw_mc/float(num_acc_mc))
     print "nbkg: ",values['num_bkg'],values['num_bkg']*(num_raw_mc/float(num_acc_mc))
 
-    print "acc_norm_integral: ",fitfunc(mc,m.args,params_names).sum()
+    print "ndata: ",len(data[0])
+    print "data_norm_integral:       ",fitfunc(data,m.args,params_names).sum()
+    print "data_norm_integral/ndata: ",fitfunc(data,m.args,params_names).sum()/len(data[0])
+    print "acc_norm_integral:       ",fitfunc(mc,m.args,params_names).sum()
     print "acc_norm_integral/n_acc: ",fitfunc(mc,m.args,params_names).sum()/len(mc[0])
-    print "raw_norm_integral: ",fitfunc(raw_mc,m.args,params_names).sum()
-    print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names).sum()
+    print "raw_norm_integral:       ",fitfunc(raw_mc,m.args,params_names).sum()
     print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names).sum()/len(raw_mc[0])
     nsig = values['num_sig']
     norgsig = nsig*(num_raw_mc/float(num_acc_mc))*(1.0/num_raw_mc)*(fitfunc(raw_mc,m.args,params_names).sum())
@@ -294,7 +299,7 @@ def main():
 
     ############################################################################
 
-    plt.show()
+    #plt.show()
 
     exit()
 
