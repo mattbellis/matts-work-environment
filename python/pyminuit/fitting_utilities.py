@@ -6,6 +6,8 @@ import scipy.integrate as integrate
 
 import minuit
 
+import pdfs 
+
 ################################################################################
 # Convert dictionary to kwd arguments
 ################################################################################
@@ -69,9 +71,25 @@ class Struct:
 class Minuit_FCN:
     def __init__(self,data,params):
         self.data = data
-        self.params = params
+
+        ################
+        params_names = ()
+        #limits = {}
+        kwd = {}
+        for k,v in params.iteritems():
+            params_names += (k,)
+            '''
+            if 'var_' in k and 'limits' in v:
+                new_key = "%s_limits" % (k)
+                limits[new_key] = v['limits']
+            '''
+        ################
+
+        self.params = params_names
+        self.params_dict = params
+        #self.limits = 1.0
         #varnames = ['%s'%i for i in params]
-        varnames = params
+        varnames = params_names
         print "varnames"
         print varnames
 
@@ -88,7 +106,7 @@ class Minuit_FCN:
         data0 = self.data[0]
         mc = self.data[1]
 
-        val = emlf_minuit(data0,mc,arg,self.func_code.co_varnames)
+        val = emlf_minuit(data0,mc,arg,self.func_code.co_varnames,self.params_dict)
 
         return val
 
@@ -103,7 +121,7 @@ def pois(mu, k):
 ################################################################################
 
 ################################################################################
-def fitfunc(data,p,parnames):
+def fitfunc(data,p,parnames,params_dict):
 
     pn = parnames
 
@@ -113,13 +131,12 @@ def fitfunc(data,p,parnames):
     #function = stats.norm(loc=mean,scale=sigma)
     #ret = function.pdf(x)
 
-    ytot = np.zeros(len(data))
 
     #'''
     if flag==0:
 
-        ytot = np.zeros(len(data))
-        x = data
+        ytot = np.zeros(len(data[0]))
+        x = data[0]
         
         mean = p[pn.index('mean')]
         sigma = p[pn.index('sigma')]
@@ -132,9 +149,10 @@ def fitfunc(data,p,parnames):
         xnorm = np.linspace(2.0,8.0,1000)
         ynorm = gauss.pdf(xnorm) 
         normalization = integrate.simps(ynorm,x=xnorm)
-        print "normalization: ",normalization
+        #print "normalization: ",normalization
 
         y = num_gauss*gauss.pdf(x)
+        #y = num_gauss*np.exp(-((x - mean)**2)/(2.0*sigma*sigma))
         y /= normalization
         ytot += y 
 
@@ -153,14 +171,21 @@ def fitfunc(data,p,parnames):
 
         #print ytot
 
-    #'''
-    #'''
-    elif flag==1:
+    lif flag==1:
 
         x = data[0]
         y = data[1]
 
-        ytot = np.zeros(len(x))
+        xlo = params_dict['var_x']['limits'][0]
+        xhi = params_dict['var_x']['limits'][1]
+
+        ylo = params_dict['var_y']['limits'][0]
+        yhi = params_dict['var_y']['limits'][1]
+
+        #print "var_x_limits: ",params_dict['var_x']['limits']
+        #print "var_y_limits: ",params_dict['var_y']['limits']
+
+        tot_pdf = np.zeros(len(x))
         
         mean = p[pn.index('mean')]
         sigma = p[pn.index('sigma')]
@@ -169,85 +194,52 @@ def fitfunc(data,p,parnames):
         num_sig = p[pn.index('num_sig')]
         num_bkg = p[pn.index('num_bkg')]
 
-        '''
-        output = ""
-        for name in pn:
-            output += "%-15s %12.4f\n" % (name,p[pn.index(name)])
-        print output
-        '''
-
         ########################################################################
         # Signal PDF
         ########################################################################
-        gauss = stats.norm(loc=mean,scale=sigma)
-        # This already normalized
-        sig_exp = stats.expon(loc=0.0,scale=sig_y_slope)
+        pdf  = pdfs.gauss(x,mean,sigma,xlo,xhi)
+        pdf *= pdfs.exp(y,sig_y_slope,ylo,yhi)
+        pdf *= num_sig
 
-        # Normalize
-        xnorm = np.linspace(2.0,8.0,1000)
-        ynorm = gauss.pdf(xnorm) 
-        normalization = integrate.simps(ynorm,x=xnorm)
-        #print "normalization: ",normalization
-
-        #xnorm = np.linspace(0.0,400.0,1000)
-        #ynorm = sig_exp.pdf(xnorm) 
-        #normalization *= integrate.simps(ynorm,x=xnorm)
-
-        #print "normalization: ",normalization
-
-        y = num_sig*gauss.pdf(x)*sig_exp.pdf(y)
         #y /= normalization
-        ytot += y 
+        tot_pdf += pdf
 
         ########################################################################
         # Background PDF
         ########################################################################
-        flat_term = 1.0
-        bkg_exp = stats.expon(loc=0.0,scale=bkg_x_slope)
+        pdf = pdfs.poly(y,[],ylo,yhi)
+        pdf *= pdfs.exp(x,bkg_x_slope,xlo,xhi)
+        pdf *= num_bkg
 
-        # Normalize
-        # Should be already normalized.
-        #xnorm = np.linspace(2.0,8.0,1000)
-        #ynorm = bkg_exp.pdf(xnorm)
-        #normalization = integrate.simps(ynorm,x=xnorm)
+        tot_pdf += pdf 
 
-        #y = num_bkg*(1.0/400.0)*bkg_exp.pdf(x)
-        y = num_bkg*(1.0/400.0)*bkg_exp.pdf(x)
-        #y = num_bkg*bkg_exp.pdf(x)
-        #y = num_flat/6.0
-        #y = num_flat*flat_term
-        #y /= normalization
-        ytot += y 
 
-        #print ytot
-
-    #'''
-
-    return ytot
+    return tot_pdf
 ################################################################################
 
 
 ################################################################################
 # Extended maximum likelihood function for minuit
 ################################################################################
-def emlf_minuit(data,mc,p,varnames):
+def emlf_minuit(data,mc,p,parnames,params_dict):
 
-    v = varnames
+    #v = parnames
 
     ndata = len(data[0])
     nmc   = len(mc[0])
 
-    print ndata,nmc
+    #print ndata,nmc
 
     #print p
-    '''
+    #'''
     n = 0
-    for name in varnames:
+    for name in parnames:
         if 'num_' in name:
-            n += p[varnames.index(name)]
-    '''
+            n += p[parnames.index(name)]
+    #'''
+    #print n,ndata
 
-    norm_func = (fitfunc(mc,p,v)).sum()/nmc
+    norm_func = (fitfunc(mc,p,parnames,params_dict)).sum()/nmc
 
     ret = 0.0
     if norm_func==0:
@@ -259,7 +251,8 @@ def emlf_minuit(data,mc,p,varnames):
     #ret = (-np.log(fitfunc(data,p,v) / norm_func).sum()) # - pois(n,len(data))
 
     #ret = (-np.log(fitfunc(data,p,v))).sum() + len(data)*np.log(norm_func) - pois(n,len(data))
-    ret = (-np.log(fitfunc(data,p,v))).sum() + ndata*(norm_func) 
+    #print "extended term: ", ((n-ndata)*(n-ndata))/(2*ndata)
+    ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func) # + ((n-ndata)*(n-ndata))/(2*ndata)
     #ret = (-np.log(fitfunc(data,p,v))).sum() + n*(norm_func) 
     #print ret
 

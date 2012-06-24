@@ -96,7 +96,7 @@ def main():
     ############################################################################
     # Gen some MC
     ############################################################################
-    nmc = 100000
+    nmc = 50000
     mc = np.array([None,None])
     for i,r in enumerate(ranges):
         mc[i] = (r[1]-r[0])*np.random.random(nmc) + r[0]
@@ -188,8 +188,10 @@ def main():
 
     params_dict = {}
     params_dict['flag'] = {'fix':True,'start_val':1}
-    params_dict['mean'] = {'fix':False,'start_val':4.0}
-    params_dict['sigma'] = {'fix':False,'start_val':1.0}
+    params_dict['var_x'] = {'fix':True,'start_val':0,'limits':(2.0,8.0)}
+    params_dict['var_y'] = {'fix':True,'start_val':0,'limits':(0.0,400.0)}
+    params_dict['mean'] = {'fix':False,'start_val':4.0,'limits':(0.0,10.0)}
+    params_dict['sigma'] = {'fix':False,'start_val':1.0,'limits':(0.1,10.0)}
     params_dict['exp_sig_y'] = {'fix':False,'start_val':2.0,'limits':(0,1000)}
     params_dict['exp_bkg_x'] = {'fix':False,'start_val':2.0,'limits':(0,1000)}
     params_dict['num_sig'] = {'fix':False,'start_val':100.0,'limits':(10,100000)}
@@ -197,7 +199,8 @@ def main():
 
     params_names,kwd = dict2kwd(params_dict)
 
-    f = Minuit_FCN([data,mc],params_names)
+    #f = Minuit_FCN([data,mc],params_names)
+    f = Minuit_FCN([data,mc],params_dict)
 
     m = minuit.Minuit(f,**kwd)
 
@@ -244,14 +247,14 @@ def main():
     print "nbkg: ",values['num_bkg'],values['num_bkg']*(num_raw_mc/float(num_acc_mc))
 
     print "ndata: ",len(data[0])
-    print "data_norm_integral:       ",fitfunc(data,m.args,params_names).sum()
-    print "data_norm_integral/ndata: ",fitfunc(data,m.args,params_names).sum()/len(data[0])
-    print "acc_norm_integral:       ",fitfunc(mc,m.args,params_names).sum()
-    print "acc_norm_integral/n_acc: ",fitfunc(mc,m.args,params_names).sum()/len(mc[0])
-    print "raw_norm_integral:       ",fitfunc(raw_mc,m.args,params_names).sum()
-    print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names).sum()/len(raw_mc[0])
+    print "data_norm_integral:       ",fitfunc(data,m.args,params_names,params_dict).sum()
+    print "data_norm_integral/ndata: ",fitfunc(data,m.args,params_names,params_dict).sum()/len(data[0])
+    print "acc_norm_integral:       ",fitfunc(mc,m.args,params_names,params_dict).sum()
+    print "acc_norm_integral/n_acc: ",fitfunc(mc,m.args,params_names,params_dict).sum()/len(mc[0])
+    print "raw_norm_integral:       ",fitfunc(raw_mc,m.args,params_names,params_dict).sum()
+    print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names,params_dict).sum()/len(raw_mc[0])
     nsig = values['num_sig']
-    norgsig = nsig*(num_raw_mc/float(num_acc_mc))*(1.0/num_raw_mc)*(fitfunc(raw_mc,m.args,params_names).sum())
+    norgsig = nsig*(num_raw_mc/float(num_acc_mc))*(1.0/num_raw_mc)*(fitfunc(raw_mc,m.args,params_names,params_dict).sum())
     print "norgsig: ",norgsig
 
     ############################################################################
