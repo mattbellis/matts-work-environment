@@ -444,5 +444,5 @@ for c0 in cut_tot_missing_mass:
 outarrays = [cuts,tot,remain]
 np.save(outfile_name,outarrays)
 
-#plt.show()
+plt.show()
 
