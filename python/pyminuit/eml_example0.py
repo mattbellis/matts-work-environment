@@ -10,7 +10,6 @@ from plotting_utilities import *
 import lichen.lichen as lch
 
 import minuit
-#import RTMinuit as rtminuit
 
 pi = np.pi
 
@@ -57,17 +56,20 @@ def main():
     ############################################################################
     # Gen some MC
     ############################################################################
-    mc = (hi-lo)*np.random.random(100000) + lo
+    mc = (hi-lo)*np.random.random(10000) + lo
     num_raw_mc = len(mc)
 
     ############################################################################
     # Get the efficiency function
     ############################################################################
-    max_val = 0.86786
+    #max_val = 0.86786
     #threshold = 0.345
-    threshold = 4.345
-    sigmoid_sigma = 0.241
+    #sigmoid_sigma = 0.241
 
+    max_val = 1.000
+    #threshold = 4.345
+    threshold = 0.1
+    sigmoid_sigma = 0.241
     
     ############################################################################
     # Run through the acceptance.
@@ -100,24 +102,33 @@ def main():
     # Fit
     ############################################################################
 
-    myparams = ('flag','mean','sigma','num_gauss','num_flat')
+    params_dict = {}
+    params_dict['flag'] = {'fix':True,'start_val':0}
+    params_dict['mean'] = {'fix':False,'start_val':4.0,'limits':(0,10)}
+    params_dict['sigma'] = {'fix':False,'start_val':1.0,'limits':(0.1,10)}
+    params_dict['num_gauss'] = {'fix':False,'start_val':1000.0,'limits':(1,100000)}
+    params_dict['num_flat'] = {'fix':False,'start_val':5000.0,'limits':(1,100000)}
 
-    print "here diagnostics."
-    print len(mc)
+    params_names,kwd = dict2kwd(params_dict)
+
+    #myparams = ('flag','mean','sigma','num_gauss','num_flat')
+
+    #print "here diagnostics."
+    #print len(mc)
 
     #exit()
 
-    f = Minuit_FCN([data,mc],myparams)
+    f = Minuit_FCN([[data],[mc]],params_names)
 
-    kwd = {}
-    kwd['flag']=0
-    kwd['fix_flag']=True
-    kwd['mean']=4.0
-    kwd['sigma']=1.0
-    kwd['num_gauss']=1000
-    kwd['num_flat']=1000
-    kwd['limit_num_gauss']=(10,100000)
-    kwd['limit_num_flat']=(10,100000)
+    #kwd = {}
+    #kwd['flag']=0
+    #kwd['fix_flag']=True
+    #kwd['mean']=4.0
+    #kwd['sigma']=1.0
+    #kwd['num_gauss']=1000
+    #kwd['num_flat']=1000
+    #kwd['limit_num_gauss']=(10,100000)
+    #kwd['limit_num_flat']=(10,100000)
 
     m = minuit.Minuit(f,**kwd)
 
@@ -139,9 +150,9 @@ def main():
     print "xgauss: ",len(xgauss)
     print "xflat: ",len(xflat)
     print "ngauss: ",values['num_gauss']*(num_raw_mc/float(num_acc_mc))
-    print "nflat: ",values['num_flat']*(num_raw_mc/float(num_acc_mc))
+    #print "nflat: ",values['num_flat']*(num_raw_mc/float(num_acc_mc))
     print "err_ngauss: ",m.errors['num_gauss']*(num_raw_mc/float(num_acc_mc))
-    print "err_nflat: ",m.errors['num_flat']*(num_raw_mc/float(num_acc_mc))
+    #print "err_nflat: ",m.errors['num_flat']*(num_raw_mc/float(num_acc_mc))
     #data.sort()
     #print data
     #mc.sort()
