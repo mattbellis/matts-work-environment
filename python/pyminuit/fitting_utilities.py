@@ -171,7 +171,7 @@ def fitfunc(data,p,parnames,params_dict):
 
         #print ytot
 
-    lif flag==1:
+    elif flag==1:
 
         x = data[0]
         y = data[1]
