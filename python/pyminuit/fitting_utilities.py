@@ -11,6 +11,42 @@ import pdfs
 ################################################################################
 # Convert dictionary to kwd arguments
 ################################################################################
+def return_numbers_of_events(m,acc_integral,nacc,raw_integral,nraw,num_data,params_to_use=None):
+
+    # Total up the number of events in the dataset, returned by the fit.
+    num_parameters = []
+    tot_fit_events = 0.0
+    for k,v in m.values.iteritems():
+        if "num_" in k:
+            if params_to_use==None or k in params_to_use:
+                tot_fit_events += v
+                num_parameters.append(k)
+
+    tot_data_events = 0.0
+    number_of_events = {}
+    for name in num_parameters:
+        num = m.values[name]
+        err = m.errors[name]
+        pct_num = num/float(tot_fit_events)
+        pct_err = err/num
+        number_of_events[name] = {"pct":pct_num,"pct_err":pct_err,"ndata":pct_num*num_data,"ndata_err":pct_num*num_data*pct_err}
+
+    acc_corr_term = (nraw/float(nacc))*(1.0/nraw)*raw_integral
+
+    number_of_events['total'] = {"pct":1.0,"ndata":num_data,"nacc_corr":acc_corr_term*num_data}
+    tot_pct_err = 0.0
+    for name in num_parameters:
+        nd = number_of_events[name]["ndata"]
+        pct_err = number_of_events[name]["pct_err"]
+        #tot_pct_err += (pct
+        number_of_events[name]["nacc_corr"] = nd*acc_corr_term
+        number_of_events[name]["nacc_corr_err"] = nd*acc_corr_term*pct_err
+
+    return number_of_events
+
+################################################################################
+# Convert dictionary to kwd arguments
+################################################################################
 def minuit_output(m):
     parameters = m.parameters
 
