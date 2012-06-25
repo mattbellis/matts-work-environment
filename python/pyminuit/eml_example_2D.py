@@ -41,27 +41,24 @@ def main():
     ############################################################################
     # Gen some data
     ############################################################################
+    # Signal
+    ############################################################################
     mean = 5.0
     sigma = 0.5
     nsig = 1000
     xsig = np.random.normal(mean,sigma,nsig)
-    #index = xsig>ranges[0][0]
-    #index *= xsig<ranges[0][1]
-    #xsig = xsig[index==True]
-    #print len(xsig)
 
     sig_exp_slope = 170.0
     ygexp = stats.expon(loc=0.0,scale=sig_exp_slope)
     ysig = ygexp.rvs(nsig)
-    #print ysig
 
-    # Bkg
-    # Exp
+    ############################################################################
+    # Background
+    ############################################################################
     nbkg = 5000
     bkg_exp_slope = 3.0
     xbkg_exp = stats.expon(loc=ranges[0][0],scale=bkg_exp_slope)
     xbkg = xbkg_exp.rvs(nbkg)
-    #print xbkg
 
     # Flat
     ybkg = (ranges[1][1]-ranges[1][0])*np.random.random(nbkg) + ranges[1][0]
@@ -75,28 +72,45 @@ def main():
     num_org_sig = len(xsig)
     num_org_bkg = len(xbkg)
 
-    print "num_org_sig: ",num_org_sig
-    print "num_org_bkg: ",num_org_bkg 
-
     # Cut out points outside of region.
     index = np.ones(len(data[0]),dtype=np.int)
     for d,r in zip(data,ranges):
         index *= ((d>r[0])*(d<r[1]))
 
-    #print len(data[0])
-    #print len(data[1])
+    '''
+    signal = np.array([xsig,ysig])
+    background = np.array([xbkg,ybkg])
 
-    #print index[index==0]
-    #print "index: ",len(index[index==True])
-    
+    index = np.ones(len(signal[0]),dtype=np.int)
+    for d,r in zip(signal,ranges):
+        index *= ((d>r[0])*(d<r[1]))
+
+    index = np.ones(len(background[0]),dtype=np.int)
+    for d,r in zip(background,ranges):
+        index *= ((d>r[0])*(d<r[1]))
+
+    print "num_org_sig: ",num_org_sig
+    print "num_org_bkg: ",num_org_bkg 
+
+    print "sig: ",len(signal[0]),len(signal[1])
+    '''
+
+    print "Before in range: ",len(data[0])
+    print "Before in range: ",len(data[1])
+
     for i in xrange(len(data)):
         data[i] = data[i][index==True]
+
+    print "After in range: ",len(data[0])
+    print "After in range: ",len(data[1])
+
+    n_org_data = len(data[0])
 
 
     ############################################################################
     # Gen some MC
     ############################################################################
-    nmc = 10000
+    nmc = 50000
     mc = np.array([None,None])
     for i,r in enumerate(ranges):
         mc[i] = (r[1]-r[0])*np.random.random(nmc) + r[0]
@@ -116,6 +130,7 @@ def main():
     #sigmoid_sigma = 0.241
 
     max_val = 0.86786
+    #max_val = 1.0
     threshold = 4.345
     sigmoid_sigma = 0.241
     
@@ -142,12 +157,31 @@ def main():
     num_acc_mc = len(mc[0])
     #print "num: mc: ",num_acc_mc
 
+    '''
+    # Count how much signal and background made it.
+    indices = np.zeros(len(signal[0]),dtype=np.int)
+    for i,pt in enumerate(signal[0]):
+        if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
+            indices[i] = 1
+    print len(signal[0])
+    print len(indices)
+    signalacc0 = signal[0][indices==1]
+    signalacc1 = signal[1][indices==1]
+    
+    indices = np.zeros(len(background[0]),dtype=np.int)
+    for i,pt in enumerate(background[0]):
+        if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
+            indices[i] = 1
+    backgroundacc0 = background[0][indices==1]
+    backgroundacc1 = background[1][indices==1]
+    
 
-    num_acc_sig = len(data[0])
-    num_acc_bkg = len(data[1])
+    num_acc_sig = len(signalacc0)
+    num_acc_bkg = len(backgroundacc0)
 
     #print "num_acc_sig: ",num_acc_sig
     #print "num_acc_bkg: ",num_acc_bkg 
+    '''
 
     ############################################################################
     # Plot the data and MC
@@ -237,28 +271,93 @@ def main():
     #mc.sort()
     #print mc
 
-    print "num_org_sig: ",num_org_sig
-    print "num_org_bkg: ",num_org_bkg 
+    #print "num_org_sig: ",num_org_sig
+    #print "num_org_bkg: ",num_org_bkg 
 
-    print "num_acc_sig: ",num_acc_sig
-    print "num_acc_bkg: ",num_acc_bkg 
+    #print "num_acc_sig: ",num_acc_sig
+    #print "num_acc_bkg: ",num_acc_bkg 
 
-    print "num_raw_mc: ",num_raw_mc 
-    print "num_acc_mc: ",num_acc_mc 
+    #print "num_raw_mc: ",num_raw_mc 
+    #print "num_acc_mc: ",num_acc_mc 
 
-    print "nsig: ",values['num_sig'],values['num_sig']*(num_raw_mc/float(num_acc_mc))
-    print "nbkg: ",values['num_bkg'],values['num_bkg']*(num_raw_mc/float(num_acc_mc))
+    #print "nsig: ",values['num_sig'],values['num_sig']*(num_raw_mc/float(num_acc_mc))
+    #print "nbkg: ",values['num_bkg'],values['num_bkg']*(num_raw_mc/float(num_acc_mc))
 
-    print "ndata: ",len(data[0])
-    print "data_norm_integral:       ",fitfunc(data,m.args,params_names,params_dict).sum()
-    print "data_norm_integral/ndata: ",fitfunc(data,m.args,params_names,params_dict).sum()/len(data[0])
-    print "acc_norm_integral:       ",fitfunc(mc,m.args,params_names,params_dict).sum()
-    print "acc_norm_integral/n_acc: ",fitfunc(mc,m.args,params_names,params_dict).sum()/len(mc[0])
-    print "raw_norm_integral:       ",fitfunc(raw_mc,m.args,params_names,params_dict).sum()
-    print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names,params_dict).sum()/len(raw_mc[0])
-    nsig = values['num_sig']
-    norgsig = nsig*(num_raw_mc/float(num_acc_mc))*(1.0/num_raw_mc)*(fitfunc(raw_mc,m.args,params_names,params_dict).sum())
-    print "norgsig: ",norgsig
+    ndata = len(data[0])
+    #print "ndata: ",len(data[0])
+    #print "data_norm_integral:       ",fitfunc(data,m.args,params_names,params_dict).sum()
+    #print "data_norm_integral/ndata: ",fitfunc(data,m.args,params_names,params_dict).sum()/len(data[0])
+    #print "acc_norm_integral:       ",fitfunc(mc,m.args,params_names,params_dict).sum()
+    #print "acc_norm_integral/n_acc: ",fitfunc(mc,m.args,params_names,params_dict).sum()/len(mc[0])
+    #print "raw_norm_integral:       ",fitfunc(raw_mc,m.args,params_names,params_dict).sum()
+    #print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names,params_dict).sum()/len(raw_mc[0])
+    #nsig = values['num_sig']
+    #norgsig = nsig*(num_raw_mc/float(num_acc_mc))*(1.0/num_raw_mc)*(fitfunc(raw_mc,m.args,params_names,params_dict).sum())
+    #print "norgsig: ",norgsig
+
+
+    temp_vals = list(m.args)
+    temp_vals[params_names.index('num_bkg')] = 0.0
+    acc_integral = fitfunc(mc,temp_vals,params_names,params_dict).sum()
+    raw_integral = fitfunc(raw_mc,temp_vals,params_names,params_dict).sum()
+    print "integrals: ",acc_integral,raw_integral,raw_integral/acc_integral
+    number_of_events = return_numbers_of_events(m,acc_integral,num_acc_mc,raw_integral,num_raw_mc,ndata,['num_sig'])
+    print number_of_events
+
+    temp_vals = list(m.args)
+    temp_vals[params_names.index('num_sig')] = 0.0
+    acc_integral = fitfunc(mc,temp_vals,params_names,params_dict).sum()
+    raw_integral = fitfunc(raw_mc,temp_vals,params_names,params_dict).sum()
+    print "integrals: ",acc_integral,raw_integral,raw_integral/acc_integral
+    number_of_events = return_numbers_of_events(m,acc_integral,num_acc_mc,raw_integral,num_raw_mc,ndata,['num_bkg'])
+    print number_of_events
+
+    acc_integral = fitfunc(mc,m.args,params_names,params_dict).sum()
+    raw_integral = fitfunc(raw_mc,m.args,params_names,params_dict).sum()
+    print "integrals: ",acc_integral,raw_integral,raw_integral/acc_integral
+    number_of_events = return_numbers_of_events(m,acc_integral,num_acc_mc,raw_integral,num_raw_mc,ndata)
+    print number_of_events
+
+    print "\nm.covariance"
+    print m.covariance
+    cov_matrix = m.covariance
+    output = ""
+    for i in params_names:
+        for j in params_names:
+            key = (i,j)
+            if key in cov_matrix:
+                output += "%11.2e " % (cov_matrix[key])
+        output += "\n"
+    print output
+    
+
+    print "\nm.matrix()"
+    print m.matrix(correlation=True)
+    corr_matrix = m.matrix(correlation=True)
+    output = ""
+    for i in xrange(len(corr_matrix)):
+        for j in xrange(len(corr_matrix[i])):
+            output += "%9.2e " % (corr_matrix[i][j])
+        output += "\n"
+    print output
+    
+    print m.errors
+    print m.values
+    output = ""
+    for k,v in number_of_events.iteritems():
+        #print k,v
+        nvals = number_of_events[k]
+        if 'num_' in k:
+            output += "%-12s %8.2f +/- %6.2f \t %8.2f +/- %6.2f\n" % (k,nvals['ndata'],nvals['ndata_err'],nvals['nacc_corr'],nvals['nacc_corr_err'])
+    print output
+
+    #print "Num org signal: ",num_org_sig
+    #print "Num org background: ",num_org_bkg
+
+    #print "Num acc signal: ",num_acc_sig
+    #print "Num acc background: ",num_acc_bkg
+
+    print "Num data events used: ",ndata
 
     ############################################################################
     # Plot on the x-projection
