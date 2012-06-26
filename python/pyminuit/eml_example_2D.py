@@ -110,7 +110,7 @@ def main():
     ############################################################################
     # Gen some MC
     ############################################################################
-    nmc = 10000
+    nmc = 50000
     mc = np.array([None,None])
     for i,r in enumerate(ranges):
         mc[i] = (r[1]-r[0])*np.random.random(nmc) + r[0]
@@ -118,7 +118,7 @@ def main():
     raw_mc = np.array([mc[0],mc[1]])
     num_raw_mc = len(mc[0])
 
-    nplotmc = 500000
+    nplotmc = 100000
     plotmc = np.array([None,None])
     for i,r in enumerate(ranges):
         plotmc[i] = (r[1]-r[0])*np.random.random(nplotmc) + r[0]
@@ -202,6 +202,7 @@ def main():
     
     hdata  = lch.hist_2D(data[0],data[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax02)
     hdatax = lch.hist_err(data[0],range=ranges[0],bins=nbins[0],axes=ax00)
+    print "hdatax: ",hdatax[2].sum()
     hdatay = lch.hist_err(data[1],range=ranges[1],bins=nbins[1],axes=ax01)
     ax00.set_xlim(ranges[0])
     ax01.set_xlim(ranges[1])
@@ -296,11 +297,6 @@ def main():
     number_of_events = return_numbers_of_events(m,acc_integral,num_acc_mc,raw_integral,num_raw_mc,ndata)
     print number_of_events
 
-    acc_mc_weights = fitfunc(plotmc,m.args,params_names,params_dict)
-    hist,bin_edges = np.histogram(plotmc[0],bins=50,weights=acc_mc_weights,density=True)
-    plot_bin_width = bin_edges[1]-bin_edges[0]
-    bin_centers = bin_edges[0:-1]+plot_bin_width
-    ax00.plot(bin_centers,ndata*plot_bin_width*(bin_widths[0]/plot_bin_width)*hist,'b--',linewidth=2)
 
     print "\nm.covariance"
     print m.covariance
@@ -343,6 +339,46 @@ def main():
 
     print "Num data events used: ",ndata
 
+    nplotbins = 1000
+
+    acc_mc_weights = fitfunc(plotmc,m.args,params_names,params_dict)
+    print acc_mc_weights[0:100]
+
+    #plot = plot_solution(plotmc[0],acc_mc_weights,nbins=nplotbins,range=ranges[0],axes_bin_width=bin_widths[0],ndata=ndata,axes=ax00,fmt='b-',linewidth=2)
+    plot = plot_solution(plotmc[1],acc_mc_weights,nbins=nplotbins,range=ranges[1],axes_bin_width=bin_widths[1],ndata=ndata,axes=ax01,fmt='b-',linewidth=2)
+
+    scale = acc_mc_weights.sum()/ndata
+    acc_mc_weights /= scale
+    ax00.hist(plotmc[0],histtype='step',weights=acc_mc_weights,bins=100,range=ranges[0],linewidth=1,color='black')
+
+    nsig_ac = number_of_events['num_sig']['ndata']
+    nbkg_ac = number_of_events['num_bkg']['ndata'] # -100
+
+    print "nums: ",nsig_ac,nbkg_ac
+
+    temp_vals = list(m.args)
+    temp_vals[params_names.index('num_bkg')] = 0.0
+    acc_mc_weights = fitfunc(plotmc,temp_vals,params_names,params_dict)
+    print acc_mc_weights[0:100]
+    #plot = plot_solution(plotmc[0],acc_mc_weights,nbins=nplotbins,range=ranges[0],axes_bin_width=bin_widths[0],ndata=nsig_ac,axes=ax00,fmt='r-',linewidth=2)
+    plot = plot_solution(plotmc[1],acc_mc_weights,nbins=nplotbins,range=ranges[1],axes_bin_width=bin_widths[1],ndata=nsig_ac,axes=ax01,fmt='r-',linewidth=2)
+
+    scale = acc_mc_weights.sum()/nsig_ac
+    acc_mc_weights /= scale
+    ax00.hist(plotmc[0],histtype='step',weights=acc_mc_weights,bins=100,range=ranges[0],linewidth=1,color='red')
+
+    temp_vals = list(m.args)
+    temp_vals[params_names.index('num_sig')] = 0.0
+    acc_mc_weights = fitfunc(plotmc,temp_vals,params_names,params_dict)
+    print acc_mc_weights[0:100]
+    #plot = plot_solution(plotmc[0],acc_mc_weights,nbins=nplotbins,range=ranges[0],axes_bin_width=bin_widths[0],ndata=nbkg_ac,axes=ax00,fmt='g-',linewidth=2)
+    plot = plot_solution(plotmc[1],acc_mc_weights,nbins=nplotbins,range=ranges[1],axes_bin_width=bin_widths[1],ndata=nbkg_ac,axes=ax01,fmt='g-',linewidth=2)
+
+    scale = acc_mc_weights.sum()/nbkg_ac
+    acc_mc_weights /= scale
+    ax00.hist(plotmc[0],histtype='step',weights=acc_mc_weights,bins=100,range=ranges[0],linewidth=1,color='red')
+
+    '''
     ############################################################################
     # Plot on the x-projection
     ############################################################################
@@ -387,6 +423,7 @@ def main():
     ax01.plot(xpts,ytot,'b',linewidth=3)
 
     ############################################################################
+    '''
 
     plt.show()
 
