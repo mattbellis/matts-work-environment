@@ -110,13 +110,18 @@ def main():
     ############################################################################
     # Gen some MC
     ############################################################################
-    nmc = 50000
+    nmc = 10000
     mc = np.array([None,None])
     for i,r in enumerate(ranges):
         mc[i] = (r[1]-r[0])*np.random.random(nmc) + r[0]
 
     raw_mc = np.array([mc[0],mc[1]])
     num_raw_mc = len(mc[0])
+
+    nplotmc = 500000
+    plotmc = np.array([None,None])
+    for i,r in enumerate(ranges):
+        plotmc[i] = (r[1]-r[0])*np.random.random(nplotmc) + r[0]
 
     ############################################################################
     # Get the efficiency function
@@ -155,8 +160,16 @@ def main():
     mc[1] = mc[1][indices==1]
     
     num_acc_mc = len(mc[0])
+
     #print "num: mc: ",num_acc_mc
 
+    indices = np.zeros(len(plotmc[0]),dtype=np.int)
+    for i,pt in enumerate(plotmc[0]):
+        if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
+            indices[i] = 1
+    plotmc[0] = plotmc[0][indices==1]
+    plotmc[1] = plotmc[1][indices==1]
+    
     '''
     # Count how much signal and background made it.
     indices = np.zeros(len(signal[0]),dtype=np.int)
@@ -259,42 +272,7 @@ def main():
 
     values = m.values # Dictionary
 
-    #print "xgauss: ",len(xgauss)
-    #print "xflat: ",len(xflat)
-    #print "ngauss: ",values['num_gauss']*(num_raw_mc/float(num_acc_mc))
-    #print "nflat: ",values['num_flat']*(num_raw_mc/float(num_acc_mc))
-    #print "err_ngauss: ",m.errors['num_gauss']*(num_raw_mc/float(num_acc_mc))
-    #print "err_nflat: ",m.errors['num_flat']*(num_raw_mc/float(num_acc_mc))
-
-    #data.sort()
-    #print data
-    #mc.sort()
-    #print mc
-
-    #print "num_org_sig: ",num_org_sig
-    #print "num_org_bkg: ",num_org_bkg 
-
-    #print "num_acc_sig: ",num_acc_sig
-    #print "num_acc_bkg: ",num_acc_bkg 
-
-    #print "num_raw_mc: ",num_raw_mc 
-    #print "num_acc_mc: ",num_acc_mc 
-
-    #print "nsig: ",values['num_sig'],values['num_sig']*(num_raw_mc/float(num_acc_mc))
-    #print "nbkg: ",values['num_bkg'],values['num_bkg']*(num_raw_mc/float(num_acc_mc))
-
     ndata = len(data[0])
-    #print "ndata: ",len(data[0])
-    #print "data_norm_integral:       ",fitfunc(data,m.args,params_names,params_dict).sum()
-    #print "data_norm_integral/ndata: ",fitfunc(data,m.args,params_names,params_dict).sum()/len(data[0])
-    #print "acc_norm_integral:       ",fitfunc(mc,m.args,params_names,params_dict).sum()
-    #print "acc_norm_integral/n_acc: ",fitfunc(mc,m.args,params_names,params_dict).sum()/len(mc[0])
-    #print "raw_norm_integral:       ",fitfunc(raw_mc,m.args,params_names,params_dict).sum()
-    #print "raw_norm_integral/n_raw: ",fitfunc(raw_mc,m.args,params_names,params_dict).sum()/len(raw_mc[0])
-    #nsig = values['num_sig']
-    #norgsig = nsig*(num_raw_mc/float(num_acc_mc))*(1.0/num_raw_mc)*(fitfunc(raw_mc,m.args,params_names,params_dict).sum())
-    #print "norgsig: ",norgsig
-
 
     temp_vals = list(m.args)
     temp_vals[params_names.index('num_bkg')] = 0.0
@@ -317,6 +295,12 @@ def main():
     print "integrals: ",acc_integral,raw_integral,raw_integral/acc_integral
     number_of_events = return_numbers_of_events(m,acc_integral,num_acc_mc,raw_integral,num_raw_mc,ndata)
     print number_of_events
+
+    acc_mc_weights = fitfunc(plotmc,m.args,params_names,params_dict)
+    hist,bin_edges = np.histogram(plotmc[0],bins=50,weights=acc_mc_weights,density=True)
+    plot_bin_width = bin_edges[1]-bin_edges[0]
+    bin_centers = bin_edges[0:-1]+plot_bin_width
+    ax00.plot(bin_centers,ndata*plot_bin_width*(bin_widths[0]/plot_bin_width)*hist,'b--',linewidth=2)
 
     print "\nm.covariance"
     print m.covariance
