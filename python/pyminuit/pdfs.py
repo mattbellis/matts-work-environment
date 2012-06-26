@@ -13,6 +13,7 @@ def exp(x,slope,xlo,xhi,num_int_points=1000):
     xnorm = np.linspace(xlo,xhi,num_int_points)
     ynorm = exp_func.pdf(xnorm)
     normalization = integrate.simps(ynorm,x=xnorm)
+    #normalization = 1.0
     #print "pdfs normalization: ",normalization
     
     y = exp_func.pdf(x)/normalization
@@ -31,6 +32,7 @@ def gauss(x,mean,sigma,xlo,xhi,num_int_points=1000):
     xnorm = np.linspace(xlo,xhi,num_int_points)
     ynorm = gauss_func.pdf(xnorm)
     normalization = integrate.simps(ynorm,x=xnorm)
+    #normalization = 1.0
     #print "pdfs normalization: ",normalization
     
     y = gauss_func.pdf(x)/normalization

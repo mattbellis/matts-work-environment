@@ -31,7 +31,7 @@ def return_numbers_of_events(m,acc_integral,nacc,raw_integral,nraw,num_data,para
         pct_err = err/num
         number_of_events[name] = {"pct":pct_num,"pct_err":pct_err,"ndata":pct_num*num_data,"ndata_err":pct_num*num_data*pct_err}
 
-    acc_corr_term = (nraw/float(nacc))*(1.0/nraw)*raw_integral
+    acc_corr_term = (float(nraw)/float(nacc))*(1.0/float(nraw))*raw_integral
 
     number_of_events['total'] = {"pct":1.0,"ndata":num_data,"nacc_corr":acc_corr_term*num_data}
     tot_pct_err = 0.0
@@ -212,11 +212,17 @@ def fitfunc(data,p,parnames,params_dict):
         x = data[0]
         y = data[1]
 
-        xlo = params_dict['var_x']['limits'][0]
-        xhi = params_dict['var_x']['limits'][1]
+        #xlo = params_dict['var_x']['limits'][0]
+        #xhi = params_dict['var_x']['limits'][1]
+        #ylo = params_dict['var_y']['limits'][0]
+        #yhi = params_dict['var_y']['limits'][1]
 
-        ylo = params_dict['var_y']['limits'][0]
-        yhi = params_dict['var_y']['limits'][1]
+        xlo = min(x)
+        xhi = max(x)
+        ylo = min(y)
+        yhi = max(y)
+
+        #print "ranges:",xlo,xhi,ylo,yhi
 
         #print "var_x_limits: ",params_dict['var_x']['limits']
         #print "var_y_limits: ",params_dict['var_y']['limits']
@@ -235,22 +241,27 @@ def fitfunc(data,p,parnames,params_dict):
         ########################################################################
         pdf  = pdfs.gauss(x,mean,sigma,xlo,xhi)
         pdf *= pdfs.exp(y,sig_y_slope,ylo,yhi)
+        #print "pdf.sum(): ",pdf.sum()
         pdf *= num_sig
 
-        #y /= normalization
+        #print "pdf.sum(): ",pdf.sum()
+
         tot_pdf += pdf
 
         ########################################################################
         # Background PDF
         ########################################################################
-        pdf = pdfs.poly(y,[],ylo,yhi)
+        pdf  = pdfs.poly(y,[],ylo,yhi)
         pdf *= pdfs.exp(x,bkg_x_slope,xlo,xhi)
+        #print "pdf.sum(): ",pdf.sum()
         pdf *= num_bkg
+
+        #print "pdf.sum(): ",pdf.sum()
 
         tot_pdf += pdf 
 
-
     return tot_pdf
+
 ################################################################################
 
 
