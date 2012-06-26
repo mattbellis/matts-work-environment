@@ -5,6 +5,7 @@ import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
 from scipy.interpolate import spline
+from scipy.interpolate import UnivariateSpline
 
 from RTMinuit import *
 
@@ -14,11 +15,12 @@ from RTMinuit import *
 def plot_pdf(x,y,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-'):
 
     # Normalize to 1.0
+    y *= efficiency
     normalization = integrate.simps(y,x=x)
     y /= normalization
 
     #print "exp int: ",integrate.simps(y,x=x)
-    y *= (scale*bin_width)*efficiency
+    y *= (scale*bin_width)
     #print "bin_width: ",bin_width
 
     if axes==None:
@@ -59,13 +61,15 @@ def plot_solution(events,weights,nbins=100,range=(0,1),axes_bin_width=None,ndata
     print "sum: ",yvals.sum()
     print "sum: ",hist.sum()
 
-    #xnew = np.linspace(bin_edges[0]-plot_bin_width,bin_edges[-1]+plot_bin_width,300)
+    xnew = np.linspace(bin_edges[0]-plot_bin_width,bin_edges[-1]+plot_bin_width,300)
     #ysmooth = spline(bin_centers,yvals,xnew)
+    s = UnivariateSpline(bin_centers,yvals,s=1.0,k=2)
+    ysmooth = s(xnew)
 
     #print "integral: ",integrate.simps(ysmooth,x=xnew)
     #print "sum: ",ysmooth.sum()
 
-    #plot = axes.plot(xnew,ysmooth,fmt,linewidth=linewidth)
-    plot = axes.plot(bin_centers,yvals,fmt,linewidth=linewidth)
+    plot = axes.plot(xnew,ysmooth,fmt,linewidth=linewidth)
+    #plot = axes.plot(bin_centers,yvals,fmt,linewidth=linewidth)
 
     return plot
