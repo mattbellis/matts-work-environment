@@ -133,21 +133,21 @@ def main():
     ############################################################################
     # Get the efficiency function
     ############################################################################
-    #max_val = 0.86786
-    #threshold = 0.345
-    #sigmoid_sigma = 0.241
+    max_val = 0.86786
+    threshold = 0.345
+    sigmoid_sigma = 0.241
 
     #max_val = 0.86786
     #max_val = 1.000
     #threshold = 0.345
     #sigmoid_sigma = 0.241
 
-    max_val = 0.86786
+    #max_val = 0.86786
     #max_val = 1.0
-    threshold = 4.345
+    #threshold = 4.345
     #threshold = 6.345
     #threshold = 2.345
-    sigmoid_sigma = 0.241
+    #sigmoid_sigma = 0.241
     
     ############################################################################
     # Run through the acceptance.
