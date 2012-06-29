@@ -4,8 +4,198 @@ import scipy.stats as stats
 import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
-from RTMinuit import *
+import minuit
 from cogent_pdfs import *
+
+import lichen.pdfs as pdfs
+
+
+################################################################################
+# Generate some flat Monte Carlo over the range.
+################################################################################
+def gen_mc(nmc,ranges):
+    
+    mc = np.array([])
+    ndim = len(ranges)
+
+    for i in xrange(ndim):
+        mc = np.append(mc,None)
+
+    for i,r in enumerate(ranges):
+        mc[i] = (r[1]-r[0])*np.random.random(nmc) + r[0]
+
+    return mc
+
+################################################################################
+# Cut events from an arbitrary dataset that fall outside a set of ranges.
+################################################################################
+def cut_events_outside_range(data,ranges):
+
+    index = np.ones(len(data[0]),dtype=np.int)
+    for i,r in enumerate(ranges):
+        index *= ((data[i]>r[0])*(data[i]<r[1]))
+
+    for i in xrange(len(data)):
+        data[i] = data[i][index==True]
+
+    return data
+
+
+################################################################################
+def fitfunc(data,p,parnames,params_dict):
+
+    pn = parnames
+
+    flag = p[pn.index('flag')]
+
+    tot_pdf = np.zeros(len(data[0]))
+
+    if flag==0:
+
+        x = data[0]
+        y = data[1]
+
+        xlo = params_dict['var_e']['limits'][0]
+        xhi = params_dict['var_e']['limits'][1]
+        ylo = params_dict['var_t']['limits'][0]
+        yhi = params_dict['var_t']['limits'][1]
+
+        tot_pdf = np.zeros(len(x))
+        
+        e_exp0 = p[pn.index('e_exp0')]
+        num_exp0 = p[pn.index('num_exp0')]
+        num_flat = p[pn.index('num_flat')]
+
+        #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
+        #lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
+
+        means = []
+        sigmas = []
+        numls = []
+        decay_constants = []
+
+        for i in xrange(10):
+            name = "ls_mean%d" % (i)
+            means.append(p[pn.index(name)])
+            name = "ls_sigma%d" % (i)
+            sigmas.append(p[pn.index(name)])
+            name = "ls_ncalc%d" % (i)
+            numls.append(p[pn.index(name)])
+            name = "ls_dc%d" % (i)
+            decay_constants.append(p[pn.index(name)])
+
+        for n,m,s,dc in zip(numls,means,sigmas,decay_constants):
+            pdf  = pdfs.gauss(x,m,s,xlo,xhi)
+            dc = -1.0/dc
+            pdf *= pdfs.exp(y,dc,ylo,yhi)
+            pdf *= n
+            tot_pdf += pdf
+
+        # Exponential in energy
+        pdf  = pdfs.poly(y,[],ylo,yhi)
+        pdf *= pdfs.exp(x,e_exp0,xlo,xhi)
+        pdf *= num_exp0
+        tot_pdf += pdf
+
+        # Flat term
+        pdf  = pdfs.poly(y,[],ylo,yhi)
+        pdf *= pdfs.poly(x,[],xlo,xhi)
+        pdf *= num_flat
+        tot_pdf += pdf
+
+    return tot_pdf
+################################################################################
+
+
+
+
+################################################################################
+################################################################################
+################################################################################
+################################################################################
+# Return the numbers of events
+################################################################################
+def return_numbers_of_events(m,acc_integral,nacc,raw_integral,nraw,num_data,params_to_use=None):
+
+    # Total up the number of events in the dataset, returned by the fit.
+    num_parameters = []
+    tot_fit_events = 0.0
+    for k,v in m.values.iteritems():
+        if "num_" in k:
+            if params_to_use==None or k in params_to_use:
+                tot_fit_events += v
+                num_parameters.append(k)
+
+    tot_data_events = 0.0
+    number_of_events = {}
+    for name in num_parameters:
+        num = m.values[name]
+        err = m.errors[name]
+        pct_num = num/float(tot_fit_events)
+        pct_err = err/num
+        number_of_events[name] = {"pct":pct_num,"pct_err":pct_err,"ndata":pct_num*num_data,"ndata_err":pct_num*num_data*pct_err}
+
+    acc_corr_term = (float(nraw)/float(nacc))*(1.0/float(nraw))*raw_integral
+
+    number_of_events['total'] = {"pct":1.0,"ndata":num_data,"nacc_corr":acc_corr_term*num_data}
+    tot_pct_err = 0.0
+    for name in num_parameters:
+        nd = number_of_events[name]["ndata"]
+        pct_err = number_of_events[name]["pct_err"]
+        #tot_pct_err += (pct
+        number_of_events[name]["nacc_corr"] = nd*acc_corr_term
+        number_of_events[name]["nacc_corr_err"] = nd*acc_corr_term*pct_err
+
+    return number_of_events
+
+################################################################################
+# Convert dictionary to kwd arguments
+################################################################################
+def minuit_output(m):
+    parameters = m.parameters
+
+    output = "%-2s  %-16s %14s %14s\n" % ("#","PARAMETER NAME","VALUE","ERROR")
+    for n,p in zip(xrange(len(parameters)),parameters):
+        output += "%-2d  %-16s %14.6e %14.6e\n" % (n,p,m.values[p],m.errors[p])
+
+    return output
+
+################################################################################
+# Convert dictionary to kwd arguments
+################################################################################
+def dict2kwd(d):
+
+    keys,vals = d.keys(),d.values()
+
+    params_names = ()
+
+    kwd = {}
+    for k,v in d.iteritems():
+        print k,v
+        params_names += (k,)
+        kwd[k] = v['start_val']
+        if 'fix' in v and v['fix']==True:
+            new_key = "fix_%s" % (k)
+            kwd[new_key] = True
+        if 'limits' in v:
+            new_key = "limit_%s" % (k)
+            kwd[new_key] = v['limits']
+
+    ''' 
+    if 'num_bkg' in keys:
+        print "YES!",d['num_bkg']
+    '''
+
+    return params_names,kwd
+
+################################################################################
+# Sigmoid function.
+################################################################################
+def sigmoid(x,thresh,sigma,max_val):
+
+    ret = max_val / (1.0 + np.exp(-(x-thresh)/(thresh*sigma)))
+
+    return ret
 
 
 ################################################################################
@@ -21,21 +211,42 @@ class Struct:
 class Minuit_FCN:
     def __init__(self,data,params):
         self.data = data
-        self.params = params
-        varnames = ['%s'%i for i in params]
+
+        ################
+        params_names = ()
+        #limits = {}
+        kwd = {}
+        for k,v in params.iteritems():
+            params_names += (k,)
+            '''
+            if 'var_' in k and 'limits' in v:
+                new_key = "%s_limits" % (k)
+                limits[new_key] = v['limits']
+            '''
+        ################
+
+        self.params = params_names
+        self.params_dict = params
+        #self.limits = 1.0
+        #varnames = ['%s'%i for i in params]
+        varnames = params_names
+        print "varnames"
+        print varnames
 
         self.func_code = Struct(co_argcount=len(params),co_varnames=varnames)
         self.func_defaults = None # Optional but makes vectorize happy
 
+        print "Finished with __init__"
+
     def __call__(self,*arg):
-        print "arg: "
-        print arg
-        print self.func_code.co_varnames
-        flag = arg[0]
+        #print "arg: "
+        #print arg
+        #print self.func_code.co_varnames
+        #flag = arg[0]
         data0 = self.data[0]
         mc = self.data[1]
 
-        val = emlf_minuit(data0,mc,arg[1:],flag,self.func_code.co_varnames[1:])
+        val = emlf_minuit(data0,mc,arg,self.func_code.co_varnames,self.params_dict)
 
         return val
 
@@ -50,86 +261,41 @@ def pois(mu, k):
 ################################################################################
 
 ################################################################################
-def fitfunc(x,p,flag,parnames):
-
-    pn = parnames
-    #mean = p[0]
-    #sigma = p[1]
-    #function = stats.norm(loc=mean,scale=sigma)
-    #ret = function.pdf(x)
-
-    ytot = np.zeros(len(x))
-
-    if flag==0:
-        
-        exp_slope = p[pn.index('exp_slope')]
-        num_exp = p[pn.index('num_exp')]
-        num_flat = p[pn.index('num_flat')]
-
-        means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-        lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
-
-        tot_cp = 0
-        for n,cp in zip(num_decays_in_dataset,lshells):
-            #y = n*cp.pdf(x)*bin_width*efficiency/HG_trigger
-            y = n*cp.pdf(x)
-            tot_cp += n
-            ytot += y
-
-        #p[pn.index('num_lshell')] = tot_cp
-
-        # Surf exponential
-        surf_expon = stats.expon(scale=1.0)
-
-        xnorm = np.linspace(0.5,3.2,1000)
-        ynorm = surf_expon.pdf(exp_slope*xnorm) 
-        normalization = integrate.simps(ynorm,x=xnorm)
-
-        y = num_exp*surf_expon.pdf(exp_slope*x)
-        y /= normalization
-        ytot += y 
-
-        # Surf exponential
-        flat_term = 1.0
-
-        #xnorm = np.linspace(0.5,3.2,1000)
-        #ynorm = 1.0*np.ones(len(xnorm))
-        #normalization = integrate.simps(ynorm,x=xnorm)
-
-        y = num_flat
-        #y = num_flat*flat_term
-        #y /= normalization
-        ytot += y 
-
-        #print ytot
-
-
-    return ytot
-################################################################################
-
-
-################################################################################
 # Extended maximum likelihood function for minuit
 ################################################################################
-def emlf_minuit(data,mc,p,flag,varnames):
+def emlf_minuit(data,mc,p,parnames,params_dict):
 
-    v = varnames
-    norm_func = (fitfunc(mc,p,flag,v)).sum()/len(mc)
+    #v = parnames
 
-    print p
+    ndata = len(data[0])
+    nmc   = len(mc[0])
+
+    #print ndata,nmc
+
+    #print p
+    #'''
     n = 0
-    for name in varnames:
+    for name in parnames:
         if 'num_' in name:
-            n += p[varnames.index(name)]
-    print "tot num: ",n
+            n += p[parnames.index(name)]
+    #'''
+    #print n,ndata
+
+    norm_func = (fitfunc(mc,p,parnames,params_dict)).sum()/nmc
 
     ret = 0.0
     if norm_func==0:
         norm_func = 1000000.0
 
-    print len(data)
-    print pois(n,len(data))
-    ret = (-np.log(fitfunc(data,p,flag,v) / norm_func).sum()) - pois(n,len(data))
+    #print "ndata: ",len(data[0])
+    #print "nmc  : ",len(mc[0])
+    #print pois(n,len(data))
+    #ret = (-np.log(fitfunc(data,p,v) / norm_func).sum()) # - pois(n,len(data))
+
+    #ret = (-np.log(fitfunc(data,p,v))).sum() + len(data)*np.log(norm_func) - pois(n,len(data))
+    #print "extended term: ", ((n-ndata)*(n-ndata))/(2*ndata)
+    ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func) # + ((n-ndata)*(n-ndata))/(2*ndata)
+    #ret = (-np.log(fitfunc(data,p,v))).sum() + n*(norm_func) 
     #print ret
 
     return ret

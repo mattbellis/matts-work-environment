@@ -2,6 +2,8 @@ import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
+from datetime import datetime,timedelta
+
 import scipy.integrate as integrate
 
 from cogent_utilities import *
@@ -11,63 +13,78 @@ from plotting_utilities import *
 
 import lichen.lichen as lch
 
-#import minuit
-import RTMinuit as rtminuit
-
+import minuit
 
 pi = np.pi
+first_event = 2750361.2
+start_date = datetime(2009, 12, 3, 0, 0, 0, 0) #
 
 ################################################################################
 # Read in the CoGeNT data
 ################################################################################
 def main():
 
+    ############################################################################
+    # Read in the data
+    ############################################################################
     infile = open('data/before_fire_LG.dat')
     content = np.array(infile.read().split()).astype('float')
     ndata = len(content)/2
     index = np.arange(0,ndata*2,2)
-    times = content[index]
+    tseconds = content[index]
+    tdays = (tseconds-first_event)/(24.0*3600.0) + 1.0
     index = np.arange(1,ndata*2+1,2)
     amplitudes = content[index]
     energies = amp_to_energy(amplitudes,0)
 
-    lo = 0.5
-    hi = 3.2
-    nbins = 108
-    bin_width = (hi-lo)/nbins
-    print bin_width
+    print tdays
+    data = [energies,tdays]
 
-    # Take events only in our selected range
-    energies = energies[energies>lo]
-    energies = energies[energies<hi]
-    print energies
-    print len(energies)
-    #exit()
+    ############################################################################
+    # Declare the ranges.
+    ############################################################################
+    ranges = [[0.5,3.2],[0.0,450.0]]
+    nbins = [108,15]
+    bin_widths = np.ones(len(ranges))
+    for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
+        bin_widths[i] = (r[1]-r[0])/n
 
-    fig0 = plt.figure(figsize=(10,9),dpi=100)
+    # Cut events out that fall outside the range.
+    data = cut_events_outside_range(data,ranges)
+
+    nevents = float(len(data[0]))
+
+    # Plot the data
+    fig0 = plt.figure(figsize=(6,6),dpi=100)
     ax0 = fig0.add_subplot(2,1,1)
-    ax0.set_xlim(lo,hi)
+    ax1 = fig0.add_subplot(2,1,2)
+    ax0.set_xlim(ranges[0])
+    ax1.set_xlim(ranges[1])
 
-    lch.hist_err(energies,bins=nbins,range=(lo,hi),axes=ax0)
+    print data[0]
+    lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
+    print data[1]
+    lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
+
+    #plt.show()
+    #exit()
 
     ############################################################################
     # Gen some MC
     ############################################################################
-    mc = (hi-lo)*np.random.random(40000) + lo
+    nmcraw = 50000
+    mcraw = gen_mc(nmcraw,ranges)
 
     ############################################################################
-    # Get the efficiency function
+    # Run the MC through the efficiency.
     ############################################################################
     max_val = 0.86786
     threshold = 0.345
     sigmoid_sigma = 0.241
 
-    indices = np.zeros(len(mc),dtype=np.int)
-    for i,pt in enumerate(mc):
-        if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
-            indices[i] = 1
-    mc = mc[indices==1]
-    print len(mc)
+    mcacc = cogent_efficiency(mcraw,threshold,sigmoid_sigma,max_val)
+
+    #exit()
     
     ############################################################################
     # Fit
@@ -75,38 +92,73 @@ def main():
     means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
     tot_lshells = num_decays_in_dataset.sum()
 
-    myparams = ['flag','exp_slope','num_lshell','num_exp']
-    myparams += ['num_flat']
+    ############################################################################
+    # Fit
+    ############################################################################
 
-    print "here diagnostics."
-    print len(mc)
+    # Declare the parameters
+    params_dict = {}
+    params_dict['flag'] = {'fix':True,'start_val':0}
+    params_dict['var_e'] = {'fix':True,'start_val':0,'limits':(ranges[0][0],ranges[1][1])}
+    params_dict['var_t'] = {'fix':True,'start_val':0,'limits':(ranges[1][0],ranges[1][1])}
+
+    # L-shell parameters
+    for i,val in enumerate(means):
+        name = "ls_mean%d" % (i)
+        params_dict[name] = {'fix':True,'start_val':val}
+    for i,val in enumerate(sigmas):
+        name = "ls_sigma%d" % (i)
+        params_dict[name] = {'fix':True,'start_val':val}
+    for i,val in enumerate(num_decays_in_dataset):
+        name = "ls_ncalc%d" % (i)
+        params_dict[name] = {'fix':True,'start_val':val}
+    for i,val in enumerate(decay_constants):
+        name = "ls_dc%d" % (i)
+        params_dict[name] = {'fix':True,'start_val':val}
+
+    # Exponential term in energy
+    params_dict['e_exp0'] = {'fix':False,'start_val':6.0,'limits':(0.0,10.0)}
+    params_dict['num_exp0'] = {'fix':False,'start_val':600.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':600.0,'limits':(0.0,100000.0)}
+
+    params_names,kwd = dict2kwd(params_dict)
+
+    f = Minuit_FCN([data,mcacc],params_dict)
+
+    m = minuit.Minuit(f,**kwd)
 
     #exit()
 
-    f = Minuit_FCN([energies,mc],myparams)
+    # For maximum likelihood method.
+    m.up = 0.5
 
-    kwd = {}
-    kwd['flag']=0
-    kwd['fix_flag']=True
-    kwd['exp_slope']=5.3
-    kwd['num_lshell']=tot_lshells
-    kwd['fix_num_lshell']=True
-    kwd['num_exp']=900
-    kwd['num_flat']=1060
-    #kwd['fix_num_flat']=True
-
-    m = rtminuit.Minuit(f,**kwd)
-
-    print m.free_param
-    print m.fix_param
+    m.printMode = 1
 
     m.migrad()
 
-    print m.values,m.errors
+    print "Finished fit!!\n"
+    print minuit_output(m)
 
-    values = m.values # Dictionary
+    acc_integral_tot = fitfunc(mcacc,m.args,params_names,params_dict).sum()
+    print "acc_integral_tot: ",acc_integral_tot
 
-    #exit()
+    nfracs = []
+    names = ['num_exp0','num_flat']
+    for name in names:
+        temp_vals = list(m.args)
+        temp_vals[params_names.index(name)] = 0.0
+        acc_integral_temp = fitfunc(mcacc,temp_vals,params_names,params_dict).sum()
+        print "acc_integral_temp: ",acc_integral_temp
+        frac = acc_integral_temp/acc_integral_tot
+        nfracs.append(frac)
+
+    for n,f in zip(names,nfracs):
+        print "%-12s: %f" % (n,(f*nevents)-tot_lshells) 
+    print "%-12s: %f" % ("L-shells",tot_lshells) 
+    print "%-12s: %f" % ("tot",nevents) 
+
+
+    exit()
 
     ############################################################################
 
