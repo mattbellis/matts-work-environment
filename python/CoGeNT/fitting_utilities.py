@@ -65,6 +65,8 @@ def fitfunc(data,p,parnames,params_dict):
         e_exp0 = p[pn.index('e_exp0')]
         num_exp0 = p[pn.index('num_exp0')]
         num_flat = p[pn.index('num_flat')]
+        e_exp1 = p[pn.index('e_exp1')]
+        num_exp1 = p[pn.index('num_exp1')]
 
         #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
         #lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
@@ -95,6 +97,12 @@ def fitfunc(data,p,parnames,params_dict):
         pdf  = pdfs.poly(y,[],ylo,yhi)
         pdf *= pdfs.exp(x,e_exp0,xlo,xhi)
         pdf *= num_exp0
+        tot_pdf += pdf
+
+        # Second exponential in energy
+        pdf  = pdfs.poly(y,[],ylo,yhi)
+        pdf *= pdfs.exp(x,e_exp1,xlo,xhi)
+        pdf *= num_exp1
         tot_pdf += pdf
 
         # Flat term
