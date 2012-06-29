@@ -1,3 +1,6 @@
+import numpy as np
+from fitting_utilities import sigmoid
+
 ################################################################################
 # Conversion 0
 # Amplitude (V) to energy (keV)
@@ -34,3 +37,20 @@ def amp_to_energy(amplitude, calibration=0):
 
 ################################################################################
 ################################################################################
+################################################################################
+# CoGeNT trigger efficiency function.
+################################################################################
+def cogent_efficiency(data,threshold,sigmoid_sigma,max_val):
+
+    indices = np.zeros(len(data[0]),dtype=np.int)
+    for i,pt in enumerate(data[0]):
+        if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
+            indices[i] = 1
+
+    data[0] = data[0][indices==1]
+    data[1] = data[1][indices==1]
+
+    return data
+
+
+
