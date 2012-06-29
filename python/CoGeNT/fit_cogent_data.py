@@ -19,6 +19,8 @@ pi = np.pi
 first_event = 2750361.2
 start_date = datetime(2009, 12, 3, 0, 0, 0, 0) #
 
+np.random.seed(200)
+
 ################################################################################
 # Read in the CoGeNT data
 ################################################################################
@@ -55,15 +57,22 @@ def main():
     nevents = float(len(data[0]))
 
     # Plot the data
-    fig0 = plt.figure(figsize=(6,6),dpi=100)
-    ax0 = fig0.add_subplot(2,1,1)
-    ax1 = fig0.add_subplot(2,1,2)
-    ax0.set_xlim(ranges[0])
-    ax1.set_xlim(ranges[1])
+    fig0 = plt.figure(figsize=(12,4),dpi=100)
+    ax0 = fig0.add_subplot(1,2,1)
+    ax1 = fig0.add_subplot(1,2,2)
 
-    print data[0]
+    fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
+
+    ax0.set_xlim(ranges[0])
+    ax0.set_ylim(0.0,100.0)
+    ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
+    ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
+
+    ax1.set_xlim(ranges[1])
+    ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
+    ax1.set_ylabel("Event/30 days",fontsize=12)
+
     lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
-    print data[1]
     lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
 
     #plt.show()
@@ -72,7 +81,7 @@ def main():
     ############################################################################
     # Gen some MC
     ############################################################################
-    nmcraw = 50000
+    nmcraw = 20000
     mcraw = gen_mc(nmcraw,ranges)
 
     ############################################################################
@@ -90,6 +99,10 @@ def main():
     # Fit
     ############################################################################
     means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
+
+    # Might need this to take care of efficiency.
+    num_decays_in_dataset *= 0.87
+
     tot_lshells = num_decays_in_dataset.sum()
 
     ############################################################################
@@ -117,8 +130,10 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
 
     # Exponential term in energy
-    params_dict['e_exp0'] = {'fix':False,'start_val':6.0,'limits':(0.0,10.0)}
+    params_dict['e_exp0'] = {'fix':False,'start_val':1.0/2.0,'limits':(0.0,10.0)}
+    params_dict['e_exp1'] = {'fix':True,'start_val':1.0/3.3,'limits':(0.0,10.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':600.0,'limits':(0.0,100000.0)}
+    params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':600.0,'limits':(0.0,100000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
@@ -132,9 +147,11 @@ def main():
     # For maximum likelihood method.
     m.up = 0.5
 
-    m.printMode = 1
+    m.printMode = 0
 
     m.migrad()
+
+    values = m.values # Dictionary
 
     print "Finished fit!!\n"
     print minuit_output(m)
@@ -143,26 +160,81 @@ def main():
     print "acc_integral_tot: ",acc_integral_tot
 
     nfracs = []
-    names = ['num_exp0','num_flat']
+    #names = ['num_exp0','num_flat']
+    names = ['num_exp0','num_exp1','num_flat']
     for name in names:
         temp_vals = list(m.args)
-        temp_vals[params_names.index(name)] = 0.0
+        # Set all but name to 0.0
+        for zero_name in names:
+            if name!= zero_name:
+                temp_vals[params_names.index(zero_name)] = 0.0
+                print "zeroing out",zero_name
         acc_integral_temp = fitfunc(mcacc,temp_vals,params_names,params_dict).sum()
         print "acc_integral_temp: ",acc_integral_temp
         frac = acc_integral_temp/acc_integral_tot
+        print "frac: ",frac
         nfracs.append(frac)
 
+    npdfs = {}
     for n,f in zip(names,nfracs):
         print "%-12s: %f" % (n,(f*nevents)-tot_lshells) 
+        npdfs[n] = (f*nevents)-tot_lshells
     print "%-12s: %f" % ("L-shells",tot_lshells) 
     print "%-12s: %f" % ("tot",nevents) 
 
+    ############################################################################
+    # Plot the solutions
+    ############################################################################
+    ############################################################################
+    # Plot on the x-projection
+    ############################################################################
+    xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
 
+    ytot = np.zeros(1000)
+    xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
+    eff = sigmoid(xpts,threshold,sigmoid_sigma,max_val)
+
+    # Exponential
+    pdf_e = stats.expon(loc=0.0,scale=values['e_exp0'])
+    ypts = pdf_e.pdf(xpts)
+
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp0'],fmt='y-',axes=ax0,efficiency=eff)
+    ytot += y
+
+    # Second exponential
+    pdf_e = stats.expon(loc=0.0,scale=values['e_exp1'])
+    ypts = pdf_e.pdf(xpts)
+
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp1'],fmt='m-',axes=ax0,efficiency=eff)
+    ytot += y
+
+    # Flat
+    ypts = np.ones(len(xpts))
+
+    print "bin_widths[0]: ",bin_widths[0]
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
+    ytot += y
+
+    # L-shell
+    # Returns pdfs
+    lshell_tot = np.zeros(1000)
+    for m,s,n in zip(means,sigmas,num_decays_in_dataset):
+        gauss = stats.norm(loc=m,scale=s)
+        ypts = gauss.pdf(xpts)
+
+        y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=n,fmt='r--',axes=ax0,efficiency=eff)
+        ytot += y
+        lshell_tot += y
+
+    ax0.plot(xpts,lshell_tot,'r-',linewidth=2)
+
+    ax0.plot(xpts,ytot,'b',linewidth=3)
+
+
+    plt.show()
     exit()
 
-    ############################################################################
 
-    x = np.linspace(lo,hi,1000)
 
     ############################################################################
 
