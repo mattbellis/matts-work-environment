@@ -101,7 +101,7 @@ def main():
     means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
 
     # Might need this to take care of efficiency.
-    num_decays_in_dataset *= 0.87
+    #num_decays_in_dataset *= 0.87
 
     tot_lshells = num_decays_in_dataset.sum()
 
@@ -131,10 +131,10 @@ def main():
 
     # Exponential term in energy
     params_dict['e_exp0'] = {'fix':False,'start_val':1.0/2.0,'limits':(0.0,10.0)}
-    params_dict['e_exp1'] = {'fix':True,'start_val':1.0/3.3,'limits':(0.0,10.0)}
+    params_dict['e_exp1'] = {'fix':True,'start_val':1.0/3.26,'limits':(0.0,10.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':600.0,'limits':(0.0,100000.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
-    params_dict['num_flat'] = {'fix':False,'start_val':600.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':True,'start_val':450.0,'limits':(0.0,100000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
 
@@ -147,7 +147,7 @@ def main():
     # For maximum likelihood method.
     m.up = 0.5
 
-    m.printMode = 0
+    m.printMode = 1
 
     m.migrad()
 
@@ -161,26 +161,36 @@ def main():
 
     nfracs = []
     #names = ['num_exp0','num_flat']
-    names = ['num_exp0','num_exp1','num_flat']
+    #names = ['num_exp0','num_exp1','num_flat']
+    names = []
+    for name in params_names:
+        if 'num_' in name or 'ncalc' in name:
+            names.append(name)
+
     for name in names:
         temp_vals = list(m.args)
         # Set all but name to 0.0
         for zero_name in names:
             if name!= zero_name:
                 temp_vals[params_names.index(zero_name)] = 0.0
-                print "zeroing out",zero_name
+                #print "zeroing out",zero_name
         acc_integral_temp = fitfunc(mcacc,temp_vals,params_names,params_dict).sum()
         print "acc_integral_temp: ",acc_integral_temp
         frac = acc_integral_temp/acc_integral_tot
-        print "frac: ",frac
+        print "frac: ",name,frac
         nfracs.append(frac)
 
     npdfs = {}
+    totls = 0.0
     for n,f in zip(names,nfracs):
-        print "%-12s: %f" % (n,(f*nevents)-tot_lshells) 
-        npdfs[n] = (f*nevents)-tot_lshells
+        print "%-12s: %f" % (n,(f*nevents)) 
+        npdfs[n] = (f*nevents)
+        if 'ncalc' in n:
+            totls += f*nevents
     print "%-12s: %f" % ("L-shells",tot_lshells) 
+    print "%-12s: %f" % ("totls",totls) 
     print "%-12s: %f" % ("tot",nevents) 
+    print "%-12s: %f" % ("nmcacc",len(mcacc[0])) 
 
     ############################################################################
     # Plot the solutions
@@ -188,47 +198,54 @@ def main():
     ############################################################################
     # Plot on the x-projection
     ############################################################################
-    xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
+    expts = np.linspace(ranges[0][0],ranges[0][1],1000)
+    txpts = np.linspace(ranges[1][0],ranges[1][1],1000)
 
     ytot = np.zeros(1000)
-    xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
-    eff = sigmoid(xpts,threshold,sigmoid_sigma,max_val)
+    expts = np.linspace(ranges[0][0],ranges[0][1],1000)
+    eff = sigmoid(expts,threshold,sigmoid_sigma,max_val)
 
     # Exponential
     pdf_e = stats.expon(loc=0.0,scale=values['e_exp0'])
-    ypts = pdf_e.pdf(xpts)
+    ypts = pdf_e.pdf(expts)
 
-    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp0'],fmt='y-',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp0'],fmt='y-',axes=ax0,efficiency=eff)
     ytot += y
 
     # Second exponential
     pdf_e = stats.expon(loc=0.0,scale=values['e_exp1'])
-    ypts = pdf_e.pdf(xpts)
+    ypts = pdf_e.pdf(expts)
 
-    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp1'],fmt='m-',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp1'],fmt='m-',axes=ax0,efficiency=eff)
     ytot += y
 
     # Flat
-    ypts = np.ones(len(xpts))
+    ypts = np.ones(len(expts))
 
     print "bin_widths[0]: ",bin_widths[0]
-    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
     ytot += y
 
     # L-shell
     # Returns pdfs
     lshell_tot = np.zeros(1000)
-    for m,s,n in zip(means,sigmas,num_decays_in_dataset):
+    for m,s,n,dc in zip(means,sigmas,num_decays_in_dataset,decay_constants):
         gauss = stats.norm(loc=m,scale=s)
-        ypts = gauss.pdf(xpts)
+        eypts = gauss.pdf(expts)
 
-        y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=n,fmt='r--',axes=ax0,efficiency=eff)
+        y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=n,fmt='r--',axes=ax0,efficiency=eff)
         ytot += y
         lshell_tot += y
 
-    ax0.plot(xpts,lshell_tot,'r-',linewidth=2)
+        # Time distribution
+        pdf_e = stats.expon(loc=0.0,scale=-1.0/dc)
+        typts = pdf_e.pdf(txpts)
 
-    ax0.plot(xpts,ytot,'b',linewidth=3)
+        y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1)
+
+    ax0.plot(expts,lshell_tot,'r-',linewidth=2)
+
+    ax0.plot(expts,ytot,'b',linewidth=3)
 
 
     plt.show()
