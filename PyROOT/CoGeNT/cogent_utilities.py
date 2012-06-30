@@ -1,5 +1,5 @@
 import numpy as np
-from fitting_utilities import sigmoid
+#from fitting_utilities import sigmoid
 
 ################################################################################
 # Conversion 0
@@ -40,6 +40,7 @@ def amp_to_energy(amplitude, calibration=0):
 ################################################################################
 # CoGeNT trigger efficiency function.
 ################################################################################
+'''
 def cogent_efficiency(data,threshold,sigmoid_sigma,max_val):
 
     indices = np.zeros(len(data[0]),dtype=np.int)
@@ -53,4 +54,4 @@ def cogent_efficiency(data,threshold,sigmoid_sigma,max_val):
     return data
 
 
-
+'''

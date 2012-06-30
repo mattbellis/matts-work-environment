@@ -88,8 +88,8 @@ def fitfunc(data,p,parnames,params_dict):
 
         for n,m,s,dc in zip(numls,means,sigmas,decay_constants):
             pdf  = pdfs.gauss(x,m,s,xlo,xhi)
-            dc = -1.0/dc
-            #dc = -1.0*dc
+            #dc = -1.0/dc
+            dc = -1.0*dc
             pdf *= pdfs.exp(y,dc,ylo,yhi)
             pdf *= n
             tot_pdf += pdf
@@ -107,6 +107,7 @@ def fitfunc(data,p,parnames,params_dict):
         tot_pdf += pdf
 
         # Flat term
+        #print xlo,xhi,ylo,yhi
         pdf  = pdfs.poly(y,[],ylo,yhi)
         pdf *= pdfs.poly(x,[],xlo,xhi)
         pdf *= num_flat
@@ -283,12 +284,12 @@ def emlf_minuit(data,mc,p,parnames,params_dict):
 
     #print p
     #'''
-    n = 0
+    ntot = 0
     for name in parnames:
         if 'num_' in name or 'ncalc' in name:
-            n += p[parnames.index(name)]
+            ntot += p[parnames.index(name)]
     #'''
-    print n,ndata
+    print ntot,ndata
 
     norm_func = (fitfunc(mc,p,parnames,params_dict)).sum()/nmc
 
@@ -296,9 +297,9 @@ def emlf_minuit(data,mc,p,parnames,params_dict):
     if norm_func==0:
         norm_func = 1000000.0
 
-    #print "extended term: ", ((n-ndata)*(n-ndata))/(2*ndata)
-    #ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func) # + ((n-ndata)*(n-ndata))/(2*ndata)
-    ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func) #+ ((n-ndata)*(n-ndata))/(0.000001)
+    #print "extended term: ", ((ntot-ndata)*(ntot-ndata))/(2*ndata)
+    #ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func) # + ((ntot-ndata)*(ntot-ndata))/(2*ndata)
+    ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func) #+ ((ntot-ndata)*(ntot-ndata))/(0.000001)
 
     return ret
 
