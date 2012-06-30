@@ -112,7 +112,7 @@ def main():
     # Declare the parameters
     params_dict = {}
     params_dict['flag'] = {'fix':True,'start_val':0}
-    params_dict['var_e'] = {'fix':True,'start_val':0,'limits':(ranges[0][0],ranges[1][1])}
+    params_dict['var_e'] = {'fix':True,'start_val':0,'limits':(ranges[0][0],ranges[0][1])}
     params_dict['var_t'] = {'fix':True,'start_val':0,'limits':(ranges[1][0],ranges[1][1])}
 
     # L-shell parameters
@@ -130,11 +130,11 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
 
     # Exponential term in energy
-    params_dict['e_exp0'] = {'fix':False,'start_val':1.0/2.0,'limits':(0.0,10.0)}
-    params_dict['e_exp1'] = {'fix':True,'start_val':1.0/3.26,'limits':(0.0,10.0)}
-    params_dict['num_exp0'] = {'fix':False,'start_val':600.0,'limits':(0.0,100000.0)}
+    params_dict['e_exp0'] = {'fix':False,'start_val':3.0,'limits':(0.0,10.0)}
+    params_dict['e_exp1'] = {'fix':True,'start_val':3.26,'limits':(0.0,10.0)}
+    params_dict['num_exp0'] = {'fix':False,'start_val':300.0,'limits':(100.0,800.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
-    params_dict['num_flat'] = {'fix':True,'start_val':450.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
 
@@ -207,14 +207,16 @@ def main():
 
     # Exponential
     pdf_e = stats.expon(loc=0.0,scale=values['e_exp0'])
-    ypts = pdf_e.pdf(expts)
+    #ypts = pdf_e.pdf(expts)
+    ypts = np.exp(-values['e_exp0']*expts)
 
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp0'],fmt='y-',axes=ax0,efficiency=eff)
     ytot += y
 
     # Second exponential
     pdf_e = stats.expon(loc=0.0,scale=values['e_exp1'])
-    ypts = pdf_e.pdf(expts)
+    #ypts = pdf_e.pdf(expts)
+    ypts = np.exp(-values['e_exp1']*expts)
 
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp1'],fmt='m-',axes=ax0,efficiency=eff)
     ytot += y
@@ -223,7 +225,7 @@ def main():
     ypts = np.ones(len(expts))
 
     print "bin_widths[0]: ",bin_widths[0]
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=npdfs['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=npdfs['num_flat'],fmt='g-',axes=ax0,efficiency=eff)
     ytot += y
 
     # L-shell
@@ -239,7 +241,8 @@ def main():
 
         # Time distribution
         pdf_e = stats.expon(loc=0.0,scale=-1.0/dc)
-        typts = pdf_e.pdf(txpts)
+        #typts = pdf_e.pdf(txpts)
+        typts = np.exp(dc*txpts)
 
         y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1)
 

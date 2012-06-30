@@ -299,7 +299,8 @@ def emlf_minuit(data,mc,p,parnames,params_dict):
 
     #ret = (-np.log(fitfunc(data,p,v))).sum() + len(data)*np.log(norm_func) - pois(n,len(data))
     #print "extended term: ", ((n-ndata)*(n-ndata))/(2*ndata)
-    ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func) # + ((n-ndata)*(n-ndata))/(2*ndata)
+    #ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func) # + ((n-ndata)*(n-ndata))/(2*ndata)
+    ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() + ndata*(norm_func)  #+ ((n-ndata)*(n-ndata))/0.0001
     #ret = (-np.log(fitfunc(data,p,v))).sum() + n*(norm_func) 
     #print ret
 
