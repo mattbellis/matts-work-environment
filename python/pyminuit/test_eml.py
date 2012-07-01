@@ -30,10 +30,10 @@ nmc = 10000
 #mc = 20.0*np.random.random(nmc) - 10.0
 mc = 9.0*np.random.random(nmc) + 1.0
 
-#k0 = 1000
-#k1 = 2041
-k0 = 2000
-k1 = 4082
+k0 = 1000
+k1 = 2041
+#k0 = 2000
+#k1 = 4082
 
 #k1 = 3000
 
@@ -54,6 +54,7 @@ print "-lf_data: ",-lf_data
 print "norm: ",norm
 print "norm*nmc: ",norm*nmc
 print "norm/ndata: ",norm/ndata
+print "norm*ndata/nmc: ",norm*ndata/nmc
 
 print "-lf_data + ndata*norm ",-lf_data+(ndata*norm)
 
@@ -64,4 +65,22 @@ print "ndata: ",ndata
 print "fracs: ",ndata*norm0/norm,ndata*norm1/norm
 
 plt.hist(data,bins=50)
-plt.show()
+#plt.show()
+
+################################################################################
+mc = 10.0*np.random.random(5000000)
+data = np.random.normal(loc=5.0,scale=0.5,size=1000)
+
+norm = 1.0/np.sqrt(2*np.pi*0.5*0.5)
+print "norm: ",norm
+
+ydata = np.exp(-(data-5.0)*(data-5.0)/(2.0*0.5*0.5))
+ymc   = np.exp(-(mc-5.0)  *(mc-5.0)/  (2.0*0.5*0.5))
+
+print ydata.sum()/len(data)
+print ymc.sum()/len(mc)
+
+
+
+
+

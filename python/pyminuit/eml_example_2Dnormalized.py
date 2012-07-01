@@ -33,6 +33,7 @@ def main():
     ax01 = fig0.add_subplot(1,3,2)
     ax02 = fig0.add_subplot(1,3,3)
 
+    '''
     fig1 = plt.figure(figsize=(14,4),dpi=100)
     ax10 = fig1.add_subplot(1,3,1)
     ax11 = fig1.add_subplot(1,3,2)
@@ -42,6 +43,7 @@ def main():
     ax20 = fig2.add_subplot(1,3,1)
     ax21 = fig2.add_subplot(1,3,2)
     ax22 = fig2.add_subplot(1,3,3)
+    '''
 
     ############################################################################
     # Gen some data
@@ -117,6 +119,7 @@ def main():
     ############################################################################
     # Gen some MC
     ############################################################################
+    '''
     nmc = 50000
     mc = np.array([None,None])
     for i,r in enumerate(ranges):
@@ -129,7 +132,7 @@ def main():
     plotmc = np.array([None,None])
     for i,r in enumerate(ranges):
         plotmc[i] = (r[1]-r[0])*np.random.random(nplotmc) + r[0]
-
+    '''
     ############################################################################
     # Get the efficiency function
     ############################################################################
@@ -163,6 +166,7 @@ def main():
     
     #print "num: data: ",len(data)
 
+    '''
     indices = np.zeros(len(mc[0]),dtype=np.int)
     for i,pt in enumerate(mc[0]):
         if np.random.random()<sigmoid(pt,threshold,sigmoid_sigma,max_val):
@@ -182,6 +186,7 @@ def main():
             indices[i] = 1
     plotmc[0] = plotmc[0][indices==1]
     plotmc[1] = plotmc[1][indices==1]
+    '''
     
     indices = np.zeros(len(xsig_copy),dtype=np.int)
     for i,pt in enumerate(xsig_copy):
@@ -231,9 +236,13 @@ def main():
     ax00.set_ylim(0.0)
     ax01.set_ylim(0.0)
 
+    ax02.set_ylim(ranges[1][0],ranges[1][1])
+    ax02.set_xlim(ranges[0][0],ranges[0][1])
+
     #print data
     #print len(data)
 
+    '''
     hmc  = lch.hist_2D(mc[0],mc[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax12)
     hmcx = lch.hist_err(mc[0],range=ranges[0],bins=nbins[0],axes=ax10)
     hmcy = lch.hist_err(mc[1],range=ranges[1],bins=nbins[1],axes=ax11)
@@ -243,6 +252,7 @@ def main():
     ax11.set_ylim(0.0)
     ax12.set_xlim(ranges[0])
     ax12.set_ylim(ranges[1])
+    '''
 
     '''
     hplotmc  = lch.hist_2D(plotmc[0],plotmc[1],xrange=ranges[0],yrange=ranges[1],xbins=nbins[0],ybins=nbins[1],axes=ax22)
@@ -269,12 +279,12 @@ def main():
     ############################################################################
 
     params_dict = {}
-    params_dict['flag'] = {'fix':True,'start_val':1}
+    params_dict['flag'] = {'fix':True,'start_val':2}
     params_dict['var_x'] = {'fix':True,'start_val':0,'limits':(2.0,8.0)}
     params_dict['var_y'] = {'fix':True,'start_val':0,'limits':(0.0,400.0)}
     params_dict['mean'] = {'fix':False,'start_val':4.0,'limits':(0.0,10.0)}
     params_dict['sigma'] = {'fix':False,'start_val':1.0,'limits':(0.1,10.0)}
-    params_dict['exp_sig_y'] = {'fix':False,'start_val':2.0,'limits':(0,1000)}
+    params_dict['exp_sig_y'] = {'fix':False,'start_val':200.0,'limits':(0,1000)}
     params_dict['exp_bkg_x'] = {'fix':False,'start_val':2.0,'limits':(0,1000)}
     params_dict['num_sig'] = {'fix':False,'start_val':500.0,'limits':(10,100000)}
     params_dict['num_bkg'] = {'fix':False,'start_val':2000.0,'limits':(10,100000)}
@@ -282,7 +292,7 @@ def main():
     params_names,kwd = dict2kwd(params_dict)
 
     #f = Minuit_FCN([data,mc],params_names)
-    f = Minuit_FCN([data,mc],params_dict)
+    f = Minuit_FCN([data],params_dict)
 
     m = minuit.Minuit(f,**kwd)
 
@@ -303,11 +313,14 @@ def main():
     print "ntotdata: ",len(data[0])
 
     values = m.values # Dictionary
+    
+    #exit()
 
     ndata = len(data[0])
     #test_point = np.array([np.array([2.5,2.5,2.5,2.5,2.5]),np.array([10.0,20,40,100,200])])
-    test_point = np.array([5.0*np.ones(10),np.linspace(0,400,10)])
+    #test_point = np.array([5.0*np.ones(10),np.linspace(0,400,10)])
 
+    '''
     temp_vals = list(m.args)
     temp_vals[params_names.index('num_bkg')] = 0.0
     acc_integral_sig = fitfunc(mc,    temp_vals,params_names,params_dict).sum()
@@ -345,6 +358,7 @@ def main():
     sig_frac = acc_integral_sig/acc_integral_tot
     bkg_frac = acc_integral_bkg/acc_integral_tot
     print "fractions: ",sig_frac,bkg_frac
+    '''
 
 
     '''
@@ -408,14 +422,15 @@ def main():
     #nbkg_ac = 1818.0
     #nsig_ac =  335.0
     #nbkg_ac = 2118.0
-    nsig_ac = ndata*sig_frac
-    nbkg_ac = ndata*bkg_frac
+    #nsig_ac = ndata*sig_frac
+    #nbkg_ac = ndata*bkg_frac
 
-    print "nums: ",nsig_ac,nbkg_ac
+    #print "nums: ",nsig_ac,nbkg_ac
 
     ######################
     # Plot total
     ######################
+    '''
     print "total"
     acc_mc_weights = fitfunc(plotmc,m.args,params_names,params_dict)
     plot = plot_solution(plotmc[0],acc_mc_weights,nbins=nplotbins,range=ranges[0],axes_bin_width=bin_widths[0],ndata=ndata,axes=ax00,fmt='b-',linewidth=2)
@@ -440,6 +455,7 @@ def main():
     acc_mc_weights = fitfunc(plotmc,temp_vals,params_names,params_dict)
     plot = plot_solution(plotmc[0],acc_mc_weights,nbins=nplotbins,range=ranges[0],axes_bin_width=bin_widths[0],ndata=nbkg_ac,axes=ax00,fmt='g-',linewidth=2)
     plot = plot_solution(plotmc[1],acc_mc_weights,nbins=nplotbins,range=ranges[1],axes_bin_width=bin_widths[1],ndata=nbkg_ac,axes=ax01,fmt='g-',linewidth=2)
+    '''
 
     print "\nnum_surv_signal: ",num_surv_signal
 
@@ -455,7 +471,7 @@ def main():
     gauss = stats.norm(loc=values['mean'],scale=values['sigma'])
     ypts = gauss.pdf(xpts)
 
-    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=nsig_ac,fmt='y--',axes=ax00,efficiency=eff)
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=values['num_sig'],fmt='y--',axes=ax00,efficiency=eff)
     ytot += y
 
     # Bkg
@@ -463,7 +479,7 @@ def main():
     #ypts = bkg_exp.pdf(xpts)
     ypts = np.exp(-values['exp_bkg_x']*xpts)
 
-    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=nbkg_ac,fmt='g--',axes=ax00,efficiency=eff)
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[0],scale=values['num_bkg'],fmt='g--',axes=ax00,efficiency=eff)
     ytot += y
 
     ax00.plot(xpts,ytot,'b',linewidth=3)
@@ -476,16 +492,16 @@ def main():
     xpts = np.linspace(ranges[1][0],ranges[1][1],1000)
 
     # Sig
-    sig_exp = stats.expon(loc=0.0,scale=values['exp_sig_y'])
-    ypts = sig_exp.pdf(xpts)
+    sig_exp = stats.expon(loc=0.0,scale=1.0)
+    ypts = sig_exp.pdf(values['exp_sig_y']*xpts)
 
-    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=nsig_ac,fmt='y--',axes=ax01)
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=values['num_sig'],fmt='y--',axes=ax01)
     ytot += y
 
     # Bkg
     ypts = np.ones(len(xpts))
 
-    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=nbkg_ac,fmt='g--',axes=ax01)
+    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=values['num_bkg'],fmt='g--',axes=ax01)
     ytot += y
 
     ax01.plot(xpts,ytot,'b',linewidth=3)
@@ -494,7 +510,7 @@ def main():
     ############################################################################
     #'''
 
-    #plt.show()
+    plt.show()
 
     exit()
 
@@ -570,7 +586,7 @@ def main():
     #m.migrad()
 
     plt.figure()
-    lch.hist_err(mc,bins=108,range=(lo,hi))
+    #lch.hist_err(mc,bins=108,range=(lo,hi))
 
 
 ################################################################################
