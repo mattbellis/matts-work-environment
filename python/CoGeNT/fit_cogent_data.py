@@ -98,6 +98,7 @@ def main():
     sigmoid_sigma = 0.241
 
     efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+    #efficiency = lambda x: 1.0
 
     #mcacc = cogent_efficiency(mcraw,threshold,sigmoid_sigma,max_val)
 

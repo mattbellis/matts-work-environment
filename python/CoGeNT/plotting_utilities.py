@@ -12,15 +12,15 @@ from RTMinuit import *
 def plot_pdf(x,ypts,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-'):
 
     y = np.array(ypts)
-    y *= efficiency
+    #y *= efficiency
 
     # Normalize to 1.0
     normalization = integrate.simps(y,x=x)
     y /= normalization
 
     #print "exp int: ",integrate.simps(y,x=x)
-    #y *= (scale*bin_width)*efficiency
-    y *= (scale*bin_width)
+    y *= (scale*bin_width)*efficiency
+    #y *= (scale*bin_width)
 
     if axes==None:
         axes=plt.gca()

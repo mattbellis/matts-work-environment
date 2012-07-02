@@ -67,10 +67,12 @@ def lshell_peaks(means,sigmas,numbers):
 ################################################################################
 # Sigmoid function.
 ################################################################################
+'''
 def sigmoid(x,thresh,sigma,max_val):
 
     ret = max_val / (1.0 + np.exp(-(x-thresh)/(thresh*sigma)))
 
     return ret
+'''
 
 

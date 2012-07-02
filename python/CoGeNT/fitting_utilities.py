@@ -120,6 +120,7 @@ def fitfunc(data,p,parnames,params_dict):
         sigmoid_sigma = 0.241
 
         efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+        #efficiency = lambda x: 1.0
 
         subranges = [[],[[1,68],[74,102],[107,306],[308,450]]]
 
