@@ -12,9 +12,10 @@ from RTMinuit import *
 ################################################################################
 # Plotting code for pdf
 ################################################################################
-def plot_pdf(x,y,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-'):
+def plot_pdf(x,ypts,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-'):
 
     # Normalize to 1.0
+    y = np.array(ypts)
     y *= efficiency
     normalization = integrate.simps(y,x=x)
     y /= normalization

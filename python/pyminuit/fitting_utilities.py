@@ -303,6 +303,60 @@ def fitfunc(data,p,parnames,params_dict):
 
         tot_pdf += pdf 
 
+    elif flag==3:
+
+        subranges = [[],[[0.0,100.0],[300.0,400.0]]]
+
+        #max_val = 0.86786
+        max_val = 1.0000
+        threshold = 0.345
+        sigmoid_sigma = 0.241
+
+        efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+
+        x = data[0]
+        y = data[1]
+
+        xlo = min(x)
+        xhi = max(x)
+        ylo = min(y)
+        yhi = max(y)
+
+        tot_pdf = np.zeros(len(x))
+        
+        mean = p[pn.index('mean')]
+        sigma = p[pn.index('sigma')]
+        sig_y_slope = p[pn.index('exp_sig_y')]
+        bkg_x_slope = p[pn.index('exp_bkg_x')]
+        num_sig = p[pn.index('num_sig')]
+        num_bkg = p[pn.index('num_bkg')]
+
+        num_tot = num_sig+num_bkg
+        num_bkg /= num_tot
+        num_sig /= num_tot
+
+        ########################################################################
+        # Signal PDF
+        ########################################################################
+        pdf  = pdfs.gauss(x,mean,sigma,xlo,xhi)
+        pdf *= pdfs.exp(y,sig_y_slope,ylo,yhi,subranges=subranges[1],efficiency=efficiency)
+        pdf *= num_sig
+
+        #print "pdf.sum(): ",pdf.sum()
+
+        tot_pdf += pdf
+
+        ########################################################################
+        # Background PDF
+        ########################################################################
+        pdf  = pdfs.poly(y,[],ylo,yhi,subranges=subranges[1],efficiency=efficiency)
+        pdf *= pdfs.exp(x,bkg_x_slope,xlo,xhi)
+        pdf *= num_bkg
+
+        #print "pdf.sum(): ",pdf.sum()
+
+        tot_pdf += pdf 
+
     return tot_pdf
 
 ################################################################################

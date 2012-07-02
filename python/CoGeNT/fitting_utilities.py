@@ -121,7 +121,7 @@ def fitfunc(data,p,parnames,params_dict):
 
         efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
 
-
+        subranges = [[],[[1,68],[74,102],[107,306],[308,450]]]
 
         x = data[0]
         y = data[1]
@@ -178,25 +178,25 @@ def fitfunc(data,p,parnames,params_dict):
             pdf  = pdfs.gauss(x,m,s,xlo,xhi,efficiency=efficiency)
             #dc = -1.0/dc
             dc = -1.0*dc
-            pdf *= pdfs.exp(y,dc,ylo,yhi)
+            pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
             pdf *= n
             tot_pdf += pdf
 
         # Exponential in energy
-        pdf  = pdfs.poly(y,[],ylo,yhi)
+        pdf  = pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= num_exp0
         tot_pdf += pdf
 
         # Second exponential in energy
-        pdf  = pdfs.poly(y,[],ylo,yhi)
+        pdf  = pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
         pdf *= num_exp1
         tot_pdf += pdf
 
         # Flat term
         #print xlo,xhi,ylo,yhi
-        pdf  = pdfs.poly(y,[],ylo,yhi)
+        pdf  = pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
         pdf *= num_flat
         tot_pdf += pdf
@@ -252,9 +252,17 @@ def return_numbers_of_events(m,acc_integral,nacc,raw_integral,nraw,num_data,para
 def minuit_output(m):
     parameters = m.parameters
 
-    output = "%-2s  %-16s %14s %14s\n" % ("#","PARAMETER NAME","VALUE","ERROR")
+    output = "FIXED PARAMETERS\n"
+    output += "%-2s  %-16s %14s %14s\n" % ("#","PARAMETER NAME","VALUE","ERROR")
     for n,p in zip(xrange(len(parameters)),parameters):
-        output += "%-2d  %-16s %14.6e %14.6e\n" % (n,p,m.values[p],m.errors[p])
+        if m.fixed[p]==True:
+            output += "%-2d  %-16s %14.6e %14.6e\n" % (n,p,m.values[p],m.errors[p])
+
+    output += "\nFREE PARAMETERS\n"
+    output += "%-2s  %-16s %14s %14s\n" % ("#","PARAMETER NAME","VALUE","ERROR")
+    for n,p in zip(xrange(len(parameters)),parameters):
+        if m.fixed[p]==False:
+            output += "%-2d  %-16s %14.6e %14.6e\n" % (n,p,m.values[p],m.errors[p])
 
     return output
 

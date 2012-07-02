@@ -45,7 +45,9 @@ def main():
     ############################################################################
     # Declare the ranges.
     ############################################################################
-    ranges = [[0.5,3.2],[0.0,450.0]]
+    ranges = [[0.5,3.2],[0.0,458.0]]
+    #dead_days = [[68,74], [102,107],[306,308]]
+    subranges = [[],[1,68],[[74,102],[107,306],[308,458]]]
     nbins = [108,15]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
@@ -75,8 +77,12 @@ def main():
     lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
     lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
 
-    #plt.show()
-    #exit()
+    # For efficiency
+    fig1 = plt.figure(figsize=(12,4),dpi=100)
+    ax10 = fig1.add_subplot(1,2,1)
+    ax11 = fig1.add_subplot(1,2,2)
+
+    fig1.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
 
     ############################################################################
     # Gen some MC
@@ -133,11 +139,11 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
 
     # Exponential term in energy
-    params_dict['e_exp0'] = {'fix':False,'start_val':3.0,'limits':(0.0,10.0)}
-    params_dict['e_exp1'] = {'fix':True,'start_val':3.26,'limits':(0.0,10.0)}
-    params_dict['num_exp0'] = {'fix':False,'start_val':300.0,'limits':(100.0,1000.0)}
+    params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
+    params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
+    params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(100.0,1000.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
-    params_dict['num_flat'] = {'fix':False,'start_val':1000.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':1159.0,'limits':(0.0,100000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
 
@@ -159,6 +165,8 @@ def main():
 
     print "Finished fit!!\n"
     print minuit_output(m)
+
+    #print m.fixed
 
     #exit()
 
@@ -212,29 +220,23 @@ def main():
     ytot = np.zeros(1000)
     expts = np.linspace(ranges[0][0],ranges[0][1],1000)
     eff = sigmoid(expts,threshold,sigmoid_sigma,max_val)
+    #eff = np.ones(1000)
 
     # Exponential
-    pdf_e = stats.expon(loc=0.0,scale=values['e_exp0'])
-    #ypts = pdf_e.pdf(expts)
     ypts = np.exp(-values['e_exp0']*expts)
-
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='y-',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
     ytot += y
 
     # Second exponential
-    pdf_e = stats.expon(loc=0.0,scale=values['e_exp1'])
-    #ypts = pdf_e.pdf(expts)
     ypts = np.exp(-values['e_exp1']*expts)
-
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp1'],fmt='m-',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp1'],fmt='y-',axes=ax0,efficiency=eff)
     ytot += y
 
     # Flat
     ypts = np.ones(len(expts))
-
-    print "bin_widths[0]: ",bin_widths[0]
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='g-',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff)
     ytot += y
+    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
 
     # L-shell
     # Returns pdfs
@@ -262,85 +264,18 @@ def main():
     ax0.plot(expts,ytot,'b',linewidth=3)
 
 
-    plt.show()
-    exit()
-
-
-
     ############################################################################
 
     # Efficiency function
-    efficiency = sigmoid(x,threshold,sigmoid_sigma,max_val)
-    ax1 = fig0.add_subplot(2,1,2) 
-    ax1.plot(x,efficiency,'r--',linewidth=2)
-    ax1.set_xlim(lo,hi)
-    ax1.set_ylim(0.0,1.0)
-
-
-    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-    #means = np.array([1.2977,1.1])
-    #sigmas = np.array([0.077,0.077])
-    #numbers = np.array([638,50])
-
-    lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
-    print lshells
-    ytot = np.zeros(1000)
-    print means
-    #HG_trigger = 0.94
-    HG_trigger = 1.00
-    for n,cp in zip(num_decays_in_dataset,lshells):
-        tempy = cp.pdf(x)
-        y = n*cp.pdf(x)*bin_width*efficiency/HG_trigger
-        print n,integrate.simps(tempy,x=x),integrate.simps(y,x=x)
-        ytot += y
-        ax0.plot(x,y,'r--',linewidth=2)
-    ax0.plot(x,ytot,'r',linewidth=3)
-
-    ############################################################################
-    # Surface term
-    ############################################################################
-    surf_expon = stats.expon(scale=1.0)
-    yorg = surf_expon.pdf(values['exp_slope']*x)
-    #yorg = surf_expon.pdf(6.0*x)
-    y,surf_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=values['num_exp'],fmt='y-',axes=ax0,efficiency=efficiency)
-    ytot += y
-
-    ############################################################################
-    # Flat term
-    ############################################################################
-    yorg = np.ones(len(x))
-    y,flat_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=efficiency)
-    ytot += y
-    
-
-    ############################################################################
-    # WIMP-like term
-    ############################################################################
-    '''
-    wimp_expon = stats.expon(scale=1.0)
-    yorg = wimp_expon.pdf(2.3*x)
-    y,wimp_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=330.0,fmt='g-',axes=ax0,efficiency=efficiency)
-    ytot += y
-    '''
-    
-    ############################################################################
-    # Total-like term
-    ############################################################################
-    ax0.plot(x,ytot,'b',linewidth=3)
-
-    
-
-    #data = [events,deltat_mc]
-    #m = minuit.Minuit(pdfs.extended_maximum_likelihood_function_minuit,p=p0)
-    #print m.values
-    #m.migrad()
-
-    plt.figure()
-    #lch.hist_err(mc,bins=108,range=(lo,hi))
-
-
+    efficiency = sigmoid(expts,threshold,sigmoid_sigma,max_val)
+    ax10.plot(expts,efficiency,'r--',linewidth=2)
+    ax10.set_xlim(ranges[0][0],ranges[0][1])
+    ax10.set_ylim(0.0,1.0)
 
     plt.show()
+
+    exit()
+
 
 ################################################################################
 ################################################################################

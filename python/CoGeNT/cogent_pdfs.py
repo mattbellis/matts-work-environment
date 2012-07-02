@@ -39,9 +39,9 @@ def lshell_data(days):
         half_life = lshell_data_dict[p][7]
         decay_constants = np.append(decay_constants,-1.0*np.log(2.0)/half_life)
 
-        #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
+        num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
         # *Before* the efficiency?
-        num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
+        #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
         
         num_decays_in_dataset = np.append(num_decays_in_dataset,num_tot_decays[i]*(1.0-np.exp(days*decay_constants[i])))
 
