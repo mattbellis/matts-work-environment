@@ -1,0 +1,5 @@
+Fit to a 3-dimensional dataset.
+
+Background is a product of three exponentials with different parameters.
+
+Signal is a product of three Gaussians with different parameters.
