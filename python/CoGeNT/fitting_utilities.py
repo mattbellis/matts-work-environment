@@ -122,7 +122,7 @@ def fitfunc(data,p,parnames,params_dict):
         efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
         #efficiency = lambda x: 1.0
 
-        subranges = [[],[[1,68],[74,102],[107,306],[308,450]]]
+        subranges = [[],[[1,68],[74,102],[107,306],[308,459]]]
 
         x = data[0]
         y = data[1]
@@ -145,6 +145,7 @@ def fitfunc(data,p,parnames,params_dict):
         for name in pn:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
+                #print "building num_tot",num_tot,p[pn.index(name)]
 
         '''
         for name in pn:
@@ -154,6 +155,8 @@ def fitfunc(data,p,parnames,params_dict):
         num_exp0 /= num_tot
         num_exp1 /= num_tot
         num_flat /= num_tot
+
+        #print "num_tot",num_tot
 
 
         #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
@@ -177,28 +180,27 @@ def fitfunc(data,p,parnames,params_dict):
 
         for n,m,s,dc in zip(numls,means,sigmas,decay_constants):
             pdf  = pdfs.gauss(x,m,s,xlo,xhi,efficiency=efficiency)
-            #dc = -1.0/dc
             dc = -1.0*dc
             pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
             pdf *= n
             tot_pdf += pdf
 
         # Exponential in energy
-        pdf  = pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        pdf *= pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
+        pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
+        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
         tot_pdf += pdf
 
         # Second exponential in energy
-        pdf  = pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        pdf *= pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
+        pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
+        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_exp1
         tot_pdf += pdf
 
         # Flat term
         #print xlo,xhi,ylo,yhi
-        pdf  = pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        pdf *= pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
+        pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
+        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_flat
         tot_pdf += pdf
 
@@ -412,9 +414,10 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     n = 0
     for name in parnames:
-        if 'num_' in name:
+        if 'num_' in name or 'ncalc' in name:
             n += p[parnames.index(name)]
 
+    print "pois: ",n,ndata
     ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() - pois(n,ndata)
 
     return ret

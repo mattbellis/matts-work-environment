@@ -45,9 +45,9 @@ def main():
     ############################################################################
     # Declare the ranges.
     ############################################################################
-    ranges = [[0.5,3.2],[0.0,458.0]]
+    ranges = [[0.5,3.2],[0.0,459.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
-    subranges = [[],[1,68],[[74,102],[107,306],[308,458]]]
+    subranges = [[],[[1,68],[74,102],[107,306],[308,459]]]
     nbins = [108,15]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
@@ -66,11 +66,12 @@ def main():
     fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
 
     ax0.set_xlim(ranges[0])
-    ax0.set_ylim(0.0,100.0)
+    ax0.set_ylim(0.0,92.0)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
 
     ax1.set_xlim(ranges[1])
+    #ax1.set_ylim(0.0,300.0)
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
     ax1.set_ylabel("Event/30 days",fontsize=12)
 
@@ -113,6 +114,7 @@ def main():
     #num_decays_in_dataset *= 0.87
 
     tot_lshells = num_decays_in_dataset.sum()
+    print "Total number of lshells in dataset: ",tot_lshells
 
     ############################################################################
     # Fit
@@ -142,7 +144,7 @@ def main():
     # Exponential term in energy
     params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-    params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(100.0,1000.0)}
+    params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':1159.0,'limits':(0.0,100000.0)}
 
@@ -166,6 +168,7 @@ def main():
 
     print "Finished fit!!\n"
     print minuit_output(m)
+    print "nentries: ",len(data[0])
 
     #print m.fixed
 
@@ -218,27 +221,73 @@ def main():
     expts = np.linspace(ranges[0][0],ranges[0][1],1000)
     txpts = np.linspace(ranges[1][0],ranges[1][1],1000)
 
-    ytot = np.zeros(1000)
-    expts = np.linspace(ranges[0][0],ranges[0][1],1000)
+    eytot = np.zeros(1000)
+    tytot = np.zeros(1000)
+
     eff = sigmoid(expts,threshold,sigmoid_sigma,max_val)
     #eff = np.ones(1000)
 
+    srxs = []
+    tot_srys = []
+    for sr in subranges[1]:
+        srx.append(np.linspace(sr[0],sr[1],1000))
+        tot_srys.append(np.zeros(len(srx)))
+
+    ############################################################################
     # Exponential
+    ############################################################################
+    # Energy projections
     ypts = np.exp(-values['e_exp0']*expts)
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
-    ytot += y
+    eytot += y
 
+    # Time projections
+    # Calc total integral.
+    totnorm = 0.0
+    srnorms = []
+    for srx,sr in zip(srxs,subranges[1]):
+        sry = np.ones(len(srx))
+        norm = integrate.simps(sry,x=srx) 
+        srnorms.append(norm)
+        totnorm += norm 
+
+    for tot_sry,norm,srx,sr in zip(tot_srys,srnorms,srxs,subranges[1]):
+        sry = np.ones(len(srx))
+        norm /= totnorm
+
+        ypts = np.ones(len(srx))
+        y,plot = plot_pdf(srx,ypts,bin_width=bin_widths[1],scale=norm*values['num_exp0'],fmt='g-',axes=ax1)
+        tot_sry += y
+
+
+    ############################################################################
     # Second exponential
+    ############################################################################
+    # Energy projections
     ypts = np.exp(-values['e_exp1']*expts)
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp1'],fmt='y-',axes=ax0,efficiency=eff)
-    ytot += y
+    eytot += y
 
+    # Time projections
+    ypts = np.ones(len(txpts))
+    y,plot = plot_pdf(txpts,ypts,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1)
+    tytot += y
+
+    ############################################################################
     # Flat
+    ############################################################################
+    # Energy projections
     ypts = np.ones(len(expts))
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff)
-    ytot += y
+    eytot += y
     #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
 
+    # Time projections
+    typts = np.ones(len(txpts))
+    y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1)
+    tytot += y
+
+    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
     # L-shell
     # Returns pdfs
     lshell_totx = np.zeros(1000)
@@ -248,7 +297,7 @@ def main():
         eypts = gauss.pdf(expts)
 
         y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=n,fmt='r--',axes=ax0,efficiency=eff)
-        ytot += y
+        eytot += y
         lshell_totx += y
 
         # Time distribution
@@ -258,11 +307,13 @@ def main():
 
         y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1)
         lshell_toty += y
+        tytot += y
 
     ax0.plot(expts,lshell_totx,'r-',linewidth=2)
     ax1.plot(txpts,lshell_toty,'r-',linewidth=2)
 
-    ax0.plot(expts,ytot,'b',linewidth=3)
+    ax0.plot(expts,eytot,'b',linewidth=3)
+    ax1.plot(txpts,tytot,'b',linewidth=3)
 
 
     ############################################################################

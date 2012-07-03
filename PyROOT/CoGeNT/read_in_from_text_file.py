@@ -267,10 +267,13 @@ def main():
     # This alone works!!!!!
     #cogent_pars,cogent_sub_funcs,cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
 
-    cogent_pars,cogent_sub_funcs,temp_cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
+    #cogent_pars,cogent_sub_funcs,temp_cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2,args.verbose)
+    cogent_pars,cogent_sub_funcs,temp_cogent_fit_pdf = cogent_pdf(x,t,args.gc_flag,lo_energy,args.no_exp,args.no_cg,args.add_exp2)
+
 
     #cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency(x,t,args.verbose)
-    cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency_sigmoid(x,t,args.verbose)
+    #cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency_sigmoid(x,t,args.verbose)
+    cut,eff_pars,eff_sub_funcs,eff_pdf = efficiency_sigmoid(x,t,0)
 
     # Add the in the efficiency correction...or not.
     cogent_fit_pdf = temp_cogent_fit_pdf
@@ -534,6 +537,7 @@ def main():
     fit_norm_range_tplot = "FULL"
 
     # Plot the total PDF
+    #cogent_fit_pdf.plotOn(xframe_main,RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
     cogent_fit_pdf.plotOn(xframe_main,RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
     cogent_fit_pdf.plotOn(tframe_main,RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
 
@@ -564,6 +568,7 @@ def main():
         #'''
         if plot_pdf:
             cogent_fit_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_xplot),RooFit.NormRange(fit_norm_range_xplot))
+            #cogent_fit_pdf.plotOn(xframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.NormRange(fit_norm_range_xplot))
             cogent_fit_pdf.plotOn(tframe_main,RooFit.Components(argset),RooFit.LineWidth(line_width),RooFit.LineColor(color),RooFit.LineStyle(line_style),RooFit.Range(fit_range_tplot),RooFit.NormRange(fit_norm_range_tplot))
 
         #'''

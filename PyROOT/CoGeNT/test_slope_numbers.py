@@ -21,9 +21,15 @@ exp_exp_x = RooExponential("exp_exp_x","Exponential PDF for exp x",x,exp_slope)
 
 data = exp_exp_x.generate(RooArgSet(x),575)
 
+x.setRange('range0',0.5,1.0)
+x.setRange('range1',1.8,3.2)
+x.setRange('FULL',0.5,3.2)
 
 data.plotOn(xframe)
-exp_exp_x.plotOn(xframe)
+#exp_exp_x.plotOn(xframe)
+#data.plotOn(xframe,RooFit.Range('range0'),RooFit.Cut('range0'))
+exp_exp_x.plotOn(xframe,RooFit.Range('range0'))
+exp_exp_x.plotOn(xframe,RooFit.Range('range0'),RooFit.NormRange('range0'),RooFit.LineColor(2))
 xframe.Draw()
 
 rep = ''
