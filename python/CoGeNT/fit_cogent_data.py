@@ -40,14 +40,25 @@ def main():
     energies = amp_to_energy(amplitudes,0)
 
     print tdays
+    output = ""
+    i = 0
+    for e,t in zip(energies,tdays):
+        if e<3.3:
+            output += "%7.2f " % (t)
+            i+=1
+        if i==10:
+            print output 
+            output = ""
+            i=0
+
     data = [energies,tdays]
 
     ############################################################################
     # Declare the ranges.
     ############################################################################
-    ranges = [[0.5,3.2],[0.0,458.0]]
+    ranges = [[0.5,3.2],[0.0,459.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
-    subranges = [[],[1,68],[[74,102],[107,306],[308,458]]]
+    subranges = [[],[[1,68],[74,102],[107,306],[308,459]]]
     nbins = [108,15]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
@@ -66,11 +77,12 @@ def main():
     fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
 
     ax0.set_xlim(ranges[0])
-    ax0.set_ylim(0.0,100.0)
+    ax0.set_ylim(0.0,92.0)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
 
     ax1.set_xlim(ranges[1])
+    #ax1.set_ylim(0.0,300.0)
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
     ax1.set_ylabel("Event/30 days",fontsize=12)
 
@@ -113,6 +125,7 @@ def main():
     #num_decays_in_dataset *= 0.87
 
     tot_lshells = num_decays_in_dataset.sum()
+    print "Total number of lshells in dataset: ",tot_lshells
 
     ############################################################################
     # Fit
@@ -140,10 +153,10 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
 
     # Exponential term in energy
-    params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
+    params_dict['e_exp0'] = {'fix':True,'start_val':2.51,'limits':(0.0,10.0)}
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-    params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(1.0,10000.0)}
-    params_dict['num_exp1'] = {'fix':False,'start_val':575.0,'limits':(0.0,100000.0)}
+    params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
+    params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':1159.0,'limits':(0.0,100000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
@@ -158,7 +171,7 @@ def main():
     # For maximum likelihood method.
     m.up = 0.5
 
-    m.printMode = 1
+    m.printMode = 0
 
     m.migrad()
 
@@ -166,48 +179,14 @@ def main():
 
     print "Finished fit!!\n"
     print minuit_output(m)
-
-    #print m.fixed
+    print "nentries: ",len(data[0])
 
     #exit()
 
-    #acc_integral_tot = fitfunc(mcacc,m.args,params_names,params_dict).sum()
-    #print "acc_integral_tot: ",acc_integral_tot
-
-    nfracs = []
-    #names = ['num_exp0','num_flat']
-    #names = ['num_exp0','num_exp1','num_flat']
     names = []
     for name in params_names:
         if 'num_' in name or 'ncalc' in name:
             names.append(name)
-
-    '''
-    for name in names:
-        temp_vals = list(m.args)
-        # Set all but name to 0.0
-        for zero_name in names:
-            if name!= zero_name:
-                temp_vals[params_names.index(zero_name)] = 0.0
-                #print "zeroing out",zero_name
-        acc_integral_temp = fitfunc(mcacc,temp_vals,params_names,params_dict).sum()
-        print "acc_integral_temp: ",acc_integral_temp
-        frac = acc_integral_temp/acc_integral_tot
-        print "frac: ",name,frac
-        nfracs.append(frac)
-
-    npdfs = {}
-    totls = 0.0
-    for n,f in zip(names,nfracs):
-        print "%-12s: %f" % (n,(f*nevents)) 
-        npdfs[n] = (f*nevents)
-        if 'ncalc' in n:
-            totls += f*nevents
-    print "%-12s: %f" % ("L-shells",tot_lshells) 
-    print "%-12s: %f" % ("totls",totls) 
-    print "%-12s: %f" % ("tot",nevents) 
-    print "%-12s: %f" % ("nmcacc",len(mcacc[0])) 
-    '''
 
     ############################################################################
     # Plot the solutions
@@ -218,27 +197,66 @@ def main():
     expts = np.linspace(ranges[0][0],ranges[0][1],1000)
     txpts = np.linspace(ranges[1][0],ranges[1][1],1000)
 
-    ytot = np.zeros(1000)
-    expts = np.linspace(ranges[0][0],ranges[0][1],1000)
+    eytot = np.zeros(1000)
+    tytot = np.zeros(1000)
+
     eff = sigmoid(expts,threshold,sigmoid_sigma,max_val)
     #eff = np.ones(1000)
 
+    srxs = []
+    tot_srys = []
+    for sr in subranges[1]:
+        srxs.append(np.linspace(sr[0],sr[1],1000))
+        tot_srys.append(np.zeros(1000))
+
+    ############################################################################
     # Exponential
+    ############################################################################
+    # Energy projections
     ypts = np.exp(-values['e_exp0']*expts)
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
-    ytot += y
+    eytot += y
 
+    # Time projections
+    func = lambda x: np.ones(len(x))
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
+    tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
+
+
+    ############################################################################
     # Second exponential
+    ############################################################################
+    # Energy projections
     ypts = np.exp(-values['e_exp1']*expts)
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp1'],fmt='y-',axes=ax0,efficiency=eff)
-    ytot += y
+    eytot += y
 
+    # Time projections
+    func = lambda x: np.ones(len(x))
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1,subranges=subranges[1])
+    tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
+    #ypts = np.ones(len(txpts))
+    #y,plot = plot_pdf(txpts,ypts,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1)
+    #tytot += y
+
+    ############################################################################
     # Flat
+    ############################################################################
+    # Energy projections
     ypts = np.ones(len(expts))
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff)
-    ytot += y
+    eytot += y
     #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
 
+    # Time projections
+    #typts = np.ones(len(txpts))
+    #y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1)
+    #tytot += y
+    func = lambda x: np.ones(len(x))
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
+    tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
+
+    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
     # L-shell
     # Returns pdfs
     lshell_totx = np.zeros(1000)
@@ -248,21 +266,32 @@ def main():
         eypts = gauss.pdf(expts)
 
         y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=n,fmt='r--',axes=ax0,efficiency=eff)
-        ytot += y
+        eytot += y
         lshell_totx += y
 
         # Time distribution
         #pdf_e = stats.expon(loc=0.0,scale=-1.0/dc)
         #typts = pdf_e.pdf(txpts)
-        typts = np.exp(dc*txpts)
+        #typts = np.exp(dc*txpts)
+        #y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1)
+        #lshell_toty += y
 
-        y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1)
-        lshell_toty += y
+        #tytot += y
+        func = lambda x: np.exp(dc*x)
+        srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1,subranges=subranges[1])
+        tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
+        lshell_toty = [tot + y for tot,y in zip(lshell_toty,srys)]
+
 
     ax0.plot(expts,lshell_totx,'r-',linewidth=2)
-    ax1.plot(txpts,lshell_toty,'r-',linewidth=2)
 
-    ax0.plot(expts,ytot,'b',linewidth=3)
+    ax0.plot(expts,eytot,'b',linewidth=3)
+    #ax1.plot(txpts,tytot,'b',linewidth=3)
+
+    # Total on y/t
+    for x,y,lsh in zip(srxs,tot_srys,lshell_toty):
+        ax1.plot(x,lsh,'r-',linewidth=2)
+        ax1.plot(x,y,'b',linewidth=3)
 
 
     ############################################################################
