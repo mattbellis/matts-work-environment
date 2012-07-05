@@ -102,12 +102,20 @@ def main():
     ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
 
     ax1.set_xlim(ranges[1])
-    #ax1.set_ylim(0.0,300.0)
+    ax1.set_ylim(0.0,220.0)
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
     ax1.set_ylabel("Event/30 days",fontsize=12)
 
     lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
-    lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
+    h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
+    # Do an acceptance correction
+    tbwidth = (ranges[1][1]-ranges[1][0])/float(nbins[1])
+    acc_corr = np.zeros(len(ypts))
+    acc_corr[2] = tbwidth/(tbwidth-7.0)
+    acc_corr[3] = tbwidth/(tbwidth-6.0)
+    acc_corr[10] = tbwidth/(tbwidth-3.0)
+    ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
+                        color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
 
     # For efficiency
     fig1 = plt.figure(figsize=(12,4),dpi=100)
@@ -179,6 +187,7 @@ def main():
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':1159.0,'limits':(0.0,100000.0)}
 
     params_dict['wmod_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
@@ -203,6 +212,35 @@ def main():
     m.migrad()
 
     values = m.values # Dictionary
+
+    '''
+    print "\nm.matrix()"
+    print m.matrix(correlation=True)
+    corr_matrix = m.matrix(correlation=True)
+    output = ""
+    for i in xrange(len(corr_matrix)):
+        for j in xrange(len(corr_matrix[i])):
+            output += "%9.2e " % (corr_matrix[i][j])
+        output += "\n"
+    print output
+    '''
+
+    print "\nm.covariance"
+    print m.covariance
+    cov_matrix = m.covariance
+    output = ""
+    for i in params_names:
+        for j in params_names:
+            key = (i,j)
+            if key in cov_matrix:
+                #output += "%11.2e " % (cov_matrix[key])
+                output += "%-12s %-12s %11.4f\n" % (i,j,cov_matrix[key])
+        #output += "\n"
+    print output
+
+
+
+
 
     print "Finished fit!!\n"
     print minuit_output(m)

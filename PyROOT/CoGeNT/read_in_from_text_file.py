@@ -445,7 +445,8 @@ def main():
     cogent_pars_dict["nexp2"].setVal(0.0); cogent_pars_dict["exp2_mod_amp"].setConstant(True)
     if args.add_exp2:
         #cogent_pars_dict["nexp2"].setVal(600.0); cogent_pars_dict["nexp2"].setConstant(False)
-        cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
+        #cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
+        cogent_pars_dict["nexp2"].setVal(506.0); cogent_pars_dict["nexp2"].setConstant(True)
         cogent_pars_dict["exp2_slope"].setVal(-3.36); cogent_pars_dict["exp2_slope"].setConstant(True)
         # Need to add in a uncertainty of 0.708
 
