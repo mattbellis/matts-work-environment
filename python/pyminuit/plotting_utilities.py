@@ -7,8 +7,51 @@ import scipy.integrate as integrate
 from scipy.interpolate import spline
 from scipy.interpolate import UnivariateSpline
 
-from RTMinuit import *
+#from RTMinuit import *
+#from RTMinuit import *
 
+################################################################################
+# Plotting code for pdf
+################################################################################
+def plot_pdf_from_lambda(func,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-',subranges=None):
+
+    y = None
+    plot = None
+    srxs = None
+
+    if axes==None:
+        axes=plt.gca()
+
+    if subranges!=None:
+
+        srxs = []
+        tot_srys = []
+        for sr in subranges:
+            srxs.append(np.linspace(sr[0],sr[1],1000))
+            tot_srys.append(np.zeros(1000))
+
+        totnorm = 0.0
+        srnorms = []
+        y = []
+        plot = []
+        for srx,sr in zip(srxs,subranges):
+            sry = func(srx)
+            norm = integrate.simps(sry,x=srx)
+            srnorms.append(norm)
+            totnorm += norm
+
+        for tot_sry,norm,srx,sr in zip(tot_srys,srnorms,srxs,subranges):
+            norm /= totnorm
+
+            ypts = func(srx)
+            #print "norm*scale: ",norm*scale
+            ytemp,plottemp = plot_pdf(srx,ypts,bin_width=bin_width,scale=norm*scale,fmt=fmt,axes=axes)
+            y.append(ytemp)
+            plot.append(plottemp)
+            #tot_sry += y
+
+
+    return y,plot,srxs
 ################################################################################
 # Plotting code for pdf
 ################################################################################

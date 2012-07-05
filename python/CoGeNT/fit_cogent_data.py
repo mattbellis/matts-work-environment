@@ -39,7 +39,8 @@ def main():
     amplitudes = content[index]
     energies = amp_to_energy(amplitudes,0)
 
-    print tdays
+    #print tdays
+    '''
     output = ""
     i = 0
     for e,t in zip(energies,tdays):
@@ -50,13 +51,16 @@ def main():
             print output 
             output = ""
             i=0
+    '''
 
-    data = [energies,tdays]
+    data = [np.array(energies),np.array(tdays)]
+
+    print "data before range cuts: ",len(data[0]),len(data[1])
 
     ############################################################################
     # Declare the ranges.
     ############################################################################
-    ranges = [[0.5,3.2],[0.0,459.0]]
+    ranges = [[0.5,3.2],[1.0,459.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
     subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
     nbins = [108,15]
@@ -66,6 +70,22 @@ def main():
 
     # Cut events out that fall outside the range.
     data = cut_events_outside_range(data,ranges)
+    data = cut_events_outside_subrange(data,subranges[1],data_index=1)
+
+    print "data after range cuts: ",len(data[0]),len(data[1])
+
+    '''
+    output = ""
+    i = 0
+    for e,t in zip(data[0],data[1]):
+        if e<3.3:
+            output += "%7.2f " % (t)
+            i+=1
+        if i==10:
+            print output 
+            output = ""
+            i=0
+    '''
 
     nevents = float(len(data[0]))
 
@@ -119,7 +139,7 @@ def main():
     ############################################################################
     # Fit
     ############################################################################
-    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
+    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(458)
 
     # Might need this to take care of efficiency.
     #num_decays_in_dataset *= 0.87
@@ -152,12 +172,19 @@ def main():
         name = "ls_dc%d" % (i)
         params_dict[name] = {'fix':True,'start_val':val}
 
+    yearly_mod = 2*pi/365.0
+
     # Exponential term in energy
-    params_dict['e_exp0'] = {'fix':True,'start_val':2.51,'limits':(0.0,10.0)}
+    params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':1159.0,'limits':(0.0,100000.0)}
+
+    params_dict['wmod_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
+    params_dict['wmod_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
+    params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
+    params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
 
@@ -218,7 +245,8 @@ def main():
     eytot += y
 
     # Time projections
-    func = lambda x: np.ones(len(x))
+    #func = lambda x: np.ones(len(x))
+    func = lambda x: values['wmod_offst'] + values['wmod_amp']*np.cos(values['wmod_freq']*x+values['wmod_phase'])   
     srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
     tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
 
