@@ -35,7 +35,31 @@ def cut_events_outside_range(data,ranges):
     for i,r in enumerate(ranges):
         index *= ((data[i]>r[0])*(data[i]<r[1]))
 
+    '''
+    for x,y in zip(data[0][index!=True],data[1][index!=True]):
+        print x,y
+    '''
+
     for i in xrange(len(data)):
+        print data[i][index!=True]
+        data[i] = data[i][index==True]
+
+    return data
+
+################################################################################
+# Cut events from an arbitrary dataset that fall outside a set of sub-ranges.
+################################################################################
+def cut_events_outside_subrange(data,subrange,data_index=0):
+
+    index = np.zeros(len(data[data_index]),dtype=np.int)
+    for r in subrange:
+        print r[0],r[1]
+        index += ((data[data_index]>r[0])*(data[data_index]<r[1]))
+        print data[1][data[1]>107.0]
+
+    print index[index!=1]
+    for i in xrange(len(data)):
+        print data[i][index!=True]
         data[i] = data[i][index==True]
 
     return data
@@ -122,7 +146,8 @@ def fitfunc(data,p,parnames,params_dict):
         efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
         #efficiency = lambda x: 1.0
 
-        subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+        #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+        subranges = [[],[[1,459]]]
 
         x = data[0]
         y = data[1]
@@ -140,6 +165,11 @@ def fitfunc(data,p,parnames,params_dict):
         e_exp1 = p[pn.index('e_exp1')]
         num_exp1 = p[pn.index('num_exp1')]
 
+        wmod_freq = p[pn.index('wmod_freq')]
+        wmod_phase = p[pn.index('wmod_phase')]
+        wmod_amp = p[pn.index('wmod_amp')]
+        wmod_offst = p[pn.index('wmod_offst')]
+
         # Normalize numbers.
         num_tot = 0.0
         for name in pn:
@@ -151,6 +181,7 @@ def fitfunc(data,p,parnames,params_dict):
         num_exp1 /= num_tot
         num_flat /= num_tot
 
+        #tot_pct = num_exp0 + num_exp1 + num_flat
         #print "num_tot",num_tot
         #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
         #lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
@@ -176,11 +207,13 @@ def fitfunc(data,p,parnames,params_dict):
             dc = -1.0*dc
             pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
             pdf *= n
+            #tot_pct += n
             tot_pdf += pdf
 
         # Exponential in energy
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
-        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+        #pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+        pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
         tot_pdf += pdf
 
@@ -196,6 +229,8 @@ def fitfunc(data,p,parnames,params_dict):
         pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_flat
         tot_pdf += pdf
+
+        #print "tot_pct: ",tot_pct
 
     return tot_pdf
 ################################################################################
