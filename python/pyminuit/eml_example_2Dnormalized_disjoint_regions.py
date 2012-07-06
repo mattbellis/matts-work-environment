@@ -22,7 +22,7 @@ np.random.seed(100)
 def main():
 
     ranges = [[2.0,8.0],[0.0,400.0]]
-    subranges = [[],[[0.0,100.0],[300.0,400.0]]]
+    subranges = [[],[[0.0,100.0],[150,200],[300.0,400.0]]]
     nbins = [100,100]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
@@ -101,6 +101,7 @@ def main():
     print subranges[1][0][0],subranges[1][0][1]
     index = ((data[1]>subranges[1][0][0])*(data[1]<subranges[1][0][1]))
     index += ((data[1]>subranges[1][1][0])*(data[1]<subranges[1][1][1]))
+    index += ((data[1]>subranges[1][2][0])*(data[1]<subranges[1][2][1]))
 
     for i in xrange(len(data)):
         data[i] = data[i][index==True]
@@ -466,7 +467,8 @@ def main():
     ############################################################################
     ytot = np.zeros(1000)
     xpts = np.linspace(ranges[0][0],ranges[0][1],1000)
-    eff = sigmoid(xpts,threshold,sigmoid_sigma,max_val)
+    #eff = sigmoid(xpts,threshold,sigmoid_sigma,max_val)
+    eff = np.ones(1000)
 
     # Sig
     gauss = stats.norm(loc=values['mean'],scale=values['sigma'])
@@ -488,22 +490,39 @@ def main():
     ############################################################################
     # Plot on the y-projection
     ############################################################################
+    srxs = []
+    tot_srys = []
+    for sr in subranges[1]:
+        srxs.append(np.linspace(sr[0],sr[1],1000))
+        tot_srys.append(np.zeros(1000))
+
+    # Signal
+    func = lambda x: np.exp(-values['exp_sig_y']*x)
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_sig'],fmt='y-',axes=ax01,subranges=subranges[1])
+    tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
+
+    # Background
+    func = lambda x: np.ones(len(x))
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_bkg'],fmt='g-',axes=ax01,subranges=subranges[1])
+    tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
+
     #'''
-    ytot = np.zeros(1000)
-    xpts = np.linspace(ranges[1][0],ranges[1][1],1000)
+    #ytot = np.zeros(1000)
+    #xpts = np.linspace(ranges[1][0],ranges[1][1],1000)
 
     # Sig
-    sig_exp = stats.expon(loc=0.0,scale=1.0)
-    ypts = sig_exp.pdf(values['exp_sig_y']*xpts)
+    #sig_exp = stats.expon(loc=0.0,scale=1.0)
+    #ypts = sig_exp.pdf(values['exp_sig_y']*xpts)
 
-    y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=values['num_sig'],fmt='y--',axes=ax01)
-    ytot += y
+    #y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=values['num_sig'],fmt='y--',axes=ax01)
+    #ytot += y
 
     # Bkg
-    ypts = np.ones(len(xpts))
+    #ypts = np.ones(len(xpts))
 
     #y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[1],scale=values['num_bkg'],fmt='g--',axes=ax01)
 
+    '''
     #print xpts,ypts
     totnorm = integrate.simps(ypts,x=xpts)
     norms = []
@@ -524,11 +543,18 @@ def main():
         y,plot = plot_pdf(xnorm,ynorm,bin_width=bin_widths[1],scale=scale*values['num_bkg'],fmt='g--',axes=ax01)
         #print y
         ytot += y
+    '''
 
     #ytot += y
 
-    ax01.plot(xpts,ytot,'b',linewidth=3)
+    #ax01.plot(xpts,ytot,'b',linewidth=3)
     #'''
+
+    # Total on y/t
+    for x,y in zip(srxs,tot_srys):
+        ax01.plot(x,y,'b',linewidth=3)
+
+    print "num_bkg+num_sig: ",values['num_bkg'] + values['num_sig']
 
     ############################################################################
     #'''

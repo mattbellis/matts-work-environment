@@ -122,9 +122,9 @@ def main():
     start_date = datetime(2009, 12, 3, 0, 0, 0, 0) #
 
     # Max day for plotting
-    tmax = 480;
+    tmax = 458;
     # When plotting the time, use this for binning.
-    tbins = 16;
+    tbins = 15;
     t_bin_width = tmax/tbins
 
     # Energy fitting range.
@@ -160,8 +160,8 @@ def main():
     # 102-107
     # 306-308
     ############################################################################
-    #dead_days = [[68,74], [102,107],[306,308]]
-    dead_days = [[68,69]]
+    dead_days = [[68,74], [102,107],[306,308]]
+    #dead_days = [[68,69]]
     # Define the months that include the dead times.
     month_ranges = [[61,90], [91,120],[301,330],[451,481]]
 
@@ -317,7 +317,8 @@ def main():
     ############################################################################
 
     data = data_total.reduce(RooFit.CutRange(good_ranges[0]))
-    if args.verbose:
+    #if args.verbose>-1:
+    if 1:
 
         print "fit   entries: %d" % (data.numEntries())
 
@@ -325,11 +326,13 @@ def main():
 
         data.append(data_total.reduce(RooFit.CutRange(good_ranges[i])))
 
-        if args.verbose:
+        #if args.verbose>-1:
+        if 1:
             print "fit   entries: %d" % (data.numEntries())
 
     # DEBUG
-    if args.verbose:
+    #if args.verbose>-1:
+    if 1:
         print "total entries: %d" % (data_total.numEntries())
         print "fit   entries: %d" % (data.numEntries())
 
@@ -350,6 +353,7 @@ def main():
     # Make a histogram where we correct the time projection of the data for the
     # dead times.
     ########################################################################
+    '''
     hacc_corr = TH1F("hacc_corr","hacc_corr",tbins,1.0,481)
     hacc_corr.Sumw2()
     nentries = data.numEntries()
@@ -360,10 +364,8 @@ def main():
         for c,m in zip(dead_time_correction_factor,month_ranges):
             if tmp>m[0] and tmp<=m[1]:
                 correction = c
-                '''
                 if args.verbose:
                     print "Dead time corrections: %f %f %f %f" % (tmp,m[0],m[1],correction)
-                '''
 
         hacc_corr.Fill(tmp,correction)
 
@@ -371,6 +373,7 @@ def main():
     hacc_corr.SetMarkerStyle(20)
     hacc_corr.SetMarkerColor(2)
     hacc_corr.SetLineColor(1)
+    '''
     ########################################################################
 
     ############################################################################
@@ -445,7 +448,8 @@ def main():
     cogent_pars_dict["nexp2"].setVal(0.0); cogent_pars_dict["exp2_mod_amp"].setConstant(True)
     if args.add_exp2:
         #cogent_pars_dict["nexp2"].setVal(600.0); cogent_pars_dict["nexp2"].setConstant(False)
-        cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
+        #cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
+        cogent_pars_dict["nexp2"].setVal(506.0); cogent_pars_dict["nexp2"].setConstant(True)
         cogent_pars_dict["exp2_slope"].setVal(-3.36); cogent_pars_dict["exp2_slope"].setConstant(True)
         # Need to add in a uncertainty of 0.708
 
@@ -467,6 +471,7 @@ def main():
         name = "nll_%s" % (r)
         # Grabbed this constructor from the source code for RooAbsPdf.
         # Add them to a python list, just to keep them distinct.
+        # True after ``data" means extended.
         temp_list.append(RooNLLVar(name,name,cogent_fit_pdf,data,True,r,"",1,False,False,False,False))
 
         # Add them to a RooArgSet, for the object we'll pass to RooMinuit.
@@ -586,9 +591,9 @@ def main():
     gPad.Update()
 
     cans[0].cd(2)
-    #tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
+    #tframe_main.GetYaxis().SetRangeUser(0.0,200.0/(tbins/15.0) + 10)
     tframe_main.Draw()
-    hacc_corr.Draw("samee") # The dead-time corrected histogram.
+    #hacc_corr.Draw("samee") # The dead-time corrected histogram.
     gPad.Update()
 
     ########################################################################
@@ -688,10 +693,12 @@ def main():
             gPad.Update()
 
             cans_talk[i].cd(2)
-            tframe_talk.GetYaxis().SetRangeUser(0.0,200.0/(tbins/16.0) + 10)
+            tframe_talk.GetYaxis().SetRangeUser(0.0,200.0/(tbins/15.0) + 10)
             tframe_talk.Draw()
+            '''
             if i>0:
                 hacc_corr.Draw("samee") # The dead-time corrected histogram.
+            '''
             gPad.Update()
 
             for file_type in ['png','pdf','eps']:
