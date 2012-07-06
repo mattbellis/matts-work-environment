@@ -522,7 +522,7 @@ def main():
         scale = norm/sum(norms)
         print "scale: ",scale,scale*values['num_bkg']
         y,plot = plot_pdf(xnorm,ynorm,bin_width=bin_widths[1],scale=scale*values['num_bkg'],fmt='g--',axes=ax01)
-        print y
+        #print y
         ytot += y
 
     #ytot += y
@@ -536,80 +536,6 @@ def main():
     plt.show()
 
     exit()
-
-    ############################################################################
-
-
-    ############################################################################
-
-    # Efficiency function
-    efficiency = sigmoid(x,threshold,sigmoid_sigma,max_val)
-    ax1 = fig0.add_subplot(2,1,2) 
-    ax1.plot(x,efficiency,'r--',linewidth=2)
-    ax1.set_xlim(lo,hi)
-    ax1.set_ylim(0.0,1.0)
-
-
-    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-    #means = np.array([1.2977,1.1])
-    #sigmas = np.array([0.077,0.077])
-    #numbers = np.array([638,50])
-
-    lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
-    print lshells
-    ytot = np.zeros(1000)
-    print means
-    #HG_trigger = 0.94
-    HG_trigger = 1.00
-    for n,cp in zip(num_decays_in_dataset,lshells):
-        tempy = cp.pdf(x)
-        y = n*cp.pdf(x)*bin_width*efficiency/HG_trigger
-        print n,integrate.simps(tempy,x=x),integrate.simps(y,x=x)
-        ytot += y
-        ax0.plot(x,y,'r--',linewidth=2)
-    ax0.plot(x,ytot,'r',linewidth=3)
-
-    ############################################################################
-    # Surface term
-    ############################################################################
-    surf_expon = stats.expon(scale=1.0)
-    yorg = surf_expon.pdf(values['exp_slope']*x)
-    #yorg = surf_expon.pdf(6.0*x)
-    y,surf_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=values['num_exp'],fmt='y-',axes=ax0,efficiency=efficiency)
-    ytot += y
-
-    ############################################################################
-    # Flat term
-    ############################################################################
-    yorg = np.ones(len(x))
-    y,flat_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=efficiency)
-    ytot += y
-    
-
-    ############################################################################
-    # WIMP-like term
-    ############################################################################
-    '''
-    wimp_expon = stats.expon(scale=1.0)
-    yorg = wimp_expon.pdf(2.3*x)
-    y,wimp_plot = plot_pdf(x,yorg,bin_width=bin_width,scale=330.0,fmt='g-',axes=ax0,efficiency=efficiency)
-    ytot += y
-    '''
-    
-    ############################################################################
-    # Total-like term
-    ############################################################################
-    ax0.plot(x,ytot,'b',linewidth=3)
-
-    
-
-    #data = [events,deltat_mc]
-    #m = minuit.Minuit(pdfs.extended_maximum_likelihood_function_minuit,p=p0)
-    #print m.values
-    #m.migrad()
-
-    plt.figure()
-    #lch.hist_err(mc,bins=108,range=(lo,hi))
 
 
 ################################################################################
