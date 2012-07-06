@@ -40,6 +40,17 @@ def main():
     energies = amp_to_energy(amplitudes,0)
 
     print tdays
+    output = ""
+    i = 0
+    for e,t in zip(energies,tdays):
+        if e<3.3:
+            output += "%7.2f " % (t)
+            i+=1
+        if i==10:
+            print output 
+            output = ""
+            i=0
+
     data = [energies,tdays]
 
     ############################################################################
@@ -142,7 +153,7 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
 
     # Exponential term in energy
-    params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
+    params_dict['e_exp0'] = {'fix':True,'start_val':2.51,'limits':(0.0,10.0)}
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
@@ -160,7 +171,7 @@ def main():
     # For maximum likelihood method.
     m.up = 0.5
 
-    m.printMode = 1
+    m.printMode = 0
 
     m.migrad()
 
@@ -170,47 +181,12 @@ def main():
     print minuit_output(m)
     print "nentries: ",len(data[0])
 
-    #print m.fixed
-
     #exit()
 
-    #acc_integral_tot = fitfunc(mcacc,m.args,params_names,params_dict).sum()
-    #print "acc_integral_tot: ",acc_integral_tot
-
-    nfracs = []
-    #names = ['num_exp0','num_flat']
-    #names = ['num_exp0','num_exp1','num_flat']
     names = []
     for name in params_names:
         if 'num_' in name or 'ncalc' in name:
             names.append(name)
-
-    '''
-    for name in names:
-        temp_vals = list(m.args)
-        # Set all but name to 0.0
-        for zero_name in names:
-            if name!= zero_name:
-                temp_vals[params_names.index(zero_name)] = 0.0
-                #print "zeroing out",zero_name
-        acc_integral_temp = fitfunc(mcacc,temp_vals,params_names,params_dict).sum()
-        print "acc_integral_temp: ",acc_integral_temp
-        frac = acc_integral_temp/acc_integral_tot
-        print "frac: ",name,frac
-        nfracs.append(frac)
-
-    npdfs = {}
-    totls = 0.0
-    for n,f in zip(names,nfracs):
-        print "%-12s: %f" % (n,(f*nevents)) 
-        npdfs[n] = (f*nevents)
-        if 'ncalc' in n:
-            totls += f*nevents
-    print "%-12s: %f" % ("L-shells",tot_lshells) 
-    print "%-12s: %f" % ("totls",totls) 
-    print "%-12s: %f" % ("tot",nevents) 
-    print "%-12s: %f" % ("nmcacc",len(mcacc[0])) 
-    '''
 
     ############################################################################
     # Plot the solutions
@@ -230,8 +206,8 @@ def main():
     srxs = []
     tot_srys = []
     for sr in subranges[1]:
-        srx.append(np.linspace(sr[0],sr[1],1000))
-        tot_srys.append(np.zeros(len(srx)))
+        srxs.append(np.linspace(sr[0],sr[1],1000))
+        tot_srys.append(np.zeros(1000))
 
     ############################################################################
     # Exponential
@@ -242,22 +218,9 @@ def main():
     eytot += y
 
     # Time projections
-    # Calc total integral.
-    totnorm = 0.0
-    srnorms = []
-    for srx,sr in zip(srxs,subranges[1]):
-        sry = np.ones(len(srx))
-        norm = integrate.simps(sry,x=srx) 
-        srnorms.append(norm)
-        totnorm += norm 
-
-    for tot_sry,norm,srx,sr in zip(tot_srys,srnorms,srxs,subranges[1]):
-        sry = np.ones(len(srx))
-        norm /= totnorm
-
-        ypts = np.ones(len(srx))
-        y,plot = plot_pdf(srx,ypts,bin_width=bin_widths[1],scale=norm*values['num_exp0'],fmt='g-',axes=ax1)
-        tot_sry += y
+    func = lambda x: np.ones(len(x))
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
+    tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
 
 
     ############################################################################
@@ -269,9 +232,12 @@ def main():
     eytot += y
 
     # Time projections
-    ypts = np.ones(len(txpts))
-    y,plot = plot_pdf(txpts,ypts,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1)
-    tytot += y
+    func = lambda x: np.ones(len(x))
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1,subranges=subranges[1])
+    tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
+    #ypts = np.ones(len(txpts))
+    #y,plot = plot_pdf(txpts,ypts,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1)
+    #tytot += y
 
     ############################################################################
     # Flat
@@ -283,9 +249,12 @@ def main():
     #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
 
     # Time projections
-    typts = np.ones(len(txpts))
-    y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1)
-    tytot += y
+    #typts = np.ones(len(txpts))
+    #y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1)
+    #tytot += y
+    func = lambda x: np.ones(len(x))
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
+    tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
 
     #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
     # L-shell
@@ -303,17 +272,26 @@ def main():
         # Time distribution
         #pdf_e = stats.expon(loc=0.0,scale=-1.0/dc)
         #typts = pdf_e.pdf(txpts)
-        typts = np.exp(dc*txpts)
+        #typts = np.exp(dc*txpts)
+        #y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1)
+        #lshell_toty += y
 
-        y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1)
-        lshell_toty += y
-        tytot += y
+        #tytot += y
+        func = lambda x: np.exp(dc*x)
+        srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1,subranges=subranges[1])
+        tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
+        lshell_toty = [tot + y for tot,y in zip(lshell_toty,srys)]
+
 
     ax0.plot(expts,lshell_totx,'r-',linewidth=2)
-    ax1.plot(txpts,lshell_toty,'r-',linewidth=2)
 
     ax0.plot(expts,eytot,'b',linewidth=3)
-    ax1.plot(txpts,tytot,'b',linewidth=3)
+    #ax1.plot(txpts,tytot,'b',linewidth=3)
+
+    # Total on y/t
+    for x,y,lsh in zip(srxs,tot_srys,lshell_toty):
+        ax1.plot(x,lsh,'r-',linewidth=2)
+        ax1.plot(x,y,'b',linewidth=3)
 
 
     ############################################################################

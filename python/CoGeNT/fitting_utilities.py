@@ -147,18 +147,11 @@ def fitfunc(data,p,parnames,params_dict):
                 num_tot += p[pn.index(name)]
                 #print "building num_tot",num_tot,p[pn.index(name)]
 
-        '''
-        for name in pn:
-            if 'num_' in name or 'ncalc' in name:
-                p[pn.index(name)] /= num_tot
-        '''
         num_exp0 /= num_tot
         num_exp1 /= num_tot
         num_flat /= num_tot
 
         #print "num_tot",num_tot
-
-
         #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
         #lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
 
@@ -167,7 +160,7 @@ def fitfunc(data,p,parnames,params_dict):
         numls = []
         decay_constants = []
 
-        for i in xrange(10):
+        for i in xrange(11):
             name = "ls_mean%d" % (i)
             means.append(p[pn.index(name)])
             name = "ls_sigma%d" % (i)
@@ -418,6 +411,7 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
             n += p[parnames.index(name)]
 
     print "pois: ",n,ndata
+    print "vals: ",(-np.log(fitfunc(data,p,parnames,params_dict))).sum(), pois(n,ndata)
     ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() - pois(n,ndata)
 
     return ret
