@@ -305,14 +305,15 @@ def fitfunc(data,p,parnames,params_dict):
 
     elif flag==3:
 
-        subranges = [[],[[0.0,100.0],[300.0,400.0]]]
+        subranges = [[],[[0.0,100.0],[150,200],[300.0,400.0]]]
 
         #max_val = 0.86786
         max_val = 1.0000
         threshold = 0.345
         sigmoid_sigma = 0.241
 
-        efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+        #efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+        efficiency = lambda x: 1.0
 
         x = data[0]
         y = data[1]
