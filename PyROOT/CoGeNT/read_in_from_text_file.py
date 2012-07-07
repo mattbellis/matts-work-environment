@@ -61,7 +61,7 @@ def main():
             help='Set the lower limit for the energy range to use.')
     parser.add_argument('--e-hi', dest='e_hi', type=float, default=3.2,
             help='Set the upper limit for the energy range to use.')
-    parser.add_argument('--e-bins', dest='e_bins', type=int, default=None,
+    parser.add_argument('--e-bins', dest='e_bins', type=int, default=108,
             help='Set the number of bins to use for energy plotting.')
     parser.add_argument('--use-fitto', dest='use_fitto', action='store_true', 
             default=False, help='Use the RooAbsPdf::fitTo() member function, \
@@ -449,7 +449,7 @@ def main():
     if args.add_exp2:
         #cogent_pars_dict["nexp2"].setVal(600.0); cogent_pars_dict["nexp2"].setConstant(False)
         #cogent_pars_dict["nexp2"].setVal(575.0); cogent_pars_dict["nexp2"].setConstant(True)
-        cogent_pars_dict["nexp2"].setVal(506.0); cogent_pars_dict["nexp2"].setConstant(True)
+        cogent_pars_dict["nexp2"].setVal(663.0); cogent_pars_dict["nexp2"].setConstant(True)
         cogent_pars_dict["exp2_slope"].setVal(-3.36); cogent_pars_dict["exp2_slope"].setConstant(True)
         # Need to add in a uncertainty of 0.708
 
@@ -586,7 +586,7 @@ def main():
 
     cans[0].cd(1)
     xframe_main.GetXaxis().SetLimits(0.5,xmax)
-    #xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
+    xframe_main.GetYaxis().SetRangeUser(0.0,95.0)
     xframe_main.Draw()
     gPad.Update()
 
