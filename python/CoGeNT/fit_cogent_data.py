@@ -213,6 +213,26 @@ def main():
 
     values = m.values # Dictionary
 
+    m1 = m
+    m2 = m
+
+    plt.figure()
+    for sig in [1.0,2.0]:
+        contour_points = None
+        print sig
+        print m.values
+        if sig==1.0:
+            contour_points = m1.contour('e_exp0','num_exp0',sig,5)
+        elif sig==2.0:
+            contour_points = m2.contour('e_exp0','num_exp0',sig,5)
+        print contour_points 
+        cx = np.array([])
+        cy = np.array([])
+        for p in contour_points:
+            cx = np.append(cx,p[0])
+            cy = np.append(cy,p[1])
+        plt.plot(cx,cy)
+
     '''
     print "\nm.matrix()"
     print m.matrix(correlation=True)
