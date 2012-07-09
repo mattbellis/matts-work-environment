@@ -9,6 +9,25 @@ from cogent_pdfs import *
 
 import lichen.pdfs as pdfs
 
+import chris_kelso_code as dmm
+
+tc_SHM = dmm.tc(np.zeros(3))
+AGe = 72.6
+
+################################################################################
+# WIMP signal
+################################################################################
+################################################################################
+def wimp(y,x,AGe,mDM):
+    #tc_SHM = dmm.tc(np.zeros(3))
+    #print tc_SHM
+    #print tc_SHM+y
+    dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
+    return dR
+################################################################################
+
+
+
 
 ################################################################################
 # Generate some flat Monte Carlo over the range.
@@ -165,17 +184,26 @@ def fitfunc(data,p,parnames,params_dict):
         e_exp1 = p[pn.index('e_exp1')]
         num_exp1 = p[pn.index('num_exp1')]
 
-        wmod_freq = p[pn.index('wmod_freq')]
-        wmod_phase = p[pn.index('wmod_phase')]
-        wmod_amp = p[pn.index('wmod_amp')]
-        wmod_offst = p[pn.index('wmod_offst')]
+        #wmod_freq = p[pn.index('wmod_freq')]
+        #wmod_phase = p[pn.index('wmod_phase')]
+        #wmod_amp = p[pn.index('wmod_amp')]
+        #wmod_offst = p[pn.index('wmod_offst')]
+
+        #mDM = 7.0
+        mDM = p[pn.index('mDM')]
+
+        loE = dmm.quench_keVee_to_keVr(0.5)
+        hiE = dmm.quench_keVee_to_keVr(3.2)
 
         # Normalize numbers.
         num_tot = 0.0
         for name in pn:
-            if 'num_' in name or 'ncalc' in name:
+            if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
                 #print "building num_tot",num_tot,p[pn.index(name)]
+
+        num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM))[0]*(0.333)*(0.867)
+        num_tot += num_wimps
 
         num_exp0 /= num_tot
         num_exp1 /= num_tot
@@ -210,10 +238,19 @@ def fitfunc(data,p,parnames,params_dict):
             #tot_pct += n
             tot_pdf += pdf
 
-        # Exponential in energy
-        pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
+        ########################################################################
+        # Wimp-like signal
+        ########################################################################
+        #pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         #pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
+        #pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
+        #tc_SHM = dmm.tc(np.zeros(3))
+        #gdbl_int = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM))
+        gdbl_int = (1.0,1.0)
+        print "gdbl_int: ",gdbl_int,mDM
+        xkeVr = dmm.quench_keVee_to_keVr(x)
+        pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM)/gdbl_int[0]
+        print "here"
         pdf *= num_exp0
         tot_pdf += pdf
 
@@ -300,7 +337,7 @@ def minuit_output(m):
 ################################################################################
 # Convert dictionary to kwd arguments
 ################################################################################
-def dict2kwd(d):
+def dict2kwd(d,verbose=False):
 
     keys,vals = d.keys(),d.values()
 
@@ -308,7 +345,8 @@ def dict2kwd(d):
 
     kwd = {}
     for k,v in d.iteritems():
-        print k,v
+        if verbose:
+            print k,v
         params_names += (k,)
         kwd[k] = v['start_val']
         if 'fix' in v and v['fix']==True:
@@ -367,8 +405,8 @@ class Minuit_FCN:
         #self.limits = 1.0
         #varnames = ['%s'%i for i in params]
         varnames = params_names
-        print "varnames"
-        print varnames
+        #print "varnames"
+        #print varnames
 
         self.func_code = Struct(co_argcount=len(params),co_varnames=varnames)
         self.func_defaults = None # Optional but makes vectorize happy
@@ -442,8 +480,17 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     n = 0
     for name in parnames:
-        if 'num_' in name or 'ncalc' in name:
+        if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
             n += p[parnames.index(name)]
+
+    mDM = p[parnames.index('mDM')]
+
+    loE = dmm.quench_keVee_to_keVr(0.5)
+    hiE = dmm.quench_keVee_to_keVr(3.2)
+
+    nwimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM))[0]*(0.333)*(0.867)
+    n += nwimps
+    print "nwimps: ",nwimps
 
     #print "pois: ",n,ndata
     #print "vals: ",(-np.log(fitfunc(data,p,parnames,params_dict))).sum(), pois(n,ndata)

@@ -185,15 +185,17 @@ def main():
     # Exponential term in energy
     params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-    params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
+    #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
+    params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':1159.0,'limits':(0.0,100000.0)}
 
-    params_dict['wmod_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
-    params_dict['wmod_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
-    params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
-    params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
+    #params_dict['wmod_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
+    #params_dict['wmod_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
+    #params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
+    #params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
+    params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(0.0,10000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
 
@@ -210,28 +212,36 @@ def main():
     m.printMode = 0
 
     m.migrad()
+    m.hesse()
 
     values = m.values # Dictionary
 
     m1 = m
     m2 = m
 
+    '''
+    print "starting contours..."
     plt.figure()
-    for sig in [1.0,2.0]:
+    for sig in [1.5,1.0]:
         contour_points = None
+        print "----"
         print sig
-        print m.values
+        #print m.values
         if sig==1.0:
-            contour_points = m1.contour('e_exp0','num_exp0',sig,5)
-        elif sig==2.0:
-            contour_points = m2.contour('e_exp0','num_exp0',sig,5)
+            contour_points = m1.contour('e_exp0','num_exp0',sig,40)
+        else:
+            contour_points = m2.contour('e_exp0','num_exp0',sig,40)
         print contour_points 
         cx = np.array([])
         cy = np.array([])
-        for p in contour_points:
-            cx = np.append(cx,p[0])
-            cy = np.append(cy,p[1])
+        if contour_points!=None and len(contour_points)>1:
+            for p in contour_points:
+                cx = np.append(cx,p[0])
+                cy = np.append(cy,p[1])
+            cx = np.append(cx,contour_points[0][0])
+            cy = np.append(cy,contour_points[0][1])
         plt.plot(cx,cy)
+    '''
 
     '''
     print "\nm.matrix()"
@@ -245,6 +255,7 @@ def main():
     print output
     '''
 
+    '''
     print "\nm.covariance"
     print m.covariance
     cov_matrix = m.covariance
@@ -257,10 +268,7 @@ def main():
                 output += "%-12s %-12s %11.4f\n" % (i,j,cov_matrix[key])
         #output += "\n"
     print output
-
-
-
-
+    '''
 
     print "Finished fit!!\n"
     print minuit_output(m)
@@ -303,8 +311,8 @@ def main():
     eytot += y
 
     # Time projections
-    #func = lambda x: np.ones(len(x))
-    func = lambda x: values['wmod_offst'] + values['wmod_amp']*np.cos(values['wmod_freq']*x+values['wmod_phase'])   
+    func = lambda x: np.ones(len(x))
+    #func = lambda x: values['wmod_offst'] + values['wmod_amp']*np.cos(values['wmod_freq']*x+values['wmod_phase'])   
     srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
     tot_srys = [tot + y for tot,y in zip(tot_srys,srys)]
 

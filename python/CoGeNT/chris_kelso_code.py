@@ -58,8 +58,16 @@ def mu(A, m):
 
 ################################################################################
 
+################################################################################
+# Quenching factor
+################################################################################
+def quench_keVr_to_keVee(x):
+    y = 0.2*(x**(1.12))
+    return y
 
-
+def quench_keVee_to_keVr(x):
+    y = (x/0.2)**(1.0/1.12)
+    return y
 
 
 ################################################################################
@@ -105,6 +113,10 @@ Nesc = special.erf(z)-2*z*np.exp(-z*z)/np.sqrt(M_PI)
 ################################################################################
 def vObs_t(vObs, t):
     for i in range(0,3):
+        #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) 
+        #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) + vsVec[i]
+        #print  type((vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) + vsVec[i])
+        #print type(vObs[i])
         vObs[i] = vsVec[i]+vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])
 
 
@@ -202,6 +214,8 @@ def gStreamZeroDispersion(vmin, vstrE):
 ################################################################################
 def glow(Er, t, A, m):
     vObs = np.zeros(3)
+    if type(t)==np.ndarray:
+        vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
 
     y = np.sqrt(dot(vObs,vObs))/vo
@@ -215,6 +229,8 @@ def glow(Er, t, A, m):
 ################################################################################
 def ghigh(Er, t, A, m):
     vObs = np.zeros(3)
+    if type(t)==np.ndarray:
+        vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
 
     y = np.sqrt(dot(vObs,vObs))/vo
@@ -225,6 +241,8 @@ def ghigh(Er, t, A, m):
 ################################################################################
 def gSHM(Er, t, A, m):
     vObs = np.zeros(3)
+    if type(t)==np.ndarray:
+        vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
 
     y = np.sqrt(dot(vObs,vObs))/vo
@@ -368,7 +386,7 @@ def main():
     # Make some plots
     ############################################################################
     npts = 100
-    xvals = np.linspace(0.0,5.0,npts)
+    xvals = np.linspace(0.5,3.2,npts)
     yvals = np.zeros(npts)
     xt = np.linspace(0.0,11.0,12)
     yt = np.zeros(12)
@@ -377,12 +395,14 @@ def main():
     month = 0
     lo = xvals[10]
     hi = xvals[60]
+    norm_tot = 0.0
     print lo,hi
     for j in range(0,360):
         #day = 30*j
         day = j
         #tot += integrate.quad(dRdErSHM,lo,hi,args=(tc_SHM+day, AGe, mDM))[0]
         yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM)
+        norm_tot += integrate.simps(yvals[1:-1],x=xvals[1:-1])
         tot += integrate.simps(yvals[1:-1],x=xvals[1:-1])
         if (j+1)%30==0:
 
@@ -394,6 +414,7 @@ def main():
             month += 1
             print month
 
+    print "SHM: ",norm_tot
     plt.xlabel('Recoil energy (keVee)')
     #plt.show()
 
