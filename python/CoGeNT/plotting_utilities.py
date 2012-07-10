@@ -53,7 +53,7 @@ def plot_pdf_from_lambda(func,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,f
 ################################################################################
 # Plotting code for pdf
 ################################################################################
-def plot_pdf(x,ypts,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-',subranges=None):
+def plot_pdf(x,ypts,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-',subranges=None,linewidth=1):
 
     y = None
     plot = None
@@ -95,7 +95,7 @@ def plot_pdf(x,ypts,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-',sub
         #y *= (scale*bin_width)*efficiency
         y *= (scale*bin_width)
 
-        plot = axes.plot(x,y,fmt,linewidth=2)
+        plot = axes.plot(x,y,fmt,linewidth=linewidth)
         #ytot += y
         #ax0.plot(x,ytot,'b',linewidth=3)
 

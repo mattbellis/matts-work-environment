@@ -15,6 +15,8 @@ import lichen.lichen as lch
 
 import minuit
 
+import argparse
+
 pi = np.pi
 first_event = 2750361.2
 start_date = datetime(2009, 12, 3, 0, 0, 0, 0) #
@@ -25,6 +27,21 @@ np.random.seed(200)
 # Read in the CoGeNT data
 ################################################################################
 def main():
+
+    ############################################################################
+    # Parse the command lines.
+    ############################################################################
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--calib', dest='calib', type=int,\
+            default=0, help='Which calibration to use (0,1,2)')
+
+    args = parser.parse_args()
+
+    ############################################################################
+
+    if args.help:
+        parser.print_help()
+        exit(-1)
 
     ############################################################################
     # Read in the data
@@ -97,7 +114,7 @@ def main():
     fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
 
     ax0.set_xlim(ranges[0])
-    ax0.set_ylim(0.0,92.0)
+    #ax0.set_ylim(0.0,92.0)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
 
@@ -185,8 +202,8 @@ def main():
     # Exponential term in energy
     params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-    #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
-    params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
+    params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
+    #params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':1159.0,'limits':(0.0,100000.0)}
@@ -195,7 +212,7 @@ def main():
     #params_dict['wmod_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
     #params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
     #params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
-    params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(0.0,10000.0)}
+    #params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(0.0,10000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
 
@@ -306,9 +323,9 @@ def main():
     # Exponential
     ############################################################################
     # Energy projections
-    ypts = np.exp(-values['e_exp0']*expts)
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
-    eytot += y
+    #ypts = np.exp(-values['e_exp0']*expts)
+    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
+    #eytot += y
 
     # Time projections
     func = lambda x: np.ones(len(x))
@@ -386,6 +403,15 @@ def main():
     for x,y,lsh in zip(srxs,tot_srys,lshell_toty):
         ax1.plot(x,lsh,'r-',linewidth=2)
         ax1.plot(x,y,'b',linewidth=3)
+
+    # Plot wimp term
+    func = lambda x: plot_wimp_er(x,AGe,7.0,time_range=[1,459])
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=120.0,fmt='k-',axes=ax0,subranges=[[0.5,3.2]])
+    ax0.plot(srxs,srys,'b',linewidth=3)
+
+    func = lambda x: plot_wimp_day(x,AGe,7.0,e_range=[0.5,3.2])
+    srys,plot,srxs = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=120.0,fmt='k-',axes=ax1,subranges=[[1,459]])
+    ax1.plot(srxs,srys,'b',linewidth=3)
 
 
     ############################################################################
