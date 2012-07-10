@@ -5,9 +5,9 @@ import scipy.constants as constants
 import scipy.integrate as integrate
 
 import chris_kelso_code as dmm
-import chris_kelso_code_mpmath as dmm_mp
+#import chris_kelso_code_mpmath as dmm_mp
 
-import mpmath as mp
+#import mpmath as mp
 
 AGe = 72.6
 
@@ -15,10 +15,31 @@ mDM = 7.0
 
 tc_SHM = dmm.tc(np.zeros(3))
 
+# For a stream with a maximum velocity
+vMaxMod = np.zeros(3)
+vEWinter = np.zeros(3)
+
+dmm.vE_t(vEWinter,tc_SHM+365./2)
+vMaxMod = dmm.normalize(vEWinter)
+tc_Max = dmm.tc(vMaxMod)
+
+############################################################################
+#Now Choose a maximum modulating stream that has a cut-off at the given energy
+############################################################################
+Er1=3
+v01=10 #v01 is the dispersion of this stream
+vstr1 = dmm.vstr(vMaxMod,AGe,tc_SHM,mDM,Er1)
+print "\nStream characteristics for a target with atomic number %.2f and energy cut-off at %f keV:" % (AGe,Er1)
+vstr1 = dmm.vstr(vMaxMod,AGe,153,mDM,Er1)
+vstr1Vec = np.array([vstr1*vMaxMod[0],vstr1*vMaxMod[1],vstr1*vMaxMod[2]])
+
+
+
 ################################################################################
 def func(y,x):
     #tc_SHM = dmm.tc(np.zeros(3))
-    dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
+    #dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
+    dR = dmm.dRdErStream(x, tc_Max+y, AGe, vstr1Vec, 10,mDM)
     return dR
 ################################################################################
 
@@ -54,9 +75,9 @@ print gdbl_int
 #print gdbl_int[0]*(330.0/1000.0)
 #print gdbl_int[0]*(330.0/1000.0)*0.867
 
-f = lambda x,y: dmm_mp.dRdErSHM(x,tc_SHM+y,AGe,mDM)
-mpquad = mp.quad(f, [lo,hi], [1, 365])
-print "mpquad: ",mpquad
+#f = lambda x,y: dmm_mp.dRdErSHM(x,tc_SHM+y,AGe,mDM)
+#mpquad = mp.quad(f, [lo,hi], [1, 365])
+#print "mpquad: ",mpquad
 
 
 
