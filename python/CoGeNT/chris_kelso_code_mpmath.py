@@ -4,6 +4,8 @@ import scipy.special as special
 import scipy.constants as constants
 import scipy.integrate as integrate
 
+import mpmath 
+
 ################################################################################
 hbarc = 0.1973269664036767; # in GeV nm 
 c = constants.c*100.0 # cm/s 
@@ -13,7 +15,6 @@ mDM = 6.8; # in GeV
 mn = 0.938; # mass of nucleon in GeV 
 mU = 0.9315; # amu in GeV 
 sigma_n = 1E-40; # in cm^2 
-#sigma_n = 5E-40; # in cm^2 
 #sigma_n = 0.5e-40; # in cm^2 
 #Na = 6.022E26; # Avogadro's # in mol/kg 
 Na = constants.N_A*1000.0 # Avogadro's # in mol/kg 
@@ -38,7 +39,7 @@ def dot(v1, v2):
 def normalize(v):
     vnorm = np.zeros(3)
     for i,vx in enumerate(v):
-        vnorm[i] = vx/np.sqrt(dot(v,v))
+        vnorm[i] = vx/mpmath.sqrt(dot(v,v))
 
     return vnorm
 
@@ -77,8 +78,8 @@ def quench_keVee_to_keVr(x):
 # result is in km/s
 ################################################################################
 def vmin(Er, A, m):
-    #return c*np.sqrt(Er*mT(A)/2)*1e-8/mu(A,m)
-    ret = c*np.sqrt(Er*mT(A)/2)*1e-8/mu(A,m)
+    #return c*mpmath.sqrt(Er*mT(A)/2)*1e-8/mu(A,m)
+    ret = c*mpmath.sqrt(Er*mT(A)/2)*1e-8/mu(A,m)
     #print ret
     if type(ret)==np.ndarray:
         # Remove nans
@@ -105,7 +106,7 @@ vsVec = np.array([10,13+vo,7])
 vs = np.sqrt(dot(vsVec,vsVec))
 vsVecHat = np.array([vsVec[0]/vs,vsVec[1]/vs,vsVec[2]/vs])
 z = vesc/vo
-Nesc = special.erf(z)-2*z*np.exp(-z*z)/np.sqrt(M_PI)
+Nesc = mpmath.erf(z)-2*z*mpmath.exp(-z*z)/mpmath.sqrt(M_PI)
 
 
 
@@ -114,11 +115,11 @@ Nesc = special.erf(z)-2*z*np.exp(-z*z)/np.sqrt(M_PI)
 ################################################################################
 def vObs_t(vObs, t):
     for i in range(0,3):
-        #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) 
-        #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) + vsVec[i]
-        #print  type((vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) + vsVec[i])
+        #print  (vorb*(mpmath.cos(omega*(t-t1))*e1[i]+mpmath.sin(omega*(t-t1))*e2[i])) 
+        #print  (vorb*(mpmath.cos(omega*(t-t1))*e1[i]+mpmath.sin(omega*(t-t1))*e2[i])) + vsVec[i]
+        #print  type((vorb*(mpmath.cos(omega*(t-t1))*e1[i]+mpmath.sin(omega*(t-t1))*e2[i])) + vsVec[i])
         #print type(vObs[i])
-        vObs[i] = vsVec[i]+vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])
+        vObs[i] = vsVec[i]+vorb*(mpmath.cos(omega*(t-t1))*e1[i]+mpmath.sin(omega*(t-t1))*e2[i])
 
 
 ################################################################################
@@ -126,7 +127,7 @@ def vObs_t(vObs, t):
 ################################################################################
 def vE_t(vE, t):
     for i in range(0,3):
-        vE[i] = vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])
+        vE[i] = vorb*(mpmath.cos(omega*(t-t1))*e1[i]+mpmath.sin(omega*(t-t1))*e2[i])
 
 ################################################################################
 # this function is the projection of the observer's velocity onto the stream
@@ -148,7 +149,7 @@ def vstr(vstrHat, A, t, m, Er):
     vObs = np.zeros(3)
     vObs_t(vObs,t)
     vObsSqrd = dot(vObs,vObs)
-    return alpha(vstrHat, t)+np.sqrt(alpha(vstrHat, t)*alpha(vstrHat, t)+vmin(Er,A,m)*vmin(Er,A,m)-vObsSqrd)
+    return alpha(vstrHat, t)+mpmath.sqrt(alpha(vstrHat, t)*alpha(vstrHat, t)+vmin(Er,A,m)*vmin(Er,A,m)-vObsSqrd)
 
 
 ################################################################################
@@ -157,7 +158,7 @@ def vstr(vstrHat, A, t, m, Er):
 def vstrEarth(vstr, t):
     vObs = np.zeros(3)
     vObs_t(vObs,t)
-    return np.sqrt(dot(vstr,vstr)+dot(vObs,vObs)-2*dot(vstr,vObs))
+    return mpmath.sqrt(dot(vstr,vstr)+dot(vObs,vObs)-2*dot(vstr,vObs))
 
 
 ################################################################################
@@ -183,8 +184,8 @@ def tc(vstr):
     print "vSunRelHat: ",vSunRelHat
     b1 = dot(e1,vSunRelHat)
     b2 = dot(e2,vSunRelHat)
-    b = np.sqrt(b1*b1+b2*b2)
-    t = np.arccos(b1/b)/omega
+    b = mpmath.sqrt(b1*b1+b2*b2)
+    t = mpmath.arccos(b1/b)/omega
 
     if(b2<0):
         t=2*M_PI/omega-t
@@ -198,7 +199,7 @@ def tc(vstr):
 # f(v)~exp(-(v-vstrE)^2/v0^2)
 ################################################################################
 def gStream(vmin, vstrE, v0):
-    return (special.erf((vmin+vstrE)/v0)-special.erf((vmin-vstrE)/v0))/(2*vstrE)
+    return (mpmath.erf((vmin+vstrE)/v0)-mpmath.erf((vmin-vstrE)/v0))/(2*vstrE)
 
 ################################################################################
 # Same as above but if the stream has zero dispersion (i.e. delta function)
@@ -219,12 +220,12 @@ def glow(Er, t, A, m):
         vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
 
-    y = np.sqrt(dot(vObs,vObs))/vo
+    y = mpmath.sqrt(dot(vObs,vObs))/vo
     x = vmin(Er,A,m)/vo
 
     #  printf("\nve(t)=%f",vo*y);
 
-    return (special.erf(x+y)-special.erf(x-y)-4*y*np.exp(-z*z)/np.sqrt(M_PI))/(2*Nesc*vo*y);
+    return (mpmath.erf(x+y)-mpmath.erf(x-y)-4*y*mpmath.exp(-z*z)/mpmath.sqrt(M_PI))/(2*Nesc*vo*y);
 
 
 ################################################################################
@@ -234,20 +235,19 @@ def ghigh(Er, t, A, m):
         vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
 
-    y = np.sqrt(dot(vObs,vObs))/vo
+    y = mpmath.sqrt(dot(vObs,vObs))/vo
     x = vmin(Er,A,m)/vo
 
-    return (special.erf(z)-special.erf(x-y)+2*(x-y-z)*np.exp(-z*z)/np.sqrt(M_PI))/(2*Nesc*vo*y)
+    return (mpmath.erf(z)-mpmath.erf(x-y)+2*(x-y-z)*mpmath.exp(-z*z)/mpmath.sqrt(M_PI))/(2*Nesc*vo*y)
 
 ################################################################################
 def gSHM(Er, t, A, m):
     vObs = np.zeros(3)
     if type(t)==np.ndarray:
         vObs = np.zeros((3,len(t)))
-
     vObs_t(vObs,t)
 
-    y = np.sqrt(dot(vObs,vObs))/vo
+    y = mpmath.sqrt(dot(vObs,vObs))/vo
     x = vmin(Er,A,m)/vo
 
     if type(Er)==np.ndarray:
@@ -257,15 +257,6 @@ def gSHM(Er, t, A, m):
         ret[x<z+y] = ghigh(Er,t,A,m)
 
         return ret
-
-    elif type(t)==np.ndarray:
-        nvals = len(t)
-        ret = np.zeros(nvals)
-        ret[x<z-y] = glow(Er,t,A,m)
-        ret[x<z+y] = ghigh(Er,t,A,m)
-
-        return ret
-
     else:
         if(x<z-y):
             return glow(Er,t,A,m)
@@ -275,15 +266,17 @@ def gSHM(Er, t, A, m):
             return 0
 
 
+
+
 ################################################################################
 # This works ok for overall rates, but will not work well if doing a modulation analysis
 ################################################################################
 def gDebris(vmin, vflow, t):
     vObs = np.zeros(3)
     vObs_t(vObs,t)
-    vobs = np.sqrt(dot(vObs,vObs))
-    if(vmin<np.abs(vflow-vobs)):
-        return (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
+    vobs = mpmath.sqrt(dot(vObs,vObs))
+    if(vmin<mpmath.abs(vflow-vobs)):
+        return (vflow+vobs-mpmath.abs(vflow-vobs))/(2*vflow*vobs)
     elif(vmin<vflow+vobs):
         return (vflow+vobs-vmin)/(2*vflow*vobs)
     else:
@@ -297,17 +290,17 @@ s=0.9
 
 ################################################################################
 def cf(A):
-    return 1.23*np.power(A,1.0/3.0)-0.6
+    return 1.23*mpmath.power(A,1.0/3.0)-0.6
 
 
 
 ################################################################################
 def q(Er, A):
-    return np.sqrt(2*mT(A)*Er*1.0E-6)
+    return mpmath.sqrt(2*mT(A)*Er*1.0E-6)
 
 ################################################################################
 def R1(A):
-    return np.sqrt(cf(A)*cf(A)+7*M_PI*M_PI*a*a/3-5*s*s)
+    return mpmath.sqrt(cf(A)*cf(A)+7*M_PI*M_PI*a*a/3-5*s*s)
 
 ################################################################################
 def Z1(Er,A):
@@ -319,11 +312,11 @@ def Zs(Er, A):
 
 ################################################################################
 def j1(x):
-    return (np.sin(x)-x*np.cos(x))/(x*x)
+    return (mpmath.sin(x)-x*mpmath.cos(x))/(x*x)
 
 ################################################################################
 def F( Er,A):
-    return 3*j1(Z1(Er,A))*np.exp(-Zs(Er,A)*Zs(Er,A)/2)/Z1(Er,A);
+    return 3*j1(Z1(Er,A))*mpmath.exp(-Zs(Er,A)*Zs(Er,A)/2)/Z1(Er,A);
 
 
 ################################################################################

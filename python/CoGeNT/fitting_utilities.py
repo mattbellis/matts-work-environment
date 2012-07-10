@@ -14,14 +14,48 @@ import chris_kelso_code as dmm
 tc_SHM = dmm.tc(np.zeros(3))
 AGe = 72.6
 
+dblqtol = 1.0
+
+################################################################################
+# Plot WIMP signal
+################################################################################
+def plot_wimp_er(x,AGe,mDM,time_range=[1,365]):
+    n = 0
+    keVr = dmm.quench_keVee_to_keVr(x)
+    for org_day in range(time_range[0],time_range[1],1):
+        day = (org_day+338)%365.0 - 151
+        n += dmm.dRdErSHM(keVr,tc_SHM+day,AGe,mDM)
+    return n
+
+def plot_wimp_day(org_day,AGe,mDM,e_range=[0.5,3.2]):
+    n = 0
+    day = (org_day+338)%365.0 - 151
+    #day = org_day
+    print day
+    if type(day)==np.ndarray:
+        print "here!"
+        n = np.zeros(len(day))
+        for i,d in enumerate(day):
+            #print d
+            x = np.linspace(e_range[0],e_range[1],100)
+            keVr = dmm.quench_keVee_to_keVr(x)
+            n[i] = (dmm.dRdErSHM(keVr,tc_SHM+d,AGe,mDM)).sum()
+            #print len(tot)
+    else:
+        for x in np.linspace(e_range[0],e_range[1],100):
+            keVr = dmm.quench_keVee_to_keVr(x)
+            n += dmm.dRdErSHM(keVr,tc_SHM+day,AGe,mDM)
+    return n
+
 ################################################################################
 # WIMP signal
 ################################################################################
 ################################################################################
-def wimp(y,x,AGe,mDM):
+def wimp(org_day,x,AGe,mDM):
     #tc_SHM = dmm.tc(np.zeros(3))
     #print tc_SHM
     #print tc_SHM+y
+    y = (org_day+338)%365.0 - 151
     dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
     return dR
 ################################################################################
@@ -165,8 +199,8 @@ def fitfunc(data,p,parnames,params_dict):
         efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
         #efficiency = lambda x: 1.0
 
-        #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
-        subranges = [[],[[1,459]]]
+        subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+        #subranges = [[],[[1,459]]]
 
         x = data[0]
         y = data[1]
@@ -190,7 +224,7 @@ def fitfunc(data,p,parnames,params_dict):
         #wmod_offst = p[pn.index('wmod_offst')]
 
         #mDM = 7.0
-        mDM = p[pn.index('mDM')]
+        #mDM = p[pn.index('mDM')]
 
         loE = dmm.quench_keVee_to_keVr(0.5)
         hiE = dmm.quench_keVee_to_keVr(3.2)
@@ -198,12 +232,13 @@ def fitfunc(data,p,parnames,params_dict):
         # Normalize numbers.
         num_tot = 0.0
         for name in pn:
-            if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
+            #if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
+            if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
                 #print "building num_tot",num_tot,p[pn.index(name)]
 
-        num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM))[0]*(0.333)*(0.867)
-        num_tot += num_wimps
+        #num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
+        #num_tot += num_wimps
 
         num_exp0 /= num_tot
         num_exp1 /= num_tot
@@ -241,9 +276,10 @@ def fitfunc(data,p,parnames,params_dict):
         ########################################################################
         # Wimp-like signal
         ########################################################################
-        #pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
-        #pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+        pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
+        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         #pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
+        '''
         #tc_SHM = dmm.tc(np.zeros(3))
         #gdbl_int = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM))
         gdbl_int = (1.0,1.0)
@@ -251,6 +287,7 @@ def fitfunc(data,p,parnames,params_dict):
         xkeVr = dmm.quench_keVee_to_keVr(x)
         pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM)/gdbl_int[0]
         print "here"
+        '''
         pdf *= num_exp0
         tot_pdf += pdf
 
@@ -480,17 +517,18 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     n = 0
     for name in parnames:
-        if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
+        #if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
+        if 'num_' in name or 'ncalc' in name:
             n += p[parnames.index(name)]
 
-    mDM = p[parnames.index('mDM')]
+    #mDM = p[parnames.index('mDM')]
 
     loE = dmm.quench_keVee_to_keVr(0.5)
     hiE = dmm.quench_keVee_to_keVr(3.2)
 
-    nwimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM))[0]*(0.333)*(0.867)
-    n += nwimps
-    print "nwimps: ",nwimps
+    #nwimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
+    #n += nwimps
+    #print "nwimps: ",nwimps
 
     #print "pois: ",n,ndata
     #print "vals: ",(-np.log(fitfunc(data,p,parnames,params_dict))).sum(), pois(n,ndata)
