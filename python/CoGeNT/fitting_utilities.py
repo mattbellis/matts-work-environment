@@ -31,9 +31,9 @@ def plot_wimp_day(org_day,AGe,mDM,e_range=[0.5,3.2]):
     n = 0
     day = (org_day+338)%365.0 - 151
     #day = org_day
-    print day
+    #print day
     if type(day)==np.ndarray:
-        print "here!"
+        #print "here!"
         n = np.zeros(len(day))
         for i,d in enumerate(day):
             #print d
@@ -79,235 +79,6 @@ def gen_mc(nmc,ranges):
 
     return mc
 
-################################################################################
-# Cut events from an arbitrary dataset that fall outside a set of ranges.
-################################################################################
-def cut_events_outside_range(data,ranges):
-
-    index = np.ones(len(data[0]),dtype=np.int)
-    for i,r in enumerate(ranges):
-        index *= ((data[i]>r[0])*(data[i]<r[1]))
-
-    '''
-    for x,y in zip(data[0][index!=True],data[1][index!=True]):
-        print x,y
-    '''
-
-    for i in xrange(len(data)):
-        print data[i][index!=True]
-        data[i] = data[i][index==True]
-
-    return data
-
-################################################################################
-# Cut events from an arbitrary dataset that fall outside a set of sub-ranges.
-################################################################################
-def cut_events_outside_subrange(data,subrange,data_index=0):
-
-    index = np.zeros(len(data[data_index]),dtype=np.int)
-    for r in subrange:
-        print r[0],r[1]
-        index += ((data[data_index]>r[0])*(data[data_index]<r[1]))
-        print data[1][data[1]>107.0]
-
-    print index[index!=1]
-    for i in xrange(len(data)):
-        print data[i][index!=True]
-        data[i] = data[i][index==True]
-
-    return data
-
-
-################################################################################
-def fitfunc(data,p,parnames,params_dict):
-
-    pn = parnames
-
-    flag = p[pn.index('flag')]
-
-    tot_pdf = np.zeros(len(data[0]))
-
-    if flag==0:
-
-        x = data[0]
-        y = data[1]
-
-        xlo = params_dict['var_e']['limits'][0]
-        xhi = params_dict['var_e']['limits'][1]
-        ylo = params_dict['var_t']['limits'][0]
-        yhi = params_dict['var_t']['limits'][1]
-
-        tot_pdf = np.zeros(len(x))
-        
-        e_exp0 = p[pn.index('e_exp0')]
-        num_exp0 = p[pn.index('num_exp0')]
-        num_flat = p[pn.index('num_flat')]
-        e_exp1 = p[pn.index('e_exp1')]
-        num_exp1 = p[pn.index('num_exp1')]
-
-        #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-        #lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
-
-        means = []
-        sigmas = []
-        numls = []
-        decay_constants = []
-
-        for i in xrange(10):
-            name = "ls_mean%d" % (i)
-            means.append(p[pn.index(name)])
-            name = "ls_sigma%d" % (i)
-            sigmas.append(p[pn.index(name)])
-            name = "ls_ncalc%d" % (i)
-            numls.append(p[pn.index(name)])
-            name = "ls_dc%d" % (i)
-            decay_constants.append(p[pn.index(name)])
-
-        for n,m,s,dc in zip(numls,means,sigmas,decay_constants):
-            pdf  = pdfs.gauss(x,m,s,xlo,xhi)
-            #dc = -1.0/dc
-            dc = -1.0*dc
-            pdf *= pdfs.exp(y,dc,ylo,yhi)
-            pdf *= n
-            tot_pdf += pdf
-
-        # Exponential in energy
-        pdf  = pdfs.poly(y,[],ylo,yhi)
-        pdf *= pdfs.exp(x,e_exp0,xlo,xhi)
-        pdf *= num_exp0
-        tot_pdf += pdf
-
-        # Second exponential in energy
-        pdf  = pdfs.poly(y,[],ylo,yhi)
-        pdf *= pdfs.exp(x,e_exp1,xlo,xhi)
-        pdf *= num_exp1
-        tot_pdf += pdf
-
-        # Flat term
-        #print xlo,xhi,ylo,yhi
-        pdf  = pdfs.poly(y,[],ylo,yhi)
-        pdf *= pdfs.poly(x,[],xlo,xhi)
-        pdf *= num_flat
-        tot_pdf += pdf
-
-    elif flag==1:
-
-        max_val = 0.86786
-        threshold = 0.345
-        sigmoid_sigma = 0.241
-
-        efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
-        #efficiency = lambda x: 1.0
-
-        subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
-        #subranges = [[],[[1,459]]]
-
-        x = data[0]
-        y = data[1]
-
-        xlo = params_dict['var_e']['limits'][0]
-        xhi = params_dict['var_e']['limits'][1]
-        ylo = params_dict['var_t']['limits'][0]
-        yhi = params_dict['var_t']['limits'][1]
-
-        tot_pdf = np.zeros(len(x))
-        
-        e_exp0 = p[pn.index('e_exp0')]
-        num_exp0 = p[pn.index('num_exp0')]
-        num_flat = p[pn.index('num_flat')]
-        e_exp1 = p[pn.index('e_exp1')]
-        num_exp1 = p[pn.index('num_exp1')]
-
-        #wmod_freq = p[pn.index('wmod_freq')]
-        #wmod_phase = p[pn.index('wmod_phase')]
-        #wmod_amp = p[pn.index('wmod_amp')]
-        #wmod_offst = p[pn.index('wmod_offst')]
-
-        #mDM = 7.0
-        #mDM = p[pn.index('mDM')]
-
-        loE = dmm.quench_keVee_to_keVr(0.5)
-        hiE = dmm.quench_keVee_to_keVr(3.2)
-
-        # Normalize numbers.
-        num_tot = 0.0
-        for name in pn:
-            #if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
-            if 'num_' in name or 'ncalc' in name:
-                num_tot += p[pn.index(name)]
-                #print "building num_tot",num_tot,p[pn.index(name)]
-
-        #num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
-        #num_tot += num_wimps
-
-        num_exp0 /= num_tot
-        num_exp1 /= num_tot
-        num_flat /= num_tot
-
-        #tot_pct = num_exp0 + num_exp1 + num_flat
-        #print "num_tot",num_tot
-        #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-        #lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
-
-        means = []
-        sigmas = []
-        numls = []
-        decay_constants = []
-
-        for i in xrange(11):
-            name = "ls_mean%d" % (i)
-            means.append(p[pn.index(name)])
-            name = "ls_sigma%d" % (i)
-            sigmas.append(p[pn.index(name)])
-            name = "ls_ncalc%d" % (i)
-            numls.append(p[pn.index(name)]/num_tot) # Normalized this
-                                                    # to number of events.
-            name = "ls_dc%d" % (i)
-            decay_constants.append(p[pn.index(name)])
-
-        for n,m,s,dc in zip(numls,means,sigmas,decay_constants):
-            pdf  = pdfs.gauss(x,m,s,xlo,xhi,efficiency=efficiency)
-            dc = -1.0*dc
-            pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
-            pdf *= n
-            #tot_pct += n
-            tot_pdf += pdf
-
-        ########################################################################
-        # Wimp-like signal
-        ########################################################################
-        pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
-        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        #pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
-        '''
-        #tc_SHM = dmm.tc(np.zeros(3))
-        #gdbl_int = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM))
-        gdbl_int = (1.0,1.0)
-        print "gdbl_int: ",gdbl_int,mDM
-        xkeVr = dmm.quench_keVee_to_keVr(x)
-        pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM)/gdbl_int[0]
-        print "here"
-        '''
-        pdf *= num_exp0
-        tot_pdf += pdf
-
-        # Second exponential in energy
-        pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
-        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        pdf *= num_exp1
-        tot_pdf += pdf
-
-        # Flat term
-        #print xlo,xhi,ylo,yhi
-        pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
-        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        pdf *= num_flat
-        tot_pdf += pdf
-
-        #print "tot_pct: ",tot_pct
-
-    return tot_pdf
-################################################################################
 
 
 
@@ -535,5 +306,64 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
     ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() - pois(n,ndata)
 
     return ret
+
+
+################################################################################
+# Do contours
+################################################################################
+def contours(m,par0,par1,sigma=1.0,npts=5):
+
+    print "Starting contours..."
+    #print m.values
+    contour_points = m.contour(par0,par1,sigma,npts)
+    #print contour_points
+    cx = np.array([])
+    cy = np.array([])
+    if contour_points!=None and len(contour_points)>1:
+        for p in contour_points:
+            cx = np.append(cx,p[0])
+            cy = np.append(cy,p[1])
+        cx = np.append(cx,contour_points[0][0])
+        cy = np.append(cy,contour_points[0][1])
+
+    return cx,cy
+
+################################################################################
+# Do contours
+################################################################################
+def print_correlation_matrix(m):
+
+    print '---------------------'
+    print "\nCorrelation matrix"
+    print "\nm.matrix()"
+    print m.matrix(correlation=True)
+    corr_matrix = m.matrix(correlation=True)
+    output = ""
+    for i in xrange(len(corr_matrix)):
+        for j in xrange(len(corr_matrix[i])):
+            output += "%9.2e " % (corr_matrix[i][j])
+        output += "\n"
+    print output
+
+################################################################################
+# Do contours
+################################################################################
+def print_covariance_matrix(m):
+
+    print '---------------------'
+    print "\nCorrelation matrix"
+    print "\nm.covariance"
+
+    print m.covariance
+    cov_matrix = m.covariance
+    output = ""
+    for i in params_names:
+        for j in params_names:
+            key = (i,j)
+            if key in cov_matrix:
+                #output += "%11.2e " % (cov_matrix[key])
+                output += "%-12s %-12s %11.4f\n" % (i,j,cov_matrix[key])
+        #output += "\n"
+    print output
 
 
