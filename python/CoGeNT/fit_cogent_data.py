@@ -292,6 +292,7 @@ def main():
         func = lambda x: plot_wimp_er(x,AGe,7.0,time_range=[1,459])
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=120.0,fmt='k-',axes=ax0,subranges=[[0.5,3.2]])
         ax0.plot(sr_txpts,sr_typts,'b',linewidth=3)
+        eytot += sr_typts
 
         func = lambda x: plot_wimp_day(x,AGe,7.0,e_range=[0.5,3.2])
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=120.0,fmt='k-',axes=ax1,subranges=[[1,459]])
