@@ -38,8 +38,8 @@ vstr1Vec = np.array([vstr1*vMaxMod[0],vstr1*vMaxMod[1],vstr1*vMaxMod[2]])
 ################################################################################
 def func(y,x):
     #tc_SHM = dmm.tc(np.zeros(3))
-    #dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
-    dR = dmm.dRdErStream(x, tc_Max+y, AGe, vstr1Vec, 10,mDM)
+    dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
+    #dR = dmm.dRdErStream(x, tc_Max+y, AGe, vstr1Vec, 10,mDM)
     return dR
 ################################################################################
 
@@ -62,14 +62,14 @@ hi = dmm.quench_keVee_to_keVr(3.2)
 
 print lo,hi
 
-#gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: 459.0,epsabs=0.1)
-gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: 365.0)
+last_day = 459.0
+#gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day)
+#print gdbl_int
+#gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day,epsabs=0.01)
+#print gdbl_int
+gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day,epsabs=0.1)
 print gdbl_int
-gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: 365.0,epsabs=0.01)
-print gdbl_int
-gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: 365.0,epsabs=0.1)
-print gdbl_int
-gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: 365.0,epsabs=1.0)
+gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day,epsabs=1.0)
 print gdbl_int
 
 #print gdbl_int[0]*(330.0/1000.0)

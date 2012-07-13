@@ -10,6 +10,11 @@ import chris_kelso_code as dmm
 
 import lichen.pdfs as pdfs
 
+tc_SHM = dmm.tc(np.zeros(3))
+AGe = 72.6
+
+dblqtol = 1.0
+
 ################################################################################
 # Cosmogenic data
 ################################################################################
@@ -77,6 +82,20 @@ def sigmoid(x,thresh,sigma,max_val):
     return ret
 
 ################################################################################
+# WIMP signal
+################################################################################
+def wimp(org_day,x,AGe,mDM):
+    #tc_SHM = dmm.tc(np.zeros(3))
+    #print tc_SHM
+    #print tc_SHM+y
+    #y = (org_day+338)%365.0 - 151
+    #dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
+    y = (org_day+338)%365.0
+    dR = dmm.dRdErSHM(x,y,AGe,mDM)
+    return dR
+################################################################################
+
+################################################################################
 # CoGeNT fit
 ################################################################################
 def fitfunc(data,p,parnames,params_dict):
@@ -86,6 +105,8 @@ def fitfunc(data,p,parnames,params_dict):
     flag = p[pn.index('flag')]
 
     tot_pdf = np.zeros(len(data[0]))
+    pdf = None
+    num_wimps = 0
 
     x = data[0]
     y = data[1]
@@ -97,164 +118,133 @@ def fitfunc(data,p,parnames,params_dict):
 
     tot_pdf = np.zeros(len(x))
 
-    if flag==0:
+    max_val = 0.86786
+    threshold = 0.345
+    sigmoid_sigma = 0.241
 
+    efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+    #efficiency = lambda x: 1.0
+
+    subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+    #subranges = [[],[[1,459]]]
+    
+    ############################################################################
+    # Set up the fit
+    ############################################################################
+    num_exp0 = p[pn.index('num_exp0')]
+    num_flat = p[pn.index('num_flat')]
+    e_exp1 = p[pn.index('e_exp1')]
+    num_exp1 = p[pn.index('num_exp1')]
+
+    if flag==0 or flag==1:
         e_exp0 = p[pn.index('e_exp0')]
-        num_exp0 = p[pn.index('num_exp0')]
-        num_flat = p[pn.index('num_flat')]
-        e_exp1 = p[pn.index('e_exp1')]
-        num_exp1 = p[pn.index('num_exp1')]
 
-        #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-        #lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
+    if flag==1:
+        wmod_freq = p[pn.index('wmod_freq')]
+        wmod_phase = p[pn.index('wmod_phase')]
+        wmod_amp = p[pn.index('wmod_amp')]
+        wmod_offst = p[pn.index('wmod_offst')]
 
-        means = []
-        sigmas = []
-        numls = []
-        decay_constants = []
-
-        for i in xrange(11):
-            name = "ls_mean%d" % (i)
-            means.append(p[pn.index(name)])
-            name = "ls_sigma%d" % (i)
-            sigmas.append(p[pn.index(name)])
-            name = "ls_ncalc%d" % (i)
-            numls.append(p[pn.index(name)])
-            name = "ls_dc%d" % (i)
-            decay_constants.append(p[pn.index(name)])
-
-        for n,m,s,dc in zip(numls,means,sigmas,decay_constants):
-            pdf  = pdfs.gauss(x,m,s,xlo,xhi)
-            #dc = -1.0/dc
-            dc = -1.0*dc
-            pdf *= pdfs.exp(y,dc,ylo,yhi)
-            pdf *= n
-            tot_pdf += pdf
-
-        # Exponential in energy
-        pdf  = pdfs.poly(y,[],ylo,yhi)
-        pdf *= pdfs.exp(x,e_exp0,xlo,xhi)
-        pdf *= num_exp0
-        tot_pdf += pdf
-
-        # Second exponential in energy
-        pdf  = pdfs.poly(y,[],ylo,yhi)
-        pdf *= pdfs.exp(x,e_exp1,xlo,xhi)
-        pdf *= num_exp1
-        tot_pdf += pdf
-
-        # Flat term
-        #print xlo,xhi,ylo,yhi
-        pdf  = pdfs.poly(y,[],ylo,yhi)
-        pdf *= pdfs.poly(x,[],xlo,xhi)
-        pdf *= num_flat
-        tot_pdf += pdf
-
-    elif flag==1:
-
-        max_val = 0.86786
-        threshold = 0.345
-        sigmoid_sigma = 0.241
-
-        efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
-        #efficiency = lambda x: 1.0
-
-        subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
-        #subranges = [[],[[1,459]]]
-
-        e_exp0 = p[pn.index('e_exp0')]
-        num_exp0 = p[pn.index('num_exp0')]
-        num_flat = p[pn.index('num_flat')]
-        e_exp1 = p[pn.index('e_exp1')]
-        num_exp1 = p[pn.index('num_exp1')]
-
-        #wmod_freq = p[pn.index('wmod_freq')]
-        #wmod_phase = p[pn.index('wmod_phase')]
-        #wmod_amp = p[pn.index('wmod_amp')]
-        #wmod_offst = p[pn.index('wmod_offst')]
-
+    elif flag==2:
         #mDM = 7.0
-        #mDM = p[pn.index('mDM')]
-
+        mDM = p[pn.index('mDM')]
         loE = dmm.quench_keVee_to_keVr(0.5)
         hiE = dmm.quench_keVee_to_keVr(3.2)
 
-        # Normalize numbers.
-        num_tot = 0.0
-        for name in pn:
-            #if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
+    ############################################################################
+    # Normalize numbers.
+    ############################################################################
+    num_tot = 0.0
+    for name in pn:
+        if flag==0 or flag==1:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
-                #print "building num_tot",num_tot,p[pn.index(name)]
+        elif flag==2:
+            if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
+                num_tot += p[pn.index(name)]
 
-        #num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
-        #num_tot += num_wimps
+    if flag==2:
+        num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
+        num_tot += num_wimps
 
+    print "fitfunc num_tot: ",num_tot
+    ############################################################################
+    # Start building the pdfs
+    ############################################################################
+
+    ############################################################################
+    # l-shell peaks
+    ############################################################################
+    means = []
+    sigmas = []
+    numls = []
+    decay_constants = []
+
+    for i in xrange(11):
+        name = "ls_mean%d" % (i)
+        means.append(p[pn.index(name)])
+        name = "ls_sigma%d" % (i)
+        sigmas.append(p[pn.index(name)])
+        name = "ls_ncalc%d" % (i)
+        numls.append(p[pn.index(name)]/num_tot) # Normalized this
+                                                # to number of events.
+        name = "ls_dc%d" % (i)
+        decay_constants.append(p[pn.index(name)])
+
+    for n,m,s,dc in zip(numls,means,sigmas,decay_constants):
+        pdf  = pdfs.gauss(x,m,s,xlo,xhi,efficiency=efficiency)
+        dc = -1.0*dc
+        pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
+        pdf *= n
+        tot_pdf += pdf
+
+    ############################################################################
+    # Normalize the number of events tot the total.
+    ############################################################################
+    if flag==0 or flag==1:
         num_exp0 /= num_tot
-        num_exp1 /= num_tot
-        num_flat /= num_tot
 
-        #tot_pct = num_exp0 + num_exp1 + num_flat
-        #print "num_tot",num_tot
-        #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
-        #lshells = lshell_peaks(means,sigmas,num_decays_in_dataset)
+    num_exp1 /= num_tot
+    num_flat /= num_tot
 
-        means = []
-        sigmas = []
-        numls = []
-        decay_constants = []
-
-        for i in xrange(11):
-            name = "ls_mean%d" % (i)
-            means.append(p[pn.index(name)])
-            name = "ls_sigma%d" % (i)
-            sigmas.append(p[pn.index(name)])
-            name = "ls_ncalc%d" % (i)
-            numls.append(p[pn.index(name)]/num_tot) # Normalized this
-                                                    # to number of events.
-            name = "ls_dc%d" % (i)
-            decay_constants.append(p[pn.index(name)])
-
-        for n,m,s,dc in zip(numls,means,sigmas,decay_constants):
-            pdf  = pdfs.gauss(x,m,s,xlo,xhi,efficiency=efficiency)
-            dc = -1.0*dc
-            pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
-            pdf *= n
-            #tot_pct += n
-            tot_pdf += pdf
-
-        ########################################################################
-        # Wimp-like signal
-        ########################################################################
+    ########################################################################
+    # Wimp-like signal
+    ########################################################################
+    if flag==0:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        #pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
-        '''
-        #tc_SHM = dmm.tc(np.zeros(3))
-        #gdbl_int = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM))
-        gdbl_int = (1.0,1.0)
-        print "gdbl_int: ",gdbl_int,mDM
-        xkeVr = dmm.quench_keVee_to_keVr(x)
-        pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM)/gdbl_int[0]
-        print "here"
-        '''
         pdf *= num_exp0
-        tot_pdf += pdf
+    if flag==1:
+        pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
+        pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
+        pdf *= num_exp0
+    if flag==2:
+        print "num_wimps mDM: ",num_wimps,mDM
+        wimp_norm = num_wimps
+        print "wimp_norm: ",wimp_norm
+        xkeVr = dmm.quench_keVee_to_keVr(x)
+        #pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM)/wimp_norm
+        #pdf *= num_wimps/num_tot
+        pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM)/num_tot
+        print "here"
 
-        # Second exponential in energy
-        pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
-        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        pdf *= num_exp1
-        tot_pdf += pdf
+    tot_pdf += pdf
 
-        # Flat term
-        #print xlo,xhi,ylo,yhi
-        pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
-        pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-        pdf *= num_flat
-        tot_pdf += pdf
+    ############################################################################
+    # Second exponential in energy
+    ############################################################################
+    pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
+    pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    pdf *= num_exp1
+    tot_pdf += pdf
 
-        #print "tot_pct: ",tot_pct
+    ############################################################################
+    # Flat term
+    ############################################################################
+    pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
+    pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    pdf *= num_flat
+    tot_pdf += pdf
 
     return tot_pdf
 ################################################################################

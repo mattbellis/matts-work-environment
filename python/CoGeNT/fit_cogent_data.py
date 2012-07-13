@@ -35,7 +35,7 @@ def main():
     ############################################################################
     parser = argparse.ArgumentParser()
     parser.add_argument('--fit', dest='fit', type=int,\
-            default=1, help='Which fit to perform (0,1,2)')
+            default=0, help='Which fit to perform (0,1,2)')
     parser.add_argument('--verbose', dest='verbose', action='store_true',\
             default=False, help='Verbose output')
     parser.add_argument('--turn-off-eff', dest='turn_off_eff', action='store_true',\
@@ -177,7 +177,7 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
 
     # Exponential term in energy
-    if args.fit==0 or args.fit==1 or args.fit==2:
+    if args.fit==0 or args.fit==1:
         params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
 
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
@@ -186,15 +186,15 @@ def main():
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
 
     # Use the dark matter SHM
-    if args.fit==3:
+    if args.fit==2:
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(0.0,10000.0)}
+        params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(5.0,10000.0)}
 
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
 
     # Let the exponential modulate as a cos term
-    if args.fit==2:
+    if args.fit==1:
         params_dict['wmod_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
         params_dict['wmod_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
         params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
@@ -209,7 +209,10 @@ def main():
     # For maximum likelihood method.
     m.up = 0.5
 
-    m.printMode = 0
+    # Up the tolerance.
+    m.tol = 1000.0
+
+    m.printMode = 1
 
     m.migrad()
     m.hesse()
@@ -269,16 +272,30 @@ def main():
     # Exponential
     ############################################################################
     # Energy projections
-    #ypts = np.exp(-values['e_exp0']*expts)
-    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
-    #eytot += y
+    if args.fit==0 or args.fit==1:
+        ypts = np.exp(-values['e_exp0']*expts)
+        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
+        eytot += y
 
     # Time projections
-    func = lambda x: np.ones(len(x))
-    #func = lambda x: values['wmod_offst'] + values['wmod_amp']*np.cos(values['wmod_freq']*x+values['wmod_phase'])   
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
-    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+    if args.fit==0:
+        func = lambda x: np.ones(len(x))
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
+        tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+    elif args.fit==1:
+        func = lambda x: values['wmod_offst'] + values['wmod_amp']*np.cos(values['wmod_freq']*x+values['wmod_phase'])   
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
+        tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
+    # Plot wimp term
+    if args.fit==2:
+        func = lambda x: plot_wimp_er(x,AGe,7.0,time_range=[1,459])
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=120.0,fmt='k-',axes=ax0,subranges=[[0.5,3.2]])
+        ax0.plot(sr_txpts,sr_typts,'b',linewidth=3)
+
+        func = lambda x: plot_wimp_day(x,AGe,7.0,e_range=[0.5,3.2])
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=120.0,fmt='k-',axes=ax1,subranges=[[1,459]])
+        ax1.plot(sr_txpts,sr_typts,'b',linewidth=3)
 
     ############################################################################
     # Second exponential
@@ -292,9 +309,6 @@ def main():
     func = lambda x: np.ones(len(x))
     sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1,subranges=subranges[1])
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
-    #ypts = np.ones(len(txpts))
-    #y,plot = plot_pdf(txpts,ypts,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1)
-    #tytot += y
 
     ############################################################################
     # Flat
@@ -303,18 +317,15 @@ def main():
     ypts = np.ones(len(expts))
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff)
     eytot += y
-    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
 
     # Time projections
-    #typts = np.ones(len(txpts))
-    #y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1)
-    #tytot += y
     func = lambda x: np.ones(len(x))
     sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
-    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='r-',axes=ax0)
+    ############################################################################
     # L-shell
+    ############################################################################
     # Returns pdfs
     lshell_totx = np.zeros(1000)
     lshell_toty = np.zeros(1000)
@@ -322,18 +333,12 @@ def main():
         gauss = stats.norm(loc=m,scale=s)
         eypts = gauss.pdf(expts)
 
+        # Energy distributions
         y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=n,fmt='r--',axes=ax0,efficiency=eff)
         eytot += y
         lshell_totx += y
 
-        # Time distribution
-        #pdf_e = stats.expon(loc=0.0,scale=-1.0/dc)
-        #typts = pdf_e.pdf(txpts)
-        #typts = np.exp(dc*txpts)
-        #y,plot = plot_pdf(txpts,typts,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1)
-        #lshell_toty += y
-
-        #tytot += y
+        # Time distributions
         func = lambda x: np.exp(dc*x)
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
@@ -343,21 +348,12 @@ def main():
     ax0.plot(expts,lshell_totx,'r-',linewidth=2)
 
     ax0.plot(expts,eytot,'b',linewidth=3)
-    #ax1.plot(txpts,tytot,'b',linewidth=3)
 
-    # Total on y/t
+    # Total on y/t over all subranges.
     for x,y,lsh in zip(sr_txpts,tot_sr_typts,lshell_toty):
         ax1.plot(x,lsh,'r-',linewidth=2)
         ax1.plot(x,y,'b',linewidth=3)
 
-    # Plot wimp term
-    func = lambda x: plot_wimp_er(x,AGe,7.0,time_range=[1,459])
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=120.0,fmt='k-',axes=ax0,subranges=[[0.5,3.2]])
-    ax0.plot(sr_txpts,sr_typts,'b',linewidth=3)
-
-    func = lambda x: plot_wimp_day(x,AGe,7.0,e_range=[0.5,3.2])
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=120.0,fmt='k-',axes=ax1,subranges=[[1,459]])
-    ax1.plot(sr_txpts,sr_typts,'b',linewidth=3)
 
 
     ############################################################################
