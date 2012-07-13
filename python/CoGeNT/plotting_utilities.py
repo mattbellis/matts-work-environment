@@ -9,7 +9,7 @@ from RTMinuit import *
 ################################################################################
 # Plotting code for pdf
 ################################################################################
-def plot_pdf_from_lambda(func,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,fmt='-',subranges=None):
+def plot_pdf_from_lambda(func,bin_width=1.0,scale=1.0,efficiency=None,axes=None,fmt='-',subranges=None):
 
     y = None
     plot = None
@@ -32,6 +32,13 @@ def plot_pdf_from_lambda(func,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,f
         plot = []
         for srx,sr in zip(srxs,subranges):
             sry = func(srx)
+
+            # Work in the efficiency
+            eff = 1.0
+            if efficiency!=None:
+                eff = efficiency(srx)
+            sry *= eff
+
             norm = integrate.simps(sry,x=srx)
             srnorms.append(norm)
             totnorm += norm
@@ -40,6 +47,13 @@ def plot_pdf_from_lambda(func,bin_width=1.0,scale=1.0,efficiency=1.0,axes=None,f
             norm /= totnorm
 
             ypts = func(srx)
+
+            # Work in the efficiency
+            eff = 1.0
+            if efficiency!=None:
+                eff = efficiency(srx)
+            ypts *= eff
+
             #print "norm*scale: ",norm*scale
             ytemp,plottemp = plot_pdf(srx,ypts,bin_width=bin_width,scale=norm*scale,fmt=fmt,axes=axes)
             y.append(ytemp)

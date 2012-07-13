@@ -84,14 +84,16 @@ def sigmoid(x,thresh,sigma,max_val):
 ################################################################################
 # WIMP signal
 ################################################################################
-def wimp(org_day,x,AGe,mDM):
-    #tc_SHM = dmm.tc(np.zeros(3))
-    #print tc_SHM
-    #print tc_SHM+y
-    #y = (org_day+338)%365.0 - 151
-    #dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
+def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None):
     y = (org_day+338)%365.0
-    dR = dmm.dRdErSHM(x,y,AGe,mDM)
+    xkeVr = dmm.quench_keVee_to_keVr(x)
+    dR = dmm.dRdErSHM(xkeVr,y,AGe,mDM,sigma_n)
+    eff = 1.0
+    if efficiency!=None:
+        #print "EFFICIENCY"
+        eff = efficiency(x)
+        #print "eff: ",eff
+    dR *= eff
     return dR
 ################################################################################
 
@@ -148,8 +150,11 @@ def fitfunc(data,p,parnames,params_dict):
     elif flag==2:
         #mDM = 7.0
         mDM = p[pn.index('mDM')]
-        loE = dmm.quench_keVee_to_keVr(0.5)
-        hiE = dmm.quench_keVee_to_keVr(3.2)
+        sigma_n = p[pn.index('sigma_n')]
+        #loE = dmm.quench_keVee_to_keVr(0.5)
+        #hiE = dmm.quench_keVee_to_keVr(3.2)
+        loE = 0.5
+        hiE = 3.2
 
     ############################################################################
     # Normalize numbers.
@@ -164,7 +169,7 @@ def fitfunc(data,p,parnames,params_dict):
                 num_tot += p[pn.index(name)]
 
     if flag==2:
-        num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
+        num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
         num_tot += num_wimps
 
     print "fitfunc num_tot: ",num_tot
@@ -222,10 +227,10 @@ def fitfunc(data,p,parnames,params_dict):
         print "num_wimps mDM: ",num_wimps,mDM
         wimp_norm = num_wimps
         print "wimp_norm: ",wimp_norm
-        xkeVr = dmm.quench_keVee_to_keVr(x)
-        #pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM)/wimp_norm
+        #pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM,sigma_n)/wimp_norm
         #pdf *= num_wimps/num_tot
-        pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM)/num_tot
+        #pdf = dmm.dRdErSHM(x,y,AGe,mDM,sigma_n,efficiency=efficiency)/num_tot
+        pdf = wimp(x,y,AGe,mDM,sigma_n,efficiency=efficiency)/num_tot
         print "here"
 
     tot_pdf += pdf

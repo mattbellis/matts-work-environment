@@ -15,6 +15,8 @@ mDM = 7.0
 
 tc_SHM = dmm.tc(np.zeros(3))
 
+sigma_n = 1e-40
+
 # For a stream with a maximum velocity
 vMaxMod = np.zeros(3)
 vEWinter = np.zeros(3)
@@ -38,8 +40,8 @@ vstr1Vec = np.array([vstr1*vMaxMod[0],vstr1*vMaxMod[1],vstr1*vMaxMod[2]])
 ################################################################################
 def func(y,x):
     #tc_SHM = dmm.tc(np.zeros(3))
-    dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
-    #dR = dmm.dRdErStream(x, tc_Max+y, AGe, vstr1Vec, 10,mDM)
+    dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM,sigma_n)
+    #dR = dmm.dRdErStream(x, tc_Max+y, AGe, vstr1Vec, 10,mDM,sigma_n)
     return dR
 ################################################################################
 

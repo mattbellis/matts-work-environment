@@ -14,15 +14,15 @@ import chris_kelso_code as dmm
 ################################################################################
 # Plot WIMP signal
 ################################################################################
-def plot_wimp_er(x,AGe,mDM,time_range=[1,365]):
+def plot_wimp_er(x,AGe,mDM,sigma_n,time_range=[1,365]):
     n = 0
     keVr = dmm.quench_keVee_to_keVr(x)
     for org_day in range(time_range[0],time_range[1],1):
         day = (org_day+338)%365.0 - 151
-        n += dmm.dRdErSHM(keVr,tc_SHM+day,AGe,mDM)
+        n += dmm.dRdErSHM(keVr,tc_SHM+day,AGe,mDM,sigma_n)
     return n
 
-def plot_wimp_day(org_day,AGe,mDM,e_range=[0.5,3.2]):
+def plot_wimp_day(org_day,AGe,mDM,sigma_n,e_range=[0.5,3.2]):
     n = 0
     day = (org_day+338)%365.0 - 151
     #day = org_day
@@ -34,12 +34,12 @@ def plot_wimp_day(org_day,AGe,mDM,e_range=[0.5,3.2]):
             #print d
             x = np.linspace(e_range[0],e_range[1],100)
             keVr = dmm.quench_keVee_to_keVr(x)
-            n[i] = (dmm.dRdErSHM(keVr,tc_SHM+d,AGe,mDM)).sum()
+            n[i] = (dmm.dRdErSHM(keVr,tc_SHM+d,AGe,mDM,sigma_n)).sum()
             #print len(tot)
     else:
         for x in np.linspace(e_range[0],e_range[1],100):
             keVr = dmm.quench_keVee_to_keVr(x)
-            n += dmm.dRdErSHM(keVr,tc_SHM+day,AGe,mDM)
+            n += dmm.dRdErSHM(keVr,tc_SHM+day,AGe,mDM,sigma_n)
     return n
 
 
@@ -281,10 +281,19 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     if flag==2:
         mDM = p[parnames.index('mDM')]
-        loE = dmm.quench_keVee_to_keVr(0.5)
-        hiE = dmm.quench_keVee_to_keVr(3.2)
+        sigma_n = p[parnames.index('sigma_n')]
+        #loE = dmm.quench_keVee_to_keVr(0.5)
+        #hiE = dmm.quench_keVee_to_keVr(3.2)
+        loE = 0.5
+        hiE = 3.2
 
-        nwimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
+        max_val = 0.86786
+        threshold = 0.345
+        sigmoid_sigma = 0.241
+
+        efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+
+        nwimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
         num_tot += nwimps
         #print "nwimps: ",nwimps
 

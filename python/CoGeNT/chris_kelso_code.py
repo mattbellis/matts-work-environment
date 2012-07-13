@@ -8,11 +8,12 @@ import scipy.integrate as integrate
 hbarc = 0.1973269664036767; # in GeV nm 
 c = constants.c*100.0 # cm/s 
 rhoDM = 0.3;  # in GeV/cm^3
-mDM = 6.8; # in GeV 
+#mDM = 6.8; # in GeV 
+mDM = 7.0; # in GeV 
 #mDM = 8.8; # in GeV 
 mn = 0.938; # mass of nucleon in GeV 
 mU = 0.9315; # amu in GeV 
-sigma_n = 1E-40; # in cm^2 
+#sigma_n = 1E-40; # in cm^2 
 #sigma_n = 5E-40; # in cm^2 
 #sigma_n = 0.5e-40; # in cm^2 
 #Na = 6.022E26; # Avogadro's # in mol/kg 
@@ -330,7 +331,7 @@ def F( Er,A):
 #All of the particle physics in the spectrum that is not the velocity distribution integral
 #This will give the spectra in counts per kg per keV per day 
 ################################################################################
-def spectraParticle(Er,A, m):
+def spectraParticle(Er,A,m,sigma_n):
     #return Na*c*c*rhoDM*A*A*sigma_n*F(Er,A)*F(Er,A)*1.0e-11*24*3600/(2*m*mu_n(m)*mu_n(m))
     ret = Na*c*c*rhoDM*A*A*sigma_n*F(Er,A)*F(Er,A)*1.0e-11*24*3600/(2*m*mu_n(m)*mu_n(m))
     if type(ret)==np.ndarray:
@@ -342,22 +343,22 @@ def spectraParticle(Er,A, m):
 ################################################################################
 # The spectrum for a stream
 ################################################################################
-def dRdErStream(Er, t, A, vstr, v0,m):
-    return spectraParticle(Er,A,m)*gStream(vmin(Er,A,m),vstrEarth(vstr,t),v0)
+def dRdErStream(Er, t, A, vstr, v0,m,sigma_n):
+    return spectraParticle(Er,A,m,sigma_n)*gStream(vmin(Er,A,m),vstrEarth(vstr,t),v0)
 
 
 ################################################################################
 # The SHM spectrum
 ################################################################################
-def dRdErSHM(Er, t, A, m):
-    return spectraParticle(Er,A,m)*gSHM(Er,t,A,m)
+def dRdErSHM(Er, t, A, m,sigma_n):
+    return spectraParticle(Er,A,m,sigma_n)*gSHM(Er,t,A,m)
 
 
 ################################################################################
 # The debris spectrum from Lisanti's paper
 ################################################################################
-def dRdErDebris(Er,t,A,m,vflow):
-    return spectraParticle(Er,A,m)*gDebris(vmin(Er,A,m),vflow,t)
+def dRdErDebris(Er,t,A,m,vflow,sigma_n):
+    return spectraParticle(Er,A,m,sigma_n)*gDebris(vmin(Er,A,m),vflow,t)
 
 
 
@@ -367,6 +368,7 @@ def dRdErDebris(Er,t,A,m,vflow):
 def main():
     i = 0.0
     Er = 0.0
+    sigma_n = 1e-40
 
     ##############################################################################
     # Find the max phase for the SHM.  This corresponds to a stream with zero velocity
@@ -374,16 +376,19 @@ def main():
     tc_SHM = tc(np.zeros(3))
     print "\nThe SHM maximum phase occurs at %f days." % (tc_SHM)
     Er = np.linspace(0.5,5.0,100)
-    dR = dRdErSHM(Er, tc_SHM, AGe, mDM)
+    dR = dRdErSHM(Er, tc_SHM, AGe, mDM,sigma_n)
 
     # Quenching factor?
     #Er = QF^-1 Eee
     #dRdEee=dRdEr*(dEr/dEee)
-    Eee = Er/5
+    #Eee = Er/5
+    Eee = quench_keVr_to_keVee(Er)
+    #Eee = quench_keVee_to_keVr(Er)
 
     plt.figure()
     #plt.plot(Er,dR)
     plt.plot(Eee,dR)
+    plt.xlabel('Eee')
     #plt.show()
 
     output = "\nSpectrum for the SHM at t=%f\n" % (tc_SHM)
@@ -409,13 +414,13 @@ def main():
     for j in range(0,360):
         #day = 30*j
         day = j
-        #tot += integrate.quad(dRdErSHM,lo,hi,args=(tc_SHM+day, AGe, mDM))[0]
-        yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM)
+        #tot += integrate.quad(dRdErSHM,lo,hi,args=(tc_SHM+day, AGe, mDM,sigma_n))[0]
+        yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM, sigma_n)
         norm_tot += integrate.simps(yvals[1:-1],x=xvals[1:-1])
         tot += integrate.simps(yvals[1:-1],x=xvals[1:-1])
         if (j+1)%30==0:
 
-            yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM)
+            yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM, sigma_n)
             plt.plot(xvals,yvals)
 
             yt[month] = tot
@@ -469,7 +474,7 @@ def main():
     output = "Spectrum for this stream at t=%f\n" % (tc_Max)
     for i in range(0,11):
         Er=2.5+i*0.1
-        output += "%.2E %.8E\n" % (Er,dRdErStream(Er, tc_Max, AGe, vstr1Vec, 10,mDM))
+        output += "%.2E %.8E\n" % (Er,dRdErStream(Er, tc_Max, AGe, vstr1Vec, 10,mDM,sigma_n))
     print output
 
 
@@ -496,7 +501,7 @@ def main():
     output = "Spectrum for this stream at t=%f\n" % (tc_Sag)
     for i in range(0,11):
         Er=1+i*0.1
-        output += "%.2E %.8E\n" % (Er,dRdErStream(Er, t1, AGe, vSagVec, v0Sag,mDM))
+        output += "%.2E %.8E\n" % (Er,dRdErStream(Er, t1, AGe, vSagVec, v0Sag,mDM,sigma_n))
     print output
 
     vDeb1 = 340
@@ -506,7 +511,7 @@ def main():
     output = "\nSpectrum for debris at t=%f\n" % (tc_SHM)
     for i in range(0,11):
         Er = 0.5+i*0.5
-        output += "%.2E %.8E\n" % (Er,dRdErDebris(Er, tc_SHM, AGe, mDM, vDeb1))
+        output += "%.2E %.8E\n" % (Er,dRdErDebris(Er, tc_SHM, AGe, mDM, vDeb1,sigma_n))
     print output
 
     ############################################################################
@@ -519,13 +524,13 @@ def main():
     for j in range(0,12):
         day = 30*j
         for i,Er in enumerate(xvals):
-            yvals[i] = dRdErDebris(Er, tc_SHM+day, AGe, mDM, vDeb1)
+            yvals[i] = dRdErDebris(Er, tc_SHM+day, AGe, mDM, vDeb1,sigma_n)
 
         #print yvals
         #print xvals
         #print integrate.trapz(yvals[1:-1],x=xvals[1:-1])
         #print integrate.simps(yvals[1:-1],x=xvals[1:-1])
-        #print integrate.quad(dRdErDebris,xvals[1],xvals[-1],args=(tc_SHM+day, AGe, mDM, vDeb1))
+        #print integrate.quad(dRdErDebris,xvals[1],xvals[-1],args=(tc_SHM+day, AGe, mDM, vDeb1,sigma_n))
         plt.plot(xvals,yvals)
 
 
