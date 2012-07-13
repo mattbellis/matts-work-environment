@@ -11,11 +11,6 @@ import lichen.pdfs as pdfs
 
 import chris_kelso_code as dmm
 
-tc_SHM = dmm.tc(np.zeros(3))
-AGe = 72.6
-
-dblqtol = 1.0
-
 ################################################################################
 # Plot WIMP signal
 ################################################################################
@@ -46,19 +41,6 @@ def plot_wimp_day(org_day,AGe,mDM,e_range=[0.5,3.2]):
             keVr = dmm.quench_keVee_to_keVr(x)
             n += dmm.dRdErSHM(keVr,tc_SHM+day,AGe,mDM)
     return n
-
-################################################################################
-# WIMP signal
-################################################################################
-################################################################################
-def wimp(org_day,x,AGe,mDM):
-    #tc_SHM = dmm.tc(np.zeros(3))
-    #print tc_SHM
-    #print tc_SHM+y
-    y = (org_day+338)%365.0 - 151
-    dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM)
-    return dR
-################################################################################
 
 
 
@@ -286,24 +268,30 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     ndata = len(data[0])
 
-    n = 0
+    flag = p[parnames.index('flag')]
+
+    num_tot = 0
     for name in parnames:
-        #if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
-        if 'num_' in name or 'ncalc' in name:
-            n += p[parnames.index(name)]
+        if flag==0 or flag==1:
+            if 'num_' in name or 'ncalc' in name:
+                num_tot += p[parnames.index(name)]
+        elif flag==2:
+            if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
+                num_tot += p[parnames.index(name)]
 
-    #mDM = p[parnames.index('mDM')]
+    if flag==2:
+        mDM = p[parnames.index('mDM')]
+        loE = dmm.quench_keVee_to_keVr(0.5)
+        hiE = dmm.quench_keVee_to_keVr(3.2)
 
-    loE = dmm.quench_keVee_to_keVr(0.5)
-    hiE = dmm.quench_keVee_to_keVr(3.2)
+        nwimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
+        num_tot += nwimps
+        #print "nwimps: ",nwimps
 
-    #nwimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM),epsabs=dblqtol)[0]*(0.333)*(0.867)
-    #n += nwimps
-    #print "nwimps: ",nwimps
-
-    #print "pois: ",n,ndata
-    #print "vals: ",(-np.log(fitfunc(data,p,parnames,params_dict))).sum(), pois(n,ndata)
-    ret = (-np.log(fitfunc(data,p,parnames,params_dict))).sum() - pois(n,ndata)
+    print "pois: ",num_tot,ndata
+    likelihood_func = (-np.log(fitfunc(data,p,parnames,params_dict))).sum()
+    print "vals: ",likelihood_func, pois(num_tot,ndata),likelihood_func-pois(num_tot,ndata)
+    ret = likelihood_func - pois(num_tot,ndata)
 
     return ret
 
