@@ -181,10 +181,10 @@ def main():
         params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
 
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
-    params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
+    params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':False,'start_val':400.0,'limits':(0.0,100000.0)}
-    params_dict['num_flat'] = {'fix':False,'start_val':1159.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
 
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
 
@@ -291,16 +291,18 @@ def main():
 
     # Plot wimp term
     if args.fit==2:
-        nwimps = integrate.dblquad(wimp,0.5,3.2,lambda x: 1.0, lambda x: 459.0,args=(AGe,values['mDM'],values['sigma_n'],efficiency),epsabs=dblqtol)[0]*(0.333)
+        num_wimps = 0.0
+        for sr in subranges[1]:
+            num_wimps += integrate.dblquad(wimp,0.5,3.2,lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency),epsabs=dblqtol)[0]*(0.333)
 
         func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,459])
-        srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=nwimps,fmt='k-',axes=ax0,subranges=[[0.5,3.2]],efficiency=efficiency)
-        ax0.plot(srxpts[0],srypts[0],'k-',linewidth=3)
+        srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[0.5,3.2]],efficiency=efficiency)
+        #ax0.plot(srxpts[0],srypts[0],'k-',linewidth=3)
         #print len(eytot),len(eypts)
         eytot += srypts[0]
 
         func = lambda x: plot_wimp_day(x,AGe,values['mDM'],values['sigma_n'],e_range=[0.5,3.2])
-        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=nwimps,fmt='k-',axes=ax1,subranges=subranges[1])
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=num_wimps,fmt='k-',linewidth=3,axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
         #ax1.plot(sr_txpts,sr_typts,'b',linewidth=3)
 

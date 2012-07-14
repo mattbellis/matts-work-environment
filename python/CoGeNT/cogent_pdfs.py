@@ -169,7 +169,9 @@ def fitfunc(data,p,parnames,params_dict):
                 num_tot += p[pn.index(name)]
 
     if flag==2:
-        num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
+        num_wimps = 0
+        for sr in subranges[1]:
+            num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
         num_tot += num_wimps
 
     print "fitfunc num_tot: ",num_tot
