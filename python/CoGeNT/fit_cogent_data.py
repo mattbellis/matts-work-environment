@@ -191,8 +191,8 @@ def main():
     # Use the dark matter SHM, WIMPS
     if args.fit==2: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['mDM'] = {'fix':True,'start_val':7.00,'limits':(5.0,10000.0)}
-        params_dict['sigma_n'] = {'fix':True,'start_val':1e-40,'limits':(1e-42,1e-38)}
+        params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(5.0,10000.0)}
+        params_dict['sigma_n'] = {'fix':False,'start_val':1e-40,'limits':(1e-42,1e-38)}
 
 
     # Let the exponential modulate as a cos term
