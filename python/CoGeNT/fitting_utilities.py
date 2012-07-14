@@ -287,15 +287,21 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         loE = 0.5
         hiE = 3.2
 
+        subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+
         max_val = 0.86786
         threshold = 0.345
         sigmoid_sigma = 0.241
 
         efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
 
-        nwimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
-        num_tot += nwimps
-        #print "nwimps: ",nwimps
+        #num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
+        num_wimps = 0
+        for sr in subranges[1]:
+            num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
+
+        num_tot += num_wimps
+        #print "num_wimps: ",num_wimps
 
     print "pois: ",num_tot,ndata
     likelihood_func = (-np.log(fitfunc(data,p,parnames,params_dict))).sum()
