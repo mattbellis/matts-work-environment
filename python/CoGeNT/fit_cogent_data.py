@@ -189,11 +189,10 @@ def main():
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
 
     # Use the dark matter SHM, WIMPS
-    if args.fit==2: 
+    if args.fit==2 or args.fit==3: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
         params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(5.0,10000.0)}
         params_dict['sigma_n'] = {'fix':False,'start_val':1e-40,'limits':(1e-42,1e-38)}
-
 
     # Let the exponential modulate as a cos term
     if args.fit==1:
@@ -290,10 +289,11 @@ def main():
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
     # Plot wimp term
-    if args.fit==2:
+    if args.fit==2 or args.fit==3:
         num_wimps = 0.0
         for sr in subranges[1]:
-            num_wimps += integrate.dblquad(wimp,0.5,3.2,lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency),epsabs=dblqtol)[0]*(0.333)
+            #num_wimps += integrate.dblquad(wimp,0.5,3.2,lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency),epsabs=dblqtol)[0]*(0.333)
+            num_wimps += integrate.dblquad(wimp_debris,0.5,3.2,lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency),epsabs=dblqtol)[0]*(0.333)
 
         func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,459])
         srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[0.5,3.2]],efficiency=efficiency)

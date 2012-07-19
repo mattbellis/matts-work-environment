@@ -119,6 +119,13 @@ def vObs_t(vObs, t):
         #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) + vsVec[i]
         #print  type((vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) + vsVec[i])
         #print type(vObs[i])
+        #print vsVec[i]
+        #print vorb
+        #print omega
+        #print t
+        #print t1
+        #print e1[i]
+        #print e2[i]
         vObs[i] = vsVec[i]+vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])
 
 
@@ -279,9 +286,12 @@ def gSHM(Er, t, A, m):
 ################################################################################
 # This works ok for overall rates, but will not work well if doing a modulation analysis
 ################################################################################
-def gDebris(vmin, vflow, t):
+def gDebris(vmin,vflow,t):
     vObs = np.zeros(3)
+    if type(t)==np.ndarray:
+        vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
+
     vobs = np.sqrt(dot(vObs,vObs))
     if(vmin<np.abs(vflow-vobs)):
         return (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
@@ -375,7 +385,7 @@ def main():
 
     tc_SHM = tc(np.zeros(3))
     print "\nThe SHM maximum phase occurs at %f days." % (tc_SHM)
-    Er = np.linspace(0.5,5.0,100)
+    Er = np.linspace(0.1,10.0,100)
     dR = dRdErSHM(Er, tc_SHM, AGe, mDM,sigma_n)
 
     # Quenching factor?
@@ -400,7 +410,7 @@ def main():
     # Make some plots
     ############################################################################
     npts = 100
-    xvals = np.linspace(0.5,3.2,npts)
+    xvals = np.linspace(0.1,10.0,npts)
     yvals = np.zeros(npts)
     xt = np.linspace(0.0,11.0,12)
     yt = np.zeros(12)
@@ -415,13 +425,16 @@ def main():
         #day = 30*j
         day = j
         #tot += integrate.quad(dRdErSHM,lo,hi,args=(tc_SHM+day, AGe, mDM,sigma_n))[0]
-        yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM, sigma_n)
+        #yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM, sigma_n)
+        yvals = dRdErSHM(Er,day,AGe,mDM,sigma_n)
         norm_tot += integrate.simps(yvals[1:-1],x=xvals[1:-1])
         tot += integrate.simps(yvals[1:-1],x=xvals[1:-1])
         if (j+1)%30==0:
 
-            yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM, sigma_n)
-            plt.plot(xvals,yvals)
+            #yvals = dRdErSHM(Er, tc_SHM+day, AGe, mDM, sigma_n)
+            yvals = dRdErSHM(Er,day,AGe,mDM,sigma_n)
+            Eee = quench_keVr_to_keVee(xvals)
+            plt.plot(Eee,yvals)
 
             yt[month] = tot
             tot = 0.0
@@ -519,19 +532,24 @@ def main():
     ############################################################################
     plt.figure()
     npts = 100
-    xvals = np.linspace(0.0,5.0,npts)
+    xvals = np.linspace(0.1,10.0,npts)
     yvals = np.zeros(npts)
     for j in range(0,12):
         day = 30*j
         for i,Er in enumerate(xvals):
-            yvals[i] = dRdErDebris(Er, tc_SHM+day, AGe, mDM, vDeb1,sigma_n)
+            #yvals[i] = dRdErDebris(Er, tc_SHM+day, AGe, mDM, vDeb1,sigma_n)
+            yvals[i] = dRdErDebris(Er,day,AGe,mDM,vDeb1,sigma_n)
+            #yvals[i] = dRdErStream(Er,day,AGe,vstr1Vec,100,mDM,sigma_n)
 
         #print yvals
         #print xvals
         #print integrate.trapz(yvals[1:-1],x=xvals[1:-1])
         #print integrate.simps(yvals[1:-1],x=xvals[1:-1])
         #print integrate.quad(dRdErDebris,xvals[1],xvals[-1],args=(tc_SHM+day, AGe, mDM, vDeb1,sigma_n))
-        plt.plot(xvals,yvals)
+        Eee = quench_keVr_to_keVee(xvals)
+        plt.plot(Eee,yvals)
+        plt.xlabel('Debris, Lisanti')
+        #plt.xlabel('Stream')
 
 
     plt.show()
