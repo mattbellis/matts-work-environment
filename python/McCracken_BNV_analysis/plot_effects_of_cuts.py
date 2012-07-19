@@ -39,10 +39,14 @@ for a,fmt in zip([5],['ro']):
     print "fom_cutoff: ",fom_cutoff
     plt.plot(fom,sig_eff,fmt)
     #plt.plot(fom,nbkg_surv,'o')
+    print " ---------- EFFECTS -------------"
     if a==5:
-        print fom[fom>fom_cutoff]
-        print sig_eff[fom>fom_cutoff]
-        print bkg_rej[fom>fom_cutoff]
+        print "fom       : ",fom[fom>fom_cutoff]
+        print "sig       : ",sig_eff[fom>fom_cutoff]
+        print "bkg-ref   : ",bkg_rej[fom>fom_cutoff]
+        br = bkg_rej[fom>fom_cutoff]
+        print "bkg remain: ",(1.0-br)*nbkg[fom>fom_cutoff]
+        print " ---------- cuts -------------"
         for i in xrange(7):
             print sigf[0][i][fom>fom_cutoff]
 

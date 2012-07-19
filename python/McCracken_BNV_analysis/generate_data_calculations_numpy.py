@@ -2,6 +2,7 @@
 
 import sys
 from math import *
+import os
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -24,6 +25,7 @@ def main():
     parser.add_argument('input_file_name', action='append', nargs='*',
             help='Input file name')
     parser.add_argument('--hypothesis',dest='hypothesis',type=str, default='kppi', help='Hypothesis of the ++- particle topology.')
+    parser.add_argument('--out-subdir',dest='out_subdir',type=str, default=None, help='Subdirectory for output files.')
 
     args = parser.parse_args()
 
@@ -41,6 +43,12 @@ def main():
 
     infile_names = args.input_file_name
     outfile_name = "calculated_data_files/%s_hyp_%s" % (infile_names[0][0].split('/')[-1].split('.')[0],args.hypothesis)
+    if args.out_subdir!=None:
+        dir_name = "./calculated_data_files/%s" % (args.out_subdir)
+        if not os.access(dir_name,os.W_OK ):
+            os.mkdir(dir_name,0744)
+        outfile_name = "calculated_data_files/%s/%s_hyp_%s" % (args.out_subdir,infile_names[0][0].split('/')[-1].split('.')[0],args.hypothesis)
+        print outfile_name
     
     beam,e0,e1,e2,p0,p1,p2,vtx0,vtx1,vtx2,vtx3 = read_mmcc_inputfiles_numpy(infile_names[0])
 
