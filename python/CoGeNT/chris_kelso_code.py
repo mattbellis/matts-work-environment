@@ -293,12 +293,30 @@ def gDebris(vmin,vflow,t):
     vObs_t(vObs,t)
 
     vobs = np.sqrt(dot(vObs,vObs))
-    if(vmin<np.abs(vflow-vobs)):
-        return (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
-    elif(vmin<vflow+vobs):
-        return (vflow+vobs-vmin)/(2*vflow*vobs)
+
+    if type(vmin)==np.ndarray:
+        nvals = len(vmin)
+        ret = np.zeros(nvals)
+        ret[vmin<np.abs(vflow-vobs)] = (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
+        ret[vmin<vflow+vobs] = (vflow+vobs-vmin)/(2*vflow*vobs)
+
+        return ret
+
+    elif type(t)==np.ndarray:
+        nvals = len(t)
+        ret = np.zeros(nvals)
+        ret[vmin<np.abs(vflow-vobs)] = (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
+        ret[vmin<vflow+vobs] = (vflow+vobs-vmin)/(2*vflow*vobs)
+
+        return ret
+
     else:
-        return 0
+        if(vmin<np.abs(vflow-vobs)):
+            return (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
+        elif(vmin<vflow+vobs):
+            return (vflow+vobs-vmin)/(2*vflow*vobs)
+        else:
+            return 0
 
 ################################################################################
 #Form Factor Functions
