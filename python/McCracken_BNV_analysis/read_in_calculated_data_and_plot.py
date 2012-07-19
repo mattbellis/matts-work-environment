@@ -118,32 +118,32 @@ anticut1 = abs(masses[3]-optimal_vals[1])>=abs(masses[2]-optimal_vals[1])
 
 print cut0
 
-good_masses[0] =                       masses[0][cut0==True]
-good_masses[0] = np.append(good_masses[0],masses[1][cut1==True])
-good_masses[1] =                       masses[2][cut0==True]
-good_masses[1] = np.append(good_masses[1],masses[3][cut1==True])
-good_masses[2] =                       masses[4][cut0==True]
-good_masses[2] = np.append(good_masses[2],masses[5][cut1==True])
+good_masses[0] =                       masses[0][cut0]
+good_masses[0] = np.append(good_masses[0],masses[1][cut1])
+good_masses[1] =                       masses[2][cut0]
+good_masses[1] = np.append(good_masses[1],masses[3][cut1])
+good_masses[2] =                       masses[4][cut0]
+good_masses[2] = np.append(good_masses[2],masses[5][cut1])
 
-bad_masses[0] =                      masses[0][anticut0==True]
-bad_masses[0] = np.append(bad_masses[0],masses[1][anticut1==True])
-bad_masses[1] =                      masses[2][anticut0==True]
-bad_masses[1] = np.append(bad_masses[1],masses[3][anticut1==True])
-bad_masses[2] =                      masses[4][anticut0==True]
-bad_masses[2] = np.append(bad_masses[2],masses[5][anticut1==True])
+bad_masses[0] =                      masses[0][anticut0]
+bad_masses[0] = np.append(bad_masses[0],masses[1][anticut1])
+bad_masses[1] =                      masses[2][anticut0]
+bad_masses[1] = np.append(bad_masses[1],masses[3][anticut1])
+bad_masses[2] =                      masses[4][anticut0]
+bad_masses[2] = np.append(bad_masses[2],masses[5][anticut1])
 
 
-good_vtx =                    vtxs[0][cut0==True]
-good_vtx = np.append(good_vtx,vtxs[1][cut1==True])
+good_vtx =                    vtxs[0][cut0]
+good_vtx = np.append(good_vtx,vtxs[1][cut1])
 
-bad_vtx =                   vtxs[0][anticut0==True]
-bad_vtx = np.append(bad_vtx,vtxs[1][anticut1==True])
+bad_vtx =                   vtxs[0][anticut0]
+bad_vtx = np.append(bad_vtx,vtxs[1][anticut1])
 
-good_lambda_beta =                     lambda_beta[0][cut0==True]
-good_lambda_beta = np.append(good_lambda_beta,lambda_beta[1][cut1==True])
+good_lambda_beta =                     lambda_beta[0][cut0]
+good_lambda_beta = np.append(good_lambda_beta,lambda_beta[1][cut1])
 
-bad_beta =                    lambda_beta[0][anticut0==True]
-bad_beta = np.append(bad_beta,lambda_beta[1][anticut1==True])
+bad_beta =                    lambda_beta[0][anticut0]
+bad_beta = np.append(bad_beta,lambda_beta[1][anticut1])
 
 print "cuts"
 print cut0
@@ -155,24 +155,24 @@ good_beta1 = [None,None]
 good_beta2 = [None,None]
 
 for i in range(0,3):
-    good_meas_betas[0][i] =                                 meas_betas[i][cut0==True]
-    good_meas_betas[0][i] = np.append(good_meas_betas[0][i],meas_betas[i][cut1==True])
-    good_meas_betas[1][i] =                                 meas_betas[i][anticut0==True]
-    good_meas_betas[1][i] = np.append(good_meas_betas[1][i],meas_betas[i][anticut1==True])
+    good_meas_betas[0][i] =                                 meas_betas[i][cut0]
+    good_meas_betas[0][i] = np.append(good_meas_betas[0][i],meas_betas[i][cut1])
+    good_meas_betas[1][i] =                                 meas_betas[i][anticut0]
+    good_meas_betas[1][i] = np.append(good_meas_betas[1][i],meas_betas[i][anticut1])
 
-good_beta0[0] =                         beta0[0][cut0==True]
-good_beta0[0] = np.append(good_beta0[0],beta0[1][cut1==True])
-good_beta1[0] =                         beta1[0][cut0==True]
-good_beta1[0] = np.append(good_beta1[0],beta1[1][cut1==True])
-good_beta2[0] =                         beta2[0][cut0==True]
-good_beta2[0] = np.append(good_beta2[0],beta2[1][cut1==True])
+good_beta0[0] =                         beta0[0][cut0]
+good_beta0[0] = np.append(good_beta0[0],beta0[1][cut1])
+good_beta1[0] =                         beta1[0][cut0]
+good_beta1[0] = np.append(good_beta1[0],beta1[1][cut1])
+good_beta2[0] =                         beta2[0][cut0]
+good_beta2[0] = np.append(good_beta2[0],beta2[1][cut1])
 
-good_beta0[1] =                         beta0[0][anticut0==True]
-good_beta0[1] = np.append(good_beta0[1],beta0[1][anticut1==True])
-good_beta1[1] =                         beta1[0][anticut0==True]
-good_beta1[1] = np.append(good_beta1[1],beta1[1][anticut1==True])
-good_beta2[1] =                         beta2[0][anticut0==True]
-good_beta2[1] = np.append(good_beta2[1],beta2[1][anticut1==True])
+good_beta0[1] =                         beta0[0][anticut0]
+good_beta0[1] = np.append(good_beta0[1],beta0[1][anticut1])
+good_beta1[1] =                         beta1[0][anticut0]
+good_beta1[1] = np.append(good_beta1[1],beta1[1][anticut1])
+good_beta2[1] =                         beta2[0][anticut0]
+good_beta2[1] = np.append(good_beta2[1],beta2[1][anticut1])
 
 good_lambda_gamma = 1.0/np.sqrt(1.0-(good_lambda_beta*good_lambda_beta))
 bad_gamma = 1.0/np.sqrt(1.0-(bad_beta*bad_beta))
@@ -379,7 +379,8 @@ cut_flight_len = np.linspace(0.00,4.00,nslices)
 #cut_beta_pid = np.array([1.0,0.5,0.4,0.3,0.2,0.1,0.05,0.03,0.01,0.005])
 cut_beta_pid = np.array([1.0,0.5,0.2,0.1,0.05,0.02])
 cut_left_beta = -0.05
-cut_missing_mass_off_k = np.linspace(1.000,0.040,2)
+#cut_missing_mass_off_k = np.linspace(1.000,0.040,2)
+cut_missing_mass_off_k = np.linspace(0.030,0.030,1)
 
 index = [None,None,None,None,None,None,None] # 7?
 ncuts = len(index)
@@ -395,6 +396,11 @@ remain = np.zeros(int(nmatrix))
 #exit()
         
 
+blinded_region = False
+if 'data' in outfile_name:
+    blinded_region = True
+
+#'''
 tot_events = len(good_masses[0])
 print "tot: ",tot_events
 i = 0
@@ -418,11 +424,33 @@ for c0 in cut_tot_missing_mass:
                     for c5 in cut_flight_len:
                         index[5] = good_vtx>c5
                         for c6 in cut_missing_mass_off_k:
-                            index[6] = abs(good_masses[2]-mass_L)<c6
 
-                            master_index = index[0]*index[1]*index[2]*index[3]*index[4]*index[5]*index[6]
+                            remaining_events = 0
+                            sub_index = index[0]*index[1]*index[2]*index[3]*index[4]*index[5]
 
-                            remaining_events = len(master_index[master_index==True])
+                            if not blinded_region:
+                            #if 1:
+                                index[6] = abs(good_masses[2]-mass_L)<c6
+                                master_index = sub_index*index[6]
+                                remaining_events = len(master_index[master_index==True])
+                                #print "remain0: ",remaining_events,blinded_region
+
+                            else:
+                            #if 1:
+                                index_temp = good_masses[2]-mass_L>(2*c6)
+                                index_temp *= good_masses[2]-mass_L<(4*c6)
+                                mhi = sub_index*index_temp
+                                nhi = len(mhi[mhi==True])
+
+                                index_temp = good_masses[2]-mass_L<-(2*c6)
+                                index_temp *= good_masses[2]-mass_L>-(4*c6)
+                                mlo = sub_index*index_temp
+                                nlo = len(mlo[mlo==True])
+
+                                avg = (nhi+nlo)/2.0
+
+                                remaining_events = avg
+                                #print "remain1: ",remaining_events,blinded_region
 
                             tot[i] = tot_events
                             remain[i] = remaining_events
@@ -443,6 +471,32 @@ for c0 in cut_tot_missing_mass:
 
 outarrays = [cuts,tot,remain]
 np.save(outfile_name,outarrays)
+#'''
 
-plt.show()
+'''
+# Quick test
+plt.figure()
+#plt.hist(good_masses[0],bins=100,range=(-0.5,1.5),alpha=0.3)
+#plt.hist(good_masses[1],bins=100,range=(-0.5,1.5),alpha=0.3)
+#plt.hist(good_masses[2],bins=100,range=(-0.5,1.5),alpha=0.3)
+plt.hist(good_masses[2],bins=100,range=(0.9,1.3),alpha=0.3)
+
+testi = abs(good_masses[2]-mass_L)<0.030
+print "roi 0: ",len(good_masses[2][testi])
+
+testi = good_masses[2]-mass_L>0.060
+testi *= good_masses[2]-mass_L<0.120
+nhi = len(good_masses[2][testi])
+print "roi 1: ",nhi
+
+testi = good_masses[2]-mass_L<-0.060
+testi *= good_masses[2]-mass_L>-0.120
+nlo = len(good_masses[2][testi])
+print "roi 2: ",nlo
+
+avg = (nhi+nlo)/2.0
+print "avg: ",avg
+'''
+
+#plt.show()
 
