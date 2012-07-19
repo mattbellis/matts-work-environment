@@ -95,6 +95,23 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None):
         #print "eff: ",eff
     dR *= eff
     return dR
+
+################################################################################
+# WIMP signal from debris flow, Lisanti
+################################################################################
+def wimp_debris(org_day,x,AGe,mDM,sigma_n,efficiency=None):
+    y = (org_day+338)%365.0
+    xkeVr = dmm.quench_keVee_to_keVr(x)
+    #dR = dmm.dRdErSHM(xkeVr,y,AGe,mDM,sigma_n)
+    vDeb1 = 340
+    dR = dmm.dRdErDebris(xkeVr,y,AGe,mDM,vDeb1,sigma_n)
+    eff = 1.0
+    if efficiency!=None:
+        #print "EFFICIENCY"
+        eff = efficiency(x)
+        #print "eff: ",eff
+    dR *= eff
+    return dR
 ################################################################################
 
 ################################################################################
@@ -147,7 +164,7 @@ def fitfunc(data,p,parnames,params_dict):
         wmod_amp = p[pn.index('wmod_amp')]
         wmod_offst = p[pn.index('wmod_offst')]
 
-    elif flag==2:
+    elif flag==2 or flag==3:
         #mDM = 7.0
         mDM = p[pn.index('mDM')]
         sigma_n = p[pn.index('sigma_n')]
@@ -164,14 +181,17 @@ def fitfunc(data,p,parnames,params_dict):
         if flag==0 or flag==1:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
-        elif flag==2:
+        elif flag==2 or flag==3:
             if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
 
-    if flag==2:
+    if flag==2 or flag==3:
         num_wimps = 0
         for sr in subranges[1]:
-            num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
+            if flag==2:
+                num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
+            elif flag==3:
+                num_wimps += integrate.dblquad(wimp_debris,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
         num_tot += num_wimps
 
     print "fitfunc num_tot: ",num_tot
@@ -221,18 +241,21 @@ def fitfunc(data,p,parnames,params_dict):
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
-    if flag==1:
+    elif flag==1:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
-    if flag==2:
+    elif flag==2 or flag==3:
         print "num_wimps mDM: ",num_wimps,mDM
         wimp_norm = num_wimps
         print "wimp_norm: ",wimp_norm
         #pdf = dmm.dRdErSHM(xkeVr,tc_SHM+y,AGe,mDM,sigma_n)/wimp_norm
         #pdf *= num_wimps/num_tot
         #pdf = dmm.dRdErSHM(x,y,AGe,mDM,sigma_n,efficiency=efficiency)/num_tot
-        pdf = wimp(x,y,AGe,mDM,sigma_n,efficiency=efficiency)/num_tot
+        if flag==2:
+            pdf = wimp(x,y,AGe,mDM,sigma_n,efficiency=efficiency)/num_tot
+        elif flag==3:
+            pdf = wimp_debris(x,y,AGe,mDM,sigma_n,efficiency=efficiency)/num_tot
         print "here"
 
     tot_pdf += pdf

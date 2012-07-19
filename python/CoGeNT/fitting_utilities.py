@@ -275,11 +275,11 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         if flag==0 or flag==1:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
-        elif flag==2:
+        elif flag==2 or flag==3:
             if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
 
-    if flag==2:
+    if flag==2 or flag==3:
         mDM = p[parnames.index('mDM')]
         sigma_n = p[parnames.index('sigma_n')]
         #loE = dmm.quench_keVee_to_keVr(0.5)
@@ -298,7 +298,10 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         #num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
         num_wimps = 0
         for sr in subranges[1]:
-            num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
+            if flag==2:
+                num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
+            elif flag==3:
+                num_wimps += integrate.dblquad(wimp_debris,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
 
         num_tot += num_wimps
         #print "num_wimps: ",num_wimps
