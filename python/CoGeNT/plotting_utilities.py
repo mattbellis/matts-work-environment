@@ -4,7 +4,75 @@ import scipy.stats as stats
 import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
-from RTMinuit import *
+#from RTMinuit import *
+
+import chris_kelso_code as dmm
+
+################################################################################
+# Plot WIMP signal
+################################################################################
+def plot_wimp_er(x,AGe,mDM,sigma_n,time_range=[1,365]):
+    n = 0
+    keVr = dmm.quench_keVee_to_keVr(x)
+    for org_day in range(time_range[0],time_range[1],1):
+        day = (org_day+338)%365.0 #- 151
+        n += dmm.dRdErSHM(keVr,day,AGe,mDM,sigma_n)
+    return n
+
+def plot_wimp_day(org_day,AGe,mDM,sigma_n,e_range=[0.5,3.2]):
+    n = 0
+    day = (org_day+338)%365.0 #- 151
+    #day = org_day
+    #print day
+    if type(day)==np.ndarray:
+        #print "here!"
+        n = np.zeros(len(day))
+        for i,d in enumerate(day):
+            #print d
+            x = np.linspace(e_range[0],e_range[1],100)
+            keVr = dmm.quench_keVee_to_keVr(x)
+            n[i] = (dmm.dRdErSHM(keVr,d,AGe,mDM,sigma_n)).sum()
+            #print len(tot)
+    else:
+        for x in np.linspace(e_range[0],e_range[1],100):
+            keVr = dmm.quench_keVee_to_keVr(x)
+            n += dmm.dRdErSHM(keVr,day,AGe,mDM,sigma_n)
+    return n
+
+################################################################################
+# Plot WIMP signal from debris flow, Lisanti
+################################################################################
+def plot_wimp_debris_er(x,AGe,mDM,sigma_n,time_range=[1,365]):
+    n = 0
+    keVr = dmm.quench_keVee_to_keVr(x)
+    vDeb1 = 340
+    for org_day in range(time_range[0],time_range[1],1):
+        day = (org_day+338)%365.0 #- 151
+        n += dmm.dRdErDebris(keVr,day,AGe,mDM,vDeb1,sigma_n)
+    return n
+
+def plot_wimp_debris_day(org_day,AGe,mDM,sigma_n,e_range=[0.5,3.2]):
+    n = 0
+    day = (org_day+338)%365.0 #- 151
+    vDeb1 = 340
+    #day = org_day
+    #print day
+    if type(day)==np.ndarray:
+        #print "here!"
+        n = np.zeros(len(day))
+        for i,d in enumerate(day):
+            #print d
+            x = np.linspace(e_range[0],e_range[1],100)
+            keVr = dmm.quench_keVee_to_keVr(x)
+            #n[i] = (dmm.dRdErSHM(keVr,d,AGe,mDM,sigma_n)).sum()
+            n[i] = (dmm.dRdErDebris(keVr,d,AGe,mDM,vDeb1,sigma_n)).sum()
+            #print len(tot)
+    else:
+        for x in np.linspace(e_range[0],e_range[1],100):
+            keVr = dmm.quench_keVee_to_keVr(x)
+            #n += dmm.dRdErSHM(keVr,day,AGe,mDM,sigma_n)
+            n += dmm.dRdErDebris(keVr,day,AGe,mDM,vDeb1,sigma_n)
+    return n
 
 ################################################################################
 # Plotting code for pdf

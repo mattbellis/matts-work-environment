@@ -4,7 +4,7 @@ import scipy.stats as stats
 import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
-from RTMinuit import *
+#from RTMinuit import *
 
 import chris_kelso_code as dmm
 
