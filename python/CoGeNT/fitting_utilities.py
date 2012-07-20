@@ -177,22 +177,30 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     flag = p[parnames.index('flag')]
 
+    wimp_model = None
+
     num_tot = 0
     for name in parnames:
         if flag==0 or flag==1:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
-        elif flag==2 or flag==3:
+        elif flag==2 or flag==3 or flag==4:
             if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
 
-    if flag==2 or flag==3:
+    if flag==2 or flag==3 or flag==4:
         mDM = p[parnames.index('mDM')]
         sigma_n = p[parnames.index('sigma_n')]
         #loE = dmm.quench_keVee_to_keVr(0.5)
         #hiE = dmm.quench_keVee_to_keVr(3.2)
         loE = 0.5
         hiE = 3.2
+        if flag==2:
+            wimp_model = 'shm'
+        elif flag==3:
+            wimp_model = 'debris'
+        elif flag==4:
+            wimp_model = 'stream'
 
         subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
 
@@ -202,16 +210,11 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
         efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
 
-        #num_wimps = integrate.dblquad(wimp,loE,hiE,lambda x: 1.0, lambda x: 459.0,args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
         num_wimps = 0
         for sr in subranges[1]:
-            if flag==2:
-                num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
-            elif flag==3:
-                num_wimps += integrate.dblquad(wimp_debris,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency),epsabs=dblqtol)[0]*(0.333)
+            num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
 
         num_tot += num_wimps
-        #print "num_wimps: ",num_wimps
 
     print "pois: ",num_tot,ndata
     likelihood_func = (-np.log(fitfunc(data,p,parnames,params_dict))).sum()

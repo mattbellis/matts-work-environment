@@ -115,9 +115,6 @@ Nesc = special.erf(z)-2*z*np.exp(-z*z)/np.sqrt(M_PI)
 ################################################################################
 def vObs_t(vObs, t):
     for i in range(0,3):
-        #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) 
-        #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) + vsVec[i]
-        #print  type((vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) + vsVec[i])
         #print type(vObs[i])
         #print vsVec[i]
         #print vorb
@@ -126,6 +123,9 @@ def vObs_t(vObs, t):
         #print t1
         #print e1[i]
         #print e2[i]
+        #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) 
+        #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i]))
+        #print  type((vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])))
         vObs[i] = vsVec[i]+vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])
 
 
@@ -142,8 +142,13 @@ def vE_t(vE, t):
 # since the earth moves, this function is time dependent
 ################################################################################
 def alpha(vstr, t):
+    #vObs = np.zeros(3)
+    #vObs_t(vObs,t)
     vObs = np.zeros(3)
+    if type(t)==np.ndarray:
+        vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
+
     return dot(vObs,vstr)
 
 
@@ -153,8 +158,13 @@ def alpha(vstr, t):
 # at a time t and for dark matter mass of m 
 ################################################################################
 def vstr(vstrHat, A, t, m, Er):
+    #vObs = np.zeros(3)
+    #vObs_t(vObs,t)
     vObs = np.zeros(3)
+    if type(t)==np.ndarray:
+        vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
+
     vObsSqrd = dot(vObs,vObs)
     return alpha(vstrHat, t)+np.sqrt(alpha(vstrHat, t)*alpha(vstrHat, t)+vmin(Er,A,m)*vmin(Er,A,m)-vObsSqrd)
 
@@ -163,8 +173,13 @@ def vstr(vstrHat, A, t, m, Er):
 # this function gives the speed of the stream in the frame of the earth
 ################################################################################
 def vstrEarth(vstr, t):
+    #vObs = np.zeros(3)
+    #vObs_t(vObs,t)
     vObs = np.zeros(3)
+    if type(t)==np.ndarray:
+        vObs = np.zeros((3,len(t)))
     vObs_t(vObs,t)
+
     return np.sqrt(dot(vstr,vstr)+dot(vObs,vObs)-2*dot(vstr,vObs))
 
 
@@ -556,8 +571,9 @@ def main():
         day = 30*j
         for i,Er in enumerate(xvals):
             #yvals[i] = dRdErDebris(Er, tc_SHM+day, AGe, mDM, vDeb1,sigma_n)
-            yvals[i] = dRdErDebris(Er,day,AGe,mDM,vDeb1,sigma_n)
-            #yvals[i] = dRdErStream(Er,day,AGe,vstr1Vec,100,mDM,sigma_n)
+            #yvals[i] = dRdErDebris(Er,day,AGe,mDM,vDeb1,sigma_n)
+            #yvals[i] = dRdErStream(Er,day,AGe,vstr1Vec,10,mDM,sigma_n)
+            yvals[i] = dRdErStream(Er,day,AGe,vSagVec,100,mDM,sigma_n)
 
         #print yvals
         #print xvals
@@ -566,8 +582,8 @@ def main():
         #print integrate.quad(dRdErDebris,xvals[1],xvals[-1],args=(tc_SHM+day, AGe, mDM, vDeb1,sigma_n))
         Eee = quench_keVr_to_keVee(xvals)
         plt.plot(Eee,yvals)
-        plt.xlabel('Debris, Lisanti')
-        #plt.xlabel('Stream')
+        #plt.xlabel('Debris, Lisanti')
+        plt.xlabel('Stream')
 
 
     plt.show()
