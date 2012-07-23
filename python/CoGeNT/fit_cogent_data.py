@@ -72,7 +72,7 @@ def main():
     ranges = [[0.5,3.2],[1.0,459.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
     subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
-    nbins = [108,15]
+    nbins = [108,30]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
         bin_widths[i] = (r[1]-r[0])/n
@@ -101,7 +101,10 @@ def main():
     ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
 
     ax1.set_xlim(ranges[1])
-    ax1.set_ylim(0.0,220.0)
+    if nbins[1]==15:
+        ax1.set_ylim(0.0,220.0)
+    elif nbins[1]==15:
+        ax1.set_ylim(0.0,110.0)
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
     ax1.set_ylabel("Event/30.6 days",fontsize=12)
 
@@ -111,9 +114,14 @@ def main():
     # Do an acceptance correction of some t-bins by hand.
     tbwidth = (ranges[1][1]-ranges[1][0])/float(nbins[1])
     acc_corr = np.zeros(len(ypts))
-    acc_corr[2] = tbwidth/(tbwidth-7.0)
-    acc_corr[3] = tbwidth/(tbwidth-6.0)
-    acc_corr[10] = tbwidth/(tbwidth-3.0)
+    # For 15 bins
+    #acc_corr[2] = tbwidth/(tbwidth-7.0)
+    #acc_corr[3] = tbwidth/(tbwidth-6.0)
+    #acc_corr[10] = tbwidth/(tbwidth-3.0)
+    # For 30 bins
+    acc_corr[4] = tbwidth/(tbwidth-7.0)
+    acc_corr[6] = tbwidth/(tbwidth-6.0)
+    acc_corr[20] = tbwidth/(tbwidth-3.0)
     ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
                         color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
 
@@ -213,7 +221,7 @@ def main():
     # Up the tolerance.
     m.tol = 1000.0
 
-    m.printMode = 1
+    m.printMode = 0
 
     m.migrad()
     m.hesse()
