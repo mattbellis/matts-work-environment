@@ -9,9 +9,9 @@ import csv
 ################################################################################
 def main():
     
-    std0 = 'PAB3'
-    std1 = 'ChC'
-    compare = 'P48A'
+    std0 = 'PAW'
+    std1 = 'PNI'
+    test = 'P40'
 
     ############################################################################
     # Open the files and read the data.
@@ -28,13 +28,16 @@ def main():
     infile = csv.reader(open(infilename, 'rb'), delimiter=',')
 
     water = {}
+    sample_types = [] # Types of the samples
     samples = [] # Names of the samples
     isotopes = [] # Names of the isotopes
 
     i = 0
     for row in infile:
         #print row
-        if i==1:
+        if i==0:
+            sample_types = row
+        elif i==1:
             samples = row
             for name in row: 
                 water[name] = np.array([])
@@ -48,7 +51,10 @@ def main():
 
         i += 1
 
-    print samples
+    for st,s in zip(sample_types,samples):
+        print "%-16s %-12s" % (st,s)
+
+    #print samples
     
     ############################################################################
 
@@ -63,15 +69,15 @@ def main():
     ############################################################################
     # Format the plot.
     ############################################################################
-    xtitle = r"(%s-%s)/%s" % (compare,std0,std0)
-    ytitle = r"(%s-%s)/%s" % (compare,std1,std1)
+    xtitle = r"(%s-%s)/%s" % (test,std0,std0)
+    ytitle = r"(%s-%s)/%s" % (test,std1,std1)
     ax0.set_xlabel(xtitle, fontsize=24, weight='bold')
     ax0.set_ylabel(ytitle, fontsize=24, weight='bold')
     #plt.xticks(fontsize=24,weight='bold')
     #plt.yticks(fontsize=24,weight='bold')
 
-    xpts = (water[compare]-water[std0])/water[std0]
-    ypts = (water[compare]-water[std1])/water[std1]
+    xpts = (water[test]-water[std0])/water[std0]
+    ypts = (water[test]-water[std1])/water[std1]
     ax0.scatter(xpts,ypts,s=30)
 
     # Draw a line with slope 1 for reference.
@@ -79,8 +85,15 @@ def main():
     yline = np.linspace(-1000,1000,1000)
     ax0.plot(xline,yline)
 
-    for i,s0,s1,c,pct0,pct1 in zip(isotopes,water[std0],water[std1],water[compare],xpts,ypts):
-        print "%-12s %12.6f %12.6f %12.6f %12.6f %12.6f" % (i,s0,s1,c,pct0,pct1)
+    print "################################################################################"
+    print "Test sample: %s" % (test)
+    print "Standard 0:  %s" % (std0)
+    print "Standard 1:  %s" % (std1)
+    print "--------------------------------------------------------------------------------"
+    print "%-12s %12s %12s %12s %12s %12s" % ("isotope","test","standard 0","standard 1","% diff 0","% diff 1")
+    print "--------------------------------------------------------------------------------"
+    for i,s0,s1,c,pct0,pct1 in zip(isotopes,water[std0],water[std1],water[test],xpts,ypts):
+        print "%-12s %12.6f %12.6f %12.6f %12.6f %12.6f" % (i,c,s0,s1,pct0,pct1)
 
     #ax0.set_xscale('log')
     #ax0.set_yscale('log')
