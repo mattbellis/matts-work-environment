@@ -8,11 +8,14 @@ import scipy.integrate as integrate
 hbarc = 0.1973269664036767; # in GeV nm 
 c = constants.c*100.0 # cm/s 
 rhoDM = 0.3;  # in GeV/cm^3
+
 #mDM = 6.8; # in GeV 
 mDM = 7.0; # in GeV 
 #mDM = 8.8; # in GeV 
+
 mn = 0.938; # mass of nucleon in GeV 
 mU = 0.9315; # amu in GeV 
+
 #sigma_n = 1E-40; # in cm^2 
 #sigma_n = 5E-40; # in cm^2 
 #sigma_n = 0.5e-40; # in cm^2 
@@ -366,7 +369,7 @@ def j1(x):
     return (np.sin(x)-x*np.cos(x))/(x*x)
 
 ################################################################################
-def F( Er,A):
+def F(Er,A):
     return 3*j1(Z1(Er,A))*np.exp(-Zs(Er,A)*Zs(Er,A)/2)/Z1(Er,A);
 
 

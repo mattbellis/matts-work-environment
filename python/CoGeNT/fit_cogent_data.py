@@ -184,10 +184,6 @@ def main():
         name = "ls_dc%d" % (i)
         params_dict[name] = {'fix':True,'start_val':val}
 
-    # Exponential term in energy
-    if args.fit==0 or args.fit==1:
-        params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
-
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
@@ -196,11 +192,15 @@ def main():
 
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
 
+    # Exponential term in energy
+    if args.fit==0 or args.fit==1:
+        params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
+
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['mDM'] = {'fix':True,'start_val':7.00,'limits':(5.0,20.0)}
-        params_dict['sigma_n'] = {'fix':True,'start_val':1e-40,'limits':(1e-42,1e-38)}
+        params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(5.0,20.0)}
+        params_dict['sigma_n'] = {'fix':False,'start_val':1e-40,'limits':(1e-42,1e-38)}
 
     # Let the exponential modulate as a cos term
     if args.fit==1:
