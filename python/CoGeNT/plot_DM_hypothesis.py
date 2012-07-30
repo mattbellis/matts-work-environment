@@ -6,6 +6,10 @@ import scipy.integrate as integrate
 
 import chris_kelso_code as dmm
 
+import plotting_utilities as pu
+import fitting_utilities as fu
+import cogent_pdfs as cpdf
+
 import argparse
 
 ################################################################################
@@ -29,6 +33,12 @@ def main():
             default=7.0, help='Mass of DM WIMP (default=7.0 GeV)')
     parser.add_argument('--xsec', dest='xsec', type=float,\
             default=1e-40, help='WIMP-proton cross-section (default=1e-40)')
+    parser.add_argument('--elo', dest='elo', type=float,\
+            default=0.0, help='Low energy range for your detector (default=0)')
+    parser.add_argument('--ehi', dest='ehi', type=float,\
+            default=4.0, help='High energy range for your detector (default=4)')
+    parser.add_argument('--cogent', dest='cogent',\
+            default=False, action='store_true', help='Use the CoGeNT detector for size and efficiency')
 
     args = parser.parse_args()
 
@@ -45,6 +55,18 @@ def main():
 
     mDM = args.mDM
     sigma_n = args.xsec
+    elo = float(args.elo)
+    ehi = float(args.ehi)
+
+    ############################################################################
+    # Figure
+    ############################################################################
+    fig0=plt.figure(figsize=(14,4),dpi=100)
+    ax0=fig0.add_subplot(1,3,1)
+    ax1=fig0.add_subplot(1,3,2)
+    ax2=fig0.add_subplot(1,3,3)
+
+    fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
 
     ##############################################################################
     # Find the max phase for the SHM.  This corresponds to a stream with zero velocity
@@ -53,27 +75,96 @@ def main():
     Eee = None
     dRdEr = None
     dRdEee = None
+
+    # Need this for Sagitarius stream
+    vSag=300
+    v0Sag=100
+    vSagHat = np.array([0,0.233,-0.970])
+    vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
+    streamVel = vSagVec
+    streamVelWidth = v0Sag
+
+    # For debris flow. (340 m/s)
+    vDeb1 = 340
+
+    # Efficiency
+    efficiency = lambda x: 1.0
+    if args.cogent:
+        max_val = 0.86786
+        threshold = 0.345
+        sigmoid_sigma = 0.241
+
+        efficiency = lambda x: fu.sigmoid(x,threshold,sigmoid_sigma,max_val)
+
+
     if args.model=='shm':
         tc_SHM = dmm.tc(np.zeros(3))
         print "\nThe SHM maximum phase occurs at %f days." % (tc_SHM)
 
+    ############################################################################
+    # Plot the spectra
+    ############################################################################
+    for day in [0,60,120,180,240,300]:
         # Recoil energy range.
         Er = np.linspace(0.1,10.0,100)
-        dRdEr = dmm.dRdErSHM(Er,tc_SHM,target_atom,mDM,sigma_n)
+
+        if args.model=='shm':
+            dRdEr = dmm.dRdErSHM(Er,day,target_atom,mDM,sigma_n)
+        elif args.model=='stream':
+            dRdEr = dmm.dRdErStream(Er,day,target_atom,streamVel,streamVelWidth,mDM,sigma_n)
+        elif args.model=='debris':
+            dRdEr = dmm.dRdErDebris(Er,day,target_atom,mDM,vDeb1,sigma_n)
+
+        leg_title = "day=%d" % (day)
+        ax0.plot(Er,dRdEr,label=leg_title)
 
         # Quenching factor to keVee (equivalent energy)
-        Eee = dmm.quench_keVr_to_keVee(Er)
-        dRdEee = dmm.dRdErSHM(Eee,tc_SHM,target_atom,mDM,sigma_n)
+        Eee = np.linspace(elo,ehi,100)
+        Er = dmm.quench_keVee_to_keVr(Eee)
 
-    fig0=plt.figure(figsize=(15,6))
-    ax0=fig0.add_subplot(1,3,1)
-    ax1=fig0.add_subplot(1,3,2)
-    ax2=fig0.add_subplot(1,3,3)
+        #func = lambda x: plot_wimp_er(Er,target_atom,mDM,sigma_n,time_range=[day,day+1],model=args.model)
 
-    ax0.plot(Er,dRdEr)
+        if args.model=='shm':
+            dRdEr = dmm.dRdErSHM(Er,day,target_atom,mDM,sigma_n)
+        elif args.model=='stream':
+            dRdEr = dmm.dRdErStream(Er,day,target_atom,streamVel,streamVelWidth,mDM,sigma_n)
+        elif args.model=='debris':
+            dRdEr = dmm.dRdErDebris(Er,day,target_atom,mDM,vDeb1,sigma_n)
+
+        dRdEr *= efficiency(Er)
+
+        leg_title = "day=%d" % (day)
+        ax1.plot(Eee,dRdEr,label=leg_title)
+
     ax0.set_xlabel('Er')
-    ax1.plot(Eee,dRdEee)
+    ax0.legend()
+
     ax1.set_xlabel('Eee')
+    ax1.set_xlim(elo,ehi)
+    ax1.legend()
+
+
+    num_wimps = 1.0
+
+
+    num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:365,args=(target_atom,mDM,sigma_n,efficiency,args.model),epsabs=0.1)[0]
+
+    if args.cogent:
+        num_wimps *= 0.333
+
+    print "# WIMPs: ",num_wimps
+
+    func = lambda x: pu.plot_wimp_day(x,target_atom,mDM,sigma_n,e_range=[elo,ehi],model=args.model)
+    pu.plot_pdf_from_lambda(func,scale=num_wimps,fmt='k-',linewidth=3,axes=ax2,subranges=[[1,365]])
+
+    ax2.set_ylim(0.0,num_wimps/100.0)
+
+    leg_title = "# WIMPs: %4.1f" % (num_wimps)
+    print leg_title
+    ax2.legend([leg_title])
+
+    ax2.set_xlabel('Day of year')
+
     plt.show()
 
     exit()
