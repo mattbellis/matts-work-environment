@@ -47,9 +47,9 @@ def lshell_data(days):
         half_life = lshell_data_dict[p][7]
         decay_constants = np.append(decay_constants,-1.0*np.log(2.0)/half_life)
 
-        num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
+        #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
         # *Before* the efficiency?
-        #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
+        num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
         
         num_decays_in_dataset = np.append(num_decays_in_dataset,num_tot_decays[i]*(1.0-np.exp(days*decay_constants[i])))
 
@@ -205,7 +205,7 @@ def fitfunc(data,p,parnames,params_dict):
             num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
         num_tot += num_wimps
 
-    print "fitfunc num_tot: ",num_tot
+    print "fitfunc num_tot: %12.3f" % (num_tot)
     ############################################################################
     # Start building the pdfs
     ############################################################################
@@ -245,6 +245,8 @@ def fitfunc(data,p,parnames,params_dict):
     num_exp1 /= num_tot
     num_flat /= num_tot
 
+    print x[0:4]
+    print y[0:4]
     ########################################################################
     # Wimp-like signal
     ########################################################################
@@ -257,12 +259,12 @@ def fitfunc(data,p,parnames,params_dict):
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
     elif flag==2 or flag==3 or flag==4:
-        print "num_wimps mDM: ",num_wimps,mDM
+        print "num_wimps mDM: %12.3f %12.3f %12.3e" % (num_wimps,mDM,sigma_n)
         wimp_norm = num_wimps
-        print "wimp_norm: ",wimp_norm
-        pdf = wimp(x,y,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/num_tot
-        print "here"
+        #print "wimp_norm: ",wimp_norm
+        pdf = wimp(y,x,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/num_tot
 
+    print "wimp pdf: ",pdf[0:4]
     tot_pdf += pdf
 
     ############################################################################
@@ -271,6 +273,7 @@ def fitfunc(data,p,parnames,params_dict):
     pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_exp1
+    print "exp1 pdf: ",pdf[0:4]
     tot_pdf += pdf
 
     ############################################################################
@@ -279,6 +282,7 @@ def fitfunc(data,p,parnames,params_dict):
     pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_flat
+    print "flat pdf: ",pdf[0:4]
     tot_pdf += pdf
 
     return tot_pdf

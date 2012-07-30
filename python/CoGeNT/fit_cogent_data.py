@@ -187,7 +187,7 @@ def main():
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
-    #params_dict['num_exp1'] = {'fix':False,'start_val':400.0,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':300.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
 
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
@@ -219,12 +219,12 @@ def main():
     m.up = 0.5
 
     # Up the tolerance.
-    m.tol = 1000.0
+    m.tol = 1.0
 
-    m.printMode = 0
+    m.printMode = 1
 
     m.migrad()
-    m.hesse()
+    #m.hesse()
 
     print "Finished fit!!\n"
 

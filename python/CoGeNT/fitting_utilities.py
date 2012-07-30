@@ -129,6 +129,8 @@ class Minuit_FCN:
 # Poisson function
 ################################################################################
 def pois(mu, k):
+    # mu = # of data returned by the fit
+    # k  = # of data events
     ret = -mu + k*np.log(mu)
     return ret
 ################################################################################
@@ -216,10 +218,12 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
         num_tot += num_wimps
 
-    print "pois: ",num_tot,ndata
+    print "pois:         %12.3f %12.3f" % (num_tot,ndata)
     likelihood_func = (-np.log(fitfunc(data,p,parnames,params_dict))).sum()
-    print "vals: ",likelihood_func, pois(num_tot,ndata),likelihood_func-pois(num_tot,ndata)
+    print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,pois(num_tot,ndata),likelihood_func-pois(num_tot,ndata))
     ret = likelihood_func - pois(num_tot,ndata)
+    #print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,num_tot,likelihood_func-num_tot)
+    #ret = likelihood_func - num_tot
 
     return ret
 
