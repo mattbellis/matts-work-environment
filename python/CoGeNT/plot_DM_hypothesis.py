@@ -77,24 +77,28 @@ def main():
     dRdEee = None
 
     # Need this for Sagitarius stream
-    vSag=300
-    v0Sag=100
+    #vSag=300
+    #v0Sag=100
+    vSag=500
+    v0Sag=10
     vSagHat = np.array([0,0.233,-0.970])
     vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
     streamVel = vSagVec
     streamVelWidth = v0Sag
 
     # For debris flow. (340 m/s)
-    vDeb1 = 340
+    vDeb1 = 1340
 
     # Efficiency
     efficiency = lambda x: 1.0
+    #'''
     if args.cogent:
         max_val = 0.86786
         threshold = 0.345
         sigmoid_sigma = 0.241
 
         efficiency = lambda x: fu.sigmoid(x,threshold,sigmoid_sigma,max_val)
+    #'''
 
 
     if args.model=='shm':
@@ -147,7 +151,7 @@ def main():
     num_wimps = 1.0
 
 
-    num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:365,args=(target_atom,mDM,sigma_n,efficiency,args.model),epsabs=0.1)[0]
+    num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:366,args=(target_atom,mDM,sigma_n,efficiency,args.model),epsabs=0.001)[0]
 
     if args.cogent:
         num_wimps *= 0.333

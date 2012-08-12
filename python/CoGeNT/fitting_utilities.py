@@ -204,7 +204,8 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         elif flag==4:
             wimp_model = 'stream'
 
-        subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+        #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+        subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
 
         max_val = 0.86786
         threshold = 0.345

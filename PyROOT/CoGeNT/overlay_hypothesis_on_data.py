@@ -337,7 +337,7 @@ def main():
     mc = mc_surf
     mc.append(mc_flat)
 
-    mc.plotOn(xframe,RooFit.MarkerColor(2))
+    mc.plotOn(xframe,RooFit.MarkerColor(3))
 
     #flat_pdf.plotOn(xframe,RooFit.LineColor(3))
     #surface_pdf.plotOn(xframe,RooFit.LineColor(4))

@@ -6,7 +6,8 @@ import scipy.integrate as integrate
 
 ################################################################################
 hbarc = 0.1973269664036767; # in GeV nm 
-c = constants.c*100.0 # cm/s 
+#c = constants.c*100.0 # cm/s 
+c = 3e10 # cm/s 
 rhoDM = 0.3;  # in GeV/cm^3
 
 #mDM = 6.8; # in GeV 
@@ -19,8 +20,8 @@ mU = 0.9315; # amu in GeV
 #sigma_n = 1E-40; # in cm^2 
 #sigma_n = 5E-40; # in cm^2 
 #sigma_n = 0.5e-40; # in cm^2 
-#Na = 6.022E26; # Avogadro's # in mol/kg 
-Na = constants.N_A*1000.0 # Avogadro's # in mol/kg 
+Na = 6.022E26; # Avogadro's # in mol/kg 
+#Na = constants.N_A*1000.0 # Avogadro's # in mol/kg 
 M_PI = np.pi
 
 ################################################################################
@@ -93,8 +94,8 @@ def vmin(Er, A, m):
 #Earth orbit parameters
 ################################################################################
 t1 = 0.218*365 #  
-e1 = np.array([0.9931,0.1170,-0.01032])
-e2= np.array([-0.0670, 0.4927, -0.8676])
+e1 = np.array([0.9931,0.1170,-0.01032]) # Define Earth's orbit in Galactic coordinates.
+e2= np.array([-0.0670, 0.4927, -0.8676]) # Define Earth's orbit in Galactic coordinates.
 vorb = 30
 omega = 2*M_PI/365.0
 
@@ -102,8 +103,8 @@ omega = 2*M_PI/365.0
 ################################################################################
 #SHM parameters      #
 ################################################################################
-vo = 220
-vesc = 544
+vo = 220.0
+vesc = 544.0
 # galactic velocity of sun, comes from peculiar velocity and local standard of rest 
 vsVec = np.array([10,13+vo,7])
 vs = np.sqrt(dot(vsVec,vsVec))
@@ -397,6 +398,8 @@ def dRdErStream(Er, t, A, vstr, v0,m,sigma_n):
 # The SHM spectrum
 ################################################################################
 def dRdErSHM(Er, t, A, m,sigma_n):
+    #print "gSHM: ",1000.0*gSHM(Er,t,A,m)
+    #print "spectraParticle: ",spectraParticle(Er,A,m,sigma_n)
     return spectraParticle(Er,A,m,sigma_n)*gSHM(Er,t,A,m)
 
 
