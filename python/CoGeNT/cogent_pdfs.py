@@ -18,7 +18,7 @@ dblqtol = 1.0
 ################################################################################
 # Cosmogenic data
 ################################################################################
-def lshell_data(days):
+def lshell_data(day_ranges):
     lshell_data_dict = {
         "As 73": [125.45,33.479,0.11000,13.799,12.741,1.4143,0.077656,80.000,0.0000,11.10,80.0],
         "Ge 68": [6070.7,1.3508,0.11400,692.06,638.98,1.2977,0.077008,271.00,0.0000,10.37,271.0],
@@ -47,11 +47,16 @@ def lshell_data(days):
         half_life = lshell_data_dict[p][7]
         decay_constants = np.append(decay_constants,-1.0*np.log(2.0)/half_life)
 
-        #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
+        num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
         # *Before* the efficiency?
-        num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
+        #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
         
-        num_decays_in_dataset = np.append(num_decays_in_dataset,num_tot_decays[i]*(1.0-np.exp(days*decay_constants[i])))
+        ndecays = 0
+        for dr in day_ranges:
+            #ndecays += num_tot_decays[i]*(1.0-np.exp((dr[1]-1)*decay_constants[i]))
+            ndecays += num_tot_decays[i]*(np.exp((dr[0]-1)*decay_constants[i])-np.exp((dr[1]-1)*decay_constants[i]))
+
+        num_decays_in_dataset = np.append(num_decays_in_dataset,ndecays)
 
     return means,sigmas,num_tot_decays,num_decays_in_dataset,decay_constants
 
@@ -95,7 +100,9 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm'):
     vDeb1 = 340
 
     y = (org_day+338)%365.0
+    #y = org_day
     xkeVr = dmm.quench_keVee_to_keVr(x)
+    #xkeVr = x
 
     if model=='shm':
         dR = dmm.dRdErSHM(xkeVr,y,AGe,mDM,sigma_n)
@@ -116,6 +123,11 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm'):
         eff = efficiency(x)
 
     dR *= eff
+#
+    # Need this because we've converted from one function to another.
+    # dR/dEee
+    dR *= ((5.0**(1.0/1.12))/1.12)*(x**(-0.12/1.12))
+
 
     return dR
 
@@ -150,7 +162,8 @@ def fitfunc(data,p,parnames,params_dict):
     efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
     #efficiency = lambda x: 1.0
 
-    subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+    #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+    subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
     #subranges = [[],[[1,459]]]
 
     wimp_model = None
@@ -262,7 +275,7 @@ def fitfunc(data,p,parnames,params_dict):
         print "num_wimps mDM: %12.3f %12.3f %12.3e" % (num_wimps,mDM,sigma_n)
         wimp_norm = num_wimps
         #print "wimp_norm: ",wimp_norm
-        pdf = wimp(y,x,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/num_tot
+        pdf = wimp(y,x,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/(1.0*num_tot)
 
     print "wimp pdf: ",pdf[0:4]
     tot_pdf += pdf

@@ -56,8 +56,9 @@ def main():
     ############################################################################
     # Read in the data
     ############################################################################
-    infile = open('data/before_fire_LG.dat')
-    tdays,energies = get_cogent_data(infile,first_event=first_event,calibration=0)
+    #infile = open('data/before_fire_LG.dat')
+    infile_name = 'data/low_gain.txt'
+    tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
 
     if args.verbose:
         print_data(energies,tdays)
@@ -69,10 +70,16 @@ def main():
     ############################################################################
     # Declare the ranges.
     ############################################################################
-    ranges = [[0.5,3.2],[1.0,459.0]]
+    #ranges = [[0.5,3.2],[1.0,459.0]]
+    ##dead_days = [[68,74], [102,107],[306,308]]
+    #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
+
+    ranges = [[0.5,3.2],[1.0,917.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
-    subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
-    nbins = [108,30]
+    subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
+
+    #nbins = [108,30]
+    nbins = [200,30]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
         bin_widths[i] = (r[1]-r[0])/n
@@ -119,9 +126,13 @@ def main():
     #acc_corr[3] = tbwidth/(tbwidth-6.0)
     #acc_corr[10] = tbwidth/(tbwidth-3.0)
     # For 30 bins
-    acc_corr[4] = tbwidth/(tbwidth-7.0)
-    acc_corr[6] = tbwidth/(tbwidth-6.0)
-    acc_corr[20] = tbwidth/(tbwidth-3.0)
+    #acc_corr[4] = tbwidth/(tbwidth-7.0)
+    #acc_corr[6] = tbwidth/(tbwidth-6.0)
+    #acc_corr[20] = tbwidth/(tbwidth-3.0)
+    # For 30 bins,full dataset
+    acc_corr[2] = tbwidth/(tbwidth-7.0)
+    acc_corr[3] = tbwidth/(tbwidth-6.0)
+    acc_corr[10] = tbwidth/(tbwidth-3.0)
     ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
                         color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
 
@@ -150,7 +161,8 @@ def main():
     ############################################################################
     # Get the information for the lshell decays.
     ############################################################################
-    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(458)
+    #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data([[1,68],[75,102],[108,306],[309,459]])
+    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data([[1,68],[75,102],[108,306],[309,459],[551,917]])
     #num_decays_in_dataset *= 0.87 # Might need this to take care of efficiency.
 
     tot_lshells = num_decays_in_dataset.sum()
@@ -185,9 +197,10 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
 
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-    params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
+    params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':300.0,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
 
     params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
@@ -199,8 +212,8 @@ def main():
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['mDM'] = {'fix':False,'start_val':7.00,'limits':(5.0,20.0)}
-        params_dict['sigma_n'] = {'fix':False,'start_val':1e-40,'limits':(1e-42,1e-38)}
+        params_dict['mDM'] = {'fix':True,'start_val':10.00,'limits':(5.0,20.0)}
+        params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
 
     # Let the exponential modulate as a cos term
     if args.fit==1:
@@ -221,7 +234,7 @@ def main():
     # Up the tolerance.
     m.tol = 1.0
 
-    m.printMode = 1
+    m.printMode = 0
 
     m.migrad()
     #m.hesse()
@@ -310,7 +323,8 @@ def main():
         for sr in subranges[1]:
             num_wimps += integrate.dblquad(wimp,0.5,3.2,lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
 
-        func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,459],model=wimp_model)
+        #func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,459],model=wimp_model)
+        func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,917],model=wimp_model)
         srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[0.5,3.2]],efficiency=efficiency)
         eytot += srypts[0]
 

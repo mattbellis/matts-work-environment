@@ -55,7 +55,8 @@ def main():
     ax1.set_xlim(lo,hi)
     ax1.set_ylim(0.0,1.0)
 
-    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(442)
+    #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data([[1,68],[75,102],[108,306],[309,459],[551,917]])
+    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data([[1,68],[75,102],[108,306],[309,459]])
     #means = np.array([1.2977,1.1])
     #sigmas = np.array([0.077,0.077])
     #numbers = np.array([638,50])

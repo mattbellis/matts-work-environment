@@ -56,9 +56,9 @@ def cogent_efficiency(data,threshold,sigmoid_sigma,max_val):
 ################################################################################
 # Return energy and day
 ################################################################################
-def get_cogent_data(infile,first_event=0.0,calibration=0):
+def get_cogent_data(infile_name,first_event=0.0,calibration=0):
 
-    infile = open('data/before_fire_LG.dat')
+    infile = open(infile_name)
     content = np.array(infile.read().split()).astype('float')
 
     ndata = len(content)/2
