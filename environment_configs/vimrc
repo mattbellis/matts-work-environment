@@ -20,6 +20,16 @@ ab myitem \begin{itemize} \item XXX\end{itemize}
 ab myframe \frame{\frametitle{XXX}}
 ab myeqn \begin{equation}XXX\end{equation}
 ab myenum \begin{enumerate}	\item XXX\end{enumerate}
+ab mynoid \noindent{\bf XXX}
+ab vca \vec{a}
+ab vcv \vec{v}
+ab vcx \vec{x}
+ab drdt \frac{dr}{dt}
+ab drdt2 \frac{d^2r}{dt^2}
+ab dxdt \frac{dx}{dt}
+ab dxdt2 \frac{d^2x}{dt^2}
+ab dvdt \frac{dv}{dt}
+ab dvdt2 \frac{d^2v}{dt^2}
 
 
 filetype indent on
