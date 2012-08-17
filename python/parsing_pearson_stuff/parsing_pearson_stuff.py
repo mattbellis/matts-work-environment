@@ -7,6 +7,9 @@ import BeautifulSoup as bs
 def find_caption(line):
     
     # Get caption
+    #print line.find("Caption")
+    if line.find('Caption')==-1:
+        return "XXX"
     cap0 = line.find('<td>',line.find('Caption')) + 4
     cap1 = line.find('</td>',cap0)
     #print cap0,cap1
@@ -32,13 +35,14 @@ def find_size(line):
     x0 = line.find('height=',0) + 7
     x1 = line.find('>',x0)
     #print x0,x1
-    height = line[x0:x1]
+    height = line[x0:x1].replace('"','')
+
 
     hx0 = x0
     x0 = line.find('width=',hx0-20) + 6
     x1 = line.find(' height',x0)
     #print x0,x1
-    width = line[x0:x1]
+    width = line[x0:x1].replace('"','')
 
     return width,height
 
@@ -74,6 +78,18 @@ if os.access( dir_name, os.W_OK ):
 
                 caption = caption.replace('&#039;',"'")
                 caption = caption.replace('&asymp;',"$\\approx$")
+                caption = caption.replace('&#916;',"$\\Delta$")
+                caption = caption.replace('&#176;',"$^{\\circ}$")
+                caption = caption.replace('&theta;',"$\\theta$")
+                caption = caption.replace('&#920;',"$\\theta$")
+                caption = caption.replace('&#956;',"$\\mu$")
+                caption = caption.replace('&#931;',"$\\Sigma$")
+                caption = caption.replace('&quot;',"\"")
+                caption = caption.replace('&rdquo;',"``")
+                caption = caption.replace('&#969;',"$\\omega$")
+                caption = caption.replace('&#8869;',"$\\perp$")
+                caption = caption.replace('&#964;',"$\\phi$")
+                caption = caption.replace('&#8733;',"$\\propto$")
 
                 #print imagename
                 #print filename
