@@ -21,7 +21,7 @@ while i < 110:
     start = time.strptime(datestring,"%Y %j")
 
     #print time.strftime("%Y %b %d",start)
-    date = time.strftime("%b %d",start)
+    date = time.strftime("%a., %b %d",start)
     if tuesday:
         print "Week %0d & %s & XXX & YYY & ZZZ \\\\ " % (week,date)
     else:
