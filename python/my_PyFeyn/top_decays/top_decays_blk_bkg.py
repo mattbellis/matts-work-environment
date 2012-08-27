@@ -27,7 +27,7 @@ def top_decays(outfilename, index):
   xdecay_vtx = Vertex(1.0, -1.0, mark=CIRCLE)
 
   c1 = Circle(center=out_vtx, radius=0.1, fill=[pyx.color.cmyk.Yellow], points = [out_vtx])
-  c2 = Circle(center=xdecay_vtx, radius=0.1, fill=[color.cmyk.Yellow], points = [xdecay_vtx])
+  c2 = Circle(center=xdecay_vtx, radius=0.1, fill=[color.cmyk.Green], points = [xdecay_vtx])
 
   decay1 = Point(3,-1)
   decay2 = Point(3,-2)
