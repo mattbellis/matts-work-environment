@@ -14,15 +14,15 @@ rm -rf .conkyrc
 rm -rf proxy.pac
 
 ######### Link files ############
-ln -s matts-work-environment/environment_configs/cshrc .cshrc
-ln -s matts-work-environment/environment_configs/dir_colors .dir_colors
-ln -s matts-work-environment/environment_configs/fluxbox_keys .fluxbox/keys
-ln -s matts-work-environment/environment_configs/fluxbox_menu .fluxbox/menu
-ln -s ~/matts-work-environment/environment_configs/hgignore matts-work-environment/.hgignore
-ln -s matts-work-environment/environment_configs/mrxvtrc .mrxvtrc
-ln -s matts-work-environment/environment_configs/vimrc .vimrc
-ln -s matts-work-environment/environment_configs/hgrc .hgrc
-ln -s matts-work-environment/environment_configs/conkyrc .conkyrc
-ln -s matts-work-environment/environment_configs/proxy.pac proxy.pac
+ln -s ~/matts-work-environment/environment_configs/cshrc .cshrc
+ln -s ~/matts-work-environment/environment_configs/dir_colors .dir_colors
+ln -s ~/matts-work-environment/environment_configs/fluxbox_keys .fluxbox/keys
+ln -s ~/matts-work-environment/environment_configs/fluxbox_menu .fluxbox/menu
+ln -s ~/matts-work-environment/environment_configs/hgignore ~/matts-work-environment/.hgignore
+ln -s ~/matts-work-environment/environment_configs/mrxvtrc .mrxvtrc
+ln -s ~/matts-work-environment/environment_configs/vimrc .vimrc
+ln -s ~/matts-work-environment/environment_configs/hgrc .hgrc
+ln -s ~/matts-work-environment/environment_configs/conkyrc .conkyrc
+ln -s ~/matts-work-environment/environment_configs/proxy.pac proxy.pac
 
 
