@@ -57,9 +57,14 @@ def main():
     # Read in the data
     ############################################################################
     #infile = open('data/before_fire_LG.dat')
-    infile_name = 'data/low_gain.txt'
-    tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
 
+    #infile_name = 'data/low_gain.txt'
+    #tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
+
+    infile_name = 'data/cogent_mc.dat'
+    tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=999)
+
+    print energies
     if args.verbose:
         print_data(energies,tdays)
 
@@ -77,6 +82,8 @@ def main():
     ranges = [[0.5,3.2],[1.0,917.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
     subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
+    if args.fit==5:
+        subranges = [[],[[1,917]]]
 
     #nbins = [108,30]
     nbins = [200,30]
@@ -201,18 +208,21 @@ def main():
     params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
-    params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
+    #params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':800.0,'limits':(0.0,100000.0)}
 
-    params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
+    #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
+    params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
 
     # Exponential term in energy
-    if args.fit==0 or args.fit==1:
-        params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
+    if args.fit==0 or args.fit==1 or args.fit==5:
+        #params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
+        params_dict['e_exp0'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
 
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['mDM'] = {'fix':True,'start_val':10.00,'limits':(5.0,20.0)}
+        params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
         params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
 
     # Let the exponential modulate as a cos term
@@ -294,13 +304,13 @@ def main():
     # Exponential
     ############################################################################
     # Energy projections
-    if args.fit==0 or args.fit==1:
+    if args.fit==0 or args.fit==1 or args.fit==5:
         ypts = np.exp(-values['e_exp0']*expts)
         y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
         eytot += y
 
     # Time projections
-    if args.fit==0:
+    if args.fit==0 or args.fit==5:
         func = lambda x: np.ones(len(x))
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
@@ -335,15 +345,16 @@ def main():
     ############################################################################
     # Second exponential
     ############################################################################
-    # Energy projections
-    ypts = np.exp(-values['e_exp1']*expts)
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp1'],fmt='y-',axes=ax0,efficiency=eff)
-    eytot += y
+    if args.fit!=5:
+        # Energy projections
+        ypts = np.exp(-values['e_exp1']*expts)
+        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp1'],fmt='y-',axes=ax0,efficiency=eff)
+        eytot += y
 
-    # Time projections
-    func = lambda x: np.ones(len(x))
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1,subranges=subranges[1])
-    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+        # Time projections
+        func = lambda x: np.ones(len(x))
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1,subranges=subranges[1])
+        tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
     ############################################################################
     # Flat
@@ -361,34 +372,38 @@ def main():
     ############################################################################
     # L-shell
     ############################################################################
-    # Returns pdfs
-    lshell_totx = np.zeros(1000)
-    lshell_toty = np.zeros(1000)
-    for m,s,n,dc in zip(means,sigmas,num_decays_in_dataset,decay_constants):
-        gauss = stats.norm(loc=m,scale=s)
-        eypts = gauss.pdf(expts)
+    if args.fit!=5:
+        # Returns pdfs
+        lshell_totx = np.zeros(1000)
+        lshell_toty = np.zeros(1000)
+        for m,s,n,dc in zip(means,sigmas,num_decays_in_dataset,decay_constants):
+            gauss = stats.norm(loc=m,scale=s)
+            eypts = gauss.pdf(expts)
 
-        # Energy distributions
-        y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=n,fmt='r--',axes=ax0,efficiency=eff)
-        eytot += y
-        lshell_totx += y
+            # Energy distributions
+            y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=n,fmt='r--',axes=ax0,efficiency=eff)
+            eytot += y
+            lshell_totx += y
 
-        # Time distributions
-        func = lambda x: np.exp(dc*x)
-        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1,subranges=subranges[1])
-        tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
-        lshell_toty = [tot + y for tot,y in zip(lshell_toty,sr_typts)]
+            # Time distributions
+            func = lambda x: np.exp(dc*x)
+            sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=n,fmt='r--',axes=ax1,subranges=subranges[1])
+            tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+            lshell_toty = [tot + y for tot,y in zip(lshell_toty,sr_typts)]
 
 
-    ax0.plot(expts,lshell_totx,'r-',linewidth=2)
+        ax0.plot(expts,lshell_totx,'r-',linewidth=2)
+
+
+        # Total on y/t over all subranges.
+        for x,y,lsh in zip(sr_txpts,tot_sr_typts,lshell_toty):
+            ax1.plot(x,lsh,'r-',linewidth=2)
+            ax1.plot(x,y,'b',linewidth=3)
 
     ax0.plot(expts,eytot,'b',linewidth=3)
-
     # Total on y/t over all subranges.
-    for x,y,lsh in zip(sr_txpts,tot_sr_typts,lshell_toty):
-        ax1.plot(x,lsh,'r-',linewidth=2)
+    for x,y in zip(sr_txpts,tot_sr_typts):
         ax1.plot(x,y,'b',linewidth=3)
-
 
 
     ############################################################################

@@ -166,6 +166,9 @@ def fitfunc(data,p,parnames,params_dict):
     subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
     #subranges = [[],[[1,459]]]
 
+    if flag==5: # MC
+        subranges = [[],[[1,917]]]
+
     wimp_model = None
     
     ############################################################################
@@ -176,7 +179,7 @@ def fitfunc(data,p,parnames,params_dict):
     e_exp1 = p[pn.index('e_exp1')]
     num_exp1 = p[pn.index('num_exp1')]
 
-    if flag==0 or flag==1:
+    if flag==0 or flag==1 or flag==5:
         e_exp0 = p[pn.index('e_exp0')]
 
     if flag==1:
@@ -211,6 +214,10 @@ def fitfunc(data,p,parnames,params_dict):
         elif flag==2 or flag==3 or flag==4:
             if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
+    # MC
+    if flag==5:
+        num_tot += p[pn.index('num_exp0')]
+        num_tot += p[pn.index('num_flat')]
 
     if flag==2 or flag==3 or flag==4:
         num_wimps = 0
@@ -247,12 +254,13 @@ def fitfunc(data,p,parnames,params_dict):
         dc = -1.0*dc
         pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
         pdf *= n
-        tot_pdf += pdf
+        if flag!=5:
+            tot_pdf += pdf
 
     ############################################################################
     # Normalize the number of events tot the total.
     ############################################################################
-    if flag==0 or flag==1:
+    if flag==0 or flag==1 or flag==5:
         num_exp0 /= num_tot
 
     num_exp1 /= num_tot
@@ -263,10 +271,11 @@ def fitfunc(data,p,parnames,params_dict):
     ########################################################################
     # Wimp-like signal
     ########################################################################
-    if flag==0:
+    if flag==0 or flag==5:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
+        print "exp0 pdf: ",pdf[0:4]
     elif flag==1:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
@@ -287,7 +296,8 @@ def fitfunc(data,p,parnames,params_dict):
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_exp1
     print "exp1 pdf: ",pdf[0:4]
-    tot_pdf += pdf
+    if flag!=5:
+        tot_pdf += pdf
 
     ############################################################################
     # Flat term

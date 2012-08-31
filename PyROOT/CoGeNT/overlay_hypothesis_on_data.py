@@ -339,6 +339,18 @@ def main():
 
     mc.plotOn(xframe,RooFit.MarkerColor(3))
 
+    # Dump MC to file.
+    tlo = 2750361.25
+    thi = 81888096.0
+    outfile = open('cogent_mc.dat','w+')
+    for i in range(mc.numEntries()):
+        x = mc.get(i).getRealValue('x')
+        t = (thi-tlo)*np.random.random() + tlo
+        output = "%f %f\n" % (t,x)
+        outfile.write(output)
+        print t,x
+    outfile.close()
+
     #flat_pdf.plotOn(xframe,RooFit.LineColor(3))
     #surface_pdf.plotOn(xframe,RooFit.LineColor(4))
 

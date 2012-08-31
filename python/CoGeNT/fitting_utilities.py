@@ -189,6 +189,11 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         elif flag==2 or flag==3 or flag==4:
             if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
+    # MC
+    if flag==5:
+        num_tot += p[parnames.index('num_exp0')]
+        num_tot += p[parnames.index('num_flat')]
+
 
     if flag==2 or flag==3 or flag==4:
         mDM = p[parnames.index('mDM')]
@@ -206,6 +211,8 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
         #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
         subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
+        if flag==5:
+            subranges = [[],[[1,917]]]
 
         max_val = 0.86786
         threshold = 0.345
