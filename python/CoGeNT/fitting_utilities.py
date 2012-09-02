@@ -194,8 +194,11 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         num_tot += p[parnames.index('num_exp0')]
         num_tot += p[parnames.index('num_flat')]
 
+    # MC
+    if flag==6:
+        num_tot += p[parnames.index('num_flat')]
 
-    if flag==2 or flag==3 or flag==4:
+    if flag==2 or flag==3 or flag==4 or flag==6:
         mDM = p[parnames.index('mDM')]
         sigma_n = p[parnames.index('sigma_n')]
         #loE = dmm.quench_keVee_to_keVr(0.5)
@@ -208,10 +211,12 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
             wimp_model = 'debris'
         elif flag==4:
             wimp_model = 'stream'
+        elif flag==6:
+            wimp_model = 'shm'
 
         #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
         subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
-        if flag==5:
+        if flag==5 or flag==6:
             subranges = [[],[[1,917]]]
 
         max_val = 0.86786
