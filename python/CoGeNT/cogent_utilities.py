@@ -17,6 +17,7 @@ def amp_to_energy(amplitude, calibration=0):
 
         # Used for the low-energy channel
         energy = 63.7*amplitude
+        #energy = 63.7*amplitude + 0.013 # From Nicole
 
 
     elif calibration==1:

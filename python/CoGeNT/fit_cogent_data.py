@@ -58,11 +58,12 @@ def main():
     ############################################################################
     #infile = open('data/before_fire_LG.dat')
 
-    #infile_name = 'data/low_gain.txt'
-    #tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
+    infile_name = 'data/low_gain.txt'
+    tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
 
-    infile_name = 'data/cogent_mc.dat'
-    tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=999)
+    if args.fit==5 or args.fit==6:
+        infile_name = 'data/cogent_mc.dat'
+        tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=999)
 
     print energies
     if args.verbose:
@@ -82,7 +83,7 @@ def main():
     ranges = [[0.5,3.2],[1.0,917.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
     subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
-    if args.fit==5:
+    if args.fit==5 or args.fit==6:
         subranges = [[],[[1,917]]]
 
     #nbins = [108,30]
@@ -110,6 +111,7 @@ def main():
     ax1 = fig0.add_subplot(1,2,2)
 
     ax0.set_xlim(ranges[0])
+    ax0.set_ylim(0.0,50.0)
     #ax0.set_ylim(0.0,92.0)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
@@ -209,7 +211,7 @@ def main():
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
     #params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
-    params_dict['num_flat'] = {'fix':False,'start_val':800.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':800.0,'limits':(0.0,2000.0)}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
@@ -220,10 +222,10 @@ def main():
         params_dict['e_exp0'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
 
     # Use the dark matter SHM, WIMPS
-    if args.fit==2 or args.fit==3 or args.fit==4: 
+    if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
         params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
-        params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
+        params_dict['sigma_n'] = {'fix':False,'start_val':2e-41,'limits':(1e-42,1e-38)}
 
     # Let the exponential modulate as a cos term
     if args.fit==1:
@@ -320,7 +322,7 @@ def main():
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
     # Plot wimp term
-    if args.fit==2 or args.fit==3 or args.fit==4:
+    if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6:
         wimp_model = None
         if args.fit==2:
             wimp_model = 'shm'
@@ -328,6 +330,8 @@ def main():
             wimp_model = 'debris'
         elif args.fit==4:
             wimp_model = 'stream'
+        elif args.fit==6:
+            wimp_model = 'shm'
 
         num_wimps = 0.0
         for sr in subranges[1]:
@@ -345,7 +349,7 @@ def main():
     ############################################################################
     # Second exponential
     ############################################################################
-    if args.fit!=5:
+    if args.fit!=5 and args.fit!=6:
         # Energy projections
         ypts = np.exp(-values['e_exp1']*expts)
         y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp1'],fmt='y-',axes=ax0,efficiency=eff)
@@ -372,7 +376,7 @@ def main():
     ############################################################################
     # L-shell
     ############################################################################
-    if args.fit!=5:
+    if args.fit!=5 and args.fit!=6:
         # Returns pdfs
         lshell_totx = np.zeros(1000)
         lshell_toty = np.zeros(1000)
