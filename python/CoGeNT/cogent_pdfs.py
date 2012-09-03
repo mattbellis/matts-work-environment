@@ -273,8 +273,8 @@ def fitfunc(data,p,parnames,params_dict):
     num_flat /= num_tot
 
     print " -------------------------------------- "
-    print x[0:4]
-    print y[0:4]
+    print "energy: ",x[0:8]
+    print "time stamp: ",y[0:8]
     ########################################################################
     # Wimp-like signal
     ########################################################################
@@ -282,7 +282,7 @@ def fitfunc(data,p,parnames,params_dict):
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
-        print "exp0 pdf: ",pdf[0:4]
+        print "exp0 pdf: ",pdf[0:8]
     elif flag==1:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
@@ -293,10 +293,10 @@ def fitfunc(data,p,parnames,params_dict):
         #print "wimp_norm: ",wimp_norm
         pdf = wimp(y,x,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/(1.0*num_tot)
         pdf *= (0.333) # Active volume of CoGeNT
-        print "wimp pdf: ",pdf[0:4]*(num_tot)/num_wimps
-        print "wimp pdf: ",pdf[0:4]
+        print "wimp pdf: ",pdf[0:8]*(num_tot)/num_wimps
+        print "wimp pdf: ",pdf[0:8]
 
-    #print "wimp pdf: ",pdf[0:4]
+    #print "wimp pdf: ",pdf[0:8]
     tot_pdf += pdf
 
     ############################################################################
@@ -305,7 +305,7 @@ def fitfunc(data,p,parnames,params_dict):
     pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_exp1
-    #print "exp1 pdf: ",pdf[0:4]
+    #print "exp1 pdf: ",pdf[0:8]
     if flag!=5 and flag!=6:
         tot_pdf += pdf
 
@@ -315,8 +315,8 @@ def fitfunc(data,p,parnames,params_dict):
     pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_flat
-    print "flat pdf: ",pdf[0:4]/num_flat
-    print "flat pdf: ",pdf[0:4]
+    print "flat pdf: ",pdf[0:8]/num_flat
+    print "flat pdf: ",pdf[0:8]
     tot_pdf += pdf
 
     print "%f %f %f" % (num_tot,num_wimps/num_tot,num_flat)

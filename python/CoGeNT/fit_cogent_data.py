@@ -225,7 +225,7 @@ def main():
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
         params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
-        params_dict['sigma_n'] = {'fix':False,'start_val':2e-41,'limits':(1e-42,1e-38)}
+        params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
 
     # Let the exponential modulate as a cos term
     if args.fit==1:
@@ -246,7 +246,7 @@ def main():
     # Up the tolerance.
     m.tol = 1.0
 
-    m.printMode = 0
+    m.printMode = 2
 
     m.migrad()
     #m.hesse()
