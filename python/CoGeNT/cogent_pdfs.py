@@ -166,6 +166,9 @@ def fitfunc(data,p,parnames,params_dict):
     subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
     #subranges = [[],[[1,459]]]
 
+    if flag==5 or flag==6: # MC
+        subranges = [[],[[1,917]]]
+
     wimp_model = None
     
     ############################################################################
@@ -176,7 +179,7 @@ def fitfunc(data,p,parnames,params_dict):
     e_exp1 = p[pn.index('e_exp1')]
     num_exp1 = p[pn.index('num_exp1')]
 
-    if flag==0 or flag==1:
+    if flag==0 or flag==1 or flag==5:
         e_exp0 = p[pn.index('e_exp0')]
 
     if flag==1:
@@ -185,7 +188,7 @@ def fitfunc(data,p,parnames,params_dict):
         wmod_amp = p[pn.index('wmod_amp')]
         wmod_offst = p[pn.index('wmod_offst')]
 
-    elif flag==2 or flag==3 or flag==4:
+    elif flag==2 or flag==3 or flag==4 or flag==6:
         #mDM = 7.0
         mDM = p[pn.index('mDM')]
         sigma_n = p[pn.index('sigma_n')]
@@ -199,6 +202,8 @@ def fitfunc(data,p,parnames,params_dict):
             wimp_model = 'debris'
         elif flag==4:
             wimp_model = 'stream'
+        elif flag==6:
+            wimp_model = 'shm'
 
     ############################################################################
     # Normalize numbers.
@@ -211,8 +216,16 @@ def fitfunc(data,p,parnames,params_dict):
         elif flag==2 or flag==3 or flag==4:
             if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
+    # MC
+    if flag==5:
+        num_tot += p[pn.index('num_exp0')]
+        num_tot += p[pn.index('num_flat')]
 
-    if flag==2 or flag==3 or flag==4:
+    # MC
+    if flag==6:
+        num_tot += p[pn.index('num_flat')]
+
+    if flag==2 or flag==3 or flag==4 or flag==6:
         num_wimps = 0
         for sr in subranges[1]:
             num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
@@ -247,37 +260,43 @@ def fitfunc(data,p,parnames,params_dict):
         dc = -1.0*dc
         pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
         pdf *= n
-        tot_pdf += pdf
+        if flag!=5 and flag!=6:
+            tot_pdf += pdf
 
     ############################################################################
-    # Normalize the number of events tot the total.
+    # Normalize the number of events to the total.
     ############################################################################
-    if flag==0 or flag==1:
+    if flag==0 or flag==1 or flag==5:
         num_exp0 /= num_tot
 
     num_exp1 /= num_tot
     num_flat /= num_tot
 
-    print x[0:4]
-    print y[0:4]
+    print " -------------------------------------- "
+    print "energy: ",x[0:8]
+    print "time stamp: ",y[0:8]
     ########################################################################
     # Wimp-like signal
     ########################################################################
-    if flag==0:
+    if flag==0 or flag==5:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
+        print "exp0 pdf: ",pdf[0:8]
     elif flag==1:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
-    elif flag==2 or flag==3 or flag==4:
+    elif flag==2 or flag==3 or flag==4 or flag==6:
         print "num_wimps mDM: %12.3f %12.3f %12.3e" % (num_wimps,mDM,sigma_n)
         wimp_norm = num_wimps
         #print "wimp_norm: ",wimp_norm
         pdf = wimp(y,x,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/(1.0*num_tot)
+        pdf *= (0.333) # Active volume of CoGeNT
+        print "wimp pdf: ",pdf[0:8]*(num_tot)/num_wimps
+        print "wimp pdf: ",pdf[0:8]
 
-    print "wimp pdf: ",pdf[0:4]
+    #print "wimp pdf: ",pdf[0:8]
     tot_pdf += pdf
 
     ############################################################################
@@ -286,8 +305,9 @@ def fitfunc(data,p,parnames,params_dict):
     pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_exp1
-    print "exp1 pdf: ",pdf[0:4]
-    tot_pdf += pdf
+    #print "exp1 pdf: ",pdf[0:8]
+    if flag!=5 and flag!=6:
+        tot_pdf += pdf
 
     ############################################################################
     # Flat term
@@ -295,8 +315,11 @@ def fitfunc(data,p,parnames,params_dict):
     pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_flat
-    print "flat pdf: ",pdf[0:4]
+    print "flat pdf: ",pdf[0:8]/num_flat
+    print "flat pdf: ",pdf[0:8]
     tot_pdf += pdf
+
+    print "%f %f %f" % (num_tot,num_wimps/num_tot,num_flat)
 
     return tot_pdf
 ################################################################################
