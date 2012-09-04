@@ -25,7 +25,7 @@ setenv EDITOR vi
 
 # CUDA stuff
 setenv PATH ${PATH}:/usr/local/cuda/bin
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/local/cuda/lib
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/local/cuda/lib64:/usr/local/cuda/lib:
 
 ###### G4 stuff
 #source /home/bellis/src/geant4/geant4.9.0.p01/env.csh
@@ -37,7 +37,8 @@ setenv MY_BEAMER_THEMES ${HOME}/Talks/my_beamer_themes
 
 # For CUDA
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu/
-setenv CUDA_INSTALL_PATH /usr/
+#setenv CUDA_INSTALL_PATH /usr/
+setenv CUDA_INSTALL_PATH /usr/local/cuda/
 
 # For PyMinuit
 setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${LD_LIBRARY_PATH}

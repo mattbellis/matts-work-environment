@@ -38,10 +38,14 @@ def main():
             default=0, help='Which fit to perform (0,1,2)')
     parser.add_argument('--verbose', dest='verbose', action='store_true',\
             default=False, help='Verbose output')
+    parser.add_argument('--sigma_n', dest='sigma_n', type=float,\
+            default=None, help='Value of sigma_n (cross section of DM-nucleon interaction).')
     parser.add_argument('--turn-off-eff', dest='turn_off_eff', action='store_true',\
             default=False, help='Turn off the efficiency.')
     parser.add_argument('--contours', dest='contours', action='store_true',\
             default=False, help='Calculate and plot the contours.')
+    parser.add_argument('--batch', dest='batch', action='store_true',\
+            default=False, help='Run in batch mode (exit on completion).')
 
     args = parser.parse_args()
 
@@ -111,8 +115,8 @@ def main():
     ax1 = fig0.add_subplot(1,2,2)
 
     ax0.set_xlim(ranges[0])
-    ax0.set_ylim(0.0,50.0)
-    #ax0.set_ylim(0.0,92.0)
+    #ax0.set_ylim(0.0,50.0)
+    ax0.set_ylim(0.0,92.0)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
 
@@ -226,6 +230,8 @@ def main():
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
         params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
         params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
+        if args.sigma_n != None:
+            params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38)}
 
     # Let the exponential modulate as a cos term
     if args.fit==1:
@@ -418,7 +424,8 @@ def main():
     ax10.set_xlim(ranges[0][0],ranges[0][1])
     ax10.set_ylim(0.0,1.0)
 
-    plt.show()
+    if not args.batch:
+        plt.show()
 
     exit()
 
