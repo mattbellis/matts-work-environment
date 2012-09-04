@@ -17,6 +17,7 @@ def amp_to_energy(amplitude, calibration=0):
 
         # Used for the low-energy channel
         energy = 63.7*amplitude
+        #energy = 63.7*amplitude + 0.013 # From Nicole
 
 
     elif calibration==1:
@@ -33,6 +34,12 @@ def amp_to_energy(amplitude, calibration=0):
         # Used for the higher-energy channel, when studying the K-shell peaks. Gives
         # a better fit to this region, but worse fit at low energies
         energy = (61.909*amplitude) + 0.28328
+
+    elif calibration==999:
+
+        # No calibration. Data is in keVee
+
+        energy = amplitude
 
     return energy
 
@@ -73,7 +80,7 @@ def get_cogent_data(infile_name,first_event=0.0,calibration=0):
     index = np.arange(1,ndata*2+1,2)
 
     amplitudes = content[index]
-    energies = amp_to_energy(amplitudes,0)
+    energies = amp_to_energy(amplitudes,calibration)
 
     return tdays,energies
 

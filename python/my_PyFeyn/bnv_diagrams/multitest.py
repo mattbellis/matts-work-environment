@@ -18,4 +18,4 @@ meson_to_baryon_lepton("B_proton"+tag,      "Bz",  "qd", "aqb", "qu", "qu", "lm"
 meson_to_baryon_lepton("D_lambda"+tag, "Dm",  "qd", "aqc", "qs", "qu","lm",  "gL", 1)
 meson_to_baryon_lepton("D_proton"+tag, "aDz",  "qu", "aqc", "qu", "qd","lm",  "p", 1)
 
-baryon_to_meson_lepton("proton_decay"+tag, "p",  "qd", "qu", "aqd", "qs", "gpz", 1)
+baryon_to_meson_lepton("lambda_decay"+tag, "gL",  "qd", "qs", "aqu", "qs", "gpp", 1)
