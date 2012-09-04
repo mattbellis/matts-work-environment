@@ -17,9 +17,11 @@ au BufRead,BufNewFile *.pde set filetype=pde
 
 " My keybindings
 ab myitem \begin{itemize} \item XXX\end{itemize}
-ab myframe \frame{\frametitle{XXX}}
+ab myframe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\begin{frame}[T]\frametitle{XXX}\end{frame}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ab myeqn \begin{equation}XXX\end{equation}
+ab myeqnarray \begin{eqnarray*}XXX &=& YYY \\\end{eqnarray*}
 ab myenum \begin{enumerate}	\item XXX\end{enumerate}
+ab newsection %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\section{XXX}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
 filetype indent on
