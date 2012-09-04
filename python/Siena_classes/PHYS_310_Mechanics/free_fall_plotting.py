@@ -1,5 +1,5 @@
-from numpy import arange
-from matplotlib.pylab import figure,plot,show,xlabel,ylabel
+from numpy import arange,ones
+from matplotlib.pylab import figure,plot,show,xlabel,ylabel,ylim
 
 a =  9.8 # m/s^2
 x0 = 0.0 # m
@@ -27,6 +27,14 @@ figure()
 plot(t,v)
 xlabel("t (s)")
 ylabel("v (m/s)")
+
+# Turn a into an array that can be plotted
+a_array = a*ones(len(x))
+figure()
+plot(t,a_array)
+xlabel("t (s)")
+ylabel("a (m/s$^2$)")
+ylim(0,12)
 
 show()
 
