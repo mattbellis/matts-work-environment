@@ -207,8 +207,8 @@ def main():
 
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
-    params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
+    params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
     #params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':800.0,'limits':(0.0,2000.0)}
