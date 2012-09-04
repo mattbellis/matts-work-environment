@@ -22,6 +22,19 @@ ab myeqn \begin{equation}XXX\end{equation}
 ab myeqnarray \begin{eqnarray*}XXX &=& YYY \\\end{eqnarray*}
 ab myenum \begin{enumerate}	\item XXX\end{enumerate}
 ab newsection %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\section{XXX}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ab mynoid \noindent{\bf XXX}
+ab vca \vec{a}
+ab vcv \vec{v}
+ab vcx \vec{x}
+ab drdt \frac{dr}{dt}
+ab drdt2 \frac{d^2r}{dt^2}
+ab dxdt \frac{dx}{dt}
+ab dxdt2 \frac{d^2x}{dt^2}
+ab dvdt \frac{dv}{dt}
+ab dvdt2 \frac{d^2v}{dt^2}
+ab xhat \hat{x}
+ab yhat \hat{y}
+ab zhat \hat{z}
 
 
 filetype indent on

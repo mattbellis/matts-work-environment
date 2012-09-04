@@ -9,7 +9,7 @@ endif
 if ( $1 == "push" ) then
     rsync -P -r -u -a -v \
         --exclude '*.npy' \
-        --exclude 'core' \
+        --exclude '*/core' \
         /home/bellis/printer_drivers \
         /home/bellis/bluehost_staging \
         /home/bellis/Stanford \
