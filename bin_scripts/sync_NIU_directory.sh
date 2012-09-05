@@ -10,6 +10,9 @@ if ( $1 == "push" ) then
     rsync -P -r -u -a -v \
         --exclude '*.npy' \
         --exclude '*/core' \
+        --exclude '*talk*.pdf' \
+        --exclude '*lecture*.pdf' \
+        --exclude '*chapter*.pdf' \
         /home/bellis/printer_drivers \
         /home/bellis/bluehost_staging \
         /home/bellis/Stanford \
@@ -28,7 +31,7 @@ if ( $1 == "push" ) then
         mattbellis.dyndns-home.com:/home/bellis
 
 else if ( $1 == "pull" ) then
-    rsync -P -r -u -a -v --exclude '*.npy' mattbellis.dyndns-home.com:/home/bellis/{Talks,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,python_packages,eBooks,wallpapers,printer_drivers} \
+    rsync -P -r -u -a -v --exclude '*.npy'  --exclude '*/core' --exclude '*talk*.pdf' --exclude '*lecture*.pdf' --exclude '*chapter*.pdf' mattbellis.dyndns-home.com:/home/bellis/{Talks,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,python_packages,eBooks,wallpapers,printer_drivers} \
         /home/bellis
 
 else
