@@ -8,7 +8,7 @@ foreach base ( 39 40 41 42 )
     set val = `printf "%se-%s" $coef $base`
 
     echo python fit_cogent_data.py --fit 4 --batch --sigma_n $val $logfile
-    python fit_cogent_data.py --fit 4 --batch --sigma_n 5.0e-41 > log_5.0.log
+    python fit_cogent_data.py --fit 4 --batch --sigma_n $val > $logfile
     #echo python fit_cogent_data.py --fit 4 --batch --sigma_n $val > $logfile
 
     end
