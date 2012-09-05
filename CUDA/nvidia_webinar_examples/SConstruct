@@ -1,0 +1,14 @@
+import os 
+
+env = Environment()
+
+# Grab my local environment variable PATH so I can find nvcc
+env = Environment(ENV = {'PATH' : os.environ['PATH']})
+
+env['CC'] = ['nvcc']
+
+env.Program(target='example_0', source=['example_0.cu'])
+env.Program(target='example_1', source=['example_1.cu'])
+env.Program(target='example_2', source=['example_2.cu'])
+
+
