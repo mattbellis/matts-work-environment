@@ -49,7 +49,7 @@ def main():
     student_grades = [[],[],[],[],[]]
 
     # Grade weighting
-    final_grade_weighting = [0.10,0.20,0.40,0.30]
+    final_grade_weighting = [0.10,0.25,0.35,0.30]
     # Quizzes
     # HWs
     # Exam 1
@@ -93,12 +93,12 @@ def main():
                 if g is not None:
                     grade_file_infos.append(g)
 
-        if line_num==1:
+        if line_num==2:
             for g in grade_file_infos:
                 g.set_date(row[g.grade_index])
 
         # Grab the hw info
-        if line_num==2:
+        if line_num==3:
             for g in grade_file_infos:
                 g.set_max_grade(float(row[g.grade_index]))
 
@@ -117,7 +117,7 @@ def main():
 
         # Grab the hw info
         #if line_num>=4:
-        if line_num>=3:
+        if line_num>=4:
             row_len = len(row)
             student_name = [row[2],row[3]]
             #email = "z%s@students.niu.edu" % (row[1])
@@ -223,12 +223,12 @@ def main():
         # For testing
         ########################################################################
         '''
-        subject = "Test of PHYS 283 grade summary email system."
+        subject = "Test of PHYS 110 grade summary email system."
         msg_body = "Hi %s %s,\n\n" % (s.student_name[1],s.student_name[0])
-        msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades for PHYS283. "
-        msg_body += "If I've matched up your name with this email address, "
-        msg_body += "could you please either email me back or let me know in class on Tuesday."
-        msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well."
+        msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades for PHYS 110.\n"
+        msg_body += "\n\tIf I've matched up your name with this email address, "
+        msg_body += "could you please either email me back or let me know in class on Thursday.\n"
+        msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well.\n"
         msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
         '''
 

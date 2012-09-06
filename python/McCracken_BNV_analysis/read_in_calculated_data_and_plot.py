@@ -400,7 +400,7 @@ blinded_region = False
 if 'data' in outfile_name:
     blinded_region = True
 
-#'''
+'''
 tot_events = len(good_masses[0])
 print "tot: ",tot_events
 i = 0
@@ -471,7 +471,7 @@ for c0 in cut_tot_missing_mass:
 
 outarrays = [cuts,tot,remain]
 np.save(outfile_name,outarrays)
-#'''
+'''
 
 '''
 # Quick test
@@ -498,5 +498,5 @@ avg = (nhi+nlo)/2.0
 print "avg: ",avg
 '''
 
-#plt.show()
+plt.show()
 

@@ -145,8 +145,8 @@ class Student:
 
         # Quizzes
         ret += " -----\nQuizzes\n -----\n"
-        drop_lowest_score = True
-        #drop_lowest_score = False
+        #drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
         for g in self.grades.quizzes:
             #ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
@@ -161,7 +161,8 @@ class Student:
         ret += "\tQuiz avg: %4.2f\n" % (avg)
 
         # HW
-        drop_lowest_score = True
+        #drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
         ret += " -----\nHomeworks\n -----\n"
         for g in self.grades.hw:
@@ -177,7 +178,8 @@ class Student:
         ret += "\tHW   avg: %4.2f\n" % (avg)
 
         # Exam 1 
-        drop_lowest_score = True
+        #drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
         ret += " -----\nExams\n -----\n"
         #print len(self.grades.exams)
