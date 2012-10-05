@@ -35,6 +35,12 @@ ab dvdt2 \frac{d^2v}{dt^2}
 ab xhat \hat{x}
 ab yhat \hat{y}
 ab zhat \hat{z}
+ab rhat \hat{r}
+ab phihat \hat{\phi}
+ab rdot \dot{r}
+ab rddot \ddot{r}
+ab phidot \dot{\phi}
+ab phiddot \ddot{\phi}
 
 
 filetype indent on

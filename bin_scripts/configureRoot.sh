@@ -1,8 +1,7 @@
 #./configure linuxx8664gcc \
 ./configure linux \
                       --prefix=/usr/local \
-                      --with-cern-libdir=/usr/lib \
-                      --enable-mathcore \
+                      --with-x11-libdir=/usr/lib/x86_64-linux-gnu/ \
                       --enable-mathmore \
                       --enable-python \
                       --enable-minuit2 \
