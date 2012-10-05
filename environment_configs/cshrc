@@ -43,3 +43,6 @@ setenv CUDA_INSTALL_PATH /usr/local/cuda/
 # For PyMinuit
 setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${LD_LIBRARY_PATH}
 #setenv PYTHONPATH /your/home/lib/python:${PYTHONPATH}
+
+# For Java
+setenv PATH ${PATH}:/usr/local/java/bin
