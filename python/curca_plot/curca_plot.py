@@ -7,7 +7,7 @@ from scipy.interpolate import spline
 fig = plt.figure(figsize=(6,6))
 fig.canvas.set_window_title('A Boxplot Example')
 ax1 = fig.add_subplot(111)
-plt.subplots_adjust(left=0.15, right=0.95, top=0.95, bottom=0.10)
+plt.subplots_adjust(left=0.15, right=0.95, top=0.90, bottom=0.10)
 
 ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey',
                       alpha=0.5)
@@ -30,6 +30,7 @@ plt.xlim(-0.5,3.5)
 plt.ylim(0.0,8.0)
 plt.xticks(fontsize=24)
 plt.yticks(fontsize=20)
+plt.title('Active award total',fontsize=24,weight='bold')
 
 fig.savefig('curca_plot.png')
 
