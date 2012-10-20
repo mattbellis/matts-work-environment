@@ -14,7 +14,7 @@ ax1.yaxis.grid(True, linestyle='-', which='major', color='lightgrey',
 
 dates = ['06-07','07-08','08-09','09-10']
 x = [0,1,2,3]
-y = [1.0,3.6,6.0,7.5]
+y = [0.9,4.9,6.8,7.5]
 
 ax1.yaxis.set_major_formatter(FormatStrFormatter('%0.0f m'))
 
@@ -22,7 +22,7 @@ xnew = np.linspace(min(x),max(x),300)
 power_smooth = spline(x,y,xnew)
 
 #ax1.plot(y,'y-',linewidth=15,solid_capstyle='round')
-ax1.plot(xnew,power_smooth,'y-',linewidth=15,solid_capstyle='round')
+ax1.plot(xnew,power_smooth,'-',color='orange',linewidth=15,solid_capstyle='round')
 
 
 plt.xticks(x,dates)
