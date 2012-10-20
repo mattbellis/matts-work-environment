@@ -16,7 +16,7 @@ dates = ['06-07','07-08','08-09','09-10']
 x = [0,1,2,3]
 y = [0.9,4.9,6.8,7.5]
 
-ax1.yaxis.set_major_formatter(FormatStrFormatter('%0.0f m'))
+ax1.yaxis.set_major_formatter(FormatStrFormatter('\$%0.0f M'))
 
 xnew = np.linspace(min(x),max(x),300)
 power_smooth = spline(x,y,xnew)
