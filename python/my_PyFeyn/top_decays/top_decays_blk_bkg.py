@@ -98,7 +98,7 @@ def top_decays(outfilename, index):
           yout = jet_len*np.sin(a) + out1.getY()
           jet = Fermion(out1,Point(xout,yout)).setStyles([CYAN,THICK2])
       fx  = Photon(out_vtx, xdecay_vtx).addLabel(r"$X^+ (q=+\frac{1}{3})$",pos=0.5,displace=0.9)
-      fx_decay1  = Fermion(xdecay_vtx, decay1).addLabel(r"$\nu$", pos=1.23, displace=0.00).setStyles([APRICOT,THICK2])
+      fx_decay1  = Higgs(xdecay_vtx, decay1).addLabel(r"$\nu$", pos=1.23, displace=0.00)
       fx_decay2  = Fermion(xdecay_vtx, jet_decay2).addLabel(r"$\bar{q}=(\bar{b},\bar{s},\bar{d})$", pos=1.28, displace=0.02)
       for a in [-0.2,-0.10,0.0,0.10,0.2]:
           xout = jet_len*np.cos(a) + jet_decay2.getX()
