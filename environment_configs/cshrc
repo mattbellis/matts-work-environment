@@ -45,4 +45,5 @@ setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${L
 #setenv PYTHONPATH /your/home/lib/python:${PYTHONPATH}
 
 # For Java
-setenv PATH ${PATH}:/home/bellis/opt/jre1.7.0_07/bin/
+#setenv PATH /usr/local/jre1.7.0_07/bin/:${PATH}:/home/bellis/opt/jre1.7.0_07/bin/
+setenv PATH ${PATH}
