@@ -62,7 +62,8 @@ def main():
     ############################################################################
     #infile = open('data/before_fire_LG.dat')
 
-    infile_name = 'data/low_gain.txt'
+    #infile_name = 'data/low_gain.txt'
+    infile_name = 'data/high_gain.txt'
     tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
 
     if args.fit==5 or args.fit==6:
