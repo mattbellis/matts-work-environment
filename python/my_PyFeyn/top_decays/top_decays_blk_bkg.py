@@ -15,7 +15,8 @@ def top_decays(outfilename, index):
 
   define_border = []
   for item in corners:
-    define_border.append(Circle(center=item, radius=0.01, stroke=[color.rgb.black], fill=[color.rgb.black]))
+      #define_border.append(Circle(center=item, radius=0.01, stroke=[color.rgb.black], fill=[color.rgb.black]))
+    define_border.append(Circle(center=item, radius=0.01, stroke=[color.rgb.white], fill=[color.rgb.white]))
 
   in1 = Point(-4, 1)
   in2 = Point(-4, 0)
