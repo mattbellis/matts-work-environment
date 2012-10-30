@@ -8,7 +8,7 @@ ax = plt.axes()
 
 x = np.linspace(0, 10, 100)
 ax.plot(x, np.sin(2.0*x), 'b', lw=1, label='undamped sine')
-ax.plot(x, np.sin(2.0*x) * np.exp(-0.2 * x ), 'r', lw=1, label='damped cosine')
+ax.plot(x, np.sin(2.0*x) * np.exp(-0.2 * x ), 'r', lw=1, label='damped sine')
 
 ax.set_title('Simple harmonic oscillator')
 ax.set_xlabel('time')
