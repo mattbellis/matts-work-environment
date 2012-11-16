@@ -11,10 +11,20 @@ def calc_dist(x0,y0,z0,x1,y1,z1):
     return dist
 
 ################################################################################
-ngals = 1000
+ngals = 100000
 x = np.random.random(ngals)
 y = np.random.random(ngals)
 z = np.random.random(ngals)
+
+outfile = open('output.cat','w+')
+output = "%d\n" % (ngals)
+outfile.write(output)
+for a,b,c in zip(x,y,z):
+    output = "%10.8f %10.8f %10.8f\n" % (a,b,c)
+    outfile.write(output)
+outfile.close()
+exit()
+
 
 hist_min = 0.0
 hist_max = 2.0
