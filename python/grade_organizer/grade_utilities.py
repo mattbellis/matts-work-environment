@@ -48,6 +48,21 @@ def is_lowest_grade(list_of_grades, grade):
     return ret 
 
 ################################################################################
+################################################################################
+def is_next_to_lowest_grade(list_of_grades, grade):
+
+    all_scores = []
+    for g in list_of_grades:
+        all_scores.append(g.grade_pct())
+
+    ret = False
+    all_scores.sort()
+    if grade.grade_pct() == all_scores[1]:
+        ret = True
+
+    return ret 
+
+################################################################################
 
 ################################################################################
 class Grade_file_info:
@@ -197,11 +212,13 @@ class Student:
         for g in self.grades.exams:
             ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
             if drop_lowest_score==True or drop_lowest_score>1:
-                #print g.grade_pct()
-                #print is_lowest_grade(self.grades.exams,g)
                 if is_lowest_grade(self.grades.exams,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
                     picked_a_lowest = True
+            if drop_lowest_score==2:
+                if is_next_to_lowest_grade(self.grades.exams,g):
+                    ret += "\tlowest score, will not be counted in average."
+                    #picked_a_lowest = True
             ret += "\n"
         avg = calc_average_of_grades(self.grades.exams, drop_lowest_score)
         averages[2] = avg
