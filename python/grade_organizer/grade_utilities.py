@@ -17,9 +17,17 @@ def calc_average_of_grades(grades, drop_lowest_score=False):
         score = g.grade_pct()
         scores.append(score)
 
-    if drop_lowest_score is True:
+    drop_lowest_score = int(drop_lowest_score)
+
+    if drop_lowest_score is 1:
         scores.sort()
         scores.reverse()
+        scores.pop()
+
+    elif drop_lowest_score is 2:
+        scores.sort()
+        scores.reverse()
+        scores.pop()
         scores.pop()
 
     #print scores
@@ -179,7 +187,8 @@ class Student:
 
         # Exam 1 
         #drop_lowest_score = True
-        drop_lowest_score = False
+        drop_lowest_score = 2
+        #drop_lowest_score = False
         picked_a_lowest = False
         ret += " -----\nExams\n -----\n"
         #print len(self.grades.exams)
@@ -187,7 +196,7 @@ class Student:
             drop_lowest_score = False
         for g in self.grades.exams:
             ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
-            if drop_lowest_score==True:
+            if drop_lowest_score==True or drop_lowest_score>1:
                 #print g.grade_pct()
                 #print is_lowest_grade(self.grades.exams,g)
                 if is_lowest_grade(self.grades.exams,g) and not picked_a_lowest:
