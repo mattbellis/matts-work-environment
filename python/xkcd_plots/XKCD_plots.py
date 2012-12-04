@@ -173,7 +173,7 @@ def XKCDify(ax, mag=1.0,
     # Add title,
     ax.text(0.5 * (xax_lim[1] + xax_lim[0]), yax_lim[1],
             ax.get_title(),
-            ha='center', va='bottom', fontsize=16)
+            ha='center', va='bottom', fontsize=32)
     ax.set_title('')
 
     Nlines = len(ax.lines)
@@ -226,7 +226,7 @@ def XKCDify(ax, mag=1.0,
                 color='k', lw=2)
 
     # Change all the fonts to humor-sans.
-    prop = fm.FontProperties(fname='Humor-Sans.ttf', size=16)
+    prop = fm.FontProperties(fname='Humor-Sans.ttf', size=20)
     for text in ax.texts:
         text.set_fontproperties(prop)
     
