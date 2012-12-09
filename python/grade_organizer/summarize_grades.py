@@ -19,7 +19,7 @@ def main():
     parser.add_argument('input_file_name', type=str, default=None, 
             help='Input file name')
     parser.add_argument('--dump-names', dest='dump_names', action='store_true',
-            default=False,
+            default=True,
             help='Dump the names of the students and an index for each.')
     parser.add_argument('--dump-grades', dest='dump_grades', action='store_true',
             default=False,
@@ -234,7 +234,7 @@ def main():
 
         #print msg_body
         #print s.email
-        if args.dump_names:
+        if args.dump_names and args.student==None:
             print "%d %-20s, %-20s\t%20s" % (i,s.student_name[0],s.student_name[1],s.email)
 
         if args.dump_grades:
