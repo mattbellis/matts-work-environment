@@ -27,8 +27,9 @@ np.random.seed(0)
 ################################################################################
 fig = plt.figure(figsize=(10,11),dpi=100,facecolor='w',edgecolor='b')
 #ax = fig.add_subplot(3,1,3,frame_on=False)
-ax = fig.add_subplot(2,1,2,frame_on=False)
-fig.subplots_adjust(top=0.99,bottom=0.05,right=0.99,left=0.01)
+#ax = fig.add_subplot(3,1,2,frame_on=False)
+ax = plt.subplot2grid((4,1), (1, 0), rowspan=2, frame_on=True)
+fig.subplots_adjust(top=0.99,bottom=0.02,right=0.99,left=0.01,wspace=0.05,hspace=0.05)
 
 
 # The lines
@@ -51,7 +52,7 @@ ax.set_ylabel('1-Confidence of graduating')
 
 ax.legend(loc='lower right')
 
-ax.text(190.05, 0.04, "\"Maybe I'll do\na second analysis!\"")
+ax.text(190.05, 0.04, "\"Maybe I'll do\na 2nd analysis!\"")
 ax.text(190.05, 0.30, "\"Freeman Dyson\nnever got\nhis PhD, right?\"")
 
 ax.text(15.0, 0.60, "SL3 -> SL4\nswitch")
@@ -74,7 +75,7 @@ img=Image.open('small_sbscience.jpg')
 height = img.size[1]
 img = np.array(img).astype(np.float) / 255
 #fig.figimage(img,-140, 180.0)
-fig.figimage(img,250,600)
+fig.figimage(img,-125,875)
 
 # Don't work?
 #rsize = img.resize((img.size[0]/100,img.size[1]/100)) 
@@ -84,29 +85,42 @@ fig.figimage(img,250,600)
 
 prop = fm.FontProperties(fname='Humor-Sans.ttf', size=14)
 
-ax0 = fig.add_subplot(4,4,1,xticks=[],yticks=[])
-ax0.text(0.05,0.3,"You\'ve managed to\ntransform counting\nphysics events\ninto a physics event\nthat counts!\nCongratulations!\n\nAdam Edwards")
+ax0 = fig.add_subplot(4,4,2,xticks=[],yticks=[])
+ax0.text(0.05,0.2,"You\'ve managed to\ntransform\ncounting physics\nevents into a\nphysics event\nthat counts!\nCongratulations!\n\nAdam Edwards")
 for text in ax0.texts:
     text.set_fontproperties(prop)
 
-ax1 = fig.add_subplot(4,4,2,xticks=[],yticks=[])
-ax1.text(0.05,0.3,"Congratulations\nTomo!!! Best of luck\nin your future\nendeavors.\n\nParker Lund")
+ax1 = fig.add_subplot(4,4,3,xticks=[],yticks=[])
+ax1.text(0.05,0.3,"Congratulations\nTomo!!!\nBest of luck\nin your future\nendeavors.\n\nParker Lund")
 for text in ax1.texts:
     text.set_fontproperties(prop)
 
-ax2 = fig.add_subplot(4,4,3,xticks=[],yticks=[])
-ax2.text(0.05,0.3,"Many congratulations\nDr. Miyashita on passing\nyour defense and wish\nyou all the best\nfor your future\ncareer,\n\nEugenia Puccio")
+ax2 = fig.add_subplot(4,4,4,xticks=[],yticks=[])
+ax2.text(0.05,0.2,"Many\ncongratulations\nDr. Miyashita on\npassing your\ndefense and wish\nyou all the best\nfor your future\ncareer,\n\nEugenia Puccio")
 for text in ax2.texts:
     text.set_fontproperties(prop)
 
-ax3 = fig.add_subplot(4,4,4,xticks=[],yticks=[])
+ax3 = fig.add_subplot(4,4,13,xticks=[],yticks=[])
 ax3.text(0.05,0.3,"A fitting gesture\nfrom those who\ntried to make\nyour success\ntake even longer.\n\nBrian Meadows")
 for text in ax3.texts:
     text.set_fontproperties(prop)
 
-ax4 = fig.add_subplot(4,4,5,xticks=[],yticks=[])
-ax4.text(0.05,0.3,"Congrats Dr. Tomo!!\nExcellent work and\nbest of luck in\nthe future!\n\nStephanie Majewski")
+ax4 = fig.add_subplot(4,4,14,xticks=[],yticks=[])
+ax4.text(0.05,0.3,"Congrats\nDr. Tomo!!\nExcellent work\nand best of luck\nin the future!\n\nStephanie Majewski")
 for text in ax4.texts:
     text.set_fontproperties(prop)
+
+ax6 = fig.add_subplot(4,4,15,xticks=[],yticks=[])
+ax6.text(0.05,0.3,"import pyphd\n\nfor i in range(137):\n  print \"Congrats!\"\n\npyphd.finished()\n\nMatt Bellis")
+for text in ax6.texts:
+    text.set_fontproperties(prop)
+
+ax5 = fig.add_subplot(4,4,16,xticks=[],yticks=[])
+ax5.text(0.05,0.3,"Congratulations\non making it over\nall those bumps\nin the road on the\nway to the PhD!\n\nPat Burchat")
+for text in ax5.texts:
+    text.set_fontproperties(prop)
+
+fig.savefig("tomo_congrats.png")
+fig.savefig("tomo_congrats.pdf")
 
 plt.show()

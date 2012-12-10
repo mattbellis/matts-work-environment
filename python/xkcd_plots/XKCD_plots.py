@@ -226,7 +226,7 @@ def XKCDify(ax, mag=1.0,
                 color='k', lw=2)
 
     # Change all the fonts to humor-sans.
-    prop = fm.FontProperties(fname='Humor-Sans.ttf', size=12)
+    prop = fm.FontProperties(fname='Humor-Sans.ttf', size=14)
     for text in ax.texts:
         text.set_fontproperties(prop)
     
