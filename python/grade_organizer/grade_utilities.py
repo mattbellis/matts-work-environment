@@ -202,6 +202,7 @@ class Student:
 
         # Exam 1 
         #drop_lowest_score = True
+        dropped_scores = 0
         drop_lowest_score = 2
         #drop_lowest_score = False
         picked_a_lowest = False
@@ -211,14 +212,16 @@ class Student:
             drop_lowest_score = False
         for g in self.grades.exams:
             ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
-            if drop_lowest_score==True or drop_lowest_score>1:
+            if drop_lowest_score==True or drop_lowest_score>1 and dropped_scores<drop_lowest_score:
                 if is_lowest_grade(self.grades.exams,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
                     picked_a_lowest = True
-            if drop_lowest_score==2:
+                    dropped_scores += 1
+            if drop_lowest_score==2 and dropped_scores<drop_lowest_score:
                 if is_next_to_lowest_grade(self.grades.exams,g):
                     ret += "\tlowest score, will not be counted in average."
                     #picked_a_lowest = True
+                    dropped_scores += 1
             ret += "\n"
         avg = calc_average_of_grades(self.grades.exams, drop_lowest_score)
         averages[2] = avg
