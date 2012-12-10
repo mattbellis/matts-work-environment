@@ -166,7 +166,7 @@ def XKCDify(ax, mag=1.0,
     ax.text(xax_lim[1], xaxis_loc - 0.02 * yspan, ax.get_xlabel(),
             fontsize=14, ha='right', va='top', rotation=12)
     ax.text(yaxis_loc - 0.02 * xspan, yax_lim[1], ax.get_ylabel(),
-            fontsize=14, ha='right', va='top', rotation=78)
+            fontsize=14, ha='right', va='top', rotation=88)
     ax.set_xlabel('')
     ax.set_ylabel('')
 
