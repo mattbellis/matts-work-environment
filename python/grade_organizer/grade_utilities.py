@@ -277,7 +277,7 @@ class Student:
         picked_a_lowest = False
         ret = ""
         for g in self.grades.quizzes:
-            ret += "[\'%s %s\', " % (self.student_name[1], self.student_name[0])
+            ret += "\t[\'%s %s\', " % (self.student_name[1], self.student_name[0])
             ret += "new Date(%s,%d,%s)," % (g.date.split('/')[2], int(g.date.split('/')[0])-1, g.date.split('/')[1])
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.quizzes,g) and not picked_a_lowest:
