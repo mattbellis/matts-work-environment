@@ -235,7 +235,7 @@ def main():
 
         #print msg_body
         #print s.email
-        if args.dump_names and args.student==None:
+        if args.dump_names and args.student==None and args.gvis==False:
             print "%d %-20s, %-20s\t%20s" % (i,s.student_name[0],s.student_name[1],s.email)
 
         if args.dump_grades:
@@ -245,9 +245,6 @@ def main():
         if args.student == i:
             print s.email
             print msg_body
-
-        if args.gvis:
-            print gvis_output
 
         if args.password is not None:
             do_email = False
@@ -266,6 +263,21 @@ def main():
             student_grades[i].append(a)
 
     #exit()
+
+    if args.gvis:
+        ret = ""
+        ret += "data.addColumn('string', 'Fruit');\n"
+        ret += "data.addColumn('date', 'Date');\n"
+        ret += "data.addColumn('number', 'Grade');\n"
+        ret += "data.addRows([\n"
+
+        for i,s in enumerate(students):
+                ret += s.gvis_output(final_grade_weighting)
+
+        ret += "]);\n"
+        print ret
+
+
 
     ############################################################################
     # Start plotting the grades.
