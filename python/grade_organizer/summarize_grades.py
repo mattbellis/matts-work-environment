@@ -206,16 +206,17 @@ def main():
         ########################################################################
         # Tack on the hpotheticals.
         ########################################################################
-        msg_body += "\n"
-        msg_body += "-----------------------------------------\n"
-        msg_body += "------- Projected performance -----------\n"
-        msg_body += "-----------------------------------------\n"
-        msg_body += "If you receive the following grades on all of the remaining exams AND the final exam,\n"
-        msg_body += "then you would receive the folowing final grade for the class ASSUMING you also\n"
-        msg_body += "maintain the same average on your quizzes and homeworks.\n"
-        msg_body += "\n"
-        for pe,pf in zip(hypothetical_performances,hypothetical_final_grades):
-            msg_body += "Projected exams/final exams: %5.1f (on each exam)  -  Projected final grade: %5.1f\n" % (pe,pf)
+        if len(s.grades.final_exam)==0:
+            msg_body += "\n"
+            msg_body += "-----------------------------------------\n"
+            msg_body += "------- Projected performance -----------\n"
+            msg_body += "-----------------------------------------\n"
+            msg_body += "If you receive the following grades on all of the remaining exams AND the final exam,\n"
+            msg_body += "then you would receive the folowing final grade for the class ASSUMING you also\n"
+            msg_body += "maintain the same average on your quizzes and homeworks.\n"
+            msg_body += "\n"
+            for pe,pf in zip(hypothetical_performances,hypothetical_final_grades):
+                msg_body += "Projected exams/final exams: %5.1f (on each exam)  -  Projected final grade: %5.1f\n" % (pe,pf)
 
 
 
