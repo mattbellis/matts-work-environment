@@ -6,6 +6,9 @@ import smtplib
 
 # Import the email modules we'll need
 from email.mime.text import MIMEText
+
+# 
+import datetime as dt
 ################################################################################
 
 
@@ -276,16 +279,79 @@ class Student:
         drop_lowest_score = True
         picked_a_lowest = False
         ret = ""
-        for g in self.grades.quizzes:
-            ret += "\t[\'%s %s\', " % (self.student_name[1], self.student_name[0])
-            ret += "new Date(%s,%d,%s)," % (g.date.split('/')[2], int(g.date.split('/')[0])-1, g.date.split('/')[1])
-            if drop_lowest_score==True:
-                if is_lowest_grade(self.grades.quizzes,g) and not picked_a_lowest:
-                    picked_a_lowest = True
-            avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
-            averages[0] = avg
-            ret += "%3.2f],\n" % (avg)
+        name0 = self.student_name[0]
+        name1 = self.student_name[1]
+        mydict = {}
+        for g in self.grades.hw:
+            year = int(g.date.split('/')[2])
+            month = int(g.date.split('/')[0])-1
+            day = int(g.date.split('/')[1])
+            hour = 9
+            minute = 0
+            date = dt.datetime(year=year,month=month,day=day,hour=hour,minute=minute)
+            num = g.grade_pct()
+            mydict[date] = num
 
+        for g in self.grades.exams:
+            year = int(g.date.split('/')[2])
+            month = int(g.date.split('/')[0])-1
+            day = int(g.date.split('/')[1])
+            hour = 17
+            minute = 0
+            date = dt.datetime(year=year,month=month,day=day,hour=hour,minute=minute)
+            num = g.grade_pct()
+            mydict[date] = num
+
+        for g in self.grades.quizzes:
+            year = int(g.date.split('/')[2])
+            month = int(g.date.split('/')[0])
+            day = int(g.date.split('/')[1])
+            hour = 16
+            minute = 0
+            date = dt.datetime(year=year,month=month,day=day,hour=hour,minute=minute)
+            num = g.grade_pct()
+            mydict[date] = num
+
+        keys = mydict.keys()
+        sorted_keys = np.sort(keys)
+        prev_quiz = 0.0
+        prev_hw = 0.0
+        prev_exam = 0.0
+        quizzes = []
+        hws = []
+        exams = []
+        for k in sorted_keys:
+            num = mydict[k]
+            ret += "\t[\'%s %s\', " % (name1,name0)
+            ret += "new Date(%d,%d,%d)," % (k.year,k.month,k.day)
+            quiz = prev_quiz
+            hw = prev_hw
+            exam = prev_exam
+            if k.hour == 16:
+                quiz = num
+                prev_exam = exam
+                prev_hw = hw
+                quizzes.append(quiz)
+            elif k.hour == 9:
+                hw = num
+                prev_quiz = quiz
+                prev_exam = exam
+                hws.append(hw)
+            elif k.hour == 17:
+                exam = num
+                prev_hw = hw
+                prev_quiz = quiz
+                exams.append(exam)
+            avgq = 0
+            avgh = 0
+            avge = 0
+            if len(quizzes)>0:
+                avgq = np.average(quizzes)
+            if len(hws)>0:
+                avgh = np.average(hws)
+            if len(exams)>0:
+                avge = np.average(exams)
+            ret += "%3.2f,%3.2f,%3.2f,%3.2f,%3.2f,%3.2f],\n" % (quiz,hw,exam,avgq,avgh,avge)
 
         return ret
 

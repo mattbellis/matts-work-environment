@@ -266,15 +266,38 @@ def main():
 
     if args.gvis:
         ret = ""
+        ret += "<html>\n"
+        ret += "<head>\n"
+        ret += '<script type="text/javascript" src="https://www.google.com/jsapi"></script>\n'
+        ret += '<script type="text/javascript">\n'
+        ret += "google.load('visualization', '1', {'packages':['motionchart']});\n"
+        ret += "google.setOnLoadCallback(drawChart);\n"
+        ret += "function drawChart() {\n"
+        ret += "var data = new google.visualization.DataTable();\n"
         ret += "data.addColumn('string', 'Fruit');\n"
         ret += "data.addColumn('date', 'Date');\n"
-        ret += "data.addColumn('number', 'Grade');\n"
+        ret += "data.addColumn('number', 'Instantaneous quiz');\n"
+        ret += "data.addColumn('number', 'Instantaneous hw');\n"
+        ret += "data.addColumn('number', 'Instantaneous exam');\n"
+        ret += "data.addColumn('number', 'Average quiz');\n"
+        ret += "data.addColumn('number', 'Average hw');\n"
+        ret += "data.addColumn('number', 'Average exam');\n"
         ret += "data.addRows([\n"
 
         for i,s in enumerate(students):
                 ret += s.gvis_output(final_grade_weighting)
 
         ret += "]);\n"
+        ret += 'var chart = new google.visualization.MotionChart(document.getElementById(\'chart_div\'));\n'
+        ret += 'chart.draw(data, {width:1100, height:500});\n'
+        ret += '}\n'
+        ret += '</script>\n'
+        ret += '</head>\n'
+        ret += '<body>\n'
+        ret += '<div id="chart_div" style="width:1100px; height: 500px;"></div>\n'
+        ret += '</body>\n'
+        ret += '</html>\n'
+
         print ret
 
 
