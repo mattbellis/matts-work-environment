@@ -158,9 +158,12 @@ class Course_grades:
 
 ################################################################################
 class Student:
-    def __init__(self, student_name, grades, email=None):
+    def __init__(self, student_name, grades, email=None, program=None, major=None, year=None):
         self.student_name = student_name
         self.email = email
+        self.program = program
+        self.major = major
+        self.year = year
         self.grades = grades
 
     def summary_output(self,final_grade_weighting=[0.2,0.2,0.2,0.2,0.2],summarize=False):
@@ -281,6 +284,9 @@ class Student:
         ret = ""
         name0 = self.student_name[0]
         name1 = self.student_name[1]
+        program = self.program
+        major = self.major
+        student_year = self.year
         mydict = {}
         for g in self.grades.hw:
             year = int(g.date.split('/')[2])
@@ -312,46 +318,58 @@ class Student:
             num = g.grade_pct()
             mydict[date] = num
 
+        for g in self.grades.final_exam:
+            year = int(g.date.split('/')[2])
+            month = int(g.date.split('/')[0])
+            day = int(g.date.split('/')[1])
+            hour = 18
+            minute = 0
+            date = dt.datetime(year=year,month=month,day=day,hour=hour,minute=minute)
+            num = g.grade_pct()
+            mydict[date] = num
+
         keys = mydict.keys()
         sorted_keys = np.sort(keys)
-        prev_quiz = 0.0
-        prev_hw = 0.0
-        prev_exam = 0.0
+        prev_quiz = 0.5
+        prev_hw = 0.5
+        prev_exam = 0.5
+        prev_final_exam = 0.5
         quizzes = []
         hws = []
         exams = []
         for k in sorted_keys:
             num = mydict[k]
             ret += "\t[\'%s %s\', " % (name1,name0)
-            ret += "new Date(%d,%d,%d)," % (k.year,k.month,k.day)
+            ret += "new Date(%d,%d,%d),'%s','%s','%s', " % (k.year,k.month,k.day,program,major,student_year)
             quiz = prev_quiz
             hw = prev_hw
             exam = prev_exam
+            final_exam = prev_final_exam
             if k.hour == 16:
                 quiz = num
-                prev_exam = exam
-                prev_hw = hw
+                prev_quiz = quiz
                 quizzes.append(quiz)
             elif k.hour == 9:
                 hw = num
-                prev_quiz = quiz
-                prev_exam = exam
+                prev_hw = hw
                 hws.append(hw)
             elif k.hour == 17:
                 exam = num
-                prev_hw = hw
-                prev_quiz = quiz
+                prev_exam = exam
                 exams.append(exam)
-            avgq = 0
-            avgh = 0
-            avge = 0
+            elif k.hour == 18:
+                final_exam = num
+                prev_final_exam = final_exam
+            avgq = 0.5
+            avgh = 0.5
+            avge = 0.5
             if len(quizzes)>0:
                 avgq = np.average(quizzes)
             if len(hws)>0:
                 avgh = np.average(hws)
             if len(exams)>0:
                 avge = np.average(exams)
-            ret += "%3.2f,%3.2f,%3.2f,%3.2f,%3.2f,%3.2f],\n" % (quiz,hw,exam,avgq,avgh,avge)
+            ret += "%3.2f,%3.2f,%3.2f,%3.2f,%3.2f,%3.2f,%3.2f],\n" % (avgh,avge,avgq,hw,exam,quiz,final_exam)
 
         return ret
 
