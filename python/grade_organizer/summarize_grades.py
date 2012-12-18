@@ -122,6 +122,9 @@ def main():
             student_name = [row[2],row[3]]
             #email = "z%s@students.niu.edu" % (row[1])
             email = row[1]
+            program = row[4]
+            major = row[5]
+            student_year = row[6]
 
             cg = Course_grades()
 
@@ -150,7 +153,7 @@ def main():
                 cg.add_grade(grade,grade.grade_type)
 
 
-            s = Student(student_name,cg,email)
+            s = Student(student_name,cg,email,program,major,student_year)
             students.append(s)
 
 
@@ -276,12 +279,16 @@ def main():
         ret += "var data = new google.visualization.DataTable();\n"
         ret += "data.addColumn('string', 'Fruit');\n"
         ret += "data.addColumn('date', 'Date');\n"
-        ret += "data.addColumn('number', 'Instantaneous quiz');\n"
-        ret += "data.addColumn('number', 'Instantaneous hw');\n"
-        ret += "data.addColumn('number', 'Instantaneous exam');\n"
-        ret += "data.addColumn('number', 'Average quiz');\n"
+        ret += "data.addColumn('string', 'Program');\n"
+        ret += "data.addColumn('string', 'Major');\n"
+        ret += "data.addColumn('string', 'Student Year');\n"
         ret += "data.addColumn('number', 'Average hw');\n"
         ret += "data.addColumn('number', 'Average exam');\n"
+        ret += "data.addColumn('number', 'Average quiz');\n"
+        ret += "data.addColumn('number', 'Instantaneous hw');\n"
+        ret += "data.addColumn('number', 'Instantaneous exam');\n"
+        ret += "data.addColumn('number', 'Instantaneous quiz');\n"
+        ret += "data.addColumn('number', 'Final exam');\n"
         ret += "data.addRows([\n"
 
         for i,s in enumerate(students):
@@ -289,12 +296,12 @@ def main():
 
         ret += "]);\n"
         ret += 'var chart = new google.visualization.MotionChart(document.getElementById(\'chart_div\'));\n'
-        ret += 'chart.draw(data, {width:1100, height:500});\n'
+        ret += 'chart.draw(data, {width:1300, height:800});\n'
         ret += '}\n'
         ret += '</script>\n'
         ret += '</head>\n'
         ret += '<body>\n'
-        ret += '<div id="chart_div" style="width:1100px; height: 500px;"></div>\n'
+        ret += '<div id="chart_div" style="width:1300px; height: 800px;"></div>\n'
         ret += '</body>\n'
         ret += '</html>\n'
 
