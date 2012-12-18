@@ -92,7 +92,8 @@ def main():
         subranges = [[],[[1,917]]]
 
     #nbins = [108,30]
-    nbins = [200,30]
+    #nbins = [200,30]
+    nbins = [100,30]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
         bin_widths[i] = (r[1]-r[0])/n
