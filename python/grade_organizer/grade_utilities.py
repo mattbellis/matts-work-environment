@@ -290,7 +290,7 @@ class Student:
         mydict = {}
         for g in self.grades.hw:
             year = int(g.date.split('/')[2])
-            month = int(g.date.split('/')[0])-1
+            month = int(g.date.split('/')[0])
             day = int(g.date.split('/')[1])
             hour = 9
             minute = 0
