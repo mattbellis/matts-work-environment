@@ -5,7 +5,15 @@ from numba.decorators import jit as jit
 
 import time
 
+####################################################################
+def mult2arr_np(x,y):
+
+    result = x*y
+
+    return result
 ################################################################################
+
+####################################################################
 def mult2arr(x,y):
 
     ix = len(x)
@@ -22,6 +30,8 @@ cmult2arr = jit(restype=double[:,:], argtypes=[double[:,:],double[:,:]])(mult2ar
 x = random.random(100000)
 y = random.random(100000)
 
+################################################################################
+
 start = time.time()
 res = mult2arr(x,y)
 duration = time.time() - start
@@ -36,3 +46,11 @@ print "Result from compiled is %s in %s (msec)" % (res, duration2*1000)
 
 print "Speed up is %s" % (duration / duration2)
 
+################################################################################
+
+start = time.time()
+res = mult2arr_np(x,y)
+duration3 = time.time() - start
+print "Result from numpy is %s in %s (msec)" % (res, duration3*1000)
+
+################################################################################
