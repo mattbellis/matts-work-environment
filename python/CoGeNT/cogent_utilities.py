@@ -1,7 +1,8 @@
 import numpy as np
 from fitting_utilities import sigmoid
 
-import minuit
+#import minuit
+import iminuit as minuit
 
 ################################################################################
 # Conversion 0

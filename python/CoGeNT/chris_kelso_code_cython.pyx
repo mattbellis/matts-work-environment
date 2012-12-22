@@ -1,7 +1,11 @@
 import numpy as np
+cimport numpy as np #overwritten those from python with cython
+
 import scipy.special as special
 import scipy.constants as constants
 import scipy.integrate as integrate
+
+#from libc.math cimport exp, M_PI, sqrt, log
 
 ################################################################################
 hbarc = 0.1973269664036767; # in GeV nm 
@@ -33,15 +37,19 @@ AXe = 131.6
 ################################################################################
 
 ################################################################################
-def dot(v1, v2):
+def dot(np.ndarray v1, np.ndarray v2):
     return v1[0]*v2[0]+v1[1]*v2[1]+v1[2]*v2[2]
 
 ################################################################################
 # this function will normalize first vector and put in second vector
 ################################################################################
-def normalize(v):
+def normalize(np.ndarray v):
+    cdef int i
+    cdef double vx
+    cdef int vlen = len(v)
     vnorm = np.zeros(3)
-    for i,vx in enumerate(v):
+    for i in range(vlen):
+        vx = v[i]
         vnorm[i] = vx/np.sqrt(dot(v,v))
 
     return vnorm

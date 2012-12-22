@@ -4,7 +4,10 @@ import scipy.stats as stats
 import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
-import minuit
+import time
+
+#import minuit
+import iminuit as minuit
 from cogent_pdfs import *
 
 import lichen.pdfs as pdfs
@@ -226,14 +229,26 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
         efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
 
-        num_wimps = 0
+        #num_wimps = 0
+        '''
         for sr in subranges[1]:
+            start = time.time()
             num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
+            duration = time.time() - start
+            print "duration: ",1000*duration
 
+        '''
+        #print "num_wimps: ",num_wimps
+        #num_tot += num_wimps
+
+    tot_pdf,num_wimps = fitfunc(data,p,parnames,params_dict)
+    print "num_wimps: ",num_wimps
+    if flag==2 or flag==3 or flag==4 or flag==6:
         num_tot += num_wimps
 
     print "pois:         %12.3f %12.3f" % (num_tot,ndata)
-    likelihood_func = (-np.log(fitfunc(data,p,parnames,params_dict))).sum()
+    #likelihood_func = (-np.log(fitfunc(data,p,parnames,params_dict))).sum()
+    likelihood_func = (-np.log(tot_pdf)).sum()
     print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,pois(num_tot,ndata),likelihood_func-pois(num_tot,ndata))
     ret = likelihood_func - pois(num_tot,ndata)
     #print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,num_tot,likelihood_func-num_tot)

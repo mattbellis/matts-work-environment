@@ -4,6 +4,8 @@ import scipy.stats as stats
 import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
+import time
+
 #from RTMinuit import *
 
 #import chris_kelso_code as dmm
@@ -15,6 +17,8 @@ tc_SHM = dmm.tc(np.zeros(3))
 AGe = 72.6
 
 dblqtol = 1.0
+
+num_wimps = 0
 
 ################################################################################
 # Cosmogenic data
@@ -130,7 +134,6 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm'):
     # dR/dEee
     dR *= ((5.0**(1.0/1.12))/1.12)*(x**(-0.12/1.12))
 
-
     return dR
 
 
@@ -230,7 +233,10 @@ def fitfunc(data,p,parnames,params_dict):
     if flag==2 or flag==3 or flag==4 or flag==6:
         num_wimps = 0
         for sr in subranges[1]:
+            #start = time.time()
             num_wimps += integrate.dblquad(wimp,loE,hiE,lambda x: sr[0],lambda x:sr[1],args=(AGe,mDM,sigma_n,efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
+            #duration = time.time() - start
+            #print "duration: ",1000*duration
         num_tot += num_wimps
 
     print "fitfunc num_tot: %12.3f" % (num_tot)
@@ -275,8 +281,8 @@ def fitfunc(data,p,parnames,params_dict):
     num_flat /= num_tot
 
     print " -------------------------------------- "
-    print "energy: ",x[0:8]
-    print "time stamp: ",y[0:8]
+    #print "energy: ",x[0:8]
+    #print "time stamp: ",y[0:8]
     ########################################################################
     # Wimp-like signal
     ########################################################################
@@ -284,7 +290,7 @@ def fitfunc(data,p,parnames,params_dict):
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
         pdf *= num_exp0
-        print "exp0 pdf: ",pdf[0:8]
+        #print "exp0 pdf: ",pdf[0:8]
     elif flag==1:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
@@ -295,8 +301,8 @@ def fitfunc(data,p,parnames,params_dict):
         #print "wimp_norm: ",wimp_norm
         pdf = wimp(y,x,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/(1.0*num_tot)
         pdf *= (0.333) # Active volume of CoGeNT
-        print "wimp pdf: ",pdf[0:8]*(num_tot)/num_wimps
-        print "wimp pdf: ",pdf[0:8]
+        #print "wimp pdf: ",pdf[0:8]*(num_tot)/num_wimps
+        #print "wimp pdf: ",pdf[0:8]
 
     #print "wimp pdf: ",pdf[0:8]
     tot_pdf += pdf
@@ -317,13 +323,13 @@ def fitfunc(data,p,parnames,params_dict):
     pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_flat
-    print "flat pdf: ",pdf[0:8]/num_flat
-    print "flat pdf: ",pdf[0:8]
+    #print "flat pdf: ",pdf[0:8]/num_flat
+    #print "flat pdf: ",pdf[0:8]
     tot_pdf += pdf
 
     print "%f %f %f" % (num_tot,num_wimps/num_tot,num_flat)
 
-    return tot_pdf
+    return tot_pdf,num_wimps
 ################################################################################
 
 
