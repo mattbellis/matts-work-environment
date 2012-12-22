@@ -4,7 +4,8 @@ import scipy.special as special
 import scipy.constants as constants
 import scipy.integrate as integrate
 
-import chris_kelso_code as dmm
+#import chris_kelso_code as dmm
+import chris_kelso_code_cython as dmm
 
 import plotting_utilities as pu
 import fitting_utilities as fu

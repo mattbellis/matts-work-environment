@@ -85,15 +85,17 @@ def main():
     ##dead_days = [[68,74], [102,107],[306,308]]
     #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
 
-    ranges = [[0.5,3.2],[1.0,917.0]]
+    #ranges = [[0.5,3.2],[1.0,917.0]]
+    ranges = [[0.5,3.5],[1.0,917.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
     subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
     if args.fit==5 or args.fit==6:
         subranges = [[],[[1,917]]]
 
     #nbins = [108,30]
+    nbins = [150,30]
     #nbins = [200,30]
-    nbins = [100,30]
+    #nbins = [100,30]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
         bin_widths[i] = (r[1]-r[0])/n

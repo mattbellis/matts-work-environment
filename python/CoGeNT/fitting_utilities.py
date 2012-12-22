@@ -9,7 +9,8 @@ from cogent_pdfs import *
 
 import lichen.pdfs as pdfs
 
-import chris_kelso_code as dmm
+#import chris_kelso_code as dmm
+import chris_kelso_code_cython as dmm
 
 ################################################################################
 # Convert dictionary to kwd arguments

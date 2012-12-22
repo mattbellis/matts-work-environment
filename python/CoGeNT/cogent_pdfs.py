@@ -6,7 +6,8 @@ import scipy.integrate as integrate
 
 #from RTMinuit import *
 
-import chris_kelso_code as dmm
+#import chris_kelso_code as dmm
+import chris_kelso_code_cython as dmm
 
 import lichen.pdfs as pdfs
 
