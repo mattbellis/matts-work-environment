@@ -1,6 +1,6 @@
 #!/usr/bin/env tcsh 
 
-set fit = 5
+set fit = "4"
 
 foreach base ( 39 40 41 42 )
     foreach coef ( 1 2 3 4 5 6 7 8 9 )
