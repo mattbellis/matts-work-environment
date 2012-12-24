@@ -202,7 +202,7 @@ def fitfunc(data,p,parnames,params_dict):
         #loE = dmm.quench_keVee_to_keVr(0.5)
         #hiE = dmm.quench_keVee_to_keVr(3.2)
         loE = 0.5
-        hiE = 3.2
+        hiE = 3.5
         if flag==2:
             wimp_model = 'shm'
         elif flag==3:

@@ -6,6 +6,8 @@ proxy_no = "DIRECT";
 
 if (shExpMatch(url, "https://webscs02.slac.stanford.edu*"))
     return proxy_yes;
+if (shExpMatch(url, "*agu.org/pubs*"))
+    return proxy_yes;
 if (shExpMatch(url, "*jap.aip.org*"))
     return proxy_yes;
 if (shExpMatch(url, "*elsevier*"))
