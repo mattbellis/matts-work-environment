@@ -18,7 +18,6 @@ def mult2arr_np(x,y):
 def mult2arr(x,y):
 
     ix = len(x)
-    jy = len(y)
     result = zeros(ix)
     for i in range(ix):
         result[i] = x[i]*y[i]
