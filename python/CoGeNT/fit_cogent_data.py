@@ -152,7 +152,7 @@ def main():
     # For 30 bins,full dataset
     acc_corr[2] = tbwidth/(tbwidth-7.0)
     acc_corr[3] = tbwidth/(tbwidth-6.0)
-    acc_corr[10] = tbwidth/(tbwidth-3.0)
+    acc_corr[9] = tbwidth/(tbwidth-3.0)
     ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
                         color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
 
