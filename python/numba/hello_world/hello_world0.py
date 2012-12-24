@@ -2,6 +2,7 @@
 from numpy import random,zeros
 from numba import double
 from numba.decorators import jit as jit
+from numba.decorators import autojit 
 
 import time
 
@@ -25,7 +26,8 @@ def mult2arr(x,y):
     return result
 ################################################################################
 
-cmult2arr = jit(restype=double[:], argtypes=[double[:],double[:]])(mult2arr)
+#cmult2arr = jit(restype=double[:], argtypes=[double[:],double[:]])(mult2arr)
+cmult2arr = autojit(mult2arr)
 
 x = random.random(100000)
 y = random.random(100000)
