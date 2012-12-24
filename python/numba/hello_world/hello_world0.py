@@ -28,8 +28,8 @@ def mult2arr(x,y):
 #cmult2arr = jit(restype=double[:], argtypes=[double[:],double[:]])(mult2arr)
 cmult2arr = autojit(mult2arr)
 
-x = random.random(100000)
-y = random.random(100000)
+x = random.random(1000000)
+y = random.random(1000000)
 
 ################################################################################
 
