@@ -25,7 +25,7 @@ def mult2arr(x,y):
     return result
 ################################################################################
 
-cmult2arr = jit(restype=double[:,:], argtypes=[double[:,:],double[:,:]])(mult2arr)
+cmult2arr = jit(restype=double[:], argtypes=[double[:],double[:]])(mult2arr)
 
 x = random.random(100000)
 y = random.random(100000)
