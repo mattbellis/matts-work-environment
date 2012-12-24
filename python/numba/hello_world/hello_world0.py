@@ -45,7 +45,7 @@ res = cmult2arr(x,y)
 duration2 = time.time() - start
 print "Result from compiled is %s in %s (msec)" % (res, duration2*1000)
 
-print "Speed up is %s" % (duration / duration2)
+#print "Speed up is %s" % (duration / duration2)
 
 ################################################################################
 
