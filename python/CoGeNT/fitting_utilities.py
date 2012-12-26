@@ -264,8 +264,10 @@ def contours(m,par0,par1,sigma=1.0,npts=5):
 
     print "Starting contours..."
     #print m.values
-    contour_points = m.contour(par0,par1,sigma,npts)
+    #contour_points = m.contour(par0,par1,sigma,npts)
+    x_bins,y_bins,values = m.contour(par0,par1,bound=sigma,bins=npts,subtract_min=True)
     #print contour_points
+    '''
     cx = np.array([])
     cy = np.array([])
     if contour_points!=None and len(contour_points)>1:
@@ -274,8 +276,10 @@ def contours(m,par0,par1,sigma=1.0,npts=5):
             cy = np.append(cy,p[1])
         cx = np.append(cx,contour_points[0][0])
         cy = np.append(cy,contour_points[0][1])
+    '''
 
-    return cx,cy
+    #return cx,cy
+    return x_bins,y_bins,values
 
 ################################################################################
 # Do contours
