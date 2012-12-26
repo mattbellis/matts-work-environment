@@ -237,8 +237,8 @@ def main():
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
         params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
         params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-        params_dict['mDM'] = {'fix':True,'start_val':10.00,'limits':(5.0,20.0)}
-        params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
+        params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
+        params_dict['sigma_n'] = {'fix':False,'start_val':2e-41,'limits':(1e-42,1e-38)}
         if args.sigma_n != None:
             params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38)}
 
@@ -275,10 +275,17 @@ def main():
     ############################################################################
     if args.contours:
         plt.figure()
-        cx,cy = contours(m,'e_exp0','num_exp0',1.0,10)
-        plt.plot(cx,cy)
-        cx,cy = contours(m,'e_exp0','num_exp0',1.2,10)
-        plt.plot(cx,cy)
+        x_bins,y_bins,contour_values = contours(m,'mDM','sigma_n',sigma=1.0,npts=4)
+        print x_bins
+        print y_bins
+        print contour_values
+        CS = plt.contour(x_bins,y_bins,contour_values,levels=[0.5,2.0,4.5])
+        plt.clabel(CS, inline=1, fontsize=10,)
+        plt.title('Simplest default with labels')
+        #cx,cy = contours(m,'e_exp0','num_exp0',1.0,10)
+        #plt.plot(cx,cy)
+        #cx,cy = contours(m,'e_exp0','num_exp0',1.2,10)
+        #plt.plot(cx,cy)
 
     if args.verbose:
         print_correlation_matrix(m)
