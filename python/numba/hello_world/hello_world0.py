@@ -1,4 +1,4 @@
-######### DOESN'T WORK RIGHT NOW! ###################
+######### Working! ###################
 import numpy as np
 from numba import double
 from numba.decorators import jit as jit
@@ -36,14 +36,14 @@ y = np.random.random(1000000)
 start = time.time()
 res = mult2arr(x,y)
 duration = time.time() - start
-print "Result from python is %s in %s (msec)" % (res, duration*1000)
+print "Result from python is %s\nin %s (msec)" % (res[0:3], duration*1000)
 
 ################################################################################
 
 start = time.time()
 res = cmult2arr(x,y)
 duration2 = time.time() - start
-print "Result from compiled is %s in %s (msec)" % (res, duration2*1000)
+print "Result from compiled is %s\nin %s (msec)" % (res[0:3], duration2*1000)
 
 #print "Speed up is %s" % (duration / duration2)
 
@@ -52,6 +52,6 @@ print "Result from compiled is %s in %s (msec)" % (res, duration2*1000)
 start = time.time()
 res = mult2arr_np(x,y)
 duration3 = time.time() - start
-print "Result from numpy is %s in %s (msec)" % (res, duration3*1000)
+print "Result from numpy is %s\nin %s (msec)" % (res[0:3], duration3*1000)
 
 ################################################################################
