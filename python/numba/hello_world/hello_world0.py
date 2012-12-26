@@ -1,5 +1,5 @@
 ######### DOESN'T WORK RIGHT NOW! ###################
-from numpy import random,zeros
+import numpy as np
 from numba import double
 from numba.decorators import jit as jit
 from numba.decorators import autojit 
@@ -18,7 +18,7 @@ def mult2arr_np(x,y):
 def mult2arr(x,y):
 
     ix = len(x)
-    result = zeros(ix)
+    result = np.zeros(ix)
     for i in range(ix):
         result[i] = x[i]*y[i]
 
@@ -28,8 +28,8 @@ def mult2arr(x,y):
 #cmult2arr = jit(restype=double[:], argtypes=[double[:],double[:]])(mult2arr)
 cmult2arr = autojit(mult2arr)
 
-x = random.random(1000000)
-y = random.random(1000000)
+x = np.random.random(1000000)
+y = np.random.random(1000000)
 
 ################################################################################
 
