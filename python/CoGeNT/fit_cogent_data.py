@@ -13,8 +13,7 @@ from plotting_utilities import *
 
 import lichen.lichen as lch
 
-#import minuit
-import iminuit as minuit
+import minuit
 
 import argparse
 
@@ -64,7 +63,6 @@ def main():
     #infile = open('data/before_fire_LG.dat')
 
     #infile_name = 'data/low_gain.txt'
-    #tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=2)
     infile_name = 'data/high_gain.txt'
     tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
 
@@ -88,16 +86,16 @@ def main():
     #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
 
     #ranges = [[0.5,3.2],[1.0,917.0]]
-    ranges = [[0.5,3.5],[1.0,917.0]]
+    #ranges = [[0.5,3.5],[1.0,917.0]]
+    ranges = [[0.5,3.6],[1.0,917.0]]
     #dead_days = [[68,74], [102,107],[306,308]]
     subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
     if args.fit==5 or args.fit==6:
         subranges = [[],[[1,917]]]
 
     #nbins = [108,30]
+    nbins = [155,30]
     #nbins = [200,30]
-    #nbins = [135,30]
-    nbins = [150,30]
     #nbins = [100,30]
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
@@ -152,7 +150,7 @@ def main():
     # For 30 bins,full dataset
     acc_corr[2] = tbwidth/(tbwidth-7.0)
     acc_corr[3] = tbwidth/(tbwidth-6.0)
-    acc_corr[9] = tbwidth/(tbwidth-3.0)
+    acc_corr[10] = tbwidth/(tbwidth-3.0)
     ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
                         color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
 
@@ -235,10 +233,8 @@ def main():
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
-        params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-        params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
-        params_dict['sigma_n'] = {'fix':False,'start_val':2e-41,'limits':(1e-42,1e-38)}
+        params_dict['mDM'] = {'fix':True,'start_val':10.00,'limits':(5.0,20.0)}
+        params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
         if args.sigma_n != None:
             params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38)}
 
@@ -261,7 +257,7 @@ def main():
     # Up the tolerance.
     m.tol = 1.0
 
-    #m.printMode = 2
+    m.printMode = 2
 
     m.migrad()
     #m.hesse()
@@ -275,23 +271,16 @@ def main():
     ############################################################################
     if args.contours:
         plt.figure()
-        x_bins,y_bins,contour_values = contours(m,'mDM','sigma_n',sigma=1.0,npts=4)
-        print x_bins
-        print y_bins
-        print contour_values
-        CS = plt.contour(x_bins,y_bins,contour_values,levels=[0.5,2.0,4.5])
-        plt.clabel(CS, inline=1, fontsize=10,)
-        plt.title('Simplest default with labels')
-        #cx,cy = contours(m,'e_exp0','num_exp0',1.0,10)
-        #plt.plot(cx,cy)
-        #cx,cy = contours(m,'e_exp0','num_exp0',1.2,10)
-        #plt.plot(cx,cy)
+        cx,cy = contours(m,'e_exp0','num_exp0',1.0,10)
+        plt.plot(cx,cy)
+        cx,cy = contours(m,'e_exp0','num_exp0',1.2,10)
+        plt.plot(cx,cy)
 
     if args.verbose:
         print_correlation_matrix(m)
         print_covariance_matrix(m)
 
-    #print minuit_output(m)
+    print minuit_output(m)
 
     print "nentries: ",len(data[0])
 
@@ -357,14 +346,14 @@ def main():
 
         num_wimps = 0.0
         for sr in subranges[1]:
-            num_wimps += integrate.dblquad(wimp,ranges[0][0],ranges[0][1],lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
+            num_wimps += integrate.dblquad(wimp,0.5,3.2,lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
 
         #func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,459],model=wimp_model)
         func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,917],model=wimp_model)
-        srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[ranges[0]],efficiency=efficiency)
+        srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[0.5,3.2]],efficiency=efficiency)
         eytot += srypts[0]
 
-        func = lambda x: plot_wimp_day(x,AGe,values['mDM'],values['sigma_n'],e_range=ranges[0],model=wimp_model)
+        func = lambda x: plot_wimp_day(x,AGe,values['mDM'],values['sigma_n'],e_range=[0.5,3.2],model=wimp_model)
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=num_wimps,fmt='k-',linewidth=3,axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
