@@ -1,11 +1,13 @@
 import numpy as np
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+import matplotlib.dates as mdates
 
 from datetime import datetime,timedelta
 
 import scipy.integrate as integrate
 
+import parameters 
 from cogent_utilities import *
 from cogent_pdfs import *
 from fitting_utilities import *
@@ -81,22 +83,8 @@ def main():
     ############################################################################
     # Declare the ranges.
     ############################################################################
-    #ranges = [[0.5,3.2],[1.0,459.0]]
-    ##dead_days = [[68,74], [102,107],[306,308]]
-    #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
-
-    #ranges = [[0.5,3.2],[1.0,917.0]]
-    #ranges = [[0.5,3.5],[1.0,917.0]]
-    ranges = [[0.5,3.6],[1.0,917.0]]
-    #dead_days = [[68,74], [102,107],[306,308]]
-    subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
-    if args.fit==5 or args.fit==6:
-        subranges = [[],[[1,917]]]
-
-    #nbins = [108,30]
-    nbins = [155,30]
-    #nbins = [200,30]
-    #nbins = [100,30]
+    ranges,subranges,nbins = parameters.fitting_parameters(args.fit)
+    
     bin_widths = np.ones(len(ranges))
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
         bin_widths[i] = (r[1]-r[0])/n
@@ -124,14 +112,6 @@ def main():
     ax0.set_ylim(0.0,92.0)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
-
-    ax1.set_xlim(ranges[1])
-    if nbins[1]==15:
-        ax1.set_ylim(0.0,220.0)
-    elif nbins[1]==15:
-        ax1.set_ylim(0.0,110.0)
-    ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
-    ax1.set_ylabel("Event/30.6 days",fontsize=12)
 
     lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
     h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
@@ -162,7 +142,7 @@ def main():
     ax11 = fig1.add_subplot(1,2,2)
 
     # Tweak the spacing on the figures.
-    fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
+    fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
     fig1.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
 
     ############################################################################
@@ -180,7 +160,9 @@ def main():
     # Get the information for the lshell decays.
     ############################################################################
     #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data([[1,68],[75,102],[108,306],[309,459]])
-    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data([[1,68],[75,102],[108,306],[309,459],[551,917]])
+    #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data([[1,68],[75,102],[108,306],[309,459],[551,917]])
+    #means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data([[1,68],[75,102],[108,306],[309,459]])
+    means,sigmas,num_decays,num_decays_in_dataset,decay_constants = lshell_data(subranges[1])
     #num_decays_in_dataset *= 0.87 # Might need this to take care of efficiency.
 
     tot_lshells = num_decays_in_dataset.sum()
@@ -213,11 +195,17 @@ def main():
     for i,val in enumerate(decay_constants):
         name = "ls_dc%d" % (i)
         params_dict[name] = {'fix':True,'start_val':val}
+    
+    ############################################################################
+    # exp0 is going to be the simple WIMP-like signal that can modulate or not
+    # exp1 is the surface events.
+    ############################################################################
 
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
+    params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':1.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
-    params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
     #params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':800.0,'limits':(0.0,2000.0)}
@@ -255,7 +243,7 @@ def main():
     m.up = 0.5
 
     # Up the tolerance.
-    m.tol = 1.0
+    #m.tol = 1.0
 
     m.printMode = 2
 
@@ -349,7 +337,7 @@ def main():
             num_wimps += integrate.dblquad(wimp,0.5,3.2,lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
 
         #func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,459],model=wimp_model)
-        func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,917],model=wimp_model)
+        func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=ranges[1],model=wimp_model)
         srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[0.5,3.2]],efficiency=efficiency)
         eytot += srypts[0]
 
@@ -428,6 +416,51 @@ def main():
     ax10.plot(expts,efficiency,'r--',linewidth=2)
     ax10.set_xlim(ranges[0][0],ranges[0][1])
     ax10.set_ylim(0.0,1.0)
+
+    ############################################################################
+    ax1_2 = ax1.twiny()
+    #ax1_2.set_xlabel("Date")
+    #dates = ['01/02/1991','01/03/1991','01/04/1991']
+    #x = [datetime.strptime(d,'%m/%d/%Y').date() for d in dates]
+    x = []
+    ndivs = 2
+    for i in range(ndivs):
+        days = ranges[1][1]/ndivs
+        date = start_date + timedelta(days=i*days)
+        x.append(date)
+    date = start_date + timedelta(days=(i+1)*days)
+    x.append(date)
+    y = range(len(x)) # many thanks to Kyss Tao for setting me straight here
+    #print x
+    #print y
+    ax1_2.plot(x,y,alpha=0)
+    #y = 100.0*np.ones(len(x)) # many thanks to Kyss Tao for setting me straight here
+
+    ax1_2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
+    ax1_2.xaxis.set_major_locator(mdates.DayLocator())
+    ticks = ax1_2.get_xticks()
+    #print ticks
+    newticks = []
+    nticks = len(ticks)
+    ndivs = 10
+    for i in range(ndivs):
+        newticks.append(ticks[int(i*(nticks/float(ndivs)))])
+    ax1_2.set_xticks(newticks)
+    fig0.autofmt_xdate()
+    labels = ax1_2.get_xticklabels()
+    for l in labels:
+        l.set_rotation(330)
+        l.set_fontsize(8)
+        l.set_horizontalalignment('right')
+    ############################################################################
+
+    # Format the axes a bit
+    ax1.set_xlim(ranges[1])
+    ax1.set_ylim(0.0,220.0)
+    ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
+    label = "Event/%4.1f days" % (bin_widths[1])
+    ax1.set_ylabel(label,fontsize=12)
+
 
     if not args.batch:
         plt.show()
