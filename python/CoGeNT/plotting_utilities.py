@@ -6,8 +6,8 @@ import scipy.integrate as integrate
 
 #from RTMinuit import *
 
-#import chris_kelso_code as dmm
-import chris_kelso_code_cython as dmm
+import chris_kelso_code as dmm
+#import chris_kelso_code_cython as dmm
 
 ################################################################################
 # Plot WIMP signal
@@ -26,7 +26,7 @@ def plot_wimp_er(x,AGe,mDM,sigma_n,time_range=[1,365],model='shm'):
     keVr = dmm.quench_keVee_to_keVr(x)
 
     n = 0
-    for org_day in range(time_range[0],time_range[1],1):
+    for org_day in range(int(time_range[0]),int(time_range[1]),1):
 
         day = (org_day+338)%365.0 #- 151
 

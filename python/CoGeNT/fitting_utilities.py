@@ -12,8 +12,8 @@ from cogent_pdfs import *
 
 import lichen.pdfs as pdfs
 
-#import chris_kelso_code as dmm
-import chris_kelso_code_cython as dmm
+import chris_kelso_code as dmm
+#import chris_kelso_code_cython as dmm
 
 ################################################################################
 # Convert dictionary to kwd arguments
@@ -183,6 +183,9 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     flag = p[parnames.index('flag')]
 
+    # Grab all the fitting paramters.
+    ranges,subranges,nbins = parameters.fitting_parameters(flag)
+
     wimp_model = None
 
     num_tot = 0
@@ -219,9 +222,12 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
             wimp_model = 'shm'
 
         #subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
-        subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
+        #subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
+        '''
+        subranges = [[],[[1,68],[75,102],[108,306],[309,459]]]
         if flag==5 or flag==6:
             subranges = [[],[[1,917]]]
+        '''
 
         max_val = 0.86786
         threshold = 0.345
