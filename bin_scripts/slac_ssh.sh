@@ -6,4 +6,4 @@ if ( $1 != "" ) then
 endif
 
 echo $machine
-ssh -v bellis@$machine.slac.stanford.edu
+ssh -X -v bellis@$machine.slac.stanford.edu
