@@ -107,44 +107,57 @@ def main():
     ax0 = fig0.add_subplot(1,2,1)
     ax1 = fig0.add_subplot(1,2,2)
 
-    ax0.set_xlim(ranges[0])
-    #ax0.set_ylim(0.0,50.0)
-    ax0.set_ylim(0.0,92.0)
-    ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
-    ax0.set_ylabel("Events/0.025 keVee",fontsize=12)
 
     lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
+    print data[1]
+    index0 = data[1]>539.0
+    index1 = data[1]<566.4
+    index = index0*index1
+    print data[1][index]
     h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
 
     # Do an acceptance correction of some t-bins by hand.
     tbwidth = (ranges[1][1]-ranges[1][0])/float(nbins[1])
+    print "tbwidth: ",tbwidth
     acc_corr = np.zeros(len(ypts))
-    # For 15 bins
-    #acc_corr[2] = tbwidth/(tbwidth-7.0)
-    #acc_corr[3] = tbwidth/(tbwidth-6.0)
-    #acc_corr[10] = tbwidth/(tbwidth-3.0)
-    # For 30 bins
-    #acc_corr[4] = tbwidth/(tbwidth-7.0)
-    #acc_corr[6] = tbwidth/(tbwidth-6.0)
-    #acc_corr[20] = tbwidth/(tbwidth-3.0)
-    # For 30 bins,full dataset
-    acc_corr[2] = tbwidth/(tbwidth-7.0)
-    acc_corr[3] = tbwidth/(tbwidth-6.0)
-    acc_corr[10] = tbwidth/(tbwidth-3.0)
+    for i,ac in enumerate(acc_corr):
+        lo = i*tbwidth + ranges[1][0]
+        hi = (i+1)*tbwidth + ranges[1][0]
+        #print lo,hi
+        vwidth = 0.01
+        vals = np.arange(lo,hi,vwidth)
+        tot_vals = len(vals)*vwidth
+        tot = 0.0
+        for sr in subranges[1]:
+            #print sr
+            for v in vals:
+                if v>sr[0] and v<=sr[1]:
+                    tot += vwidth
+        #print tot,tot_vals
+        if tot!=0 and abs(tot-tot_vals)>2.0*vwidth:
+            print lo,hi,tot,tot_vals
+            #acc_corr[i] = tot_vals/(tot_vals-tot)
+            acc_corr[i] = tot_vals/(tot)
+            print acc_corr[i]
+
+    print ypts
+    print acc_corr
+    #exit()
+
+    print acc_corr*ypts
     ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
                         color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
 
+    #plt.show()
+    #exit()
+
     ############################################################################
-
-    # For efficiency
-    fig1 = plt.figure(figsize=(12,4),dpi=100)
-    ax10 = fig1.add_subplot(1,2,1)
-    ax11 = fig1.add_subplot(1,2,2)
-
     # Tweak the spacing on the figures.
     fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
-    fig1.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
 
+    #ax1.set_ylim(0.0,420.0)
+    #plt.show()
+    #exit()
     ############################################################################
     # Set up the efficiency function.
     ############################################################################
@@ -201,14 +214,23 @@ def main():
     # exp1 is the surface events.
     ############################################################################
 
+    #nsurface = 575.0 # For full 917 days
+    nsurface = 506.0 # For full 917 days
+    tot_live_days = 808.0 # For the full 917 days
+    partial_live_days = 0.0
+    for sr in subranges[1]:
+        partial_live_days += (sr[1]-sr[0])
+    nsurface *= partial_live_days/tot_live_days
+
     params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
-    params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
+    params_dict['num_exp1'] = {'fix':True,'start_val':nsurface,'limits':(0.0,100000.0)}
+    #params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':1.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
     #params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
-    params_dict['num_flat'] = {'fix':False,'start_val':800.0,'limits':(0.0,2000.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':1700.0,'limits':(0.0,2000.0)}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
@@ -248,7 +270,7 @@ def main():
     m.printMode = 2
 
     m.migrad()
-    #m.hesse()
+    m.hesse()
 
     print "Finished fit!!\n"
 
@@ -411,11 +433,19 @@ def main():
 
     ############################################################################
 
+    '''
+    # For efficiency
+    fig1 = plt.figure(figsize=(12,4),dpi=100)
+    ax10 = fig1.add_subplot(1,2,1)
+    ax11 = fig1.add_subplot(1,2,2)
+    fig1.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
+
     # Efficiency function
     efficiency = sigmoid(expts,threshold,sigmoid_sigma,max_val)
     ax10.plot(expts,efficiency,'r--',linewidth=2)
     ax10.set_xlim(ranges[0][0],ranges[0][1])
     ax10.set_ylim(0.0,1.0)
+    '''
 
     ############################################################################
     ax1_2 = ax1.twiny()
@@ -455,10 +485,15 @@ def main():
     ############################################################################
 
     # Format the axes a bit
+    ax0.set_xlim(ranges[0])
+    #ax0.set_ylim(0.0,values['num_flat']/10)
+    ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
+    ax0.set_ylabel("Interactions/0.025 keVee",fontsize=12)
+
     ax1.set_xlim(ranges[1])
-    ax1.set_ylim(0.0,220.0)
+    #ax1.set_ylim(0.0,values['num_flat']/13)
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
-    label = "Event/%4.1f days" % (bin_widths[1])
+    label = "Interactions/%4.1f days" % (bin_widths[1])
     ax1.set_ylabel(label,fontsize=12)
 
 
