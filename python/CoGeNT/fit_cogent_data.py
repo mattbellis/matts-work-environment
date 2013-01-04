@@ -243,7 +243,7 @@ def main():
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['mDM'] = {'fix':True,'start_val':10.00,'limits':(5.0,20.0)}
+        params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
         params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
         if args.sigma_n != None:
             params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38)}
@@ -343,6 +343,8 @@ def main():
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
     # Plot wimp term
+    peak_wimp_date = 0
+    peak_wimp_val = 0
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6:
         wimp_model = None
         if args.fit==2:
@@ -366,6 +368,12 @@ def main():
         func = lambda x: plot_wimp_day(x,AGe,values['mDM'],values['sigma_n'],e_range=[0.5,3.2],model=wimp_model)
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=num_wimps,fmt='k-',linewidth=3,axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+        for srty,srtx in zip(sr_typts,sr_txpts):
+            if max(srty)>peak_wimp_val:
+                peak_wimp_val = max(srty)
+                peak_wimp_date = srtx[srty.tolist().index(max(srty))]
+
+        
 
     ############################################################################
     # Second exponential
@@ -495,6 +503,15 @@ def main():
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
     label = "Interactions/%4.1f days" % (bin_widths[1])
     ax1.set_ylabel(label,fontsize=12)
+
+    #############################################################################
+    # What is the peak_wimp_date?
+    #############################################################################
+    peak = start_date + timedelta(days=peak_wimp_date)
+    print "\nPeak WIMP signal occurs on:\n"
+    print peak.strftime("%D")
+
+
 
 
     if not args.batch:

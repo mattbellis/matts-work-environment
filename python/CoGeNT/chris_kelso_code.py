@@ -319,6 +319,8 @@ def gDebris(vmin,vflow,t):
         ret[vmin<np.abs(vflow-vobs)] = (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
         ret[vmin<vflow+vobs] = (vflow+vobs-vmin)/(2*vflow*vobs)
 
+        ret[ret<0] = 0 # Do we need this?
+
         return ret
 
     elif type(t)==np.ndarray:
@@ -326,6 +328,8 @@ def gDebris(vmin,vflow,t):
         ret = np.zeros(nvals)
         ret[vmin<np.abs(vflow-vobs)] = (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
         ret[vmin<vflow+vobs] = (vflow+vobs-vmin)/(2*vflow*vobs)
+
+        ret[ret<0] = 0 # Do we need this?
 
         return ret
 
@@ -509,6 +513,7 @@ def main():
     #Now Choose a maximum modulating stream that has a cut-off at the given energy
     ############################################################################
     Er1=3 
+    #Er1=3.5 # Trying this because we go further out in energy
     v01=10 #v01 is the dispersion of this stream
     vstr1 = vstr(vMaxMod,AGe,tc_SHM,mDM,Er1)
     print "\nStream characteristics for a target with atomic number %.2f and energy cut-off at %f keV:" % (AGe,Er1)
@@ -577,9 +582,9 @@ def main():
         day = 30*j
         for i,Er in enumerate(xvals):
             #yvals[i] = dRdErDebris(Er, tc_SHM+day, AGe, mDM, vDeb1,sigma_n)
-            #yvals[i] = dRdErDebris(Er,day,AGe,mDM,vDeb1,sigma_n)
+            yvals[i] = dRdErDebris(Er,day,AGe,mDM,vDeb1,sigma_n)
             #yvals[i] = dRdErStream(Er,day,AGe,vstr1Vec,10,mDM,sigma_n)
-            yvals[i] = dRdErStream(Er,day,AGe,vSagVec,100,mDM,sigma_n)
+            #yvals[i] = dRdErStream(Er,day,AGe,vSagVec,100,mDM,sigma_n)
 
         #print yvals
         #print xvals
@@ -588,8 +593,8 @@ def main():
         #print integrate.quad(dRdErDebris,xvals[1],xvals[-1],args=(tc_SHM+day, AGe, mDM, vDeb1,sigma_n))
         Eee = quench_keVr_to_keVee(xvals)
         plt.plot(Eee,yvals)
-        #plt.xlabel('Debris, Lisanti')
-        plt.xlabel('Stream')
+        plt.xlabel('Debris, Lisanti')
+        #plt.xlabel('Stream')
 
 
     plt.show()

@@ -308,6 +308,10 @@ def fitfunc(data,p,parnames,params_dict):
         wimp_norm = num_wimps
         #print "wimp_norm: ",wimp_norm
         pdf = wimp(y,x,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/(1.0*num_tot)
+        for d0,d1,t in zip(data[0],data[1],pdf):
+            if t<0:
+                print d0,d1,t, np.log(t)
+
         pdf *= (0.333) # Active volume of CoGeNT
         #print "wimp pdf: ",pdf[0:8]*(num_tot)/num_wimps
         #print "wimp pdf: ",pdf[0:8]
