@@ -16,7 +16,8 @@ def main():
     
     # Read in off the command line some string to look for in the 
     # input files.
-    tag = './logbinning_GPU_data100k_flat10k'
+    #tag = './logbinning_GPU_data100k_flat1000k'
+    tag = './logbinning_GPU_data100k_flat5000'
     if len(sys.argv)>=2:
         tag = sys.argv[1]
 
@@ -25,13 +26,9 @@ def main():
     filenames[1] = "%s_flat_flat_arcmin.dat" % (tag) # RR
     filenames[2] = "%s_data_flat_arcmin.dat" % (tag) # DR
 
-    # Pull the number of galaxies out of the file name.
-    #ngal_in_file = tag.split('_')[-1][0:-1]
-    #ngalaxies = float(ngal_in_file)*1000.0
-    #ngalaxies = 93900.0 # 0.000-0.025
-    #ngalaxies = 1031696 # 0.200-0.225
+    # Number of galaxies in flat and data.
     ngalaxies = 100000
-    nflat     = 10000
+    nflat     = 5000000
 
     ############################################################################
     ############################################################################
@@ -131,13 +128,13 @@ def main():
     plt.yticks(fontsize=24,weight='bold')
 
     ax0.set_xscale('log')
-    #ax0.set_yscale('log')
+    ax0.set_yscale('log')
    
     #ax0.set_xlim(-100,5000)
     #ax0.set_xlim(-10,130)
-    ax0.set_xlim(-10,100000)
+    ax0.set_xlim(10,10000)
     #ax0.set_ylim(-0.7,2.8)
-    #ax0.set_ylim(0.01,100)
+    ax0.set_ylim(0.1,300)
     #ax0.set_ylim(0.01,5)
     #ax0.set_ylim(0.00,15)
 
