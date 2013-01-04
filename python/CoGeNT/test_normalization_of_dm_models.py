@@ -28,6 +28,7 @@ tc_Max = dmm.tc(vMaxMod)
 ############################################################################
 #Now Choose a maximum modulating stream that has a cut-off at the given energy
 ############################################################################
+#Er1=3.5
 Er1=3
 v01=10 #v01 is the dispersion of this stream
 vstr1 = dmm.vstr(vMaxMod,AGe,tc_SHM,mDM,Er1)
@@ -40,8 +41,9 @@ vstr1Vec = np.array([vstr1*vMaxMod[0],vstr1*vMaxMod[1],vstr1*vMaxMod[2]])
 ################################################################################
 def func(y,x):
     #tc_SHM = dmm.tc(np.zeros(3))
-    dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM,sigma_n)
-    #dR = dmm.dRdErStream(x, tc_Max+y, AGe, vstr1Vec, 10,mDM,sigma_n)
+    #dR = dmm.dRdErSHM(x,tc_SHM+y,AGe,mDM,sigma_n)
+    dR = dmm.dRdErStream(x, tc_Max+y, AGe, vstr1Vec, 10,mDM,sigma_n)
+    #dR = dmm.dRdErDebris(x,tc_Max+y,AGe,mDM,vDeb1,sigma_n)
     return dR
 ################################################################################
 
@@ -69,9 +71,11 @@ last_day = 459.0
 #print gdbl_int
 #gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day,epsabs=0.01)
 #print gdbl_int
-gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day,epsabs=0.1)
-print gdbl_int
+#gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day,epsabs=0.1)
+#print gdbl_int
 gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day,epsabs=1.0)
+print gdbl_int
+gdbl_int = integrate.dblquad(func,lo,hi,lambda x: 1.0, lambda x: last_day,epsabs=10.0)
 print gdbl_int
 
 #print gdbl_int[0]*(330.0/1000.0)

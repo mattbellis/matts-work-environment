@@ -17,18 +17,23 @@ def main():
     # Read in off the command line some string to look for in the 
     # input files.
     #tag = './logbinning_GPU_data100k_flat1000k'
-    tag = './logbinning_GPU_data100k_flat5000'
+    #tag = './logbinning_GPU_data100k_flat5000'
+    #tag = './logbinning_GPU_data1M_flat100k'
+    tag = './logbinning_GPU_data1M_flat1000k'
     if len(sys.argv)>=2:
         tag = sys.argv[1]
 
     filenames = [None,None,None]
-    filenames[0] = "%s_data_data_arcmin.dat" % (tag) # DD
-    filenames[1] = "%s_flat_flat_arcmin.dat" % (tag) # RR
-    filenames[2] = "%s_data_flat_arcmin.dat" % (tag) # DR
+    #filenames[0] = "%s_data_data_arcmin.dat" % (tag) # DD
+    #filenames[1] = "%s_flat_flat_arcmin.dat" % (tag) # RR
+    #filenames[2] = "%s_data_flat_arcmin.dat" % (tag) # DR
+    filenames[0] = "%s_data_data_arcsec.dat" % (tag) # DD
+    filenames[1] = "%s_flat_flat_arcsec.dat" % (tag) # RR
+    filenames[2] = "%s_data_flat_arcsec.dat" % (tag) # DR
 
     # Number of galaxies in flat and data.
-    ngalaxies = 100000
-    nflat     = 5000000
+    ngalaxies = 1000000
+    nflat     = 1000000
 
     ############################################################################
     ############################################################################
