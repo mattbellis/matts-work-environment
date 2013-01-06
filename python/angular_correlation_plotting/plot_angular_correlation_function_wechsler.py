@@ -19,7 +19,7 @@ def main():
     #tag = './logbinning_GPU_data100k_flat1000k'
     #tag = './logbinning_GPU_data100k_flat5000'
     #tag = './logbinning_GPU_data1M_flat100k'
-    tag = './logbinning_GPU_data1M_flat1000k'
+    tag = './logbinning_GPU_data1M_flat10M'
     if len(sys.argv)>=2:
         tag = sys.argv[1]
 
@@ -33,7 +33,7 @@ def main():
 
     # Number of galaxies in flat and data.
     ngalaxies = 1000000
-    nflat     = 1000000
+    nflat     = 10000000
 
     ############################################################################
     ############################################################################
@@ -137,9 +137,11 @@ def main():
    
     #ax0.set_xlim(-100,5000)
     #ax0.set_xlim(-10,130)
-    ax0.set_xlim(10,10000)
+    #ax0.set_xlim(10,10000)
+    ax0.set_xlim(1,10000)
     #ax0.set_ylim(-0.7,2.8)
-    ax0.set_ylim(0.1,300)
+    #ax0.set_ylim(0.1,300)
+    ax0.set_ylim(0.01,300)
     #ax0.set_ylim(0.01,5)
     #ax0.set_ylim(0.00,15)
 
