@@ -15,7 +15,8 @@ from plotting_utilities import *
 
 import lichen.lichen as lch
 
-import minuit
+#import minuit
+import iminuit as minuit
 
 import argparse
 
@@ -243,7 +244,7 @@ def main():
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
+        params_dict['mDM'] = {'fix':True,'start_val':10.00,'limits':(5.0,20.0)}
         params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
         if args.sigma_n != None:
             params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38)}
@@ -267,10 +268,10 @@ def main():
     # Up the tolerance.
     #m.tol = 1.0
 
-    m.printMode = 2
+    #m.printMode = 2
 
     m.migrad()
-    m.hesse()
+    #m.hesse()
 
     print "Finished fit!!\n"
 
@@ -290,7 +291,7 @@ def main():
         print_correlation_matrix(m)
         print_covariance_matrix(m)
 
-    print minuit_output(m)
+    #print minuit_output(m)
 
     print "nentries: ",len(data[0])
 
@@ -323,6 +324,9 @@ def main():
         sr_txpts.append(np.linspace(sr[0],sr[1],1000))
         tot_sr_typts.append(np.zeros(1000))
 
+    # Plot wimp term
+    peak_wimp_date = 0
+    peak_wimp_val = 0
     ############################################################################
     # Exponential
     ############################################################################
@@ -341,10 +345,11 @@ def main():
         func = lambda x: values['wmod_offst'] + values['wmod_amp']*np.cos(values['wmod_freq']*x+values['wmod_phase'])   
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+        for srty,srtx in zip(sr_typts,sr_txpts):
+            if max(srty)>peak_wimp_val:
+                peak_wimp_val = max(srty)
+                peak_wimp_date = srtx[srty.tolist().index(max(srty))]
 
-    # Plot wimp term
-    peak_wimp_date = 0
-    peak_wimp_val = 0
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6:
         wimp_model = None
         if args.fit==2:
@@ -456,6 +461,7 @@ def main():
     '''
 
     ############################################################################
+    '''
     ax1_2 = ax1.twiny()
     #ax1_2.set_xlabel("Date")
     #dates = ['01/02/1991','01/03/1991','01/04/1991']
@@ -490,6 +496,7 @@ def main():
         l.set_rotation(330)
         l.set_fontsize(8)
         l.set_horizontalalignment('right')
+    '''
     ############################################################################
 
     # Format the axes a bit
