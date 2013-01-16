@@ -262,12 +262,12 @@ def main():
     m = minuit.Minuit(f,**kwd)
 
     # For maximum likelihood method.
-    m.up = 0.5
+    m.errordef = 0.5
 
     # Up the tolerance.
     #m.tol = 1.0
 
-    m.printMode = 2
+    m.print_level = 2
 
     m.migrad()
     m.hesse()
