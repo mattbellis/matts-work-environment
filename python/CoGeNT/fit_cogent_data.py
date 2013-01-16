@@ -15,7 +15,7 @@ from plotting_utilities import *
 
 import lichen.lichen as lch
 
-import minuit
+import iminuit as minuit
 
 import argparse
 
@@ -283,8 +283,8 @@ def main():
         plt.figure()
         cx,cy = contours(m,'e_exp0','num_exp0',1.0,10)
         plt.plot(cx,cy)
-        cx,cy = contours(m,'e_exp0','num_exp0',1.2,10)
-        plt.plot(cx,cy)
+        #cx,cy = contours(m,'e_exp0','num_exp0',1.2,10)
+        #plt.plot(cx,cy)
 
     if args.verbose:
         print_correlation_matrix(m)
