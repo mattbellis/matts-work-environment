@@ -281,8 +281,12 @@ def main():
     ############################################################################
     if args.contours:
         plt.figure()
-        cx,cy = contours(m,'e_exp0','num_exp0',1.0,10)
-        plt.plot(cx,cy)
+        cx,cy,cont_values = contours(m,'e_exp0','num_exp0',1.0,10)
+        #cx,cy,values = contours(m,'e_exp0','num_exp0',1.0,10)
+        print cx
+        print cy
+        print cont_values
+        #plt.plot(cx,cy)
         #cx,cy = contours(m,'e_exp0','num_exp0',1.2,10)
         #plt.plot(cx,cy)
 
@@ -290,7 +294,9 @@ def main():
         print_correlation_matrix(m)
         print_covariance_matrix(m)
 
-    print minuit_output(m)
+    #print minuit_output(m)
+    #m.print_param()
+    m.print_initial_param()
 
     print "nentries: ",len(data[0])
 
