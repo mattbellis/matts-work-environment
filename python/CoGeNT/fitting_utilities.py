@@ -276,7 +276,8 @@ def contours(m,par0,par1,sigma=1.0,npts=5):
     #print m.values
     #contour_points = m.contour(par0,par1,sigma,npts)
     #x_bins,y_bins,values = m.contour(par0,par1,bound=sigma,bins=npts,subtract_min=True)
-    x_bins,y_bins,values = m.mncontour(par0,par1,sigma=sigma,numpoints=npts)
+    #x_bins,y_bins,values = m.mncontour(par0,par1,sigma=sigma,numpoints=npts)
+    x,y,z,zz = m.draw_mncontour(par0,par1)
     #print contour_points
     '''
     cx = np.array([])
@@ -290,7 +291,8 @@ def contours(m,par0,par1,sigma=1.0,npts=5):
     '''
 
     #return cx,cy
-    return x_bins,y_bins,values
+    #return x_bins,y_bins,values
+    return x,y,z
 
 ################################################################################
 # Do contours
