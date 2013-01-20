@@ -5,7 +5,7 @@
 
 \begin{document}
 
-\pgfmathsetmacro{\cardwidth}{6.85}
+\pgfmathsetmacro{\cardwidth}{6.87}
 \pgfmathsetmacro{\cardheight}{9.79}
 \newcommand{\stripcolor}{yellow}
 \pgfmathsetmacro{\stripwidth}{0.7}
@@ -19,7 +19,7 @@
 \pgfmathsetmacro{\ruleheight}{0.3}
 
 \begin{tikzpicture}
-    \draw[rounded corners=0.1cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
     \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
     \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
     {
