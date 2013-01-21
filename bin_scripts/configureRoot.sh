@@ -1,16 +1,19 @@
 #./configure linuxx8664gcc \
-./configure linux \
+./configure \
+                      #linux \
                       --prefix=/usr/local \
-                      --with-x11-libdir=/usr/lib/x86_64-linux-gnu/ \
+                      #--with-x11-libdir=/usr/lib/x86_64-linux-gnu/ \
                       --enable-mathmore \
                       --enable-python \
                       --enable-minuit2 \
-                      --fontdir=/usr/share \
+                      #--fontdir=/usr/share \
                       --disable-xrootd \
                       --enable-roofit \
                       --enable-fftw3 \
+                      --disable-builtin-llvm \
                       --enable-soversion \
                       --enable-table 
+
 
 
 

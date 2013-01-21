@@ -18,7 +18,7 @@ setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${PATH}:"
 ## Needed to add this for latex2html to work...oh well.
 setenv RGBDEF /etc/X11/rgb.txt
 
-setenv PYTHONPATH /usr/local:/usr/local/lib/root/:${HOME}/libs/
+setenv PYTHONPATH /usr/local:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu/root5.34/
 
 setenv SVN_EDITOR vi
 setenv EDITOR vi
@@ -36,7 +36,7 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/local/cuda/lib64:/usr/local/cuda/
 setenv MY_BEAMER_THEMES ${HOME}/Talks/my_beamer_themes
 
 # For CUDA
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu/
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu/:/usr/lib/x86_64-linux-gnu/root5.34/
 #setenv CUDA_INSTALL_PATH /usr/
 setenv CUDA_INSTALL_PATH /usr/local/cuda/
 
