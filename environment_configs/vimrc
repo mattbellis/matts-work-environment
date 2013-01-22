@@ -41,6 +41,7 @@ ab rdot \dot{r}
 ab rddot \ddot{r}
 ab phidot \dot{\phi}
 ab phiddot \ddot{\phi}
+ab mydeg ^\circ
 
 ab fixthis \textcolor{red}{\bf FIX THIS!!!!}
 

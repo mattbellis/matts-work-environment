@@ -30,10 +30,11 @@ if ( $1 == "push" ) then
         /home/bellis/stuff \
         /home/bellis/NIU \
         /home/bellis/Talks \
+        /home/bellis/sketchbook \
         mattbellis.dyndns-home.com:/home/bellis
 
 else if ( $1 == "pull" ) then
-    rsync -P -r -u -a -v --exclude '*.npy'  --exclude '*.ig' --exclude 'Event_*'   --exclude '*/core' --exclude '*talk*.pdf' --exclude '*lecture*.pdf' --exclude '*chapter*.pdf' --exclude '*/data_skims/*' mattbellis.dyndns-home.com:/home/bellis/{Talks,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,eBooks,wallpapers,printer_drivers} \
+    rsync -P -r -u -a -v --exclude '*.npy'  --exclude '*.ig' --exclude 'Event_*'   --exclude '*/core' --exclude '*talk*.pdf' --exclude '*lecture*.pdf' --exclude '*chapter*.pdf' --exclude '*/data_skims/*' mattbellis.dyndns-home.com:/home/bellis/{Talks,sketchbook,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,eBooks,wallpapers,printer_drivers} \
         /home/bellis
 
 else
