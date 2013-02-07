@@ -203,13 +203,15 @@ def main():
         ########################################################################
         # For sending out the grades
         ########################################################################
-        subject = "PHYS 283 weekly grade summary"
+        #subject = "PHYS 283 weekly grade summary"
+        subject = "Weekly grade summary"
         msg_body = output
 
         ########################################################################
         # Tack on the hpotheticals.
         ########################################################################
-        if len(s.grades.final_exam)==0:
+        #if len(s.grades.final_exam)==0:
+        if 1:
             msg_body += "\n"
             msg_body += "-----------------------------------------\n"
             msg_body += "------- Projected performance -----------\n"

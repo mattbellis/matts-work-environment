@@ -49,29 +49,6 @@ for i in range(0,nsignals):
     output = "%d\t%20s\t%s\t%s\t%s\t%s" % (i,essid[i],strength[i],ap[i],encryption[i],channel[i])
     print output
 
-print "sudo iwconfig wlan0 essid ### ap ###"
+print "sudo iwconfig wlan0 essid ### ap ### channel ###"
 print "sudo dhclient wlan0"
 
-'''
-if ( ARGV[0] == nil ) # Print out the choices
-  for i in 0..max-1
-    print "#{i}\t#{essid[i]}\t#{strength[i]}\t#{ap[i]}\t#{encryption[i]}\n"
-  end
-else # Or select a network to join
-  choice = ARGV[0].to_i
-  cmd = "sudo ifconfig wlan0 up"
-  puts cmd
-  system(cmd)
-  cmd = "sudo iwconfig wlan0 essid #{essid[choice]} ap #{ap[choice]}"
-  print "Attempting to join #{essid[choice]} at #{ap[choice]}\n"
-  puts cmd
-  system(cmd)
-  system(cmd)
-  cmd = "sudo dhclient wlan0"
-  puts cmd
-  system(cmd)
-  #system("sudo dhclient wlan0")
-end
-
-
-'''
