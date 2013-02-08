@@ -173,7 +173,7 @@ class Student:
         ret += "%s %s\n" % (self.student_name[1], self.student_name[0])
 
         # Quizzes
-        ret += " -----\nQuizzes\n -----\n"
+        ret += " -----\nReading, pre-lecture quizzes\n -----\n"
         #drop_lowest_score = True
         drop_lowest_score = False
         picked_a_lowest = False
@@ -187,7 +187,7 @@ class Student:
             ret += "\n"
         avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
         averages[0] = avg
-        ret += "\tQuiz avg: %4.2f\n" % (avg)
+        ret += "\tReading, pre-lecture quizzes avg: %4.2f\n" % (avg)
 
         # HW
         #drop_lowest_score = True
@@ -212,7 +212,8 @@ class Student:
         #drop_lowest_score = 2
         drop_lowest_score = False
         picked_a_lowest = False
-        ret += " -----\nExams\n -----\n"
+        #ret += " -----\nExams\n -----\n"
+        ret += " -----\nWeekly quizzes\n -----\n"
         #print len(self.grades.exams)
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
@@ -231,7 +232,7 @@ class Student:
             ret += "\n"
         avg = calc_average_of_grades(self.grades.exams, drop_lowest_score)
         averages[2] = avg
-        ret += "\tExams avg: %4.2f\n" % (avg)
+        ret += "\tWeekly quizzes avg: %4.2f\n" % (avg)
 
         '''
         # Exam 2 
