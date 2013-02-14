@@ -3,7 +3,7 @@ import numpy as np
 
 import lichen.lichen as lch
 
-nsig = 200
+nsig = 50
 nbkg = 200
 nbinsx = 100
 nbinsy = 100
@@ -85,8 +85,26 @@ plt.plot(mxpts,mpts0,'ko')
 plt.plot(mxpts,mpts1,'bo')
 plt.plot(mxpts,mpts2,'ro')
 
-print "%8.3f %8.3f %8.3f %8.3f" % (max(mpts0),mxpts[mpts0.index(max(mpts0))],ns_pts[mpts0.index(max(mpts0))]*nsig,nb_pts[mpts0.index(max(mpts0))]*nbkg)
-print "%8.3f %8.3f %8.3f %8.3f" % (max(mpts1),mxpts[mpts1.index(max(mpts1))],ns_pts[mpts1.index(max(mpts1))]*nsig,nb_pts[mpts1.index(max(mpts1))]*nbkg)
-print "%8.3f %8.3f %8.3f %8.3f" % (max(mpts2),mxpts[mpts2.index(max(mpts2))],ns_pts[mpts2.index(max(mpts2))]*nsig,nb_pts[mpts2.index(max(mpts2))]*nbkg)
+index = mpts0.index(max(mpts0))
+mxpt = mxpts[index]
+maxpts = max(mpts0)
+nspt = ns_pts[index]*nsig
+nbpt = nb_pts[index]*nbkg
+print "%8.3f %8.3f %8.3f %8.3f %8.3f %8.3f" % (maxpts,mxpt,nspt,nbpt,nspt/np.sqrt(nspt+nbpt),nspt/np.sqrt(nbpt))
+
+index = mpts1.index(max(mpts1))
+mxpt = mxpts[index]
+maxpts = max(mpts1)
+nspt = ns_pts[index]*nsig
+nbpt = nb_pts[index]*nbkg
+print "%8.3f %8.3f %8.3f %8.3f %8.3f %8.3f" % (maxpts,mxpt,nspt,nbpt,nspt/np.sqrt(nspt+nbpt),nspt/np.sqrt(nbpt))
+
+index = mpts2.index(max(mpts2))
+mxpt = mxpts[index]
+maxpts = max(mpts2)
+nspt = ns_pts[index]*nsig
+nbpt = nb_pts[index]*nbkg
+print "%8.3f %8.3f %8.3f %8.3f %8.3f %8.3f" % (maxpts,mxpt,nspt,nbpt,nspt/np.sqrt(nspt+nbpt),nspt/np.sqrt(nbpt))
+
 
 plt.show()
