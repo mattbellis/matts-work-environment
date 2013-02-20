@@ -95,6 +95,10 @@ plt.xlim(0,3.0)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.15)
 plt.xlabel(r'$\tau$ (arbitrary)',fontsize=24)
 plt.ylabel(r'# events',fontsize=24)
+# Draw the line and arrow
+ymax = plt.ylim()[1]
+plt.plot([2.0,2.0],[0,ymax],'r-')
+plt.arrow(2.0-0.05,ymax/2.0,-0.5,0,lw=3,head_width=ymax/20,head_length=0.05,fc='k',ec='k')
 name = "Plots/optstudy_bothy0%s.png" % (tag); plt.savefig(name)
 
 ################################################################################
