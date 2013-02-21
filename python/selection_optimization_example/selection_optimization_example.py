@@ -16,8 +16,17 @@ if len(sys.argv)>1:
 #nbinsx = 100
 #nbinsy = 100
 
-nsig = 100000
-nbkg = 20000
+#nsig = 100000
+#nbkg = 20000
+#nbinsx = 100
+#nbinsy = 100
+
+#nsig = 1000
+#nbkg = 20000
+
+nsig = 100
+nbkg = 1000
+
 nbinsx = 100
 nbinsy = 100
 
@@ -207,7 +216,9 @@ for i in np.arange(3.0,0.1,-0.10):
     plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.15)
     plt.xlabel(r'Background rejection (fractional)',fontsize=24)
     plt.ylabel(r'Signal efficiency (fractional)',fontsize=24)
-    name = "Plots/optstudy_sigbkgcurve%s.png" % (tag); plt.savefig(name)
+    plt.ylim(0.30,1.00)
+    plt.xlim(0.70,1.00)
+    name = "Plots/optstudy_sigbkgcurve_cuts%d_%s.png" % (k,tag); plt.savefig(name)
 
 print ns_pts
 print nb_pts
@@ -220,6 +231,8 @@ plt.plot(nb_pts,ns_pts,'ko')
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.15)
 plt.xlabel(r'Background rejection (fractional)',fontsize=24)
 plt.ylabel(r'Signal efficiency (fractional)',fontsize=24)
+plt.ylim(0.30,1.00)
+plt.xlim(0.70,1.00)
 name = "Plots/optstudy_sigbkgcurve%s.png" % (tag); plt.savefig(name)
 
 ################################################################################
