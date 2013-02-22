@@ -16,16 +16,16 @@ if len(sys.argv)>1:
 #nbinsx = 100
 #nbinsy = 100
 
-#nsig = 100000
-#nbkg = 20000
+nsig = 100000
+nbkg = 20000
 #nbinsx = 100
 #nbinsy = 100
 
 #nsig = 1000
 #nbkg = 20000
 
-nsig = 100
-nbkg = 1000
+#nsig = 100
+#nbkg = 1000
 
 nbinsx = 100
 nbinsy = 100
@@ -157,7 +157,7 @@ for i in np.arange(3.0,0.1,-0.10):
     ################################################################################
     plt.figure()
     lch.hist_err(sig_x,bins=nbinsx,range=(0.8,1.0),linewidth=2)
-    lch.hist_err(sig_surv_x,bins=nbinsx,range=(0.8,1.0),linewidth=2,color='r',ecolor='r')
+    lch.hist_err(sig_surv_x,bins=nbinsx,range=(0.8,1.0),linewidth=4,color='r',ecolor='r')
     plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.15)
     # Draw two lines around mass peak
     ymax = plt.ylim()[1]
@@ -169,6 +169,7 @@ for i in np.arange(3.0,0.1,-0.10):
 
     plt.figure()
     lch.hist_err(sig_y,bins=nbinsy,range=(0,3.0),linewidth=2)
+    lch.hist_err(sig_surv_y,bins=nbinsy,range=(0,3.0),linewidth=4,color='r',ecolor='r')
     plt.xlim(0,3.0)
     plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.15)
     plt.xlabel(r'$\tau$ (arbitrary)',fontsize=24)
@@ -184,7 +185,7 @@ for i in np.arange(3.0,0.1,-0.10):
     ################################################################################
     plt.figure()
     lch.hist_err(bkg_x,bins=nbinsx,range=(0.8,1.0),linewidth=2)
-    lch.hist_err(bkg_surv_x,bins=nbinsx,range=(0.8,1.0),linewidth=2,color='r',ecolor='r')
+    lch.hist_err(bkg_surv_x,bins=nbinsx,range=(0.8,1.0),linewidth=4,color='r',ecolor='r')
     plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.15)
     # Draw two lines around mass peak
     ymax = plt.ylim()[1]
@@ -196,6 +197,7 @@ for i in np.arange(3.0,0.1,-0.10):
 
     plt.figure()
     lch.hist_err(bkg_y,bins=nbinsy,range=(0,3.0),linewidth=2)
+    lch.hist_err(bkg_surv_y,bins=nbinsy,range=(0,3.0),linewidth=4,color='r',ecolor='r')
     plt.xlim(0,3.0)
     plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.15)
     plt.xlabel(r'$\tau$ (arbitrary)',fontsize=24)
