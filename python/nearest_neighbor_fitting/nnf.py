@@ -13,7 +13,15 @@ import iminuit as minuit
 ################################################################################
 def fitfunc(data,p,parnames,params_dict):
 
-    tot_pdf = 0
+    tot_pdf = np.zeros(len(data[0]))
+
+    n0 = p[parnames.index('num0')]
+    n1 = p[parnames.index('num1')]
+
+    print data[0]
+    print data[1]
+
+    tot_pdf = n0*data[0] + n1*data[1]
 
     return tot_pdf
 
@@ -26,13 +34,9 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     flag = p[parnames.index('flag')]
 
-    wimp_model = None
-
     num_tot = 0.0
     for name in parnames:
-        if 'num_' in name or 'ncalc' in name:
-            num_tot += p[parnames.index(name)]
-        elif 'num_flat' in name or 'num_exp1' in name:
+        if 'num' in name:
             num_tot += p[parnames.index(name)]
 
     tot_pdf = fitfunc(data,p,parnames,params_dict)
@@ -81,9 +85,10 @@ plt.hist(data,bins=50)
 ################################################################################
 # Generate the templates we will use to fit the data
 ################################################################################
-template0 = stats.norm.rvs(loc=5,scale=1,size=500)
+nt0 = 20000
+template0 = stats.norm.rvs(loc=5,scale=1,size=nt0)
 
-nt1 = 2000
+nt1 = 20000
 template1 = np.array([])
 while len(template1)<nt1:
     temp = stats.expon.rvs(loc=0,scale=6,size=nt1)
@@ -98,27 +103,31 @@ plt.hist(template0,bins=50,color='r')
 plt.figure()
 plt.hist(template1,bins=50,color='r')
 
+nt_tot = nt0+nt1
+
 
 ################################################################################
 # Calculate the distances from data to the templates.
 ################################################################################
+max_dist = 20
 distances_t0 = np.zeros(len(data))
 distances_t1 = np.zeros(len(data))
 for i,x in enumerate(data):
     dist = np.abs(template0-x)
     temp = np.sort(dist)
-    distances_t0[i] = 1.0/temp[20]
-    print temp[30]
+    distances_t0[i] = 1.0/temp[max_dist]
+    #print temp[30]
 
     dist = np.abs(template1-x)
     temp = np.sort(dist)
-    distances_t1[i] = 1.0/temp[20]
-    print temp[30]
+    distances_t1[i] = 1.0/temp[max_dist]
+    #print temp[30]
 
     #print "---------"
     #print temp[0:10]
     #print temp[-10:-1]
 
+print "Distances"
 print distances_t0
 print distances_t1
 
@@ -137,14 +146,14 @@ params_dict = {}
 params_dict['flag'] = {'fix':True,'start_val':0}
 params_dict['var_x'] = {'fix':True,'start_val':0,'limits':(ranges[0][0],ranges[0][1])}
 
-ncomponents = 2
+ncomponents = [200,1000]
 for i,val in enumerate(ncomponents):
     name = "num%d" % (i)
     params_dict[name] = {'fix':False,'start_val':val,'limits':(0.0,6000.0)}
 
 params_names,kwd = fitutils.dict2kwd(params_dict)
 
-f = fitutils.Minuit_FCN([data],params_dict,emlf_normalized_minuit)
+f = fitutils.Minuit_FCN([[distances_t0,distances_t1]],params_dict,emlf_normalized_minuit)
 
 m = minuit.Minuit(f,**kwd)
 
