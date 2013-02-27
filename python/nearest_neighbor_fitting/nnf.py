@@ -158,7 +158,7 @@ f = fitutils.Minuit_FCN([[distances_t0,distances_t1]],params_dict,emlf_normalize
 m = minuit.Minuit(f,**kwd)
 
 # For maximum likelihood method.
-m.up = 0.5
+#m.up = 0.5
 
 # Up the tolerance.
 m.tol = 1.0
