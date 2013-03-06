@@ -191,6 +191,7 @@ def fitfunc(data,p,parnames,params_dict):
     num_flat = p[pn.index('num_flat')]
     e_exp1 = p[pn.index('e_exp1')]
     num_exp1 = p[pn.index('num_exp1')]
+    e_exp_flat = p[pn.index('e_exp_flat')]
 
     if flag==0 or flag==1 or flag==5:
         e_exp0 = p[pn.index('e_exp0')]
@@ -332,7 +333,8 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     # Flat term
     ############################################################################
-    pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
+    #pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
+    pdf  = pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_flat
     #print "flat pdf: ",pdf[0:8]/num_flat
