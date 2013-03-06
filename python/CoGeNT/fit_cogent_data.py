@@ -212,6 +212,7 @@ def main():
     ############################################################################
     # exp0 is going to be the simple WIMP-like signal that can modulate or not
     # exp1 is the surface events.
+    # exp_flat is the surface events.
     ############################################################################
 
     #nsurface = 575.0 # For full 917 days
@@ -231,6 +232,7 @@ def main():
     #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
     #params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':1700.0,'limits':(0.0,2000.0)}
+    params_dict['e_exp_flat'] = {'fix':False,'start_val':0.15,'limits':(0.00001,10.0)}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
@@ -296,7 +298,7 @@ def main():
 
     #print minuit_output(m)
     #m.print_param()
-    m.print_initial_param()
+    #m.print_initial_param()
 
     print "nentries: ",len(data[0])
 
@@ -399,7 +401,8 @@ def main():
     # Flat
     ############################################################################
     # Energy projections
-    ypts = np.ones(len(expts))
+    #ypts = np.ones(len(expts))
+    ypts = np.exp(-values['e_exp_flat']*expts)
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff)
     eytot += y
 

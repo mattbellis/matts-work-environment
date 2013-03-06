@@ -37,8 +37,8 @@ setenv MY_BEAMER_THEMES ${HOME}/Talks/my_beamer_themes
 
 # For CUDA
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/x86_64-linux-gnu/:/usr/lib/x86_64-linux-gnu/root5.34/
-#setenv CUDA_INSTALL_PATH /usr/
-setenv CUDA_INSTALL_PATH /usr/local/cuda/
+setenv CUDA_INSTALL_PATH /usr/
+#setenv CUDA_INSTALL_PATH /usr/local/cuda/
 
 # For PyMinuit
 setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${LD_LIBRARY_PATH}
