@@ -16,6 +16,7 @@ if ( $1 == "push" ) then
         --exclude '*lecture*.pdf' \
         --exclude '*chapter*.pdf' \
         --exclude '*/data_skims/*' \
+        --exclude '*/processing-2.0b3/*' \
         /home/bellis/printer_drivers \
         /home/bellis/bluehost_staging \
         /home/bellis/Stanford \
@@ -34,7 +35,7 @@ if ( $1 == "push" ) then
         mattbellis.dyndns-home.com:/home/bellis
 
 else if ( $1 == "pull" ) then
-    rsync -P -r -u -a -v --exclude '*.npy'  --exclude '*.ig' --exclude 'Event_*'   --exclude '*/core' --exclude '*talk*.pdf' --exclude '*lecture*.pdf' --exclude '*chapter*.pdf' --exclude '*/data_skims/*' mattbellis.dyndns-home.com:/home/bellis/{Talks,sketchbook,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,eBooks,wallpapers,printer_drivers} \
+    rsync -P -r -u -a -v --exclude '*.npy'  --exclude '*.ig' --exclude 'Event_*'   --exclude '*/core' --exclude '*talk*.pdf' --exclude '*lecture*.pdf' --exclude '*chapter*.pdf' --exclude '*/data_skims/*' --exclude '*/processing-2.0b3/*' mattbellis.dyndns-home.com:/home/bellis/{Talks,sketchbook,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,eBooks,wallpapers,printer_drivers} \
         /home/bellis
 
 else
