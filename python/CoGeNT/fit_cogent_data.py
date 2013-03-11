@@ -312,6 +312,8 @@ def main():
             names.append(name)
     '''
 
+    peak_wimp_date = 0
+    peak_wimp_val = 0
     ############################################################################
     # Plot the solutions
     ############################################################################
@@ -359,8 +361,6 @@ def main():
                 peak_wimp_date = srtx[srty.tolist().index(max(srty))]
 
     # Plot wimp term
-    peak_wimp_date = 0
-    peak_wimp_val = 0
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6:
         wimp_model = None
         if args.fit==2:
