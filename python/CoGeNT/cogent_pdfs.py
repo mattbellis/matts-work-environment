@@ -334,7 +334,8 @@ def fitfunc(data,p,parnames,params_dict):
     # Flat term
     ############################################################################
     #pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
-    pdf  = pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency)
+    pdf  = 0.95*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) + \
+           0.05*pdfs.exp(x,5.0,xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= num_flat
     #print "flat pdf: ",pdf[0:8]/num_flat
