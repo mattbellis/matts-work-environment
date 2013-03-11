@@ -11,7 +11,7 @@ import parameters
 from cogent_utilities import *
 from cogent_pdfs import *
 from fitting_utilities import *
-from plotting_utilities import *
+from lichen.plotting_utilities import *
 
 import lichen.lichen as lch
 
@@ -218,6 +218,7 @@ def main():
     #nsurface = 575.0 # For full 917 days
     nsurface = 506.0 # For full 917 days
     tot_live_days = 808.0 # For the full 917 days
+    #tot_live_days = 447.0 # For the time before the fire
     partial_live_days = 0.0
     for sr in subranges[1]:
         partial_live_days += (sr[1]-sr[0])
@@ -230,9 +231,9 @@ def main():
     #params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
-    #params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
-    params_dict['num_flat'] = {'fix':False,'start_val':1700.0,'limits':(0.0,2000.0)}
-    params_dict['e_exp_flat'] = {'fix':False,'start_val':0.15,'limits':(0.00001,10.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
+    #params_dict['num_flat'] = {'fix':False,'start_val':1700.0,'limits':(0.0,2000.0)}
+    params_dict['e_exp_flat'] = {'fix':True,'start_val':0.05,'limits':(0.00001,10.0)}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
@@ -366,14 +367,14 @@ def main():
 
         num_wimps = 0.0
         for sr in subranges[1]:
-            num_wimps += integrate.dblquad(wimp,0.5,3.2,lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
+            num_wimps += integrate.dblquad(wimp,ranges[0][0],ranges[0][1],lambda x:sr[0],lambda x:sr[1],args=(AGe,values['mDM'],values['sigma_n'],efficiency,wimp_model),epsabs=dblqtol)[0]*(0.333)
 
         #func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,459],model=wimp_model)
         func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=ranges[1],model=wimp_model)
-        srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[0.5,3.2]],efficiency=efficiency)
+        srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[ranges[0][0],ranges[0][1]]],efficiency=efficiency)
         eytot += srypts[0]
 
-        func = lambda x: plot_wimp_day(x,AGe,values['mDM'],values['sigma_n'],e_range=[0.5,3.2],model=wimp_model)
+        func = lambda x: plot_wimp_day(x,AGe,values['mDM'],values['sigma_n'],e_range=[ranges[0][0],ranges[0][1]],model=wimp_model)
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=num_wimps,fmt='k-',linewidth=3,axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
         for srty,srtx in zip(sr_typts,sr_txpts):
@@ -402,8 +403,16 @@ def main():
     ############################################################################
     # Energy projections
     #ypts = np.ones(len(expts))
-    ypts = np.exp(-values['e_exp_flat']*expts)
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff)
+    #ypts =  np.exp(-values['e_exp_flat']*expts)
+    ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=0.95*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
+    ypts  = pdfs.exp(expts,5.0,ranges[0][0],ranges[0][1])
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=0.05*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
+
+    #ypts =  0.95*np.exp(-values['e_exp_flat']*expts)
+    ypts  = 0.95*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
+    ypts  += 0.05*pdfs.exp(expts,5.0,ranges[0][0],ranges[0][1])
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m')
     eytot += y
 
     # Time projections
