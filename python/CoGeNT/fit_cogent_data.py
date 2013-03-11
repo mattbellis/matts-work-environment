@@ -12,6 +12,8 @@ from cogent_utilities import *
 from cogent_pdfs import *
 from fitting_utilities import *
 from lichen.plotting_utilities import *
+from plotting_utilities import plot_wimp_er
+from plotting_utilities import plot_wimp_day
 
 import lichen.lichen as lch
 
@@ -350,6 +352,11 @@ def main():
         func = lambda x: values['wmod_offst'] + values['wmod_amp']*np.cos(values['wmod_freq']*x+values['wmod_phase'])   
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp0'],fmt='g-',axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+        # Look for the peak position in the modulation.
+        for srty,srtx in zip(sr_typts,sr_txpts):
+            if max(srty)>peak_wimp_val:
+                peak_wimp_val = max(srty)
+                peak_wimp_date = srtx[srty.tolist().index(max(srty))]
 
     # Plot wimp term
     peak_wimp_date = 0
