@@ -9,7 +9,7 @@ masses = [88.0, 87.0, 86.0, 84.0]
 def calc_Ds(beta):
 
     #D = np.array([3.17e-10, 0.0, 0.0, 0.0])
-    D = np.array([3.5e-10, 0.0, 0.0, 0.0])
+    D = np.array([3.8e-10, 0.0, 0.0, 0.0])
 
     for i in range(1,4):
         # (M1/M2)^beta = (D2/D1)
@@ -103,10 +103,6 @@ tmax = (60*17) + 31
 
 invdx2 = 1.0/(dx**2)
 
-#D = 3.17e-10
-#D = 3.17364e-10
-#D = 3.185e-10
-
 beta = 0.5
 D = calc_Ds(beta)
 
@@ -120,10 +116,6 @@ t = t0
 for m,f,d in zip(masses,frac_isotopes0,D):
     print m,f,d
 
-#tag = "default"
-#tag = "D=3.17"
-#tag = "D=3.17364"
-#tag = "D=3.185"
 tag = "beta=%2.1f" % (beta)
 
 #fig_img = plt.figure()
