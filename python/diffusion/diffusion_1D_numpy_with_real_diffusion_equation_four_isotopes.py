@@ -94,7 +94,7 @@ axes_bulk0.set_ylim(0,7.0)
 # Move in time
 ################################################################################
 
-dt   = 0.001 # This needs to be small (0.01) or it doesn't work.
+dt   = 0.01 # This needs to be small (0.01) or it doesn't work.
             # We got discontinuities at the boundary at the first step.
             # The concentrations ``crossed over into one another".
 dx   = (hi-lo)/float(npts)
