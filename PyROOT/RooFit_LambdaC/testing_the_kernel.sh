@@ -1,0 +1,1 @@
+/afs/slac/g/ki/software/python/2.5.4/bin/python ./run_a_set_of_fits.py --ntp 1 --baryon LambdaC --pass 0 --step 4 --pure --num-sig 80 --num-fits 1000 --sideband-first --my-python /afs/slac/g/ki/software/python/2.5.4/bin/python
