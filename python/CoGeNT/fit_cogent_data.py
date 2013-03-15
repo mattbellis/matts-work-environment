@@ -275,7 +275,7 @@ def main():
     m.print_level = 2
 
     m.migrad()
-    #m.hesse()
+    m.hesse()
 
     print "Finished fit!!\n"
 
