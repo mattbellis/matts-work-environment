@@ -1,0 +1,39 @@
+../../bin/darwin/release/deviceQuery Starting...
+
+ CUDA Device Query (Runtime API) version (CUDART static linking)
+
+There is 1 device supporting CUDA
+
+Device 0: "GeForce 8600M GT"
+  CUDA Driver Version:                           3.10
+  CUDA Runtime Version:                          3.10
+  CUDA Capability Major revision number:         1
+  CUDA Capability Minor revision number:         1
+  Total amount of global memory:                 536674304 bytes
+  Number of multiprocessors:                     4
+  Number of cores:                               32
+  Total amount of constant memory:               65536 bytes
+  Total amount of shared memory per block:       16384 bytes
+  Total number of registers available per block: 8192
+  Warp size:                                     32
+  Maximum number of threads per block:           512
+  Maximum sizes of each dimension of a block:    512 x 512 x 64
+  Maximum sizes of each dimension of a grid:     65535 x 65535 x 1
+  Maximum memory pitch:                          2147483647 bytes
+  Texture alignment:                             256 bytes
+  Clock rate:                                    0.94 GHz
+  Concurrent copy and execution:                 Yes
+  Run time limit on kernels:                     Yes
+  Integrated:                                    No
+  Support host page-locked memory mapping:       No
+  Compute mode:                                  Default (multiple host threads can use this device simultaneously)
+  Concurrent kernel execution:                   No
+  Device has ECC support enabled:                No
+
+deviceQuery, CUDA Driver = CUDART, CUDA Driver Version = 3.10, CUDA Runtime Version = 3.10, NumDevs = 1, Device = GeForce 8600M GT
+
+
+PASSED
+
+Press <Enter> to Quit...
+-----------------------------------------------------------
