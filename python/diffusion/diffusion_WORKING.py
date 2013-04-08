@@ -30,7 +30,12 @@ def calc_Ds(beta, D_for_Sr88=3.17e-10):
 ################################################################################
 lo = 0
 hi = 2775e-6
-npts = 1000
+npts = 100
+
+dt   = 0.1 # This needs to be small (0.01) or it doesn't work.
+dx   = (hi-lo)/float(npts)
+t0   = 0
+tmax = (60*17) + 31.0
 
 xpos = np.linspace(lo,hi,npts)
 
@@ -107,11 +112,6 @@ plt.subplots_adjust(top=0.92,bottom=0.10,right=0.95,left=0.10,wspace=0.2,hspace=
 ################################################################################
 # Move in time
 ################################################################################
-
-dt   = 0.01 # This needs to be small (0.01) or it doesn't work.
-dx   = (hi-lo)/float(npts)
-t0   = 0
-tmax = (60*17) + 31.0
 
 invdx2 = 1.0/(dx**2)
 
