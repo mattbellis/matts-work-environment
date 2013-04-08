@@ -14,6 +14,7 @@ def calc_Ds(beta, D_for_Sr88=3.17e-10):
         # (M1/M2)^beta = (D2/D1)
         # D2 = (M1/M2)^beta * D1
         D[i] = ((masses[0]/masses[i])**beta) * D[0]
+        #D[i] = 1.01*D[i-1]
 
     '''
     print "beta",beta
@@ -89,6 +90,9 @@ for i in range(0,4):
     axes0.append(fig0.add_subplot(2,2,i+1))
     plt.plot(xpos,c[i],'o')
     plt.ylim(0,7.0)
+    plt.xlabel(r"Position ($\mu$ m)")
+    plt.ylabel(r'Concentration (fractional)')
+    plt.title(r'Initial concentrations')
 
 bulk_c = c[0] + c[1] + c[2] + c[3]
 fig_bulk0 = plt.figure()
@@ -99,7 +103,7 @@ axes_bulk0.set_ylim(0,7.0)
 # Move in time
 ################################################################################
 
-dt   = 0.001 # This needs to be small (0.01) or it doesn't work.
+dt   = 0.01 # This needs to be small (0.01) or it doesn't work.
 dx   = (hi-lo)/float(npts)
 t0   = 0
 tmax = (60*17) + 31.0
@@ -107,9 +111,9 @@ tmax = (60*17) + 31.0
 
 invdx2 = 1.0/(dx**2)
 
-beta = 0.05
-#D_for_Sr88 = 3.17364e-10
-D_for_Sr88 = 3.18e-10
+beta = 0.5
+D_for_Sr88 = 3.17364e-10
+#D_for_Sr88 = 3.18e-10
 D = calc_Ds(beta,D_for_Sr88)
 
 print "dx: ",dx
@@ -268,7 +272,7 @@ axes_bulk1.set_ylim(0,7.0)
 fig_deltas = []
 axes_deltas = []
 vals = [None,None,None,None]
-for i in range(0,4):
+for i in range(0,1):
     fig_deltas.append(plt.figure())
     axes_deltas.append([])
     for j in range(0,4):
@@ -288,8 +292,10 @@ name = "output_%s.dat" % (tag)
 outfile = open(name,'w+')
 
 output = ""
-for xpt,y0,y1,y2,y3,y4,y5,y6,y7 in zip(xpos,bulk_c,c[0],c[1],c[2],c[3],vals[0],vals[1],vals[2]):
-    output += "%f %f %f %f %f %f %f %f %f\n" % (xpt,y0,y1,y2,y3,y4,y5,y6,y7)
+#for xpt,y0,y1,y2,y3,y4,y5,y6,y7 in zip(xpos,bulk_c,c[0],c[1],c[2],c[3],vals[0],vals[1],vals[2]):
+    #output += "%f %f %f %f %f %f %f %f %f\n" % (xpt,y0,y1,y2,y3,y4,y5,y6,y7)
+for xpt,y0,y1,y2,y3,y4,y5 in zip(xpos,bulk_c,c[0],c[1],c[2],c[3],vals[0]):
+    output += "%f %f %f %f %f %f %f\n" % (xpt,y0,y1,y2,y3,y4,y5)
 outfile.write(output)
 outfile.close()
 
