@@ -115,7 +115,7 @@ plt.subplots_adjust(top=0.92,bottom=0.10,right=0.95,left=0.10,wspace=0.2,hspace=
 
 invdx2 = 1.0/(dx**2)
 
-beta = 0.5
+beta = 0.05
 D_for_Sr88 = 3.170e-10
 #D_for_Sr88 = 3.17364e-10
 #D_for_Sr88 = 3.18e-10
