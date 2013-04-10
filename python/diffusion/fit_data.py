@@ -13,13 +13,14 @@ masses = [88.0, 87.0, 86.0, 84.0]
 # Spatial dimensions
 ################################################################################
 lo = 0
-hi = 2775e-6
+hi = 2775e-6 # meters
 npts = 100
 
 dt   = 0.5 # This needs to be small (0.01) or it doesn't work.
 dx   = (hi-lo)/float(npts)
 t0   = 0
-tmax = (60*17) + 31.0
+tmax = (60*17) + 31.0 # seconds
+#tmax = (60*135) + 31.0 # seconds
 
 ################################################################################
 # Figure out where the boundary is wrt our individual
@@ -35,8 +36,8 @@ point_of_intial_interface = int(npts/frac_interface)
 #cmax0 = 6.13
 #cmin0 = 0.62
 
-pct_isotopes0 = np.array([83.05, 6.89, 9.537, 0.52])
-#pct_isotopes0 = np.array([82.58, 7.0, 9.86, 0.56])
+#pct_isotopes0 = np.array([83.05, 6.89, 9.537, 0.52])
+pct_isotopes0 = np.array([82.58, 7.0, 9.86, 0.56]) # Naturally occurring abundances
 frac_isotopes0 = pct_isotopes0/100.0
 print "frac_isotopes0:"
 print frac_isotopes0
@@ -218,9 +219,9 @@ print xpos
 delta[0] = content[index+1]
 delta_err[0] = content[index+2]
 delta[1] = content[index+3]
-delta_err[1] = content[index+4]
+delta_err[1] = content[index+4]*2
 delta[2] = content[index+5]
-delta_err[2] = content[index+6]
+delta_err[2] = content[index+6]*3
 
 ############################################################################
 # Plot the data
@@ -245,12 +246,12 @@ plt.subplots_adjust(top=0.92,bottom=0.15,right=0.95,left=0.10,wspace=0.2,hspace=
 # Declare the fit parameters
 ############################################################################
 params_dict = {}
-params_dict['D88'] = {'fix':True,'start_val':3.17e-10,'limits':(3.1e-10,3.5e-10)}
-params_dict['D87'] = {'fix':False,'start_val':3.1718e-10,'limits':(3.1e-10,4.0e-10)}
-params_dict['D86'] = {'fix':False,'start_val':3.1736e-10,'limits':(3.1e-10,4.0e-10)}
-params_dict['D84'] = {'fix':False,'start_val':3.198-10,'limits':(3.1e-10,7.0e-10)}
-params_dict['cmax0'] = {'fix':False,'start_val':6.13,'limits':(3.0,7.0)}
-params_dict['cmin0'] = {'fix':False,'start_val':0.6,'limits':(0.1,3.0)}
+params_dict['D88'] = {'fix':True,'start_val':3.17e-10,'limits':(1.1e-11,3.5e-10)}
+params_dict['D87'] = {'fix':False,'start_val':3.1718e-10,'limits':(1.1e-11,4.0e-10)}
+params_dict['D86'] = {'fix':False,'start_val':3.1736e-10,'limits':(1.1e-11,4.0e-10)}
+params_dict['D84'] = {'fix':False,'start_val':3.198-10,'limits':(1.1e-11,7.0e-10)}
+params_dict['cmax0'] = {'fix':True,'start_val':6.13,'limits':(3.0,7.0)}
+params_dict['cmin0'] = {'fix':True,'start_val':0.6,'limits':(0.1,3.0)}
 #cmax0 = 6.13
 #cmin0 = 0.62
 
