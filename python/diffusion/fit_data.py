@@ -32,8 +32,8 @@ point_of_intial_interface = int(npts/frac_interface)
 ################################################################################
 # Initial isotope information
 ################################################################################
-cmax0 = 6.13
-cmin0 = 0.62
+#cmax0 = 6.13
+#cmin0 = 0.62
 
 pct_isotopes0 = np.array([83.05, 6.89, 9.537, 0.52])
 #pct_isotopes0 = np.array([82.58, 7.0, 9.86, 0.56])
@@ -48,6 +48,10 @@ print frac_isotopes0
 ################################################################################
 def fitfunc(data,p,parnames,params_dict):
 
+    print '----------------------------------'
+    print ' Calulating diffusion profiles    '
+    print '----------------------------------'
+
     pn = parnames
 
     D = np.array([0.0,0.0,0.0,0.0])
@@ -55,6 +59,10 @@ def fitfunc(data,p,parnames,params_dict):
     D[1] = p[pn.index('D87')]
     D[2] = p[pn.index('D86')]
     D[3] = p[pn.index('D84')]
+    cmax0 = p[pn.index('cmax0')]
+    cmin0 = p[pn.index('cmin0')]
+    #cmax0 = 6.13
+    #cmin0 = 0.62
 
     xpos = np.linspace(lo,hi,npts)
 
@@ -91,18 +99,14 @@ def fitfunc(data,p,parnames,params_dict):
 
     invdx2 = 1.0/(dx**2)
 
-    print "dx: ",dx
-    print "invdx2: ",invdx2
-    print "dt: ",dt
-    print "D*dt*invdx2: ",D*(dt*invdx2)
-
-    t = t0
-
+    print "dx: %f\tinvdx2: %f\tdt: %f" % (dx,invdx2,dt)
     Dnum = dt*invdx2
-    print "Dnum: ",Dnum
     Dnum *= D
+    print "D*dt*invdx2: ",Dnum
     print "Dnum should be less than 1/2 for stability."
     # http://www.me.ucsb.edu/~moehlis/APC591/tutorials/tutorial5/node3.html
+
+    t = t0
 
     print "tmax: ",tmax
     while t<tmax:
@@ -241,10 +245,14 @@ plt.subplots_adjust(top=0.92,bottom=0.15,right=0.95,left=0.10,wspace=0.2,hspace=
 # Declare the fit parameters
 ############################################################################
 params_dict = {}
-params_dict['D88'] = {'fix':True,'start_val':3.17e-10,'limits':(3.1e-10,3.2e-10)}
-params_dict['D87'] = {'fix':False,'start_val':3.1718e-10,'limits':(3.1e-10,3.2e-10)}
-params_dict['D86'] = {'fix':False,'start_val':3.1736e-10,'limits':(3.1e-10,3.2e-10)}
-params_dict['D84'] = {'fix':False,'start_val':3.198-10,'limits':(3.1e-10,3.2e-10)}
+params_dict['D88'] = {'fix':True,'start_val':3.17e-10,'limits':(3.1e-10,3.5e-10)}
+params_dict['D87'] = {'fix':False,'start_val':3.1718e-10,'limits':(3.1e-10,4.0e-10)}
+params_dict['D86'] = {'fix':False,'start_val':3.1736e-10,'limits':(3.1e-10,4.0e-10)}
+params_dict['D84'] = {'fix':False,'start_val':3.198-10,'limits':(3.1e-10,7.0e-10)}
+params_dict['cmax0'] = {'fix':False,'start_val':6.13,'limits':(3.0,7.0)}
+params_dict['cmin0'] = {'fix':False,'start_val':0.6,'limits':(0.1,3.0)}
+#cmax0 = 6.13
+#cmin0 = 0.62
 
 params_names,kwd = fitutils.dict2kwd(params_dict)
 
@@ -270,9 +278,11 @@ final_values.append(values['D88'])
 final_values.append(values['D87'])
 final_values.append(values['D86'])
 final_values.append(values['D84'])
+final_values.append(values['cmax0'])
+final_values.append(values['cmin0'])
 
 
-fit_x,fit_deltas = fitfunc(data,final_values,['D88','D87','D86','D84'],params_dict)
+fit_x,fit_deltas = fitfunc(data,final_values,['D88','D87','D86','D84','cmax0','cmin0'],params_dict)
 
 for i in range(0,3):
     axes0[i].plot(fit_x*1e6,fit_deltas[i])
