@@ -1,7 +1,8 @@
 import sys
-import ROOT
 import numpy as np
-from ROOT import RooFit,RooStats
+import ROOT
+from ROOT import RooFit
+from ROOT import RooStats
 
 ROOT.gSystem.SetIncludePath('-I$ROOFITSYS/include')
 
@@ -58,6 +59,9 @@ npdfs_list = []
 min_jets = 4
 max_jets = 5
 categories = ROOT.RooCategory("njets","njets") 
+#RooCategory dataCat("dataCat", "dataCat");
+#dataCat.defineType("hi");
+#dataCat.defineType("pp");
 for i in range(min_jets,max_jets+1):
     njets_str = "%d" % (i)
     categories.defineType(njets_str) 
@@ -221,6 +225,15 @@ obs = ROOT.RooArgSet("observables");
 obs.add(pObs);
 print "Added the observables....................."
 
+#RooArgSet obs("observables");
+#obs.add(*pObs);
+#obs.add( *ws->cat("dataCat"));  
+# Add the categories.
+print pWs.cat('njets')
+#obs.add(pWs.cat('njets'));
+obs.add(categories)
+
+
 
 ################################################################################
 # Create the list of global observables
@@ -253,6 +266,7 @@ nuis.add( pWs.var("beta_nwjets") );
 sbHypo = RooStats.ModelConfig("SbHypo");
 sbHypo.SetWorkspace( pWs );
 sbHypo.SetPdf(pWs.pdf("model"))
+#sbHypo.SetPdf("model")
 sbHypo.SetObservables( obs );
 sbHypo.SetGlobalObservables( globalObs );
 sbHypo.SetParametersOfInterest( poi );

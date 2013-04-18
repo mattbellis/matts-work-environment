@@ -17,7 +17,7 @@ au BufRead,BufNewFile *.pde set filetype=java
 
 " My keybindings
 ab myitem \begin{itemize} \item XXX\end{itemize}
-ab myframe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\begin{frame}[T]\frametitle{XXX}\end{frame}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ab newframe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\begin{frame}[T]\frametitle{XXX}\end{frame}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ab myeqn \begin{equation}XXX\end{equation}
 ab myeqnarray \begin{eqnarray*}XXX &=& YYY \\\end{eqnarray*}
 ab myenum \begin{enumerate}	\item XXX\end{enumerate}
@@ -49,7 +49,9 @@ ab fixthis \textcolor{red}{\bf FIX THIS!!!!}
 filetype indent on
 "colorscheme morning
 colorscheme elflord
+"colorscheme ir_black
 "colorscheme pablo
+"colorscheme moria
 set cindent
 set cindent shiftwidth=4
 set autoindent shiftwidth=4
