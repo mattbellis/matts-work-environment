@@ -219,9 +219,9 @@ print xpos
 delta[0] = content[index+1]
 delta_err[0] = content[index+2]
 delta[1] = content[index+3]
-delta_err[1] = content[index+4]*2
+delta_err[1] = content[index+4]
 delta[2] = content[index+5]
-delta_err[2] = content[index+6]*3
+delta_err[2] = content[index+6]
 
 ############################################################################
 # Plot the data
