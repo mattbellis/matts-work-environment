@@ -6,9 +6,9 @@ infilename = sys.argv[1]
 f = ROOT.TFile(infilename)
 
 can = ROOT.TCanvas("can","can",10,10,1200,800)
-can.Divide(3,2)
+can.Divide(3,3)
 
-for i in range(1,7):
+for i in range(1,10):
     can.cd(i)
     name = "secvtxMass_btag_maxpt_njets%d" % (i)
     f.Get(name).Draw("")
