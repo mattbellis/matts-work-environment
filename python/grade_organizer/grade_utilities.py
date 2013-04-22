@@ -210,7 +210,8 @@ class Student:
         #drop_lowest_score = True
         dropped_scores = 0
         #drop_lowest_score = 2
-        drop_lowest_score = False
+        drop_lowest_score = 1
+        #drop_lowest_score = False
         picked_a_lowest = False
         #ret += " -----\nExams\n -----\n"
         ret += " -----\nWeekly quizzes\n -----\n"

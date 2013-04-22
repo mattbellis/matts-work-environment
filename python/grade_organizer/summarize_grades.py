@@ -52,8 +52,7 @@ def main():
     final_grade_weighting = [0.10,0.25,0.35,0.30]
     # Quizzes
     # HWs
-    # Exam 1
-    # Exam 2
+    # Exams
     # Final Exam
 
     grade_file_infos = []
