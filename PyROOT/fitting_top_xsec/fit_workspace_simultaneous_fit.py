@@ -62,8 +62,9 @@ categories = ROOT.RooCategory("njets","njets")
 #RooCategory dataCat("dataCat", "dataCat");
 #dataCat.defineType("hi");
 #dataCat.defineType("pp");
-for i in range(min_jets,max_jets+1):
+for i in range(min_jets,max_jets+3):
     njets_str = "%d" % (i)
+    print "njets_str: ",njets_str
     categories.defineType(njets_str) 
 
 
@@ -210,11 +211,10 @@ print "Created tot_pdf!"
 name = "SUM::model(%s)" % (model_string)
 # Take a look at rf504 about how to maybe do this. 
 #getattr(pWs,'import')(name) # Do I need to do something like this?
-#pWs.factory(name) # This worked
+pWs.factory(name) # This worked
 print name
 print "Created the model to which we will be fitting........."
 
-exit()
 
 ############################################################################
 # Data
@@ -229,10 +229,11 @@ print "Added the observables....................."
 #obs.add(*pObs);
 #obs.add( *ws->cat("dataCat"));  
 # Add the categories.
-print pWs.cat('njets')
+#print pWs.cat('njets')
 #obs.add(pWs.cat('njets'));
 obs.add(categories)
 
+#exit()
 
 
 ################################################################################
@@ -302,9 +303,11 @@ pProfile.Print("v");
 sbHypo.Print()
 pWs.Print()
 
+print "Printing these individually................................"
 pWs.allVars().Print("v")
 pWs.allFunctions().Print("v")
 pWs.allPdfs().Print("v")
+pWs.allCats().Print("v")
 
 ################################################################################
 # Print the results
