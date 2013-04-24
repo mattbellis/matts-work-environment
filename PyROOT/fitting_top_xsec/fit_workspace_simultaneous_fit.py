@@ -57,13 +57,13 @@ npdfs_list = []
 # Different njet samples.
 ################################################################################
 min_jets = 4
-max_jets = 5
+max_jets = 6
 categories = ROOT.RooCategory("njets","njets") 
 #RooCategory dataCat("dataCat", "dataCat");
 #dataCat.defineType("hi");
 #dataCat.defineType("pp");
-for i in range(min_jets,max_jets+3):
-    njets_str = "%d" % (i)
+for j in range(min_jets,max_jets):
+    njets_str = "njets_%d" % (j)
     print "njets_str: ",njets_str
     categories.defineType(njets_str) 
 
@@ -82,58 +82,60 @@ for i,sample in enumerate(samples):
     #hists.append(files[i].Get("secvtxMassHist"))
 
     # These work
-    files[i].ls()
-    hists.append(files[i].Get("secvtxMass_btag_maxpt_njets4"))
-    #hists.append(files[i].Get("secvtxMassHist_btag_maxpt"))
+    #files[i].ls()
 
-    hists[i].Rebin(2)
+    hists.append([])
+    rdhist.append([])
+    rhpdf.append([])
 
-    #c.cd(i+1)
-    titlename = "%s sample" % (sample)
-    hists[i].GetXaxis().SetTitle("Secondary vertex mass (passing selection criteria) GeV/c^{2}")
-    hists[i].GetYaxis().SetTitle("# Entries")
-    hists[i].SetFillColor(fcolor[i])
-    hists[i].SetTitle(titlename)
-    '''
-    if i==5:
-        hists[i].Draw("e")
-        ndata = hists[i].GetEntries()
-    else:
-        hists[i].Draw()
-    '''
+    for j in range(0,max_jets-min_jets):
+        hname = "secvtxMass_btag_maxpt_njets%d" % (j+min_jets)
+        hists[i].append(files[i].Get(hname))
+        #hists.append(files[i].Get("secvtxMassHist_btag_maxpt"))
 
-    if i<4:
-        efficiency.append(hists[i].GetEntries()/ngen[i])
+        hists[i][j].Rebin(2)
 
-    #ROOT.gPad.Update()
+        #c.cd(i+1)
+        titlename = "%s sample" % (sample)
+        hists[i][j].GetXaxis().SetTitle("Secondary vertex mass (passing selection criteria) GeV/c^{2}")
+        hists[i][j].GetYaxis().SetTitle("# Entries")
+        hists[i][j].SetFillColor(fcolor[i])
+        hists[i][j].SetTitle(titlename)
 
-    rdhistname = "%s_roodatahist" % (sample)
-    rdhist.append(ROOT.RooDataHist(rdhistname,rdhistname,ROOT.RooArgList(x),hists[i]))
-
-    ############################################################################
-    # If i==5, import the data that we will be fitting
-    ############################################################################
-    if i==5:
-        getattr(pWs,'import')(rdhist[i])
-
-    rdpdfname = "%s_roohistpdf" % (sample)
-    rhpdf.append(ROOT.RooHistPdf(rdpdfname,rdpdfname,ROOT.RooArgSet(x),rdhist[i]))
-
-    getattr(pWs,'import')(rhpdf[i])
-
-    npdfname = "num%s" % (sample)
-    print npdfname
-    npdftitle = "# %s events" % (sample)
-    npdfs_list.append(ROOT.RooRealVar(npdfname,npdftitle,1000))
-    #npdfs.Print()
-
-    if i<5:
-        pdfs.add(rhpdf[i])
-        npdfs.add(npdfs_list[i])
-        rooadd_string += "%s" % (rdpdfname)
         if i<4:
-            rooadd_string  += " + "
+            efficiency.append(hists[i][j].GetEntries()/ngen[i])
 
+        rdhistname = "%s_roodatahist_njets%d" % (sample,j+min_jets)
+        rdhist[i].append(ROOT.RooDataHist(rdhistname,rdhistname,ROOT.RooArgList(x),hists[i][j]))
+
+        ############################################################################
+        # If i==5, import the data that we will be fitting
+        ############################################################################
+        catname = "njets_%d" % (j+min_jets)
+
+        if i==5:
+            getattr(pWs,'import')(rdhist[i][j]) # Didn't work with category
+
+        rdpdfname = "%s_roohistpdf_njets%d" % (sample,j+min_jets)
+        rhpdf[i].append(ROOT.RooHistPdf(rdpdfname,rdpdfname,ROOT.RooArgSet(x),rdhist[i][j]))
+
+        getattr(pWs,'import')(rhpdf[i][j])
+
+        npdfname = "num%s" % (sample)
+        print npdfname
+        npdftitle = "# %s events" % (sample)
+        npdfs_list.append(ROOT.RooRealVar(npdfname,npdftitle,1000))
+        #npdfs.Print()
+
+        if i<5:
+            pdfs.add(rhpdf[i][j])
+            npdfs.add(npdfs_list[i])
+            rooadd_string += "%s" % (rdpdfname)
+            if i<4:
+                rooadd_string  += " + "
+
+pWs.Print()
+exit()
 ################################################################################
 # Calculate the number of events coming from each contributing process
 ################################################################################
@@ -225,9 +227,6 @@ obs = ROOT.RooArgSet("observables");
 obs.add(pObs);
 print "Added the observables....................."
 
-#RooArgSet obs("observables");
-#obs.add(*pObs);
-#obs.add( *ws->cat("dataCat"));  
 # Add the categories.
 #print pWs.cat('njets')
 #obs.add(pWs.cat('njets'));
