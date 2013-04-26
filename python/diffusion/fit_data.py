@@ -12,23 +12,24 @@ masses = [88.0, 87.0, 86.0, 84.0]
 ################################################################################
 # Spatial dimensions
 ################################################################################
+# This is just to declare a bunch of global variables.
+
 lo = 0
-hi = 2775e-6 # meters
+hi = 0
 npts = 100
 
-dt   = 0.5 # This needs to be small (0.01) or it doesn't work.
-dx   = (hi-lo)/float(npts)
+dt   = 0.0
+dx   = 1.0
 t0   = 0
-tmax = (60*17) + 31.0 # seconds
-#tmax = (60*135) + 31.0 # seconds
+tmax = 0
 
 ################################################################################
 # Figure out where the boundary is wrt our individual
 # spatial points.
 ################################################################################
-frac_interface = hi/1520e-6
+frac_interface = 0.0
 
-point_of_intial_interface = int(npts/frac_interface)
+point_of_intial_interface = 0
 
 ################################################################################
 # Initial isotope information
@@ -36,8 +37,8 @@ point_of_intial_interface = int(npts/frac_interface)
 #cmax0 = 6.13
 #cmin0 = 0.62
 
-#pct_isotopes0 = np.array([83.05, 6.89, 9.537, 0.52])
-pct_isotopes0 = np.array([82.58, 7.0, 9.86, 0.56]) # Naturally occurring abundances
+pct_isotopes0 = np.array([83.05, 6.89, 9.537, 0.52])
+#pct_isotopes0 = np.array([82.58, 7.0, 9.86, 0.56]) # Naturally occurring abundances
 frac_isotopes0 = pct_isotopes0/100.0
 print "frac_isotopes0:"
 print frac_isotopes0
@@ -193,13 +194,39 @@ def chisq_minuit(data,p,parnames,params_dict):
 ################################################################################
 
 
-
-
 ################################################################################
 # Importing the diffusion data.
+# 
+# Here is where you want to change things based on the file.
 ################################################################################
+
+################################################################################
+
+#data_file = 15
+data_file = 10
+
+# Set some things based on which file we've read in.
+if data_file == 10:
+    hi = 2332e-6 # meters
+    tmax = 744 # seconds
+    frac_interface = hi/1100e-6
+elif data_file == 15:
+    hi = 2775e-6 # meters
+    tmax = (60*17) + 31.0 # seconds
+    frac_interface = hi/1520e-6
+
+point_of_intial_interface = int(npts/frac_interface)
+lo = 0
+npts = 100
+
+dt   = 0.5 # This needs to be small (0.01) or it doesn't work.
+dx   = (hi-lo)/float(npts)
+t0   = 0
+################################################################################
+
+
 # Full path to the directory 
-infile_name = 'data.dat'
+infile_name = "data_%d.dat" % (data_file)
 infile = open(infile_name)
 
 content = np.array(infile.read().split()).astype('float')
