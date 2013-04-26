@@ -160,10 +160,19 @@ def chisq_minuit(data,p,parnames,params_dict):
 
     print p
 
+    offsets = [None, None, None]
+
+    offsets[0] = p[parnames.index('offset87')]
+    offsets[1] = p[parnames.index('offset86')]
+    offsets[2] = p[parnames.index('offset84')]
+
     chisq = 0.0
     for i in range(0,3):
         for x,y,yerr in zip(data[0],data[2*i+1],data[(2*i)+2]):
             if x<hi:
+
+                y += offsets[i]
+
                 # Find the indices of the closest points
                 #print fit_x
                 #print "x: ",x,fit_x.searchsorted(x)
@@ -202,8 +211,8 @@ def chisq_minuit(data,p,parnames,params_dict):
 
 ################################################################################
 
-#data_file = 15
-data_file = 10
+data_file = 15
+#data_file = 10
 
 # Set some things based on which file we've read in.
 if data_file == 10:
@@ -279,6 +288,9 @@ params_dict['D86'] = {'fix':False,'start_val':3.1736e-10,'limits':(1.1e-11,4.0e-
 params_dict['D84'] = {'fix':False,'start_val':3.198-10,'limits':(1.1e-11,7.0e-10)}
 params_dict['cmax0'] = {'fix':True,'start_val':6.13,'limits':(3.0,7.0)}
 params_dict['cmin0'] = {'fix':True,'start_val':0.6,'limits':(0.1,3.0)}
+params_dict['offset87'] = {'fix':False,'start_val':0.1,'limits':(-1.0,1.0)}
+params_dict['offset86'] = {'fix':False,'start_val':0.1,'limits':(-1.0,1.0)}
+params_dict['offset84'] = {'fix':False,'start_val':0.1,'limits':(-1.0,1.0)}
 #cmax0 = 6.13
 #cmin0 = 0.62
 
@@ -308,12 +320,22 @@ final_values.append(values['D86'])
 final_values.append(values['D84'])
 final_values.append(values['cmax0'])
 final_values.append(values['cmin0'])
+final_values.append(values['offset87'])
+final_values.append(values['offset86'])
+final_values.append(values['offset84'])
 
 
-fit_x,fit_deltas = fitfunc(data,final_values,['D88','D87','D86','D84','cmax0','cmin0'],params_dict)
+fit_x,fit_deltas = fitfunc(data,final_values,['D88','D87','D86','D84','cmax0','cmin0','offset87','offset86','offset84'],params_dict)
+
+offsets = [None, None, None]
+
+offsets[0] = values['offset87']
+offsets[1] = values['offset86']
+offsets[2] = values['offset84']
 
 for i in range(0,3):
     axes0[i].plot(fit_x*1e6,fit_deltas[i])
+    axes0[i].errorbar(xpos*1e6,delta[i]+offsets[i],yerr=delta_err[i],fmt='rv')
 
 
 
