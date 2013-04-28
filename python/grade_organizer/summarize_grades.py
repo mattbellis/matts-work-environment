@@ -52,7 +52,8 @@ def main():
     final_grade_weighting = [0.10,0.25,0.35,0.30]
     # Quizzes
     # HWs
-    # Exams
+    # Exam 1
+    # Exam 2
     # Final Exam
 
     grade_file_infos = []
@@ -202,15 +203,14 @@ def main():
         ########################################################################
         # For sending out the grades
         ########################################################################
-        #subject = "PHYS 283 weekly grade summary"
-        subject = "Weekly grade summary"
+        subject = "PHYS 283 weekly grade summary"
         msg_body = output
 
         ########################################################################
         # Tack on the hpotheticals.
         ########################################################################
-        #if len(s.grades.final_exam)==0:
-        if 1:
+        #print len(s.grades.final_exam)
+        if len(s.grades.final_exam)==0:
             msg_body += "\n"
             msg_body += "-----------------------------------------\n"
             msg_body += "------- Projected performance -----------\n"
