@@ -1,0 +1,69 @@
+      implicit double precision (A-H,O-Z) ! remove       for Real*4 regime
+      Parameter(Precision=2)              ! change to 1  for Real*4 regime
+! Sap: these 2 points above are the single that defines precision
+!      (  except of user routine  FCN :-)
+!-------------------------------------------------------------------
+! Sap: parallelization via MPI :
+      common /mn_mpi/ mpi_size, ! number of processes   = 1,2,...
+     2                mpi_rank, ! current process rank  = 0,1,...,mpi_size-1
+     3                mpi_come, ! external communicator (usually MPI_COMM_WORLD)
+     4                mpi_comi0,! internal communicator for mn_Bcast
+     5                mpi_comi1,! internal communicator for mn_Send
+     6                mpi_comi2,! internal communicator for mn_Send2
+     7                mpi_comi3,! internal communicator for mn_Send3
+     8                mpi_comi4,! internal communicator for mn_Best
+     9                mpi_data, ! MPI kind of DataType (REAL or DOUBLE)
+     *                mpi_gtype,! Derived Type for Gradient (6 numbers)
+     1                mpi_stype,! Derived Type for Gradient (6*NPAR numbers)
+     2                mpi_npar, ! previous NPAR in mn_Send
+     3                mpi_time, ! start time-mark 
+     4                LOUT,     ! flag for I/O permitted (mpi_rank=0)
+     5                mpi_debug !
+      real*8 mpi_time 
+      logical LOUT,mpi_debug
+!-------------------------------------------------------------------
+      PARAMETER (MNE=100 , MNI=52)   ! Sap: actually 50 if SIMPLEX used !
+      PARAMETER (MNIHL=MNI*(MNI+1)/2)
+      CHARACTER*10 CPNAM
+      Common /mn7mpi/ heap_mpi(MNI,5),YY(MNI+9)  ! YY is a local storage
+      Dimension GRD(MNI),G2(MNI),GSTEP(MNI),DGRD(MNI),DIRIN(MNI)
+      Equivalence(grd,  heap_mpi(1,1)), (g2,  heap_mpi(1,2)),
+     &           (gstep,heap_mpi(1,3)), (dgrd,heap_mpi(1,4)),
+     &           (dirin,heap_mpi(1,5))           ! YY = heap_mpi(1,6)
+      COMMON
+     1/MN7NAM/ CPNAM(MNE)
+     2/MN7EXT/ U(MNE)     ,ALIM(MNE)  ,BLIM(MNE)
+     3/MN7ERR/ ERP(MNI)   ,ERN(MNI)   ,WERR(MNI)  ,GLOBCC(MNI)
+     4/MN7INX/ NVARL(MNE) ,NIOFEX(MNE),NEXOFI(MNI)
+!     5/MN7INT/ X(MNI)     ,XT(MNI)    ,DIRIN(MNI)
+     5/MN7INT/ X(MNI)     ,XT(MNI)
+
+     6/MN7FX2/ XS(MNI)    ,XTS(MNI)   ,DIRINS(MNI)
+!     7/MN7DER/ GRD(MNI)   ,G2(MNI)    ,GSTEP(MNI) ,GIN(MNE) ,DGRD(MNI)
+     7/MN7DER/ GIN(MNE) ! Sap: grd,g2,gstep,dgrd,dirin,yy - placed together to heap_mpi
+
+     8/MN7FX3/ GRDS(MNI)  ,G2S(MNI)   ,GSTEPS(MNI)
+     9/MN7FX1/ IPFIX(MNI) ,NPFIX
+     A/MN7VAR/ VHMAT(MNIHL)
+     B/MN7VAT/ VTHMAT(MNIHL)
+     C/MN7SIM/ P(MNI,MNI+1),PSTAR(MNI),PSTST(MNI) ,PBAR(MNI),PRHO(MNI)
+C
+      PARAMETER (MAXDBG=10, MAXSTK=10, MAXCWD=20, MAXP=30, MAXCPT=101)
+      PARAMETER (ZERO=0.0,  ONE=1.0,   TWO=2.0,   HALF=0.5)
+      COMMON
+     D/MN7NPR/ MAXINT ,NPAR   ,MAXEXT ,NU
+     E/MN7IOU/ ISYSRD ,ISYSWR ,ISYSSA ,NPAGWD ,NPAGLN ,NEWPAG
+     E/MN7IO2/ ISTKRD(MAXSTK) ,NSTKRD ,ISTKWR(MAXSTK) ,NSTKWR
+     F/MN7TIT/ CFROM  ,CSTATU ,CTITL  ,CWORD  ,CUNDEF ,CVRSN ,COVMES
+     G/MN7FLG/ ISW(7) ,IDBG(0:MAXDBG) ,NBLOCK ,ICOMND
+     H/MN7MIN/ AMIN   ,UP     ,EDM    ,FVAL3  ,EPSI   ,APSI  ,DCOVAR
+     I/MN7CNV/ NFCN   ,NFCNMX ,NFCNLC ,NFCNFR ,ITAUR,ISTRAT,NWRMES(2)
+     J/MN7ARG/ WORD7(MAXP)
+     K/MN7LOG/ LWARN  ,LREPOR ,LIMSET ,LNOLIM ,LNEWMN ,LPHEAD
+     L/MN7CNS/ EPSMAC ,EPSMA2 ,VLIMLO ,VLIMHI ,UNDEFI ,BIGEDM,UPDFLT
+     M/MN7RPT/ XPT(MAXCPT)    ,YPT(MAXCPT)
+     N/MN7CPT/ CHPT(MAXCPT)
+     o/MN7XCR/ XMIDCR ,YMIDCR ,XDIRCR ,YDIRCR ,KE1CR  ,KE2CR
+      CHARACTER CTITL*50, CWORD*(MAXCWD), CUNDEF*10, CFROM*8,
+     +          CVRSN*6,  COVMES(0:3)*22, CSTATU*10, CHPT*1
+      LOGICAL   LWARN, LREPOR, LIMSET, LNOLIM, LNEWMN, LPHEAD
