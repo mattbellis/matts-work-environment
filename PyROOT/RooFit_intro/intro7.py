@@ -48,7 +48,7 @@ egauss = RooExtendPdf("egauss","extended gaussian PDF",gauss,n)
 data = egauss.generate(RooArgSet(x))  # RooDataSet
 
 # Fit PDF to dataset in extended mode (selected by fit option "e")
-egauss.fitTo(data,"mhe") 
+egauss.fitTo(data,RooCmdArg("mhe")) 
 
 # Plot both on a frame 
 xframe = x.frame() # RooPlot
@@ -66,7 +66,7 @@ gauss2 = RooGaussian("gauss2","gaussian PDF 2",x,mean2,sigma2)
 n2 = RooRealVar("n2","number of events",10000,0,20000) 
 egauss2 = RooExtendPdf("egauss2","extended gaussian PDF w limited range",gauss2,n2,"cut") 
 
-egauss2.fitTo(data,"mhe")
+egauss2.fitTo(data,RooCmdArg("mhe"))
 print "fitted number of events in data in range (-6,0) = " + str(n2.getVal()) 
 
 # Adding two extended PDFs gives an extended sum PDF

@@ -46,7 +46,7 @@ sigma.setConstant(kFALSE)
 # to test robustness of minimizer.
 mean.setVal(-20.0)
 sigma.setVal(10.0)
-gauss.fitTo(data, 'mh') 
+gauss.fitTo(data,RooCmdArg('mh')) 
 # Available fit options:
 #  "m" = MIGRAD only, i.e. no MINOS
 #  "s" = estimate step size with HESSE before starting MIGRAD

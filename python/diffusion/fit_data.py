@@ -211,8 +211,8 @@ def chisq_minuit(data,p,parnames,params_dict):
 
 ################################################################################
 
-data_file = 15
-#data_file = 10
+#data_file = 15
+data_file = 10
 
 # Set some things based on which file we've read in.
 if data_file == 10:
@@ -306,9 +306,10 @@ m = minuit.Minuit(f,**kwd)
 m.errordef = 1.0
 
 # Up the tolerance.
-m.tol = 1.0
+#m.tol = 1.0
 
 m.migrad()
+m.hesse()
 
 values = m.values
 
