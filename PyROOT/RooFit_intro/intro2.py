@@ -10,6 +10,7 @@
 ###############################################################
 
 import sys
+import ROOT
 from ROOT import gSystem
 gSystem.Load('libRooFit')
 from ROOT import RooFit, RooRealVar, RooGaussian, RooDataSet, RooArgList, RooTreeData
@@ -58,7 +59,7 @@ sum.plotOn(xframe)
 
 #sum.plotOn(xframe, RooFit.Components(RooArgSet(argus, gauss2)), RooFit.LineColor(2)) 
 argset = RooArgSet(argus, gauss2)
-sum.plotOn(xframe, RooFit.Components(argset), RooFit.LineColor(2)) 
+sum.plotOn(xframe, RooFit.Components(argset), RooFit.LineColor(ROOT.kRed)) 
 #super(RooAddPdf,sum).plotOn(xframe, RooFit.Components(RooArgSet(argus, gauss2)), RooFit.LineColor(2)) 
 
 # Looking at the parameters of a PDF

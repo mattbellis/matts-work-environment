@@ -127,9 +127,9 @@ dh = RooDataHist("dh","binned version of d",RooArgSet(x,y),d)
 dh.Print("v") 
 
 yframe = y.frame(10) # RooPlot
-#dh.plotOn(yframe, RooLinkedList() )  # plot projection of 2D binned data on y
+dh.plotOn(yframe, RooLinkedList() )  # plot projection of 2D binned data on y
 #RooDataHist.plotOn(dh,yframe) 
-super(RooTreeData,dh).plotOn(yframe)
+#super(RooTreeData,dh).plotOn(yframe)
 yframe.Draw() 
 
 # Examine the statistics of a binned dataset
@@ -154,8 +154,8 @@ dh2 = dh.reduce( RooArgSet(y), "x>0") # RooDataHist
 dh2.Print("v") 
 
 # Add dh2 to yframe and redraw
-#dh2.plotOn(yframe, RooFit.LineColor(2), RooFit.MarkerColor(2)) 
-super(RooTreeData,dh2).plotOn(yframe, RooFit.LineColor(2), RooFit.MarkerColor(2))
+dh2.plotOn(yframe, RooFit.LineColor(2), RooFit.MarkerColor(2)) 
+#super(RooTreeData,dh2).plotOn(yframe, RooFit.LineColor(2), RooFit.MarkerColor(2))
 yframe.Draw() 
 gPad.Update()
 
