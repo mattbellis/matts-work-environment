@@ -23,7 +23,7 @@ for i in range(0,nx+1):
 ################################################################################
 # Start diffusing the particles.
 ################################################################################
-nparticles = 100
+nparticles = 10
 
 px = np.zeros(nparticles)
 # Start all of the atoms at one point
@@ -37,11 +37,12 @@ plt.plot(gbx,gby,'bo',markersize=1)
 plt.plot(px,py,'ro',markersize=10)
 
 imgcount = 0
-fig_img = plt.figure()
-ax = fig_img.add_subplot(1,1,1)
+fig_img = plt.figure(figsize=(13,5),dpi=100)
+ax0 = fig_img.add_subplot(1,2,1)
+ax1 = fig_img.add_subplot(1,2,2)
 
 
-for t in xrange(5000):
+for t in xrange(500):
     for k in xrange(nparticles):
         probs = np.array([0.02, 0.02, 0.02, 0.02])
         x = px[k]
@@ -95,13 +96,15 @@ for t in xrange(5000):
 
     if t%10==0:
         print "t:",t
-        ax.plot(gbx,gby,'bo',markersize=1)
-        ax.plot(px,py,'go',markersize=5)
-        #ax.set_ylim(0,7.0)
+        ax0.plot(gbx,gby,'bo',markersize=1)
+        ax0.plot(px,py,'go',markersize=5)
+        ax1.hist(px,bins=50,range=(0,nx))
+        ax1.set_ylim(0,nparticles)
         name = "Plots/img_100atoms%03d.png" % (imgcount)
         fig_img.savefig(name)
         imgcount += 1
-        ax.clear()
+        ax0.clear()
+        ax1.clear()
 
 plt.plot(gbx,gby,'bo',markersize=1)
 plt.plot(px,py,'go',markersize=5)
