@@ -1,4 +1,8 @@
 import numpy as np
+
+import matplotlib
+matplotlib.use('Agg')
+
 import matplotlib.pylab as plt
 
 nx = 100
@@ -23,7 +27,7 @@ for i in range(0,nx+1):
 ################################################################################
 # Start diffusing the particles.
 ################################################################################
-nparticles = 10
+nparticles = 200
 
 px = np.zeros(nparticles)
 # Start all of the atoms at one point
@@ -31,7 +35,13 @@ px = np.zeros(nparticles)
 # Randomly arrange them on the y-axis
 starty = np.arange(0,ny+1)
 np.random.shuffle(starty)
-py = starty[0:nparticles]
+py = None
+if nparticles<ny:
+    py = starty[0:nparticles]
+else:
+    py = np.ones(nparticles)
+    for i in range(0,nparticles):
+        py[i] = np.random.randint(0,nx+1)
 
 plt.plot(gbx,gby,'bo',markersize=1)
 plt.plot(px,py,'ro',markersize=10)
@@ -42,7 +52,7 @@ ax0 = fig_img.add_subplot(1,2,1)
 ax1 = fig_img.add_subplot(1,2,2)
 
 
-for t in xrange(500):
+for t in xrange(25000):
     for k in xrange(nparticles):
         probs = np.array([0.02, 0.02, 0.02, 0.02])
         x = px[k]
@@ -100,7 +110,7 @@ for t in xrange(500):
         ax0.plot(px,py,'go',markersize=5)
         ax1.hist(px,bins=50,range=(0,nx))
         ax1.set_ylim(0,nparticles)
-        name = "Plots/img_100atoms%03d.png" % (imgcount)
+        name = "Plots/img_200atoms%03d.png" % (imgcount)
         fig_img.savefig(name)
         imgcount += 1
         ax0.clear()
@@ -109,4 +119,4 @@ for t in xrange(500):
 plt.plot(gbx,gby,'bo',markersize=1)
 plt.plot(px,py,'go',markersize=5)
 
-plt.show()
+#plt.show()
