@@ -171,28 +171,30 @@ ncontrib_pct_err.append(110.0) # qcd
 sum_string = ""
 model_string = ""
 for i,sample in enumerate(samples):
-    if i<5:
-        name = "n%s_nom[%f, 5.0, 40000.0]" % (sample,ncontributions[i])
-        pWs.factory(name)
-        kappa_err = (ncontrib_pct_err[i]/100.0) + 1 # 10% err would be 1.10
-        print "kappa_err: ",kappa_err
-        name = "n%s_kappa[%f]" % (sample,kappa_err);
-        pWs.factory(name)
-        name = "cexpr::alpha_n%s('pow(n%s_kappa,beta_n%s)',n%s_kappa,beta_n%s[0,-5,5])" % (sample,sample,sample,sample,sample)
-        pWs.factory(name)
-        name = "prod::n%s(n%s_nom,alpha_n%s)" % (sample,sample,sample)
-        pWs.factory(name)
-        name = "Gaussian::constr_n%s(beta_n%s,glob_n%s[0,-5,5],1)" % (sample,sample,sample)
-        pWs.factory(name)
-        if i==0: # ttbar
-            model_string += "n%s_nom*%s_roohistpdf" % (sample,sample)
-            model_string += ","
-        elif i>0 and i<5:
-            model_string += "n%s*%s_roohistpdf" % (sample,sample)
-            #model_string += "n%s_nom*%s_roohistpdf" % (sample,sample)
-            #model_string += "constr_n%s*%s_roohistpdf" % (sample,sample)
-            if i<4:
+    for j in range(0,max_jets-min_jets):
+        jettag = "njets%d" % (j+min_jets)
+        if i<5:
+            name = "n%s_nom_%s[%f, 5.0, 40000.0]" % (sample,jettag,ncontributions[i])
+            pWs.factory(name)
+            kappa_err = (ncontrib_pct_err[i]/100.0) + 1 # 10% err would be 1.10
+            print "kappa_err: ",kappa_err
+            name = "n%s_kappa_%s[%f]" % (sample,jettag,kappa_err);
+            pWs.factory(name)
+            name = "cexpr::alpha_n%s_%s('pow(n%s_kappa_%s,beta_n%s_%s)',n%s_kappa_%s,beta_n%s_%s[0,-5,5])" % (sample,jettag,sample,jettag,sample,jettag,sample,jettag,sample,jettag)
+            pWs.factory(name)
+            name = "prod::n%s_%s(n%s_nom_%s,alpha_n%s_%s)" % (sample,jettag,sample,jettag,sample,jettag)
+            pWs.factory(name)
+            name = "Gaussian::constr_n%s_%s(beta_n%s_%s,glob_n%s_%s[0,-5,5],1)" % (sample,jettag,sample,jettag,sample,jettag)
+            pWs.factory(name)
+            if i==0: # ttbar
+                model_string += "n%s_nom_%s*%s_roohistpdf_%s" % (sample,jettag,sample,jettag)
                 model_string += ","
+            elif i>0 and i<5:
+                model_string += "n%s_%s*%s_roohistpdf_%s" % (sample,jettag,sample,jettag)
+                #model_string += "n%s_nom*%s_roohistpdf" % (sample,sample)
+                #model_string += "constr_n%s*%s_roohistpdf" % (sample,sample)
+                if i<5:
+                    model_string += ","
 
 ################################################################################
 # Run the fit
@@ -214,15 +216,15 @@ print "Created tot_pdf!"
 #pWs.factory("SUM::model(nttbar*ttbar_roohistpdf,nqcd*qcd_roohistpdf)")
 print "MODEL STRING"
 print model_string
-#name = "SUM::model(%s)" % (model_string)
-name = "SUM::temp_model(%s)" % (model_string)
+name = "SUM::model(%s)" % (model_string)
+#name = "SUM::temp_model(%s)" % (model_string)
 # Take a look at rf504 about how to maybe do this. 
 #getattr(pWs,'import')(name) # Do I need to do something like this?
 pWs.factory(name) # This worked
 print name
 print "Created the model to which we will be fitting........."
 
-pWs.factory("SIMCLONE::model( temp_model, $SplitParam({nt,ntbar,nwjets,nqcd},tagCat[njets4,njets5]))")
+#pWs.factory("SIMCLONE::model( temp_model, $SplitParam({nt,ntbar,nwjets,nqcd},tagCat[njets4,njets5]))")
 pWs.Print()
 
 
@@ -282,16 +284,22 @@ sbHypo.SetGlobalObservables( globalObs );
 sbHypo.SetParametersOfInterest( poi );
 sbHypo.SetNuisanceParameters( nuis );
 
-pWs.var("beta_nttbar").setConstant(False);
-pWs.var("beta_nqcd").setConstant(False);
-pWs.var("beta_nwjets").setConstant(False);
-pWs.var("beta_nt").setConstant(False);
-pWs.var("beta_ntbar").setConstant(False);
+for j in range(0,max_jets-min_jets):
+    jettag = "njets%d" % (j+min_jets)
+    name = "beta_nttbar_%s" % (jettag)
+    name = "beta_nqcd_%s" % (jettag)
+    name = "beta_nwjets_%s" % (jettag)
+    name = "beta_nt_%s" % (jettag)
+    name = "beta_ntbar_%s" % (jettag)
 
-pWs.var("nwjets_nom").setConstant(True);
-pWs.var("nt_nom").setConstant(True);
-pWs.var("ntbar_nom").setConstant(True);
-pWs.var("nqcd_nom").setConstant(True);
+    pWs.var(name).setConstant(False);
+
+    name = "nwjets_nom_%s" % (jettag)
+    name = "nt_nom_%s" % (jettag)
+    name = "ntbar_nom_%s" % (jettag)
+    name = "nqcd_nom_%s" % (jettag)
+
+    pWs.var(name).setConstant(True);
 
 fixed = ROOT.RooArgSet ("fixed");
 fixed.add( pWs.var("nwjets_nom") );
@@ -302,7 +310,8 @@ fixed.add( pWs.var("ntbar_nom") );
 #sbHypo.Print()
 #pWs.Print()
 
-pNll = sbHypo.GetPdf().createNLL(rdhist[5]);
+#pNll = sbHypo.GetPdf().createNLL(rdhist[5]);
+pNll = sbHypo.GetPdf().createNLL(rdhist[5][0]); # This can't be right.
 print "Created the pNll"
 pProfile = pNll.createProfile( globalObs ); # do not profile global observables
 print "Created the pProfile"
@@ -325,25 +334,25 @@ c1 = ROOT.TCanvas("c1","c1")
 c1.Divide(1,1)
 c1.cd(1)
 legend = ROOT.TLegend(0.65,0.6,0.9,0.9)
-rdhist[5].plotOn(xframe)
+rdhist[5][0].plotOn(xframe)
 #pWs.pdf("model").plotOn(xframe,RooFit.LineColor(ROOT.kBlue))
-pWs.pdf("model").plotOn(xframe,RooFit.Components("qcd_roohistpdf,wjets_roohistpdf,tbar_roohistpdf,ttbar_roohistpdf,t_roohistpdf"),RooFit.LineColor(ROOT.kBlack),RooFit.DrawOption("F"),RooFit.FillColor(fcolor[0]),RooFit.LineWidth(5))
-pWs.pdf("model").plotOn(xframe,RooFit.Components("qcd_roohistpdf,wjets_roohistpdf,tbar_roohistpdf,t_roohistpdf"),RooFit.LineColor(ROOT.kBlack),RooFit.DrawOption("LF"),RooFit.FillColor(fcolor[2]))
-pWs.pdf("model").plotOn(xframe,RooFit.Components("qcd_roohistpdf,wjets_roohistpdf"),RooFit.LineColor(ROOT.kBlack),RooFit.DrawOption("LF"),RooFit.FillColor(fcolor[3]))
-pWs.pdf("model").plotOn(xframe,RooFit.Components("qcd_roohistpdf"),RooFit.LineColor(ROOT.kBlack),RooFit.DrawOption("LF"),RooFit.FillColor(fcolor[4]))
-rdhist[5].plotOn(xframe)
+pWs.pdf("model").plotOn(xframe,RooFit.Components("qcd_roohistpdf_njets4,wjets_roohistpdf_njets4,tbar_roohistpdf_njets4,ttbar_roohistpdf_njets4,t_roohistpdf_njets4"),RooFit.LineColor(ROOT.kBlack),RooFit.DrawOption("F"),RooFit.FillColor(fcolor[0]),RooFit.LineWidth(5))
+pWs.pdf("model").plotOn(xframe,RooFit.Components("qcd_roohistpdf_njets4,wjets_roohistpdf_njets4,tbar_roohistpdf_njets4,t_roohistpdf_njets4"),RooFit.LineColor(ROOT.kBlack),RooFit.DrawOption("LF"),RooFit.FillColor(fcolor[2]))
+pWs.pdf("model").plotOn(xframe,RooFit.Components("qcd_roohistpdf_njets4,wjets_roohistpdf_njets4"),RooFit.LineColor(ROOT.kBlack),RooFit.DrawOption("LF"),RooFit.FillColor(fcolor[3]))
+pWs.pdf("model").plotOn(xframe,RooFit.Components("qcd_roohistpdf_njets4"),RooFit.LineColor(ROOT.kBlack),RooFit.DrawOption("LF"),RooFit.FillColor(fcolor[4]))
+rdhist[5][0].plotOn(xframe)
 xframe.Draw()
 
-legend.AddEntry(rdhist[5],samples_label[i],"p")
+legend.AddEntry(rdhist[5][0],samples_label[i],"p")
 for i in range(0,len(samples)):
     if i<5:
         if i!=2:
-            legend.AddEntry(hists[i],samples_label[i],"f")
+            legend.AddEntry(hists[i][0],samples_label[i],"f")
 
 legend.SetFillColor(ROOT.kWhite);
 legend.Draw("same")
 
-title = ";%s ;Number of events" % (hists[5].GetEntries())
+title = ";%s ;Number of events" % (hists[5][0].GetEntries())
 #xframe.SetTitle(title);
 xframe.GetXaxis().SetTitleSize(.058);
 xframe.GetXaxis().SetTitleOffset(.75);
@@ -397,8 +406,8 @@ tot_sys_pct = np.sqrt(tot_sys_pct)
 ################################################################################
 # Get the final numbers
 ################################################################################
-nttbar_from_fit = pWs.var("nttbar_nom").getVal()
-nttbar_err = pWs.var("nttbar_nom").getError()
+nttbar_from_fit = pWs.var("nttbar_nom_njets4").getVal()
+nttbar_err = pWs.var("nttbar_nom_njets4").getError()
 nttbar_from_template = ncontributions[0]
 print nttbar_from_fit,nttbar_from_template,nttbar_err
 
