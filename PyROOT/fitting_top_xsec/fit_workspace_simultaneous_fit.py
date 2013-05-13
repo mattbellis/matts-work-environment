@@ -9,6 +9,8 @@ ROOT.gSystem.SetIncludePath('-I$ROOFITSYS/include')
 ROOT.gStyle.SetOptStat(111111)
 #ROOT.gStyle.SetOptStat(0)
 
+ROOT.PyConfig.IgnoreCommandLineOptions = True
+
 ################################################################################
 pWs = ROOT.RooWorkspace("myWS")
 
@@ -135,7 +137,7 @@ for i,sample in enumerate(samples):
                 rooadd_string  += " + "
 
 pWs.Print()
-exit()
+#exit()
 ################################################################################
 # Calculate the number of events coming from each contributing process
 ################################################################################
@@ -154,7 +156,7 @@ ncontributions[3] = 2240.79 # From the COUNTING group! wjets
 print "Contributions: "
 for s,n in zip(samples[0:5],ncontributions):
     print "%-10s: %f" % (s,n)
-print "%-10s: %f" % ("data",hists[5].GetEntries())
+print "%-10s: %f" % ("data",hists[5][0].GetEntries())
 
 ncontrib_pct_err = []
 ncontrib_pct_err.append(1.0) # ttbar, WON'T BE USED
@@ -210,12 +212,18 @@ print "Created tot_pdf!"
 # Add the model PDF to the workspace
 ################################################################################
 #pWs.factory("SUM::model(nttbar*ttbar_roohistpdf,nqcd*qcd_roohistpdf)")
-name = "SUM::model(%s)" % (model_string)
+print "MODEL STRING"
+print model_string
+#name = "SUM::model(%s)" % (model_string)
+name = "SUM::temp_model(%s)" % (model_string)
 # Take a look at rf504 about how to maybe do this. 
 #getattr(pWs,'import')(name) # Do I need to do something like this?
 pWs.factory(name) # This worked
 print name
 print "Created the model to which we will be fitting........."
+
+pWs.factory("SIMCLONE::model( temp_model, $SplitParam({nt,ntbar,nwjets,nqcd},tagCat[njets4,njets5]))")
+pWs.Print()
 
 
 ############################################################################
@@ -262,6 +270,8 @@ nuis.add( pWs.var("beta_nt") );
 nuis.add( pWs.var("beta_ntbar") );
 nuis.add( pWs.var("beta_nwjets") );
 
+print "HERE"
+pWs.pdf("model").Print()
 
 sbHypo = RooStats.ModelConfig("SbHypo");
 sbHypo.SetWorkspace( pWs );

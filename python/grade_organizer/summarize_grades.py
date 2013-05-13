@@ -211,8 +211,8 @@ def main():
         # Tack on the hpotheticals.
         ########################################################################
         #print len(s.grades.final_exam)
-        #if len(s.grades.final_exam)==0:
-        if 1:
+        #if 1:
+        if len(s.grades.final_exam)==0:
             msg_body += "\n"
             msg_body += "-----------------------------------------\n"
             msg_body += "------- Projected performance -----------\n"
