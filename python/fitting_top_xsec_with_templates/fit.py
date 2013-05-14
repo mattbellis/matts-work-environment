@@ -11,6 +11,14 @@ from datetime import datetime,timedelta
 
 import iminuit as minuit
 
+samples = ['ttbar','t','tbar','wjets','qcd','mu']
+samples_label = ['t#bar{t}','Single-Top','#bar{t}',"W#rightarrow#mu#nu",'QCD','data']
+#fcolor = [ROOT.kRed+1, ROOT.kMagenta, ROOT.kMagenta, ROOT.kGreen-3,ROOT.kYellow,ROOT.kWhite]
+
+njets_min = 4
+njets_max = 5
+
+
 ################################################################################
 # Fit function.
 ################################################################################
@@ -80,54 +88,80 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 # Set up a figure for future plotting.
 ################################################################################
 
-fig0 = plt.figure(figsize=(6,6),dpi=100)
-ax00 = fig0.add_subplot(2,2,1)
-ax01 = fig0.add_subplot(2,2,2)
-ax02 = fig0.add_subplot(2,2,3)
-ax03 = fig0.add_subplot(2,2,4)
+#fig0 = plt.figure(figsize=(6,6),dpi=100)
+#ax00 = fig0.add_subplot(2,2,1)
+#ax01 = fig0.add_subplot(2,2,2)
+#ax02 = fig0.add_subplot(2,2,3)
+#ax03 = fig0.add_subplot(2,2,4)
 
 ################################################################################
 # Generate the fitting templates
 ################################################################################
 
-nbins = 100
+#nbins = 100
 ranges = [0.0, 5.0]
-ngen = 100000
 
-# Gen sig
-mu0 = 2.0
-sigma0 = 0.2
-data = np.random.normal(mu0,sigma0,ngen)
-h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data,bins=nbins,range=ranges,axes=ax00)
-norm = float(sum(ypts))
-template00 = [xpts.copy(),ypts.copy()/norm]
+################################################################################
+# Read in the data.
+################################################################################
+data = []
+for j in range(njets_min,njets_max+1):
+    infilename = "templates/output_mu_njets%d.dat" % (j)
+    infile = open(infilename,'rb')
 
-mu1 = 2.0
-sigma1 = 0.1
-data = np.random.normal(mu1,sigma1,ngen)
-h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data,bins=nbins,range=ranges,axes=ax01)
-norm = float(sum(ypts))
-template01 = [xpts.copy(),ypts.copy()/norm]
+    content = np.array(infile.read().split()).astype('float')
+    index = np.arange(0,len(content),2)
+    x = content[index]
+    y = content[index+1]
 
-# Gen bkg
-yexp = stats.expon(loc=0.0,scale=6.0)
-data = yexp.rvs(ngen)
-data = data[data<ranges[1]]
-h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data,bins=nbins,range=ranges,axes=ax02)
-norm = float(sum(ypts))
-template10 = [xpts.copy(),ypts.copy()/norm]
+    # Rebin
+    print "nbins: ",len(x)
+    index = np.arange(0,len(x),2)
+    tempx = (x[index]+x[index+1])/2.0
+    tempy = (y[index]+y[index+1])
+    x = tempx
+    y = tempy
 
-yexp = stats.expon(loc=0.0,scale=3.0)
-data = yexp.rvs(ngen)
-data = data[data<ranges[1]]
-h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data,bins=nbins,range=ranges,axes=ax03)
-norm = float(sum(ypts))
-template11 = [xpts.copy(),ypts.copy()/norm]
+    data.append([x.copy(),y.copy()])
+    plt.figure()
+    plt.plot(x,y,'bo',ls='steps')
+
+################################################################################
+# Read in the templates.
+################################################################################
+templates = []
+for i,s in enumerate(samples[0:-2]):
+    templates.append([])
+    for j in range(njets_min,njets_max+1):
+        infilename = "templates/output_mu_njets%d.dat" % (j)
+        infile = open(infilename,'rb')
+
+        content = np.array(infile.read().split()).astype('float')
+        index = np.arange(0,len(content),2)
+        x = content[index]
+        y = content[index+1]
+
+        # Rebin
+        print "nbins: ",len(x)
+        index = np.arange(0,len(x),2)
+        tempx = (x[index]+x[index+1])/2.0
+        tempy = (y[index]+y[index+1])
+        x = tempx
+        y = tempy
+
+        templates[i].append([x.copy(),y.copy()])
+        plt.figure()
+        plt.plot(x,y,'ro',ls='steps')
+
+plt.show()
+exit()
 
 #print template00
 #print template01
 #print template10
 #print template11
+
+'''
 
 ax00.set_xlim(ranges[0],ranges[1])
 ax01.set_xlim(ranges[0],ranges[1])
@@ -205,6 +239,8 @@ print "nsig0: ",nsig0
 print "nbkg0: ",nbkg0
 print "nsig1: ",nsig1
 print "nbkg1: ",nbkg1
+
+'''
 
 
 '''
