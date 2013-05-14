@@ -92,6 +92,9 @@ def main():
             print canindex
             can_njets[canindex].Divide(6,4)
         for j,infilename in enumerate(sys.argv[1:]):
+            filetag = infilename.split('/')[-1].split('_skim_plots')[0]
+            outfilename = "output/output_%s_njets%d.dat" % (filetag,i)
+            outfile = open(outfilename,'w')
             print padcount
             can_njets[canindex].cd(padcount)
             histos[j][i-1].Draw("")
@@ -107,6 +110,16 @@ def main():
             plotname = "Plots/tempcan%d_njets%d.png" % (j,i)
             tempcan.SaveAs(plotname)
             ROOT.gPad.Update()
+
+            # Dump the data
+            nbins = histos[j][i-1].GetNbinsX()
+            output = ""
+            for n in range(1,nbins+1):
+                output += "%f %f\n" % (histos[j][i-1].GetBinCenter(n),histos[j][i-1].GetBinContent(n))
+            outfile.write(output)
+            outfile.close()
+
+
 
     for i in range(0,3):
         can_njets[i].Update()
