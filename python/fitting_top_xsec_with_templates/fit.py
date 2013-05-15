@@ -24,7 +24,7 @@ first_guess[4] = 4235.99 # Derived from data, QCD stuff
 
 
 njets_min = 4
-njets_max = 4
+njets_max = 5
 
 
 ################################################################################
@@ -44,7 +44,7 @@ def fitfunc(nums,templates):
         tot_pdf += n*t[1] # Use the y-values
         #print tot_pdf
     #tot_pdf /= ntot # DO I NEED THIS?
-    print nums
+    #print nums
 
     return tot_pdf
 
@@ -81,7 +81,7 @@ def emlf_normalized_minuit(data_and_pdfs,p,parnames,params_dict):
 
         likelihood_func += (-y[y>0]*np.log(tot_pdf[y>0])).sum()
 
-    print "num_tot: ",num_tot
+    #print "num_tot: ",num_tot
     #ret = likelihood_func - fitutils.pois(num_tot,ndata)
     #num_tot = num00 + num10
     ret = likelihood_func + num_tot
@@ -207,8 +207,8 @@ values = m.values
 # Set up a figure for plotting.
 ################################################################################
 
-fig0 = plt.figure(figsize=(9,6),dpi=100)
-ax00 = fig0.add_subplot(1,1,1)
+#fig0 = plt.figure(figsize=(9,6),dpi=100)
+#ax00 = fig0.add_subplot(2,2,1)
 #ax01 = fig0.add_subplot(2,2,2)
 #ax02 = fig0.add_subplot(2,2,3)
 #ax03 = fig0.add_subplot(2,2,4)
@@ -221,16 +221,25 @@ ax00.plot(template1[0],values['num1']*template1[1]+values['num0']*template0[1],'
 '''
 
 binwidth = templates[0][0][0][1]-templates[0][0][0][0]
-ax00.set_xlim(ranges[0],ranges[1])
-ax00.plot(data[0][0],data[0][1],'ko')
+
+#ax00.set_xlim(ranges[0],ranges[1])
+#ax00.plot(data[0][0],data[0][1],'ko')
+
+#ax01.set_xlim(ranges[0],ranges[1])
+#ax01.plot(data[1][0],data[1][1],'ko')
+
 for j in range(njets_min,njets_max+1):
+    plt.figure(figsize=(9,6),dpi=100)
+    plt.xlim(ranges[0],ranges[1])
+    plt.plot(data[j-njets_min][0],data[j-njets_min][1],'ko')
+
     for i,s in enumerate(samples[0:-1]):
         tempx = templates[j-njets_min][i][0]-binwidth/2.0
         tempy = np.zeros(len(templates[0][0][1]))
         for k in range(i,5):
             name = "num_%s_njets%d" % (samples[k],j)
             tempy += values[name]*templates[j-njets_min][k][1]
-        ax00.bar(tempx,tempy,color=fcolor[i],width=binwidth,edgecolor=fcolor[i])
+        plt.bar(tempx,tempy,color=fcolor[i],width=binwidth,edgecolor=fcolor[i])
         #plt.figure()
         #plt.bar(templates[j-njets_min][i][0]-binwidth/2.0,values[name]*templates[j-njets_min][i][1],color='b',width=binwidth,edgecolor='b')
 
