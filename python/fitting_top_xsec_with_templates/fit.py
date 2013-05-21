@@ -4,6 +4,7 @@ import lichen.lichen as lch
 import lichen.pdfs as pdfs
 import lichen.iminuit_fitting_utilities as fitutils
 import lichen.plotting_utilities as plotutils
+import matplotlib.colors as colors
 
 import scipy.stats as stats
 
@@ -11,10 +12,31 @@ from datetime import datetime,timedelta
 
 import iminuit as minuit
 
+# Binned likelihood fitting
+# http://hepunx.rl.ac.uk/~adye/thesis/html/node51.html
+
+luminosity = 5695.503 # pb-1
+
+muon_trigger_eff = 0.965
+btagging_eff = 0.97
+
 samples = ['ttbar','t','tbar','wjets','qcd','mu']
-samples_label = ['t#bar{t}','Single-Top','#bar{t}',"W#rightarrow#mu#nu",'QCD','data']
+samples_label = [r'$t\bar{t}$',r'single-$t$',r'single-$\bar{t}$',r"$W$+jets",r'QCD',r'data']
 #fcolor = [ROOT.kRed+1, ROOT.kMagenta, ROOT.kMagenta, ROOT.kGreen-3,ROOT.kYellow,ROOT.kWhite]
-fcolor = ['r', 'm', 'm', 'g','y']
+kRedp1 = (0.80,0,0)
+kMagenta = (1.0,0.0,1.0)
+kGreenm3 = (0.2,0.8,0.2)
+kYellow = (1.0,1.0,0.0)
+fcolor = [kRedp1, kMagenta, kMagenta, kGreenm3,kYellow]
+
+# What is this?
+ngen = [6923750.0, 3758227.0, 1935072.0, 57709905.0]
+n_pct_err = [0.0, 100.0, 100.0, 100.0]
+xsec_mc = [227.0, 56.4*3, 30.7*3, 36257.2]
+pct_uncertainty = [1.0,20.0,20.0,20.0,110.0]
+
+
+# First guess at the contributions. Do we use this?
 first_guess = [0.0,0.0,0.0,0.0,0.0]
 first_guess[0] = 16165.289 # ttbar, what's left over
 first_guess[1] = 635.094 # From the COUNTING group! single t
@@ -22,9 +44,16 @@ first_guess[2] = 361.837 # From the COUNTING group! single tbar
 first_guess[3] = 2240.79 # From the COUNTING group! wjets
 first_guess[4] = 4235.99 # Derived from data, QCD stuff
 
+nominal = []
+uncert = []
+for i,n in enumerate(first_guess):
+    nominal.append(n)
+    #uncert.append(np.sqrt(n))
+    uncert.append(n*pct_uncertainty[i])
 
-njets_min = 4
-njets_max = 5
+
+njets_min = 3
+njets_max = 6
 
 
 ################################################################################
@@ -85,7 +114,21 @@ def emlf_normalized_minuit(data_and_pdfs,p,parnames,params_dict):
     #ret = likelihood_func - fitutils.pois(num_tot,ndata)
     #num_tot = num00 + num10
     ret = likelihood_func + num_tot
-    print "ret: ",ret,likelihood_func,num_tot
+    #print "ret: ",ret,likelihood_func,num_tot
+    for j in range(njets_min,njets_max+1):
+        for i,s in enumerate(samples[0:-1]):
+            name = "num_%s_njets%d" % (s,j)
+            n = p[parnames.index(name)]
+            name = "nominal_%s_njets%d" % (s,j)
+            n0 = p[parnames.index(name)]
+            name = "uncert_%s_njets%d" % (s,j)
+            sigma = p[parnames.index(name)]
+
+            #print n,n0,sigma
+            gaussian_constraint = (((n-n0)/sigma)**2)
+            #print "gc: ",gaussian_constraint
+            ret += gaussian_constraint
+    #print "ret: ",ret
 
     return ret
 
@@ -174,15 +217,32 @@ params_dict['ntemplates'] = {'fix':True,'start_val':5,'limits':(1,10)}
 
 for i,s in enumerate(samples[0:-1]):
     for j in range(njets_min,njets_max+1):
-        name = "num_%s_njets%d" % (s,j)
-        print name
         nd = ndata[j-njets_min]
+
+        name = "num_%s_njets%d" % (s,j)
         if s=='ttbar':
             params_dict[name] = {'fix':False,'start_val':first_guess[i],'limits':(0,nd)}
         else:
             params_dict[name] = {'fix':False,'start_val':first_guess[i],'limits':(0,nd)}
 
+        #'''
+        name = "nominal_%s_njets%d" % (s,j)
+        if s=='ttbar':
+            params_dict[name] = {'fix':True,'start_val':nominal[i],'limits':(0,nd)}
+        else:
+            params_dict[name] = {'fix':True,'start_val':nominal[i],'limits':(0,nd)}
+
+        name = "uncert_%s_njets%d" % (s,j)
+        if s=='ttbar':
+            params_dict[name] = {'fix':True,'start_val':uncert[i],'limits':(0,nd)}
+        else:
+            params_dict[name] = {'fix':True,'start_val':uncert[i],'limits':(0,nd)}
+        #'''
+
+
 params_names,kwd = fitutils.dict2kwd(params_dict)
+kwd['errordef'] = 0.5 # For maximum likelihood method
+#kwd['print_level'] = 1
 
 data_and_pdfs = [data,templates]
 
@@ -190,15 +250,10 @@ f = fitutils.Minuit_FCN([data_and_pdfs],params_dict,emlf_normalized_minuit)
 
 m = minuit.Minuit(f,**kwd)
 
-# For maximum likelihood method.
-m.errordef = 0.5
-
-# Up the tolerance.
-#m.tol = 1.0
-
-#m.print_level = 2
 m.migrad(ncall=10000)
-m.hesse()
+#print "RUNNING HESSE"
+#m.hesse()
+
 #m.minos()
 
 values = m.values
@@ -231,7 +286,7 @@ binwidth = templates[0][0][0][1]-templates[0][0][0][0]
 for j in range(njets_min,njets_max+1):
     plt.figure(figsize=(9,6),dpi=100)
     plt.xlim(ranges[0],ranges[1])
-    plt.plot(data[j-njets_min][0],data[j-njets_min][1],'ko')
+    plt.errorbar(data[j-njets_min][0],data[j-njets_min][1],yerr=np.sqrt(data[j-njets_min][1]),fmt='ko',label=samples_label[-1])
 
     for i,s in enumerate(samples[0:-1]):
         tempx = templates[j-njets_min][i][0]-binwidth/2.0
@@ -239,9 +294,16 @@ for j in range(njets_min,njets_max+1):
         for k in range(i,5):
             name = "num_%s_njets%d" % (samples[k],j)
             tempy += values[name]*templates[j-njets_min][k][1]
-        plt.bar(tempx,tempy,color=fcolor[i],width=binwidth,edgecolor=fcolor[i])
+        plt.bar(tempx,tempy,color=fcolor[i],width=binwidth,edgecolor=fcolor[i],label=samples_label[i])
         #plt.figure()
         #plt.bar(templates[j-njets_min][i][0]-binwidth/2.0,values[name]*templates[j-njets_min][i][1],color='b',width=binwidth,edgecolor='b')
+    plt.legend()
+
+    plt.xlabel('Secondary vertex mass (GeV)')
+    plt.ylabel('Events / 0.067 GeV')
+    plt.title(r'5.7 fb at $\sqrt{s} = 8$ TeV')
+    name = "xsec_fit_iminuit_njets%d.png" % (j)
+    plt.savefig(name)
 
 plt.show()
 print "ndata: "
