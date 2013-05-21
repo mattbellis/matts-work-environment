@@ -188,15 +188,18 @@ data_and_pdfs = [data,template00,template01,template10,template11]
 
 f = fitutils.Minuit_FCN([data_and_pdfs],params_dict,emlf_normalized_minuit)
 
+kwd['errordef'] = 0.5
+
 m = minuit.Minuit(f,**kwd)
 
 # For maximum likelihood method.
-m.errordef = 0.5
+#m.errordef = 0.5
 
 # Up the tolerance.
 #m.tol = 1.0
 
 m.migrad()
+print "RUNNING HESSE"
 m.hesse()
 
 values = m.values
