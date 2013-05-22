@@ -22,7 +22,7 @@ btagging_eff = 0.97
 
 samples = ['ttbar','t','tbar','wjets','qcd','mu']
 samples_label = [r'$t\bar{t}$',r'single-$t$',r'single-$\bar{t}$',r"$W$+jets",r'QCD',r'data']
-#fcolor = [ROOT.kRed+1, ROOT.kMagenta, ROOT.kMagenta, ROOT.kGreen-3,ROOT.kYellow,ROOT.kWhite]
+
 kRedp1 = (0.80,0,0)
 kMagenta = (1.0,0.0,1.0)
 kGreenm3 = (0.2,0.8,0.2)
@@ -33,7 +33,6 @@ fcolor = [kRedp1, kMagenta, kMagenta, kGreenm3,kYellow]
 ngen = [6923750.0, 3758227.0, 1935072.0, 57709905.0, 100000000.0] # The last is just a dummy value
 n_pct_err = [0.0, 100.0, 100.0, 100.0]
 xsec_mc = [227.0, 56.4*3, 30.7*3, 36257.2]
-#pct_uncertainty = [1.0,20.0,20.0,20.0,110.0]
 pct_uncertainty = [100.0,20.0,20.0,20.0,110.0]
 
 
@@ -74,9 +73,8 @@ print first_guess
 print nominal
 print uncert
 
-njets_min = 4
-njets_max = 5
-
+njets_min = 3
+njets_max = 6
 
 ################################################################################
 # Fit function.
@@ -219,7 +217,9 @@ for j in range(njets_min,njets_max+1):
         #'''
 
         norm = float(sum(y))
+        print j,i,norm
         templates[j-njets_min].append([x.copy(),y.copy()/norm])
+        efficiency[j][i] = norm/ngen[i]
         #plt.figure()
         #plt.plot(x,y,'ro',ls='steps')
 
@@ -340,8 +340,18 @@ for j in range(njets_min,njets_max+1):
         print "%-16s: %10.3f +\- %6.3f" % (name, values[name], errors[name])
 
 
-plt.show()
+#plt.show()
 print "ndata: "
 print ndata
+for e in efficiency:
+    print e
 
+mc_xsec = 227.0
+
+for j in range(njets_min,njets_max+1):
+    nttbar_from_template = luminosity*mc_xsec*efficiency[j][0]
+    #print nttbar_from_template
+    name = "num_%s_njets%d" % ('ttbar',j)
+    ttxsec = mc_xsec*(values[name]/nttbar_from_template)*muon_trigger_eff*btagging_eff
+    print "ttxsec: %f" % (ttxsec)
 

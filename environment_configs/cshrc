@@ -53,3 +53,7 @@ setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
 # For Anaconda (PYTHON)
 #setenv PATH /home/bellis/anaconda/bin:${PATH}
 #setenv PYTHONPATH /home/bellis/anaconda
+
+#setenv IDL_PATH .
+setenv GRIDREC_SHARE /home/bellis/heathers_image_processing/GridrecIDL_linux_x86_64.so
+setenv TOMO_RECON_SHARE /home/bellis/heathers_image_processing/tomoRecon_linux_x86_64.so
