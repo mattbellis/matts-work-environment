@@ -33,24 +33,43 @@ fcolor = [kRedp1, kMagenta, kMagenta, kGreenm3,kYellow]
 ngen = [6923750.0, 3758227.0, 1935072.0, 57709905.0]
 n_pct_err = [0.0, 100.0, 100.0, 100.0]
 xsec_mc = [227.0, 56.4*3, 30.7*3, 36257.2]
-pct_uncertainty = [1.0,20.0,20.0,20.0,110.0]
+#pct_uncertainty = [1.0,20.0,20.0,20.0,110.0]
+pct_uncertainty = [100.0,20.0,20.0,20.0,110.0]
 
 
 # First guess at the contributions. Do we use this?
-first_guess = [0.0,0.0,0.0,0.0,0.0]
-first_guess[0] = 16165.289 # ttbar, what's left over
-first_guess[1] = 635.094 # From the COUNTING group! single t
-first_guess[2] = 361.837 # From the COUNTING group! single tbar
-first_guess[3] = 2240.79 # From the COUNTING group! wjets
-first_guess[4] = 4235.99 # Derived from data, QCD stuff
+#first_guess = [0.0,0.0,0.0,0.0,0.0]
+#first_guess[0] = 16165.289 # ttbar, what's left over
+#first_guess[1] = 635.094 # From the COUNTING group! single t
+#first_guess[2] = 361.837 # From the COUNTING group! single tbar
+#first_guess[3] = 2240.79 # From the COUNTING group! wjets
+#first_guess[4] = 4235.99 # Derived from data, QCD stuff
+
+first_guess = []
+first_guess.append([]) # njets = 0
+first_guess.append([1958.87,13779.1/2, 13779.1/2, 60893.0, 17119.8]) # njets = 1
+first_guess.append([11705.5,17155.0/2, 17155.0/2, 17531.1, 12111.7]) # njets = 2
+first_guess.append([22655.6,8262.75/2, 8262.75/2, 4360.26, 5084.18]) # njets = 3
+first_guess.append([18927.9,984.944/2, 984.944/2, 746.164, 1427.61]) # njets = 4
+first_guess.append([7420.38,180.444/2, 180.444/2, 91.322, 0.001]) # njets = 5
+first_guess.append([2941.43,28.312/2, 28.312/2, 27.282, 0.000]) # njets = 6
 
 nominal = []
 uncert = []
-for i,n in enumerate(first_guess):
-    nominal.append(n)
-    #uncert.append(np.sqrt(n))
-    uncert.append(n*pct_uncertainty[i])
+for njets in range(0,7):
+    nominal.append([])
+    uncert.append([])
+    for i,n in enumerate(first_guess[njets]):
+        num = n
+        if n<10:
+            num = 10
+        nominal[njets].append(num)
+        #uncert[njets].append(np.sqrt(num))
+        uncert[njets].append(num*pct_uncertainty[i]/100.0)
 
+print first_guess
+print nominal
+print uncert
 
 njets_min = 3
 njets_max = 6
@@ -221,22 +240,22 @@ for i,s in enumerate(samples[0:-1]):
 
         name = "num_%s_njets%d" % (s,j)
         if s=='ttbar':
-            params_dict[name] = {'fix':False,'start_val':first_guess[i],'limits':(0,nd)}
+            params_dict[name] = {'fix':False,'start_val':first_guess[j][i],'limits':(0,nd)}
         else:
-            params_dict[name] = {'fix':False,'start_val':first_guess[i],'limits':(0,nd)}
+            params_dict[name] = {'fix':False,'start_val':first_guess[j][i],'limits':(0,nd)}
 
         #'''
         name = "nominal_%s_njets%d" % (s,j)
         if s=='ttbar':
-            params_dict[name] = {'fix':True,'start_val':nominal[i],'limits':(0,nd)}
+            params_dict[name] = {'fix':True,'start_val':nominal[j][i],'limits':(0,nd)}
         else:
-            params_dict[name] = {'fix':True,'start_val':nominal[i],'limits':(0,nd)}
+            params_dict[name] = {'fix':True,'start_val':nominal[j][i],'limits':(0,nd)}
 
         name = "uncert_%s_njets%d" % (s,j)
         if s=='ttbar':
-            params_dict[name] = {'fix':True,'start_val':uncert[i],'limits':(0,nd)}
+            params_dict[name] = {'fix':True,'start_val':uncert[j][i],'limits':(0,nd)}
         else:
-            params_dict[name] = {'fix':True,'start_val':uncert[i],'limits':(0,nd)}
+            params_dict[name] = {'fix':True,'start_val':uncert[j][i],'limits':(0,nd)}
         #'''
 
 
