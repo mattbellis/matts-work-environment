@@ -30,7 +30,7 @@ kYellow = (1.0,1.0,0.0)
 fcolor = [kRedp1, kMagenta, kMagenta, kGreenm3,kYellow]
 
 # What is this?
-ngen = [6923750.0, 3758227.0, 1935072.0, 57709905.0]
+ngen = [6923750.0, 3758227.0, 1935072.0, 57709905.0, 100000000.0] # The last is just a dummy value
 n_pct_err = [0.0, 100.0, 100.0, 100.0]
 xsec_mc = [227.0, 56.4*3, 30.7*3, 36257.2]
 #pct_uncertainty = [1.0,20.0,20.0,20.0,110.0]
@@ -56,9 +56,11 @@ first_guess.append([2941.43,28.312/2, 28.312/2, 27.282, 0.000]) # njets = 6
 
 nominal = []
 uncert = []
+efficiency = []
 for njets in range(0,7):
     nominal.append([])
     uncert.append([])
+    efficiency.append([])
     for i,n in enumerate(first_guess[njets]):
         num = n
         if n<10:
@@ -66,6 +68,7 @@ for njets in range(0,7):
         nominal[njets].append(num)
         #uncert[njets].append(np.sqrt(num))
         uncert[njets].append(num*pct_uncertainty[i]/100.0)
+        efficiency[njets].append(num/ngen[i])
 
 print first_guess
 print nominal
@@ -276,6 +279,7 @@ m.migrad(ncall=10000)
 #m.minos()
 
 values = m.values
+errors = m.errors
 
 ################################################################################
 # Set up a figure for plotting.
@@ -323,6 +327,13 @@ for j in range(njets_min,njets_max+1):
     plt.title(r'5.7 fb at $\sqrt{s} = 8$ TeV')
     name = "xsec_fit_iminuit_njets%d.png" % (j)
     plt.savefig(name)
+
+for j in range(njets_min,njets_max+1):
+    nums = []
+    for i,s in enumerate(samples[0:-1]):
+        name = "num_%s_njets%d" % (s,j)
+        print "%-16s: %f +\- %f" % (name, values[name], errors[name])
+
 
 plt.show()
 print "ndata: "
