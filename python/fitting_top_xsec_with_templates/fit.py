@@ -74,8 +74,8 @@ print first_guess
 print nominal
 print uncert
 
-njets_min = 3
-njets_max = 6
+njets_min = 4
+njets_max = 5
 
 
 ################################################################################
@@ -179,6 +179,7 @@ for j in range(njets_min,njets_max+1):
     x = content[index]
     y = content[index+1]
 
+    #'''
     # Rebin
     print "nbins: ",len(x)
     index = np.arange(0,len(x),2)
@@ -186,6 +187,7 @@ for j in range(njets_min,njets_max+1):
     tempy = (y[index]+y[index+1])
     x = tempx
     y = tempy
+    #'''
 
     data.append([x.copy(),y.copy()])
     #plt.figure()
@@ -206,6 +208,7 @@ for j in range(njets_min,njets_max+1):
         x = content[index]
         y = content[index+1]
 
+        #'''
         # Rebin
         print "nbins: ",len(x)
         index = np.arange(0,len(x),2)
@@ -213,6 +216,7 @@ for j in range(njets_min,njets_max+1):
         tempy = (y[index]+y[index+1])
         x = tempx
         y = tempy
+        #'''
 
         norm = float(sum(y))
         templates[j-njets_min].append([x.copy(),y.copy()/norm])
@@ -271,10 +275,11 @@ data_and_pdfs = [data,templates]
 f = fitutils.Minuit_FCN([data_and_pdfs],params_dict,emlf_normalized_minuit)
 
 m = minuit.Minuit(f,**kwd)
+#m.tol = 100
 
 m.migrad(ncall=10000)
-#print "RUNNING HESSE"
-#m.hesse()
+print "RUNNING HESSE"
+m.hesse()
 
 #m.minos()
 
@@ -332,7 +337,7 @@ for j in range(njets_min,njets_max+1):
     nums = []
     for i,s in enumerate(samples[0:-1]):
         name = "num_%s_njets%d" % (s,j)
-        print "%-16s: %f +\- %f" % (name, values[name], errors[name])
+        print "%-16s: %10.3f +\- %6.3f" % (name, values[name], errors[name])
 
 
 plt.show()
