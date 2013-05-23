@@ -17,8 +17,12 @@ import iminuit as minuit
 
 luminosity = 5695.503 # pb-1
 
+mc_xsec = 227.0
+
 muon_trigger_eff = 0.965
 btagging_eff = 0.97
+
+muon_btag_eff_prod = muon_trigger_eff*btagging_eff
 
 samples = ['ttbar','t','tbar','wjets','qcd','mu']
 samples_label = [r'$t\bar{t}$',r'single-$t$',r'single-$\bar{t}$',r"$W$+jets",r'QCD',r'data']
@@ -49,7 +53,8 @@ first_guess.append([]) # njets = 0
 first_guess.append([1958.87,13779.1/2, 13779.1/2, 60893.0, 17119.8]) # njets = 1
 first_guess.append([11705.5,17155.0/2, 17155.0/2, 17531.1, 12111.7]) # njets = 2
 first_guess.append([22655.6,8262.75/2, 8262.75/2, 4360.26, 5084.18]) # njets = 3
-first_guess.append([18927.9,984.944/2, 984.944/2, 746.164, 1427.61]) # njets = 4
+#first_guess.append([18927.9,984.944/2, 984.944/2, 746.164, 1427.61]) # njets = 4
+first_guess.append([18927.9,635, 361, 2240.0, 4235.99]) # njets = 4, from CMS DAS
 first_guess.append([7420.38,180.444/2, 180.444/2, 91.322, 0.001]) # njets = 5
 first_guess.append([2941.43,28.312/2, 28.312/2, 27.282, 0.000]) # njets = 6
 
@@ -75,6 +80,16 @@ print uncert
 
 njets_min = 3
 njets_max = 6
+
+################################################################################
+# Xsec to n-events
+################################################################################
+def xsec_to_n(xsec,lumi,mcx,eff,random_effs):
+
+    n_from_template = lumi*mcx*eff
+    n = (xsec*n_from_template)/(mcx*random_effs)
+
+    return n
 
 ################################################################################
 # Fit function.
@@ -113,22 +128,37 @@ def emlf_normalized_minuit(data_and_pdfs,p,parnames,params_dict):
 
     flag = p[parnames.index('flag')]
 
-    num_tot = 0.0
-    for name in parnames:
-        if 'num' in name:
-            num_tot += p[parnames.index(name)]
+    tot_from_ttbar = 0
 
     tot_pdf = 0.0
     likelihood_func = 0.0
     for j in range(njets_min,njets_max+1):
         nums = []
+        
         for i,s in enumerate(samples[0:-1]):
-            name = "num_%s_njets%d" % (s,j)
-            nums.append(p[parnames.index(name)])
+            if i==0: # ttbar
+                nttbar = xsec_to_n(p[parnames.index('xsec_ttbar')],luminosity,mc_xsec,efficiency[j][i],muon_btag_eff_prod)
+                nums.append(nttbar)
+                tot_from_ttbar += nttbar
+            else:
+                name = "num_%s_njets%d" % (s,j)
+                nums.append(p[parnames.index(name)])
+
         tot_pdf = fitfunc(nums,templates[j-njets_min])
         y = data[j-njets_min][1]
 
         likelihood_func += (-y[y>0]*np.log(tot_pdf[y>0])).sum()
+
+    ############################################################################
+    # Calculate the total number of events, as determined by the fit.
+    # This is used in the function to minimize.
+    ############################################################################
+    num_tot = 0.0
+    for name in parnames:
+        if 'num' in name and 'ttbar' not in name:
+            num_tot += p[parnames.index(name)]
+    # Handle the ttbar separately
+    num_tot += tot_from_ttbar
 
     #print "num_tot: ",num_tot
     #ret = likelihood_func - fitutils.pois(num_tot,ndata)
@@ -220,6 +250,7 @@ for j in range(njets_min,njets_max+1):
         print j,i,norm
         templates[j-njets_min].append([x.copy(),y.copy()/norm])
         efficiency[j][i] = norm/ngen[i]
+        print infilename,sum(y)
         #plt.figure()
         #plt.plot(x,y,'ro',ls='steps')
 
@@ -240,6 +271,7 @@ params_dict = {}
 params_dict['flag'] = {'fix':True,'start_val':0}
 params_dict['var_x'] = {'fix':True,'start_val':0,'limits':(ranges[0],ranges[1])}
 params_dict['ntemplates'] = {'fix':True,'start_val':5,'limits':(1,10)}
+params_dict['xsec_ttbar'] = {'fix':False,'start_val':227,'limits':(100,1000)}
 
 for i,s in enumerate(samples[0:-1]):
     for j in range(njets_min,njets_max+1):
@@ -247,7 +279,7 @@ for i,s in enumerate(samples[0:-1]):
 
         name = "num_%s_njets%d" % (s,j)
         if s=='ttbar':
-            params_dict[name] = {'fix':False,'start_val':first_guess[j][i],'limits':(0,nd)}
+            params_dict[name] = {'fix':True,'start_val':first_guess[j][i],'limits':(0,nd)}
         else:
             params_dict[name] = {'fix':False,'start_val':first_guess[j][i],'limits':(0,nd)}
 
@@ -320,8 +352,12 @@ for j in range(njets_min,njets_max+1):
         tempx = templates[j-njets_min][i][0]-binwidth/2.0
         tempy = np.zeros(len(templates[0][0][1]))
         for k in range(i,5):
-            name = "num_%s_njets%d" % (samples[k],j)
-            tempy += values[name]*templates[j-njets_min][k][1]
+            if k==0: # ttbar
+                nttbar = xsec_to_n(values['xsec_ttbar'],luminosity,mc_xsec,efficiency[j][k],muon_btag_eff_prod)
+                tempy += nttbar*templates[j-njets_min][k][1]
+            else:
+                name = "num_%s_njets%d" % (samples[k],j)
+                tempy += values[name]*templates[j-njets_min][k][1]
         plt.bar(tempx,tempy,color=fcolor[i],width=binwidth,edgecolor=fcolor[i],label=samples_label[i])
         #plt.figure()
         #plt.bar(templates[j-njets_min][i][0]-binwidth/2.0,values[name]*templates[j-njets_min][i][1],color='b',width=binwidth,edgecolor='b')
@@ -340,18 +376,19 @@ for j in range(njets_min,njets_max+1):
         print "%-16s: %10.3f +\- %6.3f" % (name, values[name], errors[name])
 
 
-#plt.show()
 print "ndata: "
 print ndata
 for e in efficiency:
     print e
 
-mc_xsec = 227.0
-
+print "xsec: ",values['xsec_ttbar']
+'''
 for j in range(njets_min,njets_max+1):
     nttbar_from_template = luminosity*mc_xsec*efficiency[j][0]
-    #print nttbar_from_template
     name = "num_%s_njets%d" % ('ttbar',j)
     ttxsec = mc_xsec*(values[name]/nttbar_from_template)*muon_trigger_eff*btagging_eff
     print "ttxsec: %f" % (ttxsec)
+'''
 
+
+plt.show()
