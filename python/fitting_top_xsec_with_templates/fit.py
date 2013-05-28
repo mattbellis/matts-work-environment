@@ -78,8 +78,8 @@ print first_guess
 print nominal
 print uncert
 
-njets_min = 3
-njets_max = 6
+njets_min = 4
+njets_max = 4
 
 ################################################################################
 # Xsec to n-events
@@ -175,7 +175,8 @@ def emlf_normalized_minuit(data_and_pdfs,p,parnames,params_dict):
             sigma = p[parnames.index(name)]
 
             #print n,n0,sigma
-            gaussian_constraint = (((n-n0)/sigma)**2)
+            #gaussian_constraint = ((n-n0)**2)/(2*(sigma**2)) #- np.log(n)
+            gaussian_constraint = ((n-n0)**2)/(2*(sigma**2)) 
             #print "gc: ",gaussian_constraint
             ret += gaussian_constraint
     #print "ret: ",ret
@@ -365,8 +366,8 @@ for j in range(njets_min,njets_max+1):
 
     plt.xlabel('Secondary vertex mass (GeV)')
     plt.ylabel('Events / 0.067 GeV')
-    plt.title(r'5.7 fb at $\sqrt{s} = 8$ TeV')
-    name = "xsec_fit_iminuit_njets%d.png" % (j)
+    plt.title(r'5.7 fb$^{-1}$ at $\sqrt{s} = 8$ TeV')
+    name = "xsec_fit_iminuit_min%d_max%d_njets%d.png" % (njets_min,njets_max,j)
     plt.savefig(name)
 
 for j in range(njets_min,njets_max+1):
