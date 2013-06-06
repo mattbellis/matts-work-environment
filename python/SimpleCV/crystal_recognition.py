@@ -12,7 +12,7 @@ img = img.erode()
 
 circles = img.findBlobs(minsize=1)
 
-[circle.draw(color=(0,0,255)) for circle in circles]
+[circle.draw(color=(255,255,0)) for circle in circles]
 
 output = ""
 for circle in circles:
@@ -21,10 +21,10 @@ for circle in circles:
   output += "%d %d\n" % (circle.coordinates()[0], circle.coordinates()[1])
 
 
-newname = "%s_crystal_id.%s" % (imagename.split('.')[-2], imagename.split('.')[-1])
+newname = "marked_images/crystal_id_%s.%s" % (imagename.split('/')[-1].split('.')[-2], imagename.split('/')[-1].split('.')[-1])
 img.save(newname)
 
-newname = "%s_crystal_id_coordinates.txt" % (imagename.split('.')[-2])
+newname = "crystal_coordinates/crystal_id_coordinates_%s.txt" % (imagename.split('/')[-1].split('.')[-2])
 outfile = open(newname,'w+')
 outfile.write(output)
 outfile.close()
