@@ -35,10 +35,11 @@ for i in xrange(nentries):
         px = tree.Jet_Px[j]
         py = tree.Jet_Py[j]
         pz = tree.Jet_Pz[j]
-        output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        jet_btag = tree.Jet_btag[j]
+        output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,jet_btag)
 
-        mass = np.sqrt(e**2 - (px**2 + py**2 + pz**2))
-        print mass
+        #mass = np.sqrt(e**2 - (px**2 + py**2 + pz**2))
+        #print mass
 
     ############################################################################
     # Print out the muons
@@ -50,7 +51,8 @@ for i in xrange(nentries):
         px = tree.Muon_Px[j]
         py = tree.Muon_Py[j]
         pz = tree.Muon_Pz[j]
-        output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        q = tree.Muon_Charge[j]
+        output += "%-10.4f %-10.4f %-10.4f %-10.4f %d\n" % (e,px,py,pz,q)
 
     ############################################################################
     # Print out the electrons
@@ -62,7 +64,8 @@ for i in xrange(nentries):
         px = tree.Electron_Px[j]
         py = tree.Electron_Py[j]
         pz = tree.Electron_Pz[j]
-        output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        q = tree.Electron_Charge[j]
+        output += "%-10.4f %-10.4f %-10.4f %-10.4f %d\n" % (e,px,py,pz,q)
 
     ############################################################################
     # Print out the photons
@@ -75,6 +78,10 @@ for i in xrange(nentries):
         py = tree.Photon_Py[j]
         pz = tree.Photon_Pz[j]
         output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+
+    px = tree.MET_px
+    py = tree.MET_py
+    output += "%-10.4f %-10.4f\n" % (px,py)
 
     #print output
     outfile.write(output)
