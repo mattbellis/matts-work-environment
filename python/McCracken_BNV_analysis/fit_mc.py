@@ -14,7 +14,7 @@ import iminuit as minuit
 import sys
 
 nbins = [120]
-ranges = [[1.05,1.20]]
+ranges = [[1.09,1.15]]
 bin_widths = np.ones(len(ranges))
 for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
     bin_widths[i] = (r[1]-r[0])/n
