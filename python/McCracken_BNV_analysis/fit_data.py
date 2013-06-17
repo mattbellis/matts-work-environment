@@ -19,10 +19,14 @@ bin_widths = np.ones(len(ranges))
 for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
     bin_widths[i] = (r[1]-r[0])/n
 
-k0_sig = 0.003826
-k1_sig = 0.009798
-k0_n = 6712.0
-k1_n = 4858.0
+#k0_sig = 0.003826
+#k1_sig = 0.009798
+#k0_n = 6712.0
+#k1_n = 4858.0
+k0_sig = 0.003074
+k1_sig = 0.007619
+k0_n = 4434.0
+k1_n = 6741.0
 peak_ratios = k1_n/k0_n
 ################################################################################
 # CoGeNT fit
@@ -144,6 +148,8 @@ xpts = data[index0*index1]
 
 data = [xpts]
 
+print "Fitting ndata pts: ",len(data[0])
+
 
 ############################################################################
 # Plot the data
@@ -186,7 +192,7 @@ for i,val in enumerate(num_decays_in_dataset):
     fix = True
     if i==0:
         fix = False
-    params_dict[name] = {'fix':fix,'start_val':val,'limits':(0.00,60000000.0),'error':1}
+    params_dict[name] = {'fix':fix,'start_val':val,'limits':(-20.00,60000000.0),'error':1}
 
 params_dict['num_flat'] = {'fix':False,'start_val':10.0,'limits':(0.0,50000000.0),'error':1}
 params_dict['e_exp0'] = {'fix':False,'start_val':0.5,'limits':(0.0,100.0),'error':0.1}
@@ -206,9 +212,12 @@ m.migrad()
 #m.hesse()
 
 values = m.values
+errors = m.errors
 minscan = m.fval
 
-#'''
+print "nsig: %f %f" % (values["ks_ncalc0"]*(1+peak_ratios),values["ks_ncalc0"]*(1+peak_ratios) * (errors["ks_ncalc0"]/values["ks_ncalc0"]))
+
+'''
 scanbins, scanvals, scanresults = m.mnprofile('ks_ncalc0',50,bound=(0,10.0))
 scanbins = np.array(scanbins)
 scanvals = np.array(scanvals)
@@ -243,8 +252,6 @@ for i,d in enumerate(diff):
 print "cutoff: ",cutoff
 print "peak_ratios: ",peak_ratios
 print "nsig: ",values["ks_ncalc0"]*(1+peak_ratios)
-#'''
-#'''
 #plt.plot(scanbins[0:cutoff_index], np.exp(diff)[0:cutoff_index])
 plt.fill_between(scanbins[0:cutoff_index], np.exp(diff)[0:cutoff_index])
 axscan.set_xlabel(r"# of $\Lambda$ candidates",fontsize=18)
@@ -291,3 +298,4 @@ ax0.plot(expts,eytot,'b',linewidth=2)
 ax0.set_xlim(ranges[0][0],ranges[0][1])
 
 plt.show()
+'''
