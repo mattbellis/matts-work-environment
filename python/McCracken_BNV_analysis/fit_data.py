@@ -14,7 +14,7 @@ import iminuit as minuit
 import sys
 
 nbins = [20]
-ranges = [[1.09,1.15]]
+ranges = [[1.07,1.20]]
 bin_widths = np.ones(len(ranges))
 for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
     bin_widths[i] = (r[1]-r[0])/n
@@ -167,7 +167,7 @@ lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
 
 ############################################################################
 
-means = [1.119,1.119]
+means = [1.115,1.115]
 
 sigmas = [k0_sig,k1_sig]
 
@@ -195,7 +195,7 @@ for i,val in enumerate(num_decays_in_dataset):
     params_dict[name] = {'fix':fix,'start_val':val,'limits':(-20.00,60000000.0),'error':1}
 
 params_dict['num_flat'] = {'fix':False,'start_val':10.0,'limits':(0.0,50000000.0),'error':1}
-params_dict['e_exp0'] = {'fix':False,'start_val':0.5,'limits':(0.0,100.0),'error':0.1}
+params_dict['e_exp0'] = {'fix':False,'start_val':0.5,'limits':(-100.0,100.0),'error':0.1}
 
 #plt.show()
 
@@ -217,7 +217,7 @@ minscan = m.fval
 
 print "nsig: %f %f" % (values["ks_ncalc0"]*(1+peak_ratios),values["ks_ncalc0"]*(1+peak_ratios) * (errors["ks_ncalc0"]/values["ks_ncalc0"]))
 
-'''
+#'''
 scanbins, scanvals, scanresults = m.mnprofile('ks_ncalc0',50,bound=(0,10.0))
 scanbins = np.array(scanbins)
 scanvals = np.array(scanvals)
@@ -298,4 +298,4 @@ ax0.plot(expts,eytot,'b',linewidth=2)
 ax0.set_xlim(ranges[0][0],ranges[0][1])
 
 plt.show()
-'''
+#'''
