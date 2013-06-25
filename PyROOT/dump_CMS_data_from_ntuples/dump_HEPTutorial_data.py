@@ -22,9 +22,11 @@ outfile = open(outfilename,'w')
 
 for i in xrange(nentries):
 
-    output = "Event: %d\n" % (i)
+    #output = "Event: %d\n" % (i)
+    output = ""
     tree.GetEntry(i)
 
+    nvals = 0
     ############################################################################
     # Print out the jets
     ############################################################################
@@ -37,6 +39,7 @@ for i in xrange(nentries):
         pz = tree.Jet_Pz[j]
         jet_btag = tree.Jet_btag[j]
         output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,jet_btag)
+        nvals += 5
 
         #mass = np.sqrt(e**2 - (px**2 + py**2 + pz**2))
         #print mass
@@ -53,6 +56,7 @@ for i in xrange(nentries):
         pz = tree.Muon_Pz[j]
         q = tree.Muon_Charge[j]
         output += "%-10.4f %-10.4f %-10.4f %-10.4f %d\n" % (e,px,py,pz,q)
+        nvals += 5
 
     ############################################################################
     # Print out the electrons
@@ -66,6 +70,7 @@ for i in xrange(nentries):
         pz = tree.Electron_Pz[j]
         q = tree.Electron_Charge[j]
         output += "%-10.4f %-10.4f %-10.4f %-10.4f %d\n" % (e,px,py,pz,q)
+        nvals += 5
 
     ############################################################################
     # Print out the photons
@@ -78,10 +83,14 @@ for i in xrange(nentries):
         py = tree.Photon_Py[j]
         pz = tree.Photon_Pz[j]
         output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        nvals += 4
 
     px = tree.MET_px
     py = tree.MET_py
     output += "%-10.4f %-10.4f\n" % (px,py)
+    nvals += 2
+
+    output = "%d\n%s" % (nvals,output)
 
     #print output
     outfile.write(output)
