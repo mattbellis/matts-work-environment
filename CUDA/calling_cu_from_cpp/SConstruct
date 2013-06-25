@@ -1,0 +1,25 @@
+import os 
+#import cuda
+
+env = Environment()
+
+# Grab my local environment variable PATH so I can find nvcc
+env = Environment(ENV = {'PATH' : os.environ['PATH']})
+
+env.Append(CUDA_SDK_PATH='/Developer/GPUComputing/C/')
+cudaSDKPath = env['CUDA_SDK_PATH']
+
+env.Tool('cuda',toolpath=['./'])
+
+env['CC'] = ['nvcc']
+
+
+# This is where cutil lives.
+env.Append(NVCCFLAGS=['-I'+cudaSDKPath+'/common/inc/', '-m64'])
+
+
+env.Program(target='mytestroot.x', \
+            source=['mytestroot_gpu.cu', 'mytestroot.cpp'],\
+            parse_flags=["!root-config --cflags --libs"])
+
+
