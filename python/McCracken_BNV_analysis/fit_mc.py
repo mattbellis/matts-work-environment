@@ -201,6 +201,7 @@ m.migrad()
 m.hesse()
 
 values = m.values
+errors = m.errors
 
 
 
@@ -242,6 +243,11 @@ for i,meanc in enumerate(means):
 ax0.plot(expts,eytot,'b',linewidth=2)
 ax0.set_xlim(ranges[0][0],ranges[0][1])
 
+print "mean 0: %f +/- %f" % (values["ks_mean0"],errors["ks_mean0"])
+print "mean 1: %f +/- %f" % (values["ks_mean1"],errors["ks_mean1"])
+
+print "sigma 0: %f +/- %f" % (values["ks_sigma0"],errors["ks_sigma0"])
+print "sigma 1: %f +/- %f" % (values["ks_sigma1"],errors["ks_sigma1"])
 
 plt.show()
 

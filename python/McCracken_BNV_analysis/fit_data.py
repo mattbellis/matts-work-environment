@@ -23,10 +23,18 @@ for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
 #k1_sig = 0.009798
 #k0_n = 6712.0
 #k1_n = 4858.0
-k0_sig = 0.003074
-k1_sig = 0.007619
-k0_n = 4434.0
-k1_n = 6741.0
+
+#k0_sig = 0.003074
+#k1_sig = 0.007619
+#k0_n = 4434.0
+#k1_n = 6741.0
+
+# Values from data fit
+k0_sig = 0.008124
+k1_sig = 0.02012
+k0_n = 1972
+k1_n = 1143
+
 peak_ratios = k1_n/k0_n
 ################################################################################
 # CoGeNT fit
@@ -167,7 +175,7 @@ lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
 
 ############################################################################
 
-means = [1.115,1.115]
+means = [1.117,1.119]
 
 sigmas = [k0_sig,k1_sig]
 
@@ -296,6 +304,9 @@ for i,meanc in enumerate(means):
 
 ax0.plot(expts,eytot,'b',linewidth=2)
 ax0.set_xlim(ranges[0][0],ranges[0][1])
+
+print "mean 0: %f +/- %f" % (values["ks_mean0"],errors["ks_mean0"])
+print "mean 1: %f +/- %f" % (values["ks_mean1"],errors["ks_mean1"])
 
 plt.show()
 #'''
