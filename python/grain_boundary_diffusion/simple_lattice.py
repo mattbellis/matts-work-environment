@@ -5,11 +5,13 @@ import matplotlib
 
 import matplotlib.pylab as plt
 
+tag = "run1"
+
 ################################################################################
 # Define the grid spacing and boundary locations
 ################################################################################
-nx = 400
-ny = 400
+nx = 1200
+ny = 1200
 
 gbx = np.array([]) # grain-boundary x
 gby = np.array([]) # grain-boundary y
@@ -30,7 +32,7 @@ for i in range(0,nx+1):
 ################################################################################
 # Start diffusing the particles.
 ################################################################################
-nparticles = 500
+nparticles = 2000
 
 px = np.zeros(nparticles).astype('int') # particle x-position
 # Start all of the atoms at one point
@@ -58,7 +60,7 @@ ax1 = fig_img.add_subplot(1,2,2)
 ################################################################################
 # Step forward in time
 ################################################################################
-for t in xrange(25000):
+for t in xrange(50000):
     for k in xrange(nparticles):
         probs = np.array([0.02, 0.02, 0.02, 0.02])
         x = px[k]
@@ -139,10 +141,10 @@ for t in xrange(25000):
         print "t:",t
         ax0.plot(gbx,gby,'bo',markersize=1)
         ax0.plot(px,py,'go',markersize=5)
-        ax1.hist(px,bins=50,range=(0,nx))
+        ax1.hist(px,bins=100,range=(0,nx))
         ax1.set_ylim(0,nparticles/4.0)
         #name = "Plots/img_slicing_200atoms%04d.png" % (imgcount)
-        name = "Plots/img_slicing_%dx%dgrid_%dspacing_%datoms%04d.png" % (nx,ny,grid_size,nparticles,imgcount)
+        name = "Plots_%s/img_slicing_%dx%dgrid_%dspacing_%datoms%04d.png" % (tag,nx,ny,grid_size,nparticles,imgcount)
         #name = "Plots/test%04d.png" % (imgcount)
         fig_img.savefig(name)
         imgcount += 1
