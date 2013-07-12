@@ -144,7 +144,7 @@ for t in xrange(50000):
         ax1.hist(px,bins=100,range=(0,nx))
         ax1.set_ylim(0,nparticles/4.0)
         #name = "Plots/img_slicing_200atoms%04d.png" % (imgcount)
-        name = "Plots_%s/img_slicing_%dx%dgrid_%dspacing_%datoms%04d.png" % (tag,nx,ny,grid_size,nparticles,imgcount)
+        name = "Plots_%s/img_slicing_%dx%dgrid_%dspacing_%datoms%06d.png" % (tag,nx,ny,grid_size,nparticles,imgcount)
         #name = "Plots/test%04d.png" % (imgcount)
         fig_img.savefig(name)
         imgcount += 1
