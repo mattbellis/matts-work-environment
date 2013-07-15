@@ -5,13 +5,13 @@ import matplotlib
 
 import matplotlib.pylab as plt
 
-tag = "run1"
+tag = "run2"
 
 ################################################################################
 # Define the grid spacing and boundary locations
 ################################################################################
-nx = 1200
-ny = 1200
+nx = 1000
+ny = 1000
 
 gbx = np.array([]) # grain-boundary x
 gby = np.array([]) # grain-boundary y
@@ -32,7 +32,7 @@ for i in range(0,nx+1):
 ################################################################################
 # Start diffusing the particles.
 ################################################################################
-nparticles = 2000
+nparticles = 1000
 
 px = np.zeros(nparticles).astype('int') # particle x-position
 # Start all of the atoms at one point
@@ -60,7 +60,7 @@ ax1 = fig_img.add_subplot(1,2,2)
 ################################################################################
 # Step forward in time
 ################################################################################
-for t in xrange(50000):
+for t in xrange(5000000):
     for k in xrange(nparticles):
         probs = np.array([0.02, 0.02, 0.02, 0.02])
         x = px[k]
@@ -147,9 +147,13 @@ for t in xrange(50000):
         name = "Plots_%s/img_slicing_%dx%dgrid_%dspacing_%datoms%06d.png" % (tag,nx,ny,grid_size,nparticles,imgcount)
         #name = "Plots/test%04d.png" % (imgcount)
         fig_img.savefig(name)
-        imgcount += 1
         ax0.clear()
         ax1.clear()
+
+        name = "Plots_%s/coordinates/coordinates_%dx%dgrid_%dspacing_%datoms%06d.dat" % (tag,nx,ny,grid_size,nparticles,imgcount)
+        #outfile = open(name,'w+')
+        np.savetxt(name,(px,py))
+        imgcount += 1
 
 plt.plot(gbx,gby,'bo',markersize=1)
 plt.plot(px,py,'go',markersize=5)
