@@ -30,10 +30,16 @@ for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
 #k1_n = 6741.0
 
 # Values from data fit
-k0_sig = 0.008124
-k1_sig = 0.02012
-k0_n = 1972
-k1_n = 1143
+#k0_sig = 0.008124
+#k1_sig = 0.02012
+#k0_n = 1972
+#k1_n = 1143
+
+# Values from NEW data fit
+k0_sig = 0.003674
+k1_sig = 0.009301
+k0_n = 5685
+k1_n = 4772
 
 peak_ratios = k1_n/k0_n
 ################################################################################
@@ -175,7 +181,8 @@ lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
 
 ############################################################################
 
-means = [1.117,1.119]
+#means = [1.117,1.119]
+means = [1.118998,1.118997]
 
 sigmas = [k0_sig,k1_sig]
 
@@ -209,6 +216,8 @@ params_dict['e_exp0'] = {'fix':False,'start_val':0.5,'limits':(-100.0,100.0),'er
 
 params_names,kwd = fitutils.dict2kwd(params_dict)
 
+print "Nentries in fit: ",len(data)
+
 f = fitutils.Minuit_FCN([data],params_dict,emlf_normalized_minuit)
 
 m = minuit.Minuit(f,errordef=0.5,print_level=1,**kwd)
@@ -225,15 +234,17 @@ minscan = m.fval
 
 print "nsig: %f %f" % (values["ks_ncalc0"]*(1+peak_ratios),values["ks_ncalc0"]*(1+peak_ratios) * (errors["ks_ncalc0"]/values["ks_ncalc0"]))
 
+#exit()
+
 #'''
 scanbins, scanvals, scanresults = m.mnprofile('ks_ncalc0',50,bound=(0,10.0))
 scanbins = np.array(scanbins)
 scanvals = np.array(scanvals)
 scanbins *= (1.0+peak_ratios)
-print minscan
-print scanbins
-print scanvals
-print scanresults
+#print minscan
+#print scanbins
+#print scanvals
+#print scanresults
 
 figscan = plt.figure(figsize=(8,4),dpi=100)
 axscan = figscan.add_subplot(1,1,1)
