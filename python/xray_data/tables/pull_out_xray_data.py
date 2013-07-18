@@ -16,5 +16,5 @@ print vals[index+2]
 print vals[index+3]
 print vals[index+4]
 
-for v in vals[index+3]:
-    print v.replace('\xc3\x8e\xc2\xb11','alpha').replace('\xc3\x8e\xc2\xb2','beta')
+for x,v in zip(vals[index],vals[index+3]):
+    print x,v.replace('\xc3\x8e\xc2\xb1','alpha').replace('\xc3\x8e\xc2\xb2','beta').replace('\xc3\x8e\xc2\xb2','beta').replace('\xc3\x8e\xc2\xb3','gamma')
