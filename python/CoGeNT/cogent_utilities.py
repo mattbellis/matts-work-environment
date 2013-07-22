@@ -87,6 +87,29 @@ def get_cogent_data(infile_name,first_event=0.0,calibration=0):
 
 
 ################################################################################
+# Return energy and day and rise time
+################################################################################
+def get_3yr_cogent_data(infile_name,first_event=0.0,calibration=0):
+
+    infile = open(infile_name)
+    content = np.array(infile.read().split()).astype('float')
+
+    ndata = len(content)/3
+
+    # Get time
+    index = np.arange(0,ndata*3,3)
+
+    tseconds = content[index]
+    tdays = (tseconds-first_event)/(24.0*3600.0) + 1.0
+
+    # Get energy
+    energies = content[index+1]
+    rise_time = content[index+2]
+
+    return tdays,energies,rise_time
+
+
+################################################################################
 # Print data
 ################################################################################
 def print_data(energies,tdays):

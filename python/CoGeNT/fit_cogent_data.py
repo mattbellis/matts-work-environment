@@ -67,8 +67,15 @@ def main():
     #infile = open('data/before_fire_LG.dat')
 
     #infile_name = 'data/low_gain.txt'
-    infile_name = 'data/high_gain.txt'
-    tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
+    #infile_name = 'data/high_gain.txt'
+    #tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=0)
+
+    infile_name = 'data/LE.txt'
+    tdays,energies,rise_time = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
+    print tdays
+    print energies
+    print rise_time
+    #exit()
 
     if args.fit==5 or args.fit==6:
         infile_name = 'data/cogent_mc.dat'
@@ -78,9 +85,14 @@ def main():
     if args.verbose:
         print_data(energies,tdays)
 
-    data = [energies.copy(),tdays.copy()]
+    #data = [energies.copy(),tdays.copy()]
+    #print "data before range cuts: ",len(data[0]),len(data[1])
 
-    print "data before range cuts: ",len(data[0]),len(data[1])
+    # 3yr data
+    data = [energies.copy(),tdays.copy(),rise_time]
+    print "data before range cuts: ",len(data[0]),len(data[1]),len(data[2])
+    #exit()
+
 
     ############################################################################
     # Declare the ranges.
@@ -170,6 +182,41 @@ def main():
     efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
     if args.turn_off_eff:
         efficiency = lambda x: 1.0
+
+    ############################################################################
+    # Look at the rise-time information.
+    ############################################################################
+
+    figrt = plt.figure(figsize=(8,8),dpi=100)
+    axrt = []
+    for i in range(0,16):
+        axrt.append(figrt.add_subplot(4,4,i+1))
+        #h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
+        if i==0:
+            lch.hist_err(data[2],bins=nbins[2],range=ranges[2],axes=axrt[i])
+        elif i==1:
+            index0 = data[0]>=0.5
+            index1 = data[0]<2.0
+            index = index0*index1
+            lch.hist_err(data[2][index],bins=nbins[2],range=ranges[2],axes=axrt[i])
+        elif i==2:
+            index0 = data[0]>=2.0
+            index1 = data[0]<4.5
+            index = index0*index1
+            lch.hist_err(data[2][index],bins=nbins[2],range=ranges[2],axes=axrt[i])
+        elif i>=4:
+            width = 0.25
+            index0 = data[0]>=(i-4)*0.25 + 0.25
+            index1 = data[0]<(i-4)*0.25 + 0.50
+            index = index0*index1
+            lch.hist_err(data[2][index],bins=nbins[2],range=ranges[2],axes=axrt[i])
+
+    #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
+
+    plt.show()
+    exit()
+
+
 
     ############################################################################
     # Get the information for the lshell decays.
