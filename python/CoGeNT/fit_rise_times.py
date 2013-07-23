@@ -21,6 +21,8 @@ import iminuit as minuit
 
 import argparse
 
+import math
+
 pi = np.pi
 first_event = 2750361.2
 start_date = datetime(2009, 12, 3, 0, 0, 0, 0) #
@@ -163,9 +165,6 @@ def main():
     print "data before range cuts: ",len(data[0]),len(data[1]),len(data[2])
     #exit()
 
-    plt.figure()
-    plt.plot(energies,rise_times,'o',markersize=0.5)
-
 
     ############################################################################
     # Declare the ranges.
@@ -187,6 +186,11 @@ def main():
 
     nevents = float(len(data[0]))
 
+    plt.figure()
+    plt.plot(energies,rise_times,'o',markersize=1.5)
+    plt.yscale('log')
+    plt.ylim(0.1,10)
+
     ############################################################################
     # Plot the data
     ############################################################################
@@ -194,58 +198,58 @@ def main():
     # Look at the rise-time information.
     ############################################################################
 
-    starting_params = [1.0,1.2,0.6*nevents,  0.1,0.8,0.4*nevents]
+    starting_params = [1.2,1.5,0.2*nevents,  0.1,0.8,0.8*nevents]
 
     fit_parameters = []
+    fit_errors = []
     nevs = []
     axrt = []
 
-    for i in range(0,20):
-        if i%5==0:
-            figrt = plt.figure(figsize=(13,4),dpi=100)
-        axrt.append(figrt.add_subplot(1,5, i%5 + 1))
+    elo = 0.0
+    ehi = 1.0
+    eoffset = 0.5
+
+    #ewidth = 1.50
+    #estep = 1.00
+
+    ewidth = 0.250
+    estep = 0.05
+
+    expts = []
+
+    for i in range(0,48):
+        #if i%10==0:
+            #figrt = plt.figure(figsize=(16,8),dpi=100)
+        #axrt.append(figrt.add_subplot(2,5, i%10 + 1))
+
+        figrt = plt.figure(figsize=(6,4),dpi=100)
+        axrt.append(figrt.add_subplot(1,1,1))
         data_to_fit = []
         #h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
-        if i==0:
-            data_to_fit = data[2]
-        elif i==1:
-            index0 = data[0]>=0.5
-            index1 = data[0]<2.0
-            index = index0*index1
-            data_to_fit = data[2][index]
-        elif i==2:
-            index0 = data[0]>=2.0
-            index1 = data[0]<4.5
-            index = index0*index1
-            data_to_fit = data[2][index]
-        elif i==3:
-            fg = plt.figure(figsize=(11,4),dpi=100)
-            fg.add_subplot(1,3,1)
-            lch.hist_err(data[2],bins=nbins[2],range=ranges[2])
-            fg.add_subplot(1,3,2)
-            pdf  = pdfs.lognormal(data[2],0.5,0.5, 0,5)
-            print "PDF"
-            print pdf
-            lch.hist_err(pdf,bins=nbins[2])
-            xpts = np.linspace(0,5,1000)
-            ypts = pdfs.lognormal(xpts,0.01,0.5, 0,5)
-            fg.add_subplot(1,3,3)
-            plt.plot(xpts,ypts)
-            plt.ylim(0,2)
-        elif i>=4:
-            width = 0.25
-            index0 = data[0]>=(i-3)*0.10 + 0.25
-            index1 = data[0]< (i-3)*0.10 + 0.50
-            print (i-3)*0.10 + 0.25
-            print (i-3)*0.10 + 0.50
+
+        if i>=0:
+            elo = i*estep + eoffset
+            ehi = elo + ewidth
+            index0 = data[0]>=elo
+            index1 = data[0]< ehi
+            print elo,ehi
             index = index0*index1
             data_to_fit = data[2][index]
 
         if len(data_to_fit)>0:
             lch.hist_err(data_to_fit,bins=nbins[2],range=ranges[2],axes=axrt[i])
             plt.ylim(0)
-            plt.xlim(0,5)
+            plt.xlim(ranges[2][0],ranges[2][1])
+            name = "%0.2f-%0.2f" % (elo,ehi)
+            plt.text(0.75,0.75,name,transform=axrt[i].transAxes)
 
+        nevents = len(data_to_fit)
+        if i==0:
+            starting_params = [-0.6,0.6,0.2*nevents,  0.6,0.55,0.8*nevents]
+        '''
+        if elo>=1.0 and elo<1.2:    
+            starting_params = [0.1,0.2,0.3*nevents,  0.2,3.0,0.7*nevents]
+        '''
         ############################################################################
         # Declare the fit parameters
         ############################################################################
@@ -270,14 +274,15 @@ def main():
         #params_dict['slow_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
 
         params_dict['fast_logn_mean'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.1}
-        params_dict['fast_logn_sigma'] = {'fix':False,'start_val':starting_params[1],'limits':(0.01,5),'error':0.1}
+        params_dict['fast_logn_sigma'] = {'fix':False,'start_val':starting_params[1],'limits':(0.05,30),'error':0.1}
         params_dict['fast_num'] = {'fix':False,'start_val':starting_params[2],'limits':(0.0,1.5*nevents),'error':0.1}
         params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.1}
-        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.01,5),'error':0.1}
+        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.1}
         params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.1}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
-        figrt.subplots_adjust(left=0.01, right=0.98)
+        #figrt.subplots_adjust(left=0.05, right=0.98)
+        figrt.subplots_adjust(left=0.15, right=0.98,bottom=0.15)
         #plt.show()
         #exit()
 
@@ -285,9 +290,7 @@ def main():
         # Fit
         ############################################################################
 
-        #if i<20 and len(data_to_fit)>0:
-        #if i>=4 and i<=6 and len(data_to_fit)>0:
-        if i>=4 and i<=20 and len(data_to_fit)>0:
+        if i>=0 and len(data_to_fit)>0:
             params_names,kwd = fitutils.dict2kwd(params_dict)
         
             #print data_to_fit
@@ -315,10 +318,12 @@ def main():
             print "Finished fit!!\n"
 
             values = m.values # Dictionary
+            errors = m.errors # Dictionary
             fit_parameters.append(values)
+            fit_errors.append(errors)
             nevs.append(len(data_to_fit))
 
-            xpts = np.linspace(0,5,1000)
+            xpts = np.linspace(ranges[2][0],ranges[2][1],1000)
             tot_ypts = np.zeros(len(xpts))
 
             ypts  = pdfs.lognormal(xpts,values['fast_logn_mean'],values['fast_logn_sigma'],ranges[2][0],ranges[2][1])
@@ -330,43 +335,57 @@ def main():
             tot_ypts += y
 
             axrt[i].plot(xpts,tot_ypts,'b',linewidth=2)
+            axrt[i].set_ylabel(r'Events')
+            axrt[i].set_xlabel(r'Rise time ($\mu$s)')
+            name = "Plots/rt_slice_%03d.png" % (i)
+            plt.savefig(name)
 
-            starting_params = [ \
-            values['fast_logn_mean'], \
-            values['fast_logn_sigma'], \
-            values['fast_num'], \
-            values['slow_logn_mean'], \
-            values['slow_logn_sigma'],
-            values['slow_num'] \
-            ]
+            if math.isnan(values['fast_logn_mean']) == False:
+                starting_params = [ \
+                values['fast_logn_mean'], \
+                values['fast_logn_sigma'], \
+                values['fast_num'], \
+                values['slow_logn_mean'], \
+                values['slow_logn_sigma'],
+                values['slow_num'] \
+                ]
+
+            expts.append((ehi+elo)/2.0)
 
     print fit_parameters
     print nevs
     
-    xpts = []
     ypts = [[],[],[],[],[],[]]
+    yerr = [[],[],[],[],[],[]]
 
-    for i,fp,n in zip(xrange(len(nevs)),fit_parameters,nevs):
-        print "----------"
-        xpts.append(i*0.10 + 0.5-(0.25/2.0))
-        ypts[0].append(fp['fast_logn_mean'])
-        ypts[1].append(fp['fast_logn_sigma'])
-        ypts[2].append(fp['fast_num']/n)
-        ypts[3].append(fp['slow_logn_mean'])
-        ypts[4].append(fp['slow_logn_sigma'])
-        ypts[5].append(fp['slow_num']/n)
+    if len(expts)>0:
+        for i,fp,fe,n in zip(xrange(len(nevs)),fit_parameters,fit_errors,nevs):
+            print "----------"
+            ypts[0].append(fp['fast_logn_mean'])
+            ypts[1].append(fp['fast_logn_sigma'])
+            ypts[2].append(fp['fast_num']/n)
+            ypts[3].append(fp['slow_logn_mean'])
+            ypts[4].append(fp['slow_logn_sigma'])
+            ypts[5].append(fp['slow_num']/n)
 
-    print ypts
-    fvals = plt.figure(figsize=(11,4),dpi=100)
-    fvals.add_subplot(1,3,1)
-    plt.errorbar(xpts,ypts[0],xerr=0.01,yerr=0.01,fmt='o',mfc='r')
-    plt.errorbar(xpts,ypts[3],xerr=0.01,yerr=0.01,fmt='o',mfc='b')
-    fvals.add_subplot(1,3,2)
-    plt.errorbar(xpts,ypts[1],xerr=0.01,yerr=0.01,fmt='o',mfc='r')
-    plt.errorbar(xpts,ypts[4],xerr=0.01,yerr=0.01,fmt='o',mfc='b')
-    fvals.add_subplot(1,3,3)
-    plt.errorbar(xpts,ypts[2],xerr=0.01,yerr=0.01,fmt='o',mfc='r')
-    plt.errorbar(xpts,ypts[5],xerr=0.01,yerr=0.01,fmt='o',mfc='b')
+            yerr[0].append(fe['fast_logn_mean'])
+            yerr[1].append(fe['fast_logn_sigma'])
+            yerr[2].append(fe['fast_num']/n)
+            yerr[3].append(fe['slow_logn_mean'])
+            yerr[4].append(fe['slow_logn_sigma'])
+            yerr[5].append(fe['slow_num']/n)
+
+        print ypts
+        fvals = plt.figure(figsize=(11,4),dpi=100)
+        fvals.add_subplot(1,3,1)
+        plt.errorbar(expts,ypts[0],xerr=0.01,yerr=yerr[0],fmt='o',mfc='r')
+        plt.errorbar(expts,ypts[3],xerr=0.01,yerr=yerr[3],fmt='o',mfc='b')
+        fvals.add_subplot(1,3,2)
+        plt.errorbar(expts,ypts[1],xerr=0.01,yerr=yerr[1],fmt='o',mfc='r')
+        plt.errorbar(expts,ypts[4],xerr=0.01,yerr=yerr[4],fmt='o',mfc='b')
+        fvals.add_subplot(1,3,3)
+        plt.errorbar(expts,ypts[2],xerr=0.01,yerr=yerr[2],fmt='o',mfc='r')
+        plt.errorbar(expts,ypts[5],xerr=0.01,yerr=yerr[5],fmt='o',mfc='b')
 
     if not args.batch:
         plt.show()
