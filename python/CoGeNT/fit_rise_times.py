@@ -163,6 +163,9 @@ def main():
     print "data before range cuts: ",len(data[0]),len(data[1]),len(data[2])
     #exit()
 
+    plt.figure()
+    plt.plot(energies,rise_times,'o',markersize=0.5)
+
 
     ############################################################################
     # Declare the ranges.
@@ -190,13 +193,17 @@ def main():
     ############################################################################
     # Look at the rise-time information.
     ############################################################################
+
+    starting_params = [1.0,1.2,0.6*nevents,  0.1,0.8,0.4*nevents]
+
     fit_parameters = []
     nevs = []
-
-    figrt = plt.figure(figsize=(9,6),dpi=100)
     axrt = []
-    for i in range(0,16):
-        axrt.append(figrt.add_subplot(4,4,i+1))
+
+    for i in range(0,20):
+        if i%5==0:
+            figrt = plt.figure(figsize=(13,4),dpi=100)
+        axrt.append(figrt.add_subplot(1,5, i%5 + 1))
         data_to_fit = []
         #h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
         if i==0:
@@ -227,15 +234,17 @@ def main():
             plt.ylim(0,2)
         elif i>=4:
             width = 0.25
-            index0 = data[0]>=(i-3)*0.25 + 0.25
-            index1 = data[0]< (i-3)*0.25 + 0.50
-            print (i-3)*0.25 + 0.25
-            print (i-3)*0.25 + 0.50
+            index0 = data[0]>=(i-3)*0.10 + 0.25
+            index1 = data[0]< (i-3)*0.10 + 0.50
+            print (i-3)*0.10 + 0.25
+            print (i-3)*0.10 + 0.50
             index = index0*index1
             data_to_fit = data[2][index]
 
         if len(data_to_fit)>0:
             lch.hist_err(data_to_fit,bins=nbins[2],range=ranges[2],axes=axrt[i])
+            plt.ylim(0)
+            plt.xlim(0,5)
 
         ############################################################################
         # Declare the fit parameters
@@ -250,14 +259,25 @@ def main():
         #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':1.0,'limits':(0.01,5),'error':0.1}
         #params_dict['slow_num'] = {'fix':False,'start_val':0.8*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
 
-        params_dict['fast_logn_mean'] = {'fix':False,'start_val':1.000,'limits':(-2,2),'error':0.1}
-        params_dict['fast_logn_sigma'] = {'fix':False,'start_val':1.2,'limits':(0.01,5),'error':0.1}
-        params_dict['fast_num'] = {'fix':False,'start_val':0.6*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
-        params_dict['slow_logn_mean'] = {'fix':False,'start_val':0.1,'limits':(-2,2),'error':0.1}
-        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.8,'limits':(0.01,5),'error':0.1}
-        params_dict['slow_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
+        #starting_params = [1.0,1.2,0.6*nevents,  0.1,0.8,0.4*nevents]
+
+        # Worked for 1.0-1.25
+        #params_dict['fast_logn_mean'] = {'fix':False,'start_val':1.000,'limits':(-2,2),'error':0.1}
+        #params_dict['fast_logn_sigma'] = {'fix':False,'start_val':1.2,'limits':(0.01,5),'error':0.1}
+        #params_dict['fast_num'] = {'fix':False,'start_val':0.6*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
+        #params_dict['slow_logn_mean'] = {'fix':False,'start_val':0.1,'limits':(-2,2),'error':0.1}
+        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.8,'limits':(0.01,5),'error':0.1}
+        #params_dict['slow_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
+
+        params_dict['fast_logn_mean'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.1}
+        params_dict['fast_logn_sigma'] = {'fix':False,'start_val':starting_params[1],'limits':(0.01,5),'error':0.1}
+        params_dict['fast_num'] = {'fix':False,'start_val':starting_params[2],'limits':(0.0,1.5*nevents),'error':0.1}
+        params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.1}
+        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.01,5),'error':0.1}
+        params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.1}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
+        figrt.subplots_adjust(left=0.01, right=0.98)
         #plt.show()
         #exit()
 
@@ -266,7 +286,8 @@ def main():
         ############################################################################
 
         #if i<20 and len(data_to_fit)>0:
-        if i>=4 and i<=6 and len(data_to_fit)>0:
+        #if i>=4 and i<=6 and len(data_to_fit)>0:
+        if i>=4 and i<=20 and len(data_to_fit)>0:
             params_names,kwd = fitutils.dict2kwd(params_dict)
         
             #print data_to_fit
@@ -310,6 +331,14 @@ def main():
 
             axrt[i].plot(xpts,tot_ypts,'b',linewidth=2)
 
+            starting_params = [ \
+            values['fast_logn_mean'], \
+            values['fast_logn_sigma'], \
+            values['fast_num'], \
+            values['slow_logn_mean'], \
+            values['slow_logn_sigma'],
+            values['slow_num'] \
+            ]
 
     print fit_parameters
     print nevs
@@ -319,7 +348,7 @@ def main():
 
     for i,fp,n in zip(xrange(len(nevs)),fit_parameters,nevs):
         print "----------"
-        xpts.append(i*0.25 + 0.5-(0.25/2.0))
+        xpts.append(i*0.10 + 0.5-(0.25/2.0))
         ypts[0].append(fp['fast_logn_mean'])
         ypts[1].append(fp['fast_logn_sigma'])
         ypts[2].append(fp['fast_num']/n)
