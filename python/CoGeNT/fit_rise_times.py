@@ -217,7 +217,7 @@ def main():
 
     expts = []
 
-    for i in range(0,48):
+    for i in range(0,60):
         #if i%10==0:
             #figrt = plt.figure(figsize=(16,8),dpi=100)
         #axrt.append(figrt.add_subplot(2,5, i%10 + 1))
@@ -337,7 +337,7 @@ def main():
             axrt[i].plot(xpts,tot_ypts,'b',linewidth=2)
             axrt[i].set_ylabel(r'Events')
             axrt[i].set_xlabel(r'Rise time ($\mu$s)')
-            name = "Plots/rt_slice_%03d.png" % (i)
+            name = "Plots/rt_slice_%d.png" % (i)
             plt.savefig(name)
 
             if math.isnan(values['fast_logn_mean']) == False:
@@ -357,6 +357,7 @@ def main():
     
     ypts = [[],[],[],[],[],[]]
     yerr = [[],[],[],[],[],[]]
+    npts = []
 
     if len(expts)>0:
         for i,fp,fe,n in zip(xrange(len(nevs)),fit_parameters,fit_errors,nevs):
@@ -375,17 +376,38 @@ def main():
             yerr[4].append(fe['slow_logn_sigma'])
             yerr[5].append(fe['slow_num']/n)
 
+            npts.append(n)
+
         print ypts
-        fvals = plt.figure(figsize=(11,4),dpi=100)
+        fvals = plt.figure(figsize=(13,4),dpi=100)
         fvals.add_subplot(1,3,1)
-        plt.errorbar(expts,ypts[0],xerr=0.01,yerr=yerr[0],fmt='o',mfc='r')
-        plt.errorbar(expts,ypts[3],xerr=0.01,yerr=yerr[3],fmt='o',mfc='b')
+        plt.errorbar(expts,ypts[0],xerr=0.01,yerr=yerr[0],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
+        plt.errorbar(expts,ypts[3],xerr=0.01,yerr=yerr[3],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
+        plt.ylim(-1.5,1.5)
+        plt.xlabel('Energy (keVee)')
+        plt.ylabel(r'Lognormal $\mu$')
+        plt.legend()
+
         fvals.add_subplot(1,3,2)
-        plt.errorbar(expts,ypts[1],xerr=0.01,yerr=yerr[1],fmt='o',mfc='r')
-        plt.errorbar(expts,ypts[4],xerr=0.01,yerr=yerr[4],fmt='o',mfc='b')
+        plt.errorbar(expts,ypts[1],xerr=0.01,yerr=yerr[1],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
+        plt.errorbar(expts,ypts[4],xerr=0.01,yerr=yerr[4],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
+        plt.ylim(0.0,1.0)
+        plt.xlabel('Energy (keVee)')
+        plt.ylabel(r'Lognormal $\sigma$')
+        plt.legend()
+
         fvals.add_subplot(1,3,3)
-        plt.errorbar(expts,ypts[2],xerr=0.01,yerr=yerr[2],fmt='o',mfc='r')
-        plt.errorbar(expts,ypts[5],xerr=0.01,yerr=yerr[5],fmt='o',mfc='b')
+        plt.errorbar(expts,ypts[2],xerr=0.01,yerr=yerr[2],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
+        plt.errorbar(expts,ypts[5],xerr=0.01,yerr=yerr[5],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
+        plt.ylim(0.0,1.4)
+        plt.xlabel('Energy (keVee)')
+        plt.ylabel(r'% of events in bin')
+        plt.legend()
+
+        fvals.subplots_adjust(left=0.08, right=0.98,bottom=0.15,wspace=0.25)
+        plt.savefig('Plots/rt_summary.png')
+
+        np.savetxt('rt_parameters.txt',[expts,ypts[0],ypts[1],ypts[2],ypts[3],ypts[4],ypts[5],npts])
 
     if not args.batch:
         plt.show()
