@@ -212,18 +212,19 @@ def main():
     #ewidth = 1.50
     #estep = 1.00
 
-    ewidth = 0.250
-    estep = 0.05
+    ewidth = 0.200
+    estep = 0.20
 
     expts = []
 
-    for i in range(0,60):
-        #if i%10==0:
-            #figrt = plt.figure(figsize=(16,8),dpi=100)
-        #axrt.append(figrt.add_subplot(2,5, i%10 + 1))
+    for i in range(0,16):
+        if i%10==0:
+            figrt = plt.figure(figsize=(16,8),dpi=100)
+        axrt.append(figrt.add_subplot(2,5, i%10 + 1))
 
-        figrt = plt.figure(figsize=(6,4),dpi=100)
-        axrt.append(figrt.add_subplot(1,1,1))
+        #figrt = plt.figure(figsize=(6,4),dpi=100)
+        #axrt.append(figrt.add_subplot(1,1,1))
+
         data_to_fit = []
         #h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
 
@@ -273,12 +274,19 @@ def main():
         #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.8,'limits':(0.01,5),'error':0.1}
         #params_dict['slow_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
 
-        params_dict['fast_logn_mean'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.1}
-        params_dict['fast_logn_sigma'] = {'fix':False,'start_val':starting_params[1],'limits':(0.05,30),'error':0.1}
-        params_dict['fast_num'] = {'fix':False,'start_val':starting_params[2],'limits':(0.0,1.5*nevents),'error':0.1}
-        params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.1}
-        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.1}
-        params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.1}
+        params_dict['fast_logn_mean'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.01}
+        params_dict['fast_logn_sigma'] = {'fix':False,'start_val':starting_params[1],'limits':(0.05,30),'error':0.01}
+        params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
+        params_dict['fast_num'] = {'fix':False,'start_val':starting_params[2],'limits':(0.0,1.5*nevents),'error':0.01}
+        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
+        params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
+
+        if i==0:
+            params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.68,'limits':(-2,2),'error':0.01}
+            params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.55,'limits':(0.05,30),'error':0.01}
+
+        # Try fixing the slow sigma
+        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.55,'limits':(-2,2),'error':0.01}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
         #figrt.subplots_adjust(left=0.05, right=0.98)
