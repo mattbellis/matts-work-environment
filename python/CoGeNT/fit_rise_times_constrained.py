@@ -217,10 +217,7 @@ def main():
 
     expts = []
 
-    #for i in range(0,16):
-    for j in range(10,1,-1):
-        #i = j
-        i = 10-j
+    for i in range(0,16):
         if i%10==0:
             figrt = plt.figure(figsize=(16,8),dpi=100)
         axrt.append(figrt.add_subplot(2,5, i%10 + 1))
@@ -284,11 +281,9 @@ def main():
         params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
         params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
 
-        #'''
         if i==0:
             params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.68,'limits':(-2,2),'error':0.01}
             params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.55,'limits':(0.05,30),'error':0.01}
-        #'''
 
         # Try fixing the slow sigma
         params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.55,'limits':(-2,2),'error':0.01}

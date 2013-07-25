@@ -68,6 +68,7 @@ def main():
     # Read in the data
     ############################################################################
     infile_name = 'data/LE.txt'
+    #infile_name = 'data/HE.txt'
     tdays,energies,rise_times = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
     print tdays
     print energies
@@ -112,6 +113,8 @@ def main():
     plt.yscale('log')
     plt.ylim(0.1,10)
 
+    #plt.show()
+    #exit()
     ############################################################################
     # Plot the data
     ############################################################################
@@ -140,7 +143,7 @@ def main():
         found = False
         for i,elo in enumerate(rt_parameters[0]):
             #print i,elo
-            if (e>=elo-0.02500001 and e<elo+0.02500001) or e<0.600:
+            if (e>=elo-0.10000001 and e<elo+0.10000001) or e<0.600:
                 fmu.append(rt_parameters[1][i])
                 fsig.append(rt_parameters[2][i])
                 fn.append(rt_parameters[3][i])
@@ -163,10 +166,14 @@ def main():
     for i,rt in enumerate(data[2]):
         # Loop over the energy slices
         #print i,e,fmu[i],fsig[i],fn[i]
-        w = fn[i]*pdfs.lognormal(rt,fmu[i],fsig[i],ranges[2][0],ranges[2][1])
+        #w = fn[i]*pdfs.lognormal(rt,fmu[i],fsig[i],ranges[2][0],ranges[2][1])
+        w = npts[i]*fn[i]*pdfs.lognormal(rt,fmu[i],fsig[i],ranges[2][0],ranges[2][1])
+        #w = fn[i]
         #w /= nevents
         fweights.append(w)
-        w = sn[i]*pdfs.lognormal(rt,smu[i],ssig[i],ranges[2][0],ranges[2][1])
+        #w = sn[i]*pdfs.lognormal(rt,smu[i],ssig[i],ranges[2][0],ranges[2][1])
+        w = npts[i]*sn[i]*pdfs.lognormal(rt,smu[i],ssig[i],ranges[2][0],ranges[2][1])
+        #w = sn[i]
         #w /= nevents
         sweights.append(w)
 
