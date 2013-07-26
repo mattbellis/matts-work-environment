@@ -218,12 +218,12 @@ def main():
     expts = []
 
     #for i in range(0,16):
-    for j in range(10,1,-1):
+    for j in range(15,1,-1):
         #i = j
-        i = 10-j
-        if i%10==0:
-            figrt = plt.figure(figsize=(16,8),dpi=100)
-        axrt.append(figrt.add_subplot(2,5, i%10 + 1))
+        i = 15-j
+        if i%15==0:
+            figrt = plt.figure(figsize=(12,8),dpi=100)
+        axrt.append(figrt.add_subplot(3,5, i%15 + 1))
 
         #figrt = plt.figure(figsize=(6,4),dpi=100)
         #axrt.append(figrt.add_subplot(1,1,1))
