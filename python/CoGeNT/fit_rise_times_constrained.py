@@ -42,12 +42,16 @@ def fitfunc(data,p,parnames,params_dict):
 
     pdf = None
 
-    x = data
+    rt = data[0]
+    e = data[1]
 
-    xlo = params_dict['var_rt']['limits'][0]
-    xhi = params_dict['var_rt']['limits'][1]
+    rtlo = params_dict['var_rt']['limits'][0]
+    rthi = params_dict['var_rt']['limits'][1]
 
-    tot_pdf = np.zeros(len(x))
+    elo = params_dict['var_e']['limits'][0]
+    ehi = params_dict['var_e']['limits'][1]
+
+    tot_pdf = np.zeros(len(rt))
 
     #print "HERE"
     #print data[data<0]
@@ -64,20 +68,54 @@ def fitfunc(data,p,parnames,params_dict):
     num_tot += p[parnames.index("fast_num")]
     num_tot += p[parnames.index("slow_num")]
 
-    means.append(p[pn.index('fast_logn_mean')])
-    means.append(p[pn.index('slow_logn_mean')])
-    sigmas.append(p[pn.index('fast_logn_sigma')])
-    sigmas.append(p[pn.index('slow_logn_sigma')])
+    fma0 = p[pn.index('fast_logn_mean_a0')]
+    fma1 = p[pn.index('fast_logn_mean_a1')]
+    fma2 = p[pn.index('fast_logn_mean_a2')]
+
+    fsa0 = p[pn.index('fast_logn_sigma_a0')]
+    fsa1 = p[pn.index('fast_logn_sigma_a1')]
+    fsa2 = p[pn.index('fast_logn_sigma_a2')]
+
+    fna0 = p[pn.index('fast_num_a0')]
+    fna1 = p[pn.index('fast_num_a1')]
+    fna2 = p[pn.index('fast_num_a2')]
+
+    sma0 = p[pn.index('slow_logn_mean_a0')]
+    sma1 = p[pn.index('slow_logn_mean_a1')]
+    sma2 = p[pn.index('slow_logn_mean_a2')]
+
+    ssa0 = p[pn.index('slow_logn_sigma_a0')]
+    ssa1 = p[pn.index('slow_logn_sigma_a1')]
+    ssa2 = p[pn.index('slow_logn_sigma_a2')]
+
+    sna0 = p[pn.index('slow_num_a0')]
+    sna1 = p[pn.index('slow_num_a1')]
+    sna2 = p[pn.index('slow_num_a2')]
+
     nums.append(p[pn.index('fast_num')]/num_tot) 
     nums.append(p[pn.index('slow_num')]/num_tot) 
 
+    #fmeans = fma0 + fma1*e + fma2*e*e
+    #fsigmas = fsa0 + fsa1*e + fsa2*e*e
+    fnums = fna0 + fna1*e + fna2*e*e
+
+    #smeans = sma0 + sma1*e + sma2*e*e
+    #ssigmas = ssa0 + ssa1*e + ssa2*e*e
+    snums = sna0 + sna1*e + sna2*e*e
+
     #print means,sigmas,nums
 
-    for n,m,s in zip(nums,means,sigmas): 
-        pdf  = pdfs.lognormal(x,m,s,xlo,xhi)
-        pdf *= n
-        tot_pdf += pdf
+    fpdf  = pdfs.lognormal2D_unnormalized(rt,e,[fma0,fma1,fma2],[fsa0,fsa1,fsa2])
+    normalization = integrate.dblquad(pdfs.lognormal2D_unnormalized,elo,ehi,lambda x: rtlo, lambda x: rthi,args=([fma0,fma1,fma2],[fsa0,fsa1,fsa2]),epsabs=10.0)
+    fpdf /= normalization[0]
+    fpdf *= fnums
 
+    spdf  = pdfs.lognormal2D_unnormalized(rt,e,[sma0,sma1,sma2],[ssa0,ssa1,ssa2])
+    normalization = integrate.dblquad(pdfs.lognormal2D_unnormalized,elo,ehi,lambda x: rtlo, lambda x: rthi,args=([fma0,fma1,fma2],[fsa0,fsa1,fsa2]),epsabs=10.0)
+    spdf /= normalization[0]
+    spdf *= snums
+
+    tot_pdf = fpdf + spdf
 
     return tot_pdf
 
@@ -98,7 +136,7 @@ def emlf(data,p,parnames,params_dict):
     num_tot += p[parnames.index("fast_num")]
     num_tot += p[parnames.index("slow_num")]
 
-    tot_pdf = fitfunc(data[0],p,parnames,params_dict)
+    tot_pdf = fitfunc([data[0],data[1]],p,parnames,params_dict)
 
     likelihood_func = (-np.log(tot_pdf)).sum()
 
@@ -217,92 +255,59 @@ def main():
 
     expts = []
 
-    for i in range(0,16):
-        if i%10==0:
-            figrt = plt.figure(figsize=(16,8),dpi=100)
-        axrt.append(figrt.add_subplot(2,5, i%10 + 1))
+    for i in range(0,1):
 
-        #figrt = plt.figure(figsize=(6,4),dpi=100)
-        #axrt.append(figrt.add_subplot(1,1,1))
+        figrt = plt.figure(figsize=(6,4),dpi=100)
+        axrt.append(figrt.add_subplot(1,1,1))
 
-        data_to_fit = []
-        #h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=ax1)
+        data_to_fit = [data[2],data[0]]
 
-        if i>=0:
-            elo = i*estep + eoffset
-            ehi = elo + ewidth
-            index0 = data[0]>=elo
-            index1 = data[0]< ehi
-            print elo,ehi
-            index = index0*index1
-            data_to_fit = data[2][index]
-
-        if len(data_to_fit)>0:
-            lch.hist_err(data_to_fit,bins=nbins[2],range=ranges[2],axes=axrt[i])
-            plt.ylim(0)
-            plt.xlim(ranges[2][0],ranges[2][1])
-            name = "%0.2f-%0.2f" % (elo,ehi)
-            plt.text(0.75,0.75,name,transform=axrt[i].transAxes)
-
-        nevents = len(data_to_fit)
-        if i==0:
-            starting_params = [-0.6,0.6,0.2*nevents,  0.6,0.55,0.8*nevents]
-        '''
-        if elo>=1.0 and elo<1.2:    
-            starting_params = [0.1,0.2,0.3*nevents,  0.2,3.0,0.7*nevents]
-        '''
         ############################################################################
         # Declare the fit parameters
         ############################################################################
         params_dict = {}
         params_dict['flag'] = {'fix':True,'start_val':args.fit} 
+
         params_dict['var_rt'] = {'fix':True,'start_val':0,'limits':(ranges[2][0],ranges[2][1])}
-        #params_dict['fast_logn_mean'] = {'fix':False,'start_val':0.005,'limits':(-2,2),'error':0.1}
-        #params_dict['fast_logn_sigma'] = {'fix':False,'start_val':0.5,'limits':(0.01,5),'error':0.1}
-        #params_dict['fast_num'] = {'fix':False,'start_val':0.2*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
-        #params_dict['slow_logn_mean'] = {'fix':False,'start_val':0.5,'limits':(-2,2),'error':0.1}
-        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':1.0,'limits':(0.01,5),'error':0.1}
-        #params_dict['slow_num'] = {'fix':False,'start_val':0.8*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
+        params_dict['var_e'] = {'fix':True,'start_val':0,'limits':(ranges[0][0],ranges[0][1])}
 
-        #starting_params = [1.0,1.2,0.6*nevents,  0.1,0.8,0.4*nevents]
+        params_dict['fast_logn_mean_a0'] = {'fix':False,'start_val':-0.6,'limits':(-20,20),'error':0.01}
+        params_dict['fast_logn_mean_a1'] = {'fix':True,'start_val':-0.1,'limits':(-20,20),'error':0.01}
+        params_dict['fast_logn_mean_a2'] = {'fix':True,'start_val':0.0,'limits':(-20,20),'error':0.01}
 
-        # Worked for 1.0-1.25
-        #params_dict['fast_logn_mean'] = {'fix':False,'start_val':1.000,'limits':(-2,2),'error':0.1}
-        #params_dict['fast_logn_sigma'] = {'fix':False,'start_val':1.2,'limits':(0.01,5),'error':0.1}
-        #params_dict['fast_num'] = {'fix':False,'start_val':0.6*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
-        #params_dict['slow_logn_mean'] = {'fix':False,'start_val':0.1,'limits':(-2,2),'error':0.1}
-        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.8,'limits':(0.01,5),'error':0.1}
-        #params_dict['slow_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
+        params_dict['fast_logn_sigma_a0'] = {'fix':True,'start_val':0.6,'limits':(-20,20),'error':0.01}
+        params_dict['fast_logn_sigma_a1'] = {'fix':True,'start_val':-0.1,'limits':(-20,20),'error':0.01}
+        params_dict['fast_logn_sigma_a2'] = {'fix':True,'start_val':0.0,'limits':(-20,20),'error':0.01}
 
-        params_dict['fast_logn_mean'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.01}
-        params_dict['fast_logn_sigma'] = {'fix':False,'start_val':starting_params[1],'limits':(0.05,30),'error':0.01}
-        params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
-        params_dict['fast_num'] = {'fix':False,'start_val':starting_params[2],'limits':(0.0,1.5*nevents),'error':0.01}
-        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
-        params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
+        params_dict['slow_logn_mean_a0'] = {'fix':True,'start_val':0.7,'limits':(-20,20),'error':0.01}
+        params_dict['slow_logn_mean_a1'] = {'fix':True,'start_val':-0.1,'limits':(-20,20),'error':0.01}
+        params_dict['slow_logn_mean_a2'] = {'fix':True,'start_val':0.0,'limits':(-20,20),'error':0.01}
 
-        if i==0:
-            params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.68,'limits':(-2,2),'error':0.01}
-            params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.55,'limits':(0.05,30),'error':0.01}
+        params_dict['slow_logn_sigma_a0'] = {'fix':True,'start_val':0.55,'limits':(-20,20),'error':0.01}
+        params_dict['slow_logn_sigma_a1'] = {'fix':True,'start_val':0.01,'limits':(-20,20),'error':0.01}
+        params_dict['slow_logn_sigma_a2'] = {'fix':True,'start_val':0.0,'limits':(-20,20),'error':0.01}
 
-        # Try fixing the slow sigma
-        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.55,'limits':(-2,2),'error':0.01}
+        params_dict['fast_num_a0'] = {'fix':True,'start_val':1.0,'limits':(-20,20),'error':0.01}
+        params_dict['fast_num_a1'] = {'fix':True,'start_val':0.0,'limits':(-20,20),'error':0.01}
+        params_dict['fast_num_a2'] = {'fix':True,'start_val':0.0,'limits':(-20,20),'error':0.01}
 
-        #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
-        #figrt.subplots_adjust(left=0.05, right=0.98)
-        figrt.subplots_adjust(left=0.15, right=0.98,bottom=0.15)
-        #plt.show()
-        #exit()
+        params_dict['slow_num_a0'] = {'fix':True,'start_val':1.0,'limits':(-20,20),'error':0.01}
+        params_dict['slow_num_a1'] = {'fix':True,'start_val':0.0,'limits':(-20,20),'error':0.01}
+        params_dict['slow_num_a2'] = {'fix':True,'start_val':0.0,'limits':(-20,20),'error':0.01}
+
+        params_dict['slow_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
+        params_dict['fast_num'] = {'fix':False,'start_val':0.6*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
 
         ############################################################################
         # Fit
         ############################################################################
 
-        if i>=0 and len(data_to_fit)>0:
+
+        if 1:
             params_names,kwd = fitutils.dict2kwd(params_dict)
         
             #print data_to_fit
-            f = fitutils.Minuit_FCN([[data_to_fit]],params_dict,emlf)
+            f = fitutils.Minuit_FCN([data_to_fit],params_dict,emlf)
 
             kwd['errordef'] = 0.5
             kwd['print_level'] = 2
@@ -331,6 +336,7 @@ def main():
             fit_errors.append(errors)
             nevs.append(len(data_to_fit))
 
+            '''
             xpts = np.linspace(ranges[2][0],ranges[2][1],1000)
             tot_ypts = np.zeros(len(xpts))
 
@@ -347,8 +353,10 @@ def main():
             axrt[i].set_xlabel(r'Rise time ($\mu$s)')
             name = "Plots/rt_slice_%d.png" % (i)
             plt.savefig(name)
+            '''
 
-            if math.isnan(values['fast_logn_mean']) == False:
+            '''
+            if math.isnan(values['fast_logn_mean_a0']) == False:
                 starting_params = [ \
                 values['fast_logn_mean'], \
                 values['fast_logn_sigma'], \
@@ -357,6 +365,7 @@ def main():
                 values['slow_logn_sigma'],
                 values['slow_num'] \
                 ]
+            '''
 
             expts.append((ehi+elo)/2.0)
 
@@ -367,6 +376,7 @@ def main():
     yerr = [[],[],[],[],[],[]]
     npts = []
 
+    '''
     if len(expts)>0:
         for i,fp,fe,n in zip(xrange(len(nevs)),fit_parameters,fit_errors,nevs):
             print "----------"
@@ -416,6 +426,7 @@ def main():
         plt.savefig('Plots/rt_summary.png')
 
         np.savetxt('rt_parameters.txt',[expts,ypts[0],ypts[1],ypts[2],ypts[3],ypts[4],ypts[5],npts])
+    '''
 
     if not args.batch:
         plt.show()
