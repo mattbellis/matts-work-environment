@@ -278,18 +278,25 @@ def gSHM(Er, t, A, m):
     x = vmin(Er,A,m)/vo
 
     if type(Er)==np.ndarray:
+        #print "HERE!"
         nvals = len(Er)
         ret = np.zeros(nvals)
-        ret[x<z-y] = glow(Er,t,A,m)
-        ret[x<z+y] = ghigh(Er,t,A,m)
+        #print len(Er)
+        test = glow(Er,t,A,m)[x<z-y]
+        #print type(test)
+        #print test.shape
+        #print ret.shape
+        #print ret[x<z-y].shape
+        ret[x<z-y] = glow(Er,t,A,m)[x<z-y]
+        ret[x<z+y] = ghigh(Er,t,A,m)[x<z+y]
 
         return ret
 
     elif type(t)==np.ndarray:
         nvals = len(t)
         ret = np.zeros(nvals)
-        ret[x<z-y] = glow(Er,t,A,m)
-        ret[x<z+y] = ghigh(Er,t,A,m)
+        ret[x<z-y] = glow(Er,t,A,m)[x<z-y]
+        ret[x<z+y] = ghigh(Er,t,A,m)[x<z+y]
 
         return ret
 

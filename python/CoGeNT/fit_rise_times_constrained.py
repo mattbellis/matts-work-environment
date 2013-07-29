@@ -92,28 +92,31 @@ def fitfunc(data,p,parnames,params_dict):
     sna1 = p[pn.index('slow_num_a1')]
     sna2 = p[pn.index('slow_num_a2')]
 
-    nums.append(p[pn.index('fast_num')]/num_tot) 
-    nums.append(p[pn.index('slow_num')]/num_tot) 
+    #nums.append(p[pn.index('fast_num')]/num_tot) 
+    #nums.append(p[pn.index('slow_num')]/num_tot) 
+
+    fast_num = p[pn.index('fast_num')]/num_tot
+    slow_num = p[pn.index('slow_num')]/num_tot
 
     #fmeans = fma0 + fma1*e + fma2*e*e
     #fsigmas = fsa0 + fsa1*e + fsa2*e*e
-    fnums = fna0 + fna1*e + fna2*e*e
+    #fnums = fna0 + fna1*e + fna2*e*e
 
     #smeans = sma0 + sma1*e + sma2*e*e
     #ssigmas = ssa0 + ssa1*e + ssa2*e*e
-    snums = sna0 + sna1*e + sna2*e*e
+    #snums = sna0 + sna1*e + sna2*e*e
 
     #print means,sigmas,nums
 
-    fpdf  = pdfs.lognormal2D_unnormalized(rt,e,[fma0,fma1,fma2],[fsa0,fsa1,fsa2])
-    normalization = integrate.dblquad(pdfs.lognormal2D_unnormalized,elo,ehi,lambda x: rtlo, lambda x: rthi,args=([fma0,fma1,fma2],[fsa0,fsa1,fsa2]),epsabs=10.0)
+    fpdf  = pdfs.lognormal2D_unnormalized(rt,e,[fma0,fma1,fma2],[fsa0,fsa1,fsa2],[fna0,fna1,fna2])
+    normalization = integrate.dblquad(pdfs.lognormal2D_unnormalized,elo,ehi,lambda x: rtlo, lambda x: rthi,args=([fma0,fma1,fma2],[fsa0,fsa1,fsa2],[fna0,fna1,fna2]),epsabs=10.0)
     fpdf /= normalization[0]
-    fpdf *= fnums
+    fpdf *= fast_num
 
-    spdf  = pdfs.lognormal2D_unnormalized(rt,e,[sma0,sma1,sma2],[ssa0,ssa1,ssa2])
-    normalization = integrate.dblquad(pdfs.lognormal2D_unnormalized,elo,ehi,lambda x: rtlo, lambda x: rthi,args=([fma0,fma1,fma2],[fsa0,fsa1,fsa2]),epsabs=10.0)
+    spdf  = pdfs.lognormal2D_unnormalized(rt,e,[sma0,sma1,sma2],[ssa0,ssa1,ssa2],[sna0,sna1,sna2])
+    normalization = integrate.dblquad(pdfs.lognormal2D_unnormalized,elo,ehi,lambda x: rtlo, lambda x: rthi,args=([fma0,fma1,fma2],[fsa0,fsa1,fsa2],[sna0,sna1,sna2]),epsabs=10.0)
     spdf /= normalization[0]
-    spdf *= snums
+    spdf *= slow_num
 
     tot_pdf = fpdf + spdf
 
