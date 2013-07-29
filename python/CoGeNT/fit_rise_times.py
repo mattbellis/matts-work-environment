@@ -148,6 +148,7 @@ def main():
     # Read in the data
     ############################################################################
     infile_name = 'data/LE.txt'
+    #infile_name = 'data/HE.txt'
     tdays,energies,rise_times = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
     print tdays
     print energies
@@ -161,7 +162,7 @@ def main():
     #print "data before range cuts: ",len(data[0]),len(data[1])
 
     # 3yr data
-    data = [energies.copy(),tdays.copy(),rise_times]
+    data = [energies.copy(),tdays.copy(),rise_times.copy()]
     print "data before range cuts: ",len(data[0]),len(data[1]),len(data[2])
     #exit()
 
@@ -191,6 +192,11 @@ def main():
     plt.yscale('log')
     plt.ylim(0.1,10)
 
+    plt.figure()
+    plt.plot(tdays,rise_times,'o',markersize=1.5)
+    plt.yscale('log')
+    plt.ylim(0.1,10)
+
     ############################################################################
     # Plot the data
     ############################################################################
@@ -217,13 +223,13 @@ def main():
 
     expts = []
 
-    #for i in range(0,16):
-    for j in range(15,1,-1):
+    #for j in range(25,0,-1):
+    for i in range(0,16):
         #i = j
-        i = 15-j
-        if i%15==0:
-            figrt = plt.figure(figsize=(12,8),dpi=100)
-        axrt.append(figrt.add_subplot(3,5, i%15 + 1))
+        #i = 25-j
+        if i%6==0:
+            figrt = plt.figure(figsize=(12,6),dpi=100)
+        axrt.append(figrt.add_subplot(2,3, i%6 + 1))
 
         #figrt = plt.figure(figsize=(6,4),dpi=100)
         #axrt.append(figrt.add_subplot(1,1,1))
@@ -286,16 +292,17 @@ def main():
 
         #'''
         if i==0:
-            params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.68,'limits':(-2,2),'error':0.01}
-            params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.55,'limits':(0.05,30),'error':0.01}
+            params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.60,'limits':(-2,2),'error':0.01}
+            params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.50,'limits':(0.05,30),'error':0.01}
         #'''
 
         # Try fixing the slow sigma
-        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.55,'limits':(-2,2),'error':0.01}
+        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.55,'limits':(-2,2),'error':0.01}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
         #figrt.subplots_adjust(left=0.05, right=0.98)
-        figrt.subplots_adjust(left=0.15, right=0.98,bottom=0.15)
+        #figrt.subplots_adjust(left=0.15, right=0.98,bottom=0.15)
+        figrt.subplots_adjust(left=0.07, right=0.98,bottom=0.10)
         #plt.show()
         #exit()
 
@@ -391,6 +398,9 @@ def main():
 
             npts.append(n)
 
+        for i in xrange(len(ypts)):
+            ypts[i] = np.array(ypts[i])
+
         print ypts
         fvals = plt.figure(figsize=(13,4),dpi=100)
         fvals.add_subplot(1,3,1)
@@ -401,6 +411,26 @@ def main():
         plt.ylabel(r'Lognormal $\mu$')
         plt.legend()
 
+        index0 = np.arange(0,3)
+        index1 = np.arange(7,len(expts))
+        #index1 = np.arange(10,20)
+        index = np.append(index0,index1)
+        print index
+
+        xp = np.linspace(min(expts),max(expts))
+        expts = np.array(expts)
+
+        z = np.polyfit(expts[index],ypts[0][index],2)
+        print z
+        p = np.poly1d(z)
+        plt.plot(xp,p(xp),'-')
+
+        z = np.polyfit(expts[index],ypts[3][index],2)
+        print z
+        p = np.poly1d(z)
+        plt.plot(xp,p(xp),'-')
+
+
         fvals.add_subplot(1,3,2)
         plt.errorbar(expts,ypts[1],xerr=0.01,yerr=yerr[1],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
         plt.errorbar(expts,ypts[4],xerr=0.01,yerr=yerr[4],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
@@ -408,6 +438,16 @@ def main():
         plt.xlabel('Energy (keVee)')
         plt.ylabel(r'Lognormal $\sigma$')
         plt.legend()
+
+        z = np.polyfit(expts[index],ypts[1][index],2)
+        print z
+        p = np.poly1d(z)
+        plt.plot(xp,p(xp),'-')
+
+        z = np.polyfit(expts[index],ypts[4][index],2)
+        print z
+        p = np.poly1d(z)
+        plt.plot(xp,p(xp),'-')
 
         fvals.add_subplot(1,3,3)
         plt.errorbar(expts,ypts[2],xerr=0.01,yerr=yerr[2],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
@@ -417,6 +457,16 @@ def main():
         plt.ylabel(r'% of events in bin')
         plt.legend()
 
+        z = np.polyfit(expts[index],ypts[2][index],2)
+        print z
+        p = np.poly1d(z)
+        plt.plot(xp,p(xp),'-')
+
+        z = np.polyfit(expts[index],ypts[5][index],2)
+        print z
+        p = np.poly1d(z)
+        plt.plot(xp,p(xp),'-')
+
         fvals.subplots_adjust(left=0.08, right=0.98,bottom=0.15,wspace=0.25)
         plt.savefig('Plots/rt_summary.png')
 
@@ -425,7 +475,7 @@ def main():
     if not args.batch:
         plt.show()
 
-    exit()
+    #exit()
 
 
 ################################################################################

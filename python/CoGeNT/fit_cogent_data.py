@@ -85,11 +85,11 @@ def main():
     if args.verbose:
         print_data(energies,tdays)
 
-    #data = [energies.copy(),tdays.copy()]
-    #print "data before range cuts: ",len(data[0]),len(data[1])
+    data = [energies.copy(),tdays.copy()]
+    print "data before range cuts: ",len(data[0]),len(data[1])
 
     # 3yr data
-    data = [energies.copy(),tdays.copy(),rise_time]
+    data = [energies.copy(),tdays.copy(),rise_time.copy()]
     print "data before range cuts: ",len(data[0]),len(data[1]),len(data[2])
     #exit()
 
@@ -187,6 +187,7 @@ def main():
     # Look at the rise-time information.
     ############################################################################
 
+    '''
     figrt = plt.figure(figsize=(8,8),dpi=100)
     axrt = []
     for i in range(0,16):
@@ -213,9 +214,10 @@ def main():
 
     #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
 
-    plt.show()
-    exit()
+    #plt.show()
+    #exit()
 
+    '''
 
 
     ############################################################################

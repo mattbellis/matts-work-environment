@@ -4,10 +4,11 @@ import scipy.special as special
 import scipy.constants as constants
 import scipy.integrate as integrate
 
-#import chris_kelso_code as dmm
-import chris_kelso_code_cython as dmm
+import chris_kelso_code as dmm
+#import chris_kelso_code_cython as dmm
 
 import plotting_utilities as pu
+import lichen.plotting_utilities as plotting_utilities
 import fitting_utilities as fu
 import cogent_pdfs as cpdf
 
@@ -160,7 +161,7 @@ def main():
     print "# WIMPs: ",num_wimps
 
     func = lambda x: pu.plot_wimp_day(x,target_atom,mDM,sigma_n,e_range=[elo,ehi],model=args.model)
-    pu.plot_pdf_from_lambda(func,scale=num_wimps,fmt='k-',linewidth=3,axes=ax2,subranges=[[1,365]])
+    plotting_utilities.plot_pdf_from_lambda(func,scale=num_wimps,fmt='k-',linewidth=3,axes=ax2,subranges=[[1,365]])
 
     ax2.set_ylim(0.0,num_wimps/100.0)
 
