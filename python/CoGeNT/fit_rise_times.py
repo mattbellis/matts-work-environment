@@ -421,12 +421,12 @@ def main():
         expts = np.array(expts)
 
         z = np.polyfit(expts[index],ypts[0][index],2)
-        print z
+        print "[%f,%f,%f]" % (z[2],z[1],z[0])
         p = np.poly1d(z)
         plt.plot(xp,p(xp),'-')
 
         z = np.polyfit(expts[index],ypts[3][index],2)
-        print z
+        print "[%f,%f,%f]" % (z[2],z[1],z[0])
         p = np.poly1d(z)
         plt.plot(xp,p(xp),'-')
 
@@ -440,12 +440,12 @@ def main():
         plt.legend()
 
         z = np.polyfit(expts[index],ypts[1][index],2)
-        print z
+        print "[%f,%f,%f]" % (z[2],z[1],z[0])
         p = np.poly1d(z)
         plt.plot(xp,p(xp),'-')
 
         z = np.polyfit(expts[index],ypts[4][index],2)
-        print z
+        print "[%f,%f,%f]" % (z[2],z[1],z[0])
         p = np.poly1d(z)
         plt.plot(xp,p(xp),'-')
 
@@ -458,12 +458,12 @@ def main():
         plt.legend()
 
         z = np.polyfit(expts[index],ypts[2][index],2)
-        print z
+        print "[%f,%f,%f]" % (z[2],z[1],z[0])
         p = np.poly1d(z)
         plt.plot(xp,p(xp),'-')
 
         z = np.polyfit(expts[index],ypts[5][index],2)
-        print z
+        print "[%f,%f,%f]" % (z[2],z[1],z[0])
         p = np.poly1d(z)
         plt.plot(xp,p(xp),'-')
 
