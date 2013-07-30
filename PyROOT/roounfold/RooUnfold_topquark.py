@@ -114,8 +114,8 @@ for n in xrange(nev):
 ################################################################################
 # Unfold with one of the algorithms
 ################################################################################
-#unfold0 = RooUnfoldBayes(response,hMC_meas,4);
-unfold0 = RooUnfoldSvd(response,hMC_meas, 20);  
+unfold0 = RooUnfoldBayes(response,hMC_meas,4);
+#unfold0 = RooUnfoldSvd(response,hMC_meas, 20);  
 
 
 # MC true, measured, and unfolded histograms 
@@ -155,11 +155,12 @@ response.Mresponse().Print()
 c5 = TCanvas('c5', 'Response matrix',200,10,1000,500)
 c5.Divide(2,1)
 c5.cd(1)
-#response.Hresponse().Draw()
-response.Mresponse().Draw("colz")
+response.Hresponse().Draw("colz")
+#response.Mresponse().Draw("colz")
 c5.cd(2)
 #response.Hresponse().Draw()
-response.Mresponse().Draw("")
+#response.Mresponse().Draw("")
+response.Mresponse().Draw("colz")
 
 
 ################################################################################
