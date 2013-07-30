@@ -1,13 +1,5 @@
 #!/usr/bin/env python
 # ==============================================================================
-#  File and Version Information:
-#       $Id: RooUnfoldExample.py 302 2011-09-30 20:39:20Z T.J.Adye $
-#
-#  Description:
-#       Simple example usage of the RooUnfold package using toy MC.
-#
-#  Author: Tim Adye <T.J.Adye@rl.ac.uk>
-#
 # ==============================================================================
 
 from ROOT import gRandom, TH1, TH1D, cout, TCanvas
@@ -37,7 +29,6 @@ chain = ROOT.TChain("Events")
 for file in sys.argv[1:]:
         chain.AddFile(file)
 
-
 print "==================================== TRAIN ===================================="
 response= RooUnfoldResponse (40,100,600)
 hMC_true = TH1D("MC_true","Truth and measured: Top quark p_{t}", 40, 100,600)
@@ -54,8 +45,6 @@ str_meas_eta = "floats_pfShyftTupleJetsLooseTopTag_eta_ANA.obj"
 str_meas_phi = "floats_pfShyftTupleJetsLooseTopTag_phi_ANA.obj"
 
 chain.SetBranchStatus('*', 1 )
-#chain.SetBranchStatus(truth, 1 )
-#chain.SetBranchStatus(meas, 1 )
 
 # Assume for now that there are only two tops.
 ntops = 2
@@ -72,12 +61,16 @@ eta_meas = [0.0,0.0]
 phi_truth = [0.0,0.0]
 phi_meas = [0.0,0.0]
 
+################################################################################
+# Loop over the events
+################################################################################
 for n in xrange(nev):
     if n%1000==0:
         print n
 
     chain.GetEntry(n)
 
+    # Loop over the top and antitop truth info.
     for i in range(0,2):
 
         pt_truth = chain.GetLeaf(str_truth_pt).GetValue(i)
@@ -91,20 +84,25 @@ for n in xrange(nev):
         min_dR_pt = -1
         min_index = -1
 
+        # Loop over (if there are any) the reconstructed top jets.
         for j in range(0,2):
 
             pt_meas = chain.GetLeaf(str_meas_pt).GetValue(j)
             eta_meas = chain.GetLeaf(str_meas_eta).GetValue(j)
             phi_meas = chain.GetLeaf(str_meas_phi).GetValue(j)
 
+            # Calc dR between truth and reconstructed jet.
             dR = np.sqrt((eta_meas-eta_truth)**2 + (phi_meas-phi_truth)**2)
 
+            # Make some pt cuts for now. May relax this. 
+            # If reconstructed is within dR<0.8, this is a match!
             if pt_meas > 100 and pt_meas<600:
                 if dR < min_dR and dR < 0.8:
                     min_dR = dR
                     min_dR_pt = pt_meas
                     found_match = True
 
+        # Fill the response matrix accordingly.
         if found_match == False:
             response.Miss (pt_truth)
         else:
@@ -113,39 +111,15 @@ for n in xrange(nev):
 
 
 
-    '''
-    if val_meas>100 and val_meas<600:
-        hMC_meas.Fill(val_meas)
-
-    if val_meas>100 and val_meas<600:
-        response.Fill (val_meas, val_truth)
-    else:
-        response.Miss (val_truth)
-    '''
-
- 
-
-'''
-#  Train with a Breit-Wigner, mean 0.3 and width 2.5.
-for i in xrange(100000):
-  xt= gRandom.BreitWigner (0.3, 2.5);
-  x= smear (xt);
-  hMC_true.Fill(xt);
-  if x!=None:
-    response.Fill (x, xt);
-    hMC_meas.Fill(x);
-  else:
-    response.Miss (xt);
-
-'''
-
+################################################################################
+# Unfold with one of the algorithms
+################################################################################
 #unfold0 = RooUnfoldBayes(response,hMC_meas,4);
 unfold0 = RooUnfoldSvd(response,hMC_meas, 20);  
 
 
 # MC true, measured, and unfolded histograms 
 c1 = TCanvas( 'c1', 'MC', 200, 10, 700, 500 )
-
 
 hMC_true.SetLineColor(kBlack);  
 hMC_true.Draw();  # MC raw 
@@ -173,57 +147,8 @@ c2.SaveAs("MC_eff.png")
 
 c2.Update()
 
-'''
-print "==================================== TEST ====================================="
-hTrue= TH1D ("true", "Test Measured: Gaussian",    40, -10.0, 10.0);
-hMeas= TH1D ("meas", "Test Efficiency: Gaussian", 40, -10.0, 10.0);
-#  Test with a Gaussian, mean 0 and width 2.
-for i in xrange(10000):
-  xt= gRandom.Gaus (0.0, 2.0)
-  x= smear (xt);
-  hTrue.Fill(xt);
-  if x!=None:
-    hMeas.Fill(x);
 
-# Data efficiency (meas/raw)
-c4 = TCanvas( 'c4', 'Data_eff', 200, 10, 700, 500)
-
-hData_eff = hMeas.Clone();
-hData_eff.Divide(hTrue);
-c4.SetLogy();
-hData_eff.Draw();
-c4.SaveAs("Data_eff.png")
-
-c4.Update()
-
-
-print "==================================== UNFOLD ==================================="
-# unfold= RooUnfoldBayes     (response, hMeas, 4);    #  OR
-unfold= RooUnfoldSvd     (response, hMeas, 20);   #  OR
-# unfold= RooUnfoldTUnfold (response, hMeas);
-
-
-# Data true, measured and unfolded histograms 
-c3 = TCanvas( 'c3', 'Data', 200, 10, 700, 500 )
-
-hTrue.SetLineColor(kBlack);
-hTrue.Draw();     # Data raw
-c3.SaveAs("Data_true.png")
-
-hMeas.SetLineColor(kBlue);
-hMeas.Draw("SAME");     # Data measured
-c3.SaveAs("Data_meas.png")
-
-hReco= unfold.Hreco();
-unfold.PrintTable (cout, hTrue);
-hReco.SetLineColor(kRed);
-hReco.Draw("SAME");           # Data unfolded 
-c3.SaveAs("Data_unfold.png")
-
-c3.Update()
-'''
-
-#================================================================================
+################################################################################
 print "======================================Response matrix========================="
 response.Mresponse().Print()
 
