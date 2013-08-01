@@ -68,7 +68,22 @@ def mu(A, m):
 # Quenching factor
 ################################################################################
 def quench_keVr_to_keVee(x):
-    y = 0.2*(x**(1.12))
+    # From Chris Kelso for Ge (CDMS calculations using CoGeNT measurements?)
+    #y = 0.2*(x**(1.12))
+
+    # For Ge, according to Phil Barbeau
+    Z = 32
+    A = AGe
+
+    #k = 0.133*(Z**(2.0/3.))*(A**(-0.5))
+    # This k below is what Phil gets from his fits.
+    k = 0.169
+    print k
+    epsilon = 11.5*x*(Z**(-7./3.))
+    g_epsilon = 3.*(epsilon**0.15) + 0.7*(epsilon**0.6) + epsilon
+
+    y = (x*k*g_epsilon)/(1.+(k*g_epsilon))
+
     return y
 
 def quench_keVee_to_keVr(x):

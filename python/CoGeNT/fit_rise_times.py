@@ -216,19 +216,20 @@ def main():
     ehi = 1.0
     eoffset = 0.5
 
-    #ewidth = 0.20
-    #estep = 0.20
+    ewidth = 0.10
+    estep = 0.10
 
-    ewidth = 0.200
-    estep = 0.050
+    #ewidth = 0.200
+    #estep = 0.050
 
     expts = []
 
     #for j in range(25,0,-1):
-    for i in range(0,64):
+    for i in range(32,-1,-1):
         #i = j
         #i = 25-j
-        if i%6==0:
+        j = 32-i
+        if j%6==0:
             figrt = plt.figure(figsize=(12,6),dpi=100)
         axrt.append(figrt.add_subplot(2,3, i%6 + 1))
 
@@ -248,15 +249,20 @@ def main():
             data_to_fit = data[2][index]
 
         if len(data_to_fit)>0:
-            lch.hist_err(data_to_fit,bins=nbins[2],range=ranges[2],axes=axrt[i])
+            lch.hist_err(data_to_fit,bins=nbins[2],range=ranges[2],axes=axrt[j])
             plt.ylim(0)
             plt.xlim(ranges[2][0],ranges[2][1])
             name = "%0.2f-%0.2f" % (elo,ehi)
-            plt.text(0.75,0.75,name,transform=axrt[i].transAxes)
+            plt.text(0.75,0.75,name,transform=axrt[j].transAxes)
+            print "=======-------- E BIN ----------==========="
+            print name
 
         nevents = len(data_to_fit)
+        starting_params = [-0.6,0.6,0.2*nevents,  0.6,0.55,0.8*nevents]
+        '''
         if i==0:
             starting_params = [-0.6,0.6,0.2*nevents,  0.6,0.55,0.8*nevents]
+        '''
         '''
         if elo>=1.0 and elo<1.2:    
             starting_params = [0.1,0.2,0.3*nevents,  0.2,3.0,0.7*nevents]
@@ -293,12 +299,16 @@ def main():
 
         #'''
         if i==0:
-            params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.60,'limits':(-2,2),'error':0.01}
+            None
+            # From Nicole's simulation.
+            params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.10,'limits':(-2,2),'error':0.01}
+            # From Juan
+            #params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.60,'limits':(-2,2),'error':0.01}
             #params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.50,'limits':(0.05,30),'error':0.01}
         #'''
 
         # Try fixing the slow sigma
-        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.55,'limits':(-2,2),'error':0.01}
+        #params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.52,'limits':(-2,2),'error':0.01}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
         #figrt.subplots_adjust(left=0.05, right=0.98)
@@ -319,7 +329,7 @@ def main():
 
             # For maximum likelihood method.
             kwd['errordef'] = 0.5
-            kwd['print_level'] = 2
+            kwd['print_level'] = 0
             #print kwd
 
             m = minuit.Minuit(f,**kwd)
@@ -346,19 +356,20 @@ def main():
             tot_ypts = np.zeros(len(xpts))
 
             ypts  = pdfs.lognormal(xpts,values['fast_logn_mean'],values['fast_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='g-',axes=axrt[i])
+            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='r-',linewidth=2,axes=axrt[j])
             tot_ypts += y
 
             ypts  = pdfs.lognormal(xpts,values['slow_logn_mean'],values['slow_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='r-',axes=axrt[i])
+            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='b-',linewidth=2,axes=axrt[j])
             tot_ypts += y
 
-            axrt[i].plot(xpts,tot_ypts,'b',linewidth=2)
-            axrt[i].set_ylabel(r'Events')
-            axrt[i].set_xlabel(r'Rise time ($\mu$s)')
+            axrt[j].plot(xpts,tot_ypts,'m',linewidth=3)
+            axrt[j].set_ylabel(r'Events')
+            axrt[j].set_xlabel(r'Rise time ($\mu$s)')
             name = "Plots/rt_slice_%d.png" % (i)
             plt.savefig(name)
 
+            #'''
             if math.isnan(values['fast_logn_mean']) == False:
                 starting_params = [ \
                 values['fast_logn_mean'], \
@@ -368,6 +379,7 @@ def main():
                 values['slow_logn_sigma'],
                 values['slow_num'] \
                 ]
+            #'''
 
             expts.append((ehi+elo)/2.0)
 
@@ -402,20 +414,28 @@ def main():
                 yerrlo[0].append(abs(fe['fast_logn_mean']['lower']))
             else:
                 yerrlo[0].append(0.0)
+            if fe.has_key('slow_logn_sigma'):
+                yerrlo[4].append(abs(fe['slow_logn_sigma']['lower']))
+            else:
+                yerrlo[4].append(0.0)
             yerrlo[1].append(abs(fe['fast_logn_sigma']['lower']))
             yerrlo[2].append(abs(fe['fast_num']['lower']))
             yerrlo[3].append(abs(fe['slow_logn_mean']['lower']))
-            yerrlo[4].append(abs(fe['slow_logn_sigma']['lower']))
+            #yerrlo[4].append(abs(fe['slow_logn_sigma']['lower']))
             yerrlo[5].append(abs(fe['slow_num']['lower']))
 
             if fe.has_key('fast_logn_mean'):
                 yerrhi[0].append(fe['fast_logn_mean']['upper'])
             else:
                 yerrhi[0].append(0.0)
+            if fe.has_key('slow_logn_sigma'):
+                yerrhi[4].append(abs(fe['slow_logn_sigma']['upper']))
+            else:
+                yerrhi[4].append(0.0)
             yerrhi[1].append(fe['fast_logn_sigma']['upper'])
             yerrhi[2].append(fe['fast_num']['upper'])
             yerrhi[3].append(fe['slow_logn_mean']['upper'])
-            yerrhi[4].append(fe['slow_logn_sigma']['upper'])
+            #yerrhi[4].append(fe['slow_logn_sigma']['upper'])
             yerrhi[5].append(fe['slow_num']['upper'])
 
             npts.append(n)
