@@ -44,6 +44,8 @@ def main():
             default=False, help='Verbose output')
     parser.add_argument('--sigma_n', dest='sigma_n', type=float,\
             default=None, help='Value of sigma_n (cross section of DM-nucleon interaction).')
+    parser.add_argument('--mDM', dest='mDM', type=float,\
+            default=None, help='Value of mDM (Mass of DM particle).')
     parser.add_argument('--turn-off-eff', dest='turn_off_eff', action='store_true',\
             default=False, help='Turn off the efficiency.')
     parser.add_argument('--contours', dest='contours', action='store_true',\
@@ -72,9 +74,9 @@ def main():
 
     infile_name = 'data/LE.txt'
     tdays,energies,rise_time = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
-    print tdays
-    print energies
-    print rise_time
+    #print tdays
+    #print energies
+    #print rise_time
     #exit()
 
     if args.fit==5 or args.fit==6:
@@ -179,7 +181,9 @@ def main():
     threshold = 0.345
     sigmoid_sigma = 0.241
 
-    efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+    #eff_scaling = 1.0 # old data
+    eff_scaling = 0.9 # 3yr dataset
+    efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)/eff_scaling
     if args.turn_off_eff:
         efficiency = lambda x: 1.0
 
@@ -266,8 +270,8 @@ def main():
     # exp_flat is the surface events.
     ############################################################################
 
-    #nsurface = 575.0 # For full 917 days
-    nsurface = 506.0 # For full 917 days
+    nsurface = 575.0 # For full 917 days
+    #nsurface = 506.0 # For full 917 days
     tot_live_days = 808.0 # For the full 917 days
     #tot_live_days = 447.0 # For the time before the fire
     partial_live_days = 0.0
@@ -275,7 +279,10 @@ def main():
         partial_live_days += (sr[1]-sr[0])
     nsurface *= partial_live_days/tot_live_days
 
-    params_dict['e_exp1'] = {'fix':True,'start_val':3.36,'limits':(0.0,10.0)}
+    nsurface = 5000.0 # 3yr data.
+
+    # Exp 1 is the surface term
+    params_dict['e_exp1'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
     params_dict['num_exp1'] = {'fix':True,'start_val':nsurface,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':1.0,'limits':(0.0,100000.0)}
@@ -285,8 +292,10 @@ def main():
     params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
     #params_dict['num_flat'] = {'fix':False,'start_val':1700.0,'limits':(0.0,2000.0)}
     params_dict['e_exp_flat'] = {'fix':True,'start_val':0.05,'limits':(0.00001,10.0)}
+    params_dict['t_exp_flat'] = {'fix':False,'start_val':0.05,'limits':(0.00001,10.0)}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
+    #params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
     params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
 
     # Exponential term in energy
@@ -301,6 +310,8 @@ def main():
         params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
         if args.sigma_n != None:
             params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38)}
+        if args.mDM != None:
+            params_dict['mDM'] = {'fix':True,'start_val':args.mDM,'limits':(5.0,20.0)}
 
     # Let the exponential modulate as a cos term
     if args.fit==1:
@@ -313,15 +324,14 @@ def main():
 
     f = Minuit_FCN([data],params_dict)
 
-    m = minuit.Minuit(f,**kwd)
-
+    kwd['print_level'] = 2
     # For maximum likelihood method.
-    m.errordef = 0.5
+    kwd['errordef'] = 0.5
+
+    m = minuit.Minuit(f,**kwd)
 
     # Up the tolerance.
     #m.tol = 1.0
-
-    m.print_level = 2
 
     m.migrad()
     m.hesse()
@@ -329,6 +339,7 @@ def main():
     print "Finished fit!!\n"
 
     values = m.values # Dictionary
+    final_lh = m.fval # 
 
     ############################################################################
     # Print out some diagnostic information
@@ -381,9 +392,11 @@ def main():
     # Get the points for the subranges
     sr_txpts = []
     tot_sr_typts = []
+    flat_tpts = []
     for sr in subranges[1]:
         sr_txpts.append(np.linspace(sr[0],sr[1],1000))
         tot_sr_typts.append(np.zeros(1000))
+        flat_tpts.append(np.zeros(1000))
 
     ############################################################################
     # Exponential
@@ -472,10 +485,21 @@ def main():
     eytot += y
 
     # Time projections
+    '''
     func = lambda x: np.ones(len(x))
     sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
-
+    '''
+    func = lambda x: np.exp(-values['t_exp_flat']*x)
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=0.95*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1])
+    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+    flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
+    func = lambda x: np.ones(len(x))
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=0.05*values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
+    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+    flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
+    
+    #ax1.plot(expts,flat_tpts,'m-',linewidth=2)
     ############################################################################
     # L-shell
     ############################################################################
@@ -503,8 +527,9 @@ def main():
 
 
         # Total on y/t over all subranges.
-        for x,y,lsh in zip(sr_txpts,tot_sr_typts,lshell_toty):
+        for x,y,lsh,flat in zip(sr_txpts,tot_sr_typts,lshell_toty,flat_tpts):
             ax1.plot(x,lsh,'r-',linewidth=2)
+            ax1.plot(x,flat,'m-',linewidth=2)
             ax1.plot(x,y,'b',linewidth=3)
 
     ax0.plot(expts,eytot,'b',linewidth=3)
@@ -585,8 +610,7 @@ def main():
     print "\nPeak WIMP signal occurs on:\n"
     print peak.strftime("%D")
 
-
-
+    print "Likelihood: %f" % (final_lh)
 
     if not args.batch:
         plt.show()

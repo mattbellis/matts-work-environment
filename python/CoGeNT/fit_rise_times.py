@@ -208,6 +208,7 @@ def main():
 
     fit_parameters = []
     fit_errors = []
+    fit_mnerrors = []
     nevs = []
     axrt = []
 
@@ -215,16 +216,16 @@ def main():
     ehi = 1.0
     eoffset = 0.5
 
-    #ewidth = 1.50
-    #estep = 1.00
+    #ewidth = 0.20
+    #estep = 0.20
 
     ewidth = 0.200
-    estep = 0.20
+    estep = 0.050
 
     expts = []
 
     #for j in range(25,0,-1):
-    for i in range(0,16):
+    for i in range(0,64):
         #i = j
         #i = 25-j
         if i%6==0:
@@ -293,11 +294,11 @@ def main():
         #'''
         if i==0:
             params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.60,'limits':(-2,2),'error':0.01}
-            params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.50,'limits':(0.05,30),'error':0.01}
+            #params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.50,'limits':(0.05,30),'error':0.01}
         #'''
 
         # Try fixing the slow sigma
-        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.55,'limits':(-2,2),'error':0.01}
+        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.55,'limits':(-2,2),'error':0.01}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
         #figrt.subplots_adjust(left=0.05, right=0.98)
@@ -316,6 +317,7 @@ def main():
             #print data_to_fit
             f = fitutils.Minuit_FCN([[data_to_fit]],params_dict,emlf)
 
+            # For maximum likelihood method.
             kwd['errordef'] = 0.5
             kwd['print_level'] = 2
             #print kwd
@@ -324,23 +326,20 @@ def main():
 
             m.print_param()
 
-            # For maximum likelihood method.
-            #m.errordef = 0.5
-
-            # Up the tolerance.
-            #m.tol = 1.0
-
-            #m.print_level = 2
-
             m.migrad()
-            #m.hesse()
+            m.hesse()
+            m.minos()
 
             print "Finished fit!!\n"
 
             values = m.values # Dictionary
             errors = m.errors # Dictionary
+            mnerrors = m.get_merrors()
+            print "MNERRORS: "
+            print mnerrors
             fit_parameters.append(values)
             fit_errors.append(errors)
+            fit_mnerrors.append(mnerrors)
             nevs.append(len(data_to_fit))
 
             xpts = np.linspace(ranges[2][0],ranges[2][1],1000)
@@ -377,35 +376,60 @@ def main():
     
     ypts = [[],[],[],[],[],[]]
     yerr = [[],[],[],[],[],[]]
+    yerrlo = [[],[],[],[],[],[]]
+    yerrhi = [[],[],[],[],[],[]]
     npts = []
 
     if len(expts)>0:
-        for i,fp,fe,n in zip(xrange(len(nevs)),fit_parameters,fit_errors,nevs):
+        #for i,fp,fe,n in zip(xrange(len(nevs)),fit_parameters,fit_errors,nevs):
+        for i,fp,fe,n in zip(xrange(len(nevs)),fit_parameters,fit_mnerrors,nevs):
             print "----------"
             ypts[0].append(fp['fast_logn_mean'])
             ypts[1].append(fp['fast_logn_sigma'])
-            ypts[2].append(fp['fast_num']/n)
+            ypts[2].append(fp['fast_num'])
             ypts[3].append(fp['slow_logn_mean'])
             ypts[4].append(fp['slow_logn_sigma'])
-            ypts[5].append(fp['slow_num']/n)
+            ypts[5].append(fp['slow_num'])
 
-            yerr[0].append(fe['fast_logn_mean'])
-            yerr[1].append(fe['fast_logn_sigma'])
-            yerr[2].append(fe['fast_num']/n)
-            yerr[3].append(fe['slow_logn_mean'])
-            yerr[4].append(fe['slow_logn_sigma'])
-            yerr[5].append(fe['slow_num']/n)
+            #yerr[0].append(fe['fast_logn_mean'])
+            #yerr[1].append(fe['fast_logn_sigma'])
+            #yerr[2].append(fe['fast_num'])
+            #yerr[3].append(fe['slow_logn_mean'])
+            #yerr[4].append(fe['slow_logn_sigma'])
+            #yerr[5].append(fe['slow_num'])
+
+            if fe.has_key('fast_logn_mean'):
+                yerrlo[0].append(abs(fe['fast_logn_mean']['lower']))
+            else:
+                yerrlo[0].append(0.0)
+            yerrlo[1].append(abs(fe['fast_logn_sigma']['lower']))
+            yerrlo[2].append(abs(fe['fast_num']['lower']))
+            yerrlo[3].append(abs(fe['slow_logn_mean']['lower']))
+            yerrlo[4].append(abs(fe['slow_logn_sigma']['lower']))
+            yerrlo[5].append(abs(fe['slow_num']['lower']))
+
+            if fe.has_key('fast_logn_mean'):
+                yerrhi[0].append(fe['fast_logn_mean']['upper'])
+            else:
+                yerrhi[0].append(0.0)
+            yerrhi[1].append(fe['fast_logn_sigma']['upper'])
+            yerrhi[2].append(fe['fast_num']['upper'])
+            yerrhi[3].append(fe['slow_logn_mean']['upper'])
+            yerrhi[4].append(fe['slow_logn_sigma']['upper'])
+            yerrhi[5].append(fe['slow_num']['upper'])
 
             npts.append(n)
 
         for i in xrange(len(ypts)):
             ypts[i] = np.array(ypts[i])
 
-        print ypts
+        print ypts[0]
+        print yerrlo[0]
+        print yerrhi[0]
         fvals = plt.figure(figsize=(13,4),dpi=100)
         fvals.add_subplot(1,3,1)
-        plt.errorbar(expts,ypts[0],xerr=0.01,yerr=yerr[0],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
-        plt.errorbar(expts,ypts[3],xerr=0.01,yerr=yerr[3],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
+        plt.errorbar(expts,ypts[0],xerr=0.01,yerr=[yerrlo[0],yerrhi[0]],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
+        plt.errorbar(expts,ypts[3],xerr=0.01,yerr=[yerrlo[3],yerrhi[3]],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
         plt.ylim(-1.5,1.5)
         plt.xlabel('Energy (keVee)')
         plt.ylabel(r'Lognormal $\mu$')
@@ -432,8 +456,8 @@ def main():
 
 
         fvals.add_subplot(1,3,2)
-        plt.errorbar(expts,ypts[1],xerr=0.01,yerr=yerr[1],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
-        plt.errorbar(expts,ypts[4],xerr=0.01,yerr=yerr[4],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
+        plt.errorbar(expts,ypts[1],xerr=0.01,yerr=[yerrlo[1],yerrhi[1]],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
+        plt.errorbar(expts,ypts[4],xerr=0.01,yerr=[yerrlo[4],yerrhi[4]],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
         plt.ylim(0.0,1.0)
         plt.xlabel('Energy (keVee)')
         plt.ylabel(r'Lognormal $\sigma$')
@@ -450,9 +474,9 @@ def main():
         plt.plot(xp,p(xp),'-')
 
         fvals.add_subplot(1,3,3)
-        plt.errorbar(expts,ypts[2],xerr=0.01,yerr=yerr[2],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
-        plt.errorbar(expts,ypts[5],xerr=0.01,yerr=yerr[5],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
-        plt.ylim(0.0,1.4)
+        plt.errorbar(expts,ypts[2],xerr=0.01,yerr=[yerrlo[2],yerrhi[2]],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
+        plt.errorbar(expts,ypts[5],xerr=0.01,yerr=[yerrlo[5],yerrhi[5]],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
+        #plt.ylim(0.0,1.4)
         plt.xlabel('Energy (keVee)')
         plt.ylabel(r'% of events in bin')
         plt.legend()
@@ -471,6 +495,8 @@ def main():
         plt.savefig('Plots/rt_summary.png')
 
         np.savetxt('rt_parameters.txt',[expts,ypts[0],ypts[1],ypts[2],ypts[3],ypts[4],ypts[5],npts])
+
+    print "Sum ypts[5]: ",sum(ypts[5])
 
     if not args.batch:
         plt.show()

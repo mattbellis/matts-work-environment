@@ -233,7 +233,10 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         threshold = 0.345
         sigmoid_sigma = 0.241
 
-        efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)
+        #eff_scaling = 1.0
+        eff_scaling = 0.9 # 3yr data
+
+        efficiency = lambda x: sigmoid(x,threshold,sigmoid_sigma,max_val)/eff_scaling
 
         #num_wimps = 0
         '''

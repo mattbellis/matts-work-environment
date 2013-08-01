@@ -48,7 +48,7 @@ def plot_wimp_er(x,AGe,mDM,sigma_n,time_range=[1,365],model='shm'):
 
 ################################################################################
 
-def plot_wimp_day(org_day,AGe,mDM,sigma_n,e_range=[0.5,3.2],model='shm'):
+def plot_wimp_day(org_day,AGe,mDM,sigma_n,e_range=[0.5,3.2],model='shm',vSag=300,v0Sag=100,vDeb1=340):
 
     if not (model=='shm' or model=='stream' or model=='debris'):
         print "Not correct model for plotting WIMP PDF!"
@@ -56,7 +56,7 @@ def plot_wimp_day(org_day,AGe,mDM,sigma_n,e_range=[0.5,3.2],model='shm'):
         exit(-1)
 
     # For debris flow. (340 m/s)
-    vDeb1 = 340
+    #vDeb1 = 340
 
     n = 0
     day = (org_day+338)%365.0 #- 151
@@ -75,8 +75,8 @@ def plot_wimp_day(org_day,AGe,mDM,sigma_n,e_range=[0.5,3.2],model='shm'):
                 n[i] = (dmm.dRdErDebris(keVr,d,AGe,mDM,vDeb1,sigma_n)).sum()
             elif model=='stream':
                 #The Sagitarius stream may intersect the solar system
-                vSag=300
-                v0Sag=100
+                #vSag=300
+                #v0Sag=100
                 vSagHat = np.array([0,0.233,-0.970])
                 vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
                 streamVel = vSagVec
@@ -93,8 +93,8 @@ def plot_wimp_day(org_day,AGe,mDM,sigma_n,e_range=[0.5,3.2],model='shm'):
                 n += dmm.dRdErDebris(keVr,day,AGe,mDM,vDeb1,sigma_n)
             elif model=='stream':
                 #The Sagitarius stream may intersect the solar system
-                vSag=300
-                v0Sag=100
+                #vSag=300
+                #v0Sag=100
                 vSagHat = np.array([0,0.233,-0.970])
                 vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
                 streamVel = vSagVec

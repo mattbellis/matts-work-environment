@@ -10,8 +10,8 @@ hbarc = 0.1973269664036767; # in GeV nm
 c = 3e10 # cm/s 
 rhoDM = 0.3;  # in GeV/cm^3
 
-#mDM = 6.8; # in GeV 
-mDM = 7.0; # in GeV 
+mDM = 6.8; # in GeV 
+#mDM = 7.0; # in GeV 
 #mDM = 8.8; # in GeV 
 
 mn = 0.938; # mass of nucleon in GeV 
@@ -207,7 +207,7 @@ def tc(vstr):
     vSunRel = np.array([vsVec[0]-vstr[0],vsVec[1]-vstr[1],vsVec[2]-vstr[2]])
     vSunRelHat = np.zeros(3)
     vSunRelHat = normalize(vSunRel)
-    print "vSunRelHat: ",vSunRelHat
+    #print "vSunRelHat: ",vSunRelHat
     b1 = dot(e1,vSunRelHat)
     b2 = dot(e2,vSunRelHat)
     b = np.sqrt(b1*b1+b2*b2)
@@ -324,7 +324,7 @@ def gDebris(vmin,vflow,t):
         nvals = len(vmin)
         ret = np.zeros(nvals)
         ret[vmin<np.abs(vflow-vobs)] = (vflow+vobs-np.abs(vflow-vobs))/(2*vflow*vobs)
-        ret[vmin<vflow+vobs] = (vflow+vobs-vmin)/(2*vflow*vobs)
+        ret[vmin<vflow+vobs] = ((vflow+vobs-vmin)/(2*vflow*vobs))[vmin<vflow+vobs]
 
         ret[ret<0] = 0 # Do we need this?
 
@@ -436,6 +436,7 @@ def main():
     tc_SHM = tc(np.zeros(3))
     print "\nThe SHM maximum phase occurs at %f days." % (tc_SHM)
     Er = np.linspace(0.1,10.0,100)
+    #Er = np.arange(0.5, 6.0, 0.5)
     dR = dRdErSHM(Er, tc_SHM, AGe, mDM,sigma_n)
 
     # Quenching factor?

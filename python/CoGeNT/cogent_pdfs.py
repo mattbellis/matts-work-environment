@@ -56,6 +56,7 @@ def lshell_data(day_ranges):
         decay_constants = np.append(decay_constants,-1.0*np.log(2.0)/half_life)
 
         num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
+        num_tot_decays *= 0.9 # 3yr data, for atomic physics reasons.
         # *Before* the efficiency?
         #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
         
@@ -97,7 +98,7 @@ def sigmoid(x,thresh,sigma,max_val):
 ################################################################################
 # WIMP signal
 ################################################################################
-def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm'):
+def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=300,v0Sag=100):
 
     if not (model=='shm' or model=='stream' or model=='debris'):
         print "Not correct model for plotting WIMP PDF!"
@@ -105,7 +106,7 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm'):
         exit(-1)
 
     # For debris flow. (340 m/s)
-    vDeb1 = 340
+    #vDeb1 = 340
 
     y = (org_day+338)%365.0
     #y = org_day
@@ -118,8 +119,8 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm'):
         dR = dmm.dRdErDebris(xkeVr,y,AGe,mDM,vDeb1,sigma_n)
     elif model=='stream':
         #The Sagitarius stream may intersect the solar system
-        vSag=300
-        v0Sag=100
+        #vSag=300
+        #v0Sag=100
         vSagHat = np.array([0,0.233,-0.970])
         vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
         streamVel = vSagVec
@@ -192,6 +193,7 @@ def fitfunc(data,p,parnames,params_dict):
     e_exp1 = p[pn.index('e_exp1')]
     num_exp1 = p[pn.index('num_exp1')]
     e_exp_flat = p[pn.index('e_exp_flat')]
+    t_exp_flat = p[pn.index('t_exp_flat')]
 
     if flag==0 or flag==1 or flag==5:
         e_exp0 = p[pn.index('e_exp0')]
@@ -334,9 +336,13 @@ def fitfunc(data,p,parnames,params_dict):
     # Flat term
     ############################################################################
     #pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
-    pdf  = 0.95*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) + \
-           0.05*pdfs.exp(x,5.0,xlo,xhi,efficiency=efficiency)
-    pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    #pdf  = 0.95*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) + \
+            #0.05*pdfs.exp(x,5.0,xlo,xhi,efficiency=efficiency)
+    pdf0  = 0.95*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) 
+    pdf0 *= pdfs.exp(y,t_exp_flat,ylo,yhi,subranges=subranges[1])
+    pdf1 = 0.05*pdfs.exp(x,5.0,xlo,xhi,efficiency=efficiency)
+    pdf1 *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    pdf = pdf0 + pdf1
     pdf *= num_flat
     #print "flat pdf: ",pdf[0:8]/num_flat
     #print "flat pdf: ",pdf[0:8]
