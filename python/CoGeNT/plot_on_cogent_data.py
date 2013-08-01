@@ -48,7 +48,9 @@ def main():
     max_val = 0.86786
     threshold = 0.345
     sigmoid_sigma = 0.241
-    efficiency = sigmoid(x,threshold,sigmoid_sigma,max_val)
+    #eff_scaling = 1.0
+    eff_scaling = 0.9 # 3yr data
+    efficiency = sigmoid(x,threshold,sigmoid_sigma,max_val)/eff_scaling
     #fig1 = plt.figure()
     ax1 = fig0.add_subplot(2,1,2) 
     ax1.plot(x,efficiency,'r--',linewidth=2)

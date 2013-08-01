@@ -79,27 +79,31 @@ def main():
     dRdEee = None
 
     # Need this for Sagitarius stream
-    #vSag=300
-    #v0Sag=100
-    vSag=500
-    v0Sag=10
+    vSag=300
+    #vSag=500
+    v0Sag=25
+    #vSag=500
+    #v0Sag=10
     vSagHat = np.array([0,0.233,-0.970])
     vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
+
     streamVel = vSagVec
     streamVelWidth = v0Sag
 
     # For debris flow. (340 m/s)
-    vDeb1 = 1340
+    vDeb1 = 340
 
     # Efficiency
     efficiency = lambda x: 1.0
     #'''
     if args.cogent:
+        #eff_scaling = 1.0
+        eff_scaling = 0.9 # 3yr data
         max_val = 0.86786
         threshold = 0.345
         sigmoid_sigma = 0.241
 
-        efficiency = lambda x: fu.sigmoid(x,threshold,sigmoid_sigma,max_val)
+        efficiency = lambda x: fu.sigmoid(x,threshold,sigmoid_sigma,max_val)/eff_scaling
     #'''
 
 
@@ -153,14 +157,14 @@ def main():
     num_wimps = 1.0
 
 
-    num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:366,args=(target_atom,mDM,sigma_n,efficiency,args.model),epsabs=0.001)[0]
+    num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:366,args=(target_atom,mDM,sigma_n,efficiency,args.model,vDeb1,vSag,v0Sag),epsabs=0.001)[0]
 
     if args.cogent:
         num_wimps *= 0.333
 
     print "# WIMPs: ",num_wimps
 
-    func = lambda x: pu.plot_wimp_day(x,target_atom,mDM,sigma_n,e_range=[elo,ehi],model=args.model)
+    func = lambda x: pu.plot_wimp_day(x,target_atom,mDM,sigma_n,e_range=[elo,ehi],model=args.model,vSag=vSag,v0Sag=v0Sag,vDeb1=vDeb1)
     plotting_utilities.plot_pdf_from_lambda(func,scale=num_wimps,fmt='k-',linewidth=3,axes=ax2,subranges=[[1,365]])
 
     ax2.set_ylim(0.0,num_wimps/100.0)

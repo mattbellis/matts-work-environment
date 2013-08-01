@@ -64,7 +64,6 @@ Mod4 9 :Tab 9
 #Mod1 F1 :Exec xterm
 Mod1 F1 :Exec mrxvt
 Mod1 F2 :Exec google-chrome
-#Mod1 F2 :Exec google-chrome --pinned-tab-count=6 'https://mail.google.com/mail/?hl=en&zx=fot4cq4e1wl3&shva=1#inbox' 'https://www.google.com/calendar/renderOnline?gsessionid=OK' 'http://www.google.com/ig?t=4#max143' 'http://www.google.com/ig?t=4#max150' 'http://www.google.com/ig?t=4#max149' 'www.google.com/ig' 
 Mod1 F3 :Exec iceweasel
 #Mod1 F4 :Exec gamix
 #Mod1 F4 :Exec alsamixergui
