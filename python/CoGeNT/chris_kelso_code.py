@@ -9,8 +9,9 @@ hbarc = 0.1973269664036767; # in GeV nm
 #c = constants.c*100.0 # cm/s 
 c = 3e10 # cm/s 
 rhoDM = 0.3;  # in GeV/cm^3
+#rhoDM = 0.4;  # Chris says this might be pointing toward higher values.
 
-mDM = 6.8; # in GeV 
+mDM = 8.0; # in GeV 
 #mDM = 7.0; # in GeV 
 #mDM = 8.8; # in GeV 
 
@@ -68,28 +69,55 @@ def mu(A, m):
 # Quenching factor
 ################################################################################
 def quench_keVr_to_keVee(x):
-    # From Chris Kelso for Ge (CDMS calculations using CoGeNT measurements?)
-    #y = 0.2*(x**(1.12))
 
     # For Ge, according to Phil Barbeau
     Z = 32
     A = AGe
 
-    #k = 0.133*(Z**(2.0/3.))*(A**(-0.5))
-    # This k below is what Phil gets from his fits.
-    k = 0.169
-    print k
+    #k1 = 0.133*(Z**(2.0/3.))*(A**(-0.5))
+    # This k1 below is what Phil gets from his fits.
+    k1 = 0.169
+    #print k1
     epsilon = 11.5*x*(Z**(-7./3.))
     g_epsilon = 3.*(epsilon**0.15) + 0.7*(epsilon**0.6) + epsilon
 
-    y = (x*k*g_epsilon)/(1.+(k*g_epsilon))
+    y = (x*k1*g_epsilon)/(1.+(k1*g_epsilon))
 
+    # From Chris Kelso for Ge (CDMS calculations using CoGeNT measurements?)
+    #y = 0.2*(x**(1.12))
     return y
 
 def quench_keVee_to_keVr(x):
-    y = (x/0.2)**(1.0/1.12)
+    # x is Eee
+    # Using Phil's code doing a numerical approximation to the inverse.
+    y = 0.1683244348504411 + 4.840977386120165*x - 0.6566353866147424*np.power(x,2) + \
+       0.17748072066644058*np.power(x,3) - 0.021903569551527707*np.power(x,4)
+    # From Chris Kelso for Ge (CDMS calculations using CoGeNT measurements?)
+    #y = (x/0.2)**(1.0/1.12)
     return y
 
+def quench_dEr_dEee(Er):
+    # dR/dEee
+    # This is to account for going from dEr to dEee
+
+    # From Kelso's taking the derivative from Phil's function.
+    k1=0.169 # best fit as given by Phil  on Aug. 1, 2013
+
+    dEr_dEee = np.power(1. + 1.2865404292244196*np.power(Er,0.15)*k1 + \
+               0.023675915133928603*np.power(Er,0.6)*k1 + \
+               0.0035373759945778916*Er*k1,2)/(np.power(Er,0.15)*k1*(1.4795214936080825 + \
+               0.037881464214285766*np.power(Er,0.45) + 0.007074751989155783*np.power(Er,0.85) + \
+               1.6551862760289537*np.power(Er,0.15)*k1 + 0.06092004403737088*np.power(Er,0.6)*k1 \
+               + 0.009101954460784798*Er*k1 + 0.0005605489574289895*np.power(Er,1.05)*k1 + \
+               0.0001675012276888449*np.power(Er,1.45)*k1 + \
+               0.000012513028927015927*np.power(Er,1.85)*k1))
+
+   
+    # Old way from Chris Kelso.
+    # Eee
+    #dEr_dEee = ((5.0**(1.0/1.12))/1.12)*(Eee**(-0.12/1.12))
+
+    return dEr_dEee
 
 ################################################################################
 #minimum speed DM must have to produce recoil of energy Er
@@ -118,7 +146,7 @@ omega = 2*M_PI/365.0
 ################################################################################
 #SHM parameters      #
 ################################################################################
-vo = 220.0
+vo = 220.0 # Chris thinks this might be 235.
 vesc = 544.0
 # galactic velocity of sun, comes from peculiar velocity and local standard of rest 
 vsVec = np.array([10,13+vo,7])
@@ -134,6 +162,7 @@ Nesc = special.erf(z)-2*z*np.exp(-z*z)/np.sqrt(M_PI)
 ################################################################################
 def vObs_t(vObs, t):
     for i in range(0,3):
+        # vObs is velocity of the observer...Earth.
         #print type(vObs[i])
         #print vsVec[i]
         #print vorb
@@ -145,7 +174,9 @@ def vObs_t(vObs, t):
         #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])) 
         #print  (vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i]))
         #print  type((vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])))
+        # Max stream vector will be opposite this value!
         vObs[i] = vsVec[i]+vorb*(np.cos(omega*(t-t1))*e1[i]+np.sin(omega*(t-t1))*e2[i])
+        #print vObs
 
 
 ################################################################################
@@ -364,7 +395,7 @@ def gDebris(vmin,vflow,t):
             return 0
 
 ################################################################################
-#Form Factor Functions
+# Form Factor Functions
 ################################################################################
 a=0.523
 s=0.9
@@ -406,7 +437,9 @@ def F(Er,A):
 ################################################################################
 def spectraParticle(Er,A,m,sigma_n):
     #return Na*c*c*rhoDM*A*A*sigma_n*F(Er,A)*F(Er,A)*1.0e-11*24*3600/(2*m*mu_n(m)*mu_n(m))
-    ret = Na*c*c*rhoDM*A*A*sigma_n*F(Er,A)*F(Er,A)*1.0e-11*24*3600/(2*m*mu_n(m)*mu_n(m))
+    #ret = Na*c*c*rhoDM*A*A*sigma_n*F(Er,A)*F(Er,A)*1.0e-11*24.*3600./(2*m*mu_n(m)*mu_n(m))
+    # Chris says I needs mU here for units.
+    ret = mU*Na*c*c*rhoDM*A*A*sigma_n*F(Er,A)*F(Er,A)*1.0e-11*24.*3600./(2*m*mu_n(m)*mu_n(m))
     if type(ret)==np.ndarray:
         # Remove nans
         ret[ret!=ret] = 0
@@ -560,9 +593,11 @@ def main():
 
 
     #The Sagitarius stream may intersect the solar system
-    vSag=300 
+    vSag=350 
     v0Sag=10
     vSagHat = np.array([0,0.233,-0.970])
+    # This might be the max
+    #vSagHat = np.array([0.07247722,  0.99486114, -0.07069913])
     vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
     tc_Sag = tc(vSagVec)
 

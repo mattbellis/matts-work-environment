@@ -122,6 +122,8 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=30
         #vSag=300
         #v0Sag=100
         vSagHat = np.array([0,0.233,-0.970])
+        # IS THIS THE MAX???
+        #vSagHat = np.array([0.07247722,0.99486114,-0.07069913])
         vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
         streamVel = vSagVec
         streamVelWidth = v0Sag
@@ -132,10 +134,15 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=30
         eff = efficiency(x)
 
     dR *= eff
-#
+    
     # Need this because we've converted from one function to another.
-    # dR/dEee
-    dR *= ((5.0**(1.0/1.12))/1.12)*(x**(-0.12/1.12))
+    # dR/dEee = dR/dEr dEr
+    #dEr_dEee = ((5.0**(1.0/1.12))/1.12)*(x**(-0.12/1.12))
+    #print "dEr_dEee: ",dEr_dEee
+    # IS THIS RIGHT? DO I PASS IN Eee? OR Er?
+    # Pass in for dEee (ionization energy)
+    dEr_dEee = dmm.quench_dEr_dEee(x)
+    dR *= dEr_dEee
 
     return dR
 
@@ -158,6 +165,8 @@ def fitfunc(data,p,parnames,params_dict):
 
     x = data[0]
     y = data[1]
+    rtf = data[3]
+    rts = data[4]
 
     xlo = params_dict['var_e']['limits'][0]
     xhi = params_dict['var_e']['limits'][1]
@@ -278,6 +287,7 @@ def fitfunc(data,p,parnames,params_dict):
         pdf  = pdfs.gauss(x,m,s,xlo,xhi,efficiency=efficiency)
         dc = -1.0*dc
         pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
+        pdf *= rtf # This will be the fast rise times
         pdf *= n
         if flag!=5 and flag!=6:
             tot_pdf += pdf
@@ -300,11 +310,13 @@ def fitfunc(data,p,parnames,params_dict):
     if flag==0 or flag==5:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+        pdf *= rtf # This will be the fast rise times
         pdf *= num_exp0
         #print "exp0 pdf: ",pdf[0:8]
     elif flag==1:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
+        pdf *= rtf # This will be the fast rise times
         pdf *= num_exp0
     elif flag==2 or flag==3 or flag==4 or flag==6:
         print "num_wimps mDM: %12.3f %12.3f %12.3e" % (num_wimps,mDM,sigma_n)
@@ -316,6 +328,7 @@ def fitfunc(data,p,parnames,params_dict):
                 print d0,d1,t, np.log(t)
 
         pdf *= (0.333) # Active volume of CoGeNT
+        pdf *= rtf # This will be the fast rise times
         #print "wimp pdf: ",pdf[0:8]*(num_tot)/num_wimps
         #print "wimp pdf: ",pdf[0:8]
 
@@ -323,10 +336,11 @@ def fitfunc(data,p,parnames,params_dict):
     tot_pdf += pdf
 
     ############################################################################
-    # Second exponential in energy
+    # Second exponential in energy (Surface events)
     ############################################################################
     pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    pdf *= rts # This will be the slow rise times
     pdf *= num_exp1
     #print "exp1 pdf: ",pdf[0:8]
     if flag!=5 and flag!=6:
@@ -343,6 +357,7 @@ def fitfunc(data,p,parnames,params_dict):
     pdf1 = 0.05*pdfs.exp(x,5.0,xlo,xhi,efficiency=efficiency)
     pdf1 *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf = pdf0 + pdf1
+    pdf *= rtf # This will be the fast rise times
     pdf *= num_flat
     #print "flat pdf: ",pdf[0:8]/num_flat
     #print "flat pdf: ",pdf[0:8]

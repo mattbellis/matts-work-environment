@@ -1,6 +1,8 @@
 import numpy as np
 from fitting_utilities import sigmoid
 
+import lichen.pdfs as pdfs
+
 #import minuit
 import iminuit as minuit
 
@@ -132,7 +134,8 @@ def cut_events_outside_range(data,ranges):
 
     index = np.ones(len(data[0]),dtype=np.int)
     for i,r in enumerate(ranges):
-        index *= ((data[i]>r[0])*(data[i]<r[1]))
+        if len(r)>0:
+            index *= ((data[i]>r[0])*(data[i]<r[1]))
 
     '''
     for x,y in zip(data[0][index!=True],data[1][index!=True]):
@@ -163,4 +166,30 @@ def cut_events_outside_subrange(data,subrange,data_index=0):
 
     return data
 
+
+################################################################################
+# Precalculate the probabilities for all the lognormal distributions.
+################################################################################
+def rise_time_prob(rise_time,energy,mu_k,sigma_k,xlo,xhi):
+
+    # Pull out the constants for the polynomials.
+    ma0 = mu_k[0]
+    ma1 = mu_k[1]
+    ma2 = mu_k[2]
+
+    sa0 = sigma_k[0]
+    sa1 = sigma_k[1]
+    sa2 = sigma_k[2]
+
+    allmu = ma0 + ma1*energy + ma2*energy*energy
+    allsigma = sa0 + sa1*energy + sa2*energy*energy
+
+    #ret = (1.0/(x*sigma*np.sqrt(2*np.pi)))*np.exp(-((np.log(x)-mu)**2)/(2*sigma*sigma))
+    ret = np.zeros(len(rise_time))
+    for i in xrange(len(ret)):
+        #print rise_time[i],allmu[i],allsigma[i]
+        ret[i] = pdfs.lognormal(rise_time[i],allmu[i],allsigma[i],xlo,xhi)
+        #print "\t",ret[i]
+
+    return ret
 

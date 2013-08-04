@@ -64,6 +64,15 @@ def main():
     '''
 
     ############################################################################
+    # Declare the ranges.
+    ############################################################################
+    ranges,subranges,nbins = parameters.fitting_parameters(args.fit)
+    
+    bin_widths = np.ones(len(ranges))
+    for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
+        bin_widths[i] = (r[1]-r[0])/n
+
+    ############################################################################
     # Read in the data
     ############################################################################
     #infile = open('data/before_fire_LG.dat')
@@ -87,34 +96,52 @@ def main():
     if args.verbose:
         print_data(energies,tdays)
 
-    data = [energies.copy(),tdays.copy()]
-    print "data before range cuts: ",len(data[0]),len(data[1])
+    ############################################################################
+    # Bundle up the data into one list.
+    ############################################################################
+    #data = [energies.copy(),tdays.copy()]
+    #print "data before range cuts: ",len(data[0]),len(data[1])
 
     # 3yr data
+    #data = [energies.copy(),tdays.copy(),rise_time.copy()]
     data = [energies.copy(),tdays.copy(),rise_time.copy()]
     print "data before range cuts: ",len(data[0]),len(data[1]),len(data[2])
     #exit()
 
-
     ############################################################################
-    # Declare the ranges.
-    ############################################################################
-    ranges,subranges,nbins = parameters.fitting_parameters(args.fit)
-    
-    bin_widths = np.ones(len(ranges))
-    for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
-        bin_widths[i] = (r[1]-r[0])/n
-
     # Cut events out that fall outside the range.
+    ############################################################################
     data = cut_events_outside_range(data,ranges)
     data = cut_events_outside_subrange(data,subranges[1],data_index=1)
 
     if args.verbose:
         print_data(energies,tdays)
 
-    print "data after  range cuts: ",len(data[0]),len(data[1])
+    print "data after  range cuts: ",len(data[0]),len(data[1]),len(data[2])
 
     nevents = float(len(data[0]))
+
+    ############################################################################
+    # Pre-calculate the slow and fast log-normal probabilities.
+    ############################################################################
+    # Fast
+    print "Precalculating the fast and slow rise time probabilities........"
+    mu = [-0.384584,-0.473217,0.070561]
+    sigma = [0.751184,-0.301781,0.047121]
+    rt_fast = rise_time_prob(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
+
+    # Slow
+    mu = [0.897153,-0.304876,0.044522]
+    sigma = [0.126040,0.220238,-0.032878]
+    rt_slow = rise_time_prob(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
+
+    data.append(rt_fast)
+    data.append(rt_slow)
+
+    print "Finished with the fast and slow rise time probabilities........"
+
+    #exit()
+
 
     ############################################################################
     # Plot the data
@@ -267,7 +294,6 @@ def main():
     ############################################################################
     # exp0 is going to be the simple WIMP-like signal that can modulate or not
     # exp1 is the surface events.
-    # exp_flat is the surface events.
     ############################################################################
 
     nsurface = 575.0 # For full 917 days
@@ -283,7 +309,7 @@ def main():
 
     # Exp 1 is the surface term
     params_dict['e_exp1'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
-    params_dict['num_exp1'] = {'fix':True,'start_val':nsurface,'limits':(0.0,100000.0)}
+    params_dict['num_exp1'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':1.0,'limits':(0.0,100000.0)}
     #params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
@@ -295,8 +321,8 @@ def main():
     params_dict['t_exp_flat'] = {'fix':False,'start_val':0.05,'limits':(0.00001,10.0)}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
+    params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
     #params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
-    params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
 
     # Exponential term in energy
     if args.fit==0 or args.fit==1 or args.fit==5:
@@ -307,7 +333,7 @@ def main():
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
         params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
         params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
-        params_dict['sigma_n'] = {'fix':True,'start_val':2e-41,'limits':(1e-42,1e-38)}
+        params_dict['sigma_n'] = {'fix':False,'start_val':2e-41,'limits':(1e-42,1e-38)}
         if args.sigma_n != None:
             params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38)}
         if args.mDM != None:
@@ -334,7 +360,7 @@ def main():
     #m.tol = 1.0
 
     m.migrad()
-    m.hesse()
+    #m.hesse()
 
     print "Finished fit!!\n"
 

@@ -95,7 +95,7 @@ def main():
 
     # Efficiency
     efficiency = lambda x: 1.0
-    #'''
+    '''
     if args.cogent:
         #eff_scaling = 1.0
         eff_scaling = 0.9 # 3yr data
@@ -104,7 +104,7 @@ def main():
         sigmoid_sigma = 0.241
 
         efficiency = lambda x: fu.sigmoid(x,threshold,sigmoid_sigma,max_val)/eff_scaling
-    #'''
+    '''
 
 
     if args.model=='shm':
@@ -153,9 +153,7 @@ def main():
     ax1.set_xlim(elo,ehi)
     ax1.legend()
 
-
     num_wimps = 1.0
-
 
     num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:366,args=(target_atom,mDM,sigma_n,efficiency,args.model,vDeb1,vSag,v0Sag),epsabs=0.001)[0]
 
@@ -174,6 +172,10 @@ def main():
     ax2.legend([leg_title])
 
     ax2.set_xlabel('Day of year')
+
+    dRdEr = dmm.dRdErSHM(7.0,100.0,target_atom,mDM,sigma_n)
+
+    print "dRdEr: ",dRdEr
 
     plt.show()
 
@@ -274,6 +276,7 @@ def main():
     vSag=300 
     v0Sag=10
     vSagHat = np.array([0,0.233,-0.970])
+    #vSagHat = np.array([-0.07247722,  -0.99486114, +0.07069913])
     vSagVec = np.array([vSag*vSagHat[0],vSag*vSagHat[1],vSag*vSagHat[2]])
     tc_Sag = dmm.tc(vSagVec)
 
