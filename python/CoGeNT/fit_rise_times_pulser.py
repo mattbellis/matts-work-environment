@@ -424,61 +424,26 @@ def main():
         #for i,fp,fe,n in zip(xrange(len(nevs)),fit_parameters,fit_errors,nevs):
         for i,fp,fe,n in zip(xrange(len(nevs)),fit_parameters,fit_mnerrors,nevs):
             print "----------"
-            ypts[0].append(fp['fast_logn_mean'])
-            ypts[1].append(fp['fast_logn_sigma'])
-            ypts[2].append(fp['fast_num'])
-            ypts[3].append(fp['slow_logn_mean'])
-            ypts[4].append(fp['slow_logn_sigma'])
-            ypts[5].append(fp['slow_num'])
+            #ypts[0].append(fp['fast_logn_mean'])
+            #ypts[1].append(fp['fast_logn_sigma'])
+            #ypts[2].append(fp['fast_num'])
+            #ypts[3].append(fp['slow_logn_mean'])
+            #ypts[4].append(fp['slow_logn_sigma'])
+            #ypts[5].append(fp['slow_num'])
 
-            #yerr[0].append(fe['fast_logn_mean'])
-            #yerr[1].append(fe['fast_logn_sigma'])
-            #yerr[2].append(fe['fast_num'])
-            #yerr[3].append(fe['slow_logn_mean'])
-            #yerr[4].append(fe['slow_logn_sigma'])
-            #yerr[5].append(fe['slow_num'])
-            
             pars = ['fast_logn_mean','fast_logn_sigma','fast_num',\
                     'slow_logn_mean','slow_logn_sigma','slow_num']
 
             for i,p in enumerate(pars):
                 if fe.has_key(p):
+                    ypts[i].append(fp[p])
                     yerrlo[i].append(abs(fe[p]['lower']))
                     yerrhi[i].append(abs(fe[p]['upper']))
                 else:
+                    ypts[i].append(0.0)
                     yerrlo[i].append(0.0)
                     yerrhi[i].append(0.0)
 
-
-            '''
-            if fe.has_key('fast_logn_mean'):
-                yerrlo[0].append(abs(fe['fast_logn_mean']['lower']))
-            else:
-                yerrlo[0].append(0.0)
-            if fe.has_key('slow_logn_sigma'):
-                yerrlo[4].append(abs(fe['slow_logn_sigma']['lower']))
-            else:
-                yerrlo[4].append(0.0)
-            yerrlo[1].append(abs(fe['fast_logn_sigma']['lower']))
-            yerrlo[2].append(abs(fe['fast_num']['lower']))
-            yerrlo[3].append(abs(fe['slow_logn_mean']['lower']))
-            #yerrlo[4].append(abs(fe['slow_logn_sigma']['lower']))
-            yerrlo[5].append(abs(fe['slow_num']['lower']))
-
-            if fe.has_key('fast_logn_mean'):
-                yerrhi[0].append(fe['fast_logn_mean']['upper'])
-            else:
-                yerrhi[0].append(0.0)
-            if fe.has_key('slow_logn_sigma'):
-                yerrhi[4].append(abs(fe['slow_logn_sigma']['upper']))
-            else:
-                yerrhi[4].append(0.0)
-            yerrhi[1].append(fe['fast_logn_sigma']['upper'])
-            yerrhi[2].append(fe['fast_num']['upper'])
-            yerrhi[3].append(fe['slow_logn_mean']['upper'])
-            #yerrhi[4].append(fe['slow_logn_sigma']['upper'])
-            yerrhi[5].append(fe['slow_num']['upper'])
-            '''
 
             npts.append(n)
 
@@ -493,18 +458,30 @@ def main():
         xp = np.linspace(min(expts),max(expts),100)
         expts = np.array(expts)
 
-        fvals = plt.figure(figsize=(13,8),dpi=100)
+        fvals2 = plt.figure(figsize=(13,8),dpi=100)
+
         yfitpts = []
         for i in range(0,6):
             yfitpts.append(np.zeros(len(xp)))
 
+        for k in range(0,3):
+            fvals2.add_subplot(2,3,k+1)
+            tempypts = ypts[0+k]-ypts[3+k]
+            if k>1:
+                tempypts = ypts[0+k]/ypts[3+k]
+            # Fractional error
+            tempyerrlo = np.sqrt((yerrlo[0+k]/ypts[0+k])**2 +  (yerrlo[3+k]/ypts[3+k])**2)
+            tempyerrhi = np.sqrt((yerrhi[0+k]/ypts[0+k])**2 +  (yerrhi[3+k]/ypts[3+k])**2)
+            plt.errorbar(expts,tempypts,xerr=0.01,yerr=[tempyerrlo*tempypts,tempyerrhi*tempypts],\
+                    fmt='o',ecolor='k',mec='k',mfc='m',label='Ratio')
+
+        fvals = plt.figure(figsize=(13,8),dpi=100)
         for k in range(0,3):
             fvals.add_subplot(2,3,k+1)
             for ik in range(0,2):
                 nindex = k+3*ik
                 plt.errorbar(expts,ypts[nindex],xerr=0.01,yerr=[yerrlo[nindex],yerrhi[nindex]],\
                         fmt='o',ecolor='k',mec='k',mfc=colors[ik],label=labels[ik])
-                #plt.errorbar(expts,ypts[3],xerr=0.01,yerr=[yerrlo[3],yerrhi[3]],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
 
                 # Use part of the data
                 #index0 = np.arange(0,3)
@@ -513,9 +490,9 @@ def main():
 
                 # Use all or some of the points
                 #index = np.arange(0,len(expts))
-                index = np.arange(0,6)
+                index = np.arange(0,8)
                 if ik>0:
-                    index = np.arange(0,6)
+                    index = np.arange(0,7)
                 #print index
 
                 ########################################################################
@@ -531,20 +508,23 @@ def main():
 
                 #z,zcov = curve_fit(expfunc,expts[index],ypts[nindex][index],p0=[3,-1,2])
                 pinit = [1,1,1]
-                if ik==0 and i==1:
+                if ik==0 and k==0:
                     pinit = [1.0, 1.0, -1.2]
-                elif ik==0 and i==1:
+                elif ik==0 and k==1:
                     pinit = [4.0, 2.0, 0.0]
+                elif ik==0 and k==2:
+                    pinit = [2.0, 2000.0, 300.0]
                 elif ik==1:
                     pinit = [3.0, 1.5, 0.5]
                 #print "FITING THESE POINTS........"
                 #print expts[index], ypts[nindex][index]
                 #print yerrlo[nindex]
                 #print yerrlo[nindex][index]
-                out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], yerrlo[nindex][index]), full_output=1)
+                out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
                 z = out[0]
                 zcov = out[1]
                 print "%d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                print "%d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
                 yfitpts[nindex] = expfunc(z,xp)
                 #print zcov
                 plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
@@ -560,64 +540,18 @@ def main():
                 plt.ylabel(r'Number of events')
             plt.legend()
 
-            #fval
-            fvals.add_subplot(2,3,4)
-            plt.plot(xp,yfitpts[3]/yfitpts[0],'-',color=colors[ik])
+        #fval
+        fvals.add_subplot(2,3,4)
+        plt.plot(xp,yfitpts[3]-yfitpts[0],'-',color='m')
 
-            fvals.add_subplot(2,3,5)
-            plt.plot(xp,yfitpts[4]/yfitpts[1],'-',color=colors[ik])
-        #z = np.polyfit(expts[index],ypts[0][index],2)
-        #print "[%f,%f,%f]" % (z[2],z[1],z[0])
-        #p = np.poly1d(z)
-        #plt.plot(xp,p(xp),'-')
+        fvals.add_subplot(2,3,5)
+        plt.plot(xp,yfitpts[4]-yfitpts[1],'-',color='m')
 
-        #z = np.polyfit(expts[index],ypts[3][index],2)
-        #print "[%f,%f,%f]" % (z[2],z[1],z[0])
-        #p = np.poly1d(z)
-        #plt.plot(xp,p(xp),'-')
-
-
-        '''
-        fvals.add_subplot(1,3,2)
-        plt.errorbar(expts,ypts[1],xerr=0.01,yerr=[yerrlo[1],yerrhi[1]],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
-        plt.errorbar(expts,ypts[4],xerr=0.01,yerr=[yerrlo[4],yerrhi[4]],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
-        plt.ylim(0.0,1.0)
-        plt.xlabel('Energy (keVee)')
-        plt.ylabel(r'Lognormal $\sigma$')
-        plt.legend()
-
-        z = np.polyfit(expts[index],ypts[1][index],2)
-        print "[%f,%f,%f]" % (z[2],z[1],z[0])
-        p = np.poly1d(z)
-        plt.plot(xp,p(xp),'-')
-
-        z = np.polyfit(expts[index],ypts[4][index],2)
-        print "[%f,%f,%f]" % (z[2],z[1],z[0])
-        p = np.poly1d(z)
-        plt.plot(xp,p(xp),'-')
-
-        fvals.add_subplot(1,3,3)
-        plt.errorbar(expts,ypts[2],xerr=0.01,yerr=[yerrlo[2],yerrhi[2]],fmt='o',ecolor='k',mec='k',mfc='r',label='fast')
-        plt.errorbar(expts,ypts[5],xerr=0.01,yerr=[yerrlo[5],yerrhi[5]],fmt='o',ecolor='k',mec='k',mfc='b',label='slow')
-        #plt.ylim(0.0,1.4)
-        plt.xlabel('Energy (keVee)')
-        plt.ylabel(r'% of events in bin')
-        plt.legend()
-
-        z = np.polyfit(expts[index],ypts[2][index],2)
-        print "[%f,%f,%f]" % (z[2],z[1],z[0])
-        p = np.poly1d(z)
-        plt.plot(xp,p(xp),'-')
-
-        z = np.polyfit(expts[index],ypts[5][index],2)
-        print "[%f,%f,%f]" % (z[2],z[1],z[0])
-        p = np.poly1d(z)
-        plt.plot(xp,p(xp),'-')
-        '''
+        fvals.add_subplot(2,3,6)
+        plt.plot(xp,yfitpts[5]/yfitpts[2],'-',color='m')
 
         fvals.subplots_adjust(left=0.08, right=0.98,bottom=0.15,wspace=0.25)
         plt.savefig('Plots/rt_summary.png')
-
 
         np.savetxt('rt_parameters.txt',[expts,ypts[0],ypts[1],ypts[2],ypts[3],ypts[4],ypts[5],npts])
 
