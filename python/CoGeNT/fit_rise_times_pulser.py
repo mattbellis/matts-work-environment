@@ -206,6 +206,12 @@ def main():
     # Look at the rise-time information.
     ############################################################################
 
+    # Will use this later when trying to figure out the energy dependence of 
+    # the log-normal parameters.
+    # define our (line) fitting function
+    expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
+    errfunc = lambda p, x, y, err: (y - expfunc(p, x)) / err
+
     # For the data (two lognormals)
     #starting_params = [-0.6,0.6,0.2*nevents,  0.1,0.8,0.8*nevents]
     # For the pulser fast rise times (two lognormals)
@@ -455,27 +461,64 @@ def main():
         colors = ['r','b']
         labels = ['fast','slow']
 
-        xp = np.linspace(min(expts),max(expts),100)
+        # Use all or some of the points
+        index = np.arange(0,7)
+        
+        #xp = np.linspace(min(expts),max(expts),100)
+        xp = np.linspace(min(expts),expts[6],100)
         expts = np.array(expts)
 
-        fvals2 = plt.figure(figsize=(13,8),dpi=100)
+        fvals2 = plt.figure(figsize=(13,6),dpi=100)
 
         yfitpts = []
-        for i in range(0,6):
-            yfitpts.append(np.zeros(len(xp)))
 
         for k in range(0,3):
             fvals2.add_subplot(2,3,k+1)
             tempypts = ypts[0+k]-ypts[3+k]
+            # Fractional error
+            tempyerrlo = np.sqrt((yerrlo[0+k])**2 + (yerrlo[3+k])**2)
+            tempyerrhi = np.sqrt((yerrhi[0+k])**2 + (yerrhi[3+k])**2)
             if k>1:
                 tempypts = ypts[0+k]/ypts[3+k]
-            # Fractional error
-            tempyerrlo = np.sqrt((yerrlo[0+k]/ypts[0+k])**2 +  (yerrlo[3+k]/ypts[3+k])**2)
-            tempyerrhi = np.sqrt((yerrhi[0+k]/ypts[0+k])**2 +  (yerrhi[3+k]/ypts[3+k])**2)
-            plt.errorbar(expts,tempypts,xerr=0.01,yerr=[tempyerrlo*tempypts,tempyerrhi*tempypts],\
+                tempyerrlo = np.sqrt((yerrlo[0+k]/ypts[3+k])**2 + (yerrlo[3+k]*(ypts[0+k]/(ypts[3+k]**2)))**2)
+                tempyerrhi = np.sqrt((yerrhi[0+k]/ypts[3+k])**2 + (yerrhi[3+k]*(ypts[0+k]/(ypts[3+k]**2)))**2)
+            plt.errorbar(expts,tempypts,xerr=0.01,yerr=[tempyerrlo,tempyerrhi],\
                     fmt='o',ecolor='k',mec='k',mfc='m',label='Ratio')
 
-        fvals = plt.figure(figsize=(13,8),dpi=100)
+
+            ########################################################################
+            # Fit to exponentials.
+            ########################################################################
+            pinit = [1,1,1]
+            if k==0:
+                pinit = [1.0, 1.0, -1.2]
+            elif k==1:
+                pinit = [1.0, -1.0, 1.0]
+            elif k==2:
+                pinit = [-2.0, 1.0, 2.0]
+            
+            out = leastsq(errfunc, pinit, args=(expts[index], tempypts[index], (tempyerrlo[index]+tempyerrhi[index])/2.0), full_output=1)
+            z = out[0]
+            zcov = out[1]
+            print "%d [%f,%f,%f]" % (k,z[0],z[1],z[2])
+            #print "zcov: ",zcov
+            if zcov is not None:
+                print "%d [%f,%f,%f]" % (k,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+            yfitpts = expfunc(z,xp)
+            #print zcov
+            plt.plot(xp,yfitpts,'-',color='m')
+
+
+
+        ########################################################################
+        # Try to fit the individual distributions.
+        ########################################################################
+        '''
+        yfitpts = []
+        for i in range(0,6):
+            yfitpts.append(np.zeros(len(xp)))
+
+        fvals = plt.figure(figsize=(13,6),dpi=100)
         for k in range(0,3):
             fvals.add_subplot(2,3,k+1)
             for ik in range(0,2):
@@ -498,15 +541,6 @@ def main():
                 ########################################################################
                 # Fit to exponentials.
                 ########################################################################
-                '''
-                def expfunc(x, a, b, c):
-                    return a*np.exp(-b*x) + c
-                '''
-                # define our (line) fitting function
-                expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
-                errfunc = lambda p, x, y, err: (y - expfunc(p, x)) / err
-
-                #z,zcov = curve_fit(expfunc,expts[index],ypts[nindex][index],p0=[3,-1,2])
                 pinit = [1,1,1]
                 if ik==0 and k==0:
                     pinit = [1.0, 1.0, -1.2]
@@ -516,10 +550,7 @@ def main():
                     pinit = [2.0, 2000.0, 300.0]
                 elif ik==1:
                     pinit = [3.0, 1.5, 0.5]
-                #print "FITING THESE POINTS........"
-                #print expts[index], ypts[nindex][index]
-                #print yerrlo[nindex]
-                #print yerrlo[nindex][index]
+                
                 out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
                 z = out[0]
                 zcov = out[1]
@@ -554,8 +585,9 @@ def main():
         plt.savefig('Plots/rt_summary.png')
 
         np.savetxt('rt_parameters.txt',[expts,ypts[0],ypts[1],ypts[2],ypts[3],ypts[4],ypts[5],npts])
+        '''
 
-    print "Sum ypts[5]: ",sum(ypts[5])
+    #print "Sum ypts[5]: ",sum(ypts[5])
 
     if not args.batch:
         plt.show()
