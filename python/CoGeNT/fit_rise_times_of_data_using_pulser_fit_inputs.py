@@ -32,6 +32,24 @@ np.random.seed(200)
 
 yearly_mod = 2*pi/365.0
 
+# The entries for the narrow peak parameters.
+fast_mean0_k = [2.843792,2.265467,-1.096411]
+fast_sigma0_k = [3.350738,1.905592,0.224210]
+fast_num0_k =  [6.540050,7926.775305,226.999254]
+
+# The entries for the relationship between the broad and narrow peak.
+fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
+fast_sigma_rel_k = [0.000677,-159.839349,159.382382]
+fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+
+emid = 1.0 # Make this global for ease of fitting.
+
+# Will use this later when trying to figure out the energy dependence of 
+# the log-normal parameters.
+# define our (line) fitting function
+expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
+errfunc = lambda p, x, y, err: (y - expfunc(p, x)) / err
+
 ################################################################################
 # Rise time fit
 ################################################################################
@@ -65,19 +83,40 @@ def fitfunc(data,p,parnames,params_dict):
     num_tot += p[parnames.index("fast_num")]
     num_tot += p[parnames.index("slow_num")]
 
-    means.append(p[pn.index('fast_logn_mean')])
-    means.append(p[pn.index('slow_logn_mean')])
-    sigmas.append(p[pn.index('fast_logn_sigma')])
-    sigmas.append(p[pn.index('slow_logn_sigma')])
-    nums.append(p[pn.index('fast_num')]/num_tot) 
-    nums.append(p[pn.index('slow_num')]/num_tot) 
+    fast_logn_mean0 = p[pn.index('fast_logn_mean0')]
+    fast_logn_sigma0 = p[pn.index('fast_logn_sigma0')]
+    fast_logn_frac0 = p[pn.index('fast_logn_frac0')]
+
+    slow_logn_mean = p[pn.index('slow_logn_mean')]
+    slow_logn_sigma = p[pn.index('slow_logn_sigma')]
+
+    fast_num = p[pn.index('fast_num')]/num_tot
+    slow_num = p[pn.index('slow_num')]/num_tot
 
     #print means,sigmas,nums
+    # The entries for the relationship between the broad and narrow peak.
+    fast_logn_mean_rel = expfunc(fast_mean_rel_k,emid)
+    fast_logn_sigma_rel = expfunc(fast_sigma_rel_k,emid)
+    fast_logn_num_rel = expfunc(fast_num_rel_k,emid)
 
+    fast_logn_mean1 = fast_logn_mean0 - fast_logn_mean_rel
+    fast_logn_sigma1 = fast_logn_sigma0 - fast_logn_sigma_rel
+    #fast_num1 = fast_num0 / fast_num_rel
+
+    #fast_logn_frac0 = fast_logn_num0/(fast_num0+fast_num1)
+    print "IN FITFUNC: ",fast_logn_mean0,fast_logn_sigma0,fast_logn_mean1,fast_logn_sigma1
+
+    pdffast0  = pdfs.lognormal(x,fast_logn_mean0,fast_logn_sigma0,xlo,xhi)
+    pdffast1  = pdfs.lognormal(x,fast_logn_mean1,fast_logn_sigma1,xlo,xhi)
+    pdfslow   = pdfs.lognormal(x,slow_logn_mean, slow_logn_sigma, xlo,xhi)
+
+    tot_pdf = fast_num*(fast_logn_frac0*pdffast0 + (1.0-fast_logn_frac0)*pdffast1) + slow_num*pdfslow
+    '''
     for n,m,s in zip(nums,means,sigmas): 
         pdf  = pdfs.lognormal(x,m,s,xlo,xhi)
         pdf *= n
         tot_pdf += pdf
+    '''
 
 
     return tot_pdf
@@ -148,9 +187,9 @@ def main():
     ############################################################################
     # Read in the data
     ############################################################################
-    #infile_name = 'data/LE.txt'
+    infile_name = 'data/LE.txt'
     #infile_name = 'data/HE.txt'
-    infile_name = 'data/pulser_data.dat'
+    #infile_name = 'data/pulser_data.dat'
     tdays,energies,rise_times = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
     print tdays
     print energies
@@ -205,12 +244,6 @@ def main():
     ############################################################################
     # Look at the rise-time information.
     ############################################################################
-
-    # Will use this later when trying to figure out the energy dependence of 
-    # the log-normal parameters.
-    # define our (line) fitting function
-    expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
-    errfunc = lambda p, x, y, err: (y - expfunc(p, x)) / err
 
     # For the data (two lognormals)
     #starting_params = [-0.6,0.6,0.2*nevents,  0.1,0.8,0.8*nevents]
@@ -269,59 +302,49 @@ def main():
             print "=======-------- E BIN ----------==========="
             print name
 
+        emid = (elo+ehi)/2.0
+
+        # The entries for the narrow peak parameters.
+        fast_mean0 = expfunc(fast_mean0_k,emid)
+        fast_sigma0 = expfunc(fast_sigma0_k,emid)
+        fast_num0 = expfunc(fast_num0_k,emid)
+
+        # The entries for the relationship between the broad and narrow peak.
+        fast_mean_rel = expfunc(fast_mean_rel_k,emid)
+        fast_sigma_rel = expfunc(fast_sigma_rel_k,emid)
+        fast_logn_num_rel = expfunc(fast_num_rel_k,emid)
+
+        fast_mean1 = fast_mean0 - fast_mean_rel
+        fast_sigma1 = fast_sigma0 - fast_sigma_rel
+        fast_num1 = fast_num0 / fast_logn_num_rel
+
+        fast_logn_frac0 = fast_num0/(fast_num0+fast_num1)
+
         nevents = len(data_to_fit)
         print "Nevents for this fit: ",nevents
-        #starting_params = [-0.6,0.6,0.2*nevents,  0.6,0.55,0.8*nevents]
-        # For pulser fits
-        #starting_params = [-0.1,0.8,0.2*nevents,  0.6,0.55,0.8*nevents]
-        '''
-        if i==0:
-            starting_params = [-0.6,0.6,0.2*nevents,  0.6,0.55,0.8*nevents]
-        '''
-        '''
-        if elo>=1.0 and elo<1.2:    
-            starting_params = [0.1,0.2,0.3*nevents,  0.2,3.0,0.7*nevents]
-        '''
+        starting_params = [-0.1,0.8,0.2*nevents,  0.6,0.55,0.8*nevents]
+        
         ############################################################################
         # Declare the fit parameters
         ############################################################################
         params_dict = {}
         params_dict['flag'] = {'fix':True,'start_val':args.fit} 
         params_dict['var_rt'] = {'fix':True,'start_val':0,'limits':(ranges[2][0],ranges[2][1])}
-        #params_dict['fast_logn_mean'] = {'fix':False,'start_val':0.005,'limits':(-2,2),'error':0.1}
-        #params_dict['fast_logn_sigma'] = {'fix':False,'start_val':0.5,'limits':(0.01,5),'error':0.1}
-        #params_dict['fast_num'] = {'fix':False,'start_val':0.2*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
-        #params_dict['slow_logn_mean'] = {'fix':False,'start_val':0.5,'limits':(-2,2),'error':0.1}
-        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':1.0,'limits':(0.01,5),'error':0.1}
-        #params_dict['slow_num'] = {'fix':False,'start_val':0.8*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
 
-        #starting_params = [1.0,1.2,0.6*nevents,  0.1,0.8,0.4*nevents]
+        params_dict['fast_logn_mean0'] = {'fix':True,'start_val':fast_mean0,'limits':(-2,2),'error':0.01}
+        params_dict['fast_logn_sigma0'] = {'fix':True,'start_val':fast_sigma0,'limits':(0.05,30),'error':0.01}
+        params_dict['fast_logn_frac0'] = {'fix':True,'start_val':fast_logn_frac0,'limits':(0.0001,1.0),'error':0.01}
 
-        # Worked for 1.0-1.25
-        #params_dict['fast_logn_mean'] = {'fix':False,'start_val':1.000,'limits':(-2,2),'error':0.1}
-        #params_dict['fast_logn_sigma'] = {'fix':False,'start_val':1.2,'limits':(0.01,5),'error':0.1}
-        #params_dict['fast_num'] = {'fix':False,'start_val':0.6*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
-        #params_dict['slow_logn_mean'] = {'fix':False,'start_val':0.1,'limits':(-2,2),'error':0.1}
-        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':0.8,'limits':(0.01,5),'error':0.1}
-        #params_dict['slow_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.1}
+        params_dict['fast_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
 
-        params_dict['fast_logn_mean'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.01}
-        params_dict['fast_logn_sigma'] = {'fix':False,'start_val':starting_params[1],'limits':(0.05,30),'error':0.01}
-        params_dict['fast_num'] = {'fix':False,'start_val':nevents,'limits':(0.0,1.5*nevents),'error':0.01}
-
-        #params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
-        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
-        #params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
-
-        # For the pulser fits
-        #params_dict['slow_logn_mean'] = {'fix':True,'start_val':0.000,'limits':(-0.002,0.002),'error':0.000001}
-        #params_dict['slow_logn_sigma'] = {'fix':True,'start_val':1.000,'limits':(0.9005,1.002),'error':0.000001}
-        #params_dict['slow_num'] = {'fix':True,'start_val':0.001,'limits':(0.0,0.002),'error':0.000001}
+        #params_dict['fast_logn_mean1'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.01}
+        #params_dict['fast_logn_sigma1'] = {'fix':False,'start_val':starting_params[1],'limits':(0.05,30),'error':0.01}
+        #params_dict['fast_num1'] = {'fix':False,'start_val':nevents,'limits':(0.0,1.5*nevents),'error':0.01}
 
         # float them
         params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
         params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
-        params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
+        params_dict['slow_num'] = {'fix':False,'start_val':0.6*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
 
         # Above some value, lock this down.
         if elo>=2.2:
@@ -329,7 +352,7 @@ def main():
             params_dict['slow_logn_sigma'] = {'fix':True,'start_val':1.0,'limits':(0.05,30),'error':0.01}
             params_dict['slow_num'] = {'fix':True,'start_val':1,'limits':(0.0,1.5*nevents),'error':0.01}
 
-        #'''
+        '''
         if i==0:
             None
             # From Nicole's simulation.
@@ -337,7 +360,7 @@ def main():
             # From Juan
             #params_dict['fast_logn_mean'] = {'fix':True,'start_val':-0.60,'limits':(-2,2),'error':0.01}
             #params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.50,'limits':(0.05,30),'error':0.01}
-        #'''
+        '''
 
         # Try fixing the slow sigma
         #params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.52,'limits':(-2,2),'error':0.01}
@@ -387,13 +410,30 @@ def main():
             xpts = np.linspace(ranges[2][0],ranges[2][1],1000)
             tot_ypts = np.zeros(len(xpts))
 
-            ypts  = pdfs.lognormal(xpts,values['fast_logn_mean'],values['fast_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='r-',linewidth=2,axes=axrt[j])
+            # The entries for the relationship between the broad and narrow peak.
+            fast_logn_mean_rel = expfunc(fast_mean_rel_k,emid)
+            fast_logn_sigma_rel = expfunc(fast_sigma_rel_k,emid)
+            fast_logn_num_rel = expfunc(fast_num_rel_k,emid)
+
+            fast_logn_mean1 = values['fast_logn_mean0'] - fast_logn_mean_rel
+            fast_logn_sigma1 = values['fast_logn_sigma0'] - fast_logn_sigma_rel
+
+            tot_ypts_fast = np.zeros(len(xpts))
+
+            ypts  = pdfs.lognormal(xpts,values['fast_logn_mean0'],values['fast_logn_sigma0'],ranges[2][0],ranges[2][1])
+            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_logn_frac0']*values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
             tot_ypts += y
+            tot_ypts_fast += y
+            ypts  = pdfs.lognormal(xpts,fast_logn_mean1,fast_logn_sigma1,ranges[2][0],ranges[2][1])
+            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=(1.0-values['fast_logn_frac0'])*values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
+            tot_ypts += y
+            tot_ypts_fast += y
 
             ypts  = pdfs.lognormal(xpts,values['slow_logn_mean'],values['slow_logn_sigma'],ranges[2][0],ranges[2][1])
             y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='b-',linewidth=2,axes=axrt[j])
             tot_ypts += y
+
+            axrt[j].plot(xpts,tot_ypts_fast,'r-',linewidth=2)
 
             axrt[j].plot(xpts,tot_ypts,'m',linewidth=2)
             axrt[j].set_ylabel(r'Events')
@@ -404,10 +444,10 @@ def main():
                 figcount += 1
 
             #'''
-            if math.isnan(values['fast_logn_mean']) == False:
+            if math.isnan(values['fast_logn_mean0']) == False:
                 starting_params = [ \
-                values['fast_logn_mean'], \
-                values['fast_logn_sigma'], \
+                values['fast_logn_mean0'], \
+                values['fast_logn_sigma0'], \
                 values['fast_num'], \
                 values['slow_logn_mean'], \
                 values['slow_logn_sigma'],
@@ -417,6 +457,8 @@ def main():
 
             expts.append((ehi+elo)/2.0)
 
+    plt.show()
+    exit()
     print fit_parameters
     print nevs
     
