@@ -262,7 +262,7 @@ def main():
     eoffset = 0.5
 
     ewidth = 0.15
-    estep = 0.15
+    estep = 0.05
 
     #ewidth = 0.200
     #estep = 0.050
@@ -271,7 +271,7 @@ def main():
 
     #for i in range(32,-1,-1):
     figcount = 0
-    for i in range(0,24):
+    for i in range(0,48):
         #j = 32-i
         j = i
         if j%6==0:
@@ -331,7 +331,7 @@ def main():
         params_dict['flag'] = {'fix':True,'start_val':args.fit} 
         params_dict['var_rt'] = {'fix':True,'start_val':0,'limits':(ranges[2][0],ranges[2][1])}
 
-        params_dict['fast_logn_mean0'] = {'fix':True,'start_val':fast_mean0,'limits':(-2,2),'error':0.01}
+        params_dict['fast_logn_mean0'] = {'fix':False,'start_val':fast_mean0,'limits':(-2,2),'error':0.01}
         params_dict['fast_logn_sigma0'] = {'fix':True,'start_val':fast_sigma0,'limits':(0.05,30),'error':0.01}
         params_dict['fast_logn_frac0'] = {'fix':True,'start_val':fast_logn_frac0,'limits':(0.0001,1.0),'error':0.01}
 
@@ -347,10 +347,12 @@ def main():
         params_dict['slow_num'] = {'fix':False,'start_val':0.6*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
 
         # Above some value, lock this down.
+        '''
         if elo>=2.2:
             params_dict['slow_logn_mean'] = {'fix':True,'start_val':0.0,'limits':(-2,2),'error':0.01}
             params_dict['slow_logn_sigma'] = {'fix':True,'start_val':1.0,'limits':(0.05,30),'error':0.01}
             params_dict['slow_num'] = {'fix':True,'start_val':1,'limits':(0.0,1.5*nevents),'error':0.01}
+        '''
 
         '''
         if i==0:
@@ -363,7 +365,7 @@ def main():
         '''
 
         # Try fixing the slow sigma
-        #params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.52,'limits':(-2,2),'error':0.01}
+        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.62,'limits':(-2,2),'error':0.01}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
         #figrt.subplots_adjust(left=0.05, right=0.98)
@@ -457,8 +459,8 @@ def main():
 
             expts.append((ehi+elo)/2.0)
 
-    plt.show()
-    exit()
+    #plt.show()
+    #exit()
     print fit_parameters
     print nevs
     
@@ -479,12 +481,14 @@ def main():
             #ypts[4].append(fp['slow_logn_sigma'])
             #ypts[5].append(fp['slow_num'])
 
-            pars = ['fast_logn_mean','fast_logn_sigma','fast_num',\
+            pars = ['fast_logn_mean0','fast_logn_sigma0','fast_num',\
                     'slow_logn_mean','slow_logn_sigma','slow_num']
 
             for i,p in enumerate(pars):
+                print "key ",p
                 if fe.has_key(p):
                     ypts[i].append(fp[p])
+                    print "val: ",fp[p]
                     yerrlo[i].append(abs(fe[p]['lower']))
                     yerrhi[i].append(abs(fe[p]['upper']))
                 else:
@@ -549,16 +553,18 @@ def main():
             elif k==2:
                 pinit = [-2.0, 1.0, 2.0]
             
-            out = leastsq(errfunc, pinit, args=(expts[index], tempypts[index], (tempyerrlo[index]+tempyerrhi[index])/2.0), full_output=1)
-            z = out[0]
-            zcov = out[1]
-            print "Differences and ratios: %d [%f,%f,%f]" % (k,z[0],z[1],z[2])
-            #print "zcov: ",zcov
-            if zcov is not None:
-                print "Differences and ratios: %d [%f,%f,%f]" % (k,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
-            yfitpts = expfunc(z,xp)
-            #print zcov
-            plt.plot(xp,yfitpts,'-',color='m')
+            print expts[index], tempypts[index], (tempyerrlo[index]+tempyerrhi[index])/2.0
+            if sum(tempypts[index]) > 0:
+                out = leastsq(errfunc, pinit, args=(expts[index], tempypts[index], (tempyerrlo[index]+tempyerrhi[index])/2.0), full_output=1)
+                z = out[0]
+                zcov = out[1]
+                print "Differences and ratios: %d [%f,%f,%f]" % (k,z[0],z[1],z[2])
+                #print "zcov: ",zcov
+                if zcov is not None:
+                    print "Differences and ratios: %d [%f,%f,%f]" % (k,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+                yfitpts = expfunc(z,xp)
+                #print zcov
+                plt.plot(xp,yfitpts,'-',color='m')
 
 
 
@@ -603,14 +609,17 @@ def main():
                 elif ik==1:
                     pinit = [3.0, 1.5, 0.5]
                 
-                out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
-                z = out[0]
-                zcov = out[1]
-                print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
-                print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
-                yfitpts[nindex] = expfunc(z,xp)
-                #print zcov
-                plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
+                print "before fit: ",ypts[nindex][index],yerrlo[nindex][index],yerrhi[nindex][index]
+                if sum(ypts[nindex][index]) > 0:
+                    out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
+                    z = out[0]
+                    zcov = out[1]
+                    print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                    if zcov is not None:
+                        print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+                    yfitpts[nindex] = expfunc(z,xp)
+                    #print zcov
+                    plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
 
             if k<2:
                 plt.ylim(-1.5,1.5)
