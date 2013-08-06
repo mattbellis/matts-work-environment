@@ -50,6 +50,9 @@ emid = 1.0 # Make this global for ease of fitting.
 expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
 errfunc = lambda p, x, y, err: (y - expfunc(p, x)) / err
 
+fast_sigma0_optimal = 1.0
+fast_sigma0_uncert = 1.0
+
 ################################################################################
 # Rise time fit
 ################################################################################
@@ -95,6 +98,7 @@ def fitfunc(data,p,parnames,params_dict):
 
     #print means,sigmas,nums
     # The entries for the relationship between the broad and narrow peak.
+    print "emid: ",emid
     fast_logn_mean_rel = expfunc(fast_mean_rel_k,emid)
     fast_logn_sigma_rel = expfunc(fast_sigma_rel_k,emid)
     fast_logn_num_rel = expfunc(fast_num_rel_k,emid)
@@ -145,6 +149,17 @@ def emlf(data,p,parnames,params_dict):
     #print num_tot,ndata
 
     ret = likelihood_func - fitutils.pois(num_tot,ndata)
+
+    # GAUSSIAN CONSTRAINT
+    mu = p[parnames.index("fast_logn_sigma0")]
+    mu0 = fast_sigma0_optimal
+    sig = fast_sigma0_uncert
+    # We are taking the log of the likelihood, so the exponential in the Gaussian function
+    # goes away.
+    gc = ((mu-mu0)**2)/(2.0*sig*sig)
+    print "Gaussian constraint: ",gc,mu,mu0,sig
+
+    ret -= gc
 
     return ret
 
@@ -262,18 +277,18 @@ def main():
     eoffset = 0.5
 
     ewidth = 0.15
-    estep = 0.05
+    estep = 0.15
 
     #ewidth = 0.200
     #estep = 0.050
 
     expts = []
 
-    #for i in range(32,-1,-1):
     figcount = 0
-    for i in range(0,48):
-        #j = 32-i
-        j = i
+    #for i in range(0,16):
+    for i in range(16,-1,-1):
+        j = 16-i
+        #j = i
         if j%6==0:
             figrt = plt.figure(figsize=(12,6),dpi=100)
         axrt.append(figrt.add_subplot(2,3, i%6 + 1))
@@ -308,6 +323,10 @@ def main():
         fast_mean0 = expfunc(fast_mean0_k,emid)
         fast_sigma0 = expfunc(fast_sigma0_k,emid)
         fast_num0 = expfunc(fast_num0_k,emid)
+
+        # USE THIS FOR THE GAUSSIAN CONSTRAINT
+        fast_sigma0_optimal = fast_sigma0
+        fast_sigma0_uncert = 0.01*fast_sigma0
 
         # The entries for the relationship between the broad and narrow peak.
         fast_mean_rel = expfunc(fast_mean_rel_k,emid)
@@ -365,7 +384,7 @@ def main():
         '''
 
         # Try fixing the slow sigma
-        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.62,'limits':(-2,2),'error':0.01}
+        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.60,'limits':(-2,2),'error':0.01}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
         #figrt.subplots_adjust(left=0.05, right=0.98)
