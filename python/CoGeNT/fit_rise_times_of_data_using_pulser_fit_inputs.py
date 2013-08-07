@@ -42,7 +42,7 @@ fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
 fast_sigma_rel_k = [0.000677,-159.839349,159.382382]
 fast_num_rel_k =  [-2.831665,0.023649,1.144240]
 
-emid = 1.0 # Make this global for ease of fitting.
+#emid = 1.0 # Make this global for ease of fitting.
 
 # Will use this later when trying to figure out the energy dependence of 
 # the log-normal parameters.
@@ -50,8 +50,8 @@ emid = 1.0 # Make this global for ease of fitting.
 expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
 errfunc = lambda p, x, y, err: (y - expfunc(p, x)) / err
 
-fast_sigma0_optimal = 1.0
-fast_sigma0_uncert = 1.0
+#fast_sigma0_optimal = 1.0
+#fast_sigma0_uncert = 1.0
 
 ################################################################################
 # Rise time fit
@@ -82,6 +82,8 @@ def fitfunc(data,p,parnames,params_dict):
     sigmas = []
     nums = []
 
+    emid = p[pn.index('emid')]
+
     num_tot = 0.0
     num_tot += p[parnames.index("fast_num")]
     num_tot += p[parnames.index("slow_num")]
@@ -108,7 +110,7 @@ def fitfunc(data,p,parnames,params_dict):
     #fast_num1 = fast_num0 / fast_num_rel
 
     #fast_logn_frac0 = fast_logn_num0/(fast_num0+fast_num1)
-    print "IN FITFUNC: ",fast_logn_mean0,fast_logn_sigma0,fast_logn_mean1,fast_logn_sigma1
+    #print "IN FITFUNC: ",fast_logn_mean0,fast_logn_sigma0,fast_logn_mean1,fast_logn_sigma1
 
     pdffast0  = pdfs.lognormal(x,fast_logn_mean0,fast_logn_sigma0,xlo,xhi)
     pdffast1  = pdfs.lognormal(x,fast_logn_mean1,fast_logn_sigma1,xlo,xhi)
@@ -152,12 +154,12 @@ def emlf(data,p,parnames,params_dict):
 
     # GAUSSIAN CONSTRAINT
     mu = p[parnames.index("fast_logn_sigma0")]
-    mu0 = fast_sigma0_optimal
-    sig = fast_sigma0_uncert
+    mu0 = p[parnames.index("fast_logn_sigma0_optimal")]
+    sig = p[parnames.index("fast_logn_sigma0_uncert")]
     # We are taking the log of the likelihood, so the exponential in the Gaussian function
     # goes away.
     gc = ((mu-mu0)**2)/(2.0*sig*sig)
-    print "Gaussian constraint: ",gc,mu,mu0,sig
+    #print "Gaussian constraint: ",gc,mu,mu0,sig
 
     ret -= gc
 
@@ -318,6 +320,7 @@ def main():
             print name
 
         emid = (elo+ehi)/2.0
+        print "HERE ------------------------------- emid: ",emid
 
         # The entries for the narrow peak parameters.
         fast_mean0 = expfunc(fast_mean0_k,emid)
@@ -326,7 +329,7 @@ def main():
 
         # USE THIS FOR THE GAUSSIAN CONSTRAINT
         fast_sigma0_optimal = fast_sigma0
-        fast_sigma0_uncert = 0.01*fast_sigma0
+        fast_sigma0_uncert = 0.10*fast_sigma0
 
         # The entries for the relationship between the broad and narrow peak.
         fast_mean_rel = expfunc(fast_mean_rel_k,emid)
@@ -350,11 +353,16 @@ def main():
         params_dict['flag'] = {'fix':True,'start_val':args.fit} 
         params_dict['var_rt'] = {'fix':True,'start_val':0,'limits':(ranges[2][0],ranges[2][1])}
 
+        params_dict['emid'] = {'fix':True,'start_val':emid,'limits':(ranges[0][0],ranges[0][1])}
+
         params_dict['fast_logn_mean0'] = {'fix':False,'start_val':fast_mean0,'limits':(-2,2),'error':0.01}
         params_dict['fast_logn_sigma0'] = {'fix':True,'start_val':fast_sigma0,'limits':(0.05,30),'error':0.01}
         params_dict['fast_logn_frac0'] = {'fix':True,'start_val':fast_logn_frac0,'limits':(0.0001,1.0),'error':0.01}
 
         params_dict['fast_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
+
+        params_dict['fast_logn_sigma0_optimal'] = {'fix':True,'start_val':fast_sigma0_optimal}
+        params_dict['fast_logn_sigma0_uncert'] = {'fix':True,'start_val':fast_sigma0_uncert}
 
         #params_dict['fast_logn_mean1'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.01}
         #params_dict['fast_logn_sigma1'] = {'fix':False,'start_val':starting_params[1],'limits':(0.05,30),'error':0.01}
@@ -432,9 +440,9 @@ def main():
             tot_ypts = np.zeros(len(xpts))
 
             # The entries for the relationship between the broad and narrow peak.
-            fast_logn_mean_rel = expfunc(fast_mean_rel_k,emid)
-            fast_logn_sigma_rel = expfunc(fast_sigma_rel_k,emid)
-            fast_logn_num_rel = expfunc(fast_num_rel_k,emid)
+            fast_logn_mean_rel = expfunc(fast_mean_rel_k,values['emid'])
+            fast_logn_sigma_rel = expfunc(fast_sigma_rel_k,values['emid'])
+            fast_logn_num_rel = expfunc(fast_num_rel_k,values['emid'])
 
             fast_logn_mean1 = values['fast_logn_mean0'] - fast_logn_mean_rel
             fast_logn_sigma1 = values['fast_logn_sigma0'] - fast_logn_sigma_rel
