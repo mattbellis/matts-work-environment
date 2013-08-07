@@ -153,15 +153,16 @@ def emlf(data,p,parnames,params_dict):
     ret = likelihood_func - fitutils.pois(num_tot,ndata)
 
     # GAUSSIAN CONSTRAINT
-    mu = p[parnames.index("fast_logn_sigma0")]
-    mu0 = p[parnames.index("fast_logn_sigma0_optimal")]
-    sig = p[parnames.index("fast_logn_sigma0_uncert")]
-    # We are taking the log of the likelihood, so the exponential in the Gaussian function
-    # goes away.
-    gc = ((mu-mu0)**2)/(2.0*sig*sig)
-    #print "Gaussian constraint: ",gc,mu,mu0,sig
+    for parm in ['mean','sigma']:
+        mu = p[parnames.index("fast_logn_"+parm+"0")]
+        mu0 = p[parnames.index("fast_logn_"+parm+"0_optimal")]
+        sig = p[parnames.index("fast_logn_"+parm+"0_uncert")]
+        # We are taking the log of the likelihood, so the exponential in the Gaussian function
+        # goes away.
+        gc = ((mu-mu0)**2)/(2.0*sig*sig)
+        #print "Gaussian constraint: ",gc,mu,mu0,sig
 
-    ret += gc
+        ret += gc
 
     return ret
 
@@ -278,8 +279,8 @@ def main():
     ehi = 1.0
     eoffset = 0.5
 
-    ewidth = 0.150
-    estep = 0.050
+    ewidth = 0.200
+    estep = 0.200
 
     #ewidth = 0.200
     #estep = 0.050
@@ -287,10 +288,10 @@ def main():
     expts = []
 
     figcount = 0
-    #for i in range(0,16):
-    for i in range(32,-1,-1):
-        j = 32-i
-        #j = i
+    #for i in range(48,-1,-1):
+    for i in range(0,48):
+        #j = 48-i
+        j = i
         if j%6==0:
             figrt = plt.figure(figsize=(12,6),dpi=100)
         axrt.append(figrt.add_subplot(2,3, i%6 + 1))
@@ -328,8 +329,11 @@ def main():
         fast_num0 = expfunc(fast_num0_k,emid)
 
         # USE THIS FOR THE GAUSSIAN CONSTRAINT
+        fast_mean0_optimal = fast_mean0
+        fast_mean0_uncert = 0.100*fast_mean0
+
         fast_sigma0_optimal = fast_sigma0
-        fast_sigma0_uncert = 0.001*fast_sigma0
+        fast_sigma0_uncert = 0.100*fast_sigma0
 
         # The entries for the relationship between the broad and narrow peak.
         fast_mean_rel = expfunc(fast_mean_rel_k,emid)
@@ -363,6 +367,9 @@ def main():
 
         params_dict['fast_logn_sigma0_optimal'] = {'fix':True,'start_val':fast_sigma0_optimal}
         params_dict['fast_logn_sigma0_uncert'] = {'fix':True,'start_val':fast_sigma0_uncert}
+
+        params_dict['fast_logn_mean0_optimal'] = {'fix':True,'start_val':fast_mean0_optimal}
+        params_dict['fast_logn_mean0_uncert'] = {'fix':True,'start_val':fast_mean0_uncert}
 
         #params_dict['fast_logn_mean1'] = {'fix':False,'start_val':starting_params[0],'limits':(-2,2),'error':0.01}
         #params_dict['fast_logn_sigma1'] = {'fix':False,'start_val':starting_params[1],'limits':(0.05,30),'error':0.01}
