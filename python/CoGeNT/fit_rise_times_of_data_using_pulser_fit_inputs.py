@@ -100,7 +100,7 @@ def fitfunc(data,p,parnames,params_dict):
 
     #print means,sigmas,nums
     # The entries for the relationship between the broad and narrow peak.
-    print "emid: ",emid
+    #print "emid: ",emid
     fast_logn_mean_rel = expfunc(fast_mean_rel_k,emid)
     fast_logn_sigma_rel = expfunc(fast_sigma_rel_k,emid)
     fast_logn_num_rel = expfunc(fast_num_rel_k,emid)
@@ -161,7 +161,7 @@ def emlf(data,p,parnames,params_dict):
     gc = ((mu-mu0)**2)/(2.0*sig*sig)
     #print "Gaussian constraint: ",gc,mu,mu0,sig
 
-    ret -= gc
+    ret += gc
 
     return ret
 
@@ -278,8 +278,8 @@ def main():
     ehi = 1.0
     eoffset = 0.5
 
-    ewidth = 0.15
-    estep = 0.15
+    ewidth = 0.150
+    estep = 0.050
 
     #ewidth = 0.200
     #estep = 0.050
@@ -288,8 +288,8 @@ def main():
 
     figcount = 0
     #for i in range(0,16):
-    for i in range(16,-1,-1):
-        j = 16-i
+    for i in range(32,-1,-1):
+        j = 32-i
         #j = i
         if j%6==0:
             figrt = plt.figure(figsize=(12,6),dpi=100)
@@ -320,7 +320,7 @@ def main():
             print name
 
         emid = (elo+ehi)/2.0
-        print "HERE ------------------------------- emid: ",emid
+        #print "HERE ------------------------------- emid: ",emid
 
         # The entries for the narrow peak parameters.
         fast_mean0 = expfunc(fast_mean0_k,emid)
@@ -329,7 +329,7 @@ def main():
 
         # USE THIS FOR THE GAUSSIAN CONSTRAINT
         fast_sigma0_optimal = fast_sigma0
-        fast_sigma0_uncert = 0.10*fast_sigma0
+        fast_sigma0_uncert = 0.001*fast_sigma0
 
         # The entries for the relationship between the broad and narrow peak.
         fast_mean_rel = expfunc(fast_mean_rel_k,emid)
@@ -356,7 +356,7 @@ def main():
         params_dict['emid'] = {'fix':True,'start_val':emid,'limits':(ranges[0][0],ranges[0][1])}
 
         params_dict['fast_logn_mean0'] = {'fix':False,'start_val':fast_mean0,'limits':(-2,2),'error':0.01}
-        params_dict['fast_logn_sigma0'] = {'fix':True,'start_val':fast_sigma0,'limits':(0.05,30),'error':0.01}
+        params_dict['fast_logn_sigma0'] = {'fix':False,'start_val':fast_sigma0,'limits':(0.05,30),'error':0.01}
         params_dict['fast_logn_frac0'] = {'fix':True,'start_val':fast_logn_frac0,'limits':(0.0001,1.0),'error':0.01}
 
         params_dict['fast_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
@@ -413,7 +413,7 @@ def main():
 
             # For maximum likelihood method.
             kwd['errordef'] = 0.5
-            kwd['print_level'] = 1
+            kwd['print_level'] = 0
             #print kwd
 
             m = minuit.Minuit(f,**kwd)
@@ -535,7 +535,7 @@ def main():
         labels = ['fast','slow']
 
         # Use all or some of the points
-        index = np.arange(0,9)
+        nfitpts = 16
 
         
         #xp = np.linspace(min(expts),max(expts),100)
@@ -549,8 +549,8 @@ def main():
         for k in range(0,3):
             # Some of the broad rise times are set to 0.
             #index0s = ypts[3+k]!=0
-            #index0s = np.ones(len(ypts[3+k])).astype(bool)
-            index0s = np.ones(9).astype(bool)
+            index0s = np.ones(len(ypts[3+k])).astype(bool)
+            #index0s = np.ones(nfitpts).astype(bool)
 
             fvals2.add_subplot(2,3,k+1)
 
@@ -563,6 +563,12 @@ def main():
                 tempyerrlo = np.sqrt((yerrlo[0+k][index0s]/ypts[3+k][index0s])**2 + (yerrlo[3+k][index0s]*(ypts[0+k][index0s]/(ypts[3+k][index0s]**2)))**2)
                 tempyerrhi = np.sqrt((yerrhi[0+k][index0s]/ypts[3+k][index0s])**2 + (yerrhi[3+k][index0s]*(ypts[0+k][index0s]/(ypts[3+k][index0s]**2)))**2)
 
+            print expts
+            print index0s
+            print expts[index0s]
+            print tempypts[index0s]
+            print tempyerrlo[index0s]
+            print tempyerrhi[index0s]
             plt.errorbar(expts[index0s],tempypts[index0s],xerr=0.01,yerr=[tempyerrlo[index0s],tempyerrhi[index0s]],\
                     fmt='o',ecolor='k',mec='k',mfc='m',label='Ratio')
 
@@ -580,7 +586,14 @@ def main():
             elif k==2:
                 pinit = [-2.0, 1.0, 2.0]
             
-            print expts[index], tempypts[index], (tempyerrlo[index]+tempyerrhi[index])/2.0
+            index = np.arange(0,len(tempypts))
+            print "WHHHHYYYYYY"
+            print expts
+            print index
+            print expts[index]
+            print tempypts[index]
+            print tempyerrlo[index]
+            print tempyerrhi[index]
             if sum(tempypts[index]) > 0:
                 out = leastsq(errfunc, pinit, args=(expts[index], tempypts[index], (tempyerrlo[index]+tempyerrhi[index])/2.0), full_output=1)
                 z = out[0]
