@@ -279,8 +279,8 @@ def main():
     ehi = 1.0
     eoffset = 0.5
 
-    ewidth = 0.200
-    estep = 0.200
+    ewidth = 0.100
+    estep = 0.100
 
     #ewidth = 0.200
     #estep = 0.050
@@ -289,7 +289,7 @@ def main():
 
     figcount = 0
     #for i in range(48,-1,-1):
-    for i in range(0,16):
+    for i in range(0,32):
         #j = 48-i
         j = i
         if j%6==0:
@@ -330,10 +330,10 @@ def main():
 
         # USE THIS FOR THE GAUSSIAN CONSTRAINT
         fast_mean0_optimal = fast_mean0
-        fast_mean0_uncert = 0.100*fast_mean0
+        fast_mean0_uncert = 0.200*fast_mean0
 
         fast_sigma0_optimal = fast_sigma0
-        fast_sigma0_uncert = 0.100*fast_sigma0
+        fast_sigma0_uncert = 0.200*fast_sigma0
 
         # The entries for the relationship between the broad and narrow peak.
         fast_mean_rel = expfunc(fast_mean_rel_k,emid)
@@ -399,7 +399,7 @@ def main():
         '''
 
         # Try fixing the slow sigma
-        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.60,'limits':(-2,2),'error':0.01}
+        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.542,'limits':(-2,2),'error':0.01}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
         #figrt.subplots_adjust(left=0.05, right=0.98)
@@ -542,11 +542,11 @@ def main():
         labels = ['fast','slow']
 
         # Use all or some of the points
-        nfitpts = 16
+        nfitpts = 24
 
         
         #xp = np.linspace(min(expts),max(expts),100)
-        xp = np.linspace(min(expts),expts[8],100)
+        xp = np.linspace(min(expts),expts[24],100)
         expts = np.array(expts)
 
         fvals2 = plt.figure(figsize=(13,6),dpi=100)
@@ -638,9 +638,9 @@ def main():
 
                 # Use all or some of the points
                 #index = np.arange(0,len(expts))
-                index = np.arange(0,8)
+                index = np.arange(0,20)
                 if ik>0:
-                    index = np.arange(0,7)
+                    index = np.arange(0,20)
                 #print index
 
                 ########################################################################
@@ -656,8 +656,10 @@ def main():
                 elif ik==1:
                     pinit = [3.0, 1.5, 0.5]
                 
-                print "before fit: ",ypts[nindex][index],yerrlo[nindex][index],yerrhi[nindex][index]
-                if sum(ypts[nindex][index]) > 0:
+                #print "before fit: ",ypts[nindex][index],yerrlo[nindex][index],yerrhi[nindex][index]
+                print "Fitting data!!!!!! --------------- %d %d" % (k,ik)
+                #print "before fit: ",ypts[nindex][index]
+                if abs(sum(ypts[nindex][index])) > 0:
                     out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
                     z = out[0]
                     zcov = out[1]
@@ -666,6 +668,7 @@ def main():
                         print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
                     yfitpts[nindex] = expfunc(z,xp)
                     #print zcov
+                    print plt.gca()
                     plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
 
             if k<2:
