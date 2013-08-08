@@ -289,7 +289,7 @@ def main():
 
     figcount = 0
     #for i in range(48,-1,-1):
-    for i in range(0,48):
+    for i in range(0,16):
         #j = 48-i
         j = i
         if j%6==0:
