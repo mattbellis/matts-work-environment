@@ -139,6 +139,8 @@ def main():
 
     ############################################################################
 
+    tag = 'pulser'
+
     '''
     if args.help:
         parser.print_help()
@@ -189,6 +191,7 @@ def main():
 
     nevents = float(len(data[0]))
 
+    '''
     plt.figure()
     plt.plot(energies,rise_times,'o',markersize=1.5)
     plt.yscale('log')
@@ -198,6 +201,7 @@ def main():
     plt.plot(tdays,rise_times,'o',markersize=1.5)
     plt.yscale('log')
     plt.ylim(0.1,10)
+    '''
 
     ############################################################################
     # Plot the data
@@ -264,8 +268,8 @@ def main():
             lch.hist_err(data_to_fit,bins=nbins[2],range=ranges[2],axes=axrt[j])
             plt.ylim(0)
             plt.xlim(ranges[2][0],ranges[2][1])
-            name = "%0.2f-%0.2f" % (elo,ehi)
-            plt.text(0.75,0.75,name,transform=axrt[j].transAxes)
+            name = "Energy: %0.2f-%0.2f (keVee)" % (elo,ehi)
+            plt.text(0.20,0.75,name,transform=axrt[j].transAxes)
             print "=======-------- E BIN ----------==========="
             print name
 
@@ -417,6 +421,10 @@ def main():
 
             expts.append((ehi+elo)/2.0)
 
+        if j%6==5:
+            name = "Plots/rt_slice_%s_%d.png" % (tag,j/6)
+            plt.savefig(name)
+
     print fit_parameters
     print nevs
     
@@ -459,7 +467,7 @@ def main():
             yerrhi[i] = np.array(yerrhi[i])
 
         colors = ['r','b']
-        labels = ['fast','slow']
+        labels = ['narrow','wide']
 
         # Use all or some of the points
         index = np.arange(0,9)
@@ -469,7 +477,7 @@ def main():
         xp = np.linspace(min(expts),expts[8],100)
         expts = np.array(expts)
 
-        fvals2 = plt.figure(figsize=(13,6),dpi=100)
+        fvals2 = plt.figure(figsize=(13,4),dpi=100)
 
         yfitpts = []
 
@@ -479,7 +487,7 @@ def main():
             #index0s = np.ones(len(ypts[3+k])).astype(bool)
             index0s = np.ones(9).astype(bool)
 
-            fvals2.add_subplot(2,3,k+1)
+            fvals2.add_subplot(1,3,k+1)
 
             tempypts = ypts[0+k]-ypts[3+k]
             # Fractional error
@@ -493,7 +501,15 @@ def main():
             plt.errorbar(expts[index0s],tempypts[index0s],xerr=0.01,yerr=[tempyerrlo[index0s],tempyerrhi[index0s]],\
                     fmt='o',ecolor='k',mec='k',mfc='m',label='Ratio')
 
+            if k==0:
+                plt.ylabel(r'$\Delta \mu$')
+            elif k==1:
+                plt.ylabel(r'$\Delta \sigma$')
+            elif k==2:
+                plt.ylabel(r'# wide/# narrow')
+
             plt.xlim(0.5,3.5)
+            plt.xlabel('Energy (keVee)')
 
 
             ########################################################################
@@ -518,7 +534,9 @@ def main():
             #print zcov
             plt.plot(xp,yfitpts,'-',color='m')
 
-
+        fvals2.subplots_adjust(left=0.10, right=0.98,bottom=0.15,wspace=0.25,hspace=0.25)
+        name = 'Plots/rt_summary_%s_1.png' % (tag)
+        plt.savefig(name)
 
         ########################################################################
         # Try to fit the individual distributions.
@@ -527,15 +545,18 @@ def main():
         for i in range(0,6):
             yfitpts.append(np.zeros(len(xp)))
 
-        fvals = plt.figure(figsize=(13,6),dpi=100)
+        fvals = plt.figure(figsize=(13,4),dpi=100)
         for k in range(0,3):
-            fvals.add_subplot(2,3,k+1)
+            fvals.add_subplot(1,3,k+1)
             for ik in range(0,2):
                 nindex = k+3*ik
-                plt.errorbar(expts,ypts[nindex],xerr=0.01,yerr=[yerrlo[nindex],yerrhi[nindex]],\
+                print "HERERERERE"
+                print ypts[nindex]
+                print ypts[nindex][ypts[nindex]!=0]
+                plt.errorbar(expts[ypts[nindex]!=0],ypts[nindex][ypts[nindex]!=0],xerr=0.01,yerr=[yerrlo[nindex][ypts[nindex]!=0],yerrhi[nindex][ypts[nindex]!=0]],\
                         fmt='o',ecolor='k',mec='k',mfc=colors[ik],label=labels[ik])
 
-                #'''
+                '''
                 # Use part of the data
                 #index0 = np.arange(0,3)
                 #index1 = np.arange(7,len(expts))
@@ -569,9 +590,12 @@ def main():
                 yfitpts[nindex] = expfunc(z,xp)
                 #print zcov
                 plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
+                '''
 
-            if k<2:
+            if k==0:
                 plt.ylim(-1.5,1.5)
+            elif k==1:
+                plt.ylim(0,1.5)
             plt.xlabel('Energy (keVee)')
             if k==0:
                 plt.ylabel(r'Lognormal $\mu$')
@@ -582,6 +606,7 @@ def main():
             plt.legend()
 
         #fval
+        '''
         fvals.add_subplot(2,3,4)
         plt.plot(xp,yfitpts[3]-yfitpts[0],'-',color='m')
 
@@ -590,9 +615,11 @@ def main():
 
         fvals.add_subplot(2,3,6)
         plt.plot(xp,yfitpts[5]/yfitpts[2],'-',color='m')
+        '''
 
-        fvals.subplots_adjust(left=0.08, right=0.98,bottom=0.15,wspace=0.25)
-        plt.savefig('Plots/rt_summary.png')
+        fvals.subplots_adjust(left=0.10, right=0.98,bottom=0.15,wspace=0.25,hspace=0.25)
+        name = 'Plots/rt_summary_%s_0.png' % (tag)
+        plt.savefig(name)
 
         np.savetxt('rt_parameters.txt',[expts,ypts[0],ypts[1],ypts[2],ypts[3],ypts[4],ypts[5],npts])
         #'''
