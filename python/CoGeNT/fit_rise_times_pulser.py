@@ -365,7 +365,7 @@ def main():
 
             # For maximum likelihood method.
             kwd['errordef'] = 0.5
-            kwd['print_level'] = 1
+            kwd['print_level'] = 0
             #print kwd
 
             m = minuit.Minuit(f,**kwd)
@@ -402,10 +402,12 @@ def main():
             axrt[j].plot(xpts,tot_ypts,'m',linewidth=2)
             axrt[j].set_ylabel(r'Events')
             axrt[j].set_xlabel(r'Rise time ($\mu$s)')
+            '''
             name = "Plots/rt_slice_%d.png" % (figcount)
             if j%6==5:
                 plt.savefig(name)
                 figcount += 1
+            '''
 
             #'''
             if math.isnan(values['fast_logn_mean']) == False:
@@ -519,7 +521,8 @@ def main():
             if k==0:
                 pinit = [1.0, 1.0, -1.2]
             elif k==1:
-                pinit = [1.0, -1.0, -0.5]
+                #pinit = [1.0, -1.0, -0.5]
+                pinit = [-3.0,0.0015,-0.4]
             elif k==2:
                 pinit = [-2.0, 1.0, 2.0]
             

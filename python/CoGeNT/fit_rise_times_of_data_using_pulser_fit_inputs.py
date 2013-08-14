@@ -39,7 +39,7 @@ fast_num0_k =  [6.540050,7926.775305,226.999254]
 
 # The entries for the relationship between the broad and narrow peak.
 fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
-fast_sigma_rel_k = [0.000677,-159.839349,159.382382]
+fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
 fast_num_rel_k =  [-2.831665,0.023649,1.144240]
 
 #emid = 1.0 # Make this global for ease of fitting.
@@ -113,7 +113,11 @@ def fitfunc(data,p,parnames,params_dict):
     #print "IN FITFUNC: ",fast_logn_mean0,fast_logn_sigma0,fast_logn_mean1,fast_logn_sigma1
 
     pdffast0  = pdfs.lognormal(x,fast_logn_mean0,fast_logn_sigma0,xlo,xhi)
-    pdffast1  = pdfs.lognormal(x,fast_logn_mean1,fast_logn_sigma1,xlo,xhi)
+
+    pdffast1 = np.zeros(len(x))
+    if emid<=1.9:
+        pdffast1  = pdfs.lognormal(x,fast_logn_mean1,fast_logn_sigma1,xlo,xhi)
+
     pdfslow   = pdfs.lognormal(x,slow_logn_mean, slow_logn_sigma, xlo,xhi)
 
     tot_pdf = fast_num*(fast_logn_frac0*pdffast0 + (1.0-fast_logn_frac0)*pdffast1) + slow_num*pdfslow
@@ -193,6 +197,8 @@ def main():
             default=False, help='Run in batch mode (exit on completion).')
 
     args = parser.parse_args()
+
+    tag = 'data_constrained_with_pulser_mean20_sigma20_slowsigfloat'
 
     ############################################################################
 
@@ -288,8 +294,9 @@ def main():
     expts = []
 
     figcount = 0
+    maxrange = int((ranges[0][1]-ranges[0][0])/ewidth)
     #for i in range(48,-1,-1):
-    for i in range(0,32):
+    for i in range(0,maxrange):
         #j = 48-i
         j = i
         if j%6==0:
@@ -330,10 +337,10 @@ def main():
 
         # USE THIS FOR THE GAUSSIAN CONSTRAINT
         fast_mean0_optimal = fast_mean0
-        fast_mean0_uncert = 0.200*fast_mean0
+        fast_mean0_uncert = 0.2000*fast_mean0
 
         fast_sigma0_optimal = fast_sigma0
-        fast_sigma0_uncert = 0.200*fast_sigma0
+        fast_sigma0_uncert = 0.2000*fast_sigma0
 
         # The entries for the relationship between the broad and narrow peak.
         fast_mean_rel = expfunc(fast_mean_rel_k,emid)
@@ -363,7 +370,8 @@ def main():
         params_dict['fast_logn_sigma0'] = {'fix':False,'start_val':fast_sigma0,'limits':(0.05,30),'error':0.01}
         params_dict['fast_logn_frac0'] = {'fix':True,'start_val':fast_logn_frac0,'limits':(0.0001,1.0),'error':0.01}
 
-        params_dict['fast_num'] = {'fix':False,'start_val':0.4*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
+        #params_dict['fast_num'] = {'fix':False,'start_val':0.5*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
+        params_dict['fast_num'] = {'fix':False,'start_val':starting_params[2],'limits':(0.0,1.5*nevents),'error':0.01}
 
         params_dict['fast_logn_sigma0_optimal'] = {'fix':True,'start_val':fast_sigma0_optimal}
         params_dict['fast_logn_sigma0_uncert'] = {'fix':True,'start_val':fast_sigma0_uncert}
@@ -378,7 +386,7 @@ def main():
         # float them
         params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
         params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
-        params_dict['slow_num'] = {'fix':False,'start_val':0.6*nevents,'limits':(0.0,1.5*nevents),'error':0.01}
+        params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
 
         # Above some value, lock this down.
         '''
@@ -399,7 +407,7 @@ def main():
         '''
 
         # Try fixing the slow sigma
-        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.542,'limits':(-2,2),'error':0.01}
+        #params_dict['slow_logn_sigma'] = {'fix':True,'start_val':0.60,'limits':(-2,2),'error':0.01}
 
         #figrt.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
         #figrt.subplots_adjust(left=0.05, right=0.98)
@@ -460,10 +468,12 @@ def main():
             y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_logn_frac0']*values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
             tot_ypts += y
             tot_ypts_fast += y
-            ypts  = pdfs.lognormal(xpts,fast_logn_mean1,fast_logn_sigma1,ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=(1.0-values['fast_logn_frac0'])*values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
-            tot_ypts += y
-            tot_ypts_fast += y
+            # Only plot the second narrow bump above some value.
+            if emid<=1.9: 
+                ypts  = pdfs.lognormal(xpts,fast_logn_mean1,fast_logn_sigma1,ranges[2][0],ranges[2][1])
+                y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=(1.0-values['fast_logn_frac0'])*values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
+                tot_ypts += y
+                tot_ypts_fast += y
 
             ypts  = pdfs.lognormal(xpts,values['slow_logn_mean'],values['slow_logn_sigma'],ranges[2][0],ranges[2][1])
             y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='b-',linewidth=2,axes=axrt[j])
@@ -474,8 +484,8 @@ def main():
             axrt[j].plot(xpts,tot_ypts,'m',linewidth=2)
             axrt[j].set_ylabel(r'Events')
             axrt[j].set_xlabel(r'Rise time ($\mu$s)')
-            name = "Plots/rt_slice_%d.png" % (figcount)
             if j%6==5:
+                name = "Plots/rt_slice_%s_%d.png" % (tag,figcount)
                 plt.savefig(name)
                 figcount += 1
 
@@ -525,6 +535,10 @@ def main():
                     print "val: ",fp[p]
                     yerrlo[i].append(abs(fe[p]['lower']))
                     yerrhi[i].append(abs(fe[p]['upper']))
+                elif p=='slow_logn_sigma':
+                    ypts[i].append(0.60)
+                    yerrlo[i].append(0.0)
+                    yerrhi[i].append(0.0)
                 else:
                     ypts[i].append(0.0)
                     yerrlo[i].append(0.0)
@@ -542,16 +556,20 @@ def main():
         labels = ['fast','slow']
 
         # Use all or some of the points
-        nfitpts = 24
+        nfitpts = len(expts)
 
         
         #xp = np.linspace(min(expts),max(expts),100)
-        xp = np.linspace(min(expts),expts[24],100)
+        print "herherherkehre"
+        print nfitpts
+        print expts
+        xp = np.linspace(min(expts),expts[nfitpts-1],100)
         expts = np.array(expts)
 
-        fvals2 = plt.figure(figsize=(13,6),dpi=100)
-
         yfitpts = []
+
+        '''
+        fvals2 = plt.figure(figsize=(13,6),dpi=100)
 
         for k in range(0,3):
             # Some of the broad rise times are set to 0.
@@ -614,6 +632,7 @@ def main():
                 plt.plot(xp,yfitpts,'-',color='m')
 
 
+        '''
 
         ########################################################################
         # Try to fit the individual distributions.
@@ -622,9 +641,9 @@ def main():
         for i in range(0,6):
             yfitpts.append(np.zeros(len(xp)))
 
-        fvals = plt.figure(figsize=(13,6),dpi=100)
+        fvals = plt.figure(figsize=(13,4),dpi=100)
         for k in range(0,3):
-            fvals.add_subplot(2,3,k+1)
+            fvals.add_subplot(1,3,k+1)
             for ik in range(0,2):
                 nindex = k+3*ik
                 plt.errorbar(expts,ypts[nindex],xerr=0.01,yerr=[yerrlo[nindex],yerrhi[nindex]],\
@@ -637,10 +656,10 @@ def main():
                 #index = np.append(index0,index1)
 
                 # Use all or some of the points
-                #index = np.arange(0,len(expts))
-                index = np.arange(0,20)
+                index = np.arange(0,len(expts))
+                #index = np.arange(0,20)
                 if ik>0:
-                    index = np.arange(0,20)
+                    index = np.arange(0,len(expts))
                 #print index
 
                 ########################################################################
@@ -659,7 +678,7 @@ def main():
                 #print "before fit: ",ypts[nindex][index],yerrlo[nindex][index],yerrhi[nindex][index]
                 print "Fitting data!!!!!! --------------- %d %d" % (k,ik)
                 #print "before fit: ",ypts[nindex][index]
-                if abs(sum(ypts[nindex][index])) > 0:
+                if abs(sum(ypts[nindex][index])) > 0 and k<2:
                     out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
                     z = out[0]
                     zcov = out[1]
@@ -671,8 +690,10 @@ def main():
                     print plt.gca()
                     plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
 
-            if k<2:
+            if k==0:
                 plt.ylim(-1.5,1.5)
+            elif k==1:
+                plt.ylim(0.0,1.5)
             plt.xlabel('Energy (keVee)')
             if k==0:
                 plt.ylabel(r'Lognormal $\mu$')
@@ -683,6 +704,7 @@ def main():
             plt.legend()
 
         #fval
+        '''
         fvals.add_subplot(2,3,4)
         plt.plot(xp,yfitpts[3]-yfitpts[0],'-',color='m')
 
@@ -691,9 +713,11 @@ def main():
 
         fvals.add_subplot(2,3,6)
         plt.plot(xp,yfitpts[5]/yfitpts[2],'-',color='m')
+        '''
 
-        fvals.subplots_adjust(left=0.08, right=0.98,bottom=0.15,wspace=0.25)
-        plt.savefig('Plots/rt_summary.png')
+        fvals.subplots_adjust(left=0.10, right=0.98,bottom=0.15,wspace=0.25,hspace=0.25)
+        name = 'Plots/rt_summary_%s_0.png' % (tag)
+        plt.savefig(name)
 
         np.savetxt('rt_parameters.txt',[expts,ypts[0],ypts[1],ypts[2],ypts[3],ypts[4],ypts[5],npts])
         #'''
