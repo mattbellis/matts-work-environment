@@ -194,6 +194,40 @@ def rise_time_prob(rise_time,energy,mu_k,sigma_k,xlo,xhi):
     return ret
 
 ################################################################################
+# Precalculate the probabilities for the fast lognormal distributions.
+################################################################################
+def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numrel,xlo,xhi):
+
+    expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
+
+    # Pull out the constants for the polynomials.
+    fast_mean0 = expfunc(mu0,energy)
+    fast_sigma0 = expfunc(mu0,energy)
+    fast_num0 = np.ones(len(rise_time))
+
+    # The entries for the relationship between the broad and narrow peak.
+    fast_mean_rel = expfunc(murel,energy)
+    fast_sigma_rel = expfunc(sigmarel,energy)
+    fast_logn_num_rel = expfunc(numrel,energy)
+
+    fast_mean1 = fast_mean0 - fast_mean_rel
+    fast_sigma1 = fast_sigma0 - fast_sigma_rel
+    fast_num1 = fast_num0 / fast_logn_num_rel
+
+    fast_num0 /= (fast_num0+fast_num1)
+    fast_num1 /= (fast_num0+fast_num1)
+
+    ret = np.zeros(len(rise_time))
+    for i in xrange(len(ret)):
+        #print rise_time[i],allmu[i],allsigma[i]
+        pdf0 = pdfs.lognormal(rise_time[i],fast_mean0[i],fast_sigma0[i],xlo,xhi)
+        pdf1 = pdfs.lognormal(rise_time[i],fast_mean1[i],fast_sigma1[i],xlo,xhi)
+        ret[i] = fast_num0[i]*pdf0 + fast_num1[i]*pdf1
+        #print "\t",ret[i]
+
+    return ret
+
+################################################################################
 # Precalculate the probabilities for all the lognormal distributions.
 ################################################################################
 def rise_time_prob_exp_progression(rise_time,energy,mu_k,sigma_k,xlo,xhi):
@@ -201,16 +235,8 @@ def rise_time_prob_exp_progression(rise_time,energy,mu_k,sigma_k,xlo,xhi):
     expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
 
     # Pull out the constants for the polynomials.
-    ma0 = mu_k[0]
-    ma1 = mu_k[1]
-    ma2 = mu_k[2]
-
-    sa0 = sigma_k[0]
-    sa1 = sigma_k[1]
-    sa2 = sigma_k[2]
-
-    allmu = ma0 + ma1*energy + ma2*energy*energy
-    allsigma = sa0 + sa1*energy + sa2*energy*energy
+    allmu = expfunc(mu_k,energy)
+    allsigma = expfunc(sigma_k,energy)
 
     #ret = (1.0/(x*sigma*np.sqrt(2*np.pi)))*np.exp(-((np.log(x)-mu)**2)/(2*sigma*sigma))
     ret = np.zeros(len(rise_time))

@@ -559,7 +559,7 @@ def main():
                 plt.errorbar(expts[ypts[nindex]!=0],ypts[nindex][ypts[nindex]!=0],xerr=0.01,yerr=[yerrlo[nindex][ypts[nindex]!=0],yerrhi[nindex][ypts[nindex]!=0]],\
                         fmt='o',ecolor='k',mec='k',mfc=colors[ik],label=labels[ik])
 
-                '''
+                #'''
                 # Use part of the data
                 #index0 = np.arange(0,3)
                 #index1 = np.arange(7,len(expts))
@@ -593,7 +593,7 @@ def main():
                 yfitpts[nindex] = expfunc(z,xp)
                 #print zcov
                 plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
-                '''
+                #'''
 
             if k==0:
                 plt.ylim(-1.5,1.5)
