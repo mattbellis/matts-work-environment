@@ -126,14 +126,35 @@ def main():
     ############################################################################
     # Fast
     print "Precalculating the fast and slow rise time probabilities........"
-    mu = [-0.384584,-0.473217,0.070561]
-    sigma = [0.751184,-0.301781,0.047121]
-    rt_fast = rise_time_prob(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
-
+    #mu = [-0.384584,-0.473217,0.070561]
+    #sigma = [0.751184,-0.301781,0.047121]
     # Slow
-    mu = [0.897153,-0.304876,0.044522]
-    sigma = [0.126040,0.220238,-0.032878]
-    rt_slow = rise_time_prob(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
+    #mu = [0.897153,-0.304876,0.044522]
+    #sigma = [0.126040,0.220238,-0.032878]
+    #rt_slow = rise_time_prob(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
+    ############################################################################
+    # From the fit using
+    # uncertainty mu = 20%
+    # uncertainty sigma = 20%
+    # slow sigma = floating
+    ############################################################################
+    # Parameters for the exponential form for the narrow fast peak.
+    mu0 =  [1.016749,0.786867,-1.203125]
+    sigma0 =  [2.372789,1.140669,0.262251]
+    # The entries for the relationship between the broad and narrow peak.
+    fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
+    fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
+    fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+    rt_fast = rise_time_prob_fast_exp_dist(data[2],data[0],mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
+
+    # Parameters for the exponential form for the slow peak.
+    mu = [0.945067,0.646431,0.353891]
+    sigma =  [11.765617,94.854276,0.513464]
+    rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
+    ############################################################################
+
+    print rt_fast
+    print rt_slow
 
     data.append(rt_fast)
     data.append(rt_slow)
@@ -321,7 +342,7 @@ def main():
     params_dict['t_exp_flat'] = {'fix':False,'start_val':0.05,'limits':(0.00001,10.0)}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
-    params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
+    params_dict['num_exp0'] = {'fix':False,'start_val':1.0,'limits':(0.0,10000.0)}
     #params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
 
     # Exponential term in energy
