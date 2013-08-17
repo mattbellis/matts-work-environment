@@ -199,8 +199,8 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     num_exp0 = p[pn.index('num_exp0')]
     num_flat = p[pn.index('num_flat')]
-    e_exp1 = p[pn.index('e_exp1')]
-    num_exp1 = p[pn.index('num_exp1')]
+    e_surf = p[pn.index('e_surf')]
+    num_surf = p[pn.index('num_surf')]
     e_exp_flat = p[pn.index('e_exp_flat')]
     t_exp_flat = p[pn.index('t_exp_flat')]
 
@@ -239,7 +239,7 @@ def fitfunc(data,p,parnames,params_dict):
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
         elif flag==2 or flag==3 or flag==4:
-            if 'num_flat' in name or 'num_exp1' in name or 'ncalc' in name:
+            if 'num_flat' in name or 'num_surf' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
     # MC
     if flag==5:
@@ -298,7 +298,7 @@ def fitfunc(data,p,parnames,params_dict):
     if flag==0 or flag==1 or flag==5:
         num_exp0 /= num_tot
 
-    num_exp1 /= num_tot
+    num_surf /= num_tot
     num_flat /= num_tot
 
     print " -------------------------------------- "
@@ -338,11 +338,11 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     # Second exponential in energy (Surface events)
     ############################################################################
-    pdf  = pdfs.exp(x,e_exp1,xlo,xhi,efficiency=efficiency)
+    pdf  = pdfs.exp(x,e_surf,xlo,xhi,efficiency=efficiency)
     pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= rts # This will be the slow rise times
-    pdf *= num_exp1
-    #print "exp1 pdf: ",pdf[0:8]
+    pdf *= num_surf
+    #print "surf pdf: ",pdf[0:8]
     if flag!=5 and flag!=6:
         tot_pdf += pdf
 
@@ -352,9 +352,10 @@ def fitfunc(data,p,parnames,params_dict):
     #pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
     #pdf  = 0.95*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) + \
             #0.05*pdfs.exp(x,5.0,xlo,xhi,efficiency=efficiency)
-    pdf0  = 0.95*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) 
+    pdf0  = 0.51*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) 
     pdf0 *= pdfs.exp(y,t_exp_flat,ylo,yhi,subranges=subranges[1])
-    pdf1 = 0.05*pdfs.exp(x,5.0,xlo,xhi,efficiency=efficiency)
+    #pdf1 = 0.49*pdfs.exp(x,0.53,xlo,xhi,efficiency=efficiency)
+    pdf1 = 0.49*pdfs.exp_plus_flat(x,0.53,14.0,0.8,xlo,xhi,efficiency=efficiency)
     pdf1 *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf = pdf0 + pdf1
     pdf *= rtf # This will be the fast rise times

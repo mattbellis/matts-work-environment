@@ -50,6 +50,9 @@ fast_num_rel_k =  [-2.831665,0.023649,1.144240]
 expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
 errfunc = lambda p, x, y, err: (y - expfunc(p, x)) / err
 
+expfunc1 = lambda p, x: p[1]*x + p[0]
+errfunc1 = lambda p, x, y, err: (y - expfunc1(p, x)) / err
+
 #fast_sigma0_optimal = 1.0
 #fast_sigma0_uncert = 1.0
 
@@ -92,6 +95,8 @@ def fitfunc(data,p,parnames,params_dict):
     fast_logn_sigma0 = p[pn.index('fast_logn_sigma0')]
     fast_logn_frac0 = p[pn.index('fast_logn_frac0')]
 
+    #print "fast_logn_frac0: ", fast_logn_frac0 
+
     slow_logn_mean = p[pn.index('slow_logn_mean')]
     slow_logn_sigma = p[pn.index('slow_logn_sigma')]
 
@@ -114,9 +119,12 @@ def fitfunc(data,p,parnames,params_dict):
 
     pdffast0  = pdfs.lognormal(x,fast_logn_mean0,fast_logn_sigma0,xlo,xhi)
 
-    pdffast1 = np.zeros(len(x))
+    pdffast1 = None
     if emid<=1.9:
         pdffast1  = pdfs.lognormal(x,fast_logn_mean1,fast_logn_sigma1,xlo,xhi)
+    else:
+        fast_logn_frac0 = 1.0
+        pdffast1 = np.zeros(len(x))
 
     pdfslow   = pdfs.lognormal(x,slow_logn_mean, slow_logn_sigma, xlo,xhi)
 
@@ -672,23 +680,40 @@ def main():
                     pinit = [4.0, 2.0, 0.0]
                 elif ik==0 and k==2:
                     pinit = [2.0, 2000.0, 300.0]
-                elif ik==1:
+                elif ik==1 and k==0:
                     pinit = [3.0, 1.5, 0.5]
+                elif ik==1 and k==1:
+                    pinit = [0.5, -0.1]
                 
                 #print "before fit: ",ypts[nindex][index],yerrlo[nindex][index],yerrhi[nindex][index]
                 print "Fitting data!!!!!! --------------- %d %d" % (k,ik)
                 #print "before fit: ",ypts[nindex][index]
                 if abs(sum(ypts[nindex][index])) > 0 and k<2:
-                    out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
-                    z = out[0]
-                    zcov = out[1]
-                    print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
-                    if zcov is not None:
-                        print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
-                    yfitpts[nindex] = expfunc(z,xp)
-                    #print zcov
-                    print plt.gca()
-                    plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
+                    print "FITTING -----------"
+                    print expts[index]
+                    print ypts[nindex][index]
+                    if k==1 and ik==1:
+                        out = leastsq(errfunc1, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
+                        z = out[0]
+                        zcov = out[1]
+                        print "Data points: %d %d [%f,%f]" % (k,ik,z[0],z[1])
+                        if zcov is not None:
+                            print "Data points: %d %d [%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]))
+                        yfitpts[nindex] = expfunc1(z,xp)
+                        #print zcov
+                        print plt.gca()
+                        plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
+                    else:
+                        out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
+                        z = out[0]
+                        zcov = out[1]
+                        print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                        if zcov is not None:
+                            print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+                        yfitpts[nindex] = expfunc(z,xp)
+                        #print zcov
+                        print plt.gca()
+                        plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
 
             if k==0:
                 plt.ylim(-1.5,1.5)
