@@ -314,7 +314,7 @@ def main():
     
     ############################################################################
     # exp0 is going to be the simple WIMP-like signal that can modulate or not
-    # exp1 is the surface events.
+    # surf is the surface events.
     ############################################################################
 
     nsurface = 575.0 # For full 917 days
@@ -329,13 +329,13 @@ def main():
     nsurface = 5000.0 # 3yr data.
 
     # Exp 1 is the surface term
-    params_dict['e_exp1'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
-    params_dict['num_exp1'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':1.0,'limits':(0.0,100000.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
-    #params_dict['num_exp1'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
+    params_dict['e_surf'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
+    params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
+    #params_dict['num_surf'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
+    #params_dict['num_surf'] = {'fix':True,'start_val':1.0,'limits':(0.0,100000.0)}
+    #params_dict['num_surf'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
+    #params_dict['num_surf'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
+    #params_dict['num_surf'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
     params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
     #params_dict['num_flat'] = {'fix':False,'start_val':1700.0,'limits':(0.0,2000.0)}
     params_dict['e_exp_flat'] = {'fix':True,'start_val':0.05,'limits':(0.00001,10.0)}
@@ -505,13 +505,13 @@ def main():
     ############################################################################
     if args.fit!=5 and args.fit!=6:
         # Energy projections
-        ypts = np.exp(-values['e_exp1']*expts)
-        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp1'],fmt='y-',axes=ax0,efficiency=eff)
+        ypts = np.exp(-values['e_surf']*expts)
+        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_surf'],fmt='y-',axes=ax0,efficiency=eff)
         eytot += y
 
         # Time projections
         func = lambda x: np.ones(len(x))
-        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_exp1'],fmt='y-',axes=ax1,subranges=subranges[1])
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
     ############################################################################
@@ -521,13 +521,15 @@ def main():
     #ypts = np.ones(len(expts))
     #ypts =  np.exp(-values['e_exp_flat']*expts)
     ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=0.95*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
-    ypts  = pdfs.exp(expts,5.0,ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=0.05*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=0.51*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
+    #ypts  = pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
+    ypts  = pdfs.exp_plus_flat(expts,0.53,14.0,0.8,ranges[0][0],ranges[0][1])
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=0.49*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
 
     #ypts =  0.95*np.exp(-values['e_exp_flat']*expts)
-    ypts  = 0.95*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    ypts  += 0.05*pdfs.exp(expts,5.0,ranges[0][0],ranges[0][1])
+    ypts  = 0.51*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
+    #ypts  += 0.49*pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
+    ypts  = 0.49*pdfs.exp_plus_flat(expts,0.53,14.0,0.8,ranges[0][0],ranges[0][1])
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m')
     eytot += y
 
@@ -538,11 +540,11 @@ def main():
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     '''
     func = lambda x: np.exp(-values['t_exp_flat']*x)
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=0.95*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1])
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=0.51*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1])
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     func = lambda x: np.ones(len(x))
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=0.05*values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=0.49*values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     

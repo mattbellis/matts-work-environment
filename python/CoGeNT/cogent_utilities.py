@@ -203,7 +203,7 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
     # Pull out the constants for the polynomials.
     fast_mean0 = expfunc(mu0,energy)
     fast_sigma0 = expfunc(mu0,energy)
-    fast_num0 = np.ones(len(rise_time))
+    fast_num0 = np.ones(len(rise_time)).astype('float')
 
     # The entries for the relationship between the broad and narrow peak.
     fast_mean_rel = expfunc(murel,energy)
@@ -214,8 +214,12 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
     fast_sigma1 = fast_sigma0 - fast_sigma_rel
     fast_num1 = fast_num0 / fast_logn_num_rel
 
-    fast_num0 /= (fast_num0+fast_num1)
-    fast_num1 /= (fast_num0+fast_num1)
+    tempnorm = (fast_num0+fast_num1)
+
+    fast_num0 /= tempnorm
+    fast_num1 /= tempnorm
+
+    print "Fast NUMS 0 and 1: ",fast_num0[10],fast_num1[10]
 
     ret = np.zeros(len(rise_time))
     for i in xrange(len(ret)):
