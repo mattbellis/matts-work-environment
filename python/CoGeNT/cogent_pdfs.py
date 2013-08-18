@@ -200,6 +200,7 @@ def fitfunc(data,p,parnames,params_dict):
     num_exp0 = p[pn.index('num_exp0')]
     num_flat = p[pn.index('num_flat')]
     e_surf = p[pn.index('e_surf')]
+    t_surf = p[pn.index('t_surf')]
     num_surf = p[pn.index('num_surf')]
     e_exp_flat = p[pn.index('e_exp_flat')]
     t_exp_flat = p[pn.index('t_exp_flat')]
@@ -339,7 +340,8 @@ def fitfunc(data,p,parnames,params_dict):
     # Second exponential in energy (Surface events)
     ############################################################################
     pdf  = pdfs.exp(x,e_surf,xlo,xhi,efficiency=efficiency)
-    pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    #pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    pdf *= pdfs.exp(y,t_surf,ylo,yhi,subranges=subranges[1])
     pdf *= rts # This will be the slow rise times
     pdf *= num_surf
     #print "surf pdf: ",pdf[0:8]

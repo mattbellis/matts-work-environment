@@ -330,6 +330,7 @@ def main():
 
     # Exp 1 is the surface term
     params_dict['e_surf'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
+    params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0)}
     params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
     #params_dict['num_surf'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
     #params_dict['num_surf'] = {'fix':True,'start_val':1.0,'limits':(0.0,100000.0)}
@@ -510,7 +511,9 @@ def main():
         eytot += y
 
         # Time projections
-        func = lambda x: np.ones(len(x))
+        #func = lambda x: np.ones(len(x))
+        #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1])
+        func = lambda x: np.exp(-values['t_surf']*x)
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
