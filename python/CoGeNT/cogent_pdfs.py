@@ -147,10 +147,52 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=30
     return dR
 
 
+############################################################################
+# Second exponential in energy (Surface events)
+############################################################################
+def surface_events(data,pars,lo,hi,subranges=None,efficiency=None):
+
+    x = data[0]
+    y = data[1]
+    rts = data[4]
+
+    xlo = lo[0]
+    xhi = hi[0]
+    ylo = lo[1]
+    yhi = hi[1]
+
+    # Energy
+    pdf  = pdfs.exp(x,pars['e_surf'],xlo,xhi,efficiency=efficiency)
+
+    # Time
+    pdf *= pdfs.exp(y,pars['t_surf'],ylo,yhi,subranges=subranges[1])
+
+    # Rise time
+    pdf *= rts # This will be the slow rise times
+
+    # Normalization
+    pdf *= pars['num_surf']
+    
+    return pdf
+
+
 ################################################################################
 # CoGeNT fit
 ################################################################################
 def fitfunc(data,p,parnames,params_dict):
+
+    #print '---------------------------------------------------'
+    #print params_dict
+    #print '---------------------------------------------------'
+    #print p
+    #print '---------------------------------------------------'
+    #print parnames
+    local_pars = {}
+    for i,pn in enumerate(parnames):
+        local_pars[pn] = p[i]
+    #print '---------------------------------------------------'
+    #print local_pars
+    #exit()
 
     pn = parnames
 
@@ -339,12 +381,20 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     # Second exponential in energy (Surface events)
     ############################################################################
+    #surface_events(data,pars,lo,hi,subranges=None,efficiency=None):
+    #print "SURFACE EVENTS"
+    pdf = surface_events(data,local_pars,[xlo,ylo],[xhi,yhi],subranges=subranges,efficiency=efficiency)
+    pdf /= num_tot
+    #print pdf
+    '''
     pdf  = pdfs.exp(x,e_surf,xlo,xhi,efficiency=efficiency)
     #pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     pdf *= pdfs.exp(y,t_surf,ylo,yhi,subranges=subranges[1])
     pdf *= rts # This will be the slow rise times
     pdf *= num_surf
+    print pdf
     #print "surf pdf: ",pdf[0:8]
+    '''
     if flag!=5 and flag!=6:
         tot_pdf += pdf
 

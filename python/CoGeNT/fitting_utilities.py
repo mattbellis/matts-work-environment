@@ -257,7 +257,7 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     print "pois:         %12.3f %12.3f" % (num_tot,ndata)
     #likelihood_func = (-np.log(fitfunc(data,p,parnames,params_dict))).sum()
-    print tot_pdf
+    #print tot_pdf
     for d0,d1,t in zip(data[0],data[1],tot_pdf):
         if t<0:
             print d0,d1,t,np.log(t)
