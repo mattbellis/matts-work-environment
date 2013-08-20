@@ -29,8 +29,8 @@ plt.figure()
 plt.errorbar(xpts,ypts,yerr=yerr,xerr=0.001,fmt='o')
 
 pinit = [1.0,1.0,1.0]
-out = leastsq(errfunc, pinit, args=(xpts,ypts,yerr), full_output=1)
-xp = np.linspace(min(xpts),max(xpts),1000)
+out = leastsq(errfunc, pinit, args=(xpts[0:20],ypts[0:20],yerr[0:20]), full_output=1)
+xp = np.linspace(min(xpts),max(xpts[0:20]),1000)
 z = out[0]
 zcov = out[1]
 print "z: ",z

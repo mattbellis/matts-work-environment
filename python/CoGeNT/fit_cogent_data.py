@@ -332,18 +332,20 @@ def main():
     params_dict['e_surf'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
     params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0)}
     params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
-    #params_dict['num_surf'] = {'fix':True,'start_val':575.0,'limits':(0.0,100000.0)}
-    #params_dict['num_surf'] = {'fix':True,'start_val':1.0,'limits':(0.0,100000.0)}
-    #params_dict['num_surf'] = {'fix':True,'start_val':1000.0,'limits':(0.0,100000.0)}
-    #params_dict['num_surf'] = {'fix':True,'start_val':506.0,'limits':(0.0,100000.0)}
-    #params_dict['num_surf'] = {'fix':True,'start_val':400.0,'limits':(0.0,100000.0)}
+
     params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
-    #params_dict['num_flat'] = {'fix':False,'start_val':1700.0,'limits':(0.0,2000.0)}
-    params_dict['e_exp_flat'] = {'fix':True,'start_val':0.05,'limits':(0.00001,10.0)}
-    params_dict['t_exp_flat'] = {'fix':False,'start_val':0.05,'limits':(0.00001,10.0)}
+    params_dict['e_exp_flat'] = {'fix':False,'start_val':-0.05,'limits':(0.00001,10.0)}
+    params_dict['t_exp_flat'] = {'fix':False,'start_val':0.001,'limits':(0.0000001,10.0)}
+    params_dict['flat_frac'] = {'fix':True,'start_val':0.51,'limits':(0.00001,10.0)}
+    #params_dict['flat_alphas_slope'] = {'fix':True,'start_val':0.532,'limits':(0.00001,10.0)}
+    #params_dict['flat_alphas_amp'] = {'fix':True,'start_val':14.0,'limits':(0.00001,10.0)}
+    #params_dict['flat_alphas_offset'] = {'fix':True,'start_val':0.783,'limits':(0.00001,10.0)}
+    params_dict['flat_alphas_slope'] = {'fix':True,'start_val':0.920,'limits':(0.00001,10.0)}
+    params_dict['flat_alphas_amp'] = {'fix':True,'start_val':17.4,'limits':(0.00001,10.0)}
+    params_dict['flat_alphas_offset'] = {'fix':True,'start_val':2.38,'limits':(0.00001,10.0)}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
-    params_dict['num_exp0'] = {'fix':False,'start_val':1.0,'limits':(0.0,10000.0)}
+    params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
     #params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
 
     # Exponential term in energy
@@ -524,15 +526,15 @@ def main():
     #ypts = np.ones(len(expts))
     #ypts =  np.exp(-values['e_exp_flat']*expts)
     ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=0.51*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
     #ypts  = pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
-    ypts  = pdfs.exp_plus_flat(expts,0.53,14.0,0.8,ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=0.49*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
+    ypts  = pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
 
     #ypts =  0.95*np.exp(-values['e_exp_flat']*expts)
-    ypts  = 0.51*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    #ypts  += 0.49*pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
-    ypts  = 0.49*pdfs.exp_plus_flat(expts,0.53,14.0,0.8,ranges[0][0],ranges[0][1])
+    ypts  = values['flat_frac']*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
+    #ypts  += (1.0-values['flat_frac'])*pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
+    ypts  = (1.0-values['flat_frac'])*pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
     y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m')
     eytot += y
 
@@ -543,11 +545,11 @@ def main():
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     '''
     func = lambda x: np.exp(-values['t_exp_flat']*x)
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=0.51*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1])
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1])
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     func = lambda x: np.ones(len(x))
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=0.49*values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     
