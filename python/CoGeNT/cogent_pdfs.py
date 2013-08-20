@@ -148,7 +148,53 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=30
 
 
 ############################################################################
-# Second exponential in energy (Surface events)
+# ``Flat" events, flat in energy
+############################################################################
+def flat_events(data,pars,lo,hi,subranges=None,efficiency=None):
+
+    x = data[0]
+    y = data[1]
+    rtf = data[3]
+
+    xlo = lo[0]
+    xhi = hi[0]
+    ylo = lo[1]
+    yhi = hi[1]
+
+    '''
+    pdf0  = 0.51*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) 
+    pdf0 *= pdfs.exp(y,t_exp_flat,ylo,yhi,subranges=subranges[1])
+    #pdf1 = 0.49*pdfs.exp(x,0.53,xlo,xhi,efficiency=efficiency)
+    pdf1 = 0.49*pdfs.exp_plus_flat(x,0.53,14.0,0.8,xlo,xhi,efficiency=efficiency)
+    pdf1 *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    pdf = pdf0 + pdf1
+    pdf *= rtf # This will be the fast rise times
+    pdf *= num_flat
+    '''
+
+    # ``Flat" part in energy. Might be decaying away.
+    # Energy
+    pdf0  = pdfs.exp(x,pars['e_exp_flat'],xlo,xhi,efficiency=efficiency)
+    pdf0 *= pdfs.exp(y,pars['t_exp_flat'],ylo,yhi,subranges=subranges[1])
+
+    # Alphas contribution. Not decaying away in time.
+    pdf1  = pdfs.exp_plus_flat(x,pars['flat_alphas_slope'],pars['flat_alphas_amp'],pars['flat_alphas_offset'],xlo,xhi,efficiency=efficiency)
+    pdf1 *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
+    #pdf *= pdfs.exp(y,pars['t_exp_flat'],ylo,yhi,subranges=subranges[1])
+
+    pdf = pars['flat_frac']*pdf0 + (1.0-pars['flat_frac'])*pdf1 
+
+    # Rise time
+    pdf *= rtf # This will be the fast rise times
+
+    # Normalization
+    pdf *= pars['num_flat']
+    
+    return pdf
+
+
+############################################################################
+# Surface events
 ############################################################################
 def surface_events(data,pars,lo,hi,subranges=None,efficiency=None):
 
@@ -381,39 +427,16 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     # Second exponential in energy (Surface events)
     ############################################################################
-    #surface_events(data,pars,lo,hi,subranges=None,efficiency=None):
-    #print "SURFACE EVENTS"
     pdf = surface_events(data,local_pars,[xlo,ylo],[xhi,yhi],subranges=subranges,efficiency=efficiency)
-    pdf /= num_tot
-    #print pdf
-    '''
-    pdf  = pdfs.exp(x,e_surf,xlo,xhi,efficiency=efficiency)
-    #pdf *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-    pdf *= pdfs.exp(y,t_surf,ylo,yhi,subranges=subranges[1])
-    pdf *= rts # This will be the slow rise times
-    pdf *= num_surf
-    print pdf
-    #print "surf pdf: ",pdf[0:8]
-    '''
+    pdf /= num_tot # Need to divide by num_tot because of the normalization for the total PDF.
     if flag!=5 and flag!=6:
         tot_pdf += pdf
 
     ############################################################################
     # Flat term
     ############################################################################
-    #pdf  = pdfs.poly(x,[],xlo,xhi,efficiency=efficiency)
-    #pdf  = 0.95*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) + \
-            #0.05*pdfs.exp(x,5.0,xlo,xhi,efficiency=efficiency)
-    pdf0  = 0.51*pdfs.exp(x,e_exp_flat,xlo,xhi,efficiency=efficiency) 
-    pdf0 *= pdfs.exp(y,t_exp_flat,ylo,yhi,subranges=subranges[1])
-    #pdf1 = 0.49*pdfs.exp(x,0.53,xlo,xhi,efficiency=efficiency)
-    pdf1 = 0.49*pdfs.exp_plus_flat(x,0.53,14.0,0.8,xlo,xhi,efficiency=efficiency)
-    pdf1 *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
-    pdf = pdf0 + pdf1
-    pdf *= rtf # This will be the fast rise times
-    pdf *= num_flat
-    #print "flat pdf: ",pdf[0:8]/num_flat
-    #print "flat pdf: ",pdf[0:8]
+    pdf = flat_events(data,local_pars,[xlo,ylo],[xhi,yhi],subranges=subranges,efficiency=efficiency)
+    pdf /= num_tot # Need to divide by num_tot because of the normalization for the total PDF.
     tot_pdf += pdf
 
     print "%f %f %f" % (num_tot,num_wimps/num_tot,num_flat)
