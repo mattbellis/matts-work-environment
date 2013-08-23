@@ -161,7 +161,21 @@ def main():
 
     print "Finished with the fast and slow rise time probabilities........"
 
-    #exit()
+    plt.figure()
+    plt.plot(data[2],data[3],'o',markersize=1.5)
+
+    plt.figure()
+    plt.plot(data[2],data[4],'o',markersize=1.5)
+
+    plt.figure()
+    plt.plot(data[0],data[3],'o',markersize=1.5)
+
+    plt.figure()
+    plt.plot(data[0],data[4],'o',markersize=1.5)
+
+    plt.show()
+
+    exit()
 
 
     ############################################################################
