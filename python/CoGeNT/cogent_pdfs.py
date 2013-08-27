@@ -4,6 +4,8 @@ import scipy.stats as stats
 import matplotlib.pylab as plt
 import scipy.integrate as integrate
 
+from cogent_utilities import cogent_convolve
+
 import time
 
 import parameters
@@ -144,7 +146,11 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=30
     dEr_dEee = dmm.quench_dEr_dEee(x)
     dR *= dEr_dEee
 
-    return dR
+    # Do the CoGeNT convolution.
+    smeared,smeared_x = cogent_convolve(x,dR)
+
+    #return dR
+    return smeared
 
 
 ############################################################################

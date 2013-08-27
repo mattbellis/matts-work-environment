@@ -131,6 +131,8 @@ def main():
 
         # Quenching factor to keVee (equivalent energy)
         Eee = np.linspace(elo,ehi,100)
+        # I think we need to do this over a wider range to get the convolution right. 
+        #Eee = np.linspace(0.1,ehi,100) 
         Er = dmm.quench_keVee_to_keVr(Eee)
 
         #func = lambda x: plot_wimp_er(Er,target_atom,mDM,sigma_n,time_range=[day,day+1],model=args.model)
@@ -144,12 +146,12 @@ def main():
 
         dRdEr *= efficiency(Er)
 
-        smeared,smeared_x = cogent_convolve(Eee,dRdEr)
-        print smeared-dRdEr
+        #smeared,smeared_x = cogent_convolve(Eee,dRdEr)
+        #print smeared-dRdEr
 
         leg_title = "day=%d" % (day)
         ax1.plot(Eee,dRdEr,label=leg_title)
-        ax1.plot(Eee,smeared,'--',label='smeared')
+        #ax1.plot(Eee,smeared,'--',label='smeared')
 
     ax0.set_xlabel('Er')
     ax0.legend()

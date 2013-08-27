@@ -1,5 +1,6 @@
 import numpy as np
-from fitting_utilities import sigmoid
+#from fitting_utilities import sigmoid
+#from cogent_pdfs import sigmoid
 
 import lichen.pdfs as pdfs
 
@@ -7,6 +8,17 @@ import lichen.pdfs as pdfs
 import iminuit as minuit
 
 import scipy.signal as signal
+
+################################################################################
+# Sigmoid function.
+################################################################################
+def sigmoid(x,thresh,sigma,max_val):
+
+    ret = max_val / (1.0 + np.exp(-(x-thresh)/(thresh*sigma)))
+
+    return ret
+
+
 
 ################################################################################
 # Conversion 0
@@ -258,23 +270,44 @@ def rise_time_prob_exp_progression(rise_time,energy,mu_k,sigma_k,xlo,xhi):
 ################################################################################
 def cogent_convolve(x,y):
 
-    npts = len(y)
+    npts = 1
+    if type(y)==np.ndarray:
+        npts = len(y)
 
-    #convolving_pts = np.exp(-((x-0.0)**2)/(2*1.2*1.2)) # Make this npts as well.
-    xpts = np.linspace(-5,5,npts)
-    convolving_pts = (1.0/(0.02*np.sqrt(2*np.pi)))*np.exp(-((xpts-0.0)**2)/(2*0.02*0.02)) # Make this npts as well.
+    xpts = np.linspace(-5,5,100)
+    #xpts = np.linspace(-5,5,npts)
+    #xpts = x
+    
+    eta = 2.96 # eV
+    eta /= 1000.0 # convert to keV
+    F = 0.29 # adimensional form factor
+    sigman = 69.4 # eV
+    sigman /= 1000.0 # convert to keV
+    sigman2 = sigman*sigman
+    
+    #sigma = np.sqrt(sigman2 + (xpts*eta*F))
+    sigma = 0.5
+    convolving_pts = (1.0/(sigma*np.sqrt(2*np.pi)))*np.exp(-((xpts-0.0)**2)/(2*sigma*sigma)) # Make this npts as well.
+    #convolving_pts = np.exp(-((xpts-0.0)**2)/(2*sigma*sigma)) # Make this npts as well.
+    convolving_pts /= convolving_pts.sum()
 
-    convolved_function = signal.convolve(y/y.sum(),convolving_pts)
+    convolved_function = signal.convolve(y/y.sum(),convolving_pts,mode='same')
+    #convolved_function = signal.convolve(y/y.sum(),convolving_pts)
+    #convolved_function = signal.fftconvolve(y/y.sum(),convolving_pts,'same')
+    #convolved_function = np.convolve(y/y.sum(),convolving_pts,'same')
+
+    norm = convolved_function.sum()/y.sum()
 
     # Have to carve out the middle of the curve, because
     # the returned array has too many points in it.
-    znpts = len(convolved_function)
-    begin = znpts/2 - npts/2
-    end = znpts/2 + npts/2
+    #znpts = len(convolved_function)
+    #begin = znpts/2 - npts/2
+    #end = znpts/2 + npts/2
 
     #print "%d %d %d %d" % (npts,znpts,begin,end)
 
-    return convolved_function[begin:end],convolving_pts
+    #return convolved_function[begin:end]/norm,convolving_pts
+    return convolved_function/norm,convolving_pts
 
 
 
