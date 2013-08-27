@@ -6,6 +6,8 @@ import lichen.pdfs as pdfs
 #import minuit
 import iminuit as minuit
 
+import scipy.signal as signal
+
 ################################################################################
 # Conversion 0
 # Amplitude (V) to energy (keV)
@@ -250,4 +252,29 @@ def rise_time_prob_exp_progression(rise_time,energy,mu_k,sigma_k,xlo,xhi):
         #print "\t",ret[i]
 
     return ret
+
+################################################################################
+# Convolve a function with the CoGeNT resolution.
+################################################################################
+def cogent_convolve(x,y):
+
+    npts = len(y)
+
+    #convolving_pts = np.exp(-((x-0.0)**2)/(2*1.2*1.2)) # Make this npts as well.
+    xpts = np.linspace(-5,5,npts)
+    convolving_pts = (1.0/(0.02*np.sqrt(2*np.pi)))*np.exp(-((xpts-0.0)**2)/(2*0.02*0.02)) # Make this npts as well.
+
+    convolved_function = signal.convolve(y/y.sum(),convolving_pts)
+
+    # Have to carve out the middle of the curve, because
+    # the returned array has too many points in it.
+    znpts = len(convolved_function)
+    begin = znpts/2 - npts/2
+    end = znpts/2 + npts/2
+
+    #print "%d %d %d %d" % (npts,znpts,begin,end)
+
+    return convolved_function[begin:end],convolving_pts
+
+
 
