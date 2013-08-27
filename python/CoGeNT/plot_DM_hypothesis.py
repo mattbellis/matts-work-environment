@@ -11,6 +11,7 @@ import plotting_utilities as pu
 import lichen.plotting_utilities as plotting_utilities
 import fitting_utilities as fu
 import cogent_pdfs as cpdf
+from cogent_utilities import cogent_convolve
 
 import argparse
 
@@ -143,8 +144,12 @@ def main():
 
         dRdEr *= efficiency(Er)
 
+        smeared,smeared_x = cogent_convolve(Eee,dRdEr)
+        print smeared-dRdEr
+
         leg_title = "day=%d" % (day)
         ax1.plot(Eee,dRdEr,label=leg_title)
+        ax1.plot(Eee,smeared,'--',label='smeared')
 
     ax0.set_xlabel('Er')
     ax0.legend()
