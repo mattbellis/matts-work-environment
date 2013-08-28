@@ -9,6 +9,8 @@ import iminuit as minuit
 
 import scipy.signal as signal
 
+import scipy.stats as stats
+
 ################################################################################
 # Sigmoid function.
 ################################################################################
@@ -285,11 +287,22 @@ def cogent_convolve(x,y):
     sigman /= 1000.0 # convert to keV
     sigman2 = sigman*sigman
     
+    '''
     #sigma = np.sqrt(sigman2 + (xpts*eta*F))
     sigma = 0.5
     convolving_pts = (1.0/(sigma*np.sqrt(2*np.pi)))*np.exp(-((xpts-0.0)**2)/(2*sigma*sigma)) # Make this npts as well.
     #convolving_pts = np.exp(-((xpts-0.0)**2)/(2*sigma*sigma)) # Make this npts as well.
     convolving_pts /= convolving_pts.sum()
+    '''
+    yc = np.zeros(npts)
+    for pt in x:
+        sigma = np.sqrt(sigman2 + (pt*eta*F)) # sigma is energy dependent
+        window = 3.0*sigma
+        temp_pts = np.linspace(pt-window,pt+window,1000)
+        convolving_term = stats.norm(0.0,sigma)
+        #val = y*convolving_term.pdf(pt-temp_pts)).sum()
+
+
 
     convolved_function = signal.convolve(y/y.sum(),convolving_pts,mode='same')
     #convolved_function = signal.convolve(y/y.sum(),convolving_pts)
