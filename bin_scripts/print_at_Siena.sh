@@ -4,7 +4,8 @@ set sides = $1
 
 #set printer = 'RB256'
 #set printer = 'RB256_color'
-set printer = 'Xerox_Xerox_Phaser_8560DN'
+#set printer = 'Xerox_Xerox_Phaser_8560DN'
+set printer = 'RB131'
 
 if ( $sides == 'double' || $sides == 'single' ) then
     echo "Printing..."
