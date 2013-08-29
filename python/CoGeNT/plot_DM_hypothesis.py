@@ -126,6 +126,11 @@ def main():
         elif args.model=='debris':
             dRdEr = dmm.dRdErDebris(Er,day,target_atom,mDM,vDeb1,sigma_n)
 
+        #wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=300,v0Sag=100):
+        y = (day+338)%365.0
+        xkeVr = dmm.quench_keVr_to_keVee(Er)
+        dRdEr = cpdf.wimp(y,xkeVr,target_atom,mDM,sigma_n,efficiency=None,model='shm')
+
         leg_title = "day=%d" % (day)
         ax0.plot(Er,dRdEr,label=leg_title)
 
@@ -162,7 +167,8 @@ def main():
 
     num_wimps = 1.0
 
-    num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:366,args=(target_atom,mDM,sigma_n,efficiency,args.model,vDeb1,vSag,v0Sag),epsabs=0.001)[0]
+    #num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:366,args=(target_atom,mDM,sigma_n,efficiency,args.model,vDeb1,vSag,v0Sag),epsabs=0.001)[0]
+    num_wimps = 1000.0
 
     if args.cogent:
         num_wimps *= 0.333

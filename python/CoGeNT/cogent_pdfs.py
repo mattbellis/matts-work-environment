@@ -147,10 +147,11 @@ def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=30
     dR *= dEr_dEee
 
     # Do the CoGeNT convolution.
-    smeared,smeared_x = cogent_convolve(x,dR)
+    #smeared,smeared_x = cogent_convolve(x,dR)
+    #print smeared-dR
 
-    #return dR
-    return smeared
+    return dR
+    #return smeared
 
 
 ############################################################################

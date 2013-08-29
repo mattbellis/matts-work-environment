@@ -2,6 +2,8 @@ import numpy as np
 #from fitting_utilities import sigmoid
 #from cogent_pdfs import sigmoid
 
+from scipy.interpolate import interp1d
+
 import lichen.pdfs as pdfs
 
 #import minuit
@@ -272,7 +274,7 @@ def rise_time_prob_exp_progression(rise_time,energy,mu_k,sigma_k,xlo,xhi):
 ################################################################################
 def cogent_convolve(x,y):
 
-    npts = 1
+    npts = 2
     if type(y)==np.ndarray:
         npts = len(y)
 
@@ -295,21 +297,45 @@ def cogent_convolve(x,y):
     convolving_pts /= convolving_pts.sum()
     '''
     yc = np.zeros(npts)
-    for pt in x:
-        sigma = np.sqrt(sigman2 + (pt*eta*F)) # sigma is energy dependent
+    print "x: ",x
+    print "y: ",y
+    if type(x)!=np.ndarray:
+        x = np.array([x,x+0.0001])
+    if type(y)!=np.ndarray:
+        y = np.array([y,y+0.0001])
+    f = interp1d(x, y)
+    for i,(xpt,ypt) in enumerate(zip(x,y)):
+        sigma = np.sqrt(sigman2 + (xpt*eta*F)) # sigma is energy dependent
+        #sigma = 0.37
+        #print sigma
         window = 3.0*sigma
-        temp_pts = np.linspace(pt-window,pt+window,1000)
+        loval = xpt-window
+        if loval<min(x):
+            loval=min(x)
+        hival = xpt+window
+        if hival>max(x):
+            hival=max(x)
+        
+        temp_pts = np.linspace(loval,hival,1000)
+        
+        #loindex,val = min(enumerate(x), key=lambda x: abs(x[1]-loval))
+        #hiindex,val = min(enumerate(x), key=lambda x: abs(x[1]-hival))
+
+        ytemp = f(temp_pts)
+
         convolving_term = stats.norm(0.0,sigma)
-        #val = y*convolving_term.pdf(pt-temp_pts)).sum()
+        val = (ytemp*convolving_term.pdf(xpt-temp_pts)).sum()
+
+        yc[i] = val
 
 
-
-    convolved_function = signal.convolve(y/y.sum(),convolving_pts,mode='same')
+    #convolved_function = signal.convolve(y/y.sum(),convolving_pts,mode='same')
     #convolved_function = signal.convolve(y/y.sum(),convolving_pts)
     #convolved_function = signal.fftconvolve(y/y.sum(),convolving_pts,'same')
     #convolved_function = np.convolve(y/y.sum(),convolving_pts,'same')
 
-    norm = convolved_function.sum()/y.sum()
+    #norm = convolved_function.sum()/y.sum()
+    norm = yc.sum()/y.sum()
 
     # Have to carve out the middle of the curve, because
     # the returned array has too many points in it.
@@ -320,7 +346,8 @@ def cogent_convolve(x,y):
     #print "%d %d %d %d" % (npts,znpts,begin,end)
 
     #return convolved_function[begin:end]/norm,convolving_pts
-    return convolved_function/norm,convolving_pts
+    #return convolved_function/norm,convolving_pts
+    return yc/norm,x
 
 
 
