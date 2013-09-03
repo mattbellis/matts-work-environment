@@ -36,8 +36,8 @@ if [ -n "$1" ]; then
  #echo "	pdflatex $1-handout" >> /tmp/makefile
  #echo "	pdflatex $1-handout" >> /tmp/makefile
  echo "	xelatex $1-handout" >> /tmp/makefile
- echo "	bibtex $1-handout" >> /tmp/makefile
- echo "	bibtex $1-handout" >> /tmp/makefile
+ #echo "	bibtex $1-handout" >> /tmp/makefile
+ #echo "	bibtex $1-handout" >> /tmp/makefile
  echo "	xelatex $1-handout" >> /tmp/makefile
  #echo "	pdflatex $1-handout" >> /tmp/makefile
  echo " " >> /tmp/makefile
