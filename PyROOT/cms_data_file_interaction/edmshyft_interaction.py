@@ -24,7 +24,6 @@ chain = ROOT.TChain("Events")
 for file in sys.argv[1:]:
         chain.AddFile(file)
 
-print "==================================== TRAIN ===================================="
 hMC_true = TH1D("MC_true","Truth and measured: Top quark p_{t}", 40, 100,600)
 hMC_meas = TH1D("MC_meas","Efficiency: Top quark p_{t}", 40, 100,600)
 #hcsv = TH1D("CSV","CSV variable", 120, 0,1.2)
@@ -35,12 +34,17 @@ for i in range(0,10):
 hnjets = TH1D("njets","njets", 10,-0.5,9.5)
 htoppt = TH1D("toppt","toppt", 100,100.0,1100.0)
 
-# Truth?
+# Muon
+str_truth_pt = "floats_pfShyftTupleMuonsLoose_pt.obj"
+str_truth_eta = "floats_pfShyftTupleMuonsLoose_eta_ANA.obj"
+str_truth_phi = "floats_pfShyftTupleMuonsLoose_phi_ANA.obj"
+
+# Top
 str_truth_pt = "floats_pfShyftTupleTopQuarks_pt_ANA.obj"
 str_truth_eta = "floats_pfShyftTupleTopQuarks_eta_ANA.obj"
 str_truth_phi = "floats_pfShyftTupleTopQuarks_phi_ANA.obj"
 
-# Reconstructed
+# CSV jets
 str_csv = "floats_pfShyftTupleJets_csv_ANA.obj"
 str_meas_pt = "floats_pfShyftTupleJetsLooseTopTag_pt_ANA.obj"
 str_meas_eta = "floats_pfShyftTupleJetsLooseTopTag_eta_ANA.obj"
