@@ -31,26 +31,38 @@ hcsv = []
 for i in range(0,10):
     name = "hcsv%d" % (i)
     hcsv.append(TH1D(name,"CSV variable", 120, 0,1.2))
+
 hnjets = TH1D("njets","njets", 10,-0.5,9.5)
 htoppt = TH1D("toppt","toppt", 100,100.0,1100.0)
 
 # Muon
-str_truth_pt = "floats_pfShyftTupleMuonsLoose_pt.obj"
-str_truth_eta = "floats_pfShyftTupleMuonsLoose_eta_ANA.obj"
-str_truth_phi = "floats_pfShyftTupleMuonsLoose_phi_ANA.obj"
+muon_str = []
+muon_str.append("floats_pfShyftTupleMuons_pt_ANA.obj")
+muon_str.append("floats_pfShyftTupleMuons_eta_ANA.obj")
+muon_str.append("floats_pfShyftTupleMuons_phi_ANA.obj")
 
 # Top
-str_truth_pt = "floats_pfShyftTupleTopQuarks_pt_ANA.obj"
-str_truth_eta = "floats_pfShyftTupleTopQuarks_eta_ANA.obj"
-str_truth_phi = "floats_pfShyftTupleTopQuarks_phi_ANA.obj"
+top_str = []
+top_str.append("floats_pfShyftTupleJetsLooseTopTag_pt_ANA.obj")
+top_str.append("floats_pfShyftTupleJetsLooseTopTag_eta_ANA.obj")
+top_str.append("floats_pfShyftTupleJetsLooseTopTag_phi_ANA.obj")
+top_str.append("floats_pfShyftTupleJetsLooseTopTag_mass_ANA.obj")
 
 # CSV jets
-str_csv = "floats_pfShyftTupleJets_csv_ANA.obj"
-str_meas_pt = "floats_pfShyftTupleJetsLooseTopTag_pt_ANA.obj"
-str_meas_eta = "floats_pfShyftTupleJetsLooseTopTag_eta_ANA.obj"
-str_meas_phi = "floats_pfShyftTupleJetsLooseTopTag_phi_ANA.obj"
+csvjet_str = []
+csvjet_str.append("floats_pfShyftTupleJets_csv_ANA.obj")
+csvjet_str.append("floats_pfShyftTupleJetsLooseTopTag_pt_ANA.obj")
+csvjet_str.append("floats_pfShyftTupleJetsLooseTopTag_eta_ANA.obj")
+csvjet_str.append("floats_pfShyftTupleJetsLooseTopTag_phi_ANA.obj")
 
-chain.SetBranchStatus('*', 1 )
+#chain.SetBranchStatus('*', 1 )
+chain.SetBranchStatus('*', 0 )
+for s in muon_str:
+    chain.SetBranchStatus(s, 1 )
+for s in top_str:
+    chain.SetBranchStatus(s, 1 )
+for s in csvjet_str:
+    chain.SetBranchStatus(s, 1 )
 
 npossiblejets = 8
 
@@ -66,13 +78,13 @@ for n in xrange(nev):
 
     chain.GetEntry(n)
 
-    pt_meas = chain.GetLeaf(str_meas_pt).GetValue(0)
+    pt_meas = chain.GetLeaf(top_str[0]).GetValue(0)
     htoppt.Fill(pt_meas)
 
     #print "---------"
     njets = 0
     for i in xrange(npossiblejets):
-        val = chain.GetLeaf(str_csv).GetValue(i)
+        val = chain.GetLeaf(csvjet_str[0]).GetValue(i)
         if val>0.0:
             njets += 1
             #hcsv.Fill(val)
@@ -84,48 +96,6 @@ for n in xrange(nev):
         #print val
     #print "njets: ",njets
     hnjets.Fill(njets)
-    '''
-    # Loop over the top and antitop truth info.
-    for i in range(0,2):
-
-        pt_truth = chain.GetLeaf(str_truth_pt).GetValue(i)
-        eta_truth = chain.GetLeaf(str_truth_eta).GetValue(i)
-        phi_truth = chain.GetLeaf(str_truth_phi).GetValue(i)
-
-        hMC_true.Fill(pt_truth)
-
-        found_match = False
-        min_dR = 100000.0
-        min_dR_pt = -1
-        min_index = -1
-
-        # Loop over (if there are any) the reconstructed top jets.
-        for j in range(0,2):
-
-            pt_meas = chain.GetLeaf(str_meas_pt).GetValue(j)
-            eta_meas = chain.GetLeaf(str_meas_eta).GetValue(j)
-            phi_meas = chain.GetLeaf(str_meas_phi).GetValue(j)
-
-            # Calc dR between truth and reconstructed jet.
-            dR = np.sqrt((eta_meas-eta_truth)**2 + (phi_meas-phi_truth)**2)
-
-            # Make some pt cuts for now. May relax this. 
-            # If reconstructed is within dR<0.8, this is a match!
-            if pt_meas > 100 and pt_meas<600:
-                if dR < min_dR and dR < 0.8:
-                    min_dR = dR
-                    min_dR_pt = pt_meas
-                    found_match = True
-
-        # Fill the response matrix accordingly.
-        if found_match == False:
-            response.Miss (pt_truth)
-        else:
-            hMC_meas.Fill(min_dR_pt)
-            response.Fill (min_dR_pt, pt_truth)
-
-
-    '''
 
 ################################################################################
 # Unfold with one of the algorithms
