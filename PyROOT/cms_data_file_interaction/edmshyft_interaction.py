@@ -69,6 +69,13 @@ npossiblejets = 8
 nev = chain.GetEntries()
 print nev
 
+'''
+p4_meas.SetPtEtaPhiM(pt_meas,eta_meas,phi_meas,mass_meas);
+#dR = np.sqrt((eta_meas-eta_truth)**2 + (phi_meas-phi_truth)**2)
+dR0 = p4_meas.DeltaR(p4_truth);
+'''
+
+
 ################################################################################
 # Loop over the events
 ################################################################################
