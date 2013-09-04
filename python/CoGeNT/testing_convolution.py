@@ -24,7 +24,7 @@ for mu in [1.1]:
     convolving_pts = convolving_term.pdf(xpts)
     #convolving_pts = (1.0/(sigma*np.sqrt(2*np.pi)))*np.exp(-((x-0.0)**2)/(2*sigma*sigma))
 
-    yc = signal.convolve(y/y.sum(),convolving_pts,mode='same')
+    yc = signal.fftconvolve(y/y.sum(),convolving_pts,mode='same')
 
     print integrate.simps(y,x=x)
     print integrate.simps(yc,x=x)
