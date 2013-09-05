@@ -12,7 +12,7 @@ mu = 1.0 # Centroid
 sig=0.2 # Width
 original_pdf = stats.norm(mu,sig)
 
-x = np.linspace(0.0,2.0,npts)
+x = np.linspace(0,2.0,npts)
 y = original_pdf.pdf(x)
 plt.plot(x,y/y.sum(),label='original',linewidth=1)
 
@@ -23,14 +23,16 @@ plt.plot(x,y/y.sum(),label='original',linewidth=1)
 # width of 0.5
 mu_conv = 0.0 # Centroid 
 tot_conv_pdf = np.zeros(len(y))
-for s in range(0,1000):
-    sigma_conv = 0.01+0.0012*s # Width
-    print sigma_conv
+for s in range(0,npts):
+    sigma_conv = 0.2+0.22*x[s] # Width
+    #sigma_conv = 0.2
+    print x[s],sigma_conv
     convolving_term = stats.norm(mu_conv,sigma_conv)
-    #convolving_term = stats.norm(mu_conv,lambda x: 0.2*x + 0.1)
 
-    xconv = np.linspace(-5,5,npts)
-    yconv = convolving_term.pdf(xconv)
+    xconv = np.linspace(-5,5,5000)
+    # Multiply by sigma because we want the height constant, 
+    # not the area.
+    yconv = sigma_conv*convolving_term.pdf(xconv)
 
     #ytemp = np.hstack([y[:s+1],y[s+1:]])
     ytemp = np.zeros(npts)
