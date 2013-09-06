@@ -34,19 +34,21 @@ void convolution_tests()
   // ---------------------------------------
 
   // Construct observable
-  RooRealVar t("t","t",0.0,2.0) ;
+  RooRealVar t("t","t",2.0,4.0) ;
 
   // Construct signal(t,ml,sl) ;
-  RooRealVar ml("ml","mean signal",1.0);
-  RooRealVar sl("sl","sigma signal", 0.2);
+  RooRealVar ml("ml","mean signal",3.0);
+  RooRealVar sl("sl","sigma signal",0.2);
   RooGaussian signal("signal","signal",t,ml,sl) ;
   
   // Construct gauss(t,mg,sg) for smearing
   RooRealVar mg("mg","mg",0) ;
-  //RooRealVar sg("sg","sg",0.2);
-  RooFormulaVar sg("sg","0.2+(0.22*@0)",RooArgList(t));
+  //RooRealVar sg("sg","sg",0.4);
+  RooFormulaVar sg("sg","0.4",RooArgList(t));
   RooGaussian gauss("gauss","gauss",t,mg,sg) ;
 
+  RooFormulaVar sg1("sg1","0.4+(0.4*@0)",RooArgList(t));
+  RooGaussian gauss1("gauss1","gauss1",t,mg,sg1) ;
 
   // C o n s t r u c t   c o n v o l u t i o n   p d f 
   // ---------------------------------------
@@ -55,8 +57,9 @@ void convolution_tests()
   t.setBins(10000,"cache") ; 
 
   // Construct signal (x) gauss
-  RooFFTConvPdf signalxg("signalxg","signal (X) gauss",t,signal,gauss) ;
-
+  
+  RooNumConvPdf signalxg("signalxg","signal (X) gauss",t,signal,gauss) ;
+  RooNumConvPdf signalxg1("signalxg1","signal (X) gauss1",t,signal,gauss1) ;
 
 
   // P l o t   c o n v o l u t e d   p d f 
@@ -65,8 +68,10 @@ void convolution_tests()
   // Plot data, signal pdf, signal (X) gauss pdf
   RooPlot* framesig = t.frame(Title("signal")) ;
   signal.plotOn(framesig,LineStyle(kDashed)) ;
+
   RooPlot* framesigxg = t.frame(Title("signal (x) gauss convolution")) ;
   signalxg.plotOn(framesigxg) ;
+  signalxg1.plotOn(framesigxg,LineColor(kRed)) ;
 
   // Draw frame on canvas
   TCanvas *can = new TCanvas("can","can",10,10,1000,500);
