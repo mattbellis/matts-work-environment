@@ -24,6 +24,7 @@ while i < 110:
     date = time.strftime("%a., %b %d",start)
     if tuesday:
         print "Week %0d & %s & XXX & YYY & ZZZ \\\\ " % (week,date)
+        print "\\hline"
     elif wednesday:
         print "         & %s & XXX & YYY & ZZZ \\\\ " % (date)
     else:
@@ -32,21 +33,23 @@ while i < 110:
 
     if tuesday:
         #increment = 2
-        increment = 1
-        tuesday = False
-        wednesday = True
-        thursday = True
-    elif wednesday:
-        increment = 1
-        tuesday = False
-        wednesday = False
-        thursday = True
-    else:
-        increment = 5
+        #increment = 1
+        increment = 7
         tuesday = True
         wednesday = False
         thursday = False
         week += 1
+    #elif wednesday:
+        #increment = 1
+        #tuesday = False
+        #wednesday = False
+        #thursday = True
+    #else:
+        #increment = 5
+        #tuesday = True
+        #wednesday = False
+        #thursday = False
+        #week += 1
 
     i += increment
 

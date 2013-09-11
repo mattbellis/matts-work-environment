@@ -4,7 +4,7 @@ import matplotlib.pylab as plt
 import scipy.signal as signal
 import scipy.stats as stats
 
-npts = 100
+npts = 1000
 
 # Create the initial function. I model a spike
 # as an arbitrarily narrow Gaussian
@@ -29,7 +29,7 @@ tot_conv_pdf = np.zeros(len(y))
 for s in range(0,npts):
     #sigma_conv = 0.2 + (0.2*x[s]*x[s]) # Width
     sigma_conv = 0.02 + (0.1*x[s]) # Width
-    #sigma_conv = 0.5
+    #sigma_conv = 0.1
     convolving_term = stats.norm(mu_conv,sigma_conv)
 
     xconv = np.linspace(-5,5,5*npts)
@@ -50,4 +50,8 @@ for s in range(0,npts):
 plt.plot(x,tot_conv_pdf/tot_conv_pdf.sum(),label='convolved')
 plt.ylim(0,1.2*max(tot_conv_pdf/tot_conv_pdf.sum()))
 plt.legend()
+
+plt.figure()
+plt.plot(x,(tot_conv_pdf/tot_conv_pdf.sum())/(y/y.sum()),label='convolved')
+
 plt.show()
