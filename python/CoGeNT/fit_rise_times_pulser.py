@@ -152,7 +152,8 @@ def main():
     ############################################################################
     #infile_name = 'data/LE.txt'
     #infile_name = 'data/HE.txt'
-    infile_name = 'data/pulser_data.dat'
+    #infile_name = 'data/pulser_data.dat'
+    infile_name = 'data/pulser_data_325ns.dat'
     tdays,energies,rise_times = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
     print tdays
     print energies
@@ -589,7 +590,7 @@ def main():
                 z = out[0]
                 zcov = out[1]
                 print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
-                print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+                #print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
                 yfitpts[nindex] = expfunc(z,xp)
                 #print zcov
                 plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
