@@ -189,7 +189,7 @@ class Student:
         avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
         averages[0] = avg
         #ret += "\tQuiz avg: %4.2f\n" % (avg)
-        ret += "\tReading, pre-lecture quizzes avg: %4.2f\n" % (avg)
+        ret += "\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
 
         # HW
         #drop_lowest_score = True
