@@ -1,0 +1,214 @@
+% http://stefan.endrullis.de/en/game_set.html
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%    set.tex - version 1.0     %
+%  by Stefan Endrullis (2004)  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% die Wurzel aus der Anzahl der Karten pro Seite
+\def\cardsPerPageSqrt{2}
+% gibt an, ob der Rahmen der Karten auch an den Blatträndern gezeichnet werden soll
+\def\pageFrame{1} % 1 für Rahmen, 0 wenn kein Rahmen gezeichnet werden soll
+
+\documentclass[10pt,fleqn,a4paper]{article}
+
+% Packages einbinden
+\usepackage{ifthen}
+\usepackage[nomessages]{fp}
+\usepackage{pstricks, pst-node, pst-tree, pst-text}
+
+% gibt das Ergebnis der Division 1/x zurück für x \in {1, 2, 3, 4, 5}
+\newcommand{\einsDurch}[1]{%
+    \FPeval{\einsDurchTmp}{1/#1}% Berechnung des Wertes
+    \einsDurchTmp% Ausgabe des Wertes
+}%
+
+% gibt die aktuelle Farbe des Rahmens der Formen zurück
+\newcommand{\setFrameColor}{%
+    \ifthenelse{\theframeColorNo = 0}{\psset{linecolor=red}}{}%
+    \ifthenelse{\theframeColorNo = 1}{\psset{linecolor=green}}{}%
+    \ifthenelse{\theframeColorNo = 2}{\psset{linecolor=blue}}{}%
+}%
+
+% gibt die aktuelle Farbe des Rahmens der Formen zurück
+\newcommand{\setFillColor}{%
+    \ifthenelse{\thefillColorNo = 0}{\psset{fillcolor=white}}{}%
+    \ifthenelse{\thefillColorNo = 1}{%
+        \ifthenelse{\theframeColorNo = 0}{\psset{fillcolor=lightred}}{}%
+        \ifthenelse{\theframeColorNo = 1}{\psset{fillcolor=lightgreen}}{}%
+        \ifthenelse{\theframeColorNo = 2}{\psset{fillcolor=lightblue}}{}%
+    }{}%
+    \ifthenelse{\thefillColorNo = 2}{%
+        \ifthenelse{\theframeColorNo = 0}{\psset{fillcolor=red}}{}%
+        \ifthenelse{\theframeColorNo = 1}{\psset{fillcolor=green}}{}%
+        \ifthenelse{\theframeColorNo = 2}{\psset{fillcolor=blue}}{}%
+    }{}%
+}%
+
+% zeichnet eine Karte
+\newcounter{drawCardI}
+\newcommand{\drawCard}{%
+    % die 1 bis 3 Formen zeichnen
+    \setcounter{drawCardI}{0}%
+    \whiledo{\thedrawCardI < \theformCount}{%
+        % Position der Form berechnen
+        \FPeval{\firstx}{\cardx+\formLeftMargin}% berechnet die X-Koordinate des ersten Punktes der Form
+        \FPeval{\firsty}{\cardy+\formTopMargin+((3-\theformCount)*\formHalfHeightPlusSpace)+(\thedrawCardI*(\formHeight+\formVerticalSpace))}% berechnet die Y-Koordinate des ersten Punktes der Form
+        % Farben setzen
+        \setFrameColor\setFillColor%
+        % Form zeichnen
+        \rput[bl](\firstx,\firsty){\drawForm}%
+        \stepcounter{drawCardI}%
+    }%
+}%
+
+% zeichnet eine Form
+\newcommand{\drawForm}{%
+    \ifthenelse{\theformNo = 0}{\psframe(0,0)(\formWidth,\formHeight)}{}%
+    \ifthenelse{\theformNo = 1}{\pstriangle(\formHalfWidth,\formHeight)(\formWidth,-\formHeight)}{}%
+    \ifthenelse{\theformNo = 2}{\psellipse(\formHalfWidth,\formHalfHeight)(\formHalfWidth,\formHalfHeightMinusSpace)}{}%
+}%
+
+% zeichnet die Abgrenzungen zwischen den Karten und zum Rand des Blattes
+\newcounter{drawFramesI}% eine lokale Zählvariable
+\newcounter{drawFramesEnd}%
+\newcommand{\drawFrames}{%
+    \ifthenelse{\pageFrame = 1}{\setcounter{drawFramesI}{0}}{\setcounter{drawFramesI}{1}}% Startwert setzen
+    \setcounter{drawFramesEnd}{\cardsPerPageSqrt}%
+    \ifthenelse{\pageFrame = 1}{\stepcounter{drawFramesEnd}}{}% Endwert setzen
+    \FPeval{\drawFramesLength}{4*\cardsPerPageSqrt}% berechnet der Länge der Striche zur Abgrenzung der Karten
+    % alle Positionen durchgehen und die Abgrenzungen (Rahmen der Karten) zeichnen
+    \whiledo{\thedrawFramesI < \thedrawFramesEnd}{%
+        % Position berechnen
+        \FPeval{\drawFramesPos}{4*\thedrawFramesI}% berechnet der Länge der Striche zur Abgrenzung der Karten
+        % horizontale und vertikale Abgrenzung an der bestimmten Position zeichnen
+        \rput[bl](0,\drawFramesPos){\psline[linecolor=black, linewidth=0.1pt](0,0)(\drawFramesLength,0)}%
+        \rput[bl](\drawFramesPos,0){\psline[linecolor=black, linewidth=0.1pt](0,0)(0,\drawFramesLength)}%
+        % Zähler um 1 erhöhen
+        \stepcounter{drawFramesI}%
+    }%
+}%
+
+%----------------------------------------------------------------%
+
+% linken und oberen Rand entfernen
+\pagestyle{empty}
+\topmargin-1.65in
+\textheight\paperheight
+\linewidth 30cm
+\oddsidemargin-1in
+\parindent0mm
+
+% helle Farben definieren
+\newrgbcolor{lightred}{1 0.8 0.8}
+\newrgbcolor{lightgreen}{0.8 1 0.8}
+\newrgbcolor{lightblue}{0.8 0.8 1}
+
+% counter definieren
+\newcounter{cardsOnPage}     % die Anzahl der Karten, die auf die Seite gezeichnet wurden, beginnend bei 0
+\newcounter{frameColorNo}    % die Nummer der Farbe für den Rahmen (0 = rot, 1 = grün, 2 = blau)
+\newcounter{fillColorNo}  % die Nummer der Farbe für den Inhalt (0 = rot, 1 = grün, 2 = blau)
+\newcounter{formNo}            % die Nummer der From (0 = Viereck, 1 = Dreieck, 2 = Ellipse)
+\newcounter{formCount}       % die Anzahl der From auf einer Karte, beginnend bei 0
+
+% Höhe, Breite und Abstand von Formen definieren
+\def\formHeight{0.8}
+\def\formWidth{2.4}
+\def\formVerticalSpace{0.2}
+
+% Vorberechnungen für Karten durchführen
+\FPeval{\formTopMargin}{(4-(3*\formHeight)-(2*\formVerticalSpace)) / 2}% berechnet den Abstand einer Form nach oben
+\FPeval{\formLeftMargin}{(4-\formWidth)/2}% berechnet den Abstand einer Form nach links
+\FPeval{\formHalfHeightPlusSpace}{(\formHeight+\formVerticalSpace)/2}% berechnet (Höhe+Platz_nach_unten)/2
+\FPeval{\formHalfHeightMinusSpace}{(\formHeight-\formVerticalSpace)/2}% berechnet (Höhe+Platz_nach_unten)/2
+\FPeval{\formHalfHeight}{\formHeight/2}% berechnet (Höhe+Platz_nach_unten)/2
+\FPeval{\formHalfWidth}{\formWidth/2}% berechnet (Höhe+Platz_nach_unten)/2
+
+\begin{document}
+
+%----------------------------------------------------------------%
+
+% Seite so einrichten, daß ein (0,0)(4,4)-Rechteck die gesamte Seite ausfüllt
+\def\xunit{5.246}
+\def\yunit{-7.424}
+% nun das Koordinatensystem so skalieren, daß genau \cardsPerPageSqrt^2 (0,0)(4,4)-Rechtecke eine Seite ausfüllen
+\FPeval{\xunit}{\xunit/\cardsPerPageSqrt}%
+\FPeval{\yunit}{(\yunit)/\cardsPerPageSqrt}%
+\FPeval{\linewidta}{6/\cardsPerPageSqrt}%
+%\def\yunit{-\yunit}%  \FPeval{\drawFramesLength}{4*\cardsPerPageSqrt}% berechnet der Länge der Striche zur Abgrenzung der Karten
+
+\psset{xunit=\xunit, yunit=\yunit, linewidth=\linewidta mm, framearc=0, fillstyle=solid}
+
+% Kartenpos auf (0,0) setzen
+\def\cardx{0} \def\cardy{0}
+
+% init some counter
+\newcounter{rowi}% die aktuelle Zeilennummer
+\newcounter{coli}% die aktuelle Spaltennummer
+\setcounter{rowi}{0}% die aktuelle Zeilennummer
+\setcounter{coli}{0}% die aktuelle Spaltennummer
+
+% alle Eigenschaftkombinationen der Karten in 4 Schleifen durchgehen
+\setcounter{frameColorNo}{0}
+\whiledo{\theframeColorNo < 3}{%
+    %  \theframeColorNo
+    \setcounter{fillColorNo}{0}%
+    \whiledo{\thefillColorNo < 3}{%
+        \setcounter{formNo}{0}%
+        \whiledo{\theformNo < 3}{%
+            \setcounter{formCount}{1}%
+            \whiledo{\theformCount < 4}{%
+                % Karte zeichnen
+                \drawCard%
+                %
+                % nächste Spalte bzw. neue Zeile bzw. neue Seite
+                \stepcounter{coli}%
+                \FPeval{\cardx}{\cardx+4}%
+                \ifthenelse{\thecoli = \cardsPerPageSqrt}{%
+                    \setcounter{coli}{0}\stepcounter{rowi}%
+                    \def\cardx{0}%
+                    \FPeval{\cardy}{\cardy+4}%
+                }{}%
+                \ifthenelse{\therowi = \cardsPerPageSqrt}{%
+                    \drawFrames%
+                    \setcounter{rowi}{0}\newpage%
+                    \def\cardy{0}%
+                }{}%
+                %
+                \stepcounter{formCount}%
+
+            }%
+            \stepcounter{formNo}%
+        }%
+        \stepcounter{fillColorNo}%
+    }%
+    \stepcounter{frameColorNo}%
+}%
+\addtocounter{coli}{\therowi}%
+\ifthenelse{\thecoli > 0}{\drawFrames}{}%
+
+% Testen, ob ein 4*4Rechteck die gesamte Seite ausfüllt
+%\FPeval{\iY}{\Ypsz * \iy / (\iy + 1.0)}  % Calculates Y-coordinate
+%\FPeval{\iX}{(\Ypsz - \iY)* \ix / \Xpsz} % Calculates X-coordinate
+
+%\FPeval{\abcb}{2.0 * \abcb}
+%\psframe[linecolor=red, linewidth=2pt, framearc=0, fillstyle=solid, fillcolor=blue](\abca,\abca)(\abcb,\abcb)
+
+%\setcounter{multi}{1}
+%\whiledo{\themulti < \}{ \addtocounter{multa}{#1} \stepcounter{multi} }
+%a\\ \\ \\
+%\arabic{multi}
+%\psframe[linecolor=red, framearc=0, fillcolor=lightred](\abc,0.6)(3.2,1.4)
+%\psframe[linecolor=red, framearc=0, fillcolor=lightred](\abc,1.6)(3.2,2.4)
+%\psframe[linecolor=red, framearc=0, fillcolor=lightred](\abc,2.6)(3.2,3.4)
+
+%\pstriangle(2,.5)(4,2)
+%\rput[bl](1,1){
+%\psellipse[linecolor=blue, linewidth=2pt, framearc=4.3, fillstyle=solid, fillcolor=lightgreen](2,-2)(2,1)
+%}
+
+%\psframe[linecolor=red, linewidth=2pt, framearc=0, fillstyle=solid, fillcolor=blue](2,-4)(4,2)
+
+%----------------------------------------------------------------%
+
+
+\end{document}

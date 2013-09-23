@@ -1,0 +1,15 @@
+import os
+import subprocess as sp
+
+env = Environment()
+env = Environment(ENV = {'PATH' : os.environ['PATH']})
+env['CC'] = ['nvcc']
+
+################################################################################
+# Grab the ROOT information
+#d = env.ParseFlags("!root-config --cflags --libs")
+#env.MergeFlags(d)
+################################################################################
+
+env.Program('basic', 'basic.cc', parse_flags="!root-config --cflags --libs")
+env.Program('walkthru','walkthru.cu')
