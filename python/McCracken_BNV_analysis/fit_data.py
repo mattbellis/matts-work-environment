@@ -264,7 +264,7 @@ cutoff_index = 0
 for i,d in enumerate(diff):
     partial_area += 0.2*np.exp(d)/tot_area
     #print partial_area
-    if partial_area>0.95:
+    if partial_area>0.90:
         cutoff = scanbins[i]
         cutoff_index = i+1
         break
