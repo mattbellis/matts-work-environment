@@ -17,6 +17,8 @@ import sys
 
 import numpy as np
 
+ROOT.gStyle.SetOptStat(11)
+
 # ==============================================================================
 #  Example Unfolding
 # ==============================================================================
@@ -24,14 +26,13 @@ import numpy as np
 # ==============================================================================
 #  Read in the data.
 # ==============================================================================
-
-chain = ROOT.TChain("Events")
-
 infile = open(sys.argv[1],"r")
 
 ptlo = 100
 pthi = 800
 nptbins = 7
+
+tag = "boosted_top"
         
 
 print "==================================== TRAIN ===================================="
@@ -39,7 +40,8 @@ print "==================================== TRAIN ==============================
 #hMC_true = TH1D("MC_true","Truth and measured: Top quark p_{t}", 40, 100,600)
 #hMC_meas = TH1D("MC_meas","Efficiency: Top quark p_{t}", 40, 100,600)
 
-response= RooUnfoldResponse (10,100,1100)
+#response= RooUnfoldResponse (10,100,1100)
+response= RooUnfoldResponse (nptbins,ptlo,pthi)
 hMC_true = TH1D("MC_true","Truth and measured: Top quark p_{t}",nptbins,ptlo,pthi)
 hMC_meas = TH1D("MC_meas","Efficiency: Top quark p_{t}",nptbins,ptlo,pthi)
 
@@ -83,18 +85,23 @@ unfold0 = RooUnfoldBayes(response,hMC_meas,4);
 # MC true, measured, and unfolded histograms 
 c1 = TCanvas( 'c1', 'MC', 200, 10, 700, 500 )
 
+ROOT.gPad.SetLogy()
+
 hMC_true.SetLineColor(kBlack);  
 hMC_true.Draw();  # MC raw 
-c1.SaveAs("MC_true.png")
+name = "MC_true_%s.png" % (tag)
+c1.SaveAs(name)
 
 hMC_meas.SetLineColor(kBlue);
 hMC_meas.Draw("SAME");  # MC measured
-c1.SaveAs("MC_meas.png")
+name = "MC_meas_%s.png" % (tag)
+c1.SaveAs(name)
 
 hMC_reco = unfold0.Hreco();
 hMC_reco.SetLineColor(kRed);
 hMC_reco.Draw("SAME");        # MC unfolded 
-c1.SaveAs("MC_unfold.png")
+name = "MC_unfold_%s.png" % (tag)
+c1.SaveAs(name)
 
 c1.Update()
 
@@ -105,7 +112,8 @@ hMC_eff = hMC_meas.Clone();
 hMC_eff.Divide(hMC_true);
 c2.SetLogy();
 hMC_eff.Draw();
-c2.SaveAs("MC_eff.png")
+name = "MC_eff_%s.png" % (tag)
+c2.SaveAs(name)
 
 c2.Update()
 
@@ -124,13 +132,15 @@ c5.cd(2)
 #response.Mresponse().Draw("")
 response.Mresponse().Draw("colz")
 
+name = "response_matrices_%s.png" % (tag)
+c5.SaveAs(name)
 ################################################################################
 print "======================================Correct the data========================="
 hdata = TH1D("hdata","Data: Top quark p_{t}",nptbins,ptlo,pthi)
 #meas_data = [1000,500,100,100,50,45,35,34,20,10]
-meas_data = [0,0,15,30,20,10,5]
+meas_data = [0,3,51,50,25,9,2]
 for i,d in enumerate(meas_data):
-    hdata.SetBinContent(i,d)
+    hdata.SetBinContent(i+1,d)
 
 unfold1 = RooUnfoldBayes(response,hdata,4);
 hdata_reco = unfold1.Hreco();
@@ -138,18 +148,21 @@ hdata_reco = unfold1.Hreco();
 c6 = TCanvas('c6', 'Corrected data',200,10,1000,500)
 c6.Divide(2,1)
 c6.cd(1)
-hdata_reco.SetLineColor(kRed);
+hdata.Draw("e");        # MC unfolded 
 
 # Scale by luminosity
+c6.cd(2)
 lumi = 19.7e15
 xsec_tot = 247.0e-12
-hdata_reco.Scale((1.0/lumi)/xsec_tot)
-hdata.Draw();        # MC unfolded 
+hdata_reco.SetLineColor(kRed);
+hdata_reco.Scale(1000*(1.0/lumi)/xsec_tot)
+hdata_reco.GetYaxis().SetTitle("#frac{1}{#sigma} #frac{d#sigma}{d p^{t}_{T}} [GeV^{-1}] #times 10^{-3}")
+hdata_reco.GetXaxis().SetTitle("p^{t}_{T} [GeV^{-1}]")
 
-c6.cd(2)
 ROOT.gPad.SetLogy()
 hdata_reco.Draw();        # MC unfolded 
-c6.SaveAs("data_unfold.png")
+name = "data_unfold_%s.png" % (tag)
+c6.SaveAs(name)
 
 c6.Update()
 
