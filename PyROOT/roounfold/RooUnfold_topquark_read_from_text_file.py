@@ -66,7 +66,8 @@ for tt,tr in zip(top_truth,top_meas):
 
     # Fill the response matrix accordingly.
     if tr<0:
-        response.Miss(tt)
+        #response.Miss(tt)
+        response.Fake(tt)
     else:
         hMC_meas.Fill(tr)
         response.Fill(tr,tt)
