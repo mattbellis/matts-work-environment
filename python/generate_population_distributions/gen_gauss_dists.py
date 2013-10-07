@@ -10,7 +10,7 @@ sig = 0.05
 
 nspots = 5
 
-npts = 250
+npts = 25000
 
 xpts = np.array([])
 ypts = np.array([])

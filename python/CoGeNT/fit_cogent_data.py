@@ -173,9 +173,9 @@ def main():
     plt.figure()
     plt.plot(data[0],data[4],'o',markersize=1.5)
 
-    plt.show()
+    #plt.show()
 
-    exit()
+    #exit()
 
 
     ############################################################################
