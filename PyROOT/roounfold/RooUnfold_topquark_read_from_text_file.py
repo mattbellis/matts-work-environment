@@ -57,20 +57,29 @@ top_truth = vals[index]
 top_meas = vals[index+1]
 
 n = 0
-for tt,tr in zip(top_truth,top_meas):
+for truth,meas in zip(top_truth,top_meas):
 
     if n%10000==0:
         print "%d of %d" % (n,nentries/2)
 
-    hMC_true.Fill(tt)
 
     # Fill the response matrix accordingly.
-    if tr<0:
-        #response.Miss(tt)
-        response.Fake(tt)
+    if truth>0 and meas<0:
+        response.Miss(truth)
+        hMC_true.Fill(truth)
+
+    elif truth>0 and meas>0:
+        hMC_true.Fill(truth)
+        hMC_meas.Fill(meas)
+        response.Fill(meas,truth)
+
+    elif truth<0 and meas>0:
+        hMC_meas.Fill(meas)
+        response.Fake(meas)
+
     else:
-        hMC_meas.Fill(tr)
-        response.Fill(tr,tt)
+        print "truth and meas issue!",truth,meas
+        exit(-1)
 
     n+=1
 
@@ -136,10 +145,24 @@ response.Mresponse().Draw("colz")
 name = "response_matrices_%s.png" % (tag)
 c5.SaveAs(name)
 ################################################################################
+print "======================================Get the old results========================="
+xpts = np.array([26.2, 66.2, 126.2, 173.8, 228.8, 286.2, 356.2, 500, 600, 700, 800, 900])
+ypts = np.array([0.003695, 0.006477, 0.005077, 0.002795, 0.001246, 0.000491, 0.000126, 0,0,0,0,0])
+ypts *= 1000 # Because of how they're plotted.
+
+xpts_err = np.array([30.0,40.0,50.0,60.0,60.0,80.0,50,50,50,50,50])
+xpts_err /= 2.0
+ypts_pcterr = np.array([4.3,4.0,3.8,5.1,4.6,6.5,9.0,1,1,1,1,1])
+ypts_err = ypts*ypts_pcterr/100.0
+
+old_results = ROOT.TGraphErrors(len(xpts),xpts,ypts,xpts_err,ypts_err)
+old_results.SetLineWidth( 2 )
+old_results.SetMarkerColor( 4 )
+old_results.SetMarkerStyle( 21 )
+
 print "======================================Correct the data========================="
 hdata = TH1D("hdata","Data: Top quark p_{t}",nptbins,ptlo,pthi)
-#meas_data = [1000,500,100,100,50,45,35,34,20,10]
-meas_data = [0,3,51,50,25,9,2]
+meas_data = [0,4,63,62,32,14,3]
 for i,d in enumerate(meas_data):
     hdata.SetBinContent(i+1,d)
 
@@ -155,17 +178,29 @@ hdata.Draw("e");        # MC unfolded
 c6.cd(2)
 lumi = 19.7e15
 xsec_tot = 247.0e-12
+bin_width = hdata_reco.GetBinCenter(2)-hdata_reco.GetBinCenter(1)
+print "bin_width ",bin_width
+hdata_reco.Scale(1.0/bin_width)
 hdata_reco.SetLineColor(kRed);
 hdata_reco.Scale(1000*(1.0/lumi)/xsec_tot)
 hdata_reco.GetYaxis().SetTitle("#frac{1}{#sigma} #frac{d#sigma}{d p^{t}_{T}} [GeV^{-1}] #times 10^{-3}")
 hdata_reco.GetXaxis().SetTitle("p^{t}_{T} [GeV^{-1}]")
 
 ROOT.gPad.SetLogy()
-hdata_reco.Draw();        # MC unfolded 
+old_results.GetYaxis().SetRangeUser(0.0001,8)
+old_results.Draw("ap")
+hdata_reco.Draw("samee");        # MC unfolded 
+old_results.Draw("p")
 name = "data_unfold_%s.png" % (tag)
 c6.SaveAs(name)
 
 c6.Update()
+
+c7 = TCanvas('c7', 'Old data',520,50,1000,500)
+c7.Divide(2,1)
+c7.cd(1)
+old_results.Draw("ap")
+c7.Update()
 
 ################################################################################
 if __name__=="__main__":
