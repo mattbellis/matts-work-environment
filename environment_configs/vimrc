@@ -35,6 +35,11 @@ ab dvdt2 \frac{d^2v}{dt^2}
 ab xhat \hat{x}
 ab yhat \hat{y}
 ab zhat \hat{z}
+ab xdot \dot{x}
+ab ydot \dot{y}
+ab zdot \dot{z}
+ab qdot \dot{q}
+ab pdot \dot{p}
 ab rhat \hat{r}
 ab phihat \hat{\phi}
 ab rdot \dot{r}
@@ -42,6 +47,8 @@ ab rddot \ddot{r}
 ab phidot \dot{\phi}
 ab phiddot \ddot{\phi}
 ab mydeg ^\circ
+ab lag \mathcal{L}
+ab ham \mathcal{H}
 
 ab fixthis \textcolor{red}{\bf FIX THIS!!!!}
 
