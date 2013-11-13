@@ -64,7 +64,7 @@ def main():
     ############################################################################
     # Figure
     ############################################################################
-    fig0=plt.figure(figsize=(14,4),dpi=100)
+    fig0=plt.figure(figsize=(13,4),dpi=100)
     ax0=fig0.add_subplot(1,3,1)
     ax1=fig0.add_subplot(1,3,2)
     ax2=fig0.add_subplot(1,3,3)
@@ -115,6 +115,7 @@ def main():
     ############################################################################
     # Plot the spectra
     ############################################################################
+    #for day in [0,20,40,60,80,100,120,140,160,180]:
     for day in [0,60,120,180,240,300]:
         # Recoil energy range.
         Er = np.linspace(0.1,10.0,100)
@@ -128,8 +129,10 @@ def main():
 
         #wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=300,v0Sag=100):
         y = (day+338)%365.0
-        xkeVr = dmm.quench_keVr_to_keVee(Er)
-        dRdEr = cpdf.wimp(y,xkeVr,target_atom,mDM,sigma_n,efficiency=None,model='shm')
+        #xkeVr = dmm.quench_keVr_to_keVee(Er)
+        xkeVee = dmm.quench_keVr_to_keVee(Er)
+        # WIMP wants the energy in terms of keVee
+        dRdEr = cpdf.wimp(y,xkeVee,target_atom,mDM,sigma_n,efficiency=None,model='shm')
 
         leg_title = "day=%d" % (day)
         ax0.plot(Er,dRdEr,label=leg_title)
@@ -142,6 +145,7 @@ def main():
 
         #func = lambda x: plot_wimp_er(Er,target_atom,mDM,sigma_n,time_range=[day,day+1],model=args.model)
 
+        '''
         if args.model=='shm':
             dRdEr = dmm.dRdErSHM(Er,day,target_atom,mDM,sigma_n)
         elif args.model=='stream':
@@ -150,12 +154,18 @@ def main():
             dRdEr = dmm.dRdErDebris(Er,day,target_atom,mDM,vDeb1,sigma_n)
 
         dRdEr *= efficiency(Er)
+        '''
 
         #smeared,smeared_x = cogent_convolve(Eee,dRdEr)
         #print smeared-dRdEr
 
+        # Plot what we see deposited in the detector.
         leg_title = "day=%d" % (day)
-        ax1.plot(Eee,dRdEr,label=leg_title)
+        # THIS WAS WORKING
+        #ax1.plot(Eee,dRdEr,label=leg_title)
+        # TRY THIS USING THE WIMP PDF.
+        ax1.plot(xkeVee,dRdEr,label=leg_title)
+
         #ax1.plot(Eee,smeared,'--',label='smeared')
 
     ax0.set_xlabel('Er')
@@ -167,8 +177,8 @@ def main():
 
     num_wimps = 1.0
 
-    #num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:366,args=(target_atom,mDM,sigma_n,efficiency,args.model,vDeb1,vSag,v0Sag),epsabs=0.001)[0]
-    num_wimps = 1000.0
+    num_wimps = integrate.dblquad(cpdf.wimp,elo,ehi,lambda x: 1,lambda x:366,args=(target_atom,mDM,sigma_n,efficiency,args.model,vDeb1,vSag,v0Sag),epsabs=0.001)[0]
+    #num_wimps = 1000.0
 
     if args.cogent:
         num_wimps *= 0.333
