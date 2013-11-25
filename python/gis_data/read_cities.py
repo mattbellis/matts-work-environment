@@ -12,8 +12,12 @@ y = []
 for i,row in enumerate(reader):
 
     if i!=0:
-        x.append(float(row[12]))
-        y.append(float(row[13]))
+        # COUNTIES
+        #x.append(float(row[12]))
+        #y.append(float(row[11]))
+        # Boundaries
+        x.append(float(row[1]))
+        y.append(float(row[0]))
 
         print i
 
