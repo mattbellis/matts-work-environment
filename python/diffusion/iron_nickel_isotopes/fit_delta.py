@@ -223,6 +223,7 @@ m.print_param()
 
 m.migrad()
 #m.hesse()
+m.minos()
 
 values = m.values
 
@@ -278,6 +279,8 @@ plt.ylim(-20,20)
 
 plt.figure()
 plt.plot(xis,cis,'o')
+
+print values
 
 plt.show()
 
