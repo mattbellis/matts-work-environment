@@ -19,6 +19,16 @@ from scipy import interpolate
 xmp,ymp = read_in_a_microprobe_data_file(sys.argv[1])
 xis,yis,yerris,cis = read_in_an_isotope_data_file(sys.argv[2])
 
+# For FNDA 1
+#print "XIS!!!!"
+#print xis
+xis -= 0.00126
+#print xis
+xis = xis[::-1]
+
+#print xis
+
+
 
 ################################################################################
 # mybeta
@@ -51,7 +61,7 @@ xvals = np.linspace(lo,hi,npts)
 ################################################################################
 # Move in time
 ################################################################################
-dt   = 10.0
+dt   = 600.0
 t0   = 0
 hours = 24
 tmax = (3600*hours) # seconds?
@@ -83,12 +93,12 @@ def fitfunc(data,p,parnames,params_dict):
     print '----------------------------------'
 
     pn = parnames
-    print "ere"
-    print pn
-    print p
+    #print "ere"
+    #print pn
+    #print p
 
     mybeta = p[pn.index('mybeta')]
-    print "mybeta: ",mybeta
+    #print "mybeta: ",mybeta
 
     c56 = np.zeros(npts)
     c56[:point_of_intial_interface] = cmax0
@@ -98,8 +108,10 @@ def fitfunc(data,p,parnames,params_dict):
     t = t0
     while t<tmax:
 
+        '''
         if t%10000==0:
             print "%d of %d" % (t,tmax)
+        '''
 
         # FNDA1
         #exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
@@ -151,10 +163,10 @@ def fitfunc(data,p,parnames,params_dict):
 ################################################################################
 def chisq_minuit(data,p,parnames,params_dict):
 
-    print "EFORE CALL:"
-    print p
-    print parnames
-    print params_dict
+    #print "EFORE CALL:"
+    #print p
+    #print parnames
+    #print params_dict
     c56,c54,simulated_deltas = fitfunc(data,p,parnames,params_dict)
 
     print "values in fit: "
@@ -165,33 +177,32 @@ def chisq_minuit(data,p,parnames,params_dict):
     ydata = data[1]
     yerrdata = data[2]
 
-    #fit_function = interpolate.interp1d(xpos,simulated_deltas)
+    # Interpolate between data points.
+    predicted_delta = interpolate.interp1d(xpos,simulated_deltas)
 
     chi2 = 0.0
+    #print xdata
+    #print xpos
     for x,y,yerr in zip(xdata,ydata,yerrdata):
-        if x<simulated_deltas[-1]:
+        #if x>=simulated_deltas[-1] and x<=simulated_deltas[0]:
+        if x>=min(xpos) and x<=max(xpos):
 
-            #chi2 += ((f(x)-y)**2)/(yerr**2)
-            chi2 += ((1.0-y)**2)/(yerr**2)
+            #print x,y,yerr
+            #print "INTERPOLATE: ",predicted_delta(x)
+            chi2 += ((predicted_delta(x)-y)**2)/(yerr**2)
 
-    print chi2
+    print "-------- CHI2: %f" % (chi2)
 
     return chi2
 
 
-
-# For FNDA 1
-xis -= 0.00126
-xis = xis[::-1]
 
 
 ################################################################################
 # Set up minuit
 ################################################################################
 params_dict = {}
-params_dict['mybeta'] = {'fix':False,'start_val':0.15,'limits':(0.10,1.0),'error':0.01}
-params_dict['trial'] = {'fix':True,'start_val':0.15,'limits':(0.10,1.0),'error':0.01}
-params_dict['thisis'] = {'thisis':True,'start_val':0.15,'limits':(0.10,1.0),'error':0.01}
+params_dict['mybeta'] = {'fix':False,'start_val':0.25,'limits':(0.10,1.0),'error':0.01}
 
 params_names,kwd = fitutils.dict2kwd(params_dict,verbose=True)
 
@@ -211,7 +222,7 @@ m.print_param()
 
 
 m.migrad()
-m.hesse()
+#m.hesse()
 
 values = m.values
 
@@ -219,10 +230,19 @@ print values
 
 final_values = []
 final_values.append(values['mybeta'])
-
 c56,c54,sim_deltas = fitfunc(data,final_values,['mybeta'],params_dict)
 
+fake_values = []
+fake_values.append(0.5)
+c56fake,c54fake,sim_deltasfake = fitfunc(data,fake_values,['mybeta'],params_dict)
 
+fake_values = []
+fake_values.append(0.1)
+c56fake0,c54fake0,sim_deltasfake0 = fitfunc(data,fake_values,['mybeta'],params_dict)
+
+fake_values = []
+fake_values.append(0.25)
+c56fake1,c54fake1,sim_deltasfake1 = fitfunc(data,fake_values,['mybeta'],params_dict)
 
 
 
@@ -246,10 +266,14 @@ plt.ylim(0,1.10)
 plt.plot(xmp,ymp)
 
 
+# Plot the deltas
 plt.figure()
 #plt.plot(xpos,(c56/c54 - 1.0)*1000.0,'o')
-plt.plot(xpos,sim_deltas,'o')
+plt.plot(xpos,sim_deltas,'-',linewidth=3)
 plt.errorbar(xis,yis,yerr=yerris,markersize=10,fmt='o')
+plt.plot(xpos,sim_deltasfake,'-')
+plt.plot(xpos,sim_deltasfake0,'-')
+plt.plot(xpos,sim_deltasfake1,'-')
 plt.ylim(-20,20)
 
 plt.figure()
