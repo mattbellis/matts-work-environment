@@ -86,7 +86,7 @@ def main():
                     g = Grade_file_info("exam2")
                     g.set_grade_index(i)
 
-                elif r=='Final Exam' or r=='final exam' or r=='Final exam':
+                elif r=='Final Exam' or r=='final exam' or r=='Final exam' or r=='Final':
                     g = Grade_file_info("final_exam")
                     g.set_grade_index(i)
 
