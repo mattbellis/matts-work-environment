@@ -153,7 +153,7 @@ class Course_grades:
             self.hw.append(grade)
         elif grade_type=='exam' or grade_type=='Exam':
             self.exams.append(grade)
-        elif grade_type=='final_exam' or grade_type=='Finalexam' or grade_type=='finalexam' or grade_type=='FinalExam':
+        elif grade_type=='final_exam' or grade_type=='Finalexam' or grade_type=='finalexam' or grade_type=='FinalExam' or grade_type=='Final':
             self.final_exam.append(grade)
 
 ################################################################################
