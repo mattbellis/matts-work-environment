@@ -12,18 +12,14 @@ y = []
 for i,row in enumerate(reader):
 
     if i!=0:
-        # COUNTIES
-        #x.append(float(row[12]))
-        #y.append(float(row[11]))
-        # Boundaries
-        x.append(float(row[1]))
-        y.append(float(row[0]))
+        x.append(float(row[12]))
+        y.append(float(row[11]))
 
         print i
 
 x = np.array(x)
 y = np.array(y)
 
-plt.plot(x,y,'o',markersize=2)
+plt.plot(x,y,'o',markersize=20)
 plt.show()
 

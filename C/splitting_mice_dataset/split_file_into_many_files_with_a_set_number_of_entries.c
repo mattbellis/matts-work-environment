@@ -11,6 +11,8 @@ int main(int argc, char **argv)
     FILE *ifp = fopen(infilename, "r");
     FILE *ofp = NULL;
     float ra,dec,z;
+    float z_v,x_c,y_c,z_c;
+    char dummy[256];
 
     if (ifp == NULL) {
         printf("Can't open input file %s!",infilename);
@@ -19,13 +21,16 @@ int main(int argc, char **argv)
 
     int count = 0;
     int filecount = 0;
-    int nentries_per_file = 100000;
+    int nentries_per_file = 1000000;
 
-    while (fscanf(ifp, "%f,%f,%f",&ra,&dec,&z) != EOF) {
+    fscanf(ifp, "%s\t%s\t%s\t%s\t%s\t%s\t%s",&dummy,&dummy,&dummy,&dummy,&dummy,&dummy,&dummy);
+
+    //while (fscanf(ifp, "%f,%f,%f",&ra,&dec,&z) != EOF) {
+    while (fscanf(ifp, "%f\t%f\t%f\t%f\t%f\t%f\t%f",&ra,&dec,&z,&z_v,&x_c,&y_c,&z_c) != EOF) {
         //printf("%f %f %f\n",ra,dec,z);
         if (count%nentries_per_file==0)
         {
-            sprintf(outfilename,"outfile_nentries%d_%04d.dat",nentries_per_file,filecount);
+            sprintf(outfilename,"smaller_file_nentries%d_%04d.dat",nentries_per_file,filecount);
             printf("Opening %s\n",outfilename);
             ofp = fopen(outfilename, "w");
             if (ofp == NULL) {
@@ -34,7 +39,8 @@ int main(int argc, char **argv)
             }
             filecount += 1;
         }
-        fprintf(ofp,"%f %f %f\n",ra,dec,z);
+        //fprintf(ofp,"%f %f %f\n",ra,dec,z);
+        fprintf(ofp,"%f %f %f %f %f %f %f\n",ra,dec,z,z_v,x_c,y_c,z_c);
 
         if (count%100000==0)
             printf("%d\n",count);
