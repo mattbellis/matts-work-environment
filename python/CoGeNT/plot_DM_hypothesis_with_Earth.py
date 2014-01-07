@@ -4,6 +4,8 @@ import scipy.special as special
 import scipy.constants as constants
 import scipy.integrate as integrate
 
+from datetime import datetime,timedelta
+
 import matplotlib.patches as mpatches
 
 import chris_kelso_code as dmm
@@ -84,7 +86,7 @@ def main():
 
     # Sun
     for i in range(0,5):
-        ax2.add_artist(mpatches.Circle((.0, .0), 1.0+0.1*i,alpha=0.5-0.1*i,color='yellow'))
+        ax2.add_artist(mpatches.Circle((.0, .0), 1.0+0.3*i,alpha=0.2-0.02*i,color='yellow'))
 
     # Earth orbit
     #ax2.add_artist(mpatches.Circle((.0, .0), 8.00,alpha=0.1,color='black'))
@@ -181,17 +183,26 @@ def main():
         #smeared,smeared_x = cogent_convolve(Eee,dRdEr)
         #print smeared-dRdEr
 
-        leg_title = "day=%d" % (day)
-        ax1.plot(Eee,dRdEr,label=leg_title,color=color[i])
+        dt = datetime(2009, 1, 1, 0, 0, 0, 0) + timedelta(days=day) #
+        datestring = dt.strftime("%B %d")
+        leg_title = "%s" % (datestring)
+        #leg_title = "day=%d" % (day)
+        ax1.plot(Eee,dRdEr,label=leg_title,color=color[i],linewidth=4)
         #ax1.plot(Eee,smeared,'--',label='smeared')
 
         # Angular position of Earth
         # Call 3 o'clock = Jan 1st and rotate counter-clockwise
         radius = 8.0 # Earth orbit
         day_to_radians = np.pi*2.0*(365.0/360.0)
-        xearth = radius*np.cos(day_to_radians*day)
-        yearth = radius*np.sin(day_to_radians*day)
+        radians_earth = -day_to_radians*day
+        xearth = radius*np.cos(radians_earth)
+        yearth = radius*np.sin(radians_earth)
+
+        xtext = 1.0*radius*np.cos(radians_earth) - 1.5
+        ytext = 1.0*radius*np.sin(radians_earth) + 1.7
+
         ax2.add_artist(mpatches.Circle((xearth, yearth), 1.15,alpha=0.9,color=color[i]))
+        ax2.text(xtext,ytext,datestring)
 
     #ax0.set_xlabel('Er')
     #ax0.legend()
