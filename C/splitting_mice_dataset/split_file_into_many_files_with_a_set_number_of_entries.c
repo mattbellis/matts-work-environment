@@ -23,6 +23,7 @@ int main(int argc, char **argv)
     int filecount = 0;
     int nentries_per_file = 1000000;
 
+    // For the big file.
     fscanf(ifp, "%s\t%s\t%s\t%s\t%s\t%s\t%s",&dummy,&dummy,&dummy,&dummy,&dummy,&dummy,&dummy);
 
     //while (fscanf(ifp, "%f,%f,%f",&ra,&dec,&z) != EOF) {
