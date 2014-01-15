@@ -1,3 +1,8 @@
+################################################################################
+# A nice review of fitting with binned templates, can be found here:
+# http://hepunx.rl.ac.uk/~adye/thesis/html/node51.html
+################################################################################
+
 import numpy as np
 import matplotlib.pylab as plt
 import lichen.lichen as lch
@@ -45,11 +50,6 @@ def fitfunc(data,p,parnames,params_dict):
 ################################################################################
 def emlf_normalized_minuit(data,p,parnames,params_dict):
 
-    #print data
-
-    # Add up the data ``y" for the total number of events.
-    ndata = sum(data[0][1])
-
     flag = p[parnames.index('flag')]
 
     num_tot = 0.0
@@ -62,7 +62,6 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
     y = data[0][1]
     likelihood_func = (-y*np.log(tot_pdf)).sum()
 
-    #ret = likelihood_func - fitutils.pois(num_tot,ndata)
     ret = likelihood_func + num_tot
 
     return ret
@@ -144,10 +143,12 @@ ndata = sum(ypts)
 params_dict = {}
 params_dict['flag'] = {'fix':True,'start_val':0}
 params_dict['var_x'] = {'fix':True,'start_val':0,'limits':(ranges[0],ranges[1])}
-params_dict['num0'] = {'fix':False,'start_val':100,'limits':(0,ndata)}
-params_dict['num1'] = {'fix':False,'start_val':200,'limits':(0,ndata)}
+params_dict['num0'] = {'fix':False,'start_val':100,'limits':(0,ndata),'error':1}
+params_dict['num1'] = {'fix':False,'start_val':200,'limits':(0,ndata),'error':1}
 
 params_names,kwd = fitutils.dict2kwd(params_dict)
+
+kwd['errordef'] = 0.5
 
 data_and_pdfs = [data,template0,template1]
 
@@ -183,5 +184,3 @@ ax10.bar(template0[0]-binwidth/2.0,values['num1']*template1[1],color='r',width=b
 
 
 plt.show()
-
-
