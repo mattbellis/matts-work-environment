@@ -98,7 +98,8 @@ def main():
     z = content[index+2]
 
     #print convert(ra[0],dec[0],z[0])
-    print convert(ra,dec,z)
+    #print convert(ra,dec,z)
+    print convert(0,0,1.2)
 
 
 ################################################################################
