@@ -1,0 +1,12 @@
+import os
+
+env = Environment()
+
+# Grab my local environment variable PATH so I can find nvcc
+env = Environment(ENV = {'PATH' : os.environ['PATH']})
+
+env['CC'] = ['gcc']
+
+env.Append(CCFLAGS=['-Wall'])
+
+env.Program(target='test.o', source='test.cc')
