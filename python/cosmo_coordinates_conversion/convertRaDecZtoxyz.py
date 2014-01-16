@@ -75,14 +75,15 @@ def convert(ra, dec, z):
 
     ### convert redshift to Mpc
     zMpc = getMpcFromRedshift(z, p0, p1, p2)
-    
+
+    print "zMpc: ",zMpc
     
     ### convert ra,dec, Mpc to x,y,z in Mpc
-    x, y, zMpc = convertRaDecMpcToXYZ(ra, dec, zMpc)
+    xcart, ycart, zcart = convertRaDecMpcToXYZ(ra, dec, zMpc)
     
-    print 'converted ra=', ra, 'dec=', dec, 'and z=', z, '\n to x=', x, 'y=', y, 'z=', z, 'in Mpc. ' 
+    print 'converted ra=', ra, 'dec=', dec, 'and z=', z, '\n to x=', xcart, 'y=', ycart, 'z=', zcart, 'in Mpc. ' 
     
-    return x, y, zMpc
+    return xcart, ycart, zcart
 
 
 ################################################################################
@@ -90,16 +91,23 @@ def main():
 
     infile = open(sys.argv[1])
     content = np.array(infile.read().split()).astype('float')
-    ncolumns = 3
+    #ncolumns = 3
+    ncolumns = 7
     nentries = len(content)
     index = np.arange(0,nentries,ncolumns)
     ra = content[index]
     dec = content[index+1]
     z = content[index+2]
+    z_v = content[index+3]
+    x_c = content[index+4]
+    y_c = content[index+5]
+    z_c = content[index+6]
 
-    #print convert(ra[0],dec[0],z[0])
+    print "Results:"
+    print convert(ra[0],dec[0],z[0])
+    print x_c[0],y_c[0],z_c[0]
     #print convert(ra,dec,z)
-    print convert(0,0,1.2)
+    #print convert(0,0,1.2)
 
 
 ################################################################################

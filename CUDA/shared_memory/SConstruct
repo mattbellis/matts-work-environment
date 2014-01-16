@@ -10,5 +10,6 @@ env['CC'] = ['nvcc']
 env.Program(target='hello_world_shared_0', source=['hello_world_shared_0.cu'])
 env.Program(target='dobbs_example', source=['dobbs_example.cu'])
 env.Program(target='hello_world_hist_shared_0', source=['hello_world_hist_shared_0.cu'])
+env.Program(target='testing_size_of_shared_memory', source=['testing_size_of_shared_memory.cu'])
 
 
