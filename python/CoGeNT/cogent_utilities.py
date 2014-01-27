@@ -297,8 +297,8 @@ def cogent_convolve(x,y):
     convolving_pts /= convolving_pts.sum()
     '''
     yc = np.zeros(npts)
-    print "x: ",x
-    print "y: ",y
+    #print "x: ",x
+    #print "y: ",y
     if type(x)!=np.ndarray:
         x = np.array([x,x+0.0001])
     if type(y)!=np.ndarray:
