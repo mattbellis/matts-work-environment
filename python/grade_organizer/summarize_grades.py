@@ -229,15 +229,15 @@ def main():
         ########################################################################
         # For testing
         ########################################################################
-        '''
-        subject = "Test of PHYS 110 grade summary email system."
+        #'''
+        subject = "Test of grade summary email system."
         msg_body = "Hi %s %s,\n\n" % (s.student_name[1],s.student_name[0])
-        msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades for PHYS 110.\n"
+        msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades.\n"
         msg_body += "\n\tIf I've matched up your name with this email address, "
-        msg_body += "could you please either email me back or let me know in class on Thursday.\n"
+        msg_body += "could you please let me know in the next class.\n"
         msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well.\n"
         msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
-        '''
+        #'''
 
         #print msg_body
         #print s.email
