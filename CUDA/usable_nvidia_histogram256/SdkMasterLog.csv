@@ -1,0 +1,4 @@
+histogram64, Throughput = 1289.6576 MB/s, Time = 0.05204 s, Size = 67108864 Bytes, NumDevsUsed = 1, Workgroup = 64
+histogram256, Throughput = 447.9077 MB/s, Time = 0.14983 s, Size = 67108864 Bytes, NumDevsUsed = 1, Workgroup = 192
+histogram64, Throughput = 1289.8373 MB/s, Time = 0.05203 s, Size = 67108864 Bytes, NumDevsUsed = 1, Workgroup = 64
+histogram256, Throughput = 447.8765 MB/s, Time = 0.14984 s, Size = 67108864 Bytes, NumDevsUsed = 1, Workgroup = 192

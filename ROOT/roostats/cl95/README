@@ -1,0 +1,6 @@
+root -l 
+
+.L roostats_cl95.C+
+
+double ynum5 = roostats_cl95(0.639*1e6,1e5,0.45,0.02,0.5,0.5,1.0,1)
+double ynum6 = roostats_cl95((1.0/0.639)*3e6,2e5,0.45,0.02,0.5,0.5,1.0,1)
