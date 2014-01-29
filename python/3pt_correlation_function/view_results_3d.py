@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pylab as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 import sys
 
@@ -82,3 +83,38 @@ rrr = rrr.astype('float')/rrrnorm
 
 #w3 = (ddd - 3*ddr + 3*drr - rrr)/rrr.astype('float')
 w3 = (ddd - 3*ddr + 3*drr - rrr)
+
+binwidth = 48.0/16
+x = []
+y = []
+z = []
+sizes = []
+for i in range(0,16):
+    for j in range(0,16):
+        for k in range(0,16):
+            if w3[i][j][k]!=0:
+                x.append(i*binwidth)
+                y.append(j*binwidth)
+                z.append(k*binwidth)
+                #print w3[i][j][k]
+                #print np.log10(w3[i][j][k])+20
+                sizes.append(3*(np.log10(w3[i][j][k])+20))
+                #sizes.append(10000*w3[i][j][k])
+
+fig = plt.figure(figsize=(7,5),dpi=100)
+ax = fig.add_subplot(1,1,1)
+ax = fig.gca(projection='3d')
+plt.subplots_adjust(top=0.98,bottom=0.02,right=0.98,left=0.02)
+#ax.scatter([1,2],[1,2],[1,2],s=[200,100],color='b')
+ax.scatter(x,y,z,s=sizes,c=sizes,cmap=plt.cm.hsv)
+ax.set_xlabel('Side A of triangle [Mpc]')
+ax.set_ylabel('Side B of triangle [Mpc]')
+ax.set_zlabel('Side C of triangle [Mpc]')
+
+ax.set_xlim(0,45)
+ax.set_ylim(0,45)
+ax.set_zlim(0,45)
+
+plt.savefig('3pc_histo.png')
+
+plt.show()
