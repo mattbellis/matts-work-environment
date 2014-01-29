@@ -81,8 +81,8 @@ ddr = ddr.astype('float')/ddrnorm
 drr = drr.astype('float')/drrnorm
 rrr = rrr.astype('float')/rrrnorm
 
-#w3 = (ddd - 3*ddr + 3*drr - rrr)/rrr.astype('float')
-w3 = (ddd - 3*ddr + 3*drr - rrr)
+w3 = (ddd - 3*ddr + 3*drr - rrr)/rrr.astype('float')
+#w3 = (ddd - 3*ddr + 3*drr - rrr)
 
 binwidth = 48.0/16
 x = []
@@ -96,9 +96,10 @@ for i in range(0,16):
                 x.append(i*binwidth)
                 y.append(j*binwidth)
                 z.append(k*binwidth)
-                #print w3[i][j][k]
+                print w3[i][j][k]
                 #print np.log10(w3[i][j][k])+20
-                sizes.append(3*(np.log10(w3[i][j][k])+20))
+                #sizes.append(3*(np.log10(w3[i][j][k])+20))
+                sizes.append(15*(w3[i][j][k]))
                 #sizes.append(10000*w3[i][j][k])
 
 fig = plt.figure(figsize=(7,5),dpi=100)
