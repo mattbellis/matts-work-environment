@@ -20,12 +20,12 @@ for line in infile:
     # Split the line up by whitespace delimiters and cast all 
     # the entries as floats.
     #vals = np.array(line.split()).astype('float')
-    #vals = np.array(line.split(',')).astype('float')
-    vals = np.array(line.split()).astype('float')
+    vals = np.array(line.split(',')).astype('float')
+    #vals = np.array(line.split()).astype('float')
 
     if len(vals)>1:
         xpts.append(vals[0])
-        ypts.append(vals[1])
+        ypts.append(-vals[1])
 
     #tot += vals[1]
     #print "%f %f" % (vals[0],tot)
@@ -35,7 +35,7 @@ for line in infile:
 fig = plt.figure()
 ax = plt.subplot(1,1,1)
 
-heatmap, xedges, yedges = np.histogram2d(xpts, ypts, bins=500)
+heatmap, xedges, yedges = np.histogram2d(ypts, xpts, bins=500)
 
 heatmap = np.log10(heatmap)
 
