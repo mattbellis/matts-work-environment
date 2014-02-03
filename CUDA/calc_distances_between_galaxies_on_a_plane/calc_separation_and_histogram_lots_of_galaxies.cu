@@ -1,0 +1,500 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+//#include <iostream>
+//#include <fstream>
+//#include <string>
+//// notes
+
+//using namespace std;
+
+///////////////////////////////////////////////////////////////////////////////
+// GPU code to calculate the bin number.
+// This assumes that you have normalized your data that you want to plot to 
+// lie between 0.0 and 1.0. 
+// Outside this range is classified as overflow or underflow.
+///////////////////////////////////////////////////////////////////////////////
+__device__ int get_bin_num(float normalized_val, int nbins)
+{
+    // The data goes in bins number 1 to nbins
+    // 0 is the underflow
+    // nbins-1 is the overflow
+    //
+    // Remember that we have underflow (0) and overflow (nbins-1) 
+    
+    if (normalized_val>=1.0)
+    {
+        // If it is greater than or equal to 1.0, put it in the overflow bin
+        return nbins-1;
+    }
+    else if (normalized_val<0.0)
+    {
+        return 0;
+    }
+    else if (normalized_val==0.0)
+    {
+        return 1;
+    }
+    
+
+    // Do this calculation only if it fails the other conditionals.
+    // I think this buys us a few CPU cycles.
+    int ret = (int)(normalized_val*(nbins-2)) + 1;    
+    return ret;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+// GPU code to calculate the separation between two galaxies given the 
+// right ascenscion and declanation.
+///////////////////////////////////////////////////////////////////////////////
+//__global__ void CalcSep(float* raA, float* decA, int ngals, int nthreads, int* hist_array, float hist_lo, float hist_hi, int hist_nbins)
+__global__ void CalcSep(float* raA_0, float* sin_decA_0, float* cos_decA_0, \
+        float* raA_1, float* sin_decA_1, float* cos_decA_1, \
+        int ngals, int nthreads, int* hist_array, float hist_lo, float hist_hi, int hist_nbins)
+{
+    //does all the i's simultaneously - one for each thread 
+    int ix = blockDim.x * blockIdx.x + threadIdx.x;
+
+    // Get normalization term
+    float norm = hist_hi-hist_lo;
+    float norm_val = 0;
+    int bin = 0;
+    int hist_array_bin_block = ix*hist_nbins;
+    int hist_array_bin = 0;
+
+    float sep=0;
+    float sin_dec_ix,sin_dec_ij;
+    float cos_dec_ix,cos_dec_ij;
+    float ra_ix, ra_ij;
+    // Do the ix ``column"
+
+    sin_dec_ix = sin_decA_0[ix];
+    cos_dec_ix = cos_decA_0[ix];
+    ra_ix = raA_0[ix];
+
+    for(int ij=ix+1;ij<ngals;ij++)
+    {
+
+        sin_dec_ij = sin_decA_1[ij];
+        cos_dec_ij = cos_decA_1[ij];
+        ra_ij = raA_1[ij];
+
+        sep = acos( sin_dec_ix*sin_dec_ij + cos_dec_ix*cos_dec_ij*cos(fabs(ra_ix-ra_ij)) );
+
+        norm_val = (sep-hist_lo)/norm;
+        bin = get_bin_num(norm_val,hist_nbins);
+        hist_array_bin = hist_array_bin_block + bin;
+
+        // If we passed 0 bins or -x on the command line, don't try
+        // to fill the super array.
+        if (hist_nbins>2)
+        {
+            hist_array[hist_array_bin]++;
+        }
+
+    }//loop over gals
+
+    // Then the ngals-ix ``column"
+    ix = (ngals - 1) - ix;
+    sin_dec_ix = sin_decA_0[ix];
+    cos_dec_ix = cos_decA_0[ix];
+    ra_ix = raA_0[ix];
+    for(int ij=ix+1;ij<ngals;ij++)
+    {
+        sin_dec_ij = sin_decA_1[ij];
+        cos_dec_ij = cos_decA_1[ij];
+        ra_ij = raA_1[ij];
+
+        sep = acos( sin_dec_ix*sin_dec_ij + cos_dec_ix*cos_dec_ij*cos(fabs(ra_ix-ra_ij)) );
+
+        norm_val = (sep-hist_lo)/norm;
+        bin = get_bin_num(norm_val,hist_nbins);
+        hist_array_bin = hist_array_bin_block + bin;
+
+        // If we passed 0 bins or -x on the command line, don't try
+        // to fill the super array.
+        if (hist_nbins>2)
+        {
+            hist_array[hist_array_bin]++;
+        }
+    }//loop over gals
+}
+///////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////
+
+
+////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
+//Host code
+int main(int argc, char **argv)
+{
+    printf("In main.....\n");
+
+clock_t loopstart = clock();
+    int ngals = 2000;
+    int nbins = 100;
+    float hist_lo = 0.0;
+    float hist_hi = 2.0;
+
+    // Declare memory for the master histogram array.
+    int nbins_with_overflow = nbins + 2;
+    int *h_hist_array_compressed = 0;
+    h_hist_array_compressed = (int*)malloc(nbins_with_overflow*sizeof(int));
+    if (0==h_hist_array_compressed)
+    {
+        printf("Couldn't allocate memory on host for h_hist_array_compressed....\n");
+        return 1;
+    }
+
+
+    int ngals_per_calculation_block = 10000;
+
+    //allocate total arrays
+    printf("Allocating memory for arrays\n");
+
+    float *h_raA_total = 0;
+    float *h_decA_total = 0;
+
+    float *h_sin_decA_total = 0;
+    float *h_cos_decA_total = 0;
+
+    h_raA_total = (float*)malloc(1000000*sizeof(float));
+    h_decA_total = (float*)malloc(1000000*sizeof(float));
+
+    h_sin_decA_total = (float*)malloc(1000000*sizeof(float));
+    h_cos_decA_total = (float*)malloc(1000000*sizeof(float));
+
+    printf("Allocated memory for arrays\n");
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Grab the number of galaxies from the command line *if* they have 
+    // been specified.
+    char* filename;
+    if (argc>1)
+    {
+        filename = argv[1];
+        ngals = atoi(argv[2]);
+        if (argc>3)
+        {
+            nbins = atoi(argv[3]);
+        }
+    }
+    else
+    {
+        printf("Usage: %s <number of galaxies> <number of histogram bins>\n",\
+                argv[0]);
+        printf("\nDefault is 1000 galaxies and 100 bins\n\n"); 
+    }
+
+    printf ("Parsed the command line\n");
+    ///////////////////////////////////////////////////////////////////////////
+
+    ///////////////////////////////////////////////////////////////////////////
+    // Initialise input vectors.
+    // Read in galaxies from file.
+    ///////////////////////////////////////////////////////////////////////////
+    //ifstream infile(filename.c_str());
+
+    FILE *infile;
+    infile = fopen(filename,"r");
+
+    printf("%s\n", filename);
+
+    int i = 0;
+    
+    while (fscanf(infile, "%f %f", &h_raA_total[i], &h_decA_total[i]) != EOF)
+    {
+
+        h_cos_decA_total[i] = cos(h_decA_total[i]);
+        h_sin_decA_total[i] = sin(h_decA_total[i]);
+
+        i += 1;
+
+        if (i>ngals) break;
+
+    }
+    ngals = i-1;
+
+    // Check to make sure we haven't read in too many galaxies.
+    if (ngals>1000000)
+    {
+        printf( "Too many galaxies!\n");
+        printf( "We only made space for 1e6!\n");
+        exit(-1);
+    }
+
+    // How many times will we loop over the subblocks?
+    int nsubblocks = ngals/ngals_per_calculation_block;
+
+    if (ngals%ngals_per_calculation_block != 0)
+    {
+        printf("ngals must be an integer multiple of %d\n",ngals_per_calculation_block);
+        printf("ngals: %d\tngals_per_calculation_block: %d\tmodulo: %d\n", ngals, ngals_per_calculation_block, ngals%ngals_per_calculation_block);
+        exit(-1);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    //allocate vectors in host memory
+    float* h_raA_0 = 0; 
+    float* h_decA_0 = 0;
+    float* h_sin_decA_0 = 0; 
+    float* h_cos_decA_0 = 0;
+
+    float* h_raA_1 = 0; 
+    float* h_decA_1 = 0;
+    float* h_sin_decA_1 = 0; 
+    float* h_cos_decA_1 = 0;
+    ///////////////////////////////////////////////////////////////////////////
+
+    // Define histo arrays and memory info and the like
+    size_t gal_mem_needed = ngals_per_calculation_block * sizeof(float);
+
+    // Allocate memory for the cos and sin of the right asenscion. This saves
+    // us some time rather than recalcuating this over and over on the GPUs.
+    h_raA_0 = (float*)malloc(gal_mem_needed);
+    h_decA_0 = (float*)malloc(gal_mem_needed);
+    h_cos_decA_0 = (float*)malloc(gal_mem_needed);
+    h_sin_decA_0 = (float*)malloc(gal_mem_needed);
+
+    h_raA_1 = (float*)malloc(gal_mem_needed);
+    h_decA_1 = (float*)malloc(gal_mem_needed);
+    h_cos_decA_1 = (float*)malloc(gal_mem_needed);
+    h_sin_decA_1 = (float*)malloc(gal_mem_needed);
+
+    if (0==h_raA_0 || 0==h_sin_decA_0 || 0==h_cos_decA_0 || 0==h_raA_1 || 0==h_sin_decA_1 || 0==h_cos_decA_1)
+    {
+        printf("Couldn't allocate memory on host....\n");
+        return 1;
+    }
+    ///////////////////////////////////////////////////////////////////////////
+    //allocate vectors in device memory
+    float* d_raA_0=0;
+    float* d_sin_decA_0=0;
+    float* d_cos_decA_0=0;
+
+    float* d_raA_1=0;
+    float* d_sin_decA_1=0;
+    float* d_cos_decA_1=0;
+
+
+    cudaMalloc(&d_raA_0, gal_mem_needed);
+    cudaMalloc(&d_cos_decA_0, gal_mem_needed);
+    cudaMalloc(&d_sin_decA_0, gal_mem_needed);
+    cudaMalloc(&d_raA_1, gal_mem_needed);
+    cudaMalloc(&d_cos_decA_1, gal_mem_needed);
+    cudaMalloc(&d_sin_decA_1, gal_mem_needed);
+
+    if (0==d_raA_0 || 0==d_cos_decA_0 || 0==d_sin_decA_0 || 0==d_raA_1 || 0==d_cos_decA_1 || 0==d_sin_decA_1)
+    {
+        printf("Couldn't allocate memory on device....\n");
+        return 1;
+    }
+
+    ///////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+
+    for (int j=0;j<nsubblocks;j++)
+    {
+        for (int k=0;k<nsubblocks;k++)
+        {
+            printf("nsubblocks: %d\t\t%d% d\n",nsubblocks,j,k);
+            ///////////////////////////////////////////////////////////////////////////
+            // Define histo arrays and memory info and the like
+
+            // How many threads will there be?
+            int nthreads = ngals_per_calculation_block/2;
+            printf("nthreads: %d\n",nthreads);
+
+            // From here on out, use the number of bins with underflow/overflow added in
+            // to the calculation.
+            int nbins_in_super_hist_array = nthreads*nbins_with_overflow;
+
+            size_t hist_mem_needed = nbins_in_super_hist_array*sizeof(int);
+
+            int *h_hist_array = 0;
+            h_hist_array = (int*)malloc(hist_mem_needed);
+
+            ///////////////////////////////////////////////////////////////////////////
+
+            if (0==h_hist_array)
+            {
+                printf("Couldn't allocate memory on host....\n");
+                return 1;
+            }
+
+            ///////////////////////////////////////////////////////////////////////////
+            int *d_hist_array;
+            cudaMalloc(&d_hist_array, hist_mem_needed);
+            if (0==d_hist_array)
+            {
+                printf("Couldn't allocate memory on device....\n");
+                return 1;
+            }
+
+
+            ///////////////////////////////////////////////////////////////////////////
+            ///////////////////////////////////////////////////////////////////////////
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Copy over the subblock of galaxy coordinates.
+            ///////////////////////////////////////////////////////////////////////////
+            int gal0_lo = ngals_per_calculation_block*j;
+            int gal0_hi = ngals_per_calculation_block*(j+1);
+
+            int gal1_lo = ngals_per_calculation_block*k;
+            int gal1_hi = ngals_per_calculation_block*(k+1);
+
+            int gal_count = 0;
+            for (int gal0=gal0_lo;gal0<gal0_hi;gal0++)
+            {
+                h_raA_0[gal_count] = h_raA_total[gal0];
+
+                h_cos_decA_0[gal_count] = h_cos_decA_total[gal0];
+                h_sin_decA_0[gal_count] = h_sin_decA_total[gal0];
+
+                gal_count += 1;
+            }
+
+            gal_count = 0;
+            for (int gal1=gal1_lo;gal1<gal1_hi;gal1++)
+            {
+                h_raA_1[gal_count] = h_raA_total[gal1];
+
+                h_cos_decA_1[gal_count] = h_cos_decA_total[gal1];
+                h_sin_decA_1[gal_count] = h_sin_decA_total[gal1];
+
+                gal_count += 1;
+            }
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Zero out the super-array that will hold the histogram entries
+            // for each thread.
+            printf("nbins_in_super_hist_array: %d\n",nbins_in_super_hist_array);
+            for (int i=0;i<nbins_in_super_hist_array;i++)
+            {
+                h_hist_array[i]=0.0;
+            }
+            ///////////////////////////////////////////////////////////////////////////
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Copy vectors from host to device memory.
+            cudaMemcpy(d_raA_0,  h_raA_0,  gal_mem_needed, cudaMemcpyHostToDevice); 
+            cudaMemcpy(d_raA_1,  h_raA_1,  gal_mem_needed, cudaMemcpyHostToDevice); 
+            //cudaMemcpy(d_decA, h_decA, gal_mem_needed, cudaMemcpyHostToDevice); 
+
+            cudaMemcpy(d_sin_decA_0, h_sin_decA_0, gal_mem_needed, cudaMemcpyHostToDevice); 
+            cudaMemcpy(d_cos_decA_0, h_cos_decA_0, gal_mem_needed, cudaMemcpyHostToDevice); 
+            cudaMemcpy(d_sin_decA_1, h_sin_decA_1, gal_mem_needed, cudaMemcpyHostToDevice); 
+            cudaMemcpy(d_cos_decA_1, h_cos_decA_1, gal_mem_needed, cudaMemcpyHostToDevice); 
+
+            cudaMemcpy(d_hist_array, h_hist_array, hist_mem_needed, cudaMemcpyHostToDevice); 
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Calculate our thread/grid/block sizes.
+            int threadsPerBlock = 256;
+
+            // IS THIS CALCULATION BEING DONE PROPERLY? OPTIMALLY?????
+            int blocksPerGrid = (nthreads + threadsPerBlock - 1) / threadsPerBlock; //???????
+            printf("threadsPerBlock: %d\t\tblocksPerGrid: %d\n",threadsPerBlock,blocksPerGrid);
+
+            // Set up the cuda timer. 
+            // Ccan't use simple CPU timer since that would only time the kernel launch overhead. 
+            // Need to make sure all threads have finished before stop the timer 
+            // so can synchronise threads before and after kernel launch if using cpu timer? 
+            // I didn't get sensible results when I've tried that though. 
+
+            cudaEvent_t cudastart, cudaend;
+            cudaEventCreate(&cudastart); 
+            cudaEventCreate(&cudaend);
+
+            //record the start time
+            cudaEventRecord(cudastart,0);
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Run the kernel! 
+            //CalcSep<<<blocksPerGrid, threadsPerBlock>>>(d_raA, d_decA, ngals, nthreads, d_hist_array, hist_lo, hist_hi, nbins_with_overflow);
+            //CalcSep<<<blocksPerGrid, threadsPerBlock>>>(d_raA, d_sin_decA, d_cos_decA, ngals_per_calculation_block, nthreads, d_hist_array, hist_lo, hist_hi, nbins_with_overflow);
+            CalcSep<<<blocksPerGrid, threadsPerBlock>>>(d_raA_0, d_sin_decA_0, d_cos_decA_0, \
+                    d_raA_1, d_sin_decA_1, d_cos_decA_1, \
+                    ngals_per_calculation_block, nthreads, d_hist_array, hist_lo, hist_hi, nbins_with_overflow);
+
+            // Copy the info back off the GPU to the host.
+            cudaMemcpy(h_hist_array, d_hist_array, hist_mem_needed, cudaMemcpyDeviceToHost); 
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Record the end time
+            cudaEventRecord(cudaend,0);
+            cudaEventSynchronize(cudaend);
+
+            ///////////////////////////////////////////////////////////////////////////
+            // How long did the kernel take? this gives time in ms
+            float cudaelapsed=0;
+            cudaEventElapsedTime(&cudaelapsed, cudastart, cudaend);
+            printf("elapsed time for GPU in ms: %f\n",cudaelapsed);
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Collapse the super histogram array to a simple histogram array and write
+            // it out to histogram_array.txt
+            int sum = 0;
+            int master_bin = 0;
+            for (int i=0;i<nbins_in_super_hist_array;i++)
+            {
+                //printf("%d ",h_hist_array[i]);
+                sum += h_hist_array[i];
+
+                master_bin = i%nbins_with_overflow;
+
+                //printf("%d\n",master_bin);
+                h_hist_array_compressed[master_bin] += h_hist_array[i];
+            }
+            printf("\ntotal: %d\n",sum);
+
+            ///////////////////////////////////////////////////////////////////////////
+            // Free up the device memory.
+            cudaEventDestroy(cudastart);
+            cudaEventDestroy(cudaend);
+
+            cudaFree(d_hist_array);
+            free(h_hist_array);
+
+
+        }
+    }
+
+    // Free up the device memory.
+    cudaFree(d_raA_0); 
+    cudaFree(d_sin_decA_0);
+    cudaFree(d_cos_decA_0);
+    cudaFree(d_raA_1); 
+    cudaFree(d_sin_decA_1);
+    cudaFree(d_cos_decA_1);
+
+    // Free up the host memory.
+    free(h_raA_0); 
+    free(h_decA_0); 
+    free(h_sin_decA_0); 
+    free(h_cos_decA_0); 
+    free(h_raA_1); 
+    free(h_decA_1); 
+    free(h_sin_decA_1); 
+    free(h_cos_decA_1); 
+
+    FILE *outfile; 
+    // write to file (add text to a file or create a file if it does not exist. 
+    outfile = fopen("histogram_array.txt","w+"); 
+    // Print out the compressed array
+    fprintf(outfile,"%f %f\n",hist_lo,hist_hi);
+    for (int i=0;i<nbins_with_overflow;i++)
+    {
+        fprintf(outfile,"%d ",h_hist_array_compressed[i]);
+    }
+    fprintf(outfile,"\n");
+    fclose(outfile); 
+
+    free(h_hist_array_compressed);
+clock_t loopend = clock();
+float loopelapsed = (float)(loopend-loopstart);
+printf("elapsed time for CPU in ms: %f \n", loopelapsed/CLOCKS_PER_SEC*1000);    
+
+}
