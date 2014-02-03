@@ -176,8 +176,12 @@ def main():
             nmore_exams = 0
 
         nmore_final_exams = 0
+        # Uncomment this if you don't want the hypothetical exam grades
+        # to be calculated.
+        '''
         if len(s.grades.final_exam)==0:
             nmore_final_exams = 1
+        '''
 
         for j in range(0,nmore_exams):
             dum_grade = Grade('exam',-1,70.0,100.0,0.0,0.0,False,'3/12/2012')
@@ -229,7 +233,7 @@ def main():
         ########################################################################
         # For testing
         ########################################################################
-        #'''
+        '''
         subject = "Test of grade summary email system."
         msg_body = "Hi %s %s,\n\n" % (s.student_name[1],s.student_name[0])
         msg_body += "\tI'm testing out this semi-automated system to keep you up to date on your grades.\n"
@@ -237,7 +241,7 @@ def main():
         msg_body += "could you please let me know in the next class.\n"
         msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well.\n"
         msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
-        #'''
+        '''
 
         #print msg_body
         #print s.email
