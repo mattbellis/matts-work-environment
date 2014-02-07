@@ -10,6 +10,8 @@ int main(int argc, char **argv)
 
     char outfilename[256];
     FILE *ofp[256];
+    float zloval[256];
+    float zhival[256];
     float ra,dec,z;
     float z_v,x_c,y_c,z_c;
     char dummy[256];
@@ -21,18 +23,22 @@ int main(int argc, char **argv)
 
     int count = 0;
     int filecount = 0;
+    int j=0;
+    float zstep = 0.005;
     float zwidth = 0.01;
     float zmin = 0.0;
     float zmax = 1.5;
     float iz = 0;
 
-    filecount = 0;
-    for (iz=zmin;iz<zmax;iz+=zwidth)
+    int nfiles = 0;
+    for (iz=zmin;iz<zmax;iz+=zstep)
     {
-        sprintf(outfilename,"smaller_file_zlo%3.2f_zhi%3.2f.dat",iz,iz+zwidth);
+        zloval[nfiles] = iz;
+        zhival[nfiles] = iz+zwidth;
+        sprintf(outfilename,"smaller_file_zlo%4.3f_zhi%4.3f.dat",zloval[nfiles],zhival[nfiles]);
         printf("Opening %s\n",outfilename);
-        ofp[filecount] = fopen(outfilename, "w");
-        filecount += 1;
+        ofp[nfiles] = fopen(outfilename, "w");
+        nfiles += 1;
     }
 
     //exit(0);
@@ -47,11 +53,15 @@ int main(int argc, char **argv)
     while (fscanf(ifp, "%f\t%f\t%f\t%f\t%f\t%f\t%f",&ra,&dec,&z,&z_v,&x_c,&y_c,&z_c) != EOF) {
        // printf("%f %f %f\n",ra,dec,z);
         
-        filecount = (int)((((100*z)/(100*zwidth))));
-        //printf("%f %d\n",z,filecount);
-        if (z<zmax)
+        for (j=0;j<nfiles;j++)
         {
-            fprintf(ofp[filecount],"%f %f %f %f %f %f %f\n",ra,dec,z,z_v,x_c,y_c,z_c);
+        //filecount = (int)((((100*z)/(100*zstep))));
+        //printf("%f %d\n",z,filecount);
+        if (z>=zloval[j] && z<=zhival[j])
+        {
+            fprintf(ofp[j],"%f %f %f %f %f %f %f\n",ra,dec,z,z_v,x_c,y_c,z_c);
+            break;
+        }
         }
 
         //if (count>100)
