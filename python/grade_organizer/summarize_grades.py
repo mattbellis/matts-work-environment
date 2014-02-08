@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 from grade_utilities import *
 import argparse
 
+import plotly
+
+
+
 ################################################################################
 # main
 ################################################################################
@@ -44,9 +48,15 @@ def main():
     infile = csv.reader(open(filename, 'rb'), delimiter=',', quotechar='#')
 
     ############################################################################
+    py = plotly.plotly(username_or_email="MatthewBellis", key="d6h4et78v5")
+    ############################################################################
 
     grade_titles = ["Quizzes", "Homeworks","Exam", "Final exam", "Final grade"]
     student_grades = [[],[],[],[],[]]
+    hw_xvals = []
+    hw_grades = []
+    exam_grades = []
+    exam_xvals = []
 
     # Grade weighting
     final_grade_weighting = [0.10,0.25,0.35,0.30]
@@ -118,6 +128,7 @@ def main():
         # Grab the hw info
         #if line_num>=4:
         if line_num>=4:
+            ihw = 0 
             row_len = len(row)
             student_name = [row[2],row[3]]
             #email = "z%s@students.niu.edu" % (row[1])
@@ -149,6 +160,14 @@ def main():
                 #print g.internal_index
                 grade = Grade(g.grade_type,g.internal_index,score,g.max_grade,g.add,g.subtract,is_late,g.date)
                 #print "%s %3.1f" % (grade.grade_type, grade.score)
+                if (grade.grade_type=='hw'):
+                    hw_grades.append(grade.grade_pct())
+                    hw_xvals.append(grade.date)
+
+                if (grade.grade_type=='exam'):
+                    exam_grades.append(grade.grade_pct())
+                    exam_xvals.append(grade.date)
+
 
                 cg.add_grade(grade,grade.grade_type)
 
@@ -159,7 +178,22 @@ def main():
 
         line_num += 1
 
-         
+    print hw_grades
+    print hw_xvals
+    s={'type':'box' ,'jitter':0.1, 'boxpoints':'all'}
+    l={'title': 'Grade example'}
+
+    #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
+    data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
+    data1 = {'y':exam_grades,'x':exam_xvals,'name':"Quizzes"}
+    response = py.plot([data0,data1],style=s,layout=l,filename='grade_example',fileopt='overwrite')
+    url = response['url']
+    filename = response['filename']
+
+    print response
+    print url
+    print filename
+
     ############################################################################
     # Print out the summary
     ############################################################################
