@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 from grade_utilities import *
 import argparse
 
+import datetime
+
 import plotly
 
 
@@ -57,6 +59,10 @@ def main():
     hw_grades = []
     exam_grades = []
     exam_xvals = []
+    quiz_grades = []
+    quiz_xvals = []
+    final_exam_xvals = []
+    final_exam_grades = []
 
     # Grade weighting
     final_grade_weighting = [0.10,0.25,0.35,0.30]
@@ -159,14 +165,23 @@ def main():
                 #print is_late
                 #print g.internal_index
                 grade = Grade(g.grade_type,g.internal_index,score,g.max_grade,g.add,g.subtract,is_late,g.date)
-                #print "%s %3.1f" % (grade.grade_type, grade.score)
+                print "%s %3.1f" % (grade.grade_type, grade.score)
                 if (grade.grade_type=='hw'):
                     hw_grades.append(grade.grade_pct())
-                    hw_xvals.append(grade.date)
+                    #hw_xvals.append(grade.date)
+                    hw_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1])))
 
                 if (grade.grade_type=='exam'):
                     exam_grades.append(grade.grade_pct())
-                    exam_xvals.append(grade.date)
+                    exam_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1])))
+
+                if (grade.grade_type=='quiz'):
+                    quiz_grades.append(grade.grade_pct())
+                    quiz_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1])))
+
+                if (grade.grade_type=='final_exam'):
+                    final_exam_grades.append(grade.grade_pct())
+                    final_exam_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1])))
 
 
                 cg.add_grade(grade,grade.grade_type)
@@ -185,8 +200,10 @@ def main():
 
     #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
     data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
-    data1 = {'y':exam_grades,'x':exam_xvals,'name':"Quizzes"}
-    response = py.plot([data0,data1],style=s,layout=l,filename='grade_example',fileopt='overwrite')
+    data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
+    data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes"}
+    data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
+    response = py.plot([data0,data1,data2,data3],style=s,layout=l,filename='grade_example',fileopt='overwrite')
     url = response['url']
     filename = response['filename']
 
