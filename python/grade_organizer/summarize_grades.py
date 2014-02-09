@@ -196,7 +196,8 @@ def main():
     print hw_grades
     print hw_xvals
     s={'type':'box' ,'jitter':0.1, 'boxpoints':'all'}
-    axesstyle = {'range':[datetime.datetime(2014,1,15),datetime.datetime(2014,2,15)]}
+    #axesstyle = {'range':[datetime.datetime(2014,1,15),datetime.datetime(2014,2,15)]}
+    axesstyle = {}
     l={'title': 'Grade example','xaxis':axesstyle}
 
     #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
