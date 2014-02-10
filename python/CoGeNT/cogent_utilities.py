@@ -2,6 +2,8 @@ import numpy as np
 #from fitting_utilities import sigmoid
 #from cogent_pdfs import sigmoid
 
+from scipy import integrate
+
 from scipy.interpolate import interp1d
 
 import lichen.pdfs as pdfs
@@ -299,34 +301,71 @@ def cogent_convolve(x,y):
     yc = np.zeros(npts)
     #print "x: ",x
     #print "y: ",y
+
     if type(x)!=np.ndarray:
         x = np.array([x,x+0.0001])
+
     if type(y)!=np.ndarray:
         y = np.array([y,y+0.0001])
+
     f = interp1d(x, y)
+
+    #print y
+
+    #exit()
+
+    yc = np.zeros(len(y))
+
     for i,(xpt,ypt) in enumerate(zip(x,y)):
-        sigma = np.sqrt(sigman2 + (xpt*eta*F)) # sigma is energy dependent
-        #sigma = 0.37
-        #print sigma
-        window = 3.0*sigma
-        loval = xpt-window
-        if loval<min(x):
-            loval=min(x)
-        hival = xpt+window
-        if hival>max(x):
-            hival=max(x)
-        
-        temp_pts = np.linspace(loval,hival,1000)
-        
-        #loindex,val = min(enumerate(x), key=lambda x: abs(x[1]-loval))
-        #hiindex,val = min(enumerate(x), key=lambda x: abs(x[1]-hival))
+        #if 1:
+        if ypt>0:
+            sigma = np.sqrt(sigman2 + (xpt*eta*F)) # sigma is energy dependent
+            #sigma = 0.5 + xpt*0.1 # FOR TESTING
+            #sigma = 0.1
+            #print sigma
 
-        ytemp = f(temp_pts)
+            window = 3.0*sigma
+            loval = xpt-window
+            if loval<min(x):
+                loval=min(x)
+            hival = xpt+window
+            if hival>max(x):
+                hival=max(x)
 
-        convolving_term = stats.norm(0.0,sigma)
-        val = (ytemp*convolving_term.pdf(xpt-temp_pts)).sum()
+            convolving_term = stats.norm(0.0,sigma)
+            xconv = np.linspace(-5,5,5*npts)
+            # Use a normalized Gaussian.
+            yconv = convolving_term.pdf(xconv)
 
-        yc[i] = val
+            ytemp = np.zeros(npts)
+            ytemp[i] = y[i]
+
+            if ytemp[i]>0:
+                # Convolve a single point in the original function.
+                convolved_pdf = signal.fftconvolve(ytemp,yconv,mode='same')
+
+                #print s,x[s],y[s],sigma_conv,convolved_pdf[500]
+                # Sum up each of the contributions.
+                yc += convolved_pdf
+
+
+            
+            '''
+            # THIS IS AN OLD WAY I WAS TRYING TO DO THIS
+            print sigma,window,loval,hival
+            temp_pts = np.linspace(loval,hival,1000)
+            print temp_pts[0],temp_pts[-1]
+            
+            ytemp = f(temp_pts)
+
+            convolving_term = stats.norm(0.0,sigma)
+
+            if sum(ytemp)>0:
+                val = (ytemp*convolving_term.pdf(xpt-temp_pts)).sum()
+
+                yc[i] = val
+
+            '''
 
 
     #convolved_function = signal.convolve(y/y.sum(),convolving_pts,mode='same')
@@ -335,7 +374,7 @@ def cogent_convolve(x,y):
     #convolved_function = np.convolve(y/y.sum(),convolving_pts,'same')
 
     #norm = convolved_function.sum()/y.sum()
-    norm = yc.sum()/y.sum()
+    norm = integrate.simps(yc,x=x)
 
     # Have to carve out the middle of the curve, because
     # the returned array has too many points in it.

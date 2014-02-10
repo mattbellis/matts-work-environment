@@ -11,7 +11,8 @@ x = np.linspace(0.5,1.5,1000)
 
 #for mu in [0.7,1.1,2.0,3.0]:
 for mu in [1.1]:
-    s=0.001
+    #s=0.001
+    s=0.1
     y = np.exp(-((x-mu)**2)/(2*s*s))
     plt.plot(x,y,label='original')
     #yc,xc = cogent_convolve(x,y)

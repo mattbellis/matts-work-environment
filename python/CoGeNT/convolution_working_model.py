@@ -10,27 +10,24 @@ npts = 200
 # Create the initial function. I model a spike
 # as an arbitrarily narrow Gaussian
 
-mu = 1.0 # Centroid
-sig=0.2 # Width
+mu  = 1.0 # Centroid
+sig = 0.2 # Width
 original_pdf = stats.norm(mu,sig)
 
+# Here's the original function as x,y points
 x = np.linspace(0,2.0,npts)
 y = original_pdf.pdf(x)
 
-print y.sum()
-
-y /= y.sum()
-print y.sum()
-
 plt.plot(x,y,label='original',linewidth=3)
-
 
 # Create the ``smearing" function to convolve with the 
 # original function.
 # I use a Gaussian, centered at 0.0 (no bias) and 
-# width of 0.5
+# variable width.
+
 mu_conv = 0.0 # Centroid 
 tot_conv_pdf = np.zeros(len(y))
+
 for s in range(0,npts):
     #sigma_conv = 0.2 + (0.2*x[s]*x[s]) # Width
     sigma_conv = 0.02 + (0.1*x[s]) # Width
@@ -49,24 +46,23 @@ for s in range(0,npts):
     ytemp = np.zeros(npts)
     ytemp[s] = y[s]
 
-    print ytemp[s]
+    if ytemp[s]>0:
+        # Convolve a single point in the original function.
+        convolved_pdf = signal.fftconvolve(ytemp,yconv,mode='same')
 
-    # Convolve a single point in the original function.
-    convolved_pdf = signal.fftconvolve(ytemp,yconv,mode='same')
+        #print s,x[s],y[s],sigma_conv,convolved_pdf[500]
+        # Sum up each of the contributions.
+        tot_conv_pdf += convolved_pdf
 
-    #print s,x[s],y[s],sigma_conv,convolved_pdf[500]
-    # Sum up each of the contributions.
-    tot_conv_pdf += convolved_pdf
+# Normalize the final function. This assumes we started
+# with a normalized function.
+yc = tot_conv_pdf/integrate.simps(tot_conv_pdf,x=x)
 
-yc = tot_conv_pdf/tot_conv_pdf.sum()
 plt.plot(x,yc,label='convolved',linewidth=3)
-plt.ylim(0,1.2*max(tot_conv_pdf/tot_conv_pdf.sum()))
 plt.legend()
 
-#print x
-#print y
-#print yc
-print integrate.simps(y,x=x)
-print integrate.simps(yc,x=x)
+print "Integral of original function:  %f" % (integrate.simps(y,x=x))
+print "Integral of convolved function: %f" % (integrate.simps(yc,x=x))
+
 
 plt.show()
