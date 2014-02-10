@@ -18,6 +18,8 @@ Also, have
 which convolves an exponential with a Gaussian. A few things to note.
 
 * I start with normalized functions and normalize the final convolved function.
+***** EDIT *****
+I think it does not need a normalized function now. 
 
 * We want the convolving Gaussian to be normalized. 
 
