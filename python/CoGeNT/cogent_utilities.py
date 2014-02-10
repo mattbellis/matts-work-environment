@@ -319,7 +319,9 @@ def cogent_convolve(x,y):
     for i,(xpt,ypt) in enumerate(zip(x,y)):
         #if 1:
         if ypt>0:
-            sigma = np.sqrt(sigman2 + (xpt*eta*F)) # sigma is energy dependent
+            # Convert energy to eV
+            sigma = np.sqrt(sigman2 + (2.35**2)*((xpt/1000.0)*eta*F)) # sigma is energy dependent
+            print sigma
             #sigma = 0.5 + xpt*0.1 # FOR TESTING
             #sigma = 0.1
             #print sigma
@@ -373,8 +375,9 @@ def cogent_convolve(x,y):
     #convolved_function = signal.fftconvolve(y/y.sum(),convolving_pts,'same')
     #convolved_function = np.convolve(y/y.sum(),convolving_pts,'same')
 
-    #norm = convolved_function.sum()/y.sum()
-    norm = integrate.simps(yc,x=x)
+    norm = yc.sum()/y.sum()
+    #norm = integrate.simps(yc,x=x)
+
 
     # Have to carve out the middle of the curve, because
     # the returned array has too many points in it.
