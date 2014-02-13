@@ -246,7 +246,10 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
         #print rise_time[i],allmu[i],allsigma[i]
         pdf0 = pdfs.lognormal(rise_time[i],fast_mean0[i],fast_sigma0[i],xlo,xhi)
         pdf1 = pdfs.lognormal(rise_time[i],fast_mean1[i],fast_sigma1[i],xlo,xhi)
-        ret[i] = fast_num0[i]*pdf0 + fast_num1[i]*pdf1
+        #ret[i] = fast_num0[i]*pdf0 + fast_num1[i]*pdf1
+        ######### BELLIS IS THIS HOW WE NORMALIZE THE SUM?????
+        #ret[i] = (fast_num0[i]*pdf0 + fast_num1[i]*pdf1)/(fast_num0[i]+fast_num1[i])
+        ret[i] = (fast_num0[i]*pdf0 + fast_num1[i]*pdf1)
         #print "\t",ret[i]
 
     return ret
