@@ -165,7 +165,7 @@ def main():
                 #print is_late
                 #print g.internal_index
                 grade = Grade(g.grade_type,g.internal_index,score,g.max_grade,g.add,g.subtract,is_late,g.date)
-                print "%s %3.1f" % (grade.grade_type, grade.score)
+                #print "%s %3.1f" % (grade.grade_type, grade.score)
                 if (grade.grade_type=='hw'):
                     hw_grades.append(grade.grade_pct())
                     #hw_xvals.append(grade.date)
@@ -193,19 +193,20 @@ def main():
 
         line_num += 1
 
-    print hw_grades
-    print hw_xvals
+    #print hw_grades
+    #print hw_xvals
     s={'type':'box' ,'jitter':0.1, 'boxpoints':'all'}
-    #axesstyle = {'range':[datetime.datetime(2014,1,15),datetime.datetime(2014,2,15)]}
-    axesstyle = {}
-    l={'title': 'Grade example','xaxis':axesstyle}
+    #s={'type':'box'}
+    axesstyle = {'range':[datetime.datetime(2014,1,15),datetime.datetime(2014,2,15)]}
+    #axesstyle = {}
+    l={'title': 'PHYS 120 class grades to date.','xaxis':axesstyle}
 
     #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
     data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
     data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
     data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes"}
     data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
-    response = py.plot([data0,data1,data2,data3],style=s,layout=l,filename='grade_example',fileopt='overwrite')
+    response = py.plot([data0,data1,data2,data3],style=s,layout=l,filename='PHYS120_S14',fileopt='overwrite')
     url = response['url']
     filename = response['filename']
 
@@ -282,6 +283,7 @@ def main():
                 msg_body += "Projected exams/final exams: %5.1f (on each exam)  -  Projected final grade: %5.1f\n" % (pe,pf)
 
 
+            msg_body += "\nGrades for the class can be found at\n\n\t%s\n" % (url)
 
         ########################################################################
         # For testing
