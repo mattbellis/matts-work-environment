@@ -22,7 +22,9 @@ def fitting_parameters(flag=0):
     #ranges = [[0.5,15.0],[1.0,917.0]]
     #subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]]]
 
+    ########### FOR COGENT FITS? ###############
     ranges = [[0.5,3.0],[1.0,917.0],[0.0,6.0]]
+    #ranges = [[0.5,3.0],[1.0,917.0],[0.0,3.0]]
     subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,917]],[]]
 
     # 3-year data
@@ -31,7 +33,7 @@ def fitting_parameters(flag=0):
     # For the rise-time studies.
     #ranges = [[0.5,3.2],[551.0,1238.0],[0.0,6.0]]
     #subranges = [[],[[551,1238.0]],[]]
-    #ranges = [[0.5,3.2],[1.0,1238.0],[0.0,5.0]]
+    #ranges = [[0.5,3.2],[1.0,1238.0],[0.0,5.0]] # Should this be 6?
     #subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,1238]],[]]
 
     # For the pulser rise-time studies.
@@ -57,7 +59,7 @@ def fitting_parameters(flag=0):
     #nbins = [108,30]
     #nbins = [150,30]
     #nbins = [75,50]
-    nbins = [100,25,25]
+    nbins = [50,25,25]
     #nbins = [150,15]
     #nbins = [200,30]
     #nbins = [100,30]

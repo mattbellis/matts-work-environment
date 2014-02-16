@@ -41,3 +41,22 @@ Calls the CoGeNT convolve function on an exponential which acts as a
 faux WIMP signal.
 
    python testing_convolution3.py
+
+
+
+
+################################################################################
+# Getting the ``flat" term with alphas
+################################################################################
+
+Run 
+
+fit_simple_function_chi2.py
+
+Which fits the points from
+
+fig30_blue.dat  fig30_green.dat
+
+Taken from Fig. 30 in the long paper, arXiv 1208.5737 
+
+

@@ -152,8 +152,8 @@ def main():
     ############################################################################
     #infile_name = 'data/LE.txt'
     #infile_name = 'data/HE.txt'
-    #infile_name = 'data/pulser_data.dat'
-    infile_name = 'data/pulser_data_325ns.dat'
+    infile_name = 'data/pulser_data.dat'
+    #infile_name = 'data/pulser_data_325ns.dat'
     tdays,energies,rise_times = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
     print tdays
     print energies
@@ -554,9 +554,9 @@ def main():
             fvals.add_subplot(1,3,k+1)
             for ik in range(0,2):
                 nindex = k+3*ik
-                print "HERERERERE"
-                print ypts[nindex]
-                print ypts[nindex][ypts[nindex]!=0]
+                #print "HERERERERE"
+                #print ypts[nindex]
+                #print ypts[nindex][ypts[nindex]!=0]
                 plt.errorbar(expts[ypts[nindex]!=0],ypts[nindex][ypts[nindex]!=0],xerr=0.01,yerr=[yerrlo[nindex][ypts[nindex]!=0],yerrhi[nindex][ypts[nindex]!=0]],\
                         fmt='o',ecolor='k',mec='k',mfc=colors[ik],label=labels[ik])
 
