@@ -222,8 +222,11 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
 
     # Pull out the constants for the polynomials.
     fast_mean0 = expfunc(mu0,energy)
-    fast_sigma0 = expfunc(mu0,energy)
-    fast_num0 = np.ones(len(rise_time)).astype('float')
+    fast_sigma0 = expfunc(sigma0,energy)
+    if type(rise_time)==np.ndarray:
+        fast_num0 = np.ones(len(rise_time)).astype('float')
+    else:
+        fast_num0 = 1.0
 
     # The entries for the relationship between the broad and narrow peak.
     fast_mean_rel = expfunc(murel,energy)
@@ -239,18 +242,27 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
     fast_num0 /= tempnorm
     fast_num1 /= tempnorm
 
-    print "Fast NUMS 0 and 1: ",fast_num0[10],fast_num1[10]
+    #print "Fast NUMS 0 and 1: ",fast_num0[10],fast_num1[10]
 
-    ret = np.zeros(len(rise_time))
-    for i in xrange(len(ret)):
-        #print rise_time[i],allmu[i],allsigma[i]
-        pdf0 = pdfs.lognormal(rise_time[i],fast_mean0[i],fast_sigma0[i],xlo,xhi)
-        pdf1 = pdfs.lognormal(rise_time[i],fast_mean1[i],fast_sigma1[i],xlo,xhi)
-        #ret[i] = fast_num0[i]*pdf0 + fast_num1[i]*pdf1
+    if type(rise_time)==np.ndarray:
+        ret = np.zeros(len(rise_time))
+        for i in xrange(len(ret)):
+            ##print rise_time[i],allmu[i],allsigma[i]
+            pdf0 = pdfs.lognormal(rise_time[i],fast_mean0[i],fast_sigma0[i],xlo,xhi)
+            pdf1 = pdfs.lognormal(rise_time[i],fast_mean1[i],fast_sigma1[i],xlo,xhi)
+            #ret[i] = fast_num0[i]*pdf0 + fast_num1[i]*pdf1
+            ######### BELLIS IS THIS HOW WE NORMALIZE THE SUM?????
+            ret[i] = (fast_num0[i]*pdf0 + fast_num1[i]*pdf1)/(fast_num0[i]+fast_num1[i])
+            #ret[i] = (fast_num0[i]*pdf0 + fast_num1[i]*pdf1)
+            #print "\t",ret[i]
+    else:
+        pdf0 = pdfs.lognormal(rise_time,fast_mean0,fast_sigma0,xlo,xhi)
+        pdf1 = pdfs.lognormal(rise_time,fast_mean1,fast_sigma1,xlo,xhi)
+        #ret = fast_num0*pdf0 + fast_num1*pdf1
         ######### BELLIS IS THIS HOW WE NORMALIZE THE SUM?????
-        #ret[i] = (fast_num0[i]*pdf0 + fast_num1[i]*pdf1)/(fast_num0[i]+fast_num1[i])
-        ret[i] = (fast_num0[i]*pdf0 + fast_num1[i]*pdf1)
-        #print "\t",ret[i]
+        ret = (fast_num0*pdf0 + fast_num1*pdf1)/(fast_num0+fast_num1)
+        #ret = (fast_num0*pdf0 + fast_num1*pdf1)
+        #print "\t",ret
 
     return ret
 
@@ -260,17 +272,26 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
 def rise_time_prob_exp_progression(rise_time,energy,mu_k,sigma_k,xlo,xhi):
 
     expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
+    expfunc1 = lambda p, x: p[1]*x + p[0]
 
     # Pull out the constants for the polynomials.
     allmu = expfunc(mu_k,energy)
     allsigma = expfunc(sigma_k,energy)
+    #allsigma = expfunc1(sigma_k,energy) # Linear func
 
     #ret = (1.0/(x*sigma*np.sqrt(2*np.pi)))*np.exp(-((np.log(x)-mu)**2)/(2*sigma*sigma))
-    ret = np.zeros(len(rise_time))
-    for i in xrange(len(ret)):
-        #print rise_time[i],allmu[i],allsigma[i]
-        ret[i] = pdfs.lognormal(rise_time[i],allmu[i],allsigma[i],xlo,xhi)
-        #print "\t",ret[i]
+    if type(rise_time)==np.ndarray:
+        ret = np.zeros(len(rise_time))
+        for i in xrange(len(ret)):
+            #print rise_time[i],allmu[i],allsigma[i]
+            ret[i] = pdfs.lognormal(rise_time[i],allmu[i],allsigma[i],xlo,xhi)
+            #print "\t",ret[i]
+    else:
+        ret = 0.0
+        #print rise_time,allmu,allsigma
+        ret = pdfs.lognormal(rise_time,allmu,allsigma,xlo,xhi)
+        #print "\t",ret
+
 
     return ret
 

@@ -149,8 +149,8 @@ def main():
     # Read in the data
     ############################################################################
     #infile_name = 'data/LE.txt'
-    #infile_name = 'data/HE.txt'
-    infile_name = 'data/pulser_data.dat'
+    infile_name = 'data/HE.txt'
+    #infile_name = 'data/pulser_data.dat'
     tdays,energies,rise_times = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
     print tdays
     print energies

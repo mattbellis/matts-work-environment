@@ -153,12 +153,29 @@ def main():
     rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
     ############################################################################
 
+    ####### DO WE NEED THIS FOR THE NORMALIZATION in 2D? #######################
+    rt_fast /= (ranges[0][1]-ranges[0][0])
+    rt_slow /= (ranges[0][1]-ranges[0][0])
+
+    print (ranges[0][1]-ranges[0][0])
+
+    # FOR DIAGNOSTIC PURPOSES #
+    #rt_fast = np.ones(len(rt_fast))
+    #rt_slow = np.ones(len(rt_slow))
+
+    #exit()
+
     print rt_fast
     print rt_slow
 
     data.append(rt_fast)
     data.append(rt_slow)
 
+    figrt0 = plt.figure(figsize=(12,4),dpi=100)
+    axrt0 = figrt0.add_subplot(1,1,1)
+    lch.hist_err(data[2],bins=nbins[2],range=ranges[2],axes=axrt0)
+
+    '''
     print "Finished with the fast and slow rise time probabilities........"
 
     plt.figure()
@@ -172,6 +189,7 @@ def main():
 
     plt.figure()
     plt.plot(data[0],data[4],'o',markersize=1.5)
+    '''
 
     #plt.show()
 
@@ -343,11 +361,11 @@ def main():
     nsurface = 5000.0 # 3yr data.
 
     # Exp 1 is the surface term
-    params_dict['e_surf'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
+    params_dict['e_surf'] = {'fix':False,'start_val':1.0/3.36,'limits':(0.0,10.0)}
     params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0)}
     params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
 
-    params_dict['num_flat'] = {'fix':False,'start_val':900.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':2000.0,'limits':(0.0,100000.0)}
     params_dict['e_exp_flat'] = {'fix':False,'start_val':-0.05,'limits':(0.00001,10.0)}
     params_dict['t_exp_flat'] = {'fix':False,'start_val':0.001,'limits':(0.0000001,10.0)}
     params_dict['flat_frac'] = {'fix':True,'start_val':0.51,'limits':(0.00001,10.0)}
@@ -365,7 +383,7 @@ def main():
     # Exponential term in energy
     if args.fit==0 or args.fit==1 or args.fit==5:
         #params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
-        params_dict['e_exp0'] = {'fix':False,'start_val':3.36,'limits':(0.0,10.0)}
+        params_dict['e_exp0'] = {'fix':True,'start_val':0.005,'limits':(0.0,10.0)}
 
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
@@ -468,7 +486,7 @@ def main():
     # Energy projections
     if args.fit==0 or args.fit==1 or args.fit==5:
         ypts = np.exp(-values['e_exp0']*expts)
-        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff)
+        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff,label='exponential in energy')
         eytot += y
 
     # Time projections
@@ -504,7 +522,7 @@ def main():
 
         #func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=[1,459],model=wimp_model)
         func = lambda x: plot_wimp_er(x,AGe,values['mDM'],values['sigma_n'],time_range=ranges[1],model=wimp_model)
-        srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[ranges[0][0],ranges[0][1]]],efficiency=efficiency)
+        srypts,plot,srxpts = plot_pdf_from_lambda(func,bin_width=bin_widths[0],scale=num_wimps,fmt='k-',linewidth=3,axes=ax0,subranges=[[ranges[0][0],ranges[0][1]]],efficiency=efficiency,label='WIMP')
         eytot += srypts[0]
 
         func = lambda x: plot_wimp_day(x,AGe,values['mDM'],values['sigma_n'],e_range=[ranges[0][0],ranges[0][1]],model=wimp_model)
@@ -523,7 +541,7 @@ def main():
     if args.fit!=5 and args.fit!=6:
         # Energy projections
         ypts = np.exp(-values['e_surf']*expts)
-        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_surf'],fmt='y-',axes=ax0,efficiency=eff)
+        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_surf'],fmt='y-',axes=ax0,efficiency=eff,label='surface')
         eytot += y
 
         # Time projections
@@ -540,16 +558,14 @@ def main():
     #ypts = np.ones(len(expts))
     #ypts =  np.exp(-values['e_exp_flat']*expts)
     ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff,label='flat term')
     #ypts  = pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
     ypts  = pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax0,efficiency=eff,label='flat alphas')
 
-    #ypts =  0.95*np.exp(-values['e_exp_flat']*expts)
-    ypts  = values['flat_frac']*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    #ypts  += (1.0-values['flat_frac'])*pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
-    ypts  = (1.0-values['flat_frac'])*pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m')
+    ypts = values['flat_frac']*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
+    ypts += (1.0-values['flat_frac'])*pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m',label='flat total')
     eytot += y
 
     # Time projections
@@ -563,7 +579,7 @@ def main():
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     func = lambda x: np.ones(len(x))
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax1,subranges=subranges[1])
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     
@@ -591,7 +607,7 @@ def main():
             lshell_toty = [tot + y for tot,y in zip(lshell_toty,sr_typts)]
 
 
-        ax0.plot(expts,lshell_totx,'r-',linewidth=2)
+        ax0.plot(expts,lshell_totx,'r-',linewidth=2,label='L-shell decays')
 
 
         # Total on y/t over all subranges.
@@ -664,6 +680,7 @@ def main():
     #ax0.set_ylim(0.0,values['num_flat']/10)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     ax0.set_ylabel("Interactions/0.025 keVee",fontsize=12)
+    ax0.legend()
 
     ax1.set_xlim(ranges[1])
     #ax1.set_ylim(0.0,values['num_flat']/13)
