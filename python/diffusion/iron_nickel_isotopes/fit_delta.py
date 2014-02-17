@@ -48,8 +48,12 @@ dx   = (hi-lo)/float(npts)
 
 xpos = np.linspace(lo,hi,npts) 
 
-cmax0 = 0.009 # fraction
-cmin0 = 0.991 # fraction
+#cmax0 = 0.009 # fraction
+#cmin0 = 0.991 # fraction
+
+# For the ``new" files?
+cmax0 = 0.0085 # fraction
+cmin0 = 1.013 # fraction
 
 frac_interface = (interface_x-lo)/(hi-lo)
 print "frac_interface: ",frac_interface
@@ -63,7 +67,7 @@ xvals = np.linspace(lo,hi,npts)
 ################################################################################
 dt   = 600.0
 t0   = 0
-hours = 24
+hours = 120
 tmax = (3600*hours) # seconds?
 
 invdx2 = 1.0/(dx**2)
@@ -261,10 +265,10 @@ plt.plot(xmp,ymp,'o')
 plt.plot(xis,cis,'o')
 
 fig0.add_subplot(1,3,3)
-plt.plot(xpos,c54,'o')
+plt.plot(xpos,c54,'k','simulation')
 plt.plot([interface_x,interface_x],[0,110.0])
 plt.ylim(0,1.10)
-plt.plot(xmp,ymp)
+plt.plot(xmp,ymp,'ro','microprobe data')
 
 
 # Plot the deltas
