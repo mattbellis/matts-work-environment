@@ -22,8 +22,13 @@ def read_in_a_microprobe_data_file(infilename):
 
             vals = line.split(',')
 
+            # The ``old" files.
             concentration = float(vals[1])
             xpos = float(vals[5])
+
+            # The ``new files"
+            concentration = float(vals[0])
+            xpos = float(vals[4])
 
             difference = abs(concentration-40.0)
             if min_diff>difference:
@@ -70,10 +75,17 @@ def read_in_an_isotope_data_file(infilename):
 
             vals = line.split(',')
 
-            xpos = float(vals[3])
-            delta = float(vals[6])
-            deltaerr = float(vals[7].split()[1])
-            Fe_conc = float(vals[4])
+            # The ``old" files.
+            #xpos = float(vals[3])
+            #delta = float(vals[6])
+            #deltaerr = float(vals[7].split()[1])
+            #Fe_conc = float(vals[4])
+
+            # The ``new" files.
+            xpos = float(vals[0])
+            delta = float(vals[3])
+            deltaerr = float(vals[4].split()[1])
+            Fe_conc = float(vals[1])
 
             x.append(xpos)
             y.append(delta)
