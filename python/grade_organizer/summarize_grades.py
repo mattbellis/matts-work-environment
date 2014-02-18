@@ -35,6 +35,8 @@ def main():
             help='Dump output for the Google Motion Chart.')
     parser.add_argument('--password', dest='password', default=None, 
             help='Password for mail server.')
+    parser.add_argument('--course', dest='course', default=None, 
+            help='Course name.')
     parser.add_argument('--student', dest='student', default=None, type=int,
             help='Student name to dump info for or email.')
 
@@ -193,26 +195,48 @@ def main():
 
         line_num += 1
 
-    #print hw_grades
-    #print hw_xvals
-    s={'type':'box' ,'jitter':0.1, 'boxpoints':'all'}
-    #s={'type':'box'}
-    axesstyle = {'range':[datetime.datetime(2014,1,15),datetime.datetime(2014,2,15)]}
-    #axesstyle = {}
-    l={'title': 'PHYS 120 class grades to date.','xaxis':axesstyle}
+    url = None
+    if args.course is not None:
 
-    #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
-    data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
-    data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
-    data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes"}
-    data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
-    response = py.plot([data0,data1,data2,data3],style=s,layout=l,filename='PHYS120_S14',fileopt='overwrite')
-    url = response['url']
-    filename = response['filename']
+        plotly_title = 'Default grades'
+        plotly_filename = 'Default coursename'
 
-    print response
-    print url
-    print filename
+        if args.course=='phys120':
+            plotly_title = 'PHYS 120 class grades to date.'
+            plotly_filename = 'PHYS120_S14'
+        elif args.course=='phys260':
+            plotly_title = 'PHYS 260 class grades to date.'
+            plotly_filename = 'PHYS260_S14'
+
+        #print hw_grades
+        #print hw_xvals
+        s={'type':'box' ,'jitter':0.1, 'boxpoints':'all'}
+        #s={'type':'box'}
+        #axesstyle = {'range':[datetime.datetime(2014,1,15),datetime.datetime(2014,2,15)]}
+        axesstyle = {}
+        l={'title': plotly_title,'xaxis':axesstyle}
+
+        tot_data = []
+
+        #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
+        data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
+        tot_data.append(data0)
+        data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
+        tot_data.append(data1)
+        if len(quiz_grades)>0:
+            data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes"}
+            tot_data.append(data2)
+        if len(final_exam_grades)>0:
+            data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
+            tot_data.append(data3)
+        response = py.plot(tot_data,style=s,layout=l,filename=plotly_filename,fileopt='overwrite')
+
+        url = response['url']
+        filename = response['filename']
+
+        print response
+        print url
+        print filename
 
     ############################################################################
     # Print out the summary
