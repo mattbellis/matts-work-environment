@@ -10,11 +10,14 @@ import sys
 def read_in_a_microprobe_data_file(infilename):
 
     infile = open(infilename)
+    
+    #crossing_point = 40.0 # For Fe
+    crossing_point = 60.0 # For Ni
 
     x = []
     y = []
 
-    x_closest_to_40 = -999
+    x_closest_to_crossing_point = -999
     min_diff = 1e6
     for i,line in enumerate(infile):
 
@@ -23,31 +26,32 @@ def read_in_a_microprobe_data_file(infilename):
             vals = line.split(',')
 
             # The ``old" files.
-            concentration = float(vals[1])
-            xpos = float(vals[5])
+            #concentration = float(vals[1])
+            #xpos = float(vals[5])
 
             # The ``new files"
-            concentration = float(vals[0])
+            #concentration = float(vals[0]) # Fe
+            concentration = float(vals[1]) # Ni
             xpos = float(vals[4])
 
-            difference = abs(concentration-40.0)
+            difference = abs(concentration-crossing_point)
             if min_diff>difference:
                 min_diff = difference
-                x_closest_to_40 = i
+                x_closest_to_crossing_point = i
 
             y.append(concentration)
             x.append(xpos)
 
 
     print x
-    print x_closest_to_40,x[x_closest_to_40]
+    print x_closest_to_crossing_point,x[x_closest_to_crossing_point]
 
     y = np.array(y)
     y /= 100 # Convert from % to fraction
 
     x = np.array(x)
-    # Shift the points so that the 0 position is close to the 40% mark.
-    x -= x[x_closest_to_40]
+    # Shift the points so that the 0 position is close to the crossing_point% mark.
+    x -= x[x_closest_to_crossing_point]
 
     x /= 1000000.0 # Convert to meters
 
@@ -75,36 +79,40 @@ def read_in_an_isotope_data_file(infilename):
 
             vals = line.split(',')
 
-            # The ``old" files.
-            #xpos = float(vals[3])
-            #delta = float(vals[6])
-            #deltaerr = float(vals[7].split()[1])
-            #Fe_conc = float(vals[4])
-
             # The ``new" files, FNDA 1
-            xpos = float(vals[0])
-            delta = float(vals[3])
-            deltaerr = float(vals[4].split()[1])
-            Fe_conc = float(vals[1])
+            #xpos = float(vals[0])
+            # Fe
+            #delta = float(vals[3])
+            #deltaerr = float(vals[4].split()[1])
+            #conc = float(vals[1])
+            # Ni
+            #conc = float(vals[2])
+            #delta = float(vals[5])
+            #deltaerr = float(vals[6])
 
             # The ``new" files, FNDA 2
-            #xpos = float(vals[0])
+            xpos = float(vals[0])
+            # Fe
             #delta = float(vals[3])
             #deltaerr = float(vals[4])
-            #Fe_conc = float(vals[1])
+            #conc = float(vals[1])
+            # Ni
+            conc = float(vals[2])
+            delta = float(vals[6])
+            deltaerr = float(vals[7].split()[1])
 
             x.append(xpos)
             y.append(delta)
             yerr.append(deltaerr)
-            c.append(Fe_conc)
+            c.append(conc)
 
 
     y = np.array(y)
     yerr = np.array(yerr)
 
     x = np.array(x)
-    x /= 1000000.0 # Convert microns to meters.
-    #x /= 1000.0 # Convert mm to meters. FNDA 2
+    #x /= 1000000.0 # Convert microns to meters.
+    x /= 1000.0 # Convert mm to meters. FNDA 2
 
     c = np.array(c)
     c /= 100.0 # Convert % to fraction.
