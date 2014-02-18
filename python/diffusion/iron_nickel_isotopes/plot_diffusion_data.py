@@ -81,11 +81,17 @@ def read_in_an_isotope_data_file(infilename):
             #deltaerr = float(vals[7].split()[1])
             #Fe_conc = float(vals[4])
 
-            # The ``new" files.
+            # The ``new" files, FNDA 1
             xpos = float(vals[0])
             delta = float(vals[3])
             deltaerr = float(vals[4].split()[1])
             Fe_conc = float(vals[1])
+
+            # The ``new" files, FNDA 2
+            #xpos = float(vals[0])
+            #delta = float(vals[3])
+            #deltaerr = float(vals[4])
+            #Fe_conc = float(vals[1])
 
             x.append(xpos)
             y.append(delta)
@@ -98,6 +104,7 @@ def read_in_an_isotope_data_file(infilename):
 
     x = np.array(x)
     x /= 1000000.0 # Convert microns to meters.
+    #x /= 1000.0 # Convert mm to meters. FNDA 2
 
     c = np.array(c)
     c /= 100.0 # Convert % to fraction.

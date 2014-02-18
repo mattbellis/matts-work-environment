@@ -10,6 +10,26 @@ from plot_diffusion_data import read_in_a_microprobe_data_file,read_in_an_isotop
 
 from scipy import interpolate
 
+################################################################################
+# For the new files
+################################################################################
+# FNDA 1 
+xis_offset = 0.00044
+cmax0 = 0.0085 # fraction
+cmin0 = 1.008 # fraction
+hours = 120 
+#### exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
+D56_coeff = [-30.268,5.00,13.39,6.30]
+
+
+# FNDA 2
+#xis_offset = 0.0
+#cmax0 = 0.0096 # fraction
+#cmin0 = 1.005 # fraction
+#hours = 96 
+#### exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
+#D56_coeff = [-28.838,4.92,12.91,6.17]
+
 
 
 ################################################################################
@@ -19,12 +39,16 @@ from scipy import interpolate
 xmp,ymp = read_in_a_microprobe_data_file(sys.argv[1])
 xis,yis,yerris,cis = read_in_an_isotope_data_file(sys.argv[2])
 
-# For FNDA 1
+yis *= 2 # Weird labeling in files.
+
 #print "XIS!!!!"
 #print xis
-xis -= 0.00126
+#xis -= 0.00126
+xis -= xis_offset
 #print xis
-xis = xis[::-1]
+xis = xis[::-1] # Do this for FNDA 1
+#xmp *= -1 # Do this for FNDA 2
+#xis *= -1 # Do this for FNDA 2
 
 #print xis
 
@@ -48,13 +72,6 @@ dx   = (hi-lo)/float(npts)
 
 xpos = np.linspace(lo,hi,npts) 
 
-#cmax0 = 0.009 # fraction
-#cmin0 = 0.991 # fraction
-
-# For the ``new" files?
-cmax0 = 0.0085 # fraction
-cmin0 = 1.013 # fraction
-
 frac_interface = (interface_x-lo)/(hi-lo)
 print "frac_interface: ",frac_interface
 
@@ -67,7 +84,6 @@ xvals = np.linspace(lo,hi,npts)
 ################################################################################
 dt   = 600.0
 t0   = 0
-hours = 120
 tmax = (3600*hours) # seconds?
 
 invdx2 = 1.0/(dx**2)
@@ -122,7 +138,7 @@ def fitfunc(data,p,parnames,params_dict):
         #D56 = np.exp(-30.268 + (5.00*c56) - 13.39*(c56**2) + 6.30*(c56**3))
         # FNDA2
         #exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
-        D56 = np.exp(-28.838 + (4.92*c56) - 12.91*(c56**2) + 6.17*(c56**3))
+        D56 = np.exp(D56_coeff[0] + (D56_coeff[1]*c56) - D56_coeff[2]*(c56**2) + D56_coeff[3]*(c56**3))
 
         # Condition for finite element approach to be stable. 
         if len( (D56*dt*invdx2)[D56*(dt*invdx2)>0.5])>0:
@@ -226,7 +242,7 @@ m.print_param()
 
 
 m.migrad()
-#m.hesse()
+##m.hesse()
 m.minos()
 
 values = m.values
@@ -257,32 +273,43 @@ c56fake1,c54fake1,sim_deltasfake1 = fitfunc(data,fake_values,['mybeta'],params_d
 ################################################################################
 
 fig0 = plt.figure(figsize=(14,4))
-fig0.add_subplot(1,3,2)
-plt.plot(xpos,c56,'o')
-plt.plot([interface_x,interface_x],[0,110.0])
-plt.ylim(0,1.10)
-plt.plot(xmp,ymp,'o')
-plt.plot(xis,cis,'o')
+fig0.add_subplot(1,2,1)
+plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.05)
 
-fig0.add_subplot(1,3,3)
-plt.plot(xpos,c54,'k','simulation')
+plt.plot(xpos,c56,'b-',label='Fe56 simulation')
 plt.plot([interface_x,interface_x],[0,110.0])
 plt.ylim(0,1.10)
-plt.plot(xmp,ymp,'ro','microprobe data')
+plt.plot(xmp,ymp,'ro',label='microprobe data')
+plt.plot(xis,cis,'co',label='data from isotope file')
+plt.legend(loc='center right')
+
+fig0.add_subplot(1,2,2)
+plt.plot(xpos,c54,'b-',label='Fe54 simulation ')
+plt.plot([interface_x,interface_x],[0,110.0])
+plt.ylim(0,1.10)
+plt.plot(xmp,ymp,'ro',label='microprobe data')
+plt.legend()
+
 
 
 # Plot the deltas
 plt.figure()
 #plt.plot(xpos,(c56/c54 - 1.0)*1000.0,'o')
-plt.plot(xpos,sim_deltas,'-',linewidth=3)
-plt.errorbar(xis,yis,yerr=yerris,markersize=10,fmt='o')
-plt.plot(xpos,sim_deltasfake,'-')
-plt.plot(xpos,sim_deltasfake0,'-')
-plt.plot(xpos,sim_deltasfake1,'-')
-plt.ylim(-20,20)
+plotlabel = r"best fit $\delta$, $\beta$=%3.2f" % (values['mybeta'])
+plt.plot(xpos,sim_deltas,'-',linewidth=3,label=plotlabel)
+plt.errorbar(xis,yis,yerr=yerris,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
+plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.5)
+plt.plot(xpos,sim_deltasfake,'-',label=plotlabel)
+plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.1)
+plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
+plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.25)
+plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
+plt.ylim(-30,30)
+plt.legend()
 
-plt.figure()
-plt.plot(xis,cis,'o')
+#plt.figure()
+#plt.plot(xis,cis,'o',label='data from isotope file')
+#plt.legend()
 
 print values
 
