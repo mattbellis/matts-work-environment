@@ -14,21 +14,32 @@ from scipy import interpolate
 # For the new files
 ################################################################################
 # FNDA 1 
-xis_offset = 0.00044
-cmax0 = 0.0085 # fraction
-cmin0 = 1.008 # fraction
-hours = 120 
+#xis_offset = 0.00044 
+#hours = 120 
 #### exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
-D56_coeff = [-30.268,5.00,13.39,6.30]
+#D56_coeff = [-30.268,5.00,13.39,6.30]
+
+# Fe
+#cmax0 = 0.0085 # fraction
+#cmin0 = 1.008 # fraction
+# Ni
+#cmax0 = 0.0085 # fraction
+#cmin0 = 0.985 # fraction
 
 
 # FNDA 2
-#xis_offset = 0.0
+xis_offset = 0.0
+hours = 92 
+#### exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
+D56_coeff = [-28.838,4.92,12.91,6.17]
+# Fe
 #cmax0 = 0.0096 # fraction
 #cmin0 = 1.005 # fraction
-#hours = 96 
-#### exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
-#D56_coeff = [-28.838,4.92,12.91,6.17]
+# Ni
+#cmax0 = 0.0084 # fraction
+#cmin0 = 0.9896 # fraction
+cmax0 = 0.009 # fraction
+cmin0 = 0.991 # fraction
 
 
 
@@ -39,18 +50,14 @@ D56_coeff = [-30.268,5.00,13.39,6.30]
 xmp,ymp = read_in_a_microprobe_data_file(sys.argv[1])
 xis,yis,yerris,cis = read_in_an_isotope_data_file(sys.argv[2])
 
-yis *= 2 # Weird labeling in files.
+#yis *= 2 # Weird labeling in files (both FNDA 1 and FNDA 2).
+#yis += 14.37 # For Ni, FNDA 1
 
-#print "XIS!!!!"
-#print xis
-#xis -= 0.00126
 xis -= xis_offset
-#print xis
-xis = xis[::-1] # Do this for FNDA 1
-#xmp *= -1 # Do this for FNDA 2
-#xis *= -1 # Do this for FNDA 2
+#xis = xis[::-1] # Do this for FNDA 1
 
-#print xis
+xmp *= -1 # Do this for FNDA 2
+xis *= -1 # Do this for FNDA 2
 
 
 
@@ -144,7 +151,8 @@ def fitfunc(data,p,parnames,params_dict):
         if len( (D56*dt*invdx2)[D56*(dt*invdx2)>0.5])>0:
             print "D56*dt*invdx2: ",D56*(dt*invdx2)
 
-        D54 = D56*((56.0/54.0)**mybeta)
+        #D54 = D56*((56.0/54.0)**mybeta) # For Fe
+        D54 = D56*((62.0/61.0)**mybeta) # For Fe
 
         i = 0
         for D,concentration in zip([D56,D54],[c56, c54]):
@@ -173,6 +181,11 @@ def fitfunc(data,p,parnames,params_dict):
 
 
         t += dt
+
+    # Do this only for Ni!!!!! #############################
+    #print c56
+    c56 = 1.0 - c56
+    c54 = 1.0 - c54
 
     delta56_54 = (c56/c54 - 1.0)*1000.0
 
@@ -246,8 +259,10 @@ m.migrad()
 m.minos()
 
 values = m.values
+errors = m.errors
 
 print values
+print errors
 
 final_values = []
 final_values.append(values['mybeta'])
@@ -282,6 +297,7 @@ plt.ylim(0,1.10)
 plt.plot(xmp,ymp,'ro',label='microprobe data')
 plt.plot(xis,cis,'co',label='data from isotope file')
 plt.legend(loc='center right')
+#plt.yscale('log')
 
 fig0.add_subplot(1,2,2)
 plt.plot(xpos,c54,'b-',label='Fe54 simulation ')
@@ -295,7 +311,7 @@ plt.legend()
 # Plot the deltas
 plt.figure()
 #plt.plot(xpos,(c56/c54 - 1.0)*1000.0,'o')
-plotlabel = r"best fit $\delta$, $\beta$=%3.2f" % (values['mybeta'])
+plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 plt.plot(xpos,sim_deltas,'-',linewidth=3,label=plotlabel)
 plt.errorbar(xis,yis,yerr=yerris,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
 plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.5)
@@ -304,7 +320,7 @@ plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.1)
 plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
 plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.25)
 plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
-plt.ylim(-30,30)
+plt.ylim(-20,20)
 plt.legend()
 
 #plt.figure()
