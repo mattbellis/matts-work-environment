@@ -1,0 +1,16 @@
+import os 
+
+env = Environment()
+
+# Grab my local environment variable PATH so I can find nvcc
+env = Environment(ENV = {'PATH' : os.environ['PATH']})
+
+env['CC'] = ['nvcc']
+env.Program(target='try_to_include_rand', source=['try_to_include_rand.cu'])
+env.Program(target='try_to_include_stl_vector', source=['try_to_include_stl_vector.cu'])
+
+
+# For these, run them with 'CC=gcc' on the command line
+env.Program(target='stl_vector_in_C', source=['stl_vector_in_C.cc'])
+env.Program(target='rand_in_C', source=['rand_in_C.cc'])
+
