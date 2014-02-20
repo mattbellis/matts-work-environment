@@ -171,15 +171,15 @@ def main():
                 if (grade.grade_type=='hw'):
                     hw_grades.append(grade.grade_pct())
                     #hw_xvals.append(grade.date)
-                    hw_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1])))
+                    hw_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1]),1))
 
                 if (grade.grade_type=='exam'):
                     exam_grades.append(grade.grade_pct())
-                    exam_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1])))
+                    exam_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1]),13))
 
                 if (grade.grade_type=='quiz'):
                     quiz_grades.append(grade.grade_pct())
-                    quiz_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1])))
+                    quiz_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1]),23))
 
                 if (grade.grade_type=='final_exam'):
                     final_exam_grades.append(grade.grade_pct())
