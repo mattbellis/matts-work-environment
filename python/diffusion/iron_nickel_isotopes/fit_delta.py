@@ -14,32 +14,42 @@ from scipy import interpolate
 # For the new files
 ################################################################################
 # FNDA 1 
-#xis_offset = 0.00044 
-#hours = 120 
+xis_offset = 0.00044 
+hours = 120 
 #### exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
-#D56_coeff = [-30.268,5.00,13.39,6.30]
+D56_coeff = [-30.268,5.00,13.39,6.30]
 
 # Fe
 #cmax0 = 0.0085 # fraction
 #cmin0 = 1.008 # fraction
+#light_isotope = 54.
+#heavy_isotope = 56.
 # Ni
-#cmax0 = 0.0085 # fraction
-#cmin0 = 0.985 # fraction
+cmax0 = 0.0085 # fraction
+cmin0 = 0.985 # fraction
+light_isotope = 61.
+heavy_isotope = 62.
 
 
 # FNDA 2
+'''
 xis_offset = 0.0
-hours = 92 
+hours = 96
 #### exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
 D56_coeff = [-28.838,4.92,12.91,6.17]
 # Fe
-#cmax0 = 0.0096 # fraction
-#cmin0 = 1.005 # fraction
+cmax0 = 0.0096 # fraction
+cmin0 = 1.005 # fraction
+light_isotope = 54.
+heavy_isotope = 56.
 # Ni
-#cmax0 = 0.0084 # fraction
-#cmin0 = 0.9896 # fraction
-cmax0 = 0.009 # fraction
-cmin0 = 0.991 # fraction
+cmax0 = 0.0084 # fraction
+cmin0 = 0.9896 # fraction
+#cmax0 = 0.009 # fraction
+#cmin0 = 0.991 # fraction
+light_isotope = 61.
+heavy_isotope = 62.
+'''
 
 
 
@@ -50,15 +60,14 @@ cmin0 = 0.991 # fraction
 xmp,ymp = read_in_a_microprobe_data_file(sys.argv[1])
 xis,yis,yerris,cis = read_in_an_isotope_data_file(sys.argv[2])
 
-#yis *= 2 # Weird labeling in files (both FNDA 1 and FNDA 2).
-#yis += 14.37 # For Ni, FNDA 1
+#yis *= 2 # Weird labeling in files (both FNDA 1 and FNDA 2) for Fe?.
+yis += 14.37 # For Ni, FNDA 1
 
 xis -= xis_offset
-#xis = xis[::-1] # Do this for FNDA 1
+xis = xis[::-1] # Do this for FNDA 1
 
-xmp *= -1 # Do this for FNDA 2
-xis *= -1 # Do this for FNDA 2
-
+#xmp *= -1 # Do this for FNDA 2
+#xis *= -1 # Do this for FNDA 2, for Fe
 
 
 ################################################################################
@@ -89,7 +98,8 @@ xvals = np.linspace(lo,hi,npts)
 ################################################################################
 # Move in time
 ################################################################################
-dt   = 600.0
+#dt   = 600.0
+dt   = 60.0
 t0   = 0
 tmax = (3600*hours) # seconds?
 
@@ -140,19 +150,13 @@ def fitfunc(data,p,parnames,params_dict):
             print "%d of %d" % (t,tmax)
         '''
 
-        # FNDA1
-        #exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
-        #D56 = np.exp(-30.268 + (5.00*c56) - 13.39*(c56**2) + 6.30*(c56**3))
-        # FNDA2
-        #exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
         D56 = np.exp(D56_coeff[0] + (D56_coeff[1]*c56) - D56_coeff[2]*(c56**2) + D56_coeff[3]*(c56**3))
 
         # Condition for finite element approach to be stable. 
         if len( (D56*dt*invdx2)[D56*(dt*invdx2)>0.5])>0:
             print "D56*dt*invdx2: ",D56*(dt*invdx2)
 
-        #D54 = D56*((56.0/54.0)**mybeta) # For Fe
-        D54 = D56*((62.0/61.0)**mybeta) # For Fe
+        D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
 
         i = 0
         for D,concentration in zip([D56,D54],[c56, c54]):
@@ -182,7 +186,7 @@ def fitfunc(data,p,parnames,params_dict):
 
         t += dt
 
-    # Do this only for Ni!!!!! #############################
+    # Do this only for Ni!!!!! ############################# Nickel
     #print c56
     c56 = 1.0 - c56
     c54 = 1.0 - c54
@@ -320,7 +324,7 @@ plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.1)
 plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
 plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.25)
 plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
-plt.ylim(-20,20)
+plt.ylim(-40,40)
 plt.legend()
 
 #plt.figure()

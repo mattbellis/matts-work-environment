@@ -75,31 +75,32 @@ def read_in_an_isotope_data_file(infilename):
 
     for i,line in enumerate(infile):
 
-        if i!=0:
+        print line
+        if line[0] != "#":
 
             vals = line.split(',')
 
             # The ``new" files, FNDA 1
-            #xpos = float(vals[0])
+            xpos = float(vals[0])
             # Fe
             #delta = float(vals[3])
             #deltaerr = float(vals[4].split()[1])
             #conc = float(vals[1])
             # Ni
-            #conc = float(vals[2])
-            #delta = float(vals[5])
-            #deltaerr = float(vals[6])
+            conc = float(vals[2])
+            delta = float(vals[5])
+            deltaerr = float(vals[6])
 
             # The ``new" files, FNDA 2
-            xpos = float(vals[0])
+            #xpos = float(vals[0])
             # Fe
             #delta = float(vals[3])
             #deltaerr = float(vals[4])
             #conc = float(vals[1])
             # Ni
-            conc = float(vals[2])
-            delta = float(vals[6])
-            deltaerr = float(vals[7].split()[1])
+            #conc = float(vals[2])
+            #delta = float(vals[6])
+            #deltaerr = float(vals[7].split()[1])
 
             x.append(xpos)
             y.append(delta)
@@ -111,8 +112,7 @@ def read_in_an_isotope_data_file(infilename):
     yerr = np.array(yerr)
 
     x = np.array(x)
-    #x /= 1000000.0 # Convert microns to meters.
-    x /= 1000.0 # Convert mm to meters. FNDA 2
+    x /= 1000000.0 # Convert microns to meters.
 
     c = np.array(c)
     c /= 100.0 # Convert % to fraction.
