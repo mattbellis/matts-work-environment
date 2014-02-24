@@ -17,9 +17,12 @@ from vispy import app
 from vispy.gloo import gl
 from vispy.util.transforms import perspective, translate, rotate
 
+from vispy.gloo import _screenshot
+from vispy.util.dataio import imsave
+
 import pyscreenshot as ImageGrab
 #from PIL import ImageGrab
-import gtk.gdk
+#import gtk.gdk
 
 
 # Manual galaxy creation
@@ -57,6 +60,8 @@ theta = np.deg2rad(ra)
 phi = np.deg2rad(90-dec)
 x = theta
 y = np.cos(phi)
+#x = np.cos(theta)
+#y = phi
 
 x -= 0.8
 y -= 0.5
@@ -69,7 +74,7 @@ print min(y),max(y)
 print len(x)
 
 #z = np.zeros(len(x))
-z = np.ones(len(x))
+z = 0.7*np.ones(len(x))
 
 #p = 1400000
 #p = 1419423
@@ -143,7 +148,7 @@ varying float v_size;
 varying float v_dist;
 
 void main (void) {
-    v_size  = a_size*u_size*.15;
+    v_size  = a_size*u_size*.25;
     v_dist  = a_dist;
     gl_Position = u_projection * u_view * u_model * vec4(a_position,1.0);
     gl_PointSize = v_size;
@@ -245,21 +250,26 @@ class Canvas(app.Canvas):
     def on_paint(self, event):
         gl.glClear(gl.GL_COLOR_BUFFER_BIT | gl.GL_DEPTH_BUFFER_BIT)
         self.program.draw(gl.GL_POINTS)
-        im=ImageGrab.grab(bbox=(1,1,600,600))
-        im.save('im0.png')
+        #im=ImageGrab.grab(bbox=(1,1,600,600))
+        #im.save('im0.png')
 
 if __name__ == '__main__':
     c = Canvas()
-    print "A"
     c.show()
-    c.move(1,1)
+    c.move(0,0)
     c.update()
     c.title = "THISCANVAS"
-    print "B"
+
     app.run()
 
+    im = _screenshot((0, 0, c.size[0], c.size[1]))
+    print c.size[0],c.size[1]
+    imsave('gloo_screenshot.png', im) 
+
+
+
     #im=ImageGrab.grab()
-    print "BA"
+    #print "BA"
     #im=ImageGrab.grab(bbox=(10,10,1200,700))
     #im.show()
     #im.save('im0.png')
@@ -277,6 +287,3 @@ if __name__ == '__main__':
     else:
         print "Unable to get the screenshot."
     '''
-
-    print "C"
-    print "D"
