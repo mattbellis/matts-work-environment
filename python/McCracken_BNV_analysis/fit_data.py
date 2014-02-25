@@ -242,9 +242,11 @@ scanbins = np.array(scanbins)
 scanvals = np.array(scanvals)
 scanbins *= (1.0+peak_ratios)
 #print minscan
-#print scanbins
-#print scanvals
-#print scanresults
+print scanbins
+print scanvals
+print scanresults
+print scanvals[0],min(scanvals)
+print "Likelihood diff: ",scanvals[0]-min(scanvals)
 
 figscan = plt.figure(figsize=(8,4),dpi=100)
 axscan = figscan.add_subplot(1,1,1)
