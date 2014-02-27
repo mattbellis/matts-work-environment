@@ -88,6 +88,9 @@ def main():
     #print rise_time
     #exit()
 
+    print min(tdays),max(tdays)
+    #exit()
+
     if args.fit==5 or args.fit==6:
         infile_name = 'data/cogent_mc.dat'
         tdays,energies = get_cogent_data(infile_name,first_event=first_event,calibration=999)
