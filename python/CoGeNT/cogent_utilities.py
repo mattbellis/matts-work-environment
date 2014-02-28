@@ -154,6 +154,7 @@ def cut_events_outside_range(data,ranges):
 
     index = np.ones(len(data[0]),dtype=np.int)
     for i,r in enumerate(ranges):
+        print i,r[0],r[1]
         if len(r)>0:
             index *= ((data[i]>r[0])*(data[i]<r[1]))
 
@@ -165,6 +166,7 @@ def cut_events_outside_range(data,ranges):
     for i in xrange(len(data)):
         #print data[i][index!=True]
         data[i] = data[i][index==True]
+        print "here: ",min(data[i])
 
     return data
 

@@ -88,8 +88,6 @@ def main():
     #print rise_time
     #exit()
 
-    print min(tdays),max(tdays)
-    #exit()
 
     if args.fit==5 or args.fit==6:
         infile_name = 'data/cogent_mc.dat'
@@ -114,8 +112,20 @@ def main():
     ############################################################################
     # Cut events out that fall outside the range.
     ############################################################################
+    print min(data[1]),max(data[1])
+    print min(data[2]),max(data[2])
+    print data[2][data[2]<0]
+
+    print len(data[0])
     data = cut_events_outside_range(data,ranges)
+    print len(data[0])
     data = cut_events_outside_subrange(data,subranges[1],data_index=1)
+    print len(data[0])
+
+    print min(data[1]),max(data[1])
+    print min(data[2]),max(data[2])
+    print data[2][data[2]<0]
+    #exit()
 
     if args.verbose:
         print_data(energies,tdays)
@@ -171,6 +181,20 @@ def main():
     print rt_fast
     print rt_slow
 
+    print min(rt_fast),max(rt_fast)
+    print min(rt_slow),max(rt_slow)
+
+    print "EHREHRE"
+    print rt_fast[rt_fast!=rt_fast]
+    print rt_slow[rt_slow!=rt_slow]
+
+    # Catch any that are nan
+    rt_fast[rt_fast!=rt_fast] = 0.0
+    rt_slow[rt_slow!=rt_slow] = 0.0
+    print rt_fast[rt_fast!=rt_fast]
+    print rt_slow[rt_slow!=rt_slow]
+    #exit()
+
     data.append(rt_fast)
     data.append(rt_slow)
 
@@ -202,7 +226,7 @@ def main():
     ############################################################################
     # Plot the data
     ############################################################################
-    fig0 = plt.figure(figsize=(12,4),dpi=100)
+    fig0 = plt.figure(figsize=(12,6),dpi=100)
     ax0 = fig0.add_subplot(1,2,1)
     ax1 = fig0.add_subplot(1,2,2)
 
@@ -354,14 +378,15 @@ def main():
 
     nsurface = 575.0 # For full 917 days
     #nsurface = 506.0 # For full 917 days
-    tot_live_days = 808.0 # For the full 917 days
+    #tot_live_days = 808.0 # For the full 917 days
+    tot_live_days = 1131.0 # For the full 1238 days
     #tot_live_days = 447.0 # For the time before the fire
     partial_live_days = 0.0
     for sr in subranges[1]:
         partial_live_days += (sr[1]-sr[0])
     nsurface *= partial_live_days/tot_live_days
 
-    nsurface = 5000.0 # 3yr data.
+    nsurface = 4500.0 # 3yr data.
 
     # Exp 1 is the surface term
     params_dict['e_surf'] = {'fix':False,'start_val':1.0/3.36,'limits':(0.0,10.0)}
@@ -700,8 +725,10 @@ def main():
 
     print "Likelihood: %f" % (final_lh)
 
+    #'''
     if not args.batch:
         plt.show()
+    #'''
 
     exit()
 
