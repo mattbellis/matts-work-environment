@@ -1,6 +1,8 @@
 import sys
 import matplotlib.pylab as plt
 import numpy as np
+import csv
+import itertools as it
 
 import lichen.iminuit_fitting_utilities as fitutils
 
@@ -14,42 +16,46 @@ from scipy import interpolate
 # For the new files
 ################################################################################
 # FNDA 1 
-xis_offset = 0.00044 
-hours = 120 
+#xis_offset = 0.00044 
+#hours = 120 
 #### exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
-D56_coeff = [-30.268,5.00,13.39,6.30]
+#D56_coeff = [-30.268,5.00,13.39,6.30]
 
 # Fe
+#element = "Fe"
 #cmax0 = 0.0085 # fraction
 #cmin0 = 1.008 # fraction
 #light_isotope = 54.
 #heavy_isotope = 56.
 # Ni
-cmax0 = 0.0085 # fraction
-cmin0 = 0.985 # fraction
-light_isotope = 61.
-heavy_isotope = 62.
+#element = "Ni"
+#cmax0 = 0.0085 # fraction
+#cmin0 = 0.985 # fraction
+#light_isotope = 61.
+#heavy_isotope = 62.
 
 
 # FNDA 2
-'''
+#'''
 xis_offset = 0.0
 hours = 96
 #### exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
 D56_coeff = [-28.838,4.92,12.91,6.17]
 # Fe
-cmax0 = 0.0096 # fraction
-cmin0 = 1.005 # fraction
-light_isotope = 54.
-heavy_isotope = 56.
+#element = "Fe"
+#cmax0 = 0.0096 # fraction
+#cmin0 = 1.005 # fraction
+#light_isotope = 54.
+#heavy_isotope = 56.
 # Ni
+element = "Ni"
 cmax0 = 0.0084 # fraction
 cmin0 = 0.9896 # fraction
 #cmax0 = 0.009 # fraction
 #cmin0 = 0.991 # fraction
 light_isotope = 61.
 heavy_isotope = 62.
-'''
+#'''
 
 
 
@@ -60,14 +66,17 @@ heavy_isotope = 62.
 xmp,ymp = read_in_a_microprobe_data_file(sys.argv[1])
 xis,yis,yerris,cis = read_in_an_isotope_data_file(sys.argv[2])
 
+print sys.argv[1].split('/')[-1].split('_micro')[0]
+#exit()
+
 #yis *= 2 # Weird labeling in files (both FNDA 1 and FNDA 2) for Fe?.
-yis += 14.37 # For Ni, FNDA 1
+#yis += 14.37 # For Ni, FNDA 1
 
 xis -= xis_offset
-xis = xis[::-1] # Do this for FNDA 1
+#xis = xis[::-1] # Do this for FNDA 1
 
-#xmp *= -1 # Do this for FNDA 2
-#xis *= -1 # Do this for FNDA 2, for Fe
+xmp *= -1 # Do this for FNDA 2
+#####xis *= -1 # Do this for FNDA 2, NOT for Fe
 
 
 ################################################################################
@@ -98,8 +107,8 @@ xvals = np.linspace(lo,hi,npts)
 ################################################################################
 # Move in time
 ################################################################################
-#dt   = 600.0
-dt   = 60.0
+dt   = 600.0
+#dt   = 60.0
 t0   = 0
 tmax = (3600*hours) # seconds?
 
@@ -295,25 +304,34 @@ fig0 = plt.figure(figsize=(14,4))
 fig0.add_subplot(1,2,1)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.05)
 
-plt.plot(xpos,c56,'b-',label='Fe56 simulation')
+label = r"$^{%d}$%s simulation" % (heavy_isotope,element)
+plt.plot(xpos,c56,'b-',linewidth=3,label=label)
 plt.plot([interface_x,interface_x],[0,110.0])
 plt.ylim(0,1.10)
 plt.plot(xmp,ymp,'ro',label='microprobe data')
 plt.plot(xis,cis,'co',label='data from isotope file')
-plt.legend(loc='center right')
-#plt.yscale('log')
+plt.ylabel('Concentration')
+plt.xlabel('Meters')
+#plt.legend(loc='center right')
+plt.legend(loc='upper right') # FNDA 2, NI
 
 fig0.add_subplot(1,2,2)
-plt.plot(xpos,c54,'b-',label='Fe54 simulation ')
+label = r"$^{%d}$%s simulation" % (light_isotope,element)
+#plt.plot(xpos,c54,'b-',label='Fe54 simulation ')
+plt.plot(xpos,c54,'b-',linewidth=3,label=label)
 plt.plot([interface_x,interface_x],[0,110.0])
 plt.ylim(0,1.10)
 plt.plot(xmp,ymp,'ro',label='microprobe data')
-plt.legend()
+plt.ylabel('Concentration')
+plt.xlabel('Meters')
+#plt.legend(loc='center right')
+plt.legend(loc='upper right') # FNDA 2, NI
 
-
+name = "%s_%s_diffusion_profile.png" % (element,sys.argv[1].split('/')[-1].split('_micro')[0])
+plt.savefig(name)
 
 # Plot the deltas
-plt.figure()
+plt.figure(figsize=(12,6))
 #plt.plot(xpos,(c56/c54 - 1.0)*1000.0,'o')
 plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 plt.plot(xpos,sim_deltas,'-',linewidth=3,label=plotlabel)
@@ -324,14 +342,25 @@ plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.1)
 plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
 plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.25)
 plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
-plt.ylim(-40,40)
-plt.legend()
+#plt.ylim(-20,20) # FNDA 1, Ni
+plt.ylim(-40,40) # FNDA 1, Fe
+plt.ylabel(r'$\delta$')
+plt.xlabel('Meters')
+#plt.legend(loc='upper left')
+plt.legend(loc='upper left') # FNDA 2, NI
+name = "%s_%s_delta.png" % (element,sys.argv[1].split('/')[-1].split('_micro')[0])
+plt.savefig(name)
 
 #plt.figure()
 #plt.plot(xis,cis,'o',label='data from isotope file')
 #plt.legend()
 
 print values
+
+name = "%s_%s_output.csv" % (element,sys.argv[1].split('/')[-1].split('_micro')[0])
+
+f = open(name,'w')
+csv.writer(f).writerows(it.izip_longest(xmp,ymp,xis,cis,xpos,c56,c54,xis,yis,yerris,xpos,sim_deltas,sim_deltasfake,sim_deltasfake0,sim_deltasfake1))
 
 plt.show()
 
