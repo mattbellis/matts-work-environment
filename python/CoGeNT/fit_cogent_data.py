@@ -46,6 +46,8 @@ def main():
             default=None, help='Value of sigma_n (cross section of DM-nucleon interaction).')
     parser.add_argument('--mDM', dest='mDM', type=float,\
             default=None, help='Value of mDM (Mass of DM particle).')
+    parser.add_argument('--spike', dest='spikemass', type=float,\
+            default=None, help='Mass of a spike allowed to modulate.')
     parser.add_argument('--turn-off-eff', dest='turn_off_eff', action='store_true',\
             default=False, help='Turn off the efficiency.')
     parser.add_argument('--contours', dest='contours', action='store_true',\
@@ -430,6 +432,16 @@ def main():
         params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
         params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
 
+    params_dict['num_spike'] = {'fix':True,'start_val':1,'limits':(0.0,500.0)}
+    if args.fit == 10:
+        params_dict['num_spike'] = {'fix':True,'start_val':200,'limits':(0.0,500.0)}
+        params_dict['spike_mass'] = {'fix':True,'start_val':args.spikemass,'limits':(0.0,5.0)}
+        params_dict['spike_sigma'] = {'fix':True,'start_val':0.077,'limits':(0.0,1.0)}
+        params_dict['spike_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
+        params_dict['spike_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
+        params_dict['spike_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
+        params_dict['spike_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
+
     params_names,kwd = dict2kwd(params_dict)
 
     f = Minuit_FCN([data],params_dict)
@@ -612,6 +624,22 @@ def main():
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     
     #ax1.plot(expts,flat_tpts,'m-',linewidth=2)
+
+    ############################################################################
+    # ``spike" term.
+    ############################################################################
+    if args.fit==10:
+        gauss = stats.norm(loc=values['spike_mass'],scale=values['spike_sigma'])
+        eypts = gauss.pdf(expts)
+
+        # Energy distributions
+        y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=values['num_spike'],fmt='b--',axes=ax0,efficiency=eff)
+        eytot += y
+
+        # Time distribution
+        func = lambda x: values['spike_offst'] + values['spike_amp']*np.cos(values['spike_freq']*x+values['spike_phase'])   
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_spike'],fmt='b-',axes=ax1,subranges=subranges[1])
+        tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     ############################################################################
     # L-shell
     ############################################################################
