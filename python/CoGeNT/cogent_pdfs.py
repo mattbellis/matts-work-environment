@@ -299,6 +299,7 @@ def fitfunc(data,p,parnames,params_dict):
     num_surf = p[pn.index('num_surf')]
     e_exp_flat = p[pn.index('e_exp_flat')]
     t_exp_flat = p[pn.index('t_exp_flat')]
+    num_spike = p[pn.index('num_spike')]
 
     if flag==0 or flag==1 or flag==5:
         e_exp0 = p[pn.index('e_exp0')]
@@ -308,6 +309,14 @@ def fitfunc(data,p,parnames,params_dict):
         wmod_phase = p[pn.index('wmod_phase')]
         wmod_amp = p[pn.index('wmod_amp')]
         wmod_offst = p[pn.index('wmod_offst')]
+
+    if flag==10:
+        spike_mass = p[pn.index('spike_mass')]
+        spike_sigma = p[pn.index('spike_sigma')]
+        spike_freq = p[pn.index('spike_freq')]
+        spike_phase = p[pn.index('spike_phase')]
+        spike_amp = p[pn.index('spike_amp')]
+        spike_offst = p[pn.index('spike_offst')]
 
     elif flag==2 or flag==3 or flag==4 or flag==6:
         #mDM = 7.0
@@ -331,7 +340,7 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     num_tot = 0.0
     for name in pn:
-        if flag==0 or flag==1:
+        if flag==0 or flag==1 or flag==10:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
         elif flag==2 or flag==3 or flag==4:
@@ -414,6 +423,13 @@ def fitfunc(data,p,parnames,params_dict):
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
         pdf *= rtf # This will be the fast rise times
         pdf *= num_exp0
+
+    elif flag==10: # Spike at some fixed mass.
+        pdf  = pdfs.gauss(x,spike_mass,spike_sigma,xlo,xhi,efficiency=efficiency)
+        pdf *= pdfs.cos(y,spike_freq,spike_phase,spike_amp,spike_offst,ylo,yhi,subranges=subranges[1])
+        pdf *= rtf # This will be the fast rise times
+        pdf *= num_spike/num_tot
+    
     elif flag==2 or flag==3 or flag==4 or flag==6:
         print "num_wimps mDM: %12.3f %12.3f %12.3e" % (num_wimps,mDM,sigma_n)
         wimp_norm = num_wimps
