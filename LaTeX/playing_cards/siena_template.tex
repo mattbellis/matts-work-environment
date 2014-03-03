@@ -1,0 +1,215 @@
+%\documentclass[parskip]{scrartcl}
+\documentclass[letter]{article}
+\usepackage[margin=5mm]{geometry}
+\usepackage{tikz}
+\usepackage{pifont}
+
+\begin{document}
+
+\pgfmathsetmacro{\cardwidth}{6.55}
+\pgfmathsetmacro{\cardheight}{8.92}
+\newcommand{\stripcolor}{yellow}
+\pgfmathsetmacro{\stripwidth}{0.7}
+\pgfmathsetmacro{\strippadding}{0.1}
+\newcommand{\striptext}{SIENA PHYSICS \ding{74}}
+\pgfmathsetmacro{\textpadding}{0.3}
+
+%\newcommand{\topcaption}{PROBLEMS}
+%\newcommand{\topcontent}{\textit{General Physics I}}
+%\newcommand{\bottomcaption}{Kinematics}
+%\newcommand{\bottomcontent}{An object undergoing constant acceleration finds itself at position $x$ at\\$$x(t)=x_0+v_0t+\frac{1}{2}at^2$$Negleging air resistance, how long would it take something to fall from the top of the Empire State Building? ({\it Don't actually try this!})\\\vspace{0.2cm}\tikz{\fill[even odd rule] (0,0) circle (0.3) (-0.2,-0.2) rectangle (0.2,0.2);}}
+%\pgfmathsetmacro{\ruleheight}{0.3}
+%\newcommand{\backimage}{SClogoRGB.jpg}
+
+\newcommand{\topcaption}{Particle Physics}
+\newcommand{\topcontent}{\textit{Relativistic kinematics}}
+%\newcommand{\bottomcaption}{Relativistic kinematics}
+\newcommand{\bottomcaption}{~{}}
+\newcommand{\bottomcontentone}{$E=10.513$ GeV\\$p_x=3.154$ GeV/c\\$p_y=9.684$ GeV/c\\$p_z=7.136$ GeV/c\\\vspace{0.2cm}\tikz{\fill[even odd rule] (0,0) circle (0.3) (-0.2,-0.2) rectangle (0.2,0.2);}}
+\newcommand{\bottomcontenttwo}{$E=12.734$ GeV\\$p_x=0.390$ GeV/c\\$p_y=9.337$ GeV/c\\$p_z=8.076$ GeV/c\\\vspace{0.2cm}\tikz{\fill[even odd rule] (0,0) circle (0.3) (-0.2,-0.2) rectangle (0.2,0.2);}}
+\newcommand{\bottomcontent}{$E=11.202$ GeV\\$p_x=7.784$ GeV/c\\$p_y=4.453$ GeV/c\\$p_z=6.695$ GeV/c\\\vspace{0.2cm}\tikz{\fill[even odd rule] (0,0) circle (0.3) (-0.2,-0.2) rectangle (0.2,0.2);}}
+\pgfmathsetmacro{\ruleheight}{0.3}
+\newcommand{\backimage}{SClogoRGB.jpg}
+
+\noindent
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontent\\
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontentone\\
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontenttwo\\
+};
+\end{tikzpicture}\\
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontent\\
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontent\\
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontent\\
+};
+\end{tikzpicture}\\
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontent\\
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontent\\
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+    {\LARGE \topcaption}\\
+    \topcontent\\
+    \tikz{\fill (0,0) rectangle (\cardwidth-\strippadding-\stripwidth-2*\textpadding,\ruleheight);}\\
+    {\LARGE \bottomcaption}\\ 
+    \bottomcontent\\
+};
+\end{tikzpicture}\\
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\\
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\\
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\hfill
+\begin{tikzpicture}
+    \draw[rounded corners=0.2cm] (0,0) rectangle (\cardwidth,\cardheight);
+    \fill[\stripcolor,rounded corners=0.1cm] (\strippadding,\strippadding) rectangle (\strippadding+\stripwidth,\cardheight-\strippadding) node[rotate=90,above left,black,font=\LARGE] {\striptext};
+    \node[text width=(\cardwidth-\strippadding-\stripwidth-2*\textpadding)*1cm,below right] at (\strippadding+\stripwidth+\textpadding,\cardheight-\textpadding)
+    {
+        \includegraphics[width=1.5\textwidth,angle=90]{\backimage}
+};
+\end{tikzpicture}\\
+\end{document}
