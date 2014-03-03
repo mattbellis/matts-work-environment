@@ -46,6 +46,8 @@ def main():
             default=None, help='Value of sigma_n (cross section of DM-nucleon interaction).')
     parser.add_argument('--mDM', dest='mDM', type=float,\
             default=None, help='Value of mDM (Mass of DM particle).')
+    parser.add_argument('--spike', dest='spikemass', type=float,\
+            default=None, help='Mass of a spike allowed to modulate.')
     parser.add_argument('--turn-off-eff', dest='turn_off_eff', action='store_true',\
             default=False, help='Turn off the efficiency.')
     parser.add_argument('--contours', dest='contours', action='store_true',\
@@ -88,8 +90,6 @@ def main():
     #print rise_time
     #exit()
 
-    print min(tdays),max(tdays)
-    #exit()
 
     if args.fit==5 or args.fit==6:
         infile_name = 'data/cogent_mc.dat'
@@ -114,8 +114,20 @@ def main():
     ############################################################################
     # Cut events out that fall outside the range.
     ############################################################################
+    print min(data[1]),max(data[1])
+    print min(data[2]),max(data[2])
+    print data[2][data[2]<0]
+
+    print len(data[0])
     data = cut_events_outside_range(data,ranges)
+    print len(data[0])
     data = cut_events_outside_subrange(data,subranges[1],data_index=1)
+    print len(data[0])
+
+    print min(data[1]),max(data[1])
+    print min(data[2]),max(data[2])
+    print data[2][data[2]<0]
+    #exit()
 
     if args.verbose:
         print_data(energies,tdays)
@@ -171,6 +183,20 @@ def main():
     print rt_fast
     print rt_slow
 
+    print min(rt_fast),max(rt_fast)
+    print min(rt_slow),max(rt_slow)
+
+    print "EHREHRE"
+    print rt_fast[rt_fast!=rt_fast]
+    print rt_slow[rt_slow!=rt_slow]
+
+    # Catch any that are nan
+    rt_fast[rt_fast!=rt_fast] = 0.0
+    rt_slow[rt_slow!=rt_slow] = 0.0
+    print rt_fast[rt_fast!=rt_fast]
+    print rt_slow[rt_slow!=rt_slow]
+    #exit()
+
     data.append(rt_fast)
     data.append(rt_slow)
 
@@ -202,7 +228,7 @@ def main():
     ############################################################################
     # Plot the data
     ############################################################################
-    fig0 = plt.figure(figsize=(12,4),dpi=100)
+    fig0 = plt.figure(figsize=(12,6),dpi=100)
     ax0 = fig0.add_subplot(1,2,1)
     ax1 = fig0.add_subplot(1,2,2)
 
@@ -354,14 +380,15 @@ def main():
 
     nsurface = 575.0 # For full 917 days
     #nsurface = 506.0 # For full 917 days
-    tot_live_days = 808.0 # For the full 917 days
+    #tot_live_days = 808.0 # For the full 917 days
+    tot_live_days = 1131.0 # For the full 1238 days
     #tot_live_days = 447.0 # For the time before the fire
     partial_live_days = 0.0
     for sr in subranges[1]:
         partial_live_days += (sr[1]-sr[0])
     nsurface *= partial_live_days/tot_live_days
 
-    nsurface = 5000.0 # 3yr data.
+    nsurface = 4500.0 # 3yr data.
 
     # Exp 1 is the surface term
     params_dict['e_surf'] = {'fix':False,'start_val':1.0/3.36,'limits':(0.0,10.0)}
@@ -404,6 +431,16 @@ def main():
         params_dict['wmod_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
         params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
         params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
+
+    params_dict['num_spike'] = {'fix':True,'start_val':1,'limits':(0.0,500.0)}
+    if args.fit == 10:
+        params_dict['num_spike'] = {'fix':True,'start_val':200,'limits':(0.0,500.0)}
+        params_dict['spike_mass'] = {'fix':True,'start_val':args.spikemass,'limits':(0.0,5.0)}
+        params_dict['spike_sigma'] = {'fix':True,'start_val':0.077,'limits':(0.0,1.0)}
+        params_dict['spike_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
+        params_dict['spike_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
+        params_dict['spike_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
+        params_dict['spike_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
 
     params_names,kwd = dict2kwd(params_dict)
 
@@ -587,6 +624,22 @@ def main():
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     
     #ax1.plot(expts,flat_tpts,'m-',linewidth=2)
+
+    ############################################################################
+    # ``spike" term.
+    ############################################################################
+    if args.fit==10:
+        gauss = stats.norm(loc=values['spike_mass'],scale=values['spike_sigma'])
+        eypts = gauss.pdf(expts)
+
+        # Energy distributions
+        y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=values['num_spike'],fmt='b--',axes=ax0,efficiency=eff)
+        eytot += y
+
+        # Time distribution
+        func = lambda x: values['spike_offst'] + values['spike_amp']*np.cos(values['spike_freq']*x+values['spike_phase'])   
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_spike'],fmt='b-',axes=ax1,subranges=subranges[1])
+        tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     ############################################################################
     # L-shell
     ############################################################################
@@ -700,8 +753,10 @@ def main():
 
     print "Likelihood: %f" % (final_lh)
 
+    #'''
     if not args.batch:
         plt.show()
+    #'''
 
     exit()
 

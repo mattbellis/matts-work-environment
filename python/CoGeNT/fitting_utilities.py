@@ -190,7 +190,7 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     num_tot = 0
     for name in parnames:
-        if flag==0 or flag==1:
+        if flag==0 or flag==1 or flag==10:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
         elif flag==2 or flag==3 or flag==4:
