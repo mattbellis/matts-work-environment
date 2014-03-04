@@ -245,15 +245,18 @@ def main():
         #print s.student_name
         averages, output = s.summary_output(final_grade_weighting)
         #gvis_output = s.gvis_output(final_grade_weighting)
-        nmore_exams = 0
+        nmore_exams = 7 - len(s.grades.exams)
+        '''
         if len(s.grades.exams)==1:
             nmore_exams = 2
         elif len(s.grades.exams)==2:
             nmore_exams = 1
         elif len(s.grades.exams)==3:
             nmore_exams = 0
+        '''
 
-        nmore_final_exams = 0
+        nmore_final_exams = 0 # Don't include the final exam
+        #nmore_final_exams = 1 # Include the final exam in the hypotheticals
         # Uncomment this if you don't want the hypothetical exam grades
         # to be calculated.
         '''
@@ -271,11 +274,13 @@ def main():
         hypothetical_performances = [70.0,80.0,90.0,100.0]
         hypothetical_final_grades = []
         for g in (hypothetical_performances):
+            #'''
             for j in range(0,nmore_exams):
-                dum_grade = Grade('exam',-1,g,100.0,0.0,0.0,False,'3/12/2012')
-                s.grades.exams[(3-nmore_exams)+j] = dum_grade
+                dum_grade = Grade('exam',-1,g,100.0,0.0,0.0,False,'3/12/2014')
+                s.grades.exams[(7-nmore_exams)+j] = dum_grade
+            #'''
             for j in range(0,nmore_final_exams):
-                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'3/12/2012')
+                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'3/12/2014')
                 s.grades.final_exam[0] = dum_grade
 
             dum_averages, dum_output = s.summary_output(final_grade_weighting)
@@ -300,7 +305,7 @@ def main():
             msg_body += "------- Projected performance -----------\n"
             msg_body += "-----------------------------------------\n"
             msg_body += "If you receive the following grades on all of the remaining exams AND the final exam,\n"
-            msg_body += "then you would receive the folowing final grade for the class ASSUMING you also\n"
+            msg_body += "then you would receive the APPROXIMATELY the final grade for the class ASSUMING you also\n"
             msg_body += "maintain the same average on your quizzes and homeworks.\n"
             msg_body += "\n"
             for pe,pf in zip(hypothetical_performances,hypothetical_final_grades):
