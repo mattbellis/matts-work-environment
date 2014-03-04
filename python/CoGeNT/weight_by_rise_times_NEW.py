@@ -122,60 +122,36 @@ def main():
     # Look at the rise-time information.
     ############################################################################
 
-    params_file = 'rt_parameters.txt'
-    rt_parameters = np.loadtxt(params_file)
-    print rt_parameters[0]
-    print rt_parameters[1]
-    print rt_parameters[5]
-    print rt_parameters[6]
-    print rt_parameters[7]
+    print "Precalculating the fast and slow rise time probabilities........"
+    ############################################################################
+    # Parameters for the exponential form for the narrow fast peak.
+    mu0 =  [1.016749,0.786867,-1.203125]
+    sigma0 =  [2.372789,1.140669,0.262251]
+    # The entries for the relationship between the broad and narrow peak.
+    fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
+    fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
+    fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+    rt_fast = rise_time_prob_fast_exp_dist(data[2],data[0],mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
 
-    fmu = []
-    fsig = []
-    fn = []
-    smu = []
-    ssig = []
-    sn = []
-    npts = []
-    print "Figuring out the parameters for each data point...."
-    for e in data[0]:
-        # Loop over the energy slices
-        found = False
-        for i,elo in enumerate(rt_parameters[0]):
-            #print i,elo
-            if (e>=elo-0.10000001 and e<elo+0.10000001) or e<0.600:
-                fmu.append(rt_parameters[1][i])
-                fsig.append(rt_parameters[2][i])
-                fn.append(rt_parameters[3][i])
-                smu.append(rt_parameters[4][i])
-                ssig.append(rt_parameters[5][i])
-                sn.append(rt_parameters[6][i])
-                npts.append(rt_parameters[7][i])
-                found = True
-                break
+    # Parameters for the exponential form for the slow peak.
+    mu = [0.945067,0.646431,0.353891]
+    sigma =  [11.765617,94.854276,0.513464]
+    rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
+    ############################################################################
 
-        if found==False:
-            print e
+    rt_fast /= (ranges[0][1]-ranges[0][0])
+    rt_slow /= (ranges[0][1]-ranges[0][0])
 
-    print "Figured out the parameters for each data point!"
-    print len(data[0]),len(fmu)
-    nevents = float(len(data[0]))
+    # Catch any that are nan
+    rt_fast[rt_fast!=rt_fast] = 0.0
+    rt_slow[rt_slow!=rt_slow] = 0.0
 
-    fweights = []
-    sweights = []
-    for i,rt in enumerate(data[2]):
-        # Loop over the energy slices
-        #print i,e,fmu[i],fsig[i],fn[i]
-        #w = fn[i]*pdfs.lognormal(rt,fmu[i],fsig[i],ranges[2][0],ranges[2][1])
-        w = npts[i]*fn[i]*pdfs.lognormal(rt,fmu[i],fsig[i],ranges[2][0],ranges[2][1])
-        #w = fn[i]
-        #w /= nevents
-        fweights.append(w)
-        #w = sn[i]*pdfs.lognormal(rt,smu[i],ssig[i],ranges[2][0],ranges[2][1])
-        w = npts[i]*sn[i]*pdfs.lognormal(rt,smu[i],ssig[i],ranges[2][0],ranges[2][1])
-        #w = sn[i]
-        #w /= nevents
-        sweights.append(w)
+    fweights = rt_fast/(rt_fast+rt_slow)
+    sweights = rt_slow/(rt_fast+rt_slow)
+
+    print "LEN"
+    print len(fweights),len(data[2])
+    print min(fweights),max(fweights),fweights[fweights!=fweights]
 
     plt.figure()
     lch.hist_err(data[2],bins=nbins[2],range=(ranges[2][0],ranges[2][1]))
