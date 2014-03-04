@@ -200,9 +200,9 @@ def main():
     data.append(rt_fast)
     data.append(rt_slow)
 
-    figrt0 = plt.figure(figsize=(12,4),dpi=100)
-    axrt0 = figrt0.add_subplot(1,1,1)
-    lch.hist_err(data[2],bins=nbins[2],range=ranges[2],axes=axrt0)
+    #figrt0 = plt.figure(figsize=(12,4),dpi=100)
+    #axrt0 = figrt0.add_subplot(1,1,1)
+    #lch.hist_err(data[2],bins=nbins[2],range=ranges[2],axes=axrt0)
 
     '''
     print "Finished with the fast and slow rise time probabilities........"
@@ -633,12 +633,12 @@ def main():
         eypts = gauss.pdf(expts)
 
         # Energy distributions
-        y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=values['num_spike'],fmt='b--',axes=ax0,efficiency=eff)
+        y,plot = plot_pdf(expts,eypts,bin_width=bin_widths[0],scale=values['num_spike'],fmt='k-',axes=ax0,efficiency=eff,linewidth=3,label='spike')
         eytot += y
 
         # Time distribution
         func = lambda x: values['spike_offst'] + values['spike_amp']*np.cos(values['spike_freq']*x+values['spike_phase'])   
-        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_spike'],fmt='b-',axes=ax1,subranges=subranges[1])
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_spike'],fmt='k-',linewidth=3,axes=ax1,subranges=subranges[1])
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     ############################################################################
     # L-shell
@@ -688,10 +688,11 @@ def main():
     fig1.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
 
     # Efficiency function
-    efficiency = sigmoid(expts,threshold,sigmoid_sigma,max_val)
-    ax10.plot(expts,efficiency,'r--',linewidth=2)
+    #efficiency = sigmoid(expts,threshold,sigmoid_sigma,max_val)
+    #ax10.plot(expts,efficiency,'r--',linewidth=2)
+    ax10.plot(expts,eff,'r--',linewidth=2)
     ax10.set_xlim(ranges[0][0],ranges[0][1])
-    ax10.set_ylim(0.0,1.0)
+    ax10.set_ylim(0.0,1.1)
     '''
 
     ############################################################################
@@ -752,6 +753,8 @@ def main():
     print peak.strftime("%D")
 
     print "Likelihood: %f" % (final_lh)
+
+    print "num spike: %f" % (values['num_spike'])
 
     #'''
     if not args.batch:
