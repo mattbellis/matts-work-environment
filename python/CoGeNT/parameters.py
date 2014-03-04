@@ -34,6 +34,7 @@ def fitting_parameters(flag=0):
     # 3-year data
     ranges = [[0.5,3.0],[1.0,1238.0],[0.0,6.0]]
     subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,1238]],[]]
+
     # For the rise-time studies.
     #ranges = [[0.5,3.2],[551.0,1238.0],[0.0,6.0]]
     #subranges = [[],[[551,1238.0]],[]]
@@ -63,7 +64,7 @@ def fitting_parameters(flag=0):
     #nbins = [108,30]
     #nbins = [150,30]
     #nbins = [75,50]
-    nbins = [50,25,25]
+    nbins = [50,50,25]
     #nbins = [150,15]
     #nbins = [200,30]
     #nbins = [100,30]
