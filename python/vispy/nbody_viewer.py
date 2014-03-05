@@ -20,7 +20,7 @@ from vispy.util.transforms import perspective, translate, rotate
 from vispy.gloo import _screenshot
 from vispy.util.dataio import imsave
 
-import pyscreenshot as ImageGrab
+#import pyscreenshot as ImageGrab
 #from PIL import ImageGrab
 #import gtk.gdk
 
@@ -53,7 +53,9 @@ def make_arm(n,angle):
 #y -= 0.5
 #z /= 15000.
 
-ra,dec = np.loadtxt('data_zlo0.715_zhi0.725_arcseconds.dat',dtype=float,usecols=(0,1),unpack=True,skiprows=1)
+# For MICE
+'''
+#ra,dec = np.loadtxt('data_zlo0.715_zhi0.725_arcseconds.dat',dtype=float,usecols=(0,1),unpack=True,skiprows=1)
 ra /= 3600.0
 dec /= 3600.0
 theta = np.deg2rad(ra)
@@ -68,6 +70,22 @@ y -= 0.5
 
 x *= 2.25
 y *= 4
+'''
+
+# For SDSS
+ra,dec = np.loadtxt('../fits_utilities/test.out',dtype=float,usecols=(0,1),unpack=True,skiprows=1)
+theta = np.deg2rad(ra)
+phi = np.deg2rad(90-dec)
+x = theta
+y = np.cos(phi)
+
+x -= 2.8
+y -= 0.5
+
+x *= 2.25
+y *= 4
+
+
 
 print min(x),max(x)
 print min(y),max(y)
@@ -171,7 +189,9 @@ void main()
 {    
     float a = 2*(length(gl_PointCoord.xy - vec2(0.5,0.5)) / sqrt(2.0));
     vec3 color = texture2D(u_colormap, vec2(v_dist,.5)).rgb;
-    gl_FragColor = vec4(color,(1-a)*.25);
+    gl_FragColor = vec4(color,(1-a)*.50);
+    // 0.25 for MICE
+    // 0.50 for SDSS
 }
 """
 
@@ -262,9 +282,9 @@ if __name__ == '__main__':
 
     app.run()
 
-    im = _screenshot((0, 0, c.size[0], c.size[1]))
-    print c.size[0],c.size[1]
-    imsave('gloo_screenshot.png', im) 
+    #im = _screenshot((0, 0, c.size[0], c.size[1]))
+    #print c.size[0],c.size[1]
+    #imsave('gloo_screenshot.png', im) 
 
 
 
