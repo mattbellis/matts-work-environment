@@ -108,10 +108,12 @@ def main():
     nevents = float(len(data[0]))
 
     # Plot rise times vs. energies
+    '''
     plt.figure()
     plt.plot(data[0],data[2],'o',markersize=1.5)
     plt.yscale('log')
     plt.ylim(0.1,10)
+    '''
 
     #plt.show()
     #exit()
@@ -153,6 +155,7 @@ def main():
     print len(fweights),len(data[2])
     print min(fweights),max(fweights),fweights[fweights!=fweights]
 
+    '''
     plt.figure()
     lch.hist_err(data[2],bins=nbins[2],range=(ranges[2][0],ranges[2][1]))
     plt.xlim(ranges[2][0],ranges[2][1])
@@ -170,28 +173,39 @@ def main():
     plt.figure()
     lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]))
     plt.xlim(ranges[0][0],ranges[0][1])
+    '''
 
     plt.figure(figsize=(8,4))
     plt.subplot(1,2,1)
-    lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]),weights=fweights)
+    lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]),weights=fweights,label='Weighted by FRT')
     plt.xlim(ranges[0][0],ranges[0][1])
+    plt.xlabel('keVee')
+    plt.legend()
     plt.subplot(1,2,2)
-    lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]),weights=sweights)
+    lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]),weights=sweights,label='Weighted by SRT')
     plt.xlim(ranges[0][0],ranges[0][1])
+    plt.xlabel('keVee')
+    plt.legend()
 
     plt.figure(figsize=(8,4))
     plt.subplot(1,2,1)
-    lch.hist_err(data[1],bins=nbins[1],range=(ranges[1][0],ranges[1][1]),weights=fweights)
+    lch.hist_err(data[1],bins=nbins[1],range=(ranges[1][0],ranges[1][1]),weights=fweights,label='Weighted by FRT')
     plt.xlim(ranges[1][0],ranges[1][1])
+    plt.xlabel('Day')
+    plt.legend()
     plt.subplot(1,2,2)
-    lch.hist_err(data[1],bins=nbins[1],range=(ranges[1][0],ranges[1][1]),weights=sweights)
+    lch.hist_err(data[1],bins=nbins[1],range=(ranges[1][0],ranges[1][1]),weights=sweights,label='Weighted by SRT')
     plt.xlim(ranges[1][0],ranges[1][1])
+    plt.xlabel('Day')
+    plt.legend()
 
+    '''
     plt.figure(figsize=(8,4))
     plt.subplot(1,2,1)
     lch.hist_err(fweights,bins=50)
     plt.subplot(1,2,2)
     lch.hist_err(sweights,bins=50)
+    '''
 
     #plt.figure()
     #lch.hist_2D(data[0],fweights,xbins=nbins[0],ybins=100,xrange=(ranges[0][0],ranges[0][1]),yrange=(0,0.0001))
