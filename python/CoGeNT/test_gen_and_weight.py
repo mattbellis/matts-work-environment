@@ -60,6 +60,8 @@ pars['t_surf'] = 0.000001
 pars['num_surf'] = 50000
 pdf = surface_events(data,pars,[ranges[0][0],ranges[1][0]],[ranges[0][1],ranges[1][1]],subranges=subranges,efficiency=None)
 
+
+
 plt.figure()
 h,x,y,xerr,yerr = lch.hist_err(data[2],bins=50,weights=pdf)
 plt.plot(x,y,'b-')
