@@ -19,6 +19,15 @@ import lichen.lichen as lch
 
 import iminuit as minuit
 
+from scipy.optimize import curve_fit
+
+################################################################################
+#def func(x, a, b, c, d):
+    #return a + b*x + c*x*x + d*x*x*x
+
+def func(x, a, b, c):
+    return a*np.exp(-b*x) + c
+
 import argparse
 
 import math
@@ -182,10 +191,23 @@ def main():
     plt.xlabel('keVee')
     plt.legend()
     plt.subplot(1,2,2)
-    lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]),weights=sweights,label='Weighted by SRT')
+    h,xpts,ypts,xerr,yerr = lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]),weights=sweights,label='Weighted by SRT')
     plt.xlim(ranges[0][0],ranges[0][1])
     plt.xlabel('keVee')
     plt.legend()
+
+    # Fit the data
+    popt, pcov = curve_fit(func, xpts, ypts, sigma=yerr)
+    print "npts: %f" % (sum(ypts))
+    print popt
+    print pcov
+
+    x = np.linspace(min(xpts),max(xpts),1000)
+    y = func(x,popt[0],popt[1],popt[2])
+    #y = func(x,popt[0],popt[1],popt[2],popt[3])
+    plt.plot(x,y)
+
+
 
     plt.figure(figsize=(8,4))
     plt.subplot(1,2,1)
@@ -198,6 +220,7 @@ def main():
     plt.xlim(ranges[1][0],ranges[1][1])
     plt.xlabel('Day')
     plt.legend()
+
 
     '''
     plt.figure(figsize=(8,4))
