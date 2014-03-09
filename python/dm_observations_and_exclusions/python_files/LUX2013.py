@@ -6,7 +6,7 @@ from scipy.io import loadmat,savemat
 import os
 
 file_name = 'LUX 2013.limit'
-data_label = 'LUX(2013) 90\n % U.L.'
+data_label = 'LUX(2013) 90% U.L.'
 data_comment = 'Sigma normalized to WIMP-Nucleon'
 data_reference = 'First results from the LUX dark matter experiment at the Sanford Underground\r\nResearch Facility, <a href = "http://luxdarkmatter.org/papers/LUX_First_Results_2013.pdf"> 2013</a>'
 data_typeoflimit = ['Sensitivity Goal', 'SI-Exp']
