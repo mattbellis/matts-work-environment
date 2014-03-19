@@ -5,15 +5,19 @@ import sys
 
 import csv
 
-reader = csv.reader(open(sys.argv[1]))
+reader = csv.reader(open(sys.argv[1]),delimiter='	')
 
 x = []
 y = []
 for i,row in enumerate(reader):
 
+    print row
+
     if i!=0:
-        x.append(float(row[12]))
-        y.append(float(row[11]))
+        #x.append(float(row[12]))
+        #y.append(float(row[11]))
+        y.append(float(row[0]))
+        x.append(float(row[1]))
 
         print i
 
