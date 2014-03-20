@@ -215,7 +215,8 @@ def surface_events(data,pars,lo,hi,subranges=None,efficiency=None):
     yhi = hi[1]
 
     # Energy
-    pdf  = pdfs.exp(x,pars['e_surf'],xlo,xhi,efficiency=efficiency)
+    #pdf  = pdfs.exp(x,pars['e_surf'],xlo,xhi,efficiency=efficiency)
+    pdf  = pdfs.poly(x,[pars['k1_surf'],pars['k2_surf']],xlo,xhi,efficiency=efficiency)
 
     # Time
     pdf *= pdfs.exp(y,pars['t_surf'],ylo,yhi,subranges=subranges[1])
@@ -262,6 +263,7 @@ def fitfunc(data,p,parnames,params_dict):
     y = data[1]
     rtf = data[3]
     rts = data[4]
+    rtflat = data[5]
 
     xlo = params_dict['var_e']['limits'][0]
     xhi = params_dict['var_e']['limits'][1]
@@ -294,7 +296,7 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     num_exp0 = p[pn.index('num_exp0')]
     num_flat = p[pn.index('num_flat')]
-    e_surf = p[pn.index('e_surf')]
+    #e_surf = p[pn.index('e_surf')]
     t_surf = p[pn.index('t_surf')]
     num_surf = p[pn.index('num_surf')]
     e_exp_flat = p[pn.index('e_exp_flat')]
@@ -393,6 +395,7 @@ def fitfunc(data,p,parnames,params_dict):
         dc = -1.0*dc
         pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
         pdf *= rtf # This will be the fast rise times
+        #pdf *= rtflat # This will be the flat rise times
         pdf *= n
         if flag!=5 and flag!=6:
             tot_pdf += pdf

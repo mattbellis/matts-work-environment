@@ -38,7 +38,7 @@ def fitting_parameters(flag=0):
     # For the rise-time studies.
     #ranges = [[0.5,3.2],[551.0,1238.0],[0.0,6.0]]
     #subranges = [[],[[551,1238.0]],[]]
-    #ranges = [[0.5,3.2],[1.0,1238.0],[0.0,5.0]] # Should this be 6?
+    #ranges = [[0.5,3.2],[1.0,1238.0],[0.0,8.0]] # Should this be 6?
     #subranges = [[],[[1,68],[75,102],[108,306],[309,459],[551,1238]],[]]
 
     # For the pulser rise-time studies.
@@ -64,7 +64,7 @@ def fitting_parameters(flag=0):
     #nbins = [108,30]
     #nbins = [150,30]
     #nbins = [75,50]
-    nbins = [100,100,25]
+    nbins = [50,50,40]
     #nbins = [150,15]
     #nbins = [200,30]
     #nbins = [100,30]
