@@ -278,8 +278,8 @@ def rise_time_prob_exp_progression(rise_time,energy,mu_k,sigma_k,xlo,xhi):
 
     # Pull out the constants for the polynomials.
     allmu = expfunc(mu_k,energy)
-    allsigma = expfunc(sigma_k,energy)
-    #allsigma = expfunc1(sigma_k,energy) # Linear func
+    #allsigma = expfunc(sigma_k,energy)
+    allsigma = expfunc1(sigma_k,energy) # Linear func
 
     #ret = (1.0/(x*sigma*np.sqrt(2*np.pi)))*np.exp(-((np.log(x)-mu)**2)/(2*sigma*sigma))
     if type(rise_time)==np.ndarray:

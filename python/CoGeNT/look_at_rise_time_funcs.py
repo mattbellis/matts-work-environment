@@ -77,29 +77,6 @@ def main():
     '''
 
     ############################################################################
-    # Read in the data
-    ############################################################################
-    infile_name = 'data/LE.txt'
-    #infile_name = 'data/HE.txt'
-    tdays,energies,rise_times = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
-    print tdays
-    print energies
-    print rise_times
-
-    print energies
-    if args.verbose:
-        print_data(energies,tdays,rise_times)
-
-    #data = [energies.copy(),tdays.copy()]
-    #print "data before range cuts: ",len(data[0]),len(data[1])
-
-    # 3yr data
-    data = [energies.copy(),tdays.copy(),rise_times]
-    print "data before range cuts: ",len(data[0]),len(data[1]),len(data[2])
-    #exit()
-
-
-    ############################################################################
     # Declare the ranges.
     ############################################################################
     ranges,subranges,nbins = parameters.fitting_parameters(args.fit)
@@ -108,33 +85,25 @@ def main():
     for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
         bin_widths[i] = (r[1]-r[0])/n
 
-    # Cut events out that fall outside the range.
-    data = cut_events_outside_range(data,ranges)
-    data = cut_events_outside_subrange(data,subranges[1],data_index=1)
-
-    if args.verbose:
-        print_data(energies,tdays)
-
-    print "data after  range cuts: ",len(data[0]),len(data[1])
-
-    nevents = float(len(data[0]))
-
-    # Plot rise times vs. energies
-    '''
-    plt.figure()
-    plt.plot(data[0],data[2],'o',markersize=1.5)
-    plt.yscale('log')
-    plt.ylim(0.1,10)
-    '''
-
-    #plt.show()
-    #exit()
     ############################################################################
     # Plot the data
     ############################################################################
     ############################################################################
     # Look at the rise-time information.
     ############################################################################
+
+    ewidth = 0.150
+    estep = 0.150
+    estart = 0.5
+
+    x = []
+    rt = []
+    npts = 300
+    nbins = 15
+    for i in range(0,nbins):
+        emid = i*estep + ewidth/2.0 + estart
+        x.append(emid*np.ones(npts))
+        rt.append(np.linspace(0.0,8.0,npts))
 
     print "Precalculating the fast and slow rise time probabilities........"
     ############################################################################
@@ -167,26 +136,20 @@ def main():
     #sigma0 =  [2.263108,1.001017,0.271532]
 
     # Trial 5, 0-8 rt range
-    #mu0 =  [0.663503,0.659048,-1.251128]
-    #sigma0 = [2.249423,0.971873,0.273167]
-
-    # Trial 6, 0-8 rt range, and new rels
-    mu0 =   [0.701453,0.676855,-1.243412]
-    sigma0 = [2.270888,1.012599,0.272931]
-
+    mu0 =  [0.663503,0.659048,-1.251128]
+    sigma0 = [2.249423,0.971873,0.273167]
 
     # The entries for the relationship between the broad and narrow peak.
-    # Using rt 0-6
-    #fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
-    #fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
-    #fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+    fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
+    fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
+    fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+    #rt_fast = rise_time_prob_fast_exp_dist(data[2],data[0],mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
 
-    # Using rt 0-8
-    fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
-    fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
-    fast_num_rel_k = [-3.158560,0.014129,1.229496]
+    rtfy = []
+    for epts,rtpts in zip(x,rt):
+        rt_fast = rise_time_prob_fast_exp_dist(rtpts,epts,mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
+        rtfy.append(rt_fast)
 
-    rt_fast = rise_time_prob_fast_exp_dist(data[2],data[0],mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
 
     # Parameters for the exponential form for the slow peak.
     # YES
@@ -211,105 +174,31 @@ def main():
     #sigma = [0.547626,-0.017464] # Linear fit.
 
     # Trial 4
-    #mu = [0.867330,0.642910,0.343893]
-    ##sigma = [83.292160,-0.016094,0.516246]
-    #sigma = [0.548426,-0.017512] # Linear fit.
+    mu = [0.867330,0.642910,0.343893]
+    #sigma = [83.292160,-0.016094,0.516246]
+    sigma = [0.548426,-0.017512] # Linear fit.
 
     # Trial 5
-    #mu =  [0.831018,0.634691,0.338035]
-    #sigma =  [0.569887,-0.029380]
+    mu =  [0.831018,0.634691,0.338035]
+    sigma =  [0.569887,-0.029380]
 
-    # Trial 6
-    mu = [0.846635,0.639263,0.339941]
-    sigma = [0.568532,-0.028607]
-
-    rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
+    #rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
+    rtsy = []
+    for epts,rtpts in zip(x,rt):
+        rt_slow = rise_time_prob_exp_progression(rtpts,epts,mu,sigma,ranges[2][0],ranges[2][1])
+        rtsy.append(rt_slow)
     ############################################################################
 
-    rt_fast /= (ranges[0][1]-ranges[0][0])
-    rt_slow /= (ranges[0][1]-ranges[0][0])
+    axrt = []
+    for i in range(0,nbins):
+        if i%6==0:
+            plt.figure()
+        axrt.append(plt.subplot(2,3,i%6+1))
+        plt.plot(rt[i],rtfy[i])
+        plt.plot(rt[i],rtsy[i])
+        name = "%3.2f-%3.2f" % (i*estep+estart,i*estep+estart+ewidth)
+        plt.text(0.75,0.75,name,transform=axrt[i].transAxes)
 
-    # Catch any that are nan
-    rt_fast[rt_fast!=rt_fast] = 0.0
-    rt_slow[rt_slow!=rt_slow] = 0.0
-
-    fweights = rt_fast/(rt_fast+rt_slow)
-    sweights = rt_slow/(rt_fast+rt_slow)
-
-    print "LEN"
-    print len(fweights),len(data[2])
-    print min(fweights),max(fweights),fweights[fweights!=fweights]
-
-    '''
-    plt.figure()
-    lch.hist_err(data[2],bins=nbins[2],range=(ranges[2][0],ranges[2][1]))
-    plt.xlim(ranges[2][0],ranges[2][1])
-
-    plt.figure(figsize=(8,4))
-    plt.subplot(1,2,1)
-    lch.hist_err(data[2],bins=nbins[2],range=(ranges[2][0],ranges[2][1]),weights=fweights)
-    plt.xlim(ranges[2][0],ranges[2][1])
-
-    plt.subplot(1,2,2)
-    lch.hist_err(data[2],bins=nbins[2],range=(ranges[2][0],ranges[2][1]),weights=sweights)
-    plt.xlim(ranges[2][0],ranges[2][1])
-
-
-    plt.figure()
-    lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]))
-    plt.xlim(ranges[0][0],ranges[0][1])
-    '''
-
-    plt.figure(figsize=(8,4))
-    plt.subplot(1,2,1)
-    lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]),weights=fweights,label='Weighted by FRT')
-    plt.xlim(ranges[0][0],ranges[0][1])
-    plt.xlabel('keVee')
-    plt.legend()
-    plt.subplot(1,2,2)
-    h,xpts,ypts,xerr,yerr = lch.hist_err(data[0],bins=nbins[0],range=(ranges[0][0],ranges[0][1]),weights=sweights,label='Weighted by SRT')
-    plt.xlim(ranges[0][0],ranges[0][1])
-    plt.xlabel('keVee')
-    plt.legend()
-
-    # Fit the data
-    popt, pcov = curve_fit(funcpoly2, xpts, ypts, sigma=yerr)
-    #popt, pcov = curve_fit(funcexp, xpts, ypts, sigma=yerr,maxfev=10000)
-    print "npts: %f" % (sum(ypts))
-    print popt
-    print pcov
-
-    x = np.linspace(min(xpts),max(xpts),1000)
-    y = funcpoly2(x,popt[0],popt[1],popt[2])
-    #y = funcpoly3(x,popt[0],popt[1],popt[2],popt[3])
-    #y = funcexp(x,popt[0],popt[1],popt[2])
-    plt.plot(x,y)
-
-
-
-    plt.figure(figsize=(8,4))
-    plt.subplot(1,2,1)
-    lch.hist_err(data[1],bins=nbins[1],range=(ranges[1][0],ranges[1][1]),weights=fweights,label='Weighted by FRT')
-    plt.xlim(ranges[1][0],ranges[1][1])
-    plt.xlabel('Day')
-    plt.legend()
-    plt.subplot(1,2,2)
-    lch.hist_err(data[1],bins=nbins[1],range=(ranges[1][0],ranges[1][1]),weights=sweights,label='Weighted by SRT')
-    plt.xlim(ranges[1][0],ranges[1][1])
-    plt.xlabel('Day')
-    plt.legend()
-
-
-    '''
-    plt.figure(figsize=(8,4))
-    plt.subplot(1,2,1)
-    lch.hist_err(fweights,bins=50)
-    plt.subplot(1,2,2)
-    lch.hist_err(sweights,bins=50)
-    '''
-
-    #plt.figure()
-    #lch.hist_2D(data[0],fweights,xbins=nbins[0],ybins=100,xrange=(ranges[0][0],ranges[0][1]),yrange=(0,0.0001))
 
     if not args.batch:
         plt.show()
