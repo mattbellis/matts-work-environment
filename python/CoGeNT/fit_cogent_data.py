@@ -154,17 +154,30 @@ def main():
     # slow sigma = floating
     ############################################################################
     # Parameters for the exponential form for the narrow fast peak.
-    mu0 =  [1.016749,0.786867,-1.203125]
-    sigma0 =  [2.372789,1.140669,0.262251]
+    #mu0 =  [1.016749,0.786867,-1.203125]
+    #sigma0 =  [2.372789,1.140669,0.262251]
     # The entries for the relationship between the broad and narrow peak.
-    fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
-    fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
-    fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+    #fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
+    #fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
+    #fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+
+    # Trial 6
+    # Using rt 0-8
+    fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
+    fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
+    fast_num_rel_k = [-3.158560,0.014129,1.229496]
+    mu0 =   [0.701453,0.676855,-1.243412]
+    sigma0 = [2.270888,1.012599,0.272931]
+
     rt_fast = rise_time_prob_fast_exp_dist(data[2],data[0],mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
 
     # Parameters for the exponential form for the slow peak.
-    mu = [0.945067,0.646431,0.353891]
-    sigma =  [11.765617,94.854276,0.513464]
+    #mu = [0.945067,0.646431,0.353891]
+    #sigma =  [11.765617,94.854276,0.513464]
+    # Trial 6
+    mu = [0.846635,0.639263,0.339941]
+    sigma = [0.568532,-0.028607]
+
     rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
     ############################################################################
 
@@ -199,6 +212,12 @@ def main():
 
     data.append(rt_fast)
     data.append(rt_slow)
+
+    ############################################################################
+    rt_flat = np.ones(len(rt_slow))/((ranges[2][1]-ranges[2][0])*(ranges[0][1]-ranges[0][0]))
+    ############################################################################
+
+    data.append(rt_flat)
 
     #figrt0 = plt.figure(figsize=(12,4),dpi=100)
     #axrt0 = figrt0.add_subplot(1,1,1)
@@ -368,7 +387,10 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
     for i,val in enumerate(num_decays_in_dataset):
         name = "ls_ncalc%d" % (i)
-        params_dict[name] = {'fix':True,'start_val':val}
+        if i==2 or i==3:
+            params_dict[name] = {'fix':False,'start_val':val}
+        else:
+            params_dict[name] = {'fix':True,'start_val':val}
     for i,val in enumerate(decay_constants):
         name = "ls_dc%d" % (i)
         params_dict[name] = {'fix':True,'start_val':val}
@@ -388,10 +410,12 @@ def main():
         partial_live_days += (sr[1]-sr[0])
     nsurface *= partial_live_days/tot_live_days
 
-    nsurface = 4500.0 # 3yr data.
+    nsurface = 5035.0 # 3yr data.
 
     # Exp 1 is the surface term
-    params_dict['e_surf'] = {'fix':False,'start_val':1.0/3.36,'limits':(0.0,10.0)}
+    #params_dict['e_surf'] = {'fix':False,'start_val':1.0/3.36,'limits':(0.0,10.0)}
+    params_dict['k1_surf'] = {'fix':False,'start_val':-0.494,'limits':(-0.7,-0.4)}
+    params_dict['k2_surf'] = {'fix':False,'start_val':0.0777,'limits':(0.0,0.2)}
     params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0)}
     params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
 
@@ -580,7 +604,8 @@ def main():
     ############################################################################
     if args.fit!=5 and args.fit!=6:
         # Energy projections
-        ypts = np.exp(-values['e_surf']*expts)
+        #ypts = np.exp(-values['e_surf']*expts)
+        ypts = pdfs.poly(expts, [values['k1_surf'],values['k2_surf']],ranges[0][0],ranges[0][1])
         y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_surf'],fmt='y-',axes=ax0,efficiency=eff,label='surface')
         eytot += y
 
@@ -647,7 +672,11 @@ def main():
         # Returns pdfs
         lshell_totx = np.zeros(1000)
         lshell_toty = np.zeros(1000)
-        for m,s,n,dc in zip(means,sigmas,num_decays_in_dataset,decay_constants):
+        #for m,s,n,dc in zip(means,sigmas,num_decays_in_dataset,decay_constants):
+        for i,(m,s,dc) in enumerate(zip(means,sigmas,decay_constants)):
+
+            name = "ls_ncalc%d" % (i)
+            n = values[name]
             gauss = stats.norm(loc=m,scale=s)
             eypts = gauss.pdf(expts)
 
