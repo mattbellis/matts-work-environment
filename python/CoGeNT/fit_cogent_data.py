@@ -6,6 +6,8 @@ import matplotlib.dates as mdates
 from datetime import datetime,timedelta
 
 import scipy.integrate as integrate
+from scipy import interpolate
+
 
 import parameters 
 from cogent_utilities import *
@@ -166,8 +168,15 @@ def main():
     fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
     fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
     fast_num_rel_k = [-3.158560,0.014129,1.229496]
+
     mu0 =   [0.701453,0.676855,-1.243412]
     sigma0 = [2.270888,1.012599,0.272931]
+
+    # Trial 7, 0-8 range, new rels, 0.10 width, removing odd points
+    mu0 =  [0.896497,0.709907,-1.208970]
+    sigma0 = [2.480080,1.215221,0.266656]
+
+
 
     rt_fast = rise_time_prob_fast_exp_dist(data[2],data[0],mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
 
@@ -177,6 +186,10 @@ def main():
     # Trial 6
     mu = [0.846635,0.639263,0.339941]
     sigma = [0.568532,-0.028607]
+
+    # Trial 7
+    mu = [0.768572,0.588991,0.343744]
+    sigma = [0.566326,-0.031958]
 
     rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
     ############################################################################
@@ -247,9 +260,10 @@ def main():
     ############################################################################
     # Plot the data
     ############################################################################
-    fig0 = plt.figure(figsize=(12,6),dpi=100)
-    ax0 = fig0.add_subplot(1,2,1)
-    ax1 = fig0.add_subplot(1,2,2)
+    fig0a = plt.figure(figsize=(12,6),dpi=100)
+    fig0b = plt.figure(figsize=(12,6),dpi=100)
+    ax0 = fig0a.add_subplot(1,1,1)
+    ax1 = fig0b.add_subplot(1,1,1)
 
 
     lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
@@ -297,7 +311,8 @@ def main():
 
     ############################################################################
     # Tweak the spacing on the figures.
-    fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None,top=0.85)
+    fig0a.subplots_adjust(left=0.07, bottom=0.10, right=0.99, wspace=None, hspace=None,top=0.95)
+    fig0b.subplots_adjust(left=0.07, bottom=0.05, right=0.99, wspace=None, hspace=None,top=0.85)
 
     #ax1.set_ylim(0.0,420.0)
     #plt.show()
@@ -410,16 +425,18 @@ def main():
         partial_live_days += (sr[1]-sr[0])
     nsurface *= partial_live_days/tot_live_days
 
-    nsurface = 5035.0 # 3yr data.
+    nsurface = 4922.0 # 3yr data.
 
     # Exp 1 is the surface term
     #params_dict['e_surf'] = {'fix':False,'start_val':1.0/3.36,'limits':(0.0,10.0)}
-    params_dict['k1_surf'] = {'fix':False,'start_val':-0.494,'limits':(-0.7,-0.4)}
-    params_dict['k2_surf'] = {'fix':False,'start_val':0.0777,'limits':(0.0,0.2)}
+    params_dict['k1_surf'] = {'fix':False,'start_val':-0.50,'limits':(-0.7,-0.4)}
+    params_dict['k2_surf'] = {'fix':True,'start_val':0.079,'limits':(0.0,0.2)}
+    #params_dict['k1_surf'] = {'fix':False,'start_val':1.00,'limits':(-0.7,-0.4)}
+    #params_dict['k2_surf'] = {'fix':False,'start_val':1.00,'limits':(0.0,0.2)}
     params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0)}
     params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
 
-    params_dict['num_flat'] = {'fix':False,'start_val':2000.0,'limits':(0.0,100000.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':2900.0,'limits':(0.0,100000.0)}
     params_dict['e_exp_flat'] = {'fix':False,'start_val':-0.05,'limits':(0.00001,10.0)}
     params_dict['t_exp_flat'] = {'fix':False,'start_val':0.001,'limits':(0.0000001,10.0)}
     params_dict['flat_frac'] = {'fix':True,'start_val':0.51,'limits':(0.00001,10.0)}
@@ -476,8 +493,11 @@ def main():
 
     m = minuit.Minuit(f,**kwd)
 
+    values_initial = m.values
+
     # Up the tolerance.
     #m.tol = 1.0
+
 
     m.migrad()
     #m.hesse()
@@ -485,6 +505,7 @@ def main():
     print "Finished fit!!\n"
 
     values = m.values # Dictionary
+    errors = m.errors # Dictionary
     final_lh = m.fval # 
 
     ############################################################################
@@ -673,11 +694,11 @@ def main():
         lshell_totx = np.zeros(1000)
         lshell_toty = np.zeros(1000)
         #for m,s,n,dc in zip(means,sigmas,num_decays_in_dataset,decay_constants):
-        for i,(m,s,dc) in enumerate(zip(means,sigmas,decay_constants)):
+        for i,(mean,s,dc) in enumerate(zip(means,sigmas,decay_constants)):
 
             name = "ls_ncalc%d" % (i)
             n = values[name]
-            gauss = stats.norm(loc=m,scale=s)
+            gauss = stats.norm(loc=mean,scale=s)
             eypts = gauss.pdf(expts)
 
             # Energy distributions
@@ -706,6 +727,31 @@ def main():
     for x,y in zip(sr_txpts,tot_sr_typts):
         ax1.plot(x,y,'b',linewidth=3)
 
+    ###########################################################
+    # Subtract the fit results to see what's left.
+    ###########################################################
+    figsub = plt.figure()
+    axsub = figsub.add_subplot(1,1,1)
+    h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=axsub)
+    tempx = np.array([])
+    tempy = np.array([])
+    for x,y,lsh,flat in zip(sr_txpts,tot_sr_typts,lshell_toty,flat_tpts):
+        tempx = np.append(tempx,x)
+        tempy = np.append(tempy,y)
+    print tempx
+    print tempy
+    fit_result = interpolate.interp1d(tempx,tempy)
+    ypts_sub = ypts - fit_result(xpts)
+    acc_corr_sub = acc_corr*ypts - fit_result(xpts)
+    ypts_sub_err = ypts_err*ypts_sub/ypts
+    axsub.errorbar(xpts,ypts_sub,yerr=ypts_sub_err,fmt='o',
+                        color='black',ecolor='black',markersize=2,barsabove=False,capsize=0)
+    axsub.errorbar(xpts,acc_corr_sub,yerr=ypts_sub_err,fmt='o',
+                        color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
+
+    #ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
+
+
 
     ############################################################################
 
@@ -730,34 +776,40 @@ def main():
     #dates = ['01/02/1991','01/03/1991','01/04/1991']
     #x = [datetime.strptime(d,'%m/%d/%Y').date() for d in dates]
     x = []
-    ndivs = 2
+    ndivs = 40
     for i in range(ndivs):
         days = ranges[1][1]/ndivs
-        date = start_date + timedelta(days=i*days)
+        #date = start_date + timedelta(days=i*days)
+        date = start_date + timedelta(days=i*30)
         x.append(date)
     date = start_date + timedelta(days=(i+1)*days)
     x.append(date)
     y = range(len(x)) # many thanks to Kyss Tao for setting me straight here
-    #print x
-    #print y
+    print x
+    print y
     ax1_2.plot(x,y,alpha=0)
     #y = 100.0*np.ones(len(x)) # many thanks to Kyss Tao for setting me straight here
 
     ax1_2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
-    ax1_2.xaxis.set_major_locator(mdates.DayLocator())
+    ax1_2.xaxis.set_major_locator(mdates.MonthLocator())
+
+    #'''
     ticks = ax1_2.get_xticks()
     #print ticks
     newticks = []
     nticks = len(ticks)
-    ndivs = 10
+    #ndivs = 10
     for i in range(ndivs):
-        newticks.append(ticks[int(i*(nticks/float(ndivs)))])
+        #newticks.append(ticks[int(i*(nticks/float(ndivs)))])
+        if i%3==0:
+            newticks.append(ticks[int(i*(nticks/float(ndivs)))])
     ax1_2.set_xticks(newticks)
-    fig0.autofmt_xdate()
+    #'''
+    fig0b.autofmt_xdate()
     labels = ax1_2.get_xticklabels()
     for l in labels:
         l.set_rotation(330)
-        l.set_fontsize(8)
+        l.set_fontsize(12)
         l.set_horizontalalignment('right')
     ############################################################################
 
@@ -769,7 +821,7 @@ def main():
     ax0.legend()
 
     ax1.set_xlim(ranges[1])
-    #ax1.set_ylim(0.0,values['num_flat']/13)
+    ax1.set_ylim(0.0,values['num_flat']/9)
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
     label = "Interactions/%4.1f days" % (bin_widths[1])
     ax1.set_ylabel(label,fontsize=12)
@@ -784,6 +836,21 @@ def main():
     print "Likelihood: %f" % (final_lh)
 
     print "num spike: %f" % (values['num_spike'])
+
+    # Nums
+    tot = 0
+    for v in values:
+        if v.find('num')>=0 or v.find('ncalc')>=0:
+            tot += values[v]
+            print "%-15s %9.4f" % (v,values[v])
+    print "Total: %f" % (tot)
+
+    print "\n\n"
+    # Not fixed
+    for v,iv,e in zip(values,values_initial,errors):
+        if not m.is_fixed(v):
+            print "%-15s %9.4f +/- %9.4f     %9.4f" % (v,values[v],errors[v],values_initial[v])
+
 
     #'''
     if not args.batch:

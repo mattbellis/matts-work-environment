@@ -306,11 +306,11 @@ def main():
     ehi = 1.0
     eoffset = 0.5
 
-    #ewidth = 0.100
-    #estep = 0.100
+    ewidth = 0.100
+    estep = 0.100
 
-    ewidth = 0.150
-    estep = 0.150 
+    #ewidth = 0.150
+    #estep = 0.150 
 
     #ewidth = 0.200
     #estep = 0.050
@@ -695,6 +695,11 @@ def main():
                 if ik>0:
                     index = np.arange(0,len(expts))
                 #print index
+                index = index[index!=7]
+                index = index[index!=8]
+                index = index[index!=17]
+                index = index[index!=18]
+                index = index[index!=19]
 
                 ########################################################################
                 # Fit to exponentials.

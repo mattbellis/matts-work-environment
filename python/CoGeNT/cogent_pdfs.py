@@ -58,17 +58,25 @@ def lshell_data(day_ranges):
         decay_constants = np.append(decay_constants,-1.0*np.log(2.0)/half_life)
 
         num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
-        num_tot_decays *= 0.9 # 3yr data, for atomic physics reasons.
+        #num_tot_decays *= 0.9 # 3yr data, for atomic physics reasons.
         # *Before* the efficiency?
         #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
         
         ndecays = 0
         for dr in day_ranges:
             #ndecays += num_tot_decays[i]*(1.0-np.exp((dr[1]-1)*decay_constants[i]))
-            ndecays += num_tot_decays[i]*(np.exp((dr[0]-1)*decay_constants[i])-np.exp((dr[1]-1)*decay_constants[i]))
+            ndecays += num_tot_decays[i]*(np.exp((dr[0]-1.0)*decay_constants[i])-np.exp((dr[1]-1.0)*decay_constants[i]))
+            print ndecays
 
         num_decays_in_dataset = np.append(num_decays_in_dataset,ndecays)
 
+    print "L-shells!!!!"
+    print means
+    print sigmas
+    print num_tot_decays
+    print num_decays_in_dataset
+    print decay_constants
+    #exit()
     return means,sigmas,num_tot_decays,num_decays_in_dataset,decay_constants
 
 
