@@ -635,6 +635,7 @@ def main():
         #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1])
         func = lambda x: np.exp(-values['t_surf']*x)
         sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1])
+        surf_ypts = sr_typts
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
     ############################################################################
@@ -735,7 +736,8 @@ def main():
     h,xpts,ypts,xpts_err,ypts_err = lch.hist_err(data[1],bins=nbins[1],range=ranges[1],axes=axsub)
     tempx = np.array([])
     tempy = np.array([])
-    for x,y,lsh,flat in zip(sr_txpts,tot_sr_typts,lshell_toty,flat_tpts):
+    #for x,y,lsh,flat in zip(sr_txpts,tot_sr_typts,lshell_toty,flat_tpts):
+    for x,y,lsh,flat in zip(sr_txpts,surf_ypts,lshell_toty,flat_tpts):
         tempx = np.append(tempx,x)
         tempy = np.append(tempy,y)
     print tempx
