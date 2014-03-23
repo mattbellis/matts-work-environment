@@ -171,9 +171,12 @@ def main():
     #sigma0 = [2.249423,0.971873,0.273167]
 
     # Trial 6, 0-8 rt range, and new rels
-    mu0 =   [0.701453,0.676855,-1.243412]
-    sigma0 = [2.270888,1.012599,0.272931]
+    #mu0 =   [0.701453,0.676855,-1.243412]
+    #sigma0 = [2.270888,1.012599,0.272931]
 
+    # Trial 7, 0-8 range, new rels, 0.10 width, removing odd points
+    mu0 =  [0.896497,0.709907,-1.208970]
+    sigma0 = [2.480080,1.215221,0.266656]
 
     # The entries for the relationship between the broad and narrow peak.
     # Using rt 0-6
@@ -220,8 +223,12 @@ def main():
     #sigma =  [0.569887,-0.029380]
 
     # Trial 6
-    mu = [0.846635,0.639263,0.339941]
-    sigma = [0.568532,-0.028607]
+    #mu = [0.846635,0.639263,0.339941]
+    #sigma = [0.568532,-0.028607]
+
+    # Trial 7
+    mu = [0.768572,0.588991,0.343744]
+    sigma = [0.566326,-0.031958]
 
     rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
     ############################################################################
@@ -239,6 +246,7 @@ def main():
     print "LEN"
     print len(fweights),len(data[2])
     print min(fweights),max(fweights),fweights[fweights!=fweights]
+    print sum(fweights),sum(sweights),sum(fweights)+sum(sweights)
 
     '''
     plt.figure()
