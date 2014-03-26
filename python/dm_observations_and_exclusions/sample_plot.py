@@ -37,6 +37,6 @@ plt.fill_between(x3,y3,max(y3),facecolor='yellow',alpha=0.1)
 
 plt.yscale('log')
 plt.xlim(0,30)
-plt.legend(loc='lower left')
+plt.legend(loc='upper right')
 
 plt.show()

@@ -139,7 +139,9 @@ def main():
 
     ############################################################################
 
-    tag = 'pulser'
+    #tag = 'pulser_onelognormal'
+    #tag = 'pulser'
+    tag = 'pulser_zoomed_in'
 
     '''
     if args.help:
@@ -327,6 +329,7 @@ def main():
         params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
         params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
         params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
+        #params_dict['slow_num'] = {'fix':True,'start_val':0.0,'limits':(0.0,1.5*nevents),'error':0.01}
 
         # Above some value, lock this down.
         if elo>=2.2:
@@ -393,16 +396,17 @@ def main():
             tot_ypts = np.zeros(len(xpts))
 
             ypts  = pdfs.lognormal(xpts,values['fast_logn_mean'],values['fast_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='r-',linewidth=2,axes=axrt[j])
+            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
             tot_ypts += y
 
             ypts  = pdfs.lognormal(xpts,values['slow_logn_mean'],values['slow_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='b-',linewidth=2,axes=axrt[j])
+            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='r:',linewidth=2,axes=axrt[j])
             tot_ypts += y
 
-            axrt[j].plot(xpts,tot_ypts,'m',linewidth=2)
+            axrt[j].plot(xpts,tot_ypts,'r',linewidth=2)
             axrt[j].set_ylabel(r'Events')
             axrt[j].set_xlabel(r'Rise time ($\mu$s)')
+            axrt[j].set_xlim(0,2.0)
             '''
             name = "Plots/rt_slice_%d.png" % (figcount)
             if j%6==5:

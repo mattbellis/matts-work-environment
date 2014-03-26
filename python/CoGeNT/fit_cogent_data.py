@@ -311,8 +311,6 @@ def main():
 
     ############################################################################
     # Tweak the spacing on the figures.
-    fig0a.subplots_adjust(left=0.07, bottom=0.10, right=0.99, wspace=None, hspace=None,top=0.95)
-    fig0b.subplots_adjust(left=0.07, bottom=0.05, right=0.99, wspace=None, hspace=None,top=0.85)
 
     #ax1.set_ylim(0.0,420.0)
     #plt.show()
@@ -571,7 +569,7 @@ def main():
     # Energy projections
     if args.fit==0 or args.fit==1 or args.fit==5:
         ypts = np.exp(-values['e_exp0']*expts)
-        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff,label='exponential in energy')
+        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_exp0'],fmt='g-',axes=ax0,efficiency=eff) #,label='exponential in energy')
         eytot += y
 
     # Time projections
@@ -627,14 +625,14 @@ def main():
         # Energy projections
         #ypts = np.exp(-values['e_surf']*expts)
         ypts = pdfs.poly(expts, [values['k1_surf'],values['k2_surf']],ranges[0][0],ranges[0][1])
-        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_surf'],fmt='y-',axes=ax0,efficiency=eff,label='surface')
+        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_surf'],fmt='y-',axes=ax0,efficiency=eff,linewidth=2,label='Surface events')
         eytot += y
 
         # Time projections
         #func = lambda x: np.ones(len(x))
         #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1])
         func = lambda x: np.exp(-values['t_surf']*x)
-        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1])
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1],linewidth=2)
         surf_ypts = sr_typts
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
 
@@ -645,14 +643,14 @@ def main():
     #ypts = np.ones(len(expts))
     #ypts =  np.exp(-values['e_exp_flat']*expts)
     ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff,label='flat term')
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff,label='Compton photons')
     #ypts  = pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
     ypts  = pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax0,efficiency=eff,label='flat alphas')
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax0,efficiency=eff,label='Muon induced alphas')
 
     ypts = values['flat_frac']*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
     ypts += (1.0-values['flat_frac'])*pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m',label='flat total')
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m',label='Flat total')
     eytot += y
 
     # Time projections
@@ -723,7 +721,8 @@ def main():
             ax1.plot(x,flat,'m-',linewidth=2)
             ax1.plot(x,y,'b',linewidth=3)
 
-    ax0.plot(expts,eytot,'b',linewidth=3)
+    ax0.plot(expts,eytot,'b',linewidth=3,label='Total')
+
     # Total on y/t over all subranges.
     for x,y in zip(sr_txpts,tot_sr_typts):
         ax1.plot(x,y,'b',linewidth=3)
@@ -819,15 +818,25 @@ def main():
     ax0.set_xlim(ranges[0])
     #ax0.set_ylim(0.0,values['num_flat']/10)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
-    ax0.set_ylabel("Interactions/0.025 keVee",fontsize=12)
+    label = "Interactions/%4.3f keVee" % (bin_widths[0])
+    ax0.set_ylabel(label,fontsize=12)
     ax0.legend()
 
     ax1.set_xlim(ranges[1])
-    ax1.set_ylim(0.0,values['num_flat']/9)
+    ax1.set_ylim(0.0,values['num_flat']/8)
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
     label = "Interactions/%4.1f days" % (bin_widths[1])
     ax1.set_ylabel(label,fontsize=12)
 
+    fig0a.subplots_adjust(left=0.07, bottom=0.10, right=0.99, wspace=None, hspace=None,top=0.95)
+    fig0b.subplots_adjust(left=0.07, bottom=0.12, right=0.99, wspace=None, hspace=None,top=0.85)
+
+    #tag = "background_only"
+    tag = "WIMP_M=10_sigma_n=52e-42"
+    name = "Plots/cogent_fit_energy_%s.png" % (tag)
+    fig0a.savefig(name)
+    name = "Plots/cogent_fit_time_%s.png" % (tag)
+    fig0b.savefig(name)
     #############################################################################
     # What is the peak_wimp_date?
     #############################################################################
@@ -853,6 +862,7 @@ def main():
         if not m.is_fixed(v):
             print "%-15s %9.4f +/- %9.4f     %9.4f" % (v,values[v],errors[v],values_initial[v])
 
+    print "\nfinal lh: %f" % (final_lh)
 
     #'''
     if not args.batch:
