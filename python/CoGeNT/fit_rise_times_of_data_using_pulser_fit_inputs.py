@@ -219,7 +219,8 @@ def main():
 
     args = parser.parse_args()
 
-    tag = 'data_constrained_with_pulser_mean20_sigma20_slowsigfloat'
+    #tag = 'data_constrained_with_pulser_mean20_sigma20_slowsigfloat'
+    tag = 'data_constrained_with_pulser'
 
     ############################################################################
 
@@ -518,6 +519,7 @@ def main():
             axrt[j].plot(xpts,tot_ypts,'m',linewidth=2)
             axrt[j].set_ylabel(r'Events')
             axrt[j].set_xlabel(r'Rise time ($\mu$s)')
+            axrt[j].set_xlim(0,5.0)
             if j%6==5:
                 name = "Plots/rt_slice_%s_%d.png" % (tag,figcount)
                 plt.savefig(name)
