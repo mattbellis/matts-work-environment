@@ -262,6 +262,7 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         if t<0:
             print d0,d1,t,np.log(t)
     likelihood_func = (-np.log(tot_pdf)).sum()
+    print "nevents, nevents_fit: %f %f" % (ndata,num_tot)
     print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,pois(num_tot,ndata),likelihood_func-pois(num_tot,ndata))
     ret = likelihood_func - pois(num_tot,ndata)
     #print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,num_tot,likelihood_func-num_tot)
