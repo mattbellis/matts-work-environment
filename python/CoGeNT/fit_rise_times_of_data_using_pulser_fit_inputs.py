@@ -46,14 +46,23 @@ yearly_mod = 2*pi/365.0
 
 # The entries for the narrow peak parameters.
 # Using rt 0-8
+#fast_mean0_k =  [2.886805,2.402053,-1.095967]
+#fast_sigma0_k = [3.250484,1.843179,0.222638]
+#fast_num0_k = [6.140687,6587.374388,226.528560]
 
-fast_mean0_k =  [2.886805,2.402053,-1.095967]
-fast_sigma0_k = [3.250484,1.843179,0.222638]
-fast_num0_k = [6.140687,6587.374388,226.528560]
+#fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
+#fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
+#fast_num_rel_k = [-3.158560,0.014129,1.229496]
 
-fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
-fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
-fast_num_rel_k = [-3.158560,0.014129,1.229496]
+# Using Nicole's simulated data
+# Using rt 0-8
+fast_mean0_k = [0.474833,0.660031,-1.518465]
+fast_sigma0_k = [0.496104,0.437982,0.143220]
+fast_num0_k = [1.203499,-1346.267581,1060.346657]
+
+fast_mean_rel_k = [0.431998,-1.525604,-0.024960]
+fast_sigma_rel_k = [-0.014644,5.745791,-6.168695]
+fast_num_rel_k = [-0.261322,5.553102,-5.9144]
 
 #emid = 1.0 # Make this global for ease of fitting.
 
@@ -362,10 +371,10 @@ def main():
 
         # USE THIS FOR THE GAUSSIAN CONSTRAINT
         fast_mean0_optimal = fast_mean0
-        fast_mean0_uncert = 0.2000*fast_mean0
+        fast_mean0_uncert = 0.30*fast_mean0
 
         fast_sigma0_optimal = fast_sigma0
-        fast_sigma0_uncert = 0.2000*fast_sigma0
+        fast_sigma0_uncert = 0.30*fast_sigma0
 
         # The entries for the relationship between the broad and narrow peak.
         fast_mean_rel = expfunc(fast_mean_rel_k,emid)
@@ -565,10 +574,10 @@ def main():
                     'slow_logn_mean','slow_logn_sigma','slow_num']
 
             for i,p in enumerate(pars):
-                print "key ",p
+                #print "key ",p
                 if fe.has_key(p):
                     ypts[i].append(fp[p])
-                    print "val: ",fp[p]
+                    #print "val: ",fp[p]
                     yerrlo[i].append(abs(fe[p]['lower']))
                     yerrhi[i].append(abs(fe[p]['upper']))
                 elif p=='slow_logn_sigma':
@@ -731,8 +740,10 @@ def main():
                         z = out[0]
                         zcov = out[1]
                         print "Data points: %d %d [%f,%f]" % (k,ik,z[0],z[1])
+                        '''
                         if zcov is not None:
                             print "Data points: %d %d [%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]))
+                        '''
                         yfitpts[nindex] = expfunc1(z,xp)
                         #print zcov
                         #print plt.gca()
@@ -742,8 +753,10 @@ def main():
                         z = out[0]
                         zcov = out[1]
                         print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                        '''
                         if zcov is not None:
                             print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+                        '''
                         yfitpts[nindex] = expfunc(z,xp)
                         #print zcov
                         #print plt.gca()

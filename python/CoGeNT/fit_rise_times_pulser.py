@@ -555,10 +555,20 @@ def main():
             out = leastsq(errfunc, pinit, args=(expts[index], tempypts[index], (tempyerrlo[index]+tempyerrhi[index])/2.0), full_output=1)
             z = out[0]
             zcov = out[1]
-            print "Differences and ratios: %d [%f,%f,%f]" % (k,z[0],z[1],z[2])
+            #print "Differences and ratios: %d [%f,%f,%f]" % (k,z[0],z[1],z[2])
+            variable = None
+            if (k==0):
+                variable = "fast_mean_rel_k"
+            if (k==1):
+                variable = "fast_sigma_rel_k"
+            elif (k==2):
+                variable = "fast_num_rel_k"
+            print "%s = [%f,%f,%f]" % (variable,z[0],z[1],z[2])
             #print "zcov: ",zcov
+            '''
             if zcov is not None:
                 print "Differences and ratios: %d [%f,%f,%f]" % (k,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+            '''
             yfitpts = expfunc(z,xp)
             #print zcov
             plt.plot(xp,yfitpts,'-',color='m')
@@ -620,7 +630,16 @@ def main():
                 out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
                 z = out[0]
                 zcov = out[1]
-                print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                variable = None
+                if (k==0):
+                    variable = "fast_mean0_k"
+                if (k==1):
+                    variable = "fast_sigma0_k"
+                elif (k==2):
+                    variable = "fast_num0_k"
+                #print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                if (ik==0):
+                    print "%s = [%f,%f,%f]" % (variable,z[0],z[1],z[2])
                 #print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
                 yfitpts[nindex] = expfunc(z,xp)
                 #print zcov

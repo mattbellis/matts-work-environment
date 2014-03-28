@@ -165,18 +165,24 @@ def main():
 
     # Trial 6
     # Using rt 0-8
-    fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
-    fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
-    fast_num_rel_k = [-3.158560,0.014129,1.229496]
+    #fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
+    #fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
+    #fast_num_rel_k = [-3.158560,0.014129,1.229496]
 
-    mu0 =   [0.701453,0.676855,-1.243412]
-    sigma0 = [2.270888,1.012599,0.272931]
+    #mu0 =   [0.701453,0.676855,-1.243412]
+    #sigma0 = [2.270888,1.012599,0.272931]
 
     # Trial 7, 0-8 range, new rels, 0.10 width, removing odd points
-    mu0 =  [0.896497,0.709907,-1.208970]
-    sigma0 = [2.480080,1.215221,0.266656]
+    #mu0 =  [0.896497,0.709907,-1.208970]
+    #sigma0 = [2.480080,1.215221,0.266656]
 
+    # Using Nicole's simulated stuff
+    fast_mean_rel_k = [0.431998,-1.525604,-0.024960]
+    fast_sigma_rel_k = [-0.014644,5.745791,-6.168695]
+    fast_num_rel_k = [-0.261322,5.553102,-5.9144]
 
+    mu0 = [0.374145,0.628990,-1.369876]
+    sigma0 = [1.383249,0.495044,0.263360]
 
     rt_fast = rise_time_prob_fast_exp_dist(data[2],data[0],mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
 
@@ -184,12 +190,18 @@ def main():
     #mu = [0.945067,0.646431,0.353891]
     #sigma =  [11.765617,94.854276,0.513464]
     # Trial 6
-    mu = [0.846635,0.639263,0.339941]
-    sigma = [0.568532,-0.028607]
+    #mu = [0.846635,0.639263,0.339941]
+    #sigma = [0.568532,-0.028607]
 
     # Trial 7
-    mu = [0.768572,0.588991,0.343744]
-    sigma = [0.566326,-0.031958]
+    #mu = [0.768572,0.588991,0.343744]
+    #sigma = [0.566326,-0.031958]
+
+    # Using Nicole's simulated stuff
+    mu = [0.269108,0.747275,0.068146]
+    sigma = [0.531530,-0.020523]
+
+
 
     rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
     ############################################################################
@@ -427,8 +439,8 @@ def main():
 
     # Exp 1 is the surface term
     #params_dict['e_surf'] = {'fix':False,'start_val':1.0/3.36,'limits':(0.0,10.0)}
-    params_dict['k1_surf'] = {'fix':False,'start_val':-0.50,'limits':(-0.7,-0.4)}
-    params_dict['k2_surf'] = {'fix':True,'start_val':0.079,'limits':(0.0,0.2)}
+    params_dict['k1_surf'] = {'fix':False,'start_val':-0.503,'limits':(-0.7,-0.4)}
+    params_dict['k2_surf'] = {'fix':True,'start_val':0.0806,'limits':(0.0,0.2)}
     #params_dict['k1_surf'] = {'fix':False,'start_val':1.00,'limits':(-0.7,-0.4)}
     #params_dict['k2_surf'] = {'fix':False,'start_val':1.00,'limits':(0.0,0.2)}
     params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0)}
@@ -786,8 +798,8 @@ def main():
     date = start_date + timedelta(days=(i+1)*days)
     x.append(date)
     y = range(len(x)) # many thanks to Kyss Tao for setting me straight here
-    print x
-    print y
+    #print x
+    #print y
     ax1_2.plot(x,y,alpha=0)
     #y = 100.0*np.ones(len(x)) # many thanks to Kyss Tao for setting me straight here
 

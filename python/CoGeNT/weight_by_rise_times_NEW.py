@@ -175,8 +175,8 @@ def main():
     #sigma0 = [2.270888,1.012599,0.272931]
 
     # Trial 7, 0-8 range, new rels, 0.10 width, removing odd points
-    mu0 =  [0.896497,0.709907,-1.208970]
-    sigma0 = [2.480080,1.215221,0.266656]
+    #mu0 =  [0.896497,0.709907,-1.208970]
+    #sigma0 = [2.480080,1.215221,0.266656]
 
     # The entries for the relationship between the broad and narrow peak.
     # Using rt 0-6
@@ -185,9 +185,17 @@ def main():
     #fast_num_rel_k =  [-2.831665,0.023649,1.144240]
 
     # Using rt 0-8
-    fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
-    fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
-    fast_num_rel_k = [-3.158560,0.014129,1.229496]
+    #fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
+    #fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
+    #fast_num_rel_k = [-3.158560,0.014129,1.229496]
+
+    # From Nicole's simulated data
+    fast_mean_rel_k = [0.431998,-1.525604,-0.024960]
+    fast_sigma_rel_k = [-0.014644,5.745791,-6.168695]
+    fast_num_rel_k = [-0.261322,5.553102,-5.9144]
+
+    mu0 = [0.374145,0.628990,-1.369876]
+    sigma0 = [1.383249,0.495044,0.263360]
 
     rt_fast = rise_time_prob_fast_exp_dist(data[2],data[0],mu0,sigma0,fast_mean_rel_k,fast_sigma_rel_k,fast_num_rel_k,ranges[2][0],ranges[2][1])
 
@@ -227,8 +235,12 @@ def main():
     #sigma = [0.568532,-0.028607]
 
     # Trial 7
-    mu = [0.768572,0.588991,0.343744]
-    sigma = [0.566326,-0.031958]
+    #mu = [0.768572,0.588991,0.343744]
+    #sigma = [0.566326,-0.031958]
+
+    # Using Nicole's simulated data
+    mu = [0.269108,0.747275,0.068146]
+    sigma = [0.531530,-0.020523]
 
     rt_slow = rise_time_prob_exp_progression(data[2],data[0],mu,sigma,ranges[2][0],ranges[2][1])
     ############################################################################
@@ -285,6 +297,7 @@ def main():
     #popt, pcov = curve_fit(funcexp, xpts, ypts, sigma=yerr,maxfev=10000)
     print "npts: %f" % (sum(ypts))
     print popt
+    print popt/popt[0]
     print pcov
 
     x = np.linspace(min(xpts),max(xpts),1000)
