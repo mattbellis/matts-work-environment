@@ -14,3 +14,4 @@ sig = stats.chisqprob(D,delta_ndof)
 print "\n\n"
 print "D:   %f" % (D)
 print "sig: %f" % (sig)
+

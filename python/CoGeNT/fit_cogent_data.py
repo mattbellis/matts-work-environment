@@ -50,6 +50,8 @@ def main():
             default=None, help='Value of mDM (Mass of DM particle).')
     parser.add_argument('--spike', dest='spikemass', type=float,\
             default=None, help='Mass of a spike allowed to modulate.')
+    parser.add_argument('--tag', dest='tag', type=str,\
+            default='bkg_only', help='Tag to append to output files and figures.')
     parser.add_argument('--turn-off-eff', dest='turn_off_eff', action='store_true',\
             default=False, help='Turn off the efficiency.')
     parser.add_argument('--contours', dest='contours', action='store_true',\
@@ -138,6 +140,7 @@ def main():
 
     nevents = float(len(data[0]))
 
+    num_wimps = 0.0
     ############################################################################
     # Pre-calculate the slow and fast log-normal probabilities.
     ############################################################################
@@ -413,12 +416,12 @@ def main():
     for i,val in enumerate(num_decays_in_dataset):
         name = "ls_ncalc%d" % (i)
         if i==2 or i==3:
-            params_dict[name] = {'fix':False,'start_val':val}
+            params_dict[name] = {'fix':False,'start_val':val,'error':0.01}
         else:
-            params_dict[name] = {'fix':True,'start_val':val}
+            params_dict[name] = {'fix':True,'start_val':val,'error':0.01}
     for i,val in enumerate(decay_constants):
         name = "ls_dc%d" % (i)
-        params_dict[name] = {'fix':True,'start_val':val}
+        params_dict[name] = {'fix':True,'start_val':val,'error':0.01}
     
     ############################################################################
     # exp0 is going to be the simple WIMP-like signal that can modulate or not
@@ -435,63 +438,61 @@ def main():
         partial_live_days += (sr[1]-sr[0])
     nsurface *= partial_live_days/tot_live_days
 
-    nsurface = 4922.0 # 3yr data.
+    nsurface = 4400.0 # 3yr data.
 
     # Exp 1 is the surface term
     #params_dict['e_surf'] = {'fix':False,'start_val':1.0/3.36,'limits':(0.0,10.0)}
-    params_dict['k1_surf'] = {'fix':False,'start_val':-0.503,'limits':(-0.7,-0.4)}
-    params_dict['k2_surf'] = {'fix':True,'start_val':0.0806,'limits':(0.0,0.2)}
-    #params_dict['k1_surf'] = {'fix':False,'start_val':1.00,'limits':(-0.7,-0.4)}
-    #params_dict['k2_surf'] = {'fix':False,'start_val':1.00,'limits':(0.0,0.2)}
-    params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0)}
-    params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0)}
+    params_dict['k1_surf'] = {'fix':False,'start_val':-0.503,'limits':(-0.7,-0.4),'error':0.1}
+    params_dict['k2_surf'] = {'fix':True,'start_val':0.0806,'limits':(0.0,0.2),'error':0.01}
+    params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0),'error':0.01}
+    params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0),'error':0.01}
 
-    params_dict['num_flat'] = {'fix':False,'start_val':2900.0,'limits':(0.0,100000.0)}
-    params_dict['e_exp_flat'] = {'fix':False,'start_val':-0.05,'limits':(0.00001,10.0)}
-    params_dict['t_exp_flat'] = {'fix':False,'start_val':0.001,'limits':(0.0000001,10.0)}
-    params_dict['flat_frac'] = {'fix':True,'start_val':0.51,'limits':(0.00001,10.0)}
-    #params_dict['flat_alphas_slope'] = {'fix':True,'start_val':0.532,'limits':(0.00001,10.0)}
-    #params_dict['flat_alphas_amp'] = {'fix':True,'start_val':14.0,'limits':(0.00001,10.0)}
-    #params_dict['flat_alphas_offset'] = {'fix':True,'start_val':0.783,'limits':(0.00001,10.0)}
-    params_dict['flat_alphas_slope'] = {'fix':True,'start_val':0.920,'limits':(0.00001,10.0)}
-    params_dict['flat_alphas_amp'] = {'fix':True,'start_val':17.4,'limits':(0.00001,10.0)}
-    params_dict['flat_alphas_offset'] = {'fix':True,'start_val':2.38,'limits':(0.00001,10.0)}
+    params_dict['num_flat'] = {'fix':False,'start_val':3200.0,'limits':(0.0,100000.0),'error':0.01}
+    params_dict['e_exp_flat'] = {'fix':False,'start_val':-0.05,'limits':(0.00001,10.0),'error':0.01}
+    params_dict['t_exp_flat'] = {'fix':False,'start_val':0.001,'limits':(0.0000001,10.0),'error':0.01}
+    params_dict['flat_frac'] = {'fix':True,'start_val':0.51,'limits':(0.00001,10.0),'error':0.01}
+    #params_dict['flat_alphas_slope'] = {'fix':True,'start_val':0.532,'limits':(0.00001,10.0),'error':0.01}
+    #params_dict['flat_alphas_amp'] = {'fix':True,'start_val':14.0,'limits':(0.00001,10.0),'error':0.01}
+    #params_dict['flat_alphas_offset'] = {'fix':True,'start_val':0.783,'limits':(0.00001,10.0),'error':0.01}
+    params_dict['flat_alphas_slope'] = {'fix':True,'start_val':0.920,'limits':(0.00001,10.0),'error':0.01}
+    params_dict['flat_alphas_amp'] = {'fix':True,'start_val':17.4,'limits':(0.00001,10.0),'error':0.01}
+    params_dict['flat_alphas_offset'] = {'fix':True,'start_val':2.38,'limits':(0.00001,10.0),'error':0.01}
 
-    #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0)}
-    params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-    #params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0)}
+    #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0),'error':0.01}
+    params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0),'error':0.01}
+    #params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0),'error':0.01}
 
     # Exponential term in energy
     if args.fit==0 or args.fit==1 or args.fit==5:
-        #params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0)}
-        params_dict['e_exp0'] = {'fix':True,'start_val':0.005,'limits':(0.0,10.0)}
+        #params_dict['e_exp0'] = {'fix':False,'start_val':2.51,'limits':(0.0,10.0),'error':0.01}
+        params_dict['e_exp0'] = {'fix':True,'start_val':0.005,'limits':(0.0,10.0),'error':0.01}
 
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
-        params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0)}
-        params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,20.0)}
-        params_dict['sigma_n'] = {'fix':False,'start_val':2e-41,'limits':(1e-42,1e-38)}
+        params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0),'error':0.01}
+        params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,40.0),'error':0.01}
+        params_dict['sigma_n'] = {'fix':False,'start_val':2e-41,'limits':(1e-42,1e-38),'error':0.01}
         if args.sigma_n != None:
-            params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38)}
+            params_dict['sigma_n'] = {'fix':True,'start_val':args.sigma_n,'limits':(1e-42,1e-38),'error':0.01}
         if args.mDM != None:
-            params_dict['mDM'] = {'fix':True,'start_val':args.mDM,'limits':(5.0,20.0)}
+            params_dict['mDM'] = {'fix':True,'start_val':args.mDM,'limits':(5.0,40.0),'error':0.01}
 
     # Let the exponential modulate as a cos term
     if args.fit==1:
-        params_dict['wmod_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
-        params_dict['wmod_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
-        params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
-        params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
+        params_dict['wmod_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0),'error':0.01}
+        params_dict['wmod_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi),'error':0.01}
+        params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0),'error':0.01}
+        params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0),'error':0.01}
 
-    params_dict['num_spike'] = {'fix':True,'start_val':1,'limits':(0.0,500.0)}
+    params_dict['num_spike'] = {'fix':True,'start_val':1,'limits':(0.0,500.0),'error':0.01}
     if args.fit == 10:
-        params_dict['num_spike'] = {'fix':True,'start_val':200,'limits':(0.0,500.0)}
-        params_dict['spike_mass'] = {'fix':True,'start_val':args.spikemass,'limits':(0.0,5.0)}
-        params_dict['spike_sigma'] = {'fix':True,'start_val':0.077,'limits':(0.0,1.0)}
-        params_dict['spike_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0)}
-        params_dict['spike_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi)}
-        params_dict['spike_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0)}
-        params_dict['spike_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0)}
+        params_dict['num_spike'] = {'fix':True,'start_val':200,'limits':(0.0,500.0),'error':0.01}
+        params_dict['spike_mass'] = {'fix':True,'start_val':args.spikemass,'limits':(0.0,5.0),'error':0.01}
+        params_dict['spike_sigma'] = {'fix':True,'start_val':0.077,'limits':(0.0,1.0),'error':0.01}
+        params_dict['spike_freq'] = {'fix':True,'start_val':yearly_mod,'limits':(0.0,10000.0),'error':0.01}
+        params_dict['spike_phase'] = {'fix':False,'start_val':0.00,'limits':(-2*pi,2*pi),'error':0.01}
+        params_dict['spike_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0),'error':0.01}
+        params_dict['spike_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0),'error':0.01}
 
     params_names,kwd = dict2kwd(params_dict)
 
@@ -655,10 +656,10 @@ def main():
     #ypts = np.ones(len(expts))
     #ypts =  np.exp(-values['e_exp_flat']*expts)
     ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff,label='Compton photons')
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff,label='Compton photons from resistor and cosmogenic decays')
     #ypts  = pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
     ypts  = pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax0,efficiency=eff,label='Muon induced alphas')
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax0,efficiency=eff,label=r'$\mu$-induced $n$ and U,Th,',linewidth=2)
 
     ypts = values['flat_frac']*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
     ypts += (1.0-values['flat_frac'])*pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
@@ -672,11 +673,11 @@ def main():
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     '''
     func = lambda x: np.exp(-values['t_exp_flat']*x)
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1])
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1],linewidth=2)
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     func = lambda x: np.ones(len(x))
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax1,subranges=subranges[1])
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax1,subranges=subranges[1],linewidth=2)
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     
@@ -835,7 +836,8 @@ def main():
     ax0.legend()
 
     ax1.set_xlim(ranges[1])
-    ax1.set_ylim(0.0,values['num_flat']/8)
+    #ax1.set_ylim(0.0,values['num_flat']/8)
+    ax1.set_ylim(0.0,350)
     ax1.set_xlabel("Days since 12/4/2009",fontsize=12)
     label = "Interactions/%4.1f days" % (bin_widths[1])
     ax1.set_ylabel(label,fontsize=12)
@@ -844,7 +846,8 @@ def main():
     fig0b.subplots_adjust(left=0.07, bottom=0.12, right=0.99, wspace=None, hspace=None,top=0.85)
 
     #tag = "background_only"
-    tag = "WIMP_M=10_sigma_n=52e-42"
+    #tag = "WIMP_M=10_sigma_n=52e-42"
+    tag = args.tag
     name = "Plots/cogent_fit_energy_%s.png" % (tag)
     fig0a.savefig(name)
     name = "Plots/cogent_fit_time_%s.png" % (tag)
@@ -856,25 +859,37 @@ def main():
     print "\nPeak WIMP signal occurs on:\n"
     print peak.strftime("%D")
 
-    print "Likelihood: %f" % (final_lh)
+    #print "Likelihood: %f\n" % (final_lh)
 
-    print "num spike: %f" % (values['num_spike'])
+    #print "num spike: %f" % (values['num_spike'])
 
     # Nums
-    tot = 0
+    nevents_from_fit = 0
     for v in values:
         if v.find('num')>=0 or v.find('ncalc')>=0:
-            tot += values[v]
+            nevents_from_fit += values[v]
             print "%-15s %9.4f" % (v,values[v])
-    print "Total: %f" % (tot)
+    print "%-15s %9.4f" % ('num_wimps',num_wimps)
+    nevents_from_fit += num_wimps
+    print "\nnevents_from_fit: %f" % (nevents_from_fit)
 
-    print "\n\n"
+    print "\n"
     # Not fixed
     for v,iv,e in zip(values,values_initial,errors):
         if not m.is_fixed(v):
             print "%-15s %9.4f +/- %9.4f     %9.4f" % (v,values[v],errors[v],values_initial[v])
 
-    print "\nfinal lh: %f" % (final_lh)
+    ndata = len(data[0])
+
+    print "\n"
+    print "%-15s %15.7f" % ('ndata',ndata)
+    print "%-15s %15.7f" % ('ndata fit',nevents_from_fit)
+    print "%-15s %15.7f" % ('poisson',pois(nevents_from_fit,ndata))
+    print "%-15s %15.7f" % ('max poisson',pois(ndata,ndata))
+    print "%-15s %15.7f" % ('lh sans poisson',final_lh+pois(nevents_from_fit,ndata))
+    print "%-15s %15.7f" % ('final lh',final_lh)
+
+    #print "\nfinal lh: %f" % (final_lh)
 
     #'''
     if not args.batch:
