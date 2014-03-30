@@ -69,6 +69,12 @@ def main():
         exit(-1)
     '''
 
+    #############################################################################
+    # Make sure plots don't pop up!
+    #############################################################################
+    if args.batch:
+        plt.switch_backend('Agg')
+
     ############################################################################
     # Declare the ranges.
     ############################################################################
@@ -279,7 +285,6 @@ def main():
     fig0b = plt.figure(figsize=(12,6),dpi=100)
     ax0 = fig0a.add_subplot(1,1,1)
     ax1 = fig0b.add_subplot(1,1,1)
-
 
     lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
     print data[1]
