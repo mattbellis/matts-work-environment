@@ -1,0 +1,23 @@
+################################################################################
+#
+# This is a test to try to include other libraries or functions in CUDA calls. 
+#
+# First I try to use the rand() function (from stdlib) and the STL vector 
+# container
+# in a C++ function.
+# 
+# Build the examples:
+# 
+#    make rand_in_C
+#    make stl_vector_in_C
+# 
+# These examples build and run. 
+# 
+#
+# Trying to build the CUDA examples where these functions are called in the 
+# kernel do not work. 
+#
+#    scons try_to_include_rand
+#    scons try_to_include_stl_vector
+# 
+################################################################################
