@@ -8,11 +8,13 @@ int main(int argc, char **argv)
     printf("%s\n",infilename);
     FILE *ifp = fopen(infilename, "r");
 
-    char outfilename[256];
-    FILE *ofp[256];
+    char outfilename[1024];
+    FILE *ofp[1024];
+    float zloval[1024];
+    float zhival[1024];
     float ra,dec,z;
     float z_v,x_c,y_c,z_c;
-    char dummy[256];
+    char dummy[1024];
 
     if (ifp == NULL) {
         printf("Can't open input file %s!",infilename);
@@ -21,18 +23,22 @@ int main(int argc, char **argv)
 
     int count = 0;
     int filecount = 0;
+    int j=0;
+    float zstep = 0.005;
     float zwidth = 0.01;
     float zmin = 0.0;
     float zmax = 1.5;
     float iz = 0;
 
-    filecount = 0;
-    for (iz=zmin;iz<zmax;iz+=zwidth)
+    int nfiles = 0;
+    for (iz=zmin;iz<zmax;iz+=zstep)
     {
-        sprintf(outfilename,"smaller_file_zlo%3.2f_zhi%3.2f.dat",iz,iz+zwidth);
+        zloval[nfiles] = iz;
+        zhival[nfiles] = iz+zwidth;
+        sprintf(outfilename,"smaller_file_zlo%4.3f_zhi%4.3f.dat",zloval[nfiles],zhival[nfiles]);
         printf("Opening %s\n",outfilename);
-        ofp[filecount] = fopen(outfilename, "w");
-        filecount += 1;
+        ofp[nfiles] = fopen(outfilename, "w");
+        nfiles += 1;
     }
 
     //exit(0);
@@ -45,17 +51,20 @@ int main(int argc, char **argv)
 
     //while (fscanf(ifp, "%f,%f,%f",&ra,&dec,&z) != EOF) {
     while (fscanf(ifp, "%f\t%f\t%f\t%f\t%f\t%f\t%f",&ra,&dec,&z,&z_v,&x_c,&y_c,&z_c) != EOF) {
-       // printf("%f %f %f\n",ra,dec,z);
-        
-        filecount = (int)((((100*z)/(100*zwidth))));
-        //printf("%f %d\n",z,filecount);
-        if (z<zmax)
+        // printf("%f %f %f\n",ra,dec,z);
+
+        for (j=0;j<nfiles;j++)
         {
-            fprintf(ofp[filecount],"%f %f %f %f %f %f %f\n",ra,dec,z,z_v,x_c,y_c,z_c);
+            //filecount = (int)((((100*z)/(100*zwidth))));
+            //printf("%f %d\n",z,filecount);
+            if (z>=zloval[j] && z<zhival[j])
+            {
+                fprintf(ofp[j],"%f %f %f %f %f %f %f\n",ra,dec,z,z_v,x_c,y_c,z_c);
+            }
         }
 
         //if (count>100)
-            //exit(0);
+        //exit(0);
 
         if (count%100000==0)
             printf("%d\n",count);
@@ -63,13 +72,13 @@ int main(int argc, char **argv)
         count += 1;
         //if (count%nentries_per_file==nentries_per_file-1)
         //{
-            //close(ofp);
+        //close(ofp);
         //}
     }
 
     fclose(ifp);
     int i=0;
-    for (i=0;i<256;i++)
+    for (i=0;i<1024;i++)
     {
         fclose(ofp[i]);
     }
