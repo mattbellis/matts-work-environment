@@ -835,6 +835,7 @@ def main():
     # Format the axes a bit
     ax0.set_xlim(ranges[0])
     #ax0.set_ylim(0.0,values['num_flat']/10)
+    ax0.set_ylim(0.0,220)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     label = "Interactions/%4.3f keVee" % (bin_widths[0])
     ax0.set_ylabel(label,fontsize=12)

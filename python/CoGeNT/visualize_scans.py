@@ -42,18 +42,29 @@ for i,j,k in zip(xsec,mass,lh):
     for index,y in enumerate(Y[:,0]):
         if i==y:
             ii = index
+            #print i,j,k,ii
             break
     for index,x in enumerate(X[0]):
         if j==x:
             jj = index
+            #print i,j,k,jj
             break
 
     #print np.exp(minlh-k)
-    print ii,jj,i,j,k,np.exp(minlh-k)
+    #print ii,jj,i,j,k,np.exp(minlh-k)
     if ii is not None and jj is not None:
         #print jj,ii
-        # Z[ii][jj] = np.exp(minlh-k)
-        Z[ii][jj] = k
+        print np.exp(minlh-k)
+        if np.exp(minlh-k) > 0.0:
+            Z[ii][jj] = np.log10(np.exp(minlh-k))
+        #Z[ii][jj] = j
+        #Z[ii][jj] = k
+        '''
+        if ii==5 and jj==5:
+            #Z[ii][jj] = 1.0
+            print k
+            print "JDFKJDSKJF"
+        '''
 
     
 
@@ -76,7 +87,7 @@ fig.colorbar(surf, shrink=0.5, aspect=5)
 fig = plt.figure()
 ax = fig.add_subplot(1,1,1)
 # Contours
-im = imshow(Z,cmap=cm.RdBu,extent=(min(mass),max(mass),min(xsec),max(xsec))) # drawing the function
+im = imshow(Z,cmap=cm.RdBu,extent=(min(mass),max(mass),min(xsec),max(xsec)),origin='lower') # drawing the function
 # adding the Contour lines with labels
 #cset = contour(Z,arange(-1,1.5,0.2),linewidths=2,cmap=cm.Set2)
 #clabel(cset,inline=True,fmt='%1.1f',fontsize=10)
