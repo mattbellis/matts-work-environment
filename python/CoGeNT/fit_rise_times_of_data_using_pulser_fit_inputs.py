@@ -229,7 +229,8 @@ def main():
     args = parser.parse_args()
 
     #tag = 'data_constrained_with_pulser_mean20_sigma20_slowsigfloat'
-    tag = 'data_constrained_with_pulser'
+    #tag = 'data_constrained_with_pulser'
+    tag = 'data_constrained_with_simulated_Nicole'
 
     ############################################################################
 

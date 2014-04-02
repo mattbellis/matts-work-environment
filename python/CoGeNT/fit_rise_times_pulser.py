@@ -142,7 +142,9 @@ def main():
     #tag = 'pulser_onelognormal'
     #tag = 'pulser'
     #tag = 'pulser_zoomed_in'
-    tag = 'pulser_simulated_Nicole'
+    #tag = 'pulser_simulated_Nicole'
+    #tag = 'pulser_simulated_Nicole_zoomed_in'
+    tag = 'pulser_simulated_Nicole_onelognormal'
 
     '''
     if args.help:
@@ -327,10 +329,13 @@ def main():
         #params_dict['slow_num'] = {'fix':True,'start_val':0.001,'limits':(0.0,0.002),'error':0.000001}
 
         # float them
-        params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
-        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
-        params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
-        #params_dict['slow_num'] = {'fix':True,'start_val':0.0,'limits':(0.0,1.5*nevents),'error':0.01}
+        #params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
+        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
+        #params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
+        # To try one lognormal
+        params_dict['slow_logn_mean'] = {'fix':True,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
+        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
+        params_dict['slow_num'] = {'fix':True,'start_val':0.1,'limits':(0.0,1.5*nevents),'error':0.01}
 
         # Above some value, lock this down.
         # Juan's pulser data
