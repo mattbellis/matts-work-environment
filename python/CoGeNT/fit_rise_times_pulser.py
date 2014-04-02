@@ -139,7 +139,12 @@ def main():
 
     ############################################################################
 
-    tag = 'pulser'
+    #tag = 'pulser_onelognormal'
+    #tag = 'pulser'
+    #tag = 'pulser_zoomed_in'
+    #tag = 'pulser_simulated_Nicole'
+    #tag = 'pulser_simulated_Nicole_zoomed_in'
+    tag = 'pulser_simulated_Nicole_onelognormal'
 
     '''
     if args.help:
@@ -152,8 +157,8 @@ def main():
     ############################################################################
     #infile_name = 'data/LE.txt'
     #infile_name = 'data/HE.txt'
-    #infile_name = 'data/pulser_data.dat'
-    infile_name = 'data/pulser_data_325ns.dat'
+    #infile_name = 'data/pulser_data.dat' # FROM JUAN, 8/2/13, manually scanned pulser runs.
+    infile_name = 'data/pulser_data_325ns.dat' # SIMULATED DATA FROM NICOLE
     tdays,energies,rise_times = get_3yr_cogent_data(infile_name,first_event=first_event,calibration=0)
     print tdays
     print energies
@@ -324,12 +329,19 @@ def main():
         #params_dict['slow_num'] = {'fix':True,'start_val':0.001,'limits':(0.0,0.002),'error':0.000001}
 
         # float them
-        params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
-        params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
-        params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
+        #params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
+        #params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
+        #params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
+        # To try one lognormal
+        params_dict['slow_logn_mean'] = {'fix':True,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
+        params_dict['slow_logn_sigma'] = {'fix':True,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
+        params_dict['slow_num'] = {'fix':True,'start_val':0.1,'limits':(0.0,1.5*nevents),'error':0.01}
 
         # Above some value, lock this down.
-        if elo>=2.2:
+        # Juan's pulser data
+        #if elo>=2.2:
+        # Nicole's simulated data
+        if elo>=2.8:
             params_dict['slow_logn_mean'] = {'fix':True,'start_val':0.0,'limits':(-2,2),'error':0.01}
             params_dict['slow_logn_sigma'] = {'fix':True,'start_val':1.0,'limits':(0.05,30),'error':0.01}
             params_dict['slow_num'] = {'fix':True,'start_val':1,'limits':(0.0,1.5*nevents),'error':0.01}
@@ -393,16 +405,17 @@ def main():
             tot_ypts = np.zeros(len(xpts))
 
             ypts  = pdfs.lognormal(xpts,values['fast_logn_mean'],values['fast_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='r-',linewidth=2,axes=axrt[j])
+            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
             tot_ypts += y
 
             ypts  = pdfs.lognormal(xpts,values['slow_logn_mean'],values['slow_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='b-',linewidth=2,axes=axrt[j])
+            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='r:',linewidth=2,axes=axrt[j])
             tot_ypts += y
 
-            axrt[j].plot(xpts,tot_ypts,'m',linewidth=2)
+            axrt[j].plot(xpts,tot_ypts,'r',linewidth=2)
             axrt[j].set_ylabel(r'Events')
             axrt[j].set_xlabel(r'Rise time ($\mu$s)')
+            axrt[j].set_xlim(0,5.0)
             '''
             name = "Plots/rt_slice_%d.png" % (figcount)
             if j%6==5:
@@ -473,11 +486,17 @@ def main():
         labels = ['narrow','wide']
 
         # Use all or some of the points
-        index = np.arange(0,9)
+        # For the pulser data
+        #index = np.arange(0,9)
+        # For Nicole's simulated data
+        index = np.arange(1,16)
 
         
         #xp = np.linspace(min(expts),max(expts),100)
-        xp = np.linspace(min(expts),expts[8],100)
+        # For Juan's pulser stuff
+        #xp = np.linspace(min(expts),expts[8],100)
+        # For Nicole's simulated stuff
+        xp = np.linspace(min(expts),expts[17],100)
         expts = np.array(expts)
 
         fvals2 = plt.figure(figsize=(13,4),dpi=100)
@@ -488,7 +507,7 @@ def main():
             # Some of the broad rise times are set to 0.
             #index0s = ypts[3+k]!=0
             #index0s = np.ones(len(ypts[3+k])).astype(bool)
-            index0s = np.ones(9).astype(bool)
+            index0s = np.ones(16).astype(bool)
 
             fvals2.add_subplot(1,3,k+1)
 
@@ -519,6 +538,8 @@ def main():
             # Fit to exponentials.
             ########################################################################
             pinit = [1,1,1]
+            # For Juan's stuff
+            '''
             if k==0:
                 pinit = [1.0, 1.0, -1.2]
             elif k==1:
@@ -526,14 +547,33 @@ def main():
                 pinit = [-3.0,0.0015,-0.4]
             elif k==2:
                 pinit = [-2.0, 1.0, 2.0]
+            '''
             
+            # For Nicole's stuff
+            if k==0:
+                pinit = [1.0, 1.0, -1.2]
+            elif k==1:
+                #pinit = [1.0, -1.0, -0.5]
+                pinit = [-3.0,0.0015,-0.4]
+            elif k==2:
+                pinit = [-2.0, 1.0, 2.0]
             out = leastsq(errfunc, pinit, args=(expts[index], tempypts[index], (tempyerrlo[index]+tempyerrhi[index])/2.0), full_output=1)
             z = out[0]
             zcov = out[1]
-            print "Differences and ratios: %d [%f,%f,%f]" % (k,z[0],z[1],z[2])
+            #print "Differences and ratios: %d [%f,%f,%f]" % (k,z[0],z[1],z[2])
+            variable = None
+            if (k==0):
+                variable = "fast_mean_rel_k"
+            if (k==1):
+                variable = "fast_sigma_rel_k"
+            elif (k==2):
+                variable = "fast_num_rel_k"
+            print "%s = [%f,%f,%f]" % (variable,z[0],z[1],z[2])
             #print "zcov: ",zcov
+            '''
             if zcov is not None:
                 print "Differences and ratios: %d [%f,%f,%f]" % (k,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+            '''
             yfitpts = expfunc(z,xp)
             #print zcov
             plt.plot(xp,yfitpts,'-',color='m')
@@ -554,9 +594,9 @@ def main():
             fvals.add_subplot(1,3,k+1)
             for ik in range(0,2):
                 nindex = k+3*ik
-                print "HERERERERE"
-                print ypts[nindex]
-                print ypts[nindex][ypts[nindex]!=0]
+                #print "HERERERERE"
+                #print ypts[nindex]
+                #print ypts[nindex][ypts[nindex]!=0]
                 plt.errorbar(expts[ypts[nindex]!=0],ypts[nindex][ypts[nindex]!=0],xerr=0.01,yerr=[yerrlo[nindex][ypts[nindex]!=0],yerrhi[nindex][ypts[nindex]!=0]],\
                         fmt='o',ecolor='k',mec='k',mfc=colors[ik],label=labels[ik])
 
@@ -568,9 +608,15 @@ def main():
 
                 # Use all or some of the points
                 #index = np.arange(0,len(expts))
-                index = np.arange(0,8)
+                # Juan's pulser data.
+                #index = np.arange(0,8)
+                # Nicole's simulated data
+                index = np.arange(1,16)
                 if ik>0:
-                    index = np.arange(0,7)
+                    # Juan's pulser data
+                    #index = np.arange(0,7)
+                    # Nicole's simulated data
+                    index = np.arange(1,15)
                 #print index
 
                 ########################################################################
@@ -589,7 +635,16 @@ def main():
                 out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
                 z = out[0]
                 zcov = out[1]
-                print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                variable = None
+                if (k==0):
+                    variable = "fast_mean0_k"
+                if (k==1):
+                    variable = "fast_sigma0_k"
+                elif (k==2):
+                    variable = "fast_num0_k"
+                #print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                if (ik==0):
+                    print "%s = [%f,%f,%f]" % (variable,z[0],z[1],z[2])
                 #print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
                 yfitpts[nindex] = expfunc(z,xp)
                 #print zcov

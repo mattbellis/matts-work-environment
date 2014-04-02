@@ -58,17 +58,25 @@ def lshell_data(day_ranges):
         decay_constants = np.append(decay_constants,-1.0*np.log(2.0)/half_life)
 
         num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][4])
-        num_tot_decays *= 0.9 # 3yr data, for atomic physics reasons.
+        #num_tot_decays *= 0.9 # 3yr data, for atomic physics reasons.
         # *Before* the efficiency?
         #num_tot_decays = np.append(num_tot_decays,lshell_data_dict[p][3])
         
         ndecays = 0
         for dr in day_ranges:
             #ndecays += num_tot_decays[i]*(1.0-np.exp((dr[1]-1)*decay_constants[i]))
-            ndecays += num_tot_decays[i]*(np.exp((dr[0]-1)*decay_constants[i])-np.exp((dr[1]-1)*decay_constants[i]))
+            ndecays += num_tot_decays[i]*(np.exp((dr[0]-1.0)*decay_constants[i])-np.exp((dr[1]-1.0)*decay_constants[i]))
+            print ndecays
 
         num_decays_in_dataset = np.append(num_decays_in_dataset,ndecays)
 
+    print "L-shells!!!!"
+    print means
+    print sigmas
+    print num_tot_decays
+    print num_decays_in_dataset
+    print decay_constants
+    #exit()
     return means,sigmas,num_tot_decays,num_decays_in_dataset,decay_constants
 
 
@@ -215,7 +223,8 @@ def surface_events(data,pars,lo,hi,subranges=None,efficiency=None):
     yhi = hi[1]
 
     # Energy
-    pdf  = pdfs.exp(x,pars['e_surf'],xlo,xhi,efficiency=efficiency)
+    #pdf  = pdfs.exp(x,pars['e_surf'],xlo,xhi,efficiency=efficiency)
+    pdf  = pdfs.poly(x,[pars['k1_surf'],pars['k2_surf']],xlo,xhi,efficiency=efficiency)
 
     # Time
     pdf *= pdfs.exp(y,pars['t_surf'],ylo,yhi,subranges=subranges[1])
@@ -262,6 +271,7 @@ def fitfunc(data,p,parnames,params_dict):
     y = data[1]
     rtf = data[3]
     rts = data[4]
+    rtflat = data[5]
 
     xlo = params_dict['var_e']['limits'][0]
     xhi = params_dict['var_e']['limits'][1]
@@ -294,11 +304,12 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     num_exp0 = p[pn.index('num_exp0')]
     num_flat = p[pn.index('num_flat')]
-    e_surf = p[pn.index('e_surf')]
+    #e_surf = p[pn.index('e_surf')]
     t_surf = p[pn.index('t_surf')]
     num_surf = p[pn.index('num_surf')]
     e_exp_flat = p[pn.index('e_exp_flat')]
     t_exp_flat = p[pn.index('t_exp_flat')]
+    num_spike = p[pn.index('num_spike')]
 
     if flag==0 or flag==1 or flag==5:
         e_exp0 = p[pn.index('e_exp0')]
@@ -308,6 +319,14 @@ def fitfunc(data,p,parnames,params_dict):
         wmod_phase = p[pn.index('wmod_phase')]
         wmod_amp = p[pn.index('wmod_amp')]
         wmod_offst = p[pn.index('wmod_offst')]
+
+    if flag==10:
+        spike_mass = p[pn.index('spike_mass')]
+        spike_sigma = p[pn.index('spike_sigma')]
+        spike_freq = p[pn.index('spike_freq')]
+        spike_phase = p[pn.index('spike_phase')]
+        spike_amp = p[pn.index('spike_amp')]
+        spike_offst = p[pn.index('spike_offst')]
 
     elif flag==2 or flag==3 or flag==4 or flag==6:
         #mDM = 7.0
@@ -331,7 +350,7 @@ def fitfunc(data,p,parnames,params_dict):
     ############################################################################
     num_tot = 0.0
     for name in pn:
-        if flag==0 or flag==1:
+        if flag==0 or flag==1 or flag==10:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
         elif flag==2 or flag==3 or flag==4:
@@ -384,6 +403,7 @@ def fitfunc(data,p,parnames,params_dict):
         dc = -1.0*dc
         pdf *= pdfs.exp(y,dc,ylo,yhi,subranges=subranges[1])
         pdf *= rtf # This will be the fast rise times
+        #pdf *= rtflat # This will be the flat rise times
         pdf *= n
         if flag!=5 and flag!=6:
             tot_pdf += pdf
@@ -414,6 +434,13 @@ def fitfunc(data,p,parnames,params_dict):
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
         pdf *= rtf # This will be the fast rise times
         pdf *= num_exp0
+
+    elif flag==10: # Spike at some fixed mass.
+        pdf  = pdfs.gauss(x,spike_mass,spike_sigma,xlo,xhi,efficiency=efficiency)
+        pdf *= pdfs.cos(y,spike_freq,spike_phase,spike_amp,spike_offst,ylo,yhi,subranges=subranges[1])
+        pdf *= rtf # This will be the fast rise times
+        pdf *= num_spike/num_tot
+    
     elif flag==2 or flag==3 or flag==4 or flag==6:
         print "num_wimps mDM: %12.3f %12.3f %12.3e" % (num_wimps,mDM,sigma_n)
         wimp_norm = num_wimps

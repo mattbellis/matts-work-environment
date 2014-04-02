@@ -205,6 +205,14 @@ def main():
 
     plt.figure(figsize=(8,4))
     plt.subplot(1,2,1)
+    lch.hist_err(data[1],bins=nbins[1],range=(ranges[1][0],ranges[1][1]),weights=fweights)
+    plt.xlim(ranges[1][0],ranges[1][1])
+    plt.subplot(1,2,2)
+    lch.hist_err(data[1],bins=nbins[1],range=(ranges[1][0],ranges[1][1]),weights=sweights)
+    plt.xlim(ranges[1][0],ranges[1][1])
+
+    plt.figure(figsize=(8,4))
+    plt.subplot(1,2,1)
     lch.hist_err(fweights,bins=50)
     plt.subplot(1,2,2)
     lch.hist_err(sweights,bins=50)

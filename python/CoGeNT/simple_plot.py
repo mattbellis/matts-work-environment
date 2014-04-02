@@ -51,6 +51,9 @@ data = cut_events_outside_subrange(data,subranges[1],data_index=1)
 #index0 *= data[0]<4.50
 index0 = data[0]>1.50
 
+indexelo = data[0]>2.0
+indexehi = data[0]<3.0
+
 # rt cuts
 index2 = data[2]>1.0
 index3 = data[2]<0.7
@@ -66,6 +69,13 @@ lch.hist_err(data[0][index2],bins=70)
 
 plt.figure()
 lch.hist_err(data[0][index3],bins=70)
+
+print indexelo
+plt.figure()
+lch.hist_err(data[0][indexelo*indexehi],bins=70)
+
+plt.figure()
+lch.hist_err(data[2][indexelo*indexehi],bins=50)
 
 
 plt.show()

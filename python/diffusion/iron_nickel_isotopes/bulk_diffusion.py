@@ -31,8 +31,12 @@ dx   = (hi-lo)/float(npts)
 
 xpos = np.linspace(lo,hi,npts) 
 
-cmax0 = 0.009 # fraction
-cmin0 = 0.991 # fraction
+#cmax0 = 0.009 # fraction
+#cmin0 = 0.991 # fraction
+
+# For the ``new" files?
+cmax0 = 0.0085 # fraction
+cmin0 = 1.013 # fraction
 
 frac_interface = (interface_x-lo)/(hi-lo)
 print "frac_interface: ",frac_interface
@@ -62,7 +66,7 @@ c = c54.copy()
 ################################################################################
 dt   = 10.0
 t0   = 0
-hours = 24
+hours = 120 # For FNDA_1
 tmax = (3600*hours) # seconds?
 
 invdx2 = 1.0/(dx**2)
@@ -91,10 +95,10 @@ while t<tmax:
 
     # FNDA1
     #exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
-    #D56 = np.exp(-30.268 + (5.00*c56) - 13.39*(c56**2) + 6.30*(c56**3))
+    D56 = np.exp(-30.268 + (5.00*c56) - 13.39*(c56**2) + 6.30*(c56**3))
     # FNDA2
     #exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
-    D56 = np.exp(-28.838 + (4.92*c56) - 12.91*(c56**2) + 6.17*(c56**3))
+    #D56 = np.exp(-28.838 + (4.92*c56) - 12.91*(c56**2) + 6.17*(c56**3))
 
     # Condition for finite element approach to be stable. 
     if len( (D56*dt*invdx2)[D56*(dt*invdx2)>0.5])>0:
@@ -161,20 +165,23 @@ outfile.close()
 ################################################################################
 # Plot the result
 ################################################################################
-xis -= 0.00126
+#xis -= 0.00126
+xis -= 0.00045 # For the new stuff
 
 fig0.add_subplot(1,3,2)
-plt.plot(xpos,c56,'o')
+plt.plot(xpos,c56,'bo',label='Fe56 simulation')
 plt.plot([interface_x,interface_x],[0,110.0])
 plt.ylim(0,1.10)
-plt.plot(xmp,ymp,'o')
-plt.plot(xis[::-1],cis,'o')
+plt.plot(xmp,ymp,'ro',label='microprobe data')
+plt.plot(xis[::-1],cis,'co',label='data from isotope file')
+plt.legend()
 
 fig0.add_subplot(1,3,3)
-plt.plot(xpos,c54,'o')
+plt.plot(xpos,c54,'bo',label='Fe54 simulation')
 plt.plot([interface_x,interface_x],[0,110.0])
 plt.ylim(0,1.10)
-plt.plot(xmp,ymp)
+plt.plot(xmp,ymp,'ro',label='microprobe data')
+plt.legend()
 
 
 plt.figure()

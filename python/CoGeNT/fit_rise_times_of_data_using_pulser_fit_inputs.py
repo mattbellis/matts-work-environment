@@ -33,14 +33,36 @@ np.random.seed(200)
 yearly_mod = 2*pi/365.0
 
 # The entries for the narrow peak parameters.
-fast_mean0_k = [2.843792,2.265467,-1.096411]
-fast_sigma0_k = [3.350738,1.905592,0.224210]
-fast_num0_k =  [6.540050,7926.775305,226.999254]
+# Using rt 0-6
+#fast_mean0_k = [2.843792,2.265467,-1.096411]
+#fast_sigma0_k = [3.350738,1.905592,0.224210]
+#fast_num0_k =  [6.540050,7926.775305,226.999254]
 
 # The entries for the relationship between the broad and narrow peak.
-fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
-fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
-fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+# Using rt 0-6
+#fast_mean_rel_k = [0.649640,-1.655929,-0.069965]
+#fast_sigma_rel_k = [-3.667547,0.000256,-0.364826]
+#fast_num_rel_k =  [-2.831665,0.023649,1.144240]
+
+# The entries for the narrow peak parameters.
+# Using rt 0-8
+#fast_mean0_k =  [2.886805,2.402053,-1.095967]
+#fast_sigma0_k = [3.250484,1.843179,0.222638]
+#fast_num0_k = [6.140687,6587.374388,226.528560]
+
+#fast_mean_rel_k = [0.792906,-1.628538,-0.201567]
+#fast_sigma_rel_k = [-3.391094,0.000431,-0.369056]
+#fast_num_rel_k = [-3.158560,0.014129,1.229496]
+
+# Using Nicole's simulated data
+# Using rt 0-8
+fast_mean0_k = [0.474833,0.660031,-1.518465]
+fast_sigma0_k = [0.496104,0.437982,0.143220]
+fast_num0_k = [1.203499,-1346.267581,1060.346657]
+
+fast_mean_rel_k = [0.431998,-1.525604,-0.024960]
+fast_sigma_rel_k = [-0.014644,5.745791,-6.168695]
+fast_num_rel_k = [-0.261322,5.553102,-5.9144]
 
 #emid = 1.0 # Make this global for ease of fitting.
 
@@ -206,7 +228,9 @@ def main():
 
     args = parser.parse_args()
 
-    tag = 'data_constrained_with_pulser_mean20_sigma20_slowsigfloat'
+    #tag = 'data_constrained_with_pulser_mean20_sigma20_slowsigfloat'
+    #tag = 'data_constrained_with_pulser'
+    tag = 'data_constrained_with_simulated_Nicole'
 
     ############################################################################
 
@@ -296,6 +320,9 @@ def main():
     ewidth = 0.100
     estep = 0.100
 
+    #ewidth = 0.150
+    #estep = 0.150 
+
     #ewidth = 0.200
     #estep = 0.050
 
@@ -345,10 +372,10 @@ def main():
 
         # USE THIS FOR THE GAUSSIAN CONSTRAINT
         fast_mean0_optimal = fast_mean0
-        fast_mean0_uncert = 0.2000*fast_mean0
+        fast_mean0_uncert = 0.30*fast_mean0
 
         fast_sigma0_optimal = fast_sigma0
-        fast_sigma0_uncert = 0.2000*fast_sigma0
+        fast_sigma0_uncert = 0.30*fast_sigma0
 
         # The entries for the relationship between the broad and narrow peak.
         fast_mean_rel = expfunc(fast_mean_rel_k,emid)
@@ -363,7 +390,10 @@ def main():
 
         nevents = len(data_to_fit)
         print "Nevents for this fit: ",nevents
-        starting_params = [-0.1,0.8,0.2*nevents,  0.6,0.55,0.8*nevents]
+        #starting_params = [-0.1,0.8,0.2*nevents,  0.6,0.52,0.8*nevents]
+
+        print starting_params[4]
+        #exit()
         
         ############################################################################
         # Declare the fit parameters
@@ -395,6 +425,13 @@ def main():
         params_dict['slow_logn_mean'] = {'fix':False,'start_val':starting_params[3],'limits':(-2,2),'error':0.01}
         params_dict['slow_logn_sigma'] = {'fix':False,'start_val':starting_params[4],'limits':(0.05,30),'error':0.01}
         params_dict['slow_num'] = {'fix':False,'start_val':starting_params[5],'limits':(0.0,1.5*nevents),'error':0.01}
+
+        '''
+        if i==7:
+            params_dict['slow_logn_mean'] = {'fix':True,'start_val':0.57,'limits':(-2,2),'error':0.01}
+        elif i==8:
+            params_dict['slow_logn_mean'] = {'fix':True,'start_val':0.55,'limits':(-2,2),'error':0.01}
+        '''
 
         # Above some value, lock this down.
         '''
@@ -477,7 +514,7 @@ def main():
             tot_ypts += y
             tot_ypts_fast += y
             # Only plot the second narrow bump above some value.
-            if emid<=1.9: 
+            if emid<=3.9: 
                 ypts  = pdfs.lognormal(xpts,fast_logn_mean1,fast_logn_sigma1,ranges[2][0],ranges[2][1])
                 y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=(1.0-values['fast_logn_frac0'])*values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
                 tot_ypts += y
@@ -492,6 +529,7 @@ def main():
             axrt[j].plot(xpts,tot_ypts,'m',linewidth=2)
             axrt[j].set_ylabel(r'Events')
             axrt[j].set_xlabel(r'Rise time ($\mu$s)')
+            axrt[j].set_xlim(0,5.0)
             if j%6==5:
                 name = "Plots/rt_slice_%s_%d.png" % (tag,figcount)
                 plt.savefig(name)
@@ -537,14 +575,14 @@ def main():
                     'slow_logn_mean','slow_logn_sigma','slow_num']
 
             for i,p in enumerate(pars):
-                print "key ",p
+                #print "key ",p
                 if fe.has_key(p):
                     ypts[i].append(fp[p])
-                    print "val: ",fp[p]
+                    #print "val: ",fp[p]
                     yerrlo[i].append(abs(fe[p]['lower']))
                     yerrhi[i].append(abs(fe[p]['upper']))
                 elif p=='slow_logn_sigma':
-                    ypts[i].append(0.60)
+                    ypts[i].append(starting_params[4])
                     yerrlo[i].append(0.0)
                     yerrhi[i].append(0.0)
                 else:
@@ -669,6 +707,11 @@ def main():
                 if ik>0:
                     index = np.arange(0,len(expts))
                 #print index
+                index = index[index!=7]
+                index = index[index!=8]
+                index = index[index!=17]
+                index = index[index!=18]
+                index = index[index!=19]
 
                 ########################################################################
                 # Fit to exponentials.
@@ -683,36 +726,41 @@ def main():
                 elif ik==1 and k==0:
                     pinit = [3.0, 1.5, 0.5]
                 elif ik==1 and k==1:
-                    pinit = [0.5, -0.1]
+                    pinit = [0.5, -0.1] # For linear ft
+                    #pinit = [0.0001, 0.0001, starting_params[4]] # For exponential
                 
                 #print "before fit: ",ypts[nindex][index],yerrlo[nindex][index],yerrhi[nindex][index]
                 print "Fitting data!!!!!! --------------- %d %d" % (k,ik)
                 #print "before fit: ",ypts[nindex][index]
                 if abs(sum(ypts[nindex][index])) > 0 and k<2:
                     print "FITTING -----------"
-                    print expts[index]
-                    print ypts[nindex][index]
-                    if k==1 and ik==1:
+                    #print expts[index]
+                    #print ypts[nindex][index]
+                    if k==1 and ik==1: ########## FIT WITH LINEAR TERM FOR SLOW SIGMA
                         out = leastsq(errfunc1, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
                         z = out[0]
                         zcov = out[1]
                         print "Data points: %d %d [%f,%f]" % (k,ik,z[0],z[1])
+                        '''
                         if zcov is not None:
                             print "Data points: %d %d [%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]))
+                        '''
                         yfitpts[nindex] = expfunc1(z,xp)
                         #print zcov
-                        print plt.gca()
+                        #print plt.gca()
                         plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
                     else:
                         out = leastsq(errfunc, pinit, args=(expts[index], ypts[nindex][index], (yerrlo[nindex][index]+yerrhi[nindex][index])/2.0), full_output=1)
                         z = out[0]
                         zcov = out[1]
                         print "Data points: %d %d [%f,%f,%f]" % (k,ik,z[0],z[1],z[2])
+                        '''
                         if zcov is not None:
                             print "Data points: %d %d [%f,%f,%f]" % (k,ik,np.sqrt(zcov[0][0]),np.sqrt(zcov[1][1]),np.sqrt(zcov[2][2]))
+                        '''
                         yfitpts[nindex] = expfunc(z,xp)
                         #print zcov
-                        print plt.gca()
+                        #print plt.gca()
                         plt.plot(xp,yfitpts[nindex],'-',color=colors[ik])
 
             if k==0:

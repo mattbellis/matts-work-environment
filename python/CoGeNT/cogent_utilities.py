@@ -2,6 +2,8 @@ import numpy as np
 #from fitting_utilities import sigmoid
 #from cogent_pdfs import sigmoid
 
+from scipy import integrate
+
 from scipy.interpolate import interp1d
 
 import lichen.pdfs as pdfs
@@ -152,6 +154,7 @@ def cut_events_outside_range(data,ranges):
 
     index = np.ones(len(data[0]),dtype=np.int)
     for i,r in enumerate(ranges):
+        print i,r[0],r[1]
         if len(r)>0:
             index *= ((data[i]>r[0])*(data[i]<r[1]))
 
@@ -163,6 +166,7 @@ def cut_events_outside_range(data,ranges):
     for i in xrange(len(data)):
         #print data[i][index!=True]
         data[i] = data[i][index==True]
+        print "here: ",min(data[i])
 
     return data
 
@@ -220,8 +224,11 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
 
     # Pull out the constants for the polynomials.
     fast_mean0 = expfunc(mu0,energy)
-    fast_sigma0 = expfunc(mu0,energy)
-    fast_num0 = np.ones(len(rise_time)).astype('float')
+    fast_sigma0 = expfunc(sigma0,energy)
+    if type(rise_time)==np.ndarray:
+        fast_num0 = np.ones(len(rise_time)).astype('float')
+    else:
+        fast_num0 = 1.0
 
     # The entries for the relationship between the broad and narrow peak.
     fast_mean_rel = expfunc(murel,energy)
@@ -237,15 +244,27 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
     fast_num0 /= tempnorm
     fast_num1 /= tempnorm
 
-    print "Fast NUMS 0 and 1: ",fast_num0[10],fast_num1[10]
+    #print "Fast NUMS 0 and 1: ",fast_num0[10],fast_num1[10]
 
-    ret = np.zeros(len(rise_time))
-    for i in xrange(len(ret)):
-        #print rise_time[i],allmu[i],allsigma[i]
-        pdf0 = pdfs.lognormal(rise_time[i],fast_mean0[i],fast_sigma0[i],xlo,xhi)
-        pdf1 = pdfs.lognormal(rise_time[i],fast_mean1[i],fast_sigma1[i],xlo,xhi)
-        ret[i] = fast_num0[i]*pdf0 + fast_num1[i]*pdf1
-        #print "\t",ret[i]
+    if type(rise_time)==np.ndarray:
+        ret = np.zeros(len(rise_time))
+        for i in xrange(len(ret)):
+            ##print rise_time[i],allmu[i],allsigma[i]
+            pdf0 = pdfs.lognormal(rise_time[i],fast_mean0[i],fast_sigma0[i],xlo,xhi)
+            pdf1 = pdfs.lognormal(rise_time[i],fast_mean1[i],fast_sigma1[i],xlo,xhi)
+            #ret[i] = fast_num0[i]*pdf0 + fast_num1[i]*pdf1
+            ######### BELLIS IS THIS HOW WE NORMALIZE THE SUM?????
+            ret[i] = (fast_num0[i]*pdf0 + fast_num1[i]*pdf1)/(fast_num0[i]+fast_num1[i])
+            #ret[i] = (fast_num0[i]*pdf0 + fast_num1[i]*pdf1)
+            #print "\t",ret[i]
+    else:
+        pdf0 = pdfs.lognormal(rise_time,fast_mean0,fast_sigma0,xlo,xhi)
+        pdf1 = pdfs.lognormal(rise_time,fast_mean1,fast_sigma1,xlo,xhi)
+        #ret = fast_num0*pdf0 + fast_num1*pdf1
+        ######### BELLIS IS THIS HOW WE NORMALIZE THE SUM?????
+        ret = (fast_num0*pdf0 + fast_num1*pdf1)/(fast_num0+fast_num1)
+        #ret = (fast_num0*pdf0 + fast_num1*pdf1)
+        #print "\t",ret
 
     return ret
 
@@ -255,17 +274,26 @@ def rise_time_prob_fast_exp_dist(rise_time,energy,mu0,sigma0,murel,sigmarel,numr
 def rise_time_prob_exp_progression(rise_time,energy,mu_k,sigma_k,xlo,xhi):
 
     expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
+    expfunc1 = lambda p, x: p[1]*x + p[0]
 
     # Pull out the constants for the polynomials.
     allmu = expfunc(mu_k,energy)
-    allsigma = expfunc(sigma_k,energy)
+    #allsigma = expfunc(sigma_k,energy)
+    allsigma = expfunc1(sigma_k,energy) # Linear func
 
     #ret = (1.0/(x*sigma*np.sqrt(2*np.pi)))*np.exp(-((np.log(x)-mu)**2)/(2*sigma*sigma))
-    ret = np.zeros(len(rise_time))
-    for i in xrange(len(ret)):
-        #print rise_time[i],allmu[i],allsigma[i]
-        ret[i] = pdfs.lognormal(rise_time[i],allmu[i],allsigma[i],xlo,xhi)
-        #print "\t",ret[i]
+    if type(rise_time)==np.ndarray:
+        ret = np.zeros(len(rise_time))
+        for i in xrange(len(ret)):
+            #print rise_time[i],allmu[i],allsigma[i]
+            ret[i] = pdfs.lognormal(rise_time[i],allmu[i],allsigma[i],xlo,xhi)
+            #print "\t",ret[i]
+    else:
+        ret = 0.0
+        #print rise_time,allmu,allsigma
+        ret = pdfs.lognormal(rise_time,allmu,allsigma,xlo,xhi)
+        #print "\t",ret
+
 
     return ret
 
@@ -299,34 +327,73 @@ def cogent_convolve(x,y):
     yc = np.zeros(npts)
     #print "x: ",x
     #print "y: ",y
+
     if type(x)!=np.ndarray:
         x = np.array([x,x+0.0001])
+
     if type(y)!=np.ndarray:
         y = np.array([y,y+0.0001])
+
     f = interp1d(x, y)
+
+    #print y
+
+    #exit()
+
+    yc = np.zeros(len(y))
+
     for i,(xpt,ypt) in enumerate(zip(x,y)):
-        sigma = np.sqrt(sigman2 + (xpt*eta*F)) # sigma is energy dependent
-        #sigma = 0.37
-        #print sigma
-        window = 3.0*sigma
-        loval = xpt-window
-        if loval<min(x):
-            loval=min(x)
-        hival = xpt+window
-        if hival>max(x):
-            hival=max(x)
-        
-        temp_pts = np.linspace(loval,hival,1000)
-        
-        #loindex,val = min(enumerate(x), key=lambda x: abs(x[1]-loval))
-        #hiindex,val = min(enumerate(x), key=lambda x: abs(x[1]-hival))
+        #if 1:
+        if ypt>0:
+            # Convert energy to eV
+            sigma = np.sqrt(sigman2 + (2.35**2)*((xpt/1000.0)*eta*F)) # sigma is energy dependent
+            print sigma
+            #sigma = 0.5 + xpt*0.1 # FOR TESTING
+            #sigma = 0.1
+            #print sigma
 
-        ytemp = f(temp_pts)
+            window = 3.0*sigma
+            loval = xpt-window
+            if loval<min(x):
+                loval=min(x)
+            hival = xpt+window
+            if hival>max(x):
+                hival=max(x)
 
-        convolving_term = stats.norm(0.0,sigma)
-        val = (ytemp*convolving_term.pdf(xpt-temp_pts)).sum()
+            convolving_term = stats.norm(0.0,sigma)
+            xconv = np.linspace(-5,5,5*npts)
+            # Use a normalized Gaussian.
+            yconv = convolving_term.pdf(xconv)
 
-        yc[i] = val
+            ytemp = np.zeros(npts)
+            ytemp[i] = y[i]
+
+            if ytemp[i]>0:
+                # Convolve a single point in the original function.
+                convolved_pdf = signal.fftconvolve(ytemp,yconv,mode='same')
+
+                #print s,x[s],y[s],sigma_conv,convolved_pdf[500]
+                # Sum up each of the contributions.
+                yc += convolved_pdf
+
+
+            
+            '''
+            # THIS IS AN OLD WAY I WAS TRYING TO DO THIS
+            print sigma,window,loval,hival
+            temp_pts = np.linspace(loval,hival,1000)
+            print temp_pts[0],temp_pts[-1]
+            
+            ytemp = f(temp_pts)
+
+            convolving_term = stats.norm(0.0,sigma)
+
+            if sum(ytemp)>0:
+                val = (ytemp*convolving_term.pdf(xpt-temp_pts)).sum()
+
+                yc[i] = val
+
+            '''
 
 
     #convolved_function = signal.convolve(y/y.sum(),convolving_pts,mode='same')
@@ -334,8 +401,9 @@ def cogent_convolve(x,y):
     #convolved_function = signal.fftconvolve(y/y.sum(),convolving_pts,'same')
     #convolved_function = np.convolve(y/y.sum(),convolving_pts,'same')
 
-    #norm = convolved_function.sum()/y.sum()
     norm = yc.sum()/y.sum()
+    #norm = integrate.simps(yc,x=x)
+
 
     # Have to carve out the middle of the curve, because
     # the returned array has too many points in it.

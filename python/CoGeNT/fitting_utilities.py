@@ -56,6 +56,11 @@ def dict2kwd(d,verbose=False):
         if 'limits' in v:
             new_key = "limit_%s" % (k)
             kwd[new_key] = v['limits']
+        if 'error' in v:
+            new_key = "error_%s" % (k)
+            kwd[new_key] = v['error']
+
+
 
     ''' 
     if 'num_bkg' in keys:
@@ -190,7 +195,7 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
 
     num_tot = 0
     for name in parnames:
-        if flag==0 or flag==1:
+        if flag==0 or flag==1 or flag==10:
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
         elif flag==2 or flag==3 or flag==4:
@@ -262,6 +267,7 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
         if t<0:
             print d0,d1,t,np.log(t)
     likelihood_func = (-np.log(tot_pdf)).sum()
+    print "nevents, nevents_fit: %f %f" % (ndata,num_tot)
     print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,pois(num_tot,ndata),likelihood_func-pois(num_tot,ndata))
     ret = likelihood_func - pois(num_tot,ndata)
     #print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,num_tot,likelihood_func-num_tot)

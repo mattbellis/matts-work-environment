@@ -7,6 +7,12 @@ import matplotlib.pyplot as plt
 from grade_utilities import *
 import argparse
 
+import datetime
+
+import plotly
+
+
+
 ################################################################################
 # main
 ################################################################################
@@ -29,6 +35,8 @@ def main():
             help='Dump output for the Google Motion Chart.')
     parser.add_argument('--password', dest='password', default=None, 
             help='Password for mail server.')
+    parser.add_argument('--course', dest='course', default=None, 
+            help='Course name.')
     parser.add_argument('--student', dest='student', default=None, type=int,
             help='Student name to dump info for or email.')
 
@@ -44,9 +52,19 @@ def main():
     infile = csv.reader(open(filename, 'rb'), delimiter=',', quotechar='#')
 
     ############################################################################
+    py = plotly.plotly(username_or_email="MatthewBellis", key="d6h4et78v5")
+    ############################################################################
 
     grade_titles = ["Quizzes", "Homeworks","Exam", "Final exam", "Final grade"]
     student_grades = [[],[],[],[],[]]
+    hw_xvals = []
+    hw_grades = []
+    exam_grades = []
+    exam_xvals = []
+    quiz_grades = []
+    quiz_xvals = []
+    final_exam_xvals = []
+    final_exam_grades = []
 
     # Grade weighting
     final_grade_weighting = [0.10,0.25,0.35,0.30]
@@ -118,6 +136,7 @@ def main():
         # Grab the hw info
         #if line_num>=4:
         if line_num>=4:
+            ihw = 0 
             row_len = len(row)
             student_name = [row[2],row[3]]
             #email = "z%s@students.niu.edu" % (row[1])
@@ -149,6 +168,23 @@ def main():
                 #print g.internal_index
                 grade = Grade(g.grade_type,g.internal_index,score,g.max_grade,g.add,g.subtract,is_late,g.date)
                 #print "%s %3.1f" % (grade.grade_type, grade.score)
+                if (grade.grade_type=='hw'):
+                    hw_grades.append(grade.grade_pct())
+                    #hw_xvals.append(grade.date)
+                    hw_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1]),1))
+
+                if (grade.grade_type=='exam'):
+                    exam_grades.append(grade.grade_pct())
+                    exam_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1]),13))
+
+                if (grade.grade_type=='quiz'):
+                    quiz_grades.append(grade.grade_pct())
+                    quiz_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1]),23))
+
+                if (grade.grade_type=='final_exam'):
+                    final_exam_grades.append(grade.grade_pct())
+                    final_exam_xvals.append(datetime.datetime(int(grade.date.split('/')[2]),int(grade.date.split('/')[0]),int(grade.date.split('/')[1])))
+
 
                 cg.add_grade(grade,grade.grade_type)
 
@@ -159,7 +195,49 @@ def main():
 
         line_num += 1
 
-         
+    url = None
+    if args.course is not None:
+
+        plotly_title = 'Default grades'
+        plotly_filename = 'Default coursename'
+
+        if args.course=='phys120':
+            plotly_title = 'PHYS 120 class grades to date.'
+            plotly_filename = 'PHYS120_S14'
+        elif args.course=='phys260':
+            plotly_title = 'PHYS 260 class grades to date.'
+            plotly_filename = 'PHYS260_S14'
+
+        #print hw_grades
+        #print hw_xvals
+        s={'type':'box' ,'jitter':0.1, 'boxpoints':'all'}
+        #s={'type':'box'}
+        #axesstyle = {'range':[datetime.datetime(2014,1,15),datetime.datetime(2014,2,15)]}
+        axesstyle = {}
+        l={'title': plotly_title,'xaxis':axesstyle}
+
+        tot_data = []
+
+        #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
+        data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
+        tot_data.append(data0)
+        data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
+        tot_data.append(data1)
+        if len(quiz_grades)>0:
+            data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes"}
+            tot_data.append(data2)
+        if len(final_exam_grades)>0:
+            data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
+            tot_data.append(data3)
+        response = py.plot(tot_data,style=s,layout=l,filename=plotly_filename,fileopt='overwrite')
+
+        url = response['url']
+        filename = response['filename']
+
+        print response
+        print url
+        print filename
+
     ############################################################################
     # Print out the summary
     ############################################################################
@@ -167,15 +245,18 @@ def main():
         #print s.student_name
         averages, output = s.summary_output(final_grade_weighting)
         #gvis_output = s.gvis_output(final_grade_weighting)
-        nmore_exams = 0
+        nmore_exams = 7 - len(s.grades.exams)
+        '''
         if len(s.grades.exams)==1:
             nmore_exams = 2
         elif len(s.grades.exams)==2:
             nmore_exams = 1
         elif len(s.grades.exams)==3:
             nmore_exams = 0
+        '''
 
-        nmore_final_exams = 0
+        nmore_final_exams = 0 # Don't include the final exam
+        #nmore_final_exams = 1 # Include the final exam in the hypotheticals
         # Uncomment this if you don't want the hypothetical exam grades
         # to be calculated.
         '''
@@ -193,11 +274,13 @@ def main():
         hypothetical_performances = [70.0,80.0,90.0,100.0]
         hypothetical_final_grades = []
         for g in (hypothetical_performances):
+            #'''
             for j in range(0,nmore_exams):
-                dum_grade = Grade('exam',-1,g,100.0,0.0,0.0,False,'3/12/2012')
-                s.grades.exams[(3-nmore_exams)+j] = dum_grade
+                dum_grade = Grade('exam',-1,g,100.0,0.0,0.0,False,'3/12/2014')
+                s.grades.exams[(7-nmore_exams)+j] = dum_grade
+            #'''
             for j in range(0,nmore_final_exams):
-                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'3/12/2012')
+                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'3/12/2014')
                 s.grades.final_exam[0] = dum_grade
 
             dum_averages, dum_output = s.summary_output(final_grade_weighting)
@@ -222,13 +305,14 @@ def main():
             msg_body += "------- Projected performance -----------\n"
             msg_body += "-----------------------------------------\n"
             msg_body += "If you receive the following grades on all of the remaining exams AND the final exam,\n"
-            msg_body += "then you would receive the folowing final grade for the class ASSUMING you also\n"
+            msg_body += "then you would receive the APPROXIMATELY the final grade for the class ASSUMING you also\n"
             msg_body += "maintain the same average on your quizzes and homeworks.\n"
             msg_body += "\n"
             for pe,pf in zip(hypothetical_performances,hypothetical_final_grades):
                 msg_body += "Projected exams/final exams: %5.1f (on each exam)  -  Projected final grade: %5.1f\n" % (pe,pf)
 
 
+            msg_body += "\nGrades for the class can be found at\n\n\t%s\n" % (url)
 
         ########################################################################
         # For testing
