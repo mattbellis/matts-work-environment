@@ -452,16 +452,20 @@ def main():
     params_dict['t_surf'] = {'fix':False,'start_val':0.50,'limits':(0.0,10.0),'error':0.01}
     params_dict['num_surf'] = {'fix':False,'start_val':nsurface,'limits':(0.0,100000.0),'error':0.01}
 
-    params_dict['num_flat'] = {'fix':False,'start_val':3200.0,'limits':(0.0,100000.0),'error':0.01}
+    #params_dict['num_flat'] = {'fix':False,'start_val':3200.0,'limits':(0.0,100000.0),'error':0.01}
+    params_dict['num_comp'] = {'fix':False,'start_val':2200.0,'limits':(0.0,100000.0),'error':0.01}
     params_dict['e_exp_flat'] = {'fix':False,'start_val':-0.05,'limits':(0.00001,10.0),'error':0.01}
     params_dict['t_exp_flat'] = {'fix':False,'start_val':0.001,'limits':(0.0000001,10.0),'error':0.01}
-    params_dict['flat_frac'] = {'fix':True,'start_val':0.51,'limits':(0.00001,10.0),'error':0.01}
-    #params_dict['flat_alphas_slope'] = {'fix':True,'start_val':0.532,'limits':(0.00001,10.0),'error':0.01}
-    #params_dict['flat_alphas_amp'] = {'fix':True,'start_val':14.0,'limits':(0.00001,10.0),'error':0.01}
-    #params_dict['flat_alphas_offset'] = {'fix':True,'start_val':0.783,'limits':(0.00001,10.0),'error':0.01}
-    params_dict['flat_alphas_slope'] = {'fix':True,'start_val':0.920,'limits':(0.00001,10.0),'error':0.01}
-    params_dict['flat_alphas_amp'] = {'fix':True,'start_val':17.4,'limits':(0.00001,10.0),'error':0.01}
-    params_dict['flat_alphas_offset'] = {'fix':True,'start_val':2.38,'limits':(0.00001,10.0),'error':0.01}
+    #params_dict['flat_frac'] = {'fix':True,'start_val':0.51,'limits':(0.00001,10.0),'error':0.01}
+    #params_dict['flat_frac'] = {'fix':False,'start_val':0.66,'limits':(0.00001,1.0),'error':0.01}
+
+    #params_dict['flat_neutrons_slope'] = {'fix':True,'start_val':0.532,'limits':(0.00001,10.0),'error':0.01}
+    #params_dict['flat_neutrons_amp'] = {'fix':True,'start_val':14.0,'limits':(0.00001,10.0),'error':0.01}
+    #params_dict['flat_neutrons_offset'] = {'fix':True,'start_val':0.783,'limits':(0.00001,10.0),'error':0.01}
+    params_dict['num_neutrons'] = {'fix':False,'start_val':880.0,'limits':(0.0,100000.0),'error':0.01}
+    params_dict['flat_neutrons_slope'] = {'fix':True,'start_val':0.920,'limits':(0.00001,10.0),'error':0.01}
+    params_dict['flat_neutrons_amp'] = {'fix':True,'start_val':17.4,'limits':(0.00001,10.0),'error':0.01}
+    params_dict['flat_neutrons_offset'] = {'fix':True,'start_val':2.38,'limits':(0.00001,10.0),'error':0.01}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0),'error':0.01}
     params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0),'error':0.01}
@@ -661,15 +665,19 @@ def main():
     #ypts = np.ones(len(expts))
     #ypts =  np.exp(-values['e_exp_flat']*expts)
     ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff,label='Compton photons from resistor and cosmogenic decays')
+    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff,label='Compton photons from resistor and cosmogenic decays')
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_comp'],fmt='m--',axes=ax0,efficiency=eff,label='Compton photons from resistor and cosmogenic decays')
     #ypts  = pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
-    ypts  = pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax0,efficiency=eff,label=r'$\mu$-induced $n$ and U,Th,',linewidth=2)
-
-    ypts = values['flat_frac']*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
-    ypts += (1.0-values['flat_frac'])*pdfs.exp_plus_flat(expts,values['flat_alphas_slope'],values['flat_alphas_amp'],values['flat_alphas_offset'],ranges[0][0],ranges[0][1])
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m',label='Flat total')
+    ypts  = pdfs.exp_plus_flat(expts,values['flat_neutrons_slope'],values['flat_neutrons_amp'],values['flat_neutrons_offset'],ranges[0][0],ranges[0][1])
     eytot += y
+    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax0,efficiency=eff,label=r'$\mu$-induced $n$ and U,Th,',linewidth=2)
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_neutrons'],fmt='c--',axes=ax0,efficiency=eff,label=r'$\mu$-induced $n$ and U,Th,',linewidth=2)
+    eytot += y
+
+    #ypts = values['flat_frac']*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
+    #ypts += (1.0-values['flat_frac'])*pdfs.exp_plus_flat(expts,values['flat_neutrons_slope'],values['flat_neutrons_amp'],values['flat_neutrons_offset'],ranges[0][0],ranges[0][1])
+    #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_flat'],fmt='m-',axes=ax0,efficiency=eff,linewidth=3,linecolor='m',label='Flat total')
+    #eytot += y
 
     # Time projections
     '''
@@ -678,11 +686,13 @@ def main():
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     '''
     func = lambda x: np.exp(-values['t_exp_flat']*x)
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1],linewidth=2)
+    #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1],linewidth=2)
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_comp'],fmt='m--',axes=ax1,subranges=subranges[1],linewidth=2)
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     func = lambda x: np.ones(len(x))
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax1,subranges=subranges[1],linewidth=2)
+    #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax1,subranges=subranges[1],linewidth=2)
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_neutrons'],fmt='c--',axes=ax1,subranges=subranges[1],linewidth=2)
     tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
     flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     
@@ -756,7 +766,7 @@ def main():
     #for x,y,lsh,flat in zip(sr_txpts,tot_sr_typts,lshell_toty,flat_tpts):
     for x,y,lsh,flat in zip(sr_txpts,surf_ypts,lshell_toty,flat_tpts):
         tempx = np.append(tempx,x)
-        tempy = np.append(tempy,y)
+        tempy = np.append(tempy,y+lsh)
     print tempx
     print tempy
     fit_result = interpolate.interp1d(tempx,tempy)
@@ -835,7 +845,7 @@ def main():
     # Format the axes a bit
     ax0.set_xlim(ranges[0])
     #ax0.set_ylim(0.0,values['num_flat']/10)
-    ax0.set_ylim(0.0,220)
+    #ax0.set_ylim(0.0,220)
     ax0.set_xlabel("Ionization Energy (keVee)",fontsize=12)
     label = "Interactions/%4.3f keVee" % (bin_widths[0])
     ax0.set_ylabel(label,fontsize=12)
