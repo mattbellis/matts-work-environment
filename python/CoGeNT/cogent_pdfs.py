@@ -189,21 +189,24 @@ def flat_events(data,pars,lo,hi,subranges=None,efficiency=None):
 
     # ``Flat" part in energy. Might be decaying away.
     # Energy
+    # Comptons
     pdf0  = pdfs.exp(x,pars['e_exp_flat'],xlo,xhi,efficiency=efficiency)
     pdf0 *= pdfs.exp(y,pars['t_exp_flat'],ylo,yhi,subranges=subranges[1])
 
-    # Alphas contribution. Not decaying away in time.
-    pdf1  = pdfs.exp_plus_flat(x,pars['flat_alphas_slope'],pars['flat_alphas_amp'],pars['flat_alphas_offset'],xlo,xhi,efficiency=efficiency)
+    # Muon induced neutrons contribution. Not decaying away in time.
+    pdf1  = pdfs.exp_plus_flat(x,pars['flat_neutrons_slope'],pars['flat_neutrons_amp'],pars['flat_neutrons_offset'],xlo,xhi,efficiency=efficiency)
     pdf1 *= pdfs.poly(y,[],ylo,yhi,subranges=subranges[1])
     #pdf *= pdfs.exp(y,pars['t_exp_flat'],ylo,yhi,subranges=subranges[1])
 
-    pdf = pars['flat_frac']*pdf0 + (1.0-pars['flat_frac'])*pdf1 
+    #pdf = pars['flat_frac']*pdf0 + (1.0-pars['flat_frac'])*pdf1 
+    pdf = pars['num_comp']*pdf0 + (pars['num_neutrons'])*pdf1 
 
     # Rise time
     pdf *= rtf # This will be the fast rise times
 
     # Normalization
-    pdf *= pars['num_flat']
+    # For when we use the frac (ratio of the two)
+    #pdf *= pars['num_flat']
     
     return pdf
 
@@ -303,7 +306,9 @@ def fitfunc(data,p,parnames,params_dict):
     # Set up the fit
     ############################################################################
     num_exp0 = p[pn.index('num_exp0')]
-    num_flat = p[pn.index('num_flat')]
+    #num_flat = p[pn.index('num_flat')]
+    num_comp = p[pn.index('num_comp')]
+    num_neutrons = p[pn.index('num_neutrons')]
     #e_surf = p[pn.index('e_surf')]
     t_surf = p[pn.index('t_surf')]
     num_surf = p[pn.index('num_surf')]
@@ -354,7 +359,8 @@ def fitfunc(data,p,parnames,params_dict):
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
         elif flag==2 or flag==3 or flag==4:
-            if 'num_flat' in name or 'num_surf' in name or 'ncalc' in name:
+            #if 'num_flat' in name or 'num_surf' in name or 'ncalc' in name:
+            if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
     # MC
     if flag==5:
@@ -414,8 +420,8 @@ def fitfunc(data,p,parnames,params_dict):
     if flag==0 or flag==1 or flag==5:
         num_exp0 /= num_tot
 
-    num_surf /= num_tot
-    num_flat /= num_tot
+    #num_surf /= num_tot
+    #num_flat /= num_tot
 
     print " -------------------------------------- "
     #print "energy: ",x[0:8]
@@ -473,7 +479,8 @@ def fitfunc(data,p,parnames,params_dict):
     pdf /= num_tot # Need to divide by num_tot because of the normalization for the total PDF.
     tot_pdf += pdf
 
-    print "%f %f %f" % (num_tot,num_wimps/num_tot,num_flat)
+    #print "%f %f %f" % (num_tot,num_wimps/num_tot,num_flat)
+    print "%f %f" % (num_tot,num_wimps/num_tot)
 
     return tot_pdf,num_wimps
 ################################################################################
