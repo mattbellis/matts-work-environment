@@ -421,9 +421,9 @@ def main():
     for i,val in enumerate(num_decays_in_dataset):
         name = "ls_ncalc%d" % (i)
         if i==2 or i==3:
-            params_dict[name] = {'fix':False,'start_val':val,'error':0.01}
+            params_dict[name] = {'fix':False,'start_val':val,'error':0.01,'limits':(0,50000)}
         else:
-            params_dict[name] = {'fix':True,'start_val':val,'error':0.01}
+            params_dict[name] = {'fix':True,'start_val':val,'error':0.01,'limits':(0,50000)}
     for i,val in enumerate(decay_constants):
         name = "ls_dc%d" % (i)
         params_dict[name] = {'fix':True,'start_val':val,'error':0.01}
@@ -468,7 +468,7 @@ def main():
     params_dict['flat_neutrons_offset'] = {'fix':True,'start_val':2.38,'limits':(0.00001,10.0),'error':0.01}
 
     #params_dict['num_exp0'] = {'fix':False,'start_val':296.0,'limits':(0.0,10000.0),'error':0.01}
-    params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0),'error':0.01}
+    params_dict['num_exp0'] = {'fix':True,'start_val':0.0,'limits':(0.0,10000.0),'error':0.01}
     #params_dict['num_exp0'] = {'fix':False,'start_val':575.0,'limits':(0.0,10000.0),'error':0.01}
 
     # Exponential term in energy
@@ -478,7 +478,7 @@ def main():
 
     # Use the dark matter SHM, WIMPS
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6: 
-        params_dict['num_exp0'] = {'fix':True,'start_val':1.0,'limits':(0.0,10000.0),'error':0.01}
+        params_dict['num_exp0'] = {'fix':True,'start_val':0.0,'limits':(0.0,10000.0),'error':0.01}
         params_dict['mDM'] = {'fix':False,'start_val':10.00,'limits':(5.0,40.0),'error':0.01}
         params_dict['sigma_n'] = {'fix':False,'start_val':2e-41,'limits':(1e-42,1e-38),'error':0.01}
         if args.sigma_n != None:
@@ -493,7 +493,7 @@ def main():
         params_dict['wmod_amp'] = {'fix':False,'start_val':0.20,'limits':(0.0,1.0),'error':0.01}
         params_dict['wmod_offst'] = {'fix':True,'start_val':1.00,'limits':(0.0,10000.0),'error':0.01}
 
-    params_dict['num_spike'] = {'fix':True,'start_val':1,'limits':(0.0,500.0),'error':0.01}
+    params_dict['num_spike'] = {'fix':True,'start_val':0,'limits':(0.0,500.0),'error':0.01}
     if args.fit == 10:
         params_dict['num_spike'] = {'fix':True,'start_val':200,'limits':(0.0,500.0),'error':0.01}
         params_dict['spike_mass'] = {'fix':True,'start_val':args.spikemass,'limits':(0.0,5.0),'error':0.01}

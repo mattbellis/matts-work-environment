@@ -359,8 +359,9 @@ def fitfunc(data,p,parnames,params_dict):
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
         elif flag==2 or flag==3 or flag==4:
+            #if 'num_' in name or 'ncalc' in name:
             #if 'num_flat' in name or 'num_surf' in name or 'ncalc' in name:
-            if 'num_' in name or 'ncalc' in name:
+            if 'num_neutrons' in name or 'num_comp' in name or 'num_surf' in name or 'ncalc' in name:
                 num_tot += p[pn.index(name)]
     # MC
     if flag==5:
@@ -420,8 +421,10 @@ def fitfunc(data,p,parnames,params_dict):
     if flag==0 or flag==1 or flag==5:
         num_exp0 /= num_tot
 
-    #num_surf /= num_tot
+    num_surf /= num_tot
     #num_flat /= num_tot
+    #num_alphas /= num_tot
+    #num_comp /= num_tot
 
     print " -------------------------------------- "
     #print "energy: ",x[0:8]
@@ -454,7 +457,7 @@ def fitfunc(data,p,parnames,params_dict):
         pdf = wimp(y,x,AGe,mDM,sigma_n,efficiency=efficiency,model=wimp_model)/(1.0*num_tot)
         for d0,d1,t in zip(data[0],data[1],pdf):
             if t<0:
-                print d0,d1,t, np.log(t)
+                print "t is less than 0: ",d0,d1,t, np.log(t)
 
         pdf *= (0.333) # Active volume of CoGeNT
         pdf *= rtf # This will be the fast rise times
