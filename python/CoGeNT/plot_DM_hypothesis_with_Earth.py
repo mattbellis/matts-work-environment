@@ -109,7 +109,8 @@ def main():
     dRdEee = None
 
     # Need this for Sagitarius stream
-    vSag=300
+    #vSag=300
+    vSag=220
     #vSag=500
     v0Sag=25
     #vSag=500
@@ -180,8 +181,8 @@ def main():
 
         dRdEr *= efficiency(Er)
 
-        smeared,smeared_x = cogent_convolve(Eee,dRdEr)
-        print smeared-dRdEr
+        #smeared,smeared_x = cogent_convolve(Eee,dRdEr)
+        #print smeared-dRdEr
 
         dt = datetime(2009, 1, 1, 0, 0, 0, 0) + timedelta(days=day) #
         datestring = dt.strftime("%B %d")
@@ -189,7 +190,7 @@ def main():
         #leg_title = "day=%d" % (day)
         ax1.plot(Eee,dRdEr,label=leg_title,color=color[i],linewidth=4)
         #ax1.plot(smeared_x,smeared,label=leg_title,color=color[i],linewidth=4)
-        ax1.plot(Eee,smeared,'--',label='smeared')
+        #ax1.plot(Eee,smeared,'--',label='smeared')
 
         # Angular position of Earth
         # Call 3 o'clock = Jan 1st and rotate counter-clockwise
