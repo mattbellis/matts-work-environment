@@ -199,7 +199,8 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
             if 'num_' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
         elif flag==2 or flag==3 or flag==4:
-            if 'num_flat' in name or 'num_surf' in name or 'ncalc' in name:
+            #if 'num_flat' in name or 'num_surf' in name or 'ncalc' in name:
+            if 'num_' in name or 'ncalc' in name:
                 num_tot += p[parnames.index(name)]
     # MC
     if flag==5:
@@ -265,7 +266,7 @@ def emlf_normalized_minuit(data,p,parnames,params_dict):
     #print tot_pdf
     for d0,d1,t in zip(data[0],data[1],tot_pdf):
         if t<0:
-            print d0,d1,t,np.log(t)
+            print "IN FITTING UTILITIES: ",d0,d1,t,np.log(t)
     likelihood_func = (-np.log(tot_pdf)).sum()
     print "nevents, nevents_fit: %f %f" % (ndata,num_tot)
     print "vals         : %12.3f %12.3f %12.3f" % (likelihood_func,pois(num_tot,ndata),likelihood_func-pois(num_tot,ndata))
