@@ -108,7 +108,7 @@ def sigmoid(x,thresh,sigma,max_val):
 ################################################################################
 # WIMP signal
 ################################################################################
-def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=300,v0Sag=100):
+def wimp(org_day,x,AGe,mDM,sigma_n,efficiency=None,model='shm',vDeb1=340,vSag=220,v0Sag=25):
 
     if not (model=='shm' or model=='stream' or model=='debris'):
         print "Not correct model for plotting WIMP PDF!"

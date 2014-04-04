@@ -570,7 +570,7 @@ def main():
     ############################################################################
     Er1=3 
     #Er1=3.5 # Trying this because we go further out in energy
-    v01=10 #v01 is the dispersion of this stream
+    v01=20 #v01 is the dispersion of this stream
     vstr1 = vstr(vMaxMod,AGe,tc_SHM,mDM,Er1)
     print "\nStream characteristics for a target with atomic number %.2f and energy cut-off at %f keV:" % (AGe,Er1)
     vstr1 = vstr(vMaxMod,AGe,153,mDM,Er1)
