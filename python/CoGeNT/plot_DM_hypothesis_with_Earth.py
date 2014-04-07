@@ -19,7 +19,22 @@ from cogent_utilities import cogent_convolve
 
 import argparse
 
-color = ['red','blue','green','black','orange','cyan','yellow']
+#color = ['red','blue','green','black','orange','cyan','yellow']
+color = []
+#ndays = 7
+#halfway = 3.0
+ndays = 60
+halfway = 30.0
+for i in range(0,ndays):
+    if i<=halfway:
+        color.append(plt.cm.jet(i/halfway))
+    elif i>=halfway+1:
+        print i
+        color.append(plt.cm.jet(1.0 - ((i-halfway)/halfway) + 0.1))
+
+print color
+
+
 
 ################################################################################
 # Main
@@ -48,6 +63,9 @@ def main():
             default=4.0, help='High energy range for your detector (default=4)')
     parser.add_argument('--cogent', dest='cogent',\
             default=False, action='store_true', help='Use the CoGeNT detector for size and efficiency')
+    parser.add_argument('--tag', dest='tag', type=str,\
+            default='shm', help='Tag to append to output files and figures.')
+
 
     args = parser.parse_args()
 
@@ -73,31 +91,7 @@ def main():
     fig0=plt.figure(figsize=(10,4),dpi=100)
     ax1=fig0.add_subplot(1,2,1)
     ax2=fig0.add_subplot(1,2,2)
-
     fig0.subplots_adjust(left=0.07, bottom=0.15, right=0.95, wspace=0.2, hspace=None)
-
-    ############################################################################
-    # Plot the position of the Earth.
-    ############################################################################
-    N = 50
-    x = np.random.rand(N)
-    y = np.random.rand(N)
-    area = np.pi * (15 * np.random.rand(N))**2 # 0 to 15 point radiuses
-
-    # Sun
-    for i in range(0,5):
-        ax2.add_artist(mpatches.Circle((.0, .0), 1.0+0.3*i,alpha=0.2-0.02*i,color='yellow'))
-
-    # Earth orbit
-    #ax2.add_artist(mpatches.Circle((.0, .0), 8.00,alpha=0.1,color='black'))
-    x = np.linspace(-8,8,100)
-    y = np.sqrt(8**2 - x*x)
-    ax2.plot(x,y,color='k')
-    ax2.plot(x,-y,color='k')
-
-    ax2.axis('equal')
-    ax2.set_xlim(-10,10)
-    ax2.set_ylim(-10,10)
 
 
     ##############################################################################
@@ -145,7 +139,43 @@ def main():
     ############################################################################
     # Plot the spectra
     ############################################################################
-    for i,day in enumerate([0,60,120,180,240,300]):
+    #for i,day in enumerate([0,60,120,180,240,300]):
+    for i,day in enumerate(np.arange(1,360,int(365.0/ndays))):
+
+        # For animations
+        #day = i*int(365.0/ndays)
+        print day
+        ############################################################################
+        # Figure
+        # Only for animations
+        ############################################################################
+        fig0=plt.figure(figsize=(10,4),dpi=100)
+        ax1=fig0.add_subplot(1,2,1)
+        ax2=fig0.add_subplot(1,2,2)
+        fig0.subplots_adjust(left=0.07, bottom=0.17, right=0.95, wspace=0.2, hspace=None)
+
+        ############################################################################
+        # Plot the position of the Earth.
+        ############################################################################
+        #N = 50
+        #x = np.random.rand(N)
+        #y = np.random.rand(N)
+        #area = np.pi * (15 * np.random.rand(N))**2 # 0 to 15 point radiuses
+
+        # Sun
+        for j in range(0,5):
+            ax2.add_artist(mpatches.Circle((.0, .0), 1.0+0.3*j,alpha=0.2-0.02*j,color='yellow'))
+
+        # Earth orbit
+        x = np.linspace(-8,8,100)
+        y = np.sqrt(8**2 - x*x)
+        ax2.plot(x,y,color='k')
+        ax2.plot(x,-y,color='k')
+
+        ax2.axis('equal')
+        ax2.set_xlim(-10,10)
+        ax2.set_ylim(-10,10)
+
         # Recoil energy range.
         Er = np.linspace(0.1,10.0,100)
 
@@ -184,34 +214,52 @@ def main():
         #smeared,smeared_x = cogent_convolve(Eee,dRdEr)
         #print smeared-dRdEr
 
-        dt = datetime(2009, 1, 1, 0, 0, 0, 0) + timedelta(days=day) #
-        datestring = dt.strftime("%B %d")
+        dt = datetime(2009, 1, 5, 0, 0, 0, 0) + timedelta(days=day) #
+        #datestring = dt.strftime("%B %d")
+        datestring = dt.strftime("%B")
         leg_title = "%s" % (datestring)
         #leg_title = "day=%d" % (day)
-        ax1.plot(Eee,dRdEr,label=leg_title,color=color[i],linewidth=4)
-        #ax1.plot(smeared_x,smeared,label=leg_title,color=color[i],linewidth=4)
-        #ax1.plot(Eee,smeared,'--',label='smeared')
+        #ax1.plot(Eee,dRdEr,label=leg_title,color=color[i],linewidth=4) # different colors
+        ax1.plot(Eee,dRdEr,label=leg_title,color='k',linewidth=4) # monochromatic
+
 
         # Angular position of Earth
         # Call 3 o'clock = Jan 1st and rotate counter-clockwise
         radius = 8.0 # Earth orbit
-        day_to_radians = np.pi*2.0*(365.0/360.0)
-        radians_earth = -day_to_radians*day
+        day_to_radians = np.pi*2.0*(1.0/365.0)
+        radians_earth = day_to_radians*day
+        print radians_earth
         xearth = radius*np.cos(radians_earth)
         yearth = radius*np.sin(radians_earth)
 
         xtext = 1.0*radius*np.cos(radians_earth) - 1.5
         ytext = 1.0*radius*np.sin(radians_earth) + 1.7
 
-        ax2.add_artist(mpatches.Circle((xearth, yearth), 1.15,alpha=0.9,color=color[i]))
+        print color[i],xearth,yearth
+        #ax2.add_artist(mpatches.Circle((xearth, yearth), 1.15,alpha=0.9,color=color[i]))
+        ax2.add_artist(mpatches.Circle((xearth, yearth), 1.15,alpha=0.9,color='blue'))
         ax2.text(xtext,ytext,datestring)
+
+        ax1.set_ylabel(r'Arbitrary units',fontsize=24)
+        ax1.set_xlabel(r'keV$_{\rm ee}$',fontsize=24)
+        ax1.set_xlim(elo,ehi)
+        ax1.set_ylim(0,7)
+        ax1.legend()
+
+        ax2.axis('off')
+
+        name = "Plots/modulation_earth_%s_animation_%04d.png" % (args.tag,i)
+        fig0.savefig(name)
 
     #ax0.set_xlabel('Er')
     #ax0.legend()
 
-    ax1.set_xlabel('Eee')
+    ax1.set_ylabel(r'Arbitrary units')
+    ax1.set_xlabel(r'keV$_{\rm ee}$')
     ax1.set_xlim(elo,ehi)
     ax1.legend()
+
+    ax2.axis('off')
 
     num_wimps = 1.0
 
@@ -227,7 +275,11 @@ def main():
     #print leg_title
     #ax2.legend([leg_title])
 
-    plt.show()
+    #name = "Plots/modulation_earth_%s.png" % (args.tag)
+    name = "Plots/modulation_earth_%s.png" % (args.tag)
+    plt.savefig(name)
+
+    #plt.show()
 
     exit()
 

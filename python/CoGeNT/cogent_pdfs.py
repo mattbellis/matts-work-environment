@@ -192,6 +192,7 @@ def flat_events(data,pars,lo,hi,subranges=None,efficiency=None):
     # Comptons
     pdf0  = pdfs.exp(x,pars['e_exp_flat'],xlo,xhi,efficiency=efficiency)
     pdf0 *= pdfs.exp(y,pars['t_exp_flat'],ylo,yhi,subranges=subranges[1])
+    #pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
 
     # Muon induced neutrons contribution. Not decaying away in time.
     pdf1  = pdfs.exp_plus_flat(x,pars['flat_neutrons_slope'],pars['flat_neutrons_amp'],pars['flat_neutrons_offset'],xlo,xhi,efficiency=efficiency)
@@ -438,11 +439,13 @@ def fitfunc(data,p,parnames,params_dict):
         pdf *= rtf # This will be the fast rise times
         pdf *= num_exp0
         #print "exp0 pdf: ",pdf[0:8]
+    '''
     elif flag==1:
         pdf  = pdfs.exp(x,e_exp0,xlo,xhi,efficiency=efficiency)
         pdf *= pdfs.cos(y,wmod_freq,wmod_phase,wmod_amp,wmod_offst,ylo,yhi,subranges=subranges[1])
         pdf *= rtf # This will be the fast rise times
         pdf *= num_exp0
+    '''
 
     elif flag==10: # Spike at some fixed mass.
         pdf  = pdfs.gauss(x,spike_mass,spike_sigma,xlo,xhi,efficiency=efficiency)
