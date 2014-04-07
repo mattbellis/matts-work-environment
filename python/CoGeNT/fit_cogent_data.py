@@ -324,7 +324,7 @@ def main():
 
     print acc_corr*ypts
     ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
-                        color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
+                        color='red',ecolor='red',markersize=2,barsabove=False,capsize=0,linewidth=2)
 
     #plt.show()
     #exit()
@@ -441,6 +441,8 @@ def main():
     partial_live_days = 0.0
     for sr in subranges[1]:
         partial_live_days += (sr[1]-sr[0])
+        print partial_live_days
+
     nsurface *= partial_live_days/tot_live_days
 
     nsurface = 4400.0 # 3yr data.
@@ -462,7 +464,7 @@ def main():
     #params_dict['flat_neutrons_slope'] = {'fix':True,'start_val':0.532,'limits':(0.00001,10.0),'error':0.01}
     #params_dict['flat_neutrons_amp'] = {'fix':True,'start_val':14.0,'limits':(0.00001,10.0),'error':0.01}
     #params_dict['flat_neutrons_offset'] = {'fix':True,'start_val':0.783,'limits':(0.00001,10.0),'error':0.01}
-    params_dict['num_neutrons'] = {'fix':True,'start_val':880.0,'limits':(0.0,100000.0),'error':0.01}
+    params_dict['num_neutrons'] = {'fix':False,'start_val':880.0,'limits':(0.0,100000.0),'error':0.01}
     params_dict['flat_neutrons_slope'] = {'fix':True,'start_val':0.920,'limits':(0.00001,10.0),'error':0.01}
     params_dict['flat_neutrons_amp'] = {'fix':True,'start_val':17.4,'limits':(0.00001,10.0),'error':0.01}
     params_dict['flat_neutrons_offset'] = {'fix':True,'start_val':2.38,'limits':(0.00001,10.0),'error':0.01}
@@ -587,7 +589,9 @@ def main():
 
     ############################################################################
     # Exponential
+    # This was an early attempt just to use an exponential for a WIMP.
     ############################################################################
+    '''
     # Energy projections
     if args.fit==0 or args.fit==1 or args.fit==5:
         ypts = np.exp(-values['e_exp0']*expts)
@@ -608,6 +612,8 @@ def main():
             if max(srty)>peak_wimp_val:
                 peak_wimp_val = max(srty)
                 peak_wimp_date = srtx[srty.tolist().index(max(srty))]
+
+    '''
 
     # Plot wimp term
     if args.fit==2 or args.fit==3 or args.fit==4 or args.fit==6:
@@ -642,37 +648,38 @@ def main():
 
     ############################################################################
     # Second exponential
+    # Surface events
     ############################################################################
+    #'''
     if args.fit!=5 and args.fit!=6:
         # Energy projections
         #ypts = np.exp(-values['e_surf']*expts)
         ypts = pdfs.poly(expts, [values['k1_surf'],values['k2_surf']],ranges[0][0],ranges[0][1])
-        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_surf'],fmt='y-',axes=ax0,efficiency=eff,linewidth=2,label='Surface events')
+        y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_surf'],fmt='y-',axes=ax0,efficiency=eff,linewidth=4,label='Surface events')
         eytot += y
 
         # Time projections
         #func = lambda x: np.ones(len(x))
         #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1])
         func = lambda x: np.exp(-values['t_surf']*x)
-        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1],linewidth=2)
+        sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_surf'],fmt='y-',axes=ax1,subranges=subranges[1],linewidth=4)
         surf_ypts = sr_typts
         tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+
+    #'''
+
 
     ############################################################################
     # Flat
     ############################################################################
+    '''
     # Energy projections
     #ypts = np.ones(len(expts))
     #ypts =  np.exp(-values['e_exp_flat']*expts)
-    ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
     #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax0,efficiency=eff,label='Compton photons from resistor and cosmogenic decays')
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_comp'],fmt='m--',axes=ax0,efficiency=eff,label='Compton photons from resistor and cosmogenic decays')
     #ypts  = pdfs.exp(expts,0.53,ranges[0][0],ranges[0][1])
-    ypts  = pdfs.exp_plus_flat(expts,values['flat_neutrons_slope'],values['flat_neutrons_amp'],values['flat_neutrons_offset'],ranges[0][0],ranges[0][1])
-    eytot += y
     #y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax0,efficiency=eff,label=r'$\mu$-induced $n$ and U,Th,',linewidth=2)
-    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_neutrons'],fmt='c--',axes=ax0,efficiency=eff,label=r'$\mu$-induced $n$ and U,Th,',linewidth=2)
-    eytot += y
+
 
     #ypts = values['flat_frac']*pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
     #ypts += (1.0-values['flat_frac'])*pdfs.exp_plus_flat(expts,values['flat_neutrons_slope'],values['flat_neutrons_amp'],values['flat_neutrons_offset'],ranges[0][0],ranges[0][1])
@@ -680,23 +687,47 @@ def main():
     #eytot += y
 
     # Time projections
-    '''
-    func = lambda x: np.ones(len(x))
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
-    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
-    '''
+    #func = lambda x: np.ones(len(x))
+    #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_flat'],fmt='m-',axes=ax1,subranges=subranges[1])
+    #tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+    
     func = lambda x: np.exp(-values['t_exp_flat']*x)
     #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['flat_frac']*values['num_flat'],fmt='m--',axes=ax1,subranges=subranges[1],linewidth=2)
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_comp'],fmt='m--',axes=ax1,subranges=subranges[1],linewidth=2)
-    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
-    flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
     func = lambda x: np.ones(len(x))
     #sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=(1.0-values['flat_frac'])*values['num_flat'],fmt='c--',axes=ax1,subranges=subranges[1],linewidth=2)
-    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_neutrons'],fmt='c--',axes=ax1,subranges=subranges[1],linewidth=2)
-    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
-    flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
-    
+
     #ax1.plot(expts,flat_tpts,'m-',linewidth=2)
+    '''
+
+    ############################################################################
+    # Neutrons from muons and alphas (in the rock)
+    ############################################################################
+    # Energy
+    ypts  = pdfs.exp_plus_flat(expts,values['flat_neutrons_slope'],values['flat_neutrons_amp'],values['flat_neutrons_offset'],ranges[0][0],ranges[0][1])
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_neutrons'],fmt='c-',axes=ax0,efficiency=eff,label=r'($\mu,n$) and ($\alpha,n$) induced neutrons',linewidth=4)
+    eytot += y
+
+    # Time
+    func = lambda x: np.ones(len(x))
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_neutrons'],fmt='c-',axes=ax1,subranges=subranges[1],linewidth=4)
+    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+    #flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
+    
+    ############################################################################
+    # Comptons
+    ############################################################################
+    #'''
+    # Energy
+    ypts  = pdfs.exp(expts,values['e_exp_flat'],ranges[0][0],ranges[0][1])
+    y,plot = plot_pdf(expts,ypts,bin_width=bin_widths[0],scale=values['num_comp'],fmt='m-',axes=ax0,efficiency=eff,label='Comptons: resistor and cosmogenic activations',linewidth=4)
+    eytot += y
+
+    # Time
+    func = lambda x: np.exp(-values['t_exp_flat']*x)
+    sr_typts,plot,sr_txpts = plot_pdf_from_lambda(func,bin_width=bin_widths[1],scale=values['num_comp'],fmt='m-',axes=ax1,subranges=subranges[1],linewidth=4)
+    tot_sr_typts = [tot + y for tot,y in zip(tot_sr_typts,sr_typts)]
+    #flat_tpts = [tot + y for tot,y in zip(flat_tpts,sr_typts)]
+    #'''
 
     ############################################################################
     # ``spike" term.
@@ -716,6 +747,7 @@ def main():
     ############################################################################
     # L-shell
     ############################################################################
+    #'''
     if args.fit!=5 and args.fit!=6:
         # Returns pdfs
         lshell_totx = np.zeros(1000)
@@ -740,21 +772,27 @@ def main():
             lshell_toty = [tot + y for tot,y in zip(lshell_toty,sr_typts)]
 
 
-        ax0.plot(expts,lshell_totx,'r-',linewidth=2,label='L-shell decays')
+        ax0.plot(expts,lshell_totx,'r-',linewidth=4,label='L-shell decays')
 
 
         # Total on y/t over all subranges.
         for x,y,lsh,flat in zip(sr_txpts,tot_sr_typts,lshell_toty,flat_tpts):
-            ax1.plot(x,lsh,'r-',linewidth=2)
-            ax1.plot(x,flat,'m-',linewidth=2)
-            ax1.plot(x,y,'b',linewidth=3)
+            ax1.plot(x,lsh,'r-',linewidth=4)
+            #ax1.plot(x,flat,'m-',linewidth=2)
 
-    ax0.plot(expts,eytot,'b',linewidth=3,label='Total')
+    #'''
+    ############################################################################
+    # Plot the total of all the contributions
+    ############################################################################
+    #'''
+    ax0.plot(expts,eytot,'b',linewidth=4,label='Total')
 
     # Total on y/t over all subranges.
     for x,y in zip(sr_txpts,tot_sr_typts):
-        ax1.plot(x,y,'b',linewidth=3)
+        ax1.plot(x,y,'b',linewidth=4)
 
+    #'''
+    '''
     ###########################################################
     # Subtract the fit results to see what's left.
     ###########################################################
@@ -779,6 +817,7 @@ def main():
                         color='red',ecolor='red',markersize=2,barsabove=False,capsize=0)
 
     #ax1.errorbar(xpts, acc_corr*ypts,xerr=xpts_err,yerr=acc_corr*ypts_err,fmt='o', \
+    '''
 
 
 
