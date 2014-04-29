@@ -245,7 +245,7 @@ def main():
         #print s.student_name
         averages, output = s.summary_output(final_grade_weighting)
         #gvis_output = s.gvis_output(final_grade_weighting)
-        nmore_exams = 7 - len(s.grades.exams)
+        nmore_exams = 15 - len(s.grades.exams)
         '''
         if len(s.grades.exams)==1:
             nmore_exams = 2
