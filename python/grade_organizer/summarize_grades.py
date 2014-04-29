@@ -84,6 +84,8 @@ def main():
         if line_num==0:
             for i,r in enumerate(row):
 
+                r = r.strip()
+
                 g = None
 
                 if r=='Quiz' or r=='quiz':
@@ -245,7 +247,7 @@ def main():
         #print s.student_name
         averages, output = s.summary_output(final_grade_weighting)
         #gvis_output = s.gvis_output(final_grade_weighting)
-        nmore_exams = 7 - len(s.grades.exams)
+        nmore_exams = 15 - len(s.grades.exams)
         '''
         if len(s.grades.exams)==1:
             nmore_exams = 2
@@ -265,10 +267,10 @@ def main():
         '''
 
         for j in range(0,nmore_exams):
-            dum_grade = Grade('exam',-1,70.0,100.0,0.0,0.0,False,'3/12/2012')
+            dum_grade = Grade('exam',-1,70.0,100.0,0.0,0.0,False,'5/12/2014')
             s.grades.exams.append(dum_grade)
         for j in range(0,nmore_final_exams):
-            dum_grade = Grade('final_exam',-1,70.0,100.0,0.0,0.0,False,'3/12/2012')
+            dum_grade = Grade('final_exam',-1,70.0,100.0,0.0,0.0,False,'5/12/2014')
             s.grades.final_exam.append(dum_grade)
 
         hypothetical_performances = [70.0,80.0,90.0,100.0]
@@ -276,11 +278,11 @@ def main():
         for g in (hypothetical_performances):
             #'''
             for j in range(0,nmore_exams):
-                dum_grade = Grade('exam',-1,g,100.0,0.0,0.0,False,'3/12/2014')
-                s.grades.exams[(7-nmore_exams)+j] = dum_grade
+                dum_grade = Grade('exam',-1,g,100.0,0.0,0.0,False,'5/12/2014')
+                s.grades.exams[(15-nmore_exams)+j] = dum_grade
             #'''
             for j in range(0,nmore_final_exams):
-                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'3/12/2014')
+                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'5/12/2014')
                 s.grades.final_exam[0] = dum_grade
 
             dum_averages, dum_output = s.summary_output(final_grade_weighting)

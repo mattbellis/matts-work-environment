@@ -144,7 +144,8 @@ def main():
     #tag = 'pulser_zoomed_in'
     #tag = 'pulser_simulated_Nicole'
     #tag = 'pulser_simulated_Nicole_zoomed_in'
-    tag = 'pulser_simulated_Nicole_onelognormal'
+    #tag = 'pulser_simulated_Nicole_onelognormal'
+    tag = 'pulser_simulated_Nicole_no_fit'
 
     '''
     if args.help:
@@ -404,15 +405,15 @@ def main():
             xpts = np.linspace(ranges[2][0],ranges[2][1],1000)
             tot_ypts = np.zeros(len(xpts))
 
-            ypts  = pdfs.lognormal(xpts,values['fast_logn_mean'],values['fast_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
-            tot_ypts += y
+            #ypts  = pdfs.lognormal(xpts,values['fast_logn_mean'],values['fast_logn_sigma'],ranges[2][0],ranges[2][1])
+            #y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['fast_num'],fmt='r--',linewidth=2,axes=axrt[j])
+            #tot_ypts += y
 
-            ypts  = pdfs.lognormal(xpts,values['slow_logn_mean'],values['slow_logn_sigma'],ranges[2][0],ranges[2][1])
-            y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='r:',linewidth=2,axes=axrt[j])
-            tot_ypts += y
+            #ypts  = pdfs.lognormal(xpts,values['slow_logn_mean'],values['slow_logn_sigma'],ranges[2][0],ranges[2][1])
+            #y,plot = plot_pdf(xpts,ypts,bin_width=bin_widths[2],scale=values['slow_num'],fmt='r:',linewidth=2,axes=axrt[j])
+            #tot_ypts += y
 
-            axrt[j].plot(xpts,tot_ypts,'r',linewidth=2)
+            #axrt[j].plot(xpts,tot_ypts,'r',linewidth=2)
             axrt[j].set_ylabel(r'Events')
             axrt[j].set_xlabel(r'Rise time ($\mu$s)')
             axrt[j].set_xlim(0,5.0)
