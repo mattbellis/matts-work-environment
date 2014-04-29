@@ -38,6 +38,7 @@ def mb_cdist(v,m,T):
 ################################################################################
 
 # Earth, moon, titan
+bodies = ['Earth','Moon','Titan']
 masses = [6e24, 7.3e22, 1.3e23]
 radii = [6e6, 1.7e6, 2.6e6]
 
@@ -76,11 +77,11 @@ for i,T in enumerate(temps):
             plt.plot((vesc[i],vesc[i]),[0,.014],'k-')
 
 for i,T in enumerate(temps):
-    for am in amasses:
+    for j,am in enumerate(amasses):
         y = mb_cdist(vesc[i],am,T)
         y1 = quad(mb_dist,0,vesc[i],(am,T))[0]
         #y = mb_cdist(1000.0,am,T)
-        print "%s %f %f %e %e %e" % (mols[i],T,vesc[i],am,1.0-y,1.0-y1)
+        print "%s %s %f %f %e %e %e" % (bodies[i],mols[j],T,vesc[i],am,1.0-y,1.0-y1)
 
 
 print "HEREJHRKJE"
