@@ -1,0 +1,15 @@
+CHDR = \
+
+
+DHDR = \
+
+
+SHDR = \
+
+
+CSRC = \
+
+DSRC = \
+
+SSRC = \
+magma_ssyevd_gpu.cpp
