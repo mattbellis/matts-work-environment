@@ -247,7 +247,8 @@ def main():
         #print s.student_name
         averages, output = s.summary_output(final_grade_weighting)
         #gvis_output = s.gvis_output(final_grade_weighting)
-        nmore_exams = 15 - len(s.grades.exams)
+        #nmore_exams = 15 - len(s.grades.exams)
+        nmore_exams = 0
         '''
         if len(s.grades.exams)==1:
             nmore_exams = 2
@@ -257,8 +258,8 @@ def main():
             nmore_exams = 0
         '''
 
-        nmore_final_exams = 0 # Don't include the final exam
-        #nmore_final_exams = 1 # Include the final exam in the hypotheticals
+        #nmore_final_exams = 0 # Don't include the final exam
+        nmore_final_exams = 1 # Include the final exam in the hypotheticals
         # Uncomment this if you don't want the hypothetical exam grades
         # to be calculated.
         '''
@@ -266,9 +267,11 @@ def main():
             nmore_final_exams = 1
         '''
 
+        '''
         for j in range(0,nmore_exams):
             dum_grade = Grade('exam',-1,70.0,100.0,0.0,0.0,False,'5/12/2014')
             s.grades.exams.append(dum_grade)
+        '''
         for j in range(0,nmore_final_exams):
             dum_grade = Grade('final_exam',-1,70.0,100.0,0.0,0.0,False,'5/12/2014')
             s.grades.final_exam.append(dum_grade)
@@ -276,11 +279,12 @@ def main():
         hypothetical_performances = [70.0,80.0,90.0,100.0]
         hypothetical_final_grades = []
         for g in (hypothetical_performances):
-            #'''
+            #print g
+            '''
             for j in range(0,nmore_exams):
                 dum_grade = Grade('exam',-1,g,100.0,0.0,0.0,False,'5/12/2014')
                 s.grades.exams[(15-nmore_exams)+j] = dum_grade
-            #'''
+            '''
             for j in range(0,nmore_final_exams):
                 dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'5/12/2014')
                 s.grades.final_exam[0] = dum_grade
@@ -289,6 +293,8 @@ def main():
             #print dum_averages
             hypothetical_final_grades.append(dum_averages[-1])
 
+        #print hypothetical_performances 
+        #print hypothetical_final_grades 
         ########################################################################
         # For sending out the grades
         ########################################################################
