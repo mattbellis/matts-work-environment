@@ -36,10 +36,19 @@ for i,n,r in zip(xrange(len(nbins)),nbins,ranges):
 #k1_n = 1143
 
 # Values from NEW data fit
-k0_sig = 0.003674
-k1_sig = 0.009301
-k0_n = 5685
-k1_n = 4772
+#k0_sig = 0.003674
+#k1_sig = 0.009301
+#k0_n = 5685
+#k1_n = 4772
+
+# New from McCracken (5/8/2014)
+mean0 = 1.118960
+mean1 = 1.118810 
+k0_sig = 0.003535 
+k1_sig = 0.008979 
+k0_n = 5241
+k1_n = 4845
+
 
 peak_ratios = k1_n/k0_n
 ################################################################################
@@ -182,7 +191,8 @@ lch.hist_err(data[0],bins=nbins[0],range=ranges[0],axes=ax0)
 ############################################################################
 
 #means = [1.117,1.119]
-means = [1.118998,1.118997]
+#means = [1.118998,1.118997]
+means = [mean0,mean1] # As of 5/8/2014
 
 sigmas = [k0_sig,k1_sig]
 

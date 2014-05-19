@@ -254,7 +254,7 @@ class Student:
         drop_lowest_score = False
         ret += " -----\nFinal exam\n -----\n"
         for g in self.grades.final_exam:
-            ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
+            ret +=  "%-7s (%10s) %s\n" % (g.grade_type,g.date,g.summary_output())
             #1
             #ret +=  "%-7s   %2s (%10s) %s\n" % (g.grade_type,g.internal_index,g.date,g.summary_output())
         if len(self.grades.final_exam)>=1:
@@ -268,12 +268,20 @@ class Student:
 
         tot = 0.0
         tot_wt = 0.0
-        for g,w in zip(averages,final_grade_weighting):
+        tot_pre_final = 0.0
+        tot_wt_pre_final = 0.0
+        for ii,(g,w) in enumerate(zip(averages,final_grade_weighting)):
             if g>=0:
                 tot += g*w
                 tot_wt += w
+            if g>=0 and ii<3:
+                tot_pre_final += g*w
+                tot_wt_pre_final += w
         final = tot/tot_wt
+        final_pre_final = tot_pre_final/tot_wt_pre_final
+        #print averages,final_grade_weighting
         ret += "\n -------\n\tFinal grade: %4.2f\n" % (final)
+        #ret += "\n -------\n\tPre-final/Final grade: %4.2f %4.2f\n" % (final_pre_final,final)
 
         averages.append(final)
 
