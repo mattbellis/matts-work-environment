@@ -1,0 +1,42 @@
+<memo name="test">
+
+  <entry name="1">
+    <value one="one" />
+  </entry>
+
+<entry name="thistest">	<value one="ONE">
+</value>
+</entry>
+<entry name="thistest">
+	<value one="ONE">
+</value>
+</entry>
+<entry name="thistest">
+	<value one="ONE">
+</value>
+</entry>
+<entry name="thistest">
+	<value one="ONE">
+</value>
+</entry>
+<entry name="thistest">
+	<value one="ONE">
+</value>
+</entry>
+<entry name="thistest">
+	<value first="TWO" one="ONE">
+</value>
+</entry>
+<entry name="thistest">
+	<value first="TWO">
+</value>
+</entry>
+<entry name="thistest">
+	<value one="ONE" two="TWO">
+</value>
+</entry>
+<entry name="thistest">
+	<value one="ONE" three="THREE" two="TWO">
+</value>
+</entry>
+</memo>
