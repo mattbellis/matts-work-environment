@@ -12,4 +12,5 @@ CSRC = \
 DSRC = \
 
 SSRC = \
-magma_ssyevd_gpu.cpp
+magma_ssyevd_gpu.cpp \
+magma_ssyevd_gpu_large.cpp
