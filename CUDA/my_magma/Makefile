@@ -101,6 +101,13 @@ magma_ssyevd_gpu: magma_ssyevd_gpu.o
 	$(LIBDIR) \
 	$(LIB) 
 
+
+magma_ssyevd_gpu_large: magma_ssyevd_gpu_large.o
+	$(CC) $(LDOPTS) $(NOMAIN) $< -o $@ \
+	$(LIBTEST) $(LIBLAPACKTEST) -L$(MAGMA_DIR)/lib -lmagma \
+	$(LIBDIR) \
+	$(LIB) 
+
 #
 # These two files are provided by cuda
 # CUDA 5 needs -DCUBLAS_GFORTRAN or appropriate setting to compile cuda/src/fortran.c bindings
