@@ -1,18 +1,22 @@
 import sys
 import numpy as np
 
+#'''
 nsig = 10
 if len(sys.argv)>1:
     nsig = int(sys.argv[1])
+#'''
 
 ntoys = 10
 if len(sys.argv)>2:
     ntoys = int(sys.argv[2])
 
-infile0 = open('ks_nu_data_optimal.txt')
-infile1 = open('ks_nu_mc_optimal.txt')
+#infile0 = open('ks_nu_data_optimal.txt')
+#infile1 = open('ks_nu_mc_optimal.txt')
+#infile0 = open('ks_nu_mmoffk_data.txt')
+infile1 = open('ks_nu_mmoffk_acc.txt')
 
-data = np.loadtxt(infile0)
+#data = np.loadtxt(infile0)
 mc = np.loadtxt(infile1)
 
 #print data
@@ -21,6 +25,10 @@ mc = np.loadtxt(infile1)
 nmc = len(mc)
 
 for i in range(ntoys):
+
+    name = "toys/ks_nu_toy_bkg_%04d.dat" % (i)
+    infile0 = open(name)
+    data = np.loadtxt(infile0)
 
     sample = data.copy()
 

@@ -50,7 +50,7 @@ k0_n = 5241
 k1_n = 4845
 
 
-peak_ratios = k1_n/k0_n
+peak_ratios = float(k1_n)/k0_n
 ################################################################################
 # CoGeNT fit
 ################################################################################
@@ -244,10 +244,10 @@ minscan = m.fval
 
 print "nsig: %f %f" % (values["ks_ncalc0"]*(1+peak_ratios),values["ks_ncalc0"]*(1+peak_ratios) * (errors["ks_ncalc0"]/values["ks_ncalc0"]))
 
-#exit()
+exit()
 
 #'''
-scanbins, scanvals, scanresults = m.mnprofile('ks_ncalc0',50,bound=(0,10.0))
+scanbins, scanvals, scanresults = m.mnprofile('ks_ncalc0',50,bound=(0,30.0))
 scanbins = np.array(scanbins)
 scanvals = np.array(scanvals)
 scanbins *= (1.0+peak_ratios)
