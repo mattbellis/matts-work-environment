@@ -11,8 +11,8 @@ def read_in_a_microprobe_data_file(infilename):
 
     infile = open(infilename)
     
-    #crossing_point = 40.0 # For Fe
-    crossing_point = 60.0 # For Ni
+    crossing_point = 40.0 # For Fe
+    #crossing_point = 60.0 # For Ni
 
     x = []
     y = []
@@ -30,8 +30,8 @@ def read_in_a_microprobe_data_file(infilename):
             #xpos = float(vals[5])
 
             # The ``new files"
-            #concentration = float(vals[0]) # Fe
-            concentration = float(vals[1]) # Ni
+            concentration = float(vals[0]) # Fe
+            #concentration = float(vals[1]) # Ni
             xpos = float(vals[4])
 
             difference = abs(concentration-crossing_point)
@@ -81,26 +81,26 @@ def read_in_an_isotope_data_file(infilename):
             vals = line.split(',')
 
             # The ``new" files, FNDA 1
-            #xpos = float(vals[0])
+            xpos = float(vals[0])
             # Fe
-            #delta = float(vals[3])
-            #deltaerr = float(vals[4].split()[1])
-            #conc = float(vals[1])
+            delta = float(vals[3])
+            deltaerr = float(vals[4].split()[1])
+            conc = float(vals[1])
             # Ni
             #conc = float(vals[2])
             #delta = float(vals[5])
             #deltaerr = float(vals[6])
 
             # The ``new" files, FNDA 2
-            xpos = float(vals[0])
+            #xpos = float(vals[0])
             # Fe
             #delta = float(vals[3])
             #deltaerr = float(vals[4])
             #conc = float(vals[1])
             # Ni
-            conc = float(vals[2])
-            delta = float(vals[6])
-            deltaerr = float(vals[7].split()[1])
+            #conc = float(vals[2])
+            #delta = float(vals[6])
+            #deltaerr = float(vals[7].split()[1])
 
             x.append(xpos)
             y.append(delta)

@@ -15,28 +15,30 @@ from scipy import interpolate
 ################################################################################
 # For the new files
 ################################################################################
+#'''
 # FNDA 1 
-#xis_offset = 0.00044 
-#hours = 120 
+xis_offset = 0.00044 
+hours = 120 
 #### exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
-#D56_coeff = [-30.268,5.00,13.39,6.30]
+D56_coeff = [-30.268,5.00,13.39,6.30]
 
 # Fe
-#element = "Fe"
-#cmax0 = 0.0085 # fraction
-#cmin0 = 1.008 # fraction
-#light_isotope = 54.
-#heavy_isotope = 56.
+element = "Fe"
+cmax0 = 0.0085 # fraction
+cmin0 = 1.008 # fraction
+light_isotope = 54.
+heavy_isotope = 56.
 # Ni
 #element = "Ni"
 #cmax0 = 0.0085 # fraction
 #cmin0 = 0.985 # fraction
 #light_isotope = 61.
 #heavy_isotope = 62.
+#'''
 
 
 # FNDA 2
-#'''
+'''
 xis_offset = 0.0
 hours = 96
 #### exp(-28.838 + 4.92 xFe - 12.91 xFe^2 + 6.17 xFe^3)
@@ -55,7 +57,7 @@ cmin0 = 0.9896 # fraction
 #cmin0 = 0.991 # fraction
 light_isotope = 61.
 heavy_isotope = 62.
-#'''
+'''
 
 
 
@@ -69,14 +71,28 @@ xis,yis,yerris,cis = read_in_an_isotope_data_file(sys.argv[2])
 print sys.argv[1].split('/')[-1].split('_micro')[0]
 #exit()
 
-#yis *= 2 # Weird labeling in files (both FNDA 1 and FNDA 2) for Fe?.
+yis *= 2 # Weird labeling in files (both FNDA 1 and FNDA 2) for Fe?.
 #yis += 14.37 # For Ni, FNDA 1
 
 xis -= xis_offset
-#xis = xis[::-1] # Do this for FNDA 1
+xis = xis[::-1] # Do this for FNDA 1
 
-xmp *= -1 # Do this for FNDA 2
+#xmp *= -1 # Do this for FNDA 2
 #####xis *= -1 # Do this for FNDA 2, NOT for Fe
+
+print xis
+print yis
+#for index in [-13,-12,-11,-10,-9,-7]:
+for index in []:
+    xis = np.delete(xis,index)
+    yis = np.delete(yis,index)
+    yerris = np.delete(yerris,index)
+    cis = np.delete(cis,index)
+
+print xis
+print yis
+#yerris *= 4
+#exit()
 
 
 ################################################################################
@@ -195,10 +211,11 @@ def fitfunc(data,p,parnames,params_dict):
 
         t += dt
 
+    # FNDA CHANGE?
     # Do this only for Ni!!!!! ############################# Nickel
     #print c56
-    c56 = 1.0 - c56
-    c54 = 1.0 - c54
+    #c56 = 1.0 - c56
+    #c54 = 1.0 - c54
 
     delta56_54 = (c56/c54 - 1.0)*1000.0
 
@@ -312,8 +329,8 @@ plt.plot(xmp,ymp,'ro',label='microprobe data')
 plt.plot(xis,cis,'co',label='data from isotope file')
 plt.ylabel('Concentration')
 plt.xlabel('Meters')
-#plt.legend(loc='center right')
-plt.legend(loc='upper right') # FNDA 2, NI
+plt.legend(loc='center right')
+#plt.legend(loc='upper right') # FNDA 2, NI
 
 fig0.add_subplot(1,2,2)
 label = r"$^{%d}$%s simulation" % (light_isotope,element)
@@ -324,8 +341,8 @@ plt.ylim(0,1.10)
 plt.plot(xmp,ymp,'ro',label='microprobe data')
 plt.ylabel('Concentration')
 plt.xlabel('Meters')
-#plt.legend(loc='center right')
-plt.legend(loc='upper right') # FNDA 2, NI
+plt.legend(loc='center right')
+#plt.legend(loc='upper right') # FNDA 2, NI
 
 name = "%s_%s_diffusion_profile.png" % (element,sys.argv[1].split('/')[-1].split('_micro')[0])
 plt.savefig(name)
@@ -347,7 +364,8 @@ plt.ylim(-40,40) # FNDA 1, Fe
 plt.ylabel(r'$\delta$')
 plt.xlabel('Meters')
 #plt.legend(loc='upper left')
-plt.legend(loc='upper left') # FNDA 2, NI
+#plt.legend(loc='upper left') # FNDA 2, NI
+plt.legend(loc='upper right') # FNDA 1, Fe
 name = "%s_%s_delta.png" % (element,sys.argv[1].split('/')[-1].split('_micro')[0])
 plt.savefig(name)
 
@@ -361,6 +379,9 @@ name = "%s_%s_output.csv" % (element,sys.argv[1].split('/')[-1].split('_micro')[
 
 f = open(name,'w')
 csv.writer(f).writerows(it.izip_longest(xmp,ymp,xis,cis,xpos,c56,c54,xis,yis,yerris,xpos,sim_deltas,sim_deltasfake,sim_deltasfake0,sim_deltasfake1))
+
+print xis
+print yis
 
 plt.show()
 
