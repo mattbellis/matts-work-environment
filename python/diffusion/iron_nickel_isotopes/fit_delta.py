@@ -91,6 +91,8 @@ for index in []:
 
 print xis
 print yis
+#yerris /= yerris
+print yerris
 #yerris *= 4
 #exit()
 
