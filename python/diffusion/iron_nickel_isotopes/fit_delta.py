@@ -17,8 +17,11 @@ from scipy import interpolate
 ################################################################################
 #'''
 # FNDA 1 
-xis_offset = 0.00044 
+#xis_offset = 0.000
+#xis_offset = 0.00044 
+xis_offset = 0.00050 
 hours = 120 
+#hours = 0.01 
 #### exp(-30.268 + 5.00 xFe - 13.39 xFe^2 + 6.30 xFe^3)
 D56_coeff = [-30.268,5.00,13.39,6.30]
 
@@ -26,12 +29,15 @@ D56_coeff = [-30.268,5.00,13.39,6.30]
 element = "Fe"
 cmax0 = 0.0085 # fraction
 cmin0 = 1.008 # fraction
+#cmin0 = 0.99 # fraction
 light_isotope = 54.
 heavy_isotope = 56.
 # Ni
 #element = "Ni"
-#cmax0 = 0.0085 # fraction
-#cmin0 = 0.985 # fraction
+###########cmax0 = 0.0085 # fraction
+###########cmin0 = 0.985 # fraction
+#cmin0 = 1-0.0085 # fraction
+#cmax0 = 1-0.985 # fraction
 #light_isotope = 61.
 #heavy_isotope = 62.
 #'''
@@ -83,7 +89,9 @@ xis = xis[::-1] # Do this for FNDA 1
 print xis
 print yis
 #for index in [-13,-12,-11,-10,-9,-7]:
-for index in []:
+#for index in [-13,-12,-11,-10]:
+#for index in []:
+for index in [-3,-2,-1]:
     xis = np.delete(xis,index)
     yis = np.delete(yis,index)
     yerris = np.delete(yerris,index)
@@ -92,6 +100,7 @@ for index in []:
 print xis
 print yis
 #yerris /= yerris
+#yerris *= 5
 print yerris
 #yerris *= 4
 #exit()
@@ -107,10 +116,11 @@ print yerris
 ################################################################################
 #lo = -1155.0e-6
 #hi = 1530.0e-6
+#xmp += 0.000060
 lo = xmp[0]
 hi = xmp[-1]
 interface_x = 0
-npts = 100
+npts = 200
 dx   = (hi-lo)/float(npts)
 
 xpos = np.linspace(lo,hi,npts) 
@@ -290,6 +300,10 @@ m.migrad()
 ##m.hesse()
 m.minos()
 
+#print m.get_fmin()
+#exit()
+
+
 values = m.values
 errors = m.errors
 
@@ -305,7 +319,7 @@ fake_values.append(0.5)
 c56fake,c54fake,sim_deltasfake = fitfunc(data,fake_values,['mybeta'],params_dict)
 
 fake_values = []
-fake_values.append(0.1)
+fake_values.append(0.38)
 c56fake0,c54fake0,sim_deltasfake0 = fitfunc(data,fake_values,['mybeta'],params_dict)
 
 fake_values = []
@@ -354,10 +368,10 @@ plt.figure(figsize=(12,6))
 #plt.plot(xpos,(c56/c54 - 1.0)*1000.0,'o')
 plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 plt.plot(xpos,sim_deltas,'-',linewidth=3,label=plotlabel)
-plt.errorbar(xis,yis,yerr=yerris,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
+plt.errorbar(xis,yis,yerr=yerris,markersize=5,fmt='o',label=r'$\delta$ from isotope data')
 plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.5)
 plt.plot(xpos,sim_deltasfake,'-',label=plotlabel)
-plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.1)
+plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.38)
 plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
 plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.25)
 plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
@@ -385,5 +399,6 @@ csv.writer(f).writerows(it.izip_longest(xmp,ymp,xis,cis,xpos,c56,c54,xis,yis,yer
 print xis
 print yis
 
+print "FVAL: %f" % (m.fval)
 plt.show()
 
