@@ -114,8 +114,9 @@ xis -= xis_offset
 #for index in [-13,-12,-11,-10,-9,-7]:
 #for index in [-13,-12,-11,-10]:
 #for index in []:
-if experiment=="FNDA1" and element=="Fe":
-    for index in [-3,-2,-1]:
+#if experiment=="FNDA1" and element=="Fe":
+if len(sys.argv)>=4:
+    for index in [int(sys.argv[3])]:
         xis = np.delete(xis,index)
         yis = np.delete(yis,index)
         yerris = np.delete(yerris,index)
@@ -127,6 +128,10 @@ print yis
 #yerris *= 5
 print yerris
 #yerris *= 4
+#exit()
+
+print len(xis)
+print len(yis)
 #exit()
 
 
@@ -196,7 +201,7 @@ def fitfunc(data,p,parnames,params_dict):
     #print p
 
     mybeta = p[pn.index('mybeta')]
-    intercept = p[pn.index('intercept')] # CONCENTRATION DEPENDENCE
+    #intercept = p[pn.index('intercept')] # CONCENTRATION DEPENDENCE
     #print "mybeta: ",mybeta
 
     c56 = np.zeros(npts)
@@ -218,8 +223,8 @@ def fitfunc(data,p,parnames,params_dict):
         if len( (D56*dt*invdx2)[D56*(dt*invdx2)>0.5])>0:
             print "D56*dt*invdx2: ",D56*(dt*invdx2)
 
-        #D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
-        D54 = D56*((heavy_isotope/light_isotope)**(intercept + (mybeta*c56))) # CONCENTRATION DEPENDENT
+        D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
+        #D54 = D56*((heavy_isotope/light_isotope)**(intercept + (mybeta*c56))) # CONCENTRATION DEPENDENT
 
         i = 0
         for D,concentration in zip([D56,D54],[c56, c54]):
@@ -304,9 +309,9 @@ def chisq_minuit(data,p,parnames,params_dict):
 # Set up minuit
 ################################################################################
 params_dict = {}
-#params_dict['mybeta'] = {'fix':False,'start_val':0.25,'limits':(0.10,1.0),'error':0.01}
-params_dict['mybeta'] = {'fix':False,'start_val':0.0,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
-params_dict['intercept'] = {'fix':False,'start_val':0.5,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
+params_dict['mybeta'] = {'fix':False,'start_val':0.25,'limits':(0.10,1.0),'error':0.01}
+#params_dict['mybeta'] = {'fix':False,'start_val':0.0,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
+#params_dict['intercept'] = {'fix':False,'start_val':0.5,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 
 params_names,kwd = fitutils.dict2kwd(params_dict,verbose=True)
 
@@ -341,24 +346,24 @@ print errors
 
 final_values = []
 final_values.append(values['mybeta'])
-#c56,c54,sim_deltas = fitfunc(data,final_values,['mybeta'],params_dict) 
-final_values.append(values['intercept']) # CONCENTRATION DEPENDENCE
-c56,c54,sim_deltas = fitfunc(data,final_values,['mybeta','intercept'],params_dict) # CONCENTRATION DEPENDENCE
+c56,c54,sim_deltas = fitfunc(data,final_values,['mybeta'],params_dict) 
+#final_values.append(values['intercept']) # CONCENTRATION DEPENDENCE
+#c56,c54,sim_deltas = fitfunc(data,final_values,['mybeta','intercept'],params_dict) # CONCENTRATION DEPENDENCE
 
-'''
+#'''
 fake_values = []
-fake_values.append(0.5)
+fake_values.append(values['mybeta']+(2.0*errors['mybeta']))
 c56fake,c54fake,sim_deltasfake = fitfunc(data,fake_values,['mybeta'],params_dict)
 
 fake_values = []
-fake_values.append(0.38)
+fake_values.append(values['mybeta']-(2.0*errors['mybeta']))
 c56fake0,c54fake0,sim_deltasfake0 = fitfunc(data,fake_values,['mybeta'],params_dict)
 
-fake_values = []
-fake_values.append(0.25)
-c56fake1,c54fake1,sim_deltasfake1 = fitfunc(data,fake_values,['mybeta'],params_dict)
+#fake_values = []
+#fake_values.append(0.3)
+#c56fake1,c54fake1,sim_deltasfake1 = fitfunc(data,fake_values,['mybeta'],params_dict)
 
-'''
+#'''
 
 
 
@@ -413,14 +418,14 @@ plt.figure(figsize=(12,6))
 plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 plt.plot(xpos,sim_deltas,'-',linewidth=3,label=plotlabel)
 plt.errorbar(xis,yis,yerr=yerris,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
-'''
-plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.5)
+#'''
+plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']+(2.0*errors['mybeta']))
 plt.plot(xpos,sim_deltasfake,'-',label=plotlabel)
-plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.38)
+plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']-(2.0*errors['mybeta']))
 plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
-plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.25)
-plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
-'''
+#plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.3)
+#plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
+#'''
 plt.ylim(-40,40) # FNDA 1, Fe
 if element=="Ni":
     plt.ylim(-20,20) # FNDA 1, Ni
@@ -453,16 +458,17 @@ plt.savefig(name)
 #plt.plot(xis,cis,'o',label='data from isotope file')
 #plt.legend()
 
-print values
+print "Final value of beta: %f" % (values['mybeta'])
 
 name = "%s_%s_output.csv" % (element,experiment)
 
-#f = open(name,'w')
+f = open(name,'w')
 #csv.writer(f).writerows(it.izip_longest(xmp,ymp,xis,cis,xpos,c56,c54,xis,yis,yerris,xpos,sim_deltas,sim_deltasfake,sim_deltasfake0,sim_deltasfake1))
+csv.writer(f).writerows(it.izip_longest(xmp,ymp,xis,cis,xpos,c56,c54,xis,yis,yerris,xpos,sim_deltas,sim_deltasfake,sim_deltasfake0))
 
 print xis
 print yis
 
 print "FVAL: %f" % (m.fval)
-plt.show()
+#plt.show()
 
