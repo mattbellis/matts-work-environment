@@ -126,7 +126,7 @@ print xis
 print yis
 #yerris /= yerris
 #yerris *= 5
-print yerris
+#print yerris
 #yerris *= 4
 #exit()
 
@@ -470,5 +470,5 @@ print xis
 print yis
 
 print "FVAL: %f" % (m.fval)
-#plt.show()
+plt.show()
 
