@@ -49,6 +49,15 @@ k1_sig = 0.008979
 k0_n = 5241
 k1_n = 4845
 
+# New from McCracken (6/24/2014)
+mean0 = 1.118918
+mean1 = 1.118734 
+k0_sig = 0.003526 
+k1_sig = 0.008955 
+k0_n = 5116
+k1_n = 4740
+
+
 
 peak_ratios = float(k1_n)/k0_n
 ################################################################################
@@ -244,7 +253,7 @@ minscan = m.fval
 
 print "nsig: %f %f" % (values["ks_ncalc0"]*(1+peak_ratios),values["ks_ncalc0"]*(1+peak_ratios) * (errors["ks_ncalc0"]/values["ks_ncalc0"]))
 
-exit()
+#exit()
 
 #'''
 scanbins, scanvals, scanresults = m.mnprofile('ks_ncalc0',50,bound=(0,30.0))

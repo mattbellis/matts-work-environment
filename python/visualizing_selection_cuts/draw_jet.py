@@ -4,7 +4,7 @@ fig = plt.figure(figsize=(8,8))
 ax = fig.add_subplot(1,1,1)
 
 #patches,lines = jet()
-patches,lines = jet(length=1,opening_angle=45,angle=340)
+patches,lines = jet(length=1,opening_angle=45,angle=60)
 
 for p in patches:
     ax.add_patch(p)
