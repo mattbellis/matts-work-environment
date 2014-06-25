@@ -127,7 +127,7 @@ print yis
 #yerris /= yerris
 #yerris *= 5
 #print yerris
-#yerris *= 4
+yerris *= 2
 #exit()
 
 print len(xis)
