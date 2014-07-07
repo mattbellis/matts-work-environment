@@ -224,9 +224,11 @@ for i,val in enumerate(sigmas):
 for i,val in enumerate(num_decays_in_dataset):
     name = "ks_ncalc%d" % (i)
     fix = True
+    start_val = 0.0
     if i==0:
         fix = False
-    params_dict[name] = {'fix':fix,'start_val':val,'limits':(-20.00,60000000.0),'error':1}
+        start_val = val
+    params_dict[name] = {'fix':fix,'start_val':start_val,'limits':(-20.00,60000000.0),'error':1}
 
 params_dict['num_flat'] = {'fix':False,'start_val':10.0,'limits':(0.0,50000000.0),'error':1}
 params_dict['e_exp0'] = {'fix':False,'start_val':0.5,'limits':(-100.0,100.0),'error':0.1}
@@ -245,7 +247,7 @@ m = minuit.Minuit(f,errordef=0.5,print_level=1,**kwd)
 m.tol = 1.0
 
 m.migrad()
-#m.hesse()
+m.hesse()
 
 values = m.values
 errors = m.errors
