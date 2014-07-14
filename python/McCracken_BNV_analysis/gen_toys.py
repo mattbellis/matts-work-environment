@@ -6,7 +6,8 @@ width = ranges[0][1]-ranges[0][0]
 
 nsamples = int(sys.argv[1])
 #nevents = 142
-nevents = 478 # As of 5/1/2014
+#nevents = 478 # As of 5/1/2014
+nevents = 445 # As of 7/1/2014
 
 for n in range(nsamples):
     name = "toys/ks_nu_toy_bkg_%04d.dat" % (n)

@@ -90,7 +90,7 @@ for i in xrange(nentries):
     output += "%-10.4f %-10.4f\n" % (px,py)
     nvals += 2
 
-    output = "%d\n%s" % (nvals,output)
+    #output = "%d\n%s" % (nvals,output)
 
     #print output
     outfile.write(output)
