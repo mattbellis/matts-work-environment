@@ -247,7 +247,7 @@ m = minuit.Minuit(f,errordef=0.5,print_level=1,**kwd)
 m.tol = 1.0
 
 m.migrad()
-m.hesse()
+#m.hesse()
 
 values = m.values
 errors = m.errors
@@ -255,7 +255,7 @@ minscan = m.fval
 
 print "nsig: %f %f" % (values["ks_ncalc0"]*(1+peak_ratios),values["ks_ncalc0"]*(1+peak_ratios) * (errors["ks_ncalc0"]/values["ks_ncalc0"]))
 
-#exit()
+exit()
 
 #'''
 scanbins, scanvals, scanresults = m.mnprofile('ks_ncalc0',50,bound=(0,30.0))
@@ -342,5 +342,5 @@ ax0.set_xlim(ranges[0][0],ranges[0][1])
 print "mean 0: %f +/- %f" % (values["ks_mean0"],errors["ks_mean0"])
 print "mean 1: %f +/- %f" % (values["ks_mean1"],errors["ks_mean1"])
 
-plt.show()
+#plt.show()
 #'''
