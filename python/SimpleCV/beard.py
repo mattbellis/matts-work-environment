@@ -1,8 +1,8 @@
 import SimpleCV
 import time
 
-#c = SimpleCV.Camera(1)
-c = SimpleCV.Camera()
+c = SimpleCV.Camera(1)
+#c = SimpleCV.Camera()
 js = SimpleCV.JpegStreamer() 
 
 while(1):
