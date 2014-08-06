@@ -17,13 +17,13 @@ tree.Print()
 
 nentries = tree.GetEntries()
 
-outfilename = "%s.txt" % (sys.argv[1].split('/')[-1].split('.root')[0])
+outfilename = "%s.dat" % (sys.argv[1].split('/')[-1].split('.root')[0])
 outfile = open(outfilename,'w')
 
 for i in xrange(nentries):
 
-    #output = "Event: %d\n" % (i)
-    output = ""
+    output = "Event: %d\n" % (i)
+    #output = ""
     tree.GetEntry(i)
 
     nvals = 0
@@ -90,7 +90,7 @@ for i in xrange(nentries):
     output += "%-10.4f %-10.4f\n" % (px,py)
     nvals += 2
 
-    output = "%d\n%s" % (nvals,output)
+    #output = "%d\n%s" % (nvals,output)
 
     #print output
     outfile.write(output)

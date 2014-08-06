@@ -49,6 +49,15 @@ k1_sig = 0.008979
 k0_n = 5241
 k1_n = 4845
 
+# New from McCracken (6/24/2014)
+mean0 = 1.118918
+mean1 = 1.118734 
+k0_sig = 0.003526 
+k1_sig = 0.008955 
+k0_n = 5116
+k1_n = 4740
+
+
 
 peak_ratios = float(k1_n)/k0_n
 ################################################################################
@@ -215,9 +224,11 @@ for i,val in enumerate(sigmas):
 for i,val in enumerate(num_decays_in_dataset):
     name = "ks_ncalc%d" % (i)
     fix = True
+    start_val = 0.0
     if i==0:
         fix = False
-    params_dict[name] = {'fix':fix,'start_val':val,'limits':(-20.00,60000000.0),'error':1}
+        start_val = val
+    params_dict[name] = {'fix':fix,'start_val':start_val,'limits':(-20.00,60000000.0),'error':1}
 
 params_dict['num_flat'] = {'fix':False,'start_val':10.0,'limits':(0.0,50000000.0),'error':1}
 params_dict['e_exp0'] = {'fix':False,'start_val':0.5,'limits':(-100.0,100.0),'error':0.1}
@@ -331,5 +342,5 @@ ax0.set_xlim(ranges[0][0],ranges[0][1])
 print "mean 0: %f +/- %f" % (values["ks_mean0"],errors["ks_mean0"])
 print "mean 1: %f +/- %f" % (values["ks_mean1"],errors["ks_mean1"])
 
-plt.show()
+#plt.show()
 #'''

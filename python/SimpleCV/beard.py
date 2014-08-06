@@ -12,8 +12,8 @@ while(1):
   img = img.erode()
   #lines = img.findLines(threshold=25,minlinelength=20,maxlinegap=20)
   #lines = img.findLines(threshold=75,minlinelength=50,maxlinegap=10)
-  lines = img.findLines(threshold=95,minlinelength=150,maxlinegap=10)
-  [line.draw(color=(0,255,0)) for line in lines]
+  lines = img.findLines(threshold=15,minlinelength=50,maxlinegap=10)
+  [line.draw(color=(255,255,0)) for line in lines]
   sum = 0
   for line in lines:
       #print "%f %f" % (line.x,line.y)
