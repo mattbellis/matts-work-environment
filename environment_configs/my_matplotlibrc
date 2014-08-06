@@ -2,6 +2,7 @@
 # http://damon-is-a-geek.com/publication-ready-the-first-time-beautiful-reproducible-plots-with-matplotlib.html
 #
 # rcParams dict
+'''
 rcParams['axes.labelsize'] = 9
 rcParams['xtick.labelsize'] = 9
 rcParams['ytick.labelsize'] = 9
@@ -20,6 +21,7 @@ font.family     : serif
 font.serif      : Computer Modern Roman
 text.usetex     : True  # use latex for all text handling
 figure.figsize  : 7.3, 4.2
+'''
 
 # SAMPLE USAGE
 #from matplotlib import rc_file
