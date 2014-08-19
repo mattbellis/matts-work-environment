@@ -2,8 +2,8 @@ import datetime as dt
 import time
 
 year = 2014
-starting_month = 1
-starting_day = 21
+starting_month = 9
+starting_day = 2
 
 datestring = "%d %d %d" % (year, starting_month, starting_day)
 start = time.strptime(datestring,"%Y %m %d")
@@ -14,7 +14,7 @@ tuesday = True
 
 i=0
 week = 0
-while i < 110:
+while i < 120:
 
     day = year_day + i
     datestring = "%d %d" % (year, day)
