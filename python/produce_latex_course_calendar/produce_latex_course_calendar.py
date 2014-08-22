@@ -33,22 +33,22 @@ while i < 120:
         print "\\hline"
 
     if tuesday:
-        increment = 2
-        #increment = 1
+        #increment = 2
+        increment = 1
         #increment = 7
         tuesday = False
-        #wednesday = False
-        thursday = True
+        wednesday = True
+        thursday = False
         #week += 1
-    #elif wednesday:
-        #increment = 1
-        #tuesday = False
-        #wednesday = False
-        #thursday = True
+    elif wednesday:
+        increment = 1
+        tuesday = False
+        wednesday = False
+        thursday = True
     elif thursday:
         increment = 5
         tuesday = True
-        #wednesday = False
+        wednesday = False
         thursday = False
         week += 1
     #else:
