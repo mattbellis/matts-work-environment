@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import HTMLParser
 from HTMLParser import HTMLParser
 import sys
+import os
 
 # Open the file.
 r = open(sys.argv[1])
@@ -26,6 +27,12 @@ print "\setlength{\headsep}{0pt}"
 print "\\begin{document}"
 print "\\begin{figure}"
 print "\centering"
+
+h2s = soup.find_all('h2')
+caption = 'Default'
+for h in h2s:
+    if h.string.find('Class Roster For')>=0:
+        caption = h.string
 
 tables = soup.find_all('table')
 
@@ -54,6 +61,9 @@ for table in tables:
 
 
                 if name is not None and image is not None:
+                    if os.stat(image).st_size < 200:
+                        image = './file_not_found.jpg'
+
                     if icount%5==4:
                         print "\subfloat[%s]{\includegraphics[width=0.19\\textwidth]{%s}}\\\\" % (name,image)
                     else:
@@ -65,7 +75,7 @@ for table in tables:
                     icount += 1
                     
 
-print "\caption{PHYS 110, Section 10}"
+print "\caption{%s}" % (caption)
 print "\end{figure}"
 print "\end{document}"
 
