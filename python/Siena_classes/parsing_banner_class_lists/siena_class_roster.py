@@ -8,6 +8,9 @@ import os
 # Open the file.
 r = open(sys.argv[1])
 
+if os.path.exists('./Siena Class Roster_files'):
+    os.rename('Siena Class Roster_files','Siena_Class_Roster_files')
+
 # Try to parse the webpage by looking for the tables.
 soup = BeautifulSoup(r)
 
@@ -24,10 +27,6 @@ print "\setlength{\headheight}{0pt}"
 print "\setlength{\headsep}{0pt}"
 
 
-print "\\begin{document}"
-print "\\begin{figure}"
-print "\centering"
-
 h2s = soup.find_all('h2')
 caption = 'Default'
 for h in h2s:
@@ -37,6 +36,7 @@ for h in h2s:
 tables = soup.find_all('table')
 
 icount = 0
+closed_figure = False
 for table in tables:
     
     if table['class'][0]=='datadisplaytable':
@@ -61,6 +61,12 @@ for table in tables:
 
 
                 if name is not None and image is not None:
+                    if icount%25==0:
+                        print "\\begin{document}"
+                        print "\\begin{figure}"
+                        print "\centering"
+                        closed_figure = False
+
                     if os.stat(image).st_size < 200:
                         image = './file_not_found.jpg'
 
@@ -72,10 +78,16 @@ for table in tables:
                     image = None
                     name = None
 
+                    if icount%25==24:
+                        print "\caption{%s}" % (caption)
+                        print "\end{figure}"
+                        closed_figure = True
+
                     icount += 1
                     
 
-print "\caption{%s}" % (caption)
-print "\end{figure}"
+if not closed_figure:
+    print "\caption{%s}" % (caption)
+    print "\end{figure}"
 print "\end{document}"
 
