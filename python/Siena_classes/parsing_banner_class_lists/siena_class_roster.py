@@ -61,7 +61,7 @@ for table in tables:
 
 
                 if name is not None and image is not None:
-                    if icount%25==0:
+                    if icount%30==0:
                         print "\\begin{document}"
                         print "\\begin{figure}"
                         print "\centering"
@@ -71,19 +71,21 @@ for table in tables:
                         image = './file_not_found.jpg'
 
                     if icount%5==4:
-                        print "\subfloat[%s]{\includegraphics[width=0.19\\textwidth]{%s}}\\\\" % (name,image)
+                        print "\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\\\" % (name,image)
                     else:
-                        print "\subfloat[%s]{\includegraphics[width=0.19\\textwidth]{%s}}\\hfill" % (name,image)
+                        print "\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\hfill" % (name,image)
 
                     image = None
                     name = None
 
-                    if icount%25==24:
+                    if icount%30==29:
                         print "\caption{%s}" % (caption)
                         print "\end{figure}"
                         closed_figure = True
+                        icount = -1
 
                     icount += 1
+                    #print icount
                     
 
 if not closed_figure:
