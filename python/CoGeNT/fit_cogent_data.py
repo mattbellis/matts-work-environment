@@ -420,6 +420,7 @@ def main():
         params_dict[name] = {'fix':True,'start_val':val}
     for i,val in enumerate(num_decays_in_dataset):
         name = "ls_ncalc%d" % (i)
+        #if i==999:
         if i==2 or i==3:
             params_dict[name] = {'fix':False,'start_val':val,'error':0.01,'limits':(0,50000)}
         else:
@@ -889,6 +890,8 @@ def main():
     label = "Interactions/%4.3f keVee" % (bin_widths[0])
     ax0.set_ylabel(label,fontsize=12)
     ax0.legend()
+    #ax0.set_yscale('log')
+    #ax0.set_ylim(0.1)
 
     ax1.set_xlim(ranges[1])
     #ax1.set_ylim(0.0,values['num_flat']/8)

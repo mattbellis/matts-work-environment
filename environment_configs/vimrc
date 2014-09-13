@@ -17,7 +17,8 @@ au BufRead,BufNewFile *.pde set filetype=java
 
 " My keybindings
 ab myitem \begin{itemize}\item XXX\end{itemize}
-ab newframe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\begin{frame}[T]\frametitle{XXX}\end{frame}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ab 2cframe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\begin{frame}[t]\frametitle{Motivation}\begin{columns}\column{0.5\textwidth}Hi\column{0.5\textwidth}Hi\end{columns}\end{frame}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ab newframe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\begin{frame}[t]\frametitle{XXX}\end{frame}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ab myeqn \begin{equation}XXX\end{equation}
 ab myeqnarray \begin{eqnarray*}XXX &=& YYY \\\end{eqnarray*}
 ab myenum \begin{enumerate}	\item XXX\end{enumerate}
