@@ -68,6 +68,7 @@ def fitting_parameters(flag=0):
     #nbins = [108,30]
     #nbins = [150,30]
     #nbins = [75,50]
+    #nbins = [104,40,100]
     nbins = [104,40,100]
     #nbins = [150,15]
     #nbins = [200,30]
