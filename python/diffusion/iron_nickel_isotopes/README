@@ -1,0 +1,5 @@
+#python fit_delta.py FNDA1_microprobe.csv FNDA1_isotope.csv
+#python bulk_diffusion.py new_data_021614/FNDA_1_microprobe.csv new_data_021614/FNDA_1_isotope.csv
+python fit_delta.py new_data_021614/FNDA_1_microprobe.csv new_data_021614/FNDA_1_isotope.csv
+python fit_delta.py new_data_021614/FNDA_2_microprobe.csv new_data_021614/FNDA_2_isotope.dat
+python fit_delta.py new_data_021614/FNDA_1_microprobe.csv new_data_021614/FNDA_1_isotope.csv
