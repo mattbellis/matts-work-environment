@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import sys
 import csv 
 from pylab import *
@@ -209,6 +207,11 @@ def main():
         elif args.course=='phys260':
             plotly_title = 'PHYS 260 class grades to date.'
             plotly_filename = 'PHYS260_S14'
+        elif args.course=='phys110':
+            plotly_title = 'PHYS 110 class grades to date.'
+            plotly_filename = 'PHYS110_F14'
+
+
 
         #print hw_grades
         #print hw_xvals
@@ -320,7 +323,7 @@ def main():
                 msg_body += "Projected exams/final exams: %5.1f (on each exam)  -  Projected final grade: %5.1f\n" % (pe,pf)
 
 
-            msg_body += "\nGrades for the class can be found at\n\n\t%s\n" % (url)
+        msg_body += "\nGrades for the class can be found at\n\n\t%s\n" % (url)
 
         ########################################################################
         # For testing
@@ -332,6 +335,7 @@ def main():
         msg_body += "\n\tIf I've matched up your name with this email address, "
         msg_body += "could you please let me know in the next class.\n"
         msg_body += "\n\tIf I\'ve made a mistake with the name/email, please let me know that as well.\n"
+        msg_body += "\n\tYou don\'t need to email me right now! Just let me know in class.  :)\n"
         msg_body += "\n\tThanks! See you in class!\n\n\nMatt\n\n"
         '''
 

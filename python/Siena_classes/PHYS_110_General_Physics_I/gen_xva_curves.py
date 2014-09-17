@@ -1,11 +1,16 @@
 import numpy as np
 import matplotlib.pylab as plt
 
+import matplotlib as mpl
+mpl.rcParams['grid.linewidth'] = 3
+
+'''
 t_intervals = [0,2,5,6,8]
 a_intervals = [0,-20,-5,15]
 v0 = 20.0
 x0 = 0
 tag = "A"
+'''
 
 '''
 t_intervals = [0,2,5,6,8]
@@ -15,13 +20,13 @@ x0 = 10
 tag = "B"
 '''
 
-'''
+#'''
 t_intervals = [0,2,5,6,8]
 a_intervals = [10,-10,0,5]
 v0 = -10.0
 x0 = 0
 tag = "C"
-'''
+#'''
 
 dt = 0.01
 t = np.arange(0,t_intervals[-1],dt)
