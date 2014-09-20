@@ -124,11 +124,30 @@ if len(sys.argv)>=4:
 
 print xis
 print yis
+
+
 #yerris /= yerris
 #yerris *= 5
 #print yerris
-yerris *= 2
+#yerris *= 2
+#yerris = 2.5*np.ones(len(yis))
+#yerris = np.ones(len(yis))
+#yerris[-13:] = 2.5
+#yerris[-18:] = 5
+#xis -= 0.00007 # By hand offset
 #exit()
+print xis
+print yis
+npts = len(yis)
+print yis[-13:]
+print np.std(yis[-13:])
+print yerris[-13:]
+print np.mean(yerris[-13:])
+
+print yis[0:9]
+print np.std(yis[0:9])
+print yerris[0:9]
+print np.mean(yerris[0:9])
 
 print len(xis)
 print len(yis)
@@ -181,7 +200,12 @@ print "dt: ",dt
 
 t = t0
 
-tag = "default"
+#tag = "default"
+#tag = "fits_to_E"
+#tag = "fits_to_E_scalederrors5_remove17"
+#tag = "fits_to_E_allerrors25"
+#tag = "fits_to_E_xshift0007"
+tag = "15"
 
 #imgcount = 0
 #it = 0
@@ -223,7 +247,11 @@ def fitfunc(data,p,parnames,params_dict):
         if len( (D56*dt*invdx2)[D56*(dt*invdx2)>0.5])>0:
             print "D56*dt*invdx2: ",D56*(dt*invdx2)
 
-        D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
+        # This is the normal beta
+        #D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
+
+        # Here, we'll interpret beta as E.
+        D54 = D56*(mybeta*(np.sqrt((heavy_isotope/light_isotope)) - 1.0) + 1) # For Fe
         #D54 = D56*((heavy_isotope/light_isotope)**(intercept + (mybeta*c56))) # CONCENTRATION DEPENDENT
 
         i = 0
@@ -284,6 +312,8 @@ def chisq_minuit(data,p,parnames,params_dict):
     ydata = data[1]
     yerrdata = data[2]
 
+    offset = p[parnames.index('offset')]
+
     # Interpolate between data points.
     predicted_delta = interpolate.interp1d(xpos,simulated_deltas)
 
@@ -292,6 +322,7 @@ def chisq_minuit(data,p,parnames,params_dict):
     #print xpos
     for x,y,yerr in zip(xdata,ydata,yerrdata):
         #if x>=simulated_deltas[-1] and x<=simulated_deltas[0]:
+        x += offset
         if x>=min(xpos) and x<=max(xpos):
 
             #print x,y,yerr
@@ -309,7 +340,9 @@ def chisq_minuit(data,p,parnames,params_dict):
 # Set up minuit
 ################################################################################
 params_dict = {}
-params_dict['mybeta'] = {'fix':False,'start_val':0.25,'limits':(0.10,1.0),'error':0.01}
+params_dict['mybeta'] = {'fix':False,'start_val':0.25,'limits':(0.10,2.0),'error':0.01}
+#params_dict['offset'] = {'fix':False,'start_val':-0.000074,'limits':(-0.000200,0.000200),'error':0.0000001}
+params_dict['offset'] = {'fix':True,'start_val':-0.000000,'limits':(-0.000200,0.000200),'error':0.0000001}
 #params_dict['mybeta'] = {'fix':False,'start_val':0.0,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 #params_dict['intercept'] = {'fix':False,'start_val':0.5,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 
@@ -337,12 +370,14 @@ m.minos()
 #print m.get_fmin()
 #exit()
 
-
 values = m.values
 errors = m.errors
 
 print values
 print errors
+
+mybeta = values['mybeta']
+offset = values['offset']
 
 final_values = []
 final_values.append(values['mybeta'])
@@ -409,19 +444,22 @@ elif experiment=="FNDA2" and element=="Fe":
 else:
     plt.legend(loc='center right')
 '''
-name = "%s_%s_diffusion_profile.png" % (element,experiment)
+name = "%s_%s_%s_diffusion_profile.png" % (element,experiment,tag)
 plt.savefig(name)
 
 # Plot the deltas
 plt.figure(figsize=(12,6))
 #plt.plot(xpos,(c56/c54 - 1.0)*1000.0,'o')
-plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
+#plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
+plotlabel = r"best fit $\delta$, $E$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 plt.plot(xpos,sim_deltas,'-',linewidth=3,label=plotlabel)
-plt.errorbar(xis,yis,yerr=yerris,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
+plt.errorbar(xis+offset,yis,yerr=yerris,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
 #'''
-plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']+(2.0*errors['mybeta']))
+#plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']+(2.0*errors['mybeta']))
+plotlabel = r"simulated $\delta$, $E$=%3.2f" % (values['mybeta']+(2.0*errors['mybeta']))
 plt.plot(xpos,sim_deltasfake,'-',label=plotlabel)
-plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']-(2.0*errors['mybeta']))
+#plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']-(2.0*errors['mybeta']))
+plotlabel = r"simulated $\delta$, $E$=%3.2f" % (values['mybeta']-(2.0*errors['mybeta']))
 plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
 #plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.3)
 #plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
@@ -437,20 +475,21 @@ elif experiment=="FNDA1" and element=="Fe":
     plt.legend(loc='upper right') # FNDA 1, Fe
 else:
     plt.legend(loc='upper left')
-name = "%s_%s_delta.png" % (element,experiment)
+name = "%s_%s_%s_delta.png" % (element,experiment,tag)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
 plt.savefig(name)
 
 # Plot the deltas vs. concentration.
 plt.figure(figsize=(12,6))
-plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
+#plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
+plotlabel = r"best fit $\delta$, $E$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 plt.plot(c56,sim_deltas,'-',linewidth=3,label=plotlabel)
 label = r"$^{%d}$%s" % (heavy_isotope,element)
 plt.errorbar(cis,yis,yerr=yerris,fmt='o',markersize=10,label=label)
 plt.ylabel(r'$\delta$',fontsize=36)
 plt.xlabel('Concentration',fontsize=24)
 plt.legend(loc='upper left') # FNDA 2, NI
-name = "%s_%s_delta_vs_concentration.png" % (element,experiment)
+name = "%s_%s_%s_delta_vs_concentration.png" % (element,experiment,tag)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
 plt.savefig(name)
 
@@ -460,15 +499,16 @@ plt.savefig(name)
 
 print "Final value of beta: %f" % (values['mybeta'])
 
-name = "%s_%s_output.csv" % (element,experiment)
+name = "%s_%s_%s_output.csv" % (element,experiment,tag)
 
 f = open(name,'w')
 #csv.writer(f).writerows(it.izip_longest(xmp,ymp,xis,cis,xpos,c56,c54,xis,yis,yerris,xpos,sim_deltas,sim_deltasfake,sim_deltasfake0,sim_deltasfake1))
 csv.writer(f).writerows(it.izip_longest(xmp,ymp,xis,cis,xpos,c56,c54,xis,yis,yerris,xpos,sim_deltas,sim_deltasfake,sim_deltasfake0))
 
-print xis
-print yis
 
+print experiment,element
+print "mybeta: %f" % (mybeta)
+print "offset: %f" % (offset)
 print "FVAL: %f" % (m.fval)
-plt.show()
+#plt.show()
 
