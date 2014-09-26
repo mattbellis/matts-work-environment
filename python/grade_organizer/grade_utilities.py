@@ -174,7 +174,7 @@ class Student:
 
         # Quizzes
         #ret += " -----\nQuizzes\n -----\n"
-        ret += " -----\nReading, pre-lecture quizzes\n -----\n"
+        ret += " -----\nReading, pre-lecture quizzes, in-class activities\n -----\n"
         #drop_lowest_score = True
         drop_lowest_score = False
         picked_a_lowest = False
