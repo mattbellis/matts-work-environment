@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pylab as plt
 
-plt.figure()
+#plt.figure()
 
 # exponential
 def taylor_exponential(nterms=1,frange=(0,1),exact_func=False):
+
+    plt.figure()
 
     x = np.arange(frange[0],frange[1],0.1)
     y = np.zeros(len(x))
