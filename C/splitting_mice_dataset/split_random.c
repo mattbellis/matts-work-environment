@@ -14,6 +14,7 @@ int main(int argc, char **argv)
     FILE *ofp = NULL;
     float ra,dec,z;
     float z_v,x_c,y_c,z_c;
+    int id;
     char dummy[256];
 
     // Seed the random number generator with the time.
@@ -33,13 +34,28 @@ int main(int argc, char **argv)
 
     int count = 0;
     int fill_count = 0;
-    float probability_of_accepting_an_entry = 0.005;
+    //float probability_of_accepting_an_entry = 0.005;
+    // for 689
+    int tot_entries = 25984717;
+    //int num_entries_per_file = 10000 + 500; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 1000 + 50; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 5000 + 200; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 50000 + 100; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 100000 + 200; // Kludge it to make sure we get enough galaxies.
+    int num_entries_per_file = 500000 + 1000; // Kludge it to make sure we get enough galaxies.
+    float probability_of_accepting_an_entry = (float)num_entries_per_file/tot_entries;
     float r;
+    printf("%f",probability_of_accepting_an_entry);
+    //exit(-1);
 
-    fscanf(ifp, "%s\t%s\t%s\t%s\t%s\t%s\t%s",&dummy,&dummy,&dummy,&dummy,&dummy,&dummy,&dummy);
+    fscanf(ifp, "%s,%s,%s,%s,%s,%s,%s",&dummy,&dummy,&dummy,&dummy,&dummy,&dummy,&dummy);
 
     //while (fscanf(ifp, "%f,%f,%f",&ra,&dec,&z) != EOF) {
-    while (fscanf(ifp, "%f\t%f\t%f\t%f\t%f\t%f\t%f",&ra,&dec,&z,&z_v,&x_c,&y_c,&z_c) != EOF) {
+    //while (fscanf(ifp, "%f\t%f\t%f\t%f\t%f\t%f\t%f",&ra,&dec,&z,&z_v,&x_c,&y_c,&z_c) != EOF) 
+    // For 689
+    //id,ra,dec,z,x_c,y_c,z_c
+    while (fscanf(ifp, "%d,%f,%f,%f,%f,%f,%f",&id,&ra,&dec,&z,&x_c,&y_c,&z_c) != EOF) 
+    {
         //printf("%f %f %f\n",ra,dec,z);
         //fprintf(ofp,"%f %f %f\n",ra,dec,z);
         r = (float)rand()/(float)RAND_MAX;
@@ -47,7 +63,9 @@ int main(int argc, char **argv)
         //exit(1);
         if (r<probability_of_accepting_an_entry)
         {
-            fprintf(ofp,"%f %f %f %f %f %f %f\n",ra,dec,z,z_v,x_c,y_c,z_c);
+            //fprintf(ofp,"%f %f %f %f %f %f %f\n",ra,dec,z,z_v,x_c,y_c,z_c);
+            // For 689
+            fprintf(ofp,"%d %f %f %f %f %f %f\n",id,ra,dec,z,x_c,y_c,z_c);
             fill_count += 1;
         }
 
