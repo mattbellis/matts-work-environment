@@ -13,11 +13,13 @@
  set viminfo='20,\"50    " read/write a .viminfo file, don't store more
                          " than 50 lines of registers
 
+"let processing_doc_path="/home/bellis/processing-2.0b8/modes/java/reference"
+"au BufRead,BufNewFile *.pde set filetype=pde
 au BufRead,BufNewFile *.pde set filetype=java
 
 " My keybindings
-ab myitem \begin{itemize}\item XXX\end{itemize}
-ab newframe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\begin{frame}[T]\frametitle{XXX}\end{frame}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+ab myitem \begin{itemize} \item XXX\end{itemize}
+ab myframe %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%\begin{frame}[T]\frametitle{XXX}\end{frame}%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ab myeqn \begin{equation}XXX\end{equation}
 ab myeqnarray \begin{eqnarray*}XXX &=& YYY \\\end{eqnarray*}
 ab myenum \begin{enumerate}	\item XXX\end{enumerate}
@@ -35,20 +37,12 @@ ab dvdt2 \frac{d^2v}{dt^2}
 ab xhat \hat{x}
 ab yhat \hat{y}
 ab zhat \hat{z}
-ab xdot \dot{x}
-ab ydot \dot{y}
-ab zdot \dot{z}
-ab qdot \dot{q}
-ab pdot \dot{p}
 ab rhat \hat{r}
 ab phihat \hat{\phi}
 ab rdot \dot{r}
 ab rddot \ddot{r}
 ab phidot \dot{\phi}
 ab phiddot \ddot{\phi}
-ab mydeg ^\circ
-ab lag \mathcal{L}
-ab ham \mathcal{H}
 
 ab fixthis \textcolor{red}{\bf FIX THIS!!!!}
 
@@ -56,9 +50,7 @@ ab fixthis \textcolor{red}{\bf FIX THIS!!!!}
 filetype indent on
 "colorscheme morning
 colorscheme elflord
-"colorscheme ir_black
 "colorscheme pablo
-"colorscheme moria
 set cindent
 set cindent shiftwidth=4
 set autoindent shiftwidth=4
@@ -93,6 +85,9 @@ au BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") |
 "	 highlight Search term=reverse  ctermbg=4 ctermfg=3 guibg=white guifg=black
 "	 highlight Search term=reverse  ctermbg=white ctermfg=black guibg=white guifg=black
 " endif
+
+" Processing
+"let processing_doc_path="/home/bellis/processing-2.0b8/modes/java/reference"
 
 " Commented this to remove that stuff at beginning that I 
 " needed to hit space to get past.
