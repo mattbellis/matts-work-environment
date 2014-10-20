@@ -8,6 +8,7 @@ import argparse
 import datetime
 
 import plotly
+import plotly.plotly as py
 
 
 
@@ -50,7 +51,8 @@ def main():
     infile = csv.reader(open(filename, 'rb'), delimiter=',', quotechar='#')
 
     ############################################################################
-    py = plotly.plotly(username_or_email="MatthewBellis", key="d6h4et78v5")
+    py.sign_in("MatthewBellis", "d6h4et78v5")
+    #py = plotly.plotly(username_or_email="MatthewBellis", key="d6h4et78v5")
     ############################################################################
 
     grade_titles = ["Quizzes", "Homeworks","Exam", "Final exam", "Final grade"]
