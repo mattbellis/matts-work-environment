@@ -9,6 +9,7 @@ import datetime
 
 import plotly
 import plotly.plotly as py
+from plotly.graph_objs import Box,Layout
 
 
 
@@ -113,6 +114,10 @@ def main():
                 if g is not None:
                     grade_file_infos.append(g)
 
+        if line_num==1:
+            for g in grade_file_infos:
+                g.set_description(row[g.grade_index])
+
         if line_num==2:
             for g in grade_file_infos:
                 g.set_date(row[g.grade_index])
@@ -168,7 +173,7 @@ def main():
                 #print student_name[0]
                 #print is_late
                 #print g.internal_index
-                grade = Grade(g.grade_type,g.internal_index,score,g.max_grade,g.add,g.subtract,is_late,g.date)
+                grade = Grade(g.grade_type,g.internal_index,score,g.max_grade,g.add,g.subtract,is_late,g.date,g.description)
                 #print "%s %3.1f" % (grade.grade_type, grade.score)
                 if (grade.grade_type=='hw'):
                     hw_grades.append(grade.grade_pct())
@@ -220,33 +225,40 @@ def main():
 
         #print hw_grades
         #print hw_xvals
-        s={'type':'box' ,'jitter':0.1, 'boxpoints':'all'}
+        #s={'type':'box' ,'jitter':0.1, 'boxpoints':'all'}
         #s={'type':'box'}
         #axesstyle = {'range':[datetime.datetime(2014,1,15),datetime.datetime(2014,2,15)]}
-        axesstyle = {}
-        l={'title': plotly_title,'xaxis':axesstyle}
+        #axesstyle = {}
+        #l={'title': plotly_title,'xaxis':axesstyle}
 
         tot_data = []
 
         #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
-        data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
+        #data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
+        data0 = Box(y=hw_grades,x=hw_xvals,name="Homework",boxpoints='all',jitter=0.1)
         tot_data.append(data0)
-        data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
+        data1 = Box(y=exam_grades,x=exam_xvals,name="Quizzes",boxpoints='all',jitter=0.1)
         tot_data.append(data1)
+        #data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
         if len(quiz_grades)>0:
-            data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes"}
+            data2 = Box(y=quiz_grades,x=quiz_xvals,name="In-class assignments",boxpoints='all',jitter=0.1)
+            #data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes"}
             tot_data.append(data2)
         if len(final_exam_grades)>0:
-            data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
+            data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final exam",boxpoints='all',jitter=0.1)
+            #data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
             tot_data.append(data3)
-        response = py.plot(tot_data,style=s,layout=l,filename=plotly_filename,fileopt='overwrite')
+        #tot_data = [data0]
+        #url = py.plot(tot_data,style=s,layout=l,filename=plotly_filename,fileopt='overwrite')
+        layout = Layout(title=plotly_title)
+        url = py.plot(tot_data,layout=layout,filename=plotly_filename,fileopt='overwrite')
 
-        url = response['url']
-        filename = response['filename']
+        #url = response['url']
+        #filename = response['filename']
 
-        print response
+        #print response
         print url
-        print filename
+        #print filename
 
     ############################################################################
     # Print out the summary
@@ -281,7 +293,7 @@ def main():
             s.grades.exams.append(dum_grade)
         '''
         for j in range(0,nmore_final_exams):
-            dum_grade = Grade('final_exam',-1,70.0,100.0,0.0,0.0,False,'5/12/2014')
+            dum_grade = Grade('final_exam',-1,70.0,100.0,0.0,0.0,False,'5/12/2014','Test')
             s.grades.final_exam.append(dum_grade)
 
         hypothetical_performances = [70.0,80.0,90.0,100.0]
@@ -294,7 +306,7 @@ def main():
                 s.grades.exams[(15-nmore_exams)+j] = dum_grade
             '''
             for j in range(0,nmore_final_exams):
-                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'5/12/2014')
+                dum_grade = Grade('final_exam',-1,g,100.0,0.0,0.0,False,'5/12/2014','Test')
                 s.grades.final_exam[0] = dum_grade
 
             dum_averages, dum_output = s.summary_output(final_grade_weighting)
