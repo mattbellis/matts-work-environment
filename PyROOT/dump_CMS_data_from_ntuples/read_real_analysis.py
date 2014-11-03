@@ -9,7 +9,7 @@ import hep_tools_real_analysis as hep
 #f = open(sys.argv[1],'r')
 f = zipfile.ZipFile(sys.argv[1])
 print f.namelist()
-f.open("shyft_ultraslim_100_1_SK7_for_analysis.txt")
+f  = f.open("shyft_ultraslim_100_1_SK7_for_analysis.txt")
 #f = zipfile.ZipFile(sys.argv[1],'r')
 #f = open('temp.txt','r')
 
