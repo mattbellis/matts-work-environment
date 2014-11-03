@@ -72,6 +72,7 @@ class Grade_file_info:
     def __init__(self, grade_type):
         self.grade_type = grade_type
         self.date = ''
+        self.description = 'Assignment'
         self.grade_index = -1
         self.internal_index = -1
         self.max_grade = 100.0
@@ -82,6 +83,9 @@ class Grade_file_info:
 
     def set_date(self, date):
         self.date = date
+
+    def set_description(self, description):
+        self.description = description
 
     def set_grade_index(self, grade_index):
         self.grade_index = grade_index
@@ -109,7 +113,7 @@ class Grade_file_info:
 
 ################################################################################
 class Grade:
-    def __init__(self, grade_type, internal_index, score, max_score, added, subtracted, late, date):
+    def __init__(self, grade_type, internal_index, score, max_score, added, subtracted, late, date, description):
         self.grade_type = grade_type
         self.internal_index = internal_index
         self.score = score
@@ -118,6 +122,7 @@ class Grade:
         self.subtracted = subtracted
         self.late = late
         self.date = date
+        self.description = description
 
     def grade_sum(self):
         ret = self.score + self.added
@@ -180,7 +185,7 @@ class Student:
         picked_a_lowest = False
         for g in self.grades.quizzes:
             #ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
-            ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
+            ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.quizzes,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
@@ -189,7 +194,7 @@ class Student:
         avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
         averages[0] = avg
         #ret += "\tQuiz avg: %4.2f\n" % (avg)
-        ret += "\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
+        ret += "\n\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
 
         # HW
         #drop_lowest_score = True
@@ -198,7 +203,8 @@ class Student:
         ret += " -----\nHomeworks\n -----\n"
         for g in self.grades.hw:
             #ret +=  "%-7s   %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
-            ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
+            ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
+            #ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.hw,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
@@ -206,7 +212,7 @@ class Student:
             ret += "\n"
         avg = calc_average_of_grades(self.grades.hw, drop_lowest_score)
         averages[1] = avg
-        ret += "\tHW   avg: %4.2f\n" % (avg)
+        ret += "\n\tHW   avg: %4.2f\n" % (avg)
 
         # Exam 1 
         #drop_lowest_score = True
@@ -221,7 +227,8 @@ class Student:
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
         for g in self.grades.exams:
-            ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
+            ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
+            #ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
             if drop_lowest_score==True or drop_lowest_score>1 and dropped_scores<drop_lowest_score:
                 if is_lowest_grade(self.grades.exams,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
@@ -236,7 +243,7 @@ class Student:
         avg = calc_average_of_grades(self.grades.exams, drop_lowest_score)
         averages[2] = avg
         #ret += "\tExams avg: %4.2f\n" % (avg)
-        ret += "\tWeekly quizzes avg: %4.2f\n" % (avg)  
+        ret += "\n\tWeekly quizzes avg: %4.2f\n" % (avg)  
 
         '''
         # Exam 2 
