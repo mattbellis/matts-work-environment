@@ -34,6 +34,20 @@ ca8jet_str.append("floats_pfShyftTupleJetsLooseTopTag_mass_ANA.obj")
 ca8jet_str.append("floats_pfShyftTupleJetsLooseTopTag_nSubjets_ANA.obj")
 ca8jet_str.append("floats_pfShyftTupleJetsLooseTopTag_minMass_ANA.obj")
 
+muons_str = []
+muons_str.append("floats_pfShyftTupleMuonsLoose_pt_ANA.obj")
+muons_str.append("floats_pfShyftTupleMuonsLoose_eta_ANA.obj")
+muons_str.append("floats_pfShyftTupleMuonsLoose_phi_ANA.obj")
+
+electrons_str = []
+electrons_str.append("floats_pfShyftTupleElectronsLoose_pt_ANA.obj")
+electrons_str.append("floats_pfShyftTupleElectronsLoose_eta_ANA.obj")
+electrons_str.append("floats_pfShyftTupleElectronsLoose_phi_ANA.obj")
+
+met_str = []
+met_str.append("floats_pfShyftTupleMETLoose_pt_ANA.obj")
+met_str.append("floats_pfShyftTupleMETLoose_phi_ANA.obj")
+
 
 chain = ROOT.TChain("Events")
 
@@ -52,6 +66,12 @@ chain.SetBranchStatus('*', 0 )
 for s in ak5jet_str:
     chain.SetBranchStatus(s, 1 )
 for s in ca8jet_str:
+    chain.SetBranchStatus(s, 1 )
+for s in muons_str:
+    chain.SetBranchStatus(s, 1 )
+for s in electrons_str:
+    chain.SetBranchStatus(s, 1 )
+for s in met_str:
     chain.SetBranchStatus(s, 1 )
 
 
@@ -118,9 +138,73 @@ for i in xrange(nentries):
 
     output += "%d\n%s" % (nthings,temp_output)
 
+    ############################################################################
+    # Print out the muons
+    ############################################################################
+    nthings = 0
+    temp_output = ""
+    mass = 0.105
+    for i in xrange(16):
+        pt = chain.GetLeaf(muons_str[0]).GetValue(i)
+        eta = chain.GetLeaf(muons_str[1]).GetValue(i)
+        phi = chain.GetLeaf(muons_str[2]).GetValue(i)
+        if pt==0.0:
+            break
+        nthings += 1
+
+        px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
+        e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
+        
+        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        print pt,eta,phi
+
+    output += "%d\n%s" % (nthings,temp_output)
+
+    ############################################################################
+    # Print out the muons
+    ############################################################################
+    nthings = 0
+    temp_output = ""
+    mass = 0.000511
+    for i in xrange(16):
+        pt = chain.GetLeaf(electrons_str[0]).GetValue(i)
+        eta = chain.GetLeaf(electrons_str[1]).GetValue(i)
+        phi = chain.GetLeaf(electrons_str[2]).GetValue(i)
+        if pt==0.0:
+            break
+        nthings += 1
+
+        px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
+        e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
+        
+        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        print pt,eta,phi
+
+    output += "%d\n%s" % (nthings,temp_output)
+
+    ############################################################################
+    # Print out the MET
+    ############################################################################
+    nthings = 0
+    temp_output = ""
+    for i in xrange(1):
+        pt = chain.GetLeaf(met_str[0]).GetValue(i)
+        phi = chain.GetLeaf(met_str[1]).GetValue(i)
+        if pt==0.0:
+            break
+        nthings += 1
+
+        #px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
+        #e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
+        
+        temp_output += "%-10.4f %-10.4f\n" % (pt,phi)
+        print pt,eta,phi
+
+    output += "%d\n%s" % (nthings,temp_output)
+
     print output
     outfile.write(output)
 
+
+
 outfile.close()
-
-
