@@ -496,7 +496,7 @@ def fitfunc(data,p,parnames,params_dict):
 # ALPs
 ################################################################################
 
-def alp_pdfdata,pars,lo,hi,subranges=None,efficiency=None):
+def alp_pdf(data,pars,lo,hi,subranges=None,efficiency=None):
 
     energy_shape = [0.35000,18771,
 0.45000,11414,
