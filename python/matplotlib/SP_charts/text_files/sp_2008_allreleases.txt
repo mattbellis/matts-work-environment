@@ -1,0 +1,18 @@
+: caltech      : 191191078   : USA
+: ccin2p3      : 2107609930  : France
+: cu-boulder   : 323173576   : USA
+: fzk          : 407276658   : Germany
+: infn         : 99320554    : Italy
+: infngrid     : 494652000   : Italy
+: osu          : 424991789   : USA
+: ral          : 1940940548  : UK
+: slac         : 6010660438  : USA
+: tud          : 161023010   : Germany
+: udo          : 463471755   : Germany
+: uofl         : 51689428    : USA
+: utd          : 240083641   : USA
+: utenn        : 5425481     : USA
+: uvic2        : 781188241   : Canada
+: westgrid     : 225915026   : Canada
+: Totals       : 13934116153 :
+
