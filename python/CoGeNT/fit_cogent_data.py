@@ -949,7 +949,14 @@ def main():
     print "%-15s %15.7f" % ('lh sans poisson',final_lh+pois(nevents_from_fit,ndata))
     print "%-15s %15.7f" % ('final lh',final_lh)
 
-    pprint.pprint(values)
+
+    name = "fit_results/results_%s.txt" % (tag)
+    out_results = open(name,'w')
+    #pprint.pprint(values)
+    #s = pprint.pformat(values)
+    out_results.write(str(values))
+    #out_results.write(s)
+    out_results.close()
 
     #print "\nfinal lh: %f" % (final_lh)
 
