@@ -3,6 +3,8 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 
+import pprint
+
 from datetime import datetime,timedelta
 
 import scipy.integrate as integrate
@@ -946,6 +948,8 @@ def main():
     print "%-15s %15.7f" % ('max poisson',pois(ndata,ndata))
     print "%-15s %15.7f" % ('lh sans poisson',final_lh+pois(nevents_from_fit,ndata))
     print "%-15s %15.7f" % ('final lh',final_lh)
+
+    pprint.pprint(values)
 
     #print "\nfinal lh: %f" % (final_lh)
 
