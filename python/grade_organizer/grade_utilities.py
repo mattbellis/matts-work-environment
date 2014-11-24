@@ -219,8 +219,8 @@ class Student:
         dropped_scores = 0
         #drop_lowest_score = 1
         drop_lowest_score = False
-        #drop_lowest_score = True
-        picked_a_lowest = False
+        drop_lowest_score = True
+        #picked_a_lowest = False
         #ret += " -----\nExams\n -----\n"
         ret += " -----\nWeekly quizzes\n -----\n"
         #print len(self.grades.exams)
