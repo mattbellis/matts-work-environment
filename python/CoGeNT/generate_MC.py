@@ -242,12 +242,24 @@ results = eval(results_file.readline())
 print results
 #exit()
 
-#energies,days,rise_times = gen_surface_events(20,365,'MC_files/mc_test_surface.dat',results)
-#energies,days,rise_times = gen_flat_events(20,365,'MC_files/mc_test_flat.dat',results)
-energies,days,rise_times = gen_cosmogenic_events(1000,1238,'MC_files/mc_test_lshell.dat',results)
+etot = np.array([])
+dtot = np.array([])
+rtot = np.array([])
+energies,days,rise_times = gen_surface_events(4482,1238,'MC_files/mc_test_surface.dat',results)
+etot = np.append(etot,energies)
+dtot = np.append(dtot,days)
+rtot = np.append(rtot,rise_times)
+energies,days,rise_times = gen_flat_events(3140,1238,'MC_files/mc_test_flat.dat',results)
+etot = np.append(etot,energies)
+dtot = np.append(dtot,days)
+rtot = np.append(rtot,rise_times)
+energies,days,rise_times = gen_cosmogenic_events(900,1238,'MC_files/mc_test_lshell.dat',results)
+etot = np.append(etot,energies)
+dtot = np.append(dtot,days)
+rtot = np.append(rtot,rise_times)
 #print energies,days,rise_times 
 
-#'''
+'''
 nbins = 50
 plt.figure(figsize=(12,4))
 plt.subplot(1,3,1)
@@ -256,6 +268,15 @@ plt.subplot(1,3,2)
 h = plt.hist(days,bins=nbins)
 plt.subplot(1,3,3)
 h = plt.hist(rise_times,bins=nbins)
+'''
+nbins = 50
+plt.figure(figsize=(12,4))
+plt.subplot(1,3,1)
+h = plt.hist(etot,bins=nbins)
+plt.subplot(1,3,2)
+h = plt.hist(dtot,bins=nbins)
+plt.subplot(1,3,3)
+h = plt.hist(rtot,bins=nbins)
+
 
 plt.show()
-#'''
