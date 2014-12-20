@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pylab as plt
 
-g = -8.1
+#g = -8.1
+g = -5.0
 
 x0 = 15.0
 
@@ -24,7 +25,7 @@ for t in np.arange(0,100,0.10):
     if x<0:
         break
 
-plt.errorbar(tpts,xpts,fmt='o',yerr=xerrpts)
-plt.xlabel('Time (s)',fontsize=16)
-plt.ylabel('Height above ground (m)',fontsize=16)
-plt.show()
+#plt.errorbar(tpts,xpts,fmt='o',yerr=xerrpts)
+#plt.xlabel('Time (s)',fontsize=16)
+#plt.ylabel('Height above ground (m)',fontsize=16)
+#plt.show()
