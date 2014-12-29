@@ -10,18 +10,20 @@ int main(int argc, char **argv)
     // for 689
     int tot_entries = 25984717;
 
-    //int num_entries_per_file = 10000 + 1000; // Kludge it to make sure we get enough galaxies.
-    //int num_entries_per_file = 1000 + 100; // Kludge it to make sure we get enough galaxies.
-    //int num_entries_per_file = 5000 + 600; // Kludge it to make sure we get enough galaxies.
-    //int num_entries_per_file = 50000 + 5000; // Kludge it to make sure we get enough galaxies.
-    int num_entries_per_file = 100000 + 10000; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 1000 + 50; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 5000 + 200; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 10000 + 350; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 20000 + 1200; // Kludge it to make sure we get enough galaxies.
+    //int num_entries_per_file = 50000 + 1500; // Kludge it to make sure we get enough galaxies.
+    int num_entries_per_file = 100000 + 2000; // Kludge it to make sure we get enough galaxies.
     //int num_entries_per_file = 500000 + 5000; // Kludge it to make sure we get enough galaxies.
     float probability_of_accepting_an_entry = (float)num_entries_per_file/tot_entries;
-    probability_of_accepting_an_entry *= 12; // For 20deg by 20deg
+    probability_of_accepting_an_entry *= 200; // For 20deg by 20deg
 
     char outfilename[256];
     //sprintf(outfilename,"random_file_%04d.dat",0);
-    sprintf(outfilename,"MICE_20degx20deg_100k.dat");
+    //sprintf(outfilename,"MICE_20degx20deg_100k.dat");
+    sprintf(outfilename,"MICE_5degx5deg_100k.dat");
 
     FILE *ifp = fopen(infilename, "r");
     FILE *ofp = NULL;
@@ -66,7 +68,8 @@ int main(int argc, char **argv)
         //printf("%f\n",r);
         //exit(1);
         //if (r<probability_of_accepting_an_entry)
-        if (r<probability_of_accepting_an_entry && ra<=20 && dec<=20)
+        //if (r<probability_of_accepting_an_entry && ra<=20 && dec<=20)
+        if (r<probability_of_accepting_an_entry && ra<=5 && dec<=5)
         {
             //fprintf(ofp,"%f %f %f %f %f %f %f\n",ra,dec,z,z_v,x_c,y_c,z_c);
             // For 689
