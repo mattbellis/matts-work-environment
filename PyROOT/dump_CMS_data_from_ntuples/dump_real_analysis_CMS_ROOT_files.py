@@ -155,13 +155,13 @@ for i in xrange(nentries):
         px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
         e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
         
-        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,0)
         print pt,eta,phi
 
     output += "%d\n%s" % (nthings,temp_output)
 
     ############################################################################
-    # Print out the muons
+    # Print out the electrons
     ############################################################################
     nthings = 0
     temp_output = ""
@@ -177,10 +177,15 @@ for i in xrange(nentries):
         px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
         e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
         
-        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,0)
         print pt,eta,phi
 
     output += "%d\n%s" % (nthings,temp_output)
+
+    ############################################################################
+    # Print out the photons
+    ############################################################################
+    output += "0\n"
 
     ############################################################################
     # Print out the MET

@@ -5,7 +5,7 @@ import sys
 import zipfile
 
 #import hep_tools_real_analysis as hep
-from siena_cms_tools import get_collisions,pretty_print
+from siena_cms_tools import get_collisions,pretty_print,cms_tools_help
 
 #f = open(sys.argv[1],'r')
 f = zipfile.ZipFile(sys.argv[1])
@@ -27,4 +27,6 @@ for count,collision in enumerate(collisions):
 
     print "\n-------------------------- %d" % (count)
     pretty_print(collision)
+
+    #exit()
 
