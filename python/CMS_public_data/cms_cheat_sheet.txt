@@ -1,0 +1,509 @@
+/home/bellis/CMS/public_data/Events/Run_140124/Event_1007912007
+[u'Associations', u'Collections', u'Types']
+CaloMETs_V1
+CaloMETs_V1
+	phi	double
+	pt	double
+	px	double
+	py	double
+	pz	double
+
+CaloTowers_V2
+CaloTowers_V2
+	et	double
+	eta	double
+	phi	double
+	iphi	double
+	hadEnergy	double
+	emEnergy	double
+	outerEnergy	double
+	ecalTime	double
+	hcalTime	double
+	emPosition	v3d
+	hadPosition	v3d
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+TrackerMuons_V1
+TrackerMuons_V1
+	pt	double
+	charge	int
+	rp	v3d
+	phi	double
+	eta	double
+	calo_energy	double
+
+TriggerObjects_V1
+TriggerObjects_V1
+	path	string
+	slot	int
+	moduleLabel	string
+	moduleType	string
+	VID	int
+	KEY	int
+	id	int
+	pt	double
+	eta	double
+	phi	double
+	mass	double
+
+Errors_V1
+Errors_V1
+	Error	string
+
+EERecHits_V2
+EERecHits_V2
+	energy	double
+	eta	double
+	phi	double
+	time	double
+	detid	int
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+ESRecHits_V2
+ESRecHits_V2
+	energy	double
+	eta	double
+	phi	double
+	time	double
+	detid	int
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+DTRecHits_V1
+DTRecHits_V1
+	wireId	int
+	layerId	int
+	superLayerId	int
+	sectorId	int
+	stationId	int
+	wheelId	int
+	digitime	double
+	wirePos	v3d
+	lPlusGlobalPos	v3d
+	lMinusGlobalPos	v3d
+	rPlusGlobalPos	v3d
+	rMinusGlobalPos	v3d
+	lGlobalPos	v3d
+	rGlobalPos	v3d
+	axis	v3d
+	angle	double
+	cellWidth	double
+	cellLength	double
+	cellHeight	double
+
+TechTrigger_V1
+TechTrigger_V1
+	bitNumber	int
+	result	int
+
+RPCRecHits_V1
+RPCRecHits_V1
+	u1	v3d
+	u2	v3d
+	v1	v3d
+	v2	v3d
+	w1	v3d
+	w2	v3d
+	region	int
+	ring	int
+	station	int
+	sector	int
+	layer	int
+	subsector	int
+	roll	int
+	detid	int
+
+L1GtTrigger_V1
+L1GtTrigger_V1
+	algorithm	string
+	algoBitNumber	int
+	result	int
+
+CSCSegments_V1
+CSCSegments_V1
+	detid	int
+	pos_1	v3d
+	pos_2	v3d
+
+DetIds_V1
+DetIds_V1
+	detid	int
+
+HBRecHits_V2
+HBRecHits_V2
+	energy	double
+	eta	double
+	phi	double
+	time	double
+	detid	int
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+Products_V1
+Products_V1
+	Product	string
+
+SiPixelClusters_V1
+SiPixelClusters_V1
+	detid	int
+	pos	v3d
+
+StandaloneMuons_V2
+StandaloneMuons_V2
+	pt	double
+	charge	int
+	pos	v3d
+	phi	double
+	eta	double
+	calo_energy	double
+
+HORecHits_V2
+HORecHits_V2
+	energy	double
+	eta	double
+	phi	double
+	time	double
+	detid	int
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+PreshowerClusters_V1
+PreshowerClusters_V1
+	energy	double
+	pos	v3d
+	eta	double
+	phi	double
+	nhits	int
+	plane	int
+	et	double
+
+EBRecHits_V2
+EBRecHits_V2
+	energy	double
+	eta	double
+	phi	double
+	time	double
+	detid	int
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+TriggerPaths_V1
+TriggerPaths_V1
+	Name	string
+	Index	int
+	WasRun	int
+	Accept	int
+	Error	int
+	Objects	string
+
+Points_V1
+Points_V1
+	pos	v3d
+
+GsfTracks_V1
+GsfTracks_V1
+	pos	v3d
+	dir	v3d
+	pt	double
+	phi	double
+	eta	double
+	charge	int
+
+Photons_V1
+Photons_V1
+	energy	double
+	et	double
+	eta	double
+	phi	double
+	pos	v3d
+	hadronicOverEm	double
+	hadronicDepth1OverEcal	double
+	hadronicDepth2OverEcal	double
+	e1x5	double
+	e2x5	double
+	e3x3	double
+	e5x5	double
+	maxEnergyXtal	double
+	sigmaEtaEta	double
+	sigmaIetaIeta	double
+	r1x5	double
+	r2x5	double
+	r9	double
+	ecalRecHitSumEtConeDR04	double
+	hcalTowerSumEtConeDR04	double
+	hcalDepth1TowerSumEtConeDR04	double
+	hcalDepth2TowerSumEtConeDR04	double
+	trkSumPtSolidConeConeDR04	double
+	trkSumPtHollowConeDR04	double
+	nTrkSolidConeDR04	int
+	nTrkHollowConeDR04	int
+	ecalRecHitSumEtDR03	double
+	hcalTowerSumEtDR03	double
+	hcalDepth1TowerSumEtDR03	double
+	hcalDepth2TowerSumEtDR03	double
+	trkSumPtSolidConeDR03	double
+	trkSumPtHollowConeDR03	double
+	nTrkSolidConeDR03	int
+	nTrkHollowConeDR03	int
+
+CSCRecHit2Ds_V2
+CSCRecHit2Ds_V2
+	u1	v3d
+	u2	v3d
+	v1	v3d
+	v2	v3d
+	w1	v3d
+	w2	v3d
+	endcap	int
+	station	int
+	ring	int
+	chamber	int
+	layer	int
+	tpeak	double
+	positionWithinStrip	double
+	errorWithinStrip	double
+	strips	string
+	wireGroups	string
+
+Vertices_V1
+Vertices_V1
+	isValid	int
+	isFake	int
+	pos	v3d
+	xError	double
+	yError	double
+	zError	double
+	chi2	double
+	ndof	double
+
+CaloTaus_V1
+CaloTaus_V1
+	eta	double
+	phi	double
+	pt	double
+	charge	double
+	leadTrackSignedSiPt	double
+	leadTrackHCAL3x3HitsEtSum	double
+	leadTrackHCAL3x3HottestHitDEta	double
+	signalTracksInvariantMass	double
+	TracksInvariantMass	double
+	isolationTracksPtSum	double
+	isolationECALHitsEtSum	double
+	maximumHCALHitEt	double
+
+TrackingRecHits_V1
+TrackingRecHits_V1
+	pos	v3d
+
+SiStripClusters_V1
+SiStripClusters_V1
+	detid	int
+	pos	v3d
+
+GlobalMuons_V1
+GlobalMuons_V1
+	pt	double
+	charge	int
+	rp	v3d
+	phi	double
+	eta	double
+	calo_energy	double
+
+GsfExtras_V1
+GsfExtras_V1
+	pos_1	v3d
+	dir_1	v3d
+	pos_2	v3d
+	dir_2	v3d
+
+PFJets_V1
+PFJets_V1
+	et	double
+	eta	double
+	theta	double
+	phi	double
+
+HFRecHits_V2
+HFRecHits_V2
+	energy	double
+	eta	double
+	phi	double
+	time	double
+	detid	int
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+Extras_V1
+Extras_V1
+	pos_1	v3d
+	dir_1	v3d
+	pos_2	v3d
+	dir_2	v3d
+
+METs_V1
+METs_V1
+	phi	double
+	pt	double
+	px	double
+	py	double
+	pz	double
+
+RecHitFractions_V1
+RecHitFractions_V1
+	detid	int
+	fraction	double
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+SuperClusters_V1
+SuperClusters_V1
+	energy	double
+	pos	v3d
+	eta	double
+	phi	double
+	algo	string
+	etaWidth	double
+	phiWidth	double
+	rawEnergy	double
+	preshowerEnergy	double
+
+DTRecSegment4D_V1
+DTRecSegment4D_V1
+	detid	int
+	pos_1	v3d
+	pos_2	v3d
+	sectorId	int
+	stationId	int
+	wheelId	int
+
+Event_V2
+Event_V2
+	run	int
+	event	int
+	ls	int
+	orbit	int
+	bx	int
+	time	string
+	localtime	string
+
+Hits_V1
+Hits_V1
+	pos	v3d
+
+Tracks_V2
+Tracks_V2
+	pos	v3d
+	dir	v3d
+	pt	double
+	phi	double
+	eta	double
+	charge	int
+	chi2	double
+	ndof	double
+
+GsfElectrons_V1
+GsfElectrons_V1
+	pt	double
+	eta	double
+	phi	double
+	charge	int
+	pos	v3d
+	dir	v3d
+
+CaloClusters_V1
+CaloClusters_V1
+	energy	double
+	pos	v3d
+	eta	double
+	phi	double
+	algo	string
+
+Jets_V1
+Jets_V1
+	et	double
+	eta	double
+	theta	double
+	phi	double
+
+HERecHits_V2
+HERecHits_V2
+	energy	double
+	eta	double
+	phi	double
+	time	double
+	detid	int
+	front_1	v3d
+	front_2	v3d
+	front_3	v3d
+	front_4	v3d
+	back_1	v3d
+	back_2	v3d
+	back_3	v3d
+	back_4	v3d
+
+PFMETs_V1
+PFMETs_V1
+	phi	double
+	pt	double
+	px	double
+	py	double
+	pz	double
+
+BasicClusters_V1
+BasicClusters_V1
+	energy	double
+	pos	v3d
+	eta	double
+	phi	double
+	algo	string
+
