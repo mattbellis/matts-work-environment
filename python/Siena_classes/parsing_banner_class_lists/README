@@ -1,0 +1,41 @@
+################################################################################
+# README
+################################################################################
+
+To generate a grid of subfigures of the students do this:
+
+* Download the Detail Class List (or Siena Class Roster) to this directory. This produces a file 
+
+    Detail Class List.html (Siena Class Roster.html)
+ 
+and a directory.
+
+    Detail Class List_files (Siena Class Roster_files.html)
+
+* Rename the files directory (which contains the images) to remove spaces in the name.
+For some reason, LaTeX doesn't like this. 
+
+    mv Detail\ Class\ List_files Detail_Class_List_files
+
+    or 
+
+    mv Siena\ Class\ Roster_files Siena_Class_Roster_files
+
+* Run the parser.
+
+    python hello_world_web_scraper.py Detail\ Class\ List.html > temp.tex
+
+    or 
+
+    python hello_world_web_scraper.py Siena\ Class\ Roster.html > temp.tex
+
+
+* Build the pdf.
+
+    pdflatex temp.tex
+
+* View your class list!
+
+    evince temp.pdf -f
+
+
