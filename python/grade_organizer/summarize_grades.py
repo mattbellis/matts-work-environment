@@ -211,15 +211,19 @@ def main():
         if args.course=='phys120':
             plotly_title = 'PHYS 120 class grades to date.'
             plotly_filename = 'PHYS120_S14'
-        elif args.course=='phys260':
-            plotly_title = 'PHYS 260 class grades to date.'
-            plotly_filename = 'PHYS260_S14'
+        #elif args.course=='phys260':
+            #plotly_title = 'PHYS 260 class grades to date.'
+            #plotly_filename = 'PHYS260_S14'
         elif args.course=='phys110':
             plotly_title = 'PHYS 110 class grades to date.'
             plotly_filename = 'PHYS110_F14'
         elif args.course=='phys310':
             plotly_title = 'PHYS 310 class grades to date.'
             plotly_filename = 'PHYS310_F14'
+        elif args.course=='phys260':
+            plotly_title = 'PHYS 260 class grades to date.'
+            plotly_filename = 'PHYS260_F15'
+
 
 
 
@@ -296,7 +300,8 @@ def main():
             dum_grade = Grade('final_exam',-1,70.0,100.0,0.0,0.0,False,'5/12/2014','Test')
             s.grades.final_exam.append(dum_grade)
 
-        hypothetical_performances = [70.0,80.0,90.0,100.0]
+        #hypothetical_performances = [70.0,80.0,90.0,100.0]
+        hypothetical_performances = []
         hypothetical_final_grades = []
         for g in (hypothetical_performances):
             #print g
