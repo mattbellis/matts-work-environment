@@ -9,7 +9,7 @@ f = ROOT.TFile(sys.argv[1])
 
 f.ls()
 
-tree = f.Get("data")
+tree = f.Get("events")
 
 tree.Print()
 
@@ -28,7 +28,7 @@ for i in xrange(nentries):
 
     nvals = 0
     ############################################################################
-    # Print out the jets
+    # Print out the not top-jets
     ############################################################################
     njets = tree.NJet
     output += "%d\n" % (njets)
@@ -43,6 +43,11 @@ for i in xrange(nentries):
 
         #mass = np.sqrt(e**2 - (px**2 + py**2 + pz**2))
         #print mass
+
+    ############################################################################
+    # Print out the top jets
+    ############################################################################
+    output += "0\n"
 
     ############################################################################
     # Print out the muons
@@ -87,7 +92,11 @@ for i in xrange(nentries):
 
     px = tree.MET_px
     py = tree.MET_py
-    output += "%-10.4f %-10.4f\n" % (px,py)
+    pt = np.sqrt(px*px + py*py)
+    phi = np.arccos(px/pt)
+    #output += "%-10.4f %-10.4f\n" % (px,py)
+    output += "%d\n" % (1)
+    output += "%-10.4f %-10.4f\n" % (pt,phi)
     nvals += 2
 
     #output = "%d\n%s" % (nvals,output)
