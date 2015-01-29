@@ -11,6 +11,35 @@ from email.mime.text import MIMEText
 import datetime as dt
 ################################################################################
 
+def letter_grade(n):
+
+    ret = 'F'
+    if n>=92.0 and n<200:
+        ret = 'A'
+    elif n>=90.0 and n<92:
+        ret = 'A-'
+    elif n>=87.0 and n<90:
+        ret = 'B+'
+    elif n>=82.0 and n<87:
+        ret = 'B'
+    elif n>=80.0 and n<82:
+        ret = 'B-'
+    elif n>=77.0 and n<80:
+        ret = 'C+'
+    elif n>=72.0 and n<77:
+        ret = 'C'
+    elif n>=70.0 and n<72:
+        ret = 'C-'
+    elif n>=67.0 and n<90:
+        ret = 'D+'
+    elif n>=62.0 and n<67:
+        ret = 'D'
+    elif n>=60.0 and n<62:
+        ret = 'D-'
+    else:
+        ret = 'F'
+
+    return ret
 
 ################################################################################
 def calc_average_of_grades(grades, drop_lowest_score=False):
@@ -288,6 +317,7 @@ class Student:
         final_pre_final = tot_pre_final/tot_wt_pre_final
         #print averages,final_grade_weighting
         ret += "\n -------\n\tFinal grade: %4.2f\n" % (final)
+        #print "SUMMARY: %-30s %6.2f \t %6.2f \t %6.2f \t %6.2f \t %6.2f \t %-3s\n" % (self.student_name,averages[0],averages[1],averages[2],averages[3],final,letter_grade(final))
         #ret += "\n -------\n\tPre-final/Final grade: %4.2f %4.2f\n" % (final_pre_final,final)
 
         averages.append(final)

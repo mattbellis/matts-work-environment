@@ -296,7 +296,8 @@ def main():
             dum_grade = Grade('final_exam',-1,70.0,100.0,0.0,0.0,False,'5/12/2014','Test')
             s.grades.final_exam.append(dum_grade)
 
-        hypothetical_performances = [70.0,80.0,90.0,100.0]
+        #hypothetical_performances = [70.0,80.0,90.0,100.0]
+        hypothetical_performances = []
         hypothetical_final_grades = []
         for g in (hypothetical_performances):
             #print g
