@@ -21,6 +21,9 @@ if course=="phys110":
 elif course=="phys310":
     s = c.open_by_url('https://docs.google.com/spreadsheets/d/1tF2HIqiTYcPOpJsA3pfc_jQB4W7Hxa9nE_OdxNkJq2c/edit#gid=1083720838')
     w = s.get_worksheet(0)
+elif course=="phys260":
+    s = c.open_by_url('https://docs.google.com/spreadsheets/d/1vm_xNMUsVUpLOEEIv3XAc52m_gCxFwnJby4uFgO9ZPk/edit#gid=333596407')
+    w = s.get_worksheet(0)
 
 d = w.get_all_values()
 
