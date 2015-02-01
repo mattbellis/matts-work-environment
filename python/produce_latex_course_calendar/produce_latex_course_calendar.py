@@ -1,9 +1,9 @@
 import datetime as dt
 import time
 
-year = 2014
-starting_month = 9
-starting_day = 2
+year = 2015
+starting_month = 1
+starting_day = 13
 
 datestring = "%d %d %d" % (year, starting_month, starting_day)
 start = time.strptime(datestring,"%Y %m %d")
@@ -28,17 +28,19 @@ while i < 120:
     elif thursday:
         print "         & %s & XXX & YYY & ZZZ \\\\ " % (date)
         print "\\hline"
+    '''
     else:
         print "        & %s  & XXX & YYY & ZZZ \\\\" % (date)
         print "\\hline"
+    '''
 
     if tuesday:
-        #increment = 2
-        increment = 1
+        increment = 2
+        #increment = 1
         #increment = 7
         tuesday = False
-        wednesday = True
-        thursday = False
+        wednesday = False
+        thursday = True
         #week += 1
     elif wednesday:
         increment = 1
