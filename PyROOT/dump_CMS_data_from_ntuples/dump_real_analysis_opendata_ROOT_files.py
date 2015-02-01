@@ -24,7 +24,7 @@ ak5jet_str.append("recoPFJets_ak5PFJets__RECO.obj.pt_")
 ak5jet_str.append("recoPFJets_ak5PFJets__RECO.obj.eta_")
 ak5jet_str.append("recoPFJets_ak5PFJets__RECO.obj.phi_")
 ak5jet_str.append("recoPFJets_ak5PFJets__RECO.obj.mass_")
-ak5jet_str.append("floats_pfShyftTupleJetsLooseAK5_csv_ANA.obj")
+#ak5jet_str.append("floats_pfShyftTupleJetsLooseAK5_csv_ANA.obj")
 
 '''
 ca8jet_str = []
@@ -48,10 +48,15 @@ electrons_str.append("recoPFCandidates_particleFlow_electrons_RECO.obj.eta_")
 electrons_str.append("recoPFCandidates_particleFlow_electrons_RECO.obj.phi_")
 electrons_str.append("recoPFCandidates_particleFlow_electrons_RECO.obj.qx3_")
 
-'''
+photons_str = []
+photons_str.append("recoPhotons_photons__RECO.obj.pt_")
+photons_str.append("recoPhotons_photons__RECO.obj.eta_")
+photons_str.append("recoPhotons_photons__RECO.obj.phi_")
+
 met_str = []
-met_str.append("floats_pfShyftTupleMETLoose_pt_ANA.obj")
-met_str.append("floats_pfShyftTupleMETLoose_phi_ANA.obj")
+met_str.append("recoPFMETs_pfMet__RECO.obj.pt_")
+met_str.append("recoPFMETs_pfMet__RECO.obj.phi_")
+'''
 '''
 
 
@@ -69,16 +74,18 @@ for file in sys.argv[1:]:
 #tree.Print()
 
 chain.SetBranchStatus('*', 0 )
-#for s in ak5jet_str:
-    #chain.SetBranchStatus(s, 1 )
+for s in ak5jet_str:
+    chain.SetBranchStatus(s, 1 )
 #for s in ca8jet_str:
     #chain.SetBranchStatus(s, 1 )
 for s in muons_str:
     chain.SetBranchStatus(s, 1 )
-#for s in electrons_str:
-    #chain.SetBranchStatus(s, 1 )
-#for s in met_str:
-    #chain.SetBranchStatus(s, 1 )
+for s in electrons_str:
+    chain.SetBranchStatus(s, 1 )
+for s in photons_str:
+    chain.SetBranchStatus(s, 1 )
+for s in met_str:
+    chain.SetBranchStatus(s, 1 )
 
 
 #exit()
@@ -100,27 +107,28 @@ for i in xrange(nentries):
     ############################################################################
     nthings = 0
     temp_output = ""
-    '''
-    for i in xrange(16):
+    for i in xrange(32):
         pt = chain.GetLeaf(ak5jet_str[0]).GetValue(i)
         eta = chain.GetLeaf(ak5jet_str[1]).GetValue(i)
         phi = chain.GetLeaf(ak5jet_str[2]).GetValue(i)
         mass = chain.GetLeaf(ak5jet_str[3]).GetValue(i)
-        csv = chain.GetLeaf(ak5jet_str[4]).GetValue(i)
-        if csv==0.0:
+        #csv = chain.GetLeaf(ak5jet_str[4]).GetValue(i)
+        csv = -999.
+        if mass==0.0:
             break
         nthings += 1
 
         px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
         e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
         
-        print nthings
+        #print nthings
         temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,csv)
-        print pt,eta,phi,mass,csv
+        #print pt,eta,phi,mass,csv
 
-    print nthings
+    #print nthings
     output += "%d\n%s" % (nthings,temp_output)
 
+    '''
     ############################################################################
     # Print out the top jets
     ############################################################################
@@ -156,6 +164,7 @@ for i in xrange(nentries):
         pt = chain.GetLeaf(muons_str[0]).GetValue(i)
         eta = chain.GetLeaf(muons_str[1]).GetValue(i)
         phi = chain.GetLeaf(muons_str[2]).GetValue(i)
+        q = chain.GetLeaf(muons_str[3]).GetValue(i)
         if pt==0.0:
             break
         nthings += 1
@@ -163,12 +172,11 @@ for i in xrange(nentries):
         px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
         e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
         
-        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,0)
-        print pt,eta,phi
+        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,q)
+        #print pt,eta,phi
 
     output += "%d\n%s" % (nthings,temp_output)
 
-    '''
     ############################################################################
     # Print out the electrons
     ############################################################################
@@ -179,6 +187,7 @@ for i in xrange(nentries):
         pt = chain.GetLeaf(electrons_str[0]).GetValue(i)
         eta = chain.GetLeaf(electrons_str[1]).GetValue(i)
         phi = chain.GetLeaf(electrons_str[2]).GetValue(i)
+        q = chain.GetLeaf(electrons_str[3]).GetValue(i)
         if pt==0.0:
             break
         nthings += 1
@@ -186,15 +195,33 @@ for i in xrange(nentries):
         px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
         e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
         
-        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,0)
-        print pt,eta,phi
+        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz,q)
+        #print pt,eta,phi
 
     output += "%d\n%s" % (nthings,temp_output)
 
     ############################################################################
     # Print out the photons
     ############################################################################
-    output += "0\n"
+    nthings = 0
+    temp_output = ""
+    mass = 0.0
+    for i in xrange(16):
+        pt = chain.GetLeaf(photons_str[0]).GetValue(i)
+        eta = chain.GetLeaf(photons_str[1]).GetValue(i)
+        phi = chain.GetLeaf(photons_str[2]).GetValue(i)
+        if pt==0.0:
+            break
+        nthings += 1
+
+        px,py,pz = ptetaphi_to_xyz(pt,eta,phi)
+        e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
+        
+        temp_output += "%-10.4f %-10.4f %-10.4f %-10.4f\n" % (e,px,py,pz)
+        #print pt,eta,phi
+
+    output += "%d\n%s" % (nthings,temp_output)
+
 
     ############################################################################
     # Print out the MET
@@ -216,8 +243,9 @@ for i in xrange(nentries):
 
     output += "%d\n%s" % (nthings,temp_output)
     '''
+    '''
 
-    #print output
+    print output
     outfile.write(output)
 
 
