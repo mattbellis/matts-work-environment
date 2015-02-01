@@ -1,6 +1,11 @@
 #!/usr/bin/env python
-
 import subprocess as sp
+
+import sys
+
+choice = None
+if len(sys.argv)>1:
+    choice = sys.argv[1]
 
 cmd = ['sudo', 'ifconfig', 'eth0', 'down']
 sp.Popen(cmd,0).wait()
@@ -18,25 +23,27 @@ ap = []
 encryption = []
 strength = []
 
-words = output.split()
-for i,word in enumerate(words):
+lines = output.split('\n')
+for line in lines:
     #print word
-    if "Cell" == word:
-        cell.append(words[i+1])
-        ap.append(words[i+4])
+    if "Cell" in line:
+        words = line.split()
+        cell.append(words[1])
+        ap.append(words[4])
 
-    if "Channel:" in word:
-        #print word
-        channel.append(word.split(":")[1].strip())
+    if "Channel:" in line:
+        channel.append(line.split(":")[1].strip())
 
-    if "ESSID" in word:
-        essid.append(word.split(":")[1].strip())
+    if "ESSID" in line:
+        essid.append(line.split(":")[1].strip())
 
-    if "Encryption" == word:
-        encryption.append(words[i+1].strip())
+    if "Encryption" in line:
+        words = line.split()
+        encryption.append(words[1].split(":")[1])
 
-    if "Quality" in word:
-        strength.append(word.split("=")[1].strip())
+    if "Quality" in line:
+        words = line.split()
+        strength.append(words[0].split("=")[1].strip())
 
 nsignals = len(cell)
 #print cell
@@ -45,10 +52,18 @@ nsignals = len(cell)
 #print ap
 #print encryption
 
-for i in range(0,nsignals):
-    output = "%d\t%20s\t%s\t%s\t%s\t%s" % (i,essid[i],strength[i],ap[i],encryption[i],channel[i])
-    print output
 
 print "sudo iwconfig wlan0 essid ### ap ### channel ###"
 print "sudo dhclient wlan0"
 
+if choice is not None:
+    index = ap.index(choice)
+    cmd = ['sudo', 'iwconfig', 'wlan0', 'essid',essid[index],"ap",ap[index],"channel",channel[index]]
+    print " ".join(cmd)
+    sp.Popen(cmd,0).wait()
+else:
+    for i in range(0,nsignals):
+        output = "%d\t%20s\t%s\t%s\t%s\t%s" % (i,essid[i],strength[i],ap[i],encryption[i],channel[i])
+        print output
+    print "sudo iwconfig wlan0 essid ### ap ### channel ###"
+    print "sudo dhclient wlan0"
