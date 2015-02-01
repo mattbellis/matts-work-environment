@@ -211,15 +211,19 @@ def main():
         if args.course=='phys120':
             plotly_title = 'PHYS 120 class grades to date.'
             plotly_filename = 'PHYS120_S14'
-        elif args.course=='phys260':
-            plotly_title = 'PHYS 260 class grades to date.'
-            plotly_filename = 'PHYS260_S14'
+        #elif args.course=='phys260':
+            #plotly_title = 'PHYS 260 class grades to date.'
+            #plotly_filename = 'PHYS260_S14'
         elif args.course=='phys110':
             plotly_title = 'PHYS 110 class grades to date.'
             plotly_filename = 'PHYS110_F14'
         elif args.course=='phys310':
             plotly_title = 'PHYS 310 class grades to date.'
             plotly_filename = 'PHYS310_F14'
+        elif args.course=='phys260':
+            plotly_title = 'PHYS 260 class grades to date.'
+            plotly_filename = 'PHYS260_F15'
+
 
 
 
