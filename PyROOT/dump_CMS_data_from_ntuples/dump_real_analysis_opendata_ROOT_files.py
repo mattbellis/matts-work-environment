@@ -3,6 +3,8 @@ import matplotlib as plt
 
 import ROOT
 
+import zipfile
+
 import sys
 
 def ptetaphi_to_xyz(pt,eta,phi):
