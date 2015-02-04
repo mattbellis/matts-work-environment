@@ -98,6 +98,9 @@ outfile = open(outfilename,'w')
 
 for i in xrange(nentries):
 
+    if i%1000==0:
+        print "Event: %d" % (i)
+
     output = "Event: %d\n" % (i)
     #output = ""
     chain.GetEntry(i)
@@ -128,10 +131,11 @@ for i in xrange(nentries):
     #print nthings
     output += "%d\n%s" % (nthings,temp_output)
 
-    '''
     ############################################################################
     # Print out the top jets
     ############################################################################
+    output += "%d\n" % (0)
+    '''
     nthings = 0
     temp_output = ""
     for i in xrange(16):
@@ -239,15 +243,22 @@ for i in xrange(nentries):
         #e = np.sqrt(mass*mass + px*px + py*py + pz*pz)
         
         temp_output += "%-10.4f %-10.4f\n" % (pt,phi)
-        print pt,eta,phi
+        #print pt,eta,phi
 
     output += "%d\n%s" % (nthings,temp_output)
     '''
     '''
 
-    print output
+    #print output
     outfile.write(output)
 
 
 
 outfile.close()
+
+#zipfilename = "%s.zip" % (sys.argv[1].split('/')[-1].split('.root')[0])
+zipfilename = "%s.zip" % (sys.argv[1].split('.root')[0])
+zf = zipfile.ZipFile(zipfilename,'w')
+zf.write(outfilename,compress_type=zipfile.ZIP_DEFLATED)
+zf.close()
+#outfile = open(outfilename,'w')
