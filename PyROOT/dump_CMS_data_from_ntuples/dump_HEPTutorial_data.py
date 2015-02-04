@@ -5,6 +5,8 @@ import ROOT
 
 import sys
 
+import zipfile
+
 f = ROOT.TFile(sys.argv[1])
 
 f.ls()
@@ -17,7 +19,8 @@ tree.Print()
 
 nentries = tree.GetEntries()
 
-outfilename = "%s.dat" % (sys.argv[1].split('/')[-1].split('.root')[0])
+#outfilename = "%s.dat" % (sys.argv[1].split('/')[-1].split('.root')[0])
+outfilename = "%s.dat" % (sys.argv[1].split('.root')[0])
 outfile = open(outfilename,'w')
 
 for i in xrange(nentries):
@@ -107,3 +110,9 @@ for i in xrange(nentries):
 outfile.close()
 
 
+#zipfilename = "%s.zip" % (sys.argv[1].split('/')[-1].split('.root')[0])
+zipfilename = "%s.zip" % (sys.argv[1].split('.root')[0])
+zf = zipfile.ZipFile(zipfilename,'w')
+zf.write(outfilename,compress_type=zipfile.ZIP_DEFLATED)
+zf.close()
+#outfile = open(outfilename,'w')
