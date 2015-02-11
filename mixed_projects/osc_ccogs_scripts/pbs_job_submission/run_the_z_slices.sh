@@ -1,0 +1,14 @@
+python build_submission_files.py flat_5M_0.000_to_0.025 Z-Array_is_greater_than_0.000_and_less_than_0.025_arcseconds.dat flat_5M_0.000_to_0.025_arcseconds.dat 
+python build_submission_files.py flat_5M_0.025_to_0.050 Z-Array_is_greater_than_0.025_and_less_than_0.050_arcseconds.dat flat_5M_0.025_to_0.050_arcseconds.dat 
+python build_submission_files.py flat_5M_0.050_to_0.075 Z-Array_is_greater_than_0.050_and_less_than_0.075_arcseconds.dat flat_5M_0.050_to_0.075_arcseconds.dat 
+python build_submission_files.py flat_5M_0.075_to_0.100 Z-Array_is_greater_than_0.075_and_less_than_0.100_arcseconds.dat flat_5M_0.075_to_0.100_arcseconds.dat 
+python build_submission_files.py flat_5M_0.100_to_0.125 Z-Array_is_greater_than_0.100_and_less_than_0.125_arcseconds.dat flat_5M_0.100_to_0.125_arcseconds.dat 
+python build_submission_files.py flat_5M_0.125_to_0.150 Z-Array_is_greater_than_0.125_and_less_than_0.150_arcseconds.dat flat_5M_0.125_to_0.150_arcseconds.dat 
+python build_submission_files.py flat_5M_0.150_to_0.175 Z-Array_is_greater_than_0.150_and_less_than_0.175_arcseconds.dat flat_5M_0.150_to_0.175_arcseconds.dat 
+python build_submission_files.py flat_5M_0.175_to_0.200 Z-Array_is_greater_than_0.175_and_less_than_0.200_arcseconds.dat flat_5M_0.175_to_0.200_arcseconds.dat 
+python build_submission_files.py flat_5M_0.200_to_0.225 Z-Array_is_greater_than_0.200_and_less_than_0.225_arcseconds.dat flat_5M_0.200_to_0.225_arcseconds.dat 
+python build_submission_files.py flat_5M_0.225_to_0.250 Z-Array_is_greater_than_0.225_and_less_than_0.250_arcseconds.dat flat_5M_0.225_to_0.250_arcseconds.dat 
+python build_submission_files.py flat_5M_0.250_to_0.275 Z-Array_is_greater_than_0.250_and_less_than_0.275_arcseconds.dat flat_5M_0.250_to_0.275_arcseconds.dat 
+python build_submission_files.py flat_5M_0.275_to_0.300 Z-Array_is_greater_than_0.275_and_less_than_0.300_arcseconds.dat flat_5M_0.275_to_0.300_arcseconds.dat 
+python build_submission_files.py flat_5M_0.300_to_0.325 Z-Array_is_greater_than_0.300_and_less_than_0.325_arcseconds.dat flat_5M_0.300_to_0.325_arcseconds.dat 
+python build_submission_files.py flat_5M_0.325_to_0.350 Z-Array_is_greater_than_0.325_and_less_than_0.350_arcseconds.dat flat_5M_0.325_to_0.350_arcseconds.dat 

@@ -1,0 +1,73 @@
+import numpy as np
+from scipy import optimize         # simplified syntax
+import matplotlib.pyplot as plt    # pylab != pyplot
+
+import sys
+
+# `unpack` lets you split the columns immediately:
+filename = sys.argv[1]
+x,y,l0,l1 = np.loadtxt(filename, dtype=str, delimiter=',', usecols=(1,2,5,6), skiprows=1, unpack=True)
+
+#print y.astype('float')[y>0]
+#y = y.astype('float')
+#y = y[y>0]
+#l0 = l0.astype('float')[y>0]
+#l1 = l1.astype('float')[y>0]
+
+y = y.astype('float')
+y0 = y[0:89]
+y1 = y[90:191]
+y2 = y[199:304]
+
+
+#npts = len(y)
+print y0
+npts0 = len(y0)
+npts1 = len(y1)
+npts2 = len(y2)
+
+print np.average(y0)
+
+
+l0 = 0.01179*np.ones(npts2)
+l1 = 0.030190476*np.ones(npts2)
+l2 = 0.030190476*np.ones(npts2)
+l3 = 0.035595*np.ones(npts2)
+
+#y1 = np.zeros(npts1)
+#y2 = np.zeros(npts)
+
+dx = 20.0
+
+x0 = np.linspace(0,dx*npts0,npts0)
+x1 = np.linspace(0,dx*npts1,npts1)
+x2 = np.linspace(0,dx*npts2,npts2)
+
+
+fig = plt.figure(figsize=(10,6))
+ax = fig.add_subplot(1,1,1)
+
+plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
+
+plt.plot(x0,y0,'o',label=r'1400$^\circ$ C - 60 hours (SGB-7)',markersize=8,color='k')
+plt.plot(x1,y1,'v',label=r'1400$^\circ$ C - 24 hours',markersize=8,color='r')
+plt.plot(x2,y2,'*',label=r'Untreated Mo foil',markersize=8,color='lightgreen')
+
+plt.plot(x2,l0,'--',label='Detection limit (99% CI)',linewidth=3,color='r')
+plt.plot(x2,l2,'-',label='Average measured value of SGB-7',linewidth=3,color='b')
+plt.plot(x0,y0,'o',markersize=8,color='k')
+
+plt.xlabel(r'Distance ($\mu$m)',fontsize=24)
+plt.ylabel(r'Concentration S (wt %)',fontsize=24)
+
+plt.xticks(fontsize=14) #, weight='bold')
+plt.yticks(fontsize=14) #, weight='bold')
+
+plt.ylim(0.0,.10)
+plt.xlim(0.0,2500)
+
+plt.legend(fontsize=12)
+
+plt.savefig('sulfur_sgb7.jpg',transparent=False,frameon=True,facecolor='lightgrey')
+
+#plt.show()
