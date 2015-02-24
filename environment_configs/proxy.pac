@@ -6,6 +6,8 @@ proxy_no = "DIRECT";
 
 if (shExpMatch(url, "https://webscs02.slac.stanford.edu*"))
     return proxy_yes;
+if (shExpMatch(url, "*opticsinfobase*"))
+    return proxy_yes;
 if (shExpMatch(url, "*onlinelibrary.wiley.com*"))
     return proxy_yes;
 if (shExpMatch(url, "*agu.org/pubs*"))
