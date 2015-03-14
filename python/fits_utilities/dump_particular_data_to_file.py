@@ -21,5 +21,5 @@ ra = ra[object_class=='GALAXY']
 dec = dec[object_class=='GALAXY']
 
 
-np.savetxt('test.out', np.transpose([ra,dec,z]),fmt='%f')
+#np.savetxt('test.out', np.transpose([ra,dec,z]),fmt='%f')
 
