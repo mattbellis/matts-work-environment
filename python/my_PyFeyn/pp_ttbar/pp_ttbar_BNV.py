@@ -48,7 +48,7 @@ fermion_length = [
 fragmentation_images = [4,7,10,13,16,19,20]
 
 fragmentation_names = [
-        [r"\Large{$\ell^+$}",r"\Large{$j$}",r"\Large{$j$}",r"q"],
+        [r"\Large{$\ell^\pm$}",r"\Large{$j$}",r"\Large{$j$}",r"q"],
         [r"\Large{$j$}",r"\Large{$j$}",r"\Large{$j_b$}",r"q"],
         ]
 
