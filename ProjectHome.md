@@ -1,0 +1,1 @@
+Repository of current coding work. So all source code, Makefiles, scripts, etc., as well as helper scripts (.vimrc, .dircolors, .mrxvt, etc.). Also, all my example scripts and the like.
