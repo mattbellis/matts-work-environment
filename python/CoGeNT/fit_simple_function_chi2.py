@@ -5,7 +5,8 @@ import sys
 
 from scipy.optimize import curve_fit,leastsq
 
-expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
+#expfunc = lambda p, x: p[1]*np.exp(-p[0]*x) + p[2]
+expfunc = lambda p, x: p[1]*np.exp(-p[0]*x)
 errfunc = lambda p, x, y, err: (y - expfunc(p, x)) / err
 
 expfunc1 = lambda p, x: p[1]*x + p[0]
@@ -37,6 +38,7 @@ print "z: ",z
 print "zcov: ",zcov
 yp = expfunc(z,xp)
 plt.plot(xp,yp,'-',color='r')
+#plt.yscale('log')
 
 ################################################################################
 # Fit blue data
