@@ -64,6 +64,8 @@ x,c0,c1,delta,delta_err,xoffset = read_datafile(infilename)
 conc = None
 if element=="Fe":
     conc = c0
+    if experiment=="FNDA1" and profile=="2":
+        x = x[::-1]
 elif element=="Ni":
     conc = c1
     #x *= -1.0
@@ -88,6 +90,8 @@ dx   = (hi-lo)/float(npts)
 
 xpos = np.linspace(lo,hi,npts) 
 if element=="Ni":
+    xpos = xpos[::-1]
+elif element=="Fe" and experiment=="FNDA1" and profile=="2":
     xpos = xpos[::-1]
 
 frac_interface = (interface_x-lo)/(hi-lo)
@@ -282,7 +286,7 @@ def chisq_minuit(data,p,parnames,params_dict):
 # Set up minuit
 ################################################################################
 params_dict = {}
-params_dict['mybeta'] = {'fix':False,'start_val':0.50,'limits':(0.05,2.0),'error':0.01}
+params_dict['mybeta'] = {'fix':False,'start_val':0.250,'limits':(0.05,2.0),'error':0.01}
 #params_dict['offset'] = {'fix':False,'start_val':-0.000074,'limits':(-0.000200,0.000200),'error':0.0000001}
 params_dict['offset'] = {'fix':True,'start_val':-0.000000,'limits':(-0.000200,0.000200),'error':0.0000001}
 #params_dict['mybeta'] = {'fix':False,'start_val':0.0,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
@@ -407,9 +411,11 @@ plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
 #plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.3)
 #plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
 #'''
+'''
 plt.ylim(-40,40) # FNDA 1, Fe
 if element=="Ni":
     plt.ylim(-20,20) # FNDA 1, Ni
+'''
 plt.ylabel(r'$\delta$',fontsize=36)
 plt.xlabel('Meters',fontsize=24)
 if experiment=="FNDA2" and element=="Ni":

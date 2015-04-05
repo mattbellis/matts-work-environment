@@ -42,6 +42,9 @@ def read_datafile(infilename,experiment="FNDA1",element="Fe"):
     #conc_ni = 100.0 - conc_ni
 
     dfe /= 1e6 # Convert to meters
+    
+    delta_fe *= 2
+    delta_fe_err *= 2
 
     return dfe,conc_fe/100.,conc_ni/100.,delta_fe,delta_fe_err,xoffset
 
