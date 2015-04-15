@@ -104,6 +104,12 @@ def fd_lfv_c_quark(outfilename, index=0):
     q2 = Fermion(q0out, vtx3).addLabel(r"{\Large $\bar{u}$}",pos=-0.10,displace=-0.08).addArrow()
     q3 = Fermion(vtx3, q1out).addLabel(r"{\Large $d/s$}",pos=1.10,displace=+0.11).addArrow()
 
+    if index==3:
+
+        ecenter = q0in.midpoint(q0out)
+        e = Ellipse(center=ecenter,xradius=3,yradius=1,fill=[WHITE])
+
+
     ############################################################################
     # Write the output file
     ############################################################################

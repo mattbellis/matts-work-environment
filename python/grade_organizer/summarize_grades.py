@@ -68,7 +68,8 @@ def main():
     final_exam_grades = []
 
     # Grade weighting
-    final_grade_weighting = [0.10,0.25,0.35,0.30]
+    #final_grade_weighting = [0.10,0.25,0.35,0.30]
+    final_grade_weighting = [0.10,0.20,0.45,0.25]
     # Quizzes
     # HWs
     # Exam 1

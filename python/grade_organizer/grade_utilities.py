@@ -226,8 +226,8 @@ class Student:
         ret += "\n\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
 
         # HW
-        #drop_lowest_score = True
-        drop_lowest_score = False
+        drop_lowest_score = True
+        #drop_lowest_score = False
         picked_a_lowest = False
         ret += " -----\nHomeworks\n -----\n"
         for g in self.grades.hw:
@@ -244,10 +244,10 @@ class Student:
         ret += "\n\tHW   avg: %4.2f\n" % (avg)
 
         # Exam 1 
-        #drop_lowest_score = True
+        drop_lowest_score = True
         dropped_scores = 0
         #drop_lowest_score = 1
-        drop_lowest_score = False
+        #drop_lowest_score = False
         #drop_lowest_score = True
         picked_a_lowest = False
         #ret += " -----\nExams\n -----\n"
