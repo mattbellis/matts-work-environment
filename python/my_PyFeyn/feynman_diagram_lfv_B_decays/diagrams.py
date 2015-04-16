@@ -1,4 +1,5 @@
 from pyfeyn.user import *
+from pyx import *
 
 from subprocess import call
 
@@ -7,6 +8,12 @@ corners.append(Point(-3.5,1.5))
 corners.append(Point(-3.5,1.5))
 corners.append(Point(3.5,-1.5))
 corners.append(Point(3.5,1.5))
+
+col = color.cmyk.Black
+#text.set(mode="latex")
+text.preamble(r"\usepackage{color}")
+text.preamble(r"\definecolor{COL}{cmyk}{%(c)g,%(m)g,%(y)g,%(k)g}" % col.color)
+
 
 #################################################################
 def fd_lfv_c_quark(outfilename, index=0):
@@ -42,6 +49,7 @@ def fd_lfv_c_quark(outfilename, index=0):
     styles0b = [THICK3,WHITE]
     styles1 = None
     styles1a = None
+    styles1b = [THICK3,WHITE]
 
     f4name = None
 
@@ -77,7 +85,7 @@ def fd_lfv_c_quark(outfilename, index=0):
 
         W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^+$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
 
-    elif index==2:
+    elif index==2 or index==3:
 
         vtx2a = vtx2.midpoint(vtx1)
         f4name = r"{\Large $\ell^{'+}$}"
@@ -93,12 +101,13 @@ def fd_lfv_c_quark(outfilename, index=0):
 
         W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^+$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
 
+
     f3out = Point(q0out.x()-1.0,q0out.y()+2)
     f4out = Point(q0out.x()-0.5,q0out.y()+1)
 
+    print f4name
     f3 = Fermion(vtx1, f3out).addLabel(r"{\Large $\ell^{+}$}",pos=1.04,displace=+0.005).addArrow().setStyles(styles0)
     f4 = Fermion(f4out, vtx2).addLabel(f4name,pos=-0.11,displace=+0.005).addArrow().setStyles(styles1b)
-
 
     # Final state quarks
     q2 = Fermion(q0out, vtx3).addLabel(r"{\Large $\bar{u}$}",pos=-0.10,displace=-0.08).addArrow()
@@ -107,7 +116,8 @@ def fd_lfv_c_quark(outfilename, index=0):
     if index==3:
 
         ecenter = q0in.midpoint(q0out)
-        e = Ellipse(center=ecenter,xradius=3,yradius=1,fill=[WHITE])
+        ecenter = Vertex(ecenter.x(),ecenter.y()-0.7)
+        e = Ellipse(center=ecenter,xradius=2.5,yradius=0.7,fill=[WHITE]).addLabel(r"\textcolor{COL}{\bf New Physics}")
 
 
     ############################################################################
