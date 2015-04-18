@@ -1,5 +1,39 @@
-#python fit_delta.py FNDA1_microprobe.csv FNDA1_isotope.csv
-#python bulk_diffusion.py new_data_021614/FNDA_1_microprobe.csv new_data_021614/FNDA_1_isotope.csv
-python fit_delta.py new_data_021614/FNDA_1_microprobe.csv new_data_021614/FNDA_1_isotope.csv
-python fit_delta.py new_data_021614/FNDA_2_microprobe.csv new_data_021614/FNDA_2_isotope.dat
-python fit_delta.py new_data_021614/FNDA_1_microprobe.csv new_data_021614/FNDA_1_isotope.csv
+FNDA2 Fe 1    COPIED  FITS!
+FNDA2 Ni 1    COPIED  FITS!
+FNDA2 Ni 2    COPIED  FITS!
+
+FNDA1 Fe 1    COPIED  FITS!
+FNDA1 Fe 2    COPIED  FITS!
+
+FNDA1 Ni 1    COPIED
+FNDA1 Ni 2    COPIED
+FNDA1 Ni 3    COPIED
+
+############## THESE MIGHT BE BAD
+FND2 Fe 1    COPIED
+FND2 Ni 1    COPIED
+
+
+################################################################################
+# Notes
+################################################################################
+FNDA2 Fe 1
+Fit seems to be lower than the data on the concentration profile. 40% crossing?
+Starting concentrations?
+
+
+FNDA2 Ni 1
+Data seem to have a discontinuity.
+
+
+FNDA2 Ni 2
+Data seem to have a discontinuity around 0.0003
+
+
+FNDA1 Fe 1
+
+FNDA1 Fe 2
+Data might be bad. Big discontinuity at -0.0003
+
+
+

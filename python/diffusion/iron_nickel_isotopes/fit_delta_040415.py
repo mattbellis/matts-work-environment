@@ -21,6 +21,7 @@ element = "Fe"
 
 profile = "1"
 #profile = "2"
+#profile = "3"
 
 if len(sys.argv)>1:
     experiment = sys.argv[1]
@@ -93,6 +94,10 @@ if element=="Ni":
     xpos = xpos[::-1]
 elif element=="Fe" and experiment=="FNDA1" and profile=="2":
     xpos = xpos[::-1]
+
+print lo,hi
+print xpos[0],xpos[-1]
+#exit()
 
 frac_interface = (interface_x-lo)/(hi-lo)
 print "frac_interface: ",frac_interface
@@ -288,7 +293,7 @@ def chisq_minuit(data,p,parnames,params_dict):
 params_dict = {}
 params_dict['mybeta'] = {'fix':False,'start_val':0.250,'limits':(0.05,2.0),'error':0.01}
 #params_dict['offset'] = {'fix':False,'start_val':-0.000074,'limits':(-0.000200,0.000200),'error':0.0000001}
-params_dict['offset'] = {'fix':True,'start_val':-0.000000,'limits':(-0.000200,0.000200),'error':0.0000001}
+params_dict['offset'] = {'fix':False,'start_val':-0.000000,'limits':(-0.000200,0.000200),'error':0.0000001}
 #params_dict['mybeta'] = {'fix':False,'start_val':0.0,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 #params_dict['intercept'] = {'fix':False,'start_val':0.5,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 
@@ -391,7 +396,7 @@ elif experiment=="FNDA2" and element=="Fe":
 else:
     plt.legend(loc='center right')
 '''
-name = "%s_%s_%s_diffusion_profile.png" % (element,experiment,tag)
+name = "%s_%s_%s_%s_diffusion_profile.png" % (element,experiment,profile,tag)
 plt.savefig(name)
 
 # Plot the deltas
@@ -424,7 +429,7 @@ elif experiment=="FNDA1" and element=="Fe":
     plt.legend(loc='upper right') # FNDA 1, Fe
 else:
     plt.legend(loc='upper left')
-name = "%s_%s_%s_delta.png" % (element,experiment,tag)
+name = "%s_%s_%s_%s_delta.png" % (element,experiment,profile,tag)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
 plt.savefig(name)
 
@@ -438,7 +443,7 @@ plt.errorbar(conc,delta,yerr=delta_err,fmt='o',markersize=10,label=label)
 plt.ylabel(r'$\delta$',fontsize=36)
 plt.xlabel('Concentration',fontsize=24)
 plt.legend(loc='upper left') # FNDA 2, NI
-name = "%s_%s_%s_delta_vs_concentration.png" % (element,experiment,tag)
+name = "%s_%s_%s_%s_delta_vs_concentration.png" % (element,experiment,profile,tag)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
 plt.savefig(name)
 
@@ -448,7 +453,7 @@ plt.savefig(name)
 
 print "Final value of beta: %f" % (values['mybeta'])
 
-name = "%s_%s_%s_output.csv" % (element,experiment,tag)
+name = "%s_%s_%s_%s_output.csv" % (element,experiment,profile,tag)
 
 f = open(name,'w')
 #csv.writer(f).writerows(it.izip_longest(x,conc,x,conc,xpos,c56,c54,x,delta,delta_err,xpos,sim_deltas,sim_deltasfake,sim_deltasfake0,sim_deltasfake1))

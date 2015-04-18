@@ -37,7 +37,10 @@ def read_datafile(infilename,experiment="FNDA1",element="Fe"):
     xvals = np.linspace(min(dfe),max(dfe),1000)
     idx = find_nearest(predicted_conc(xvals),crossing_point)
     xoffset = xvals[idx]
+    print "xoffset: %f %e" % (xoffset,xoffset)
     dfe -= xoffset
+
+    #dfe -= 2050.
 
     #conc_ni = 100.0 - conc_ni
 
@@ -53,12 +56,13 @@ def read_datafile(infilename,experiment="FNDA1",element="Fe"):
 ################################################################################
 if __name__=="__main__":
 
-    x,c0,c1,delta,delta_err,xoffset = read_data_file(sys.argv[1])
+    x,c0,c1,delta,delta_err,xoffset = read_datafile(sys.argv[1])
 
     plt.figure(figsize=(8,6))
-    plt.plot(x,c0,'o')
-    plt.plot(x,c1,'o')
+    plt.plot(x,c0,'o',label='Fe')
+    plt.plot(x,c1,'o',label='Ni')
     plt.ylim(0.0,1.1)
+    plt.legend()
 
     plt.figure(figsize=(8,6))
     plt.errorbar(x,delta,yerr=delta_err,fmt='o')
