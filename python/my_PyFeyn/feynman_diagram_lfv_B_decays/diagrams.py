@@ -67,7 +67,11 @@ def fd_lfv_c_quark(outfilename, index=0):
         styles1b = [THICK3,WHITE]
         f4name = r"{\Large $\ell^{-}$}"
 
-        W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^-$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
+        W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^+$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
+
+        # Final state quarks
+        q2 = Fermion(q0out, vtx3).addLabel(r"{\Large $u$}",pos=-0.10,displace=-0.08).addArrow()
+        q3 = Fermion(vtx3, q1out).addLabel(r"{\Large $\bar{d}/\bar{s}$}",pos=1.10,displace=+0.11).addArrow()
 
     elif index==1:
 
@@ -79,11 +83,17 @@ def fd_lfv_c_quark(outfilename, index=0):
         f4name = r"{\Large $\ell^{+}$}"
 
         f3 = Fermion(vtx1, vtx2a).setStyles(styles0a)
-        f3 = Fermion(vtx1, vtx2a).addLabel(r"{\Large $\nu$}",pos=0.5,displace=0.29).setStyles(styles0)
-        f3bar = Fermion(vtx2a, vtx2).addLabel(r"{\Large $\bar{\nu}$}",pos=0.5,displace=0.29).setStyles(styles1)
+        #f3 = Fermion(vtx1, vtx2a).addLabel(r"{\Large $\nu$}",pos=0.5,displace=0.29).setStyles(styles0)
+        #f3bar = Fermion(vtx2a, vtx2).addLabel(r"{\Large $\bar{\nu}$}",pos=0.5,displace=0.29).setStyles(styles1)
+        f3 = Fermion(vtx1, vtx2a).addLabel(r"{\Large $\nu_{\rm M}$}",pos=1.0,displace=0.19).setStyles(styles0)
+        f3bar = Fermion(vtx2a, vtx2).setStyles(styles1)
         f3bar = Fermion(vtx2a, vtx2).setStyles(styles1a)
 
-        W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^+$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
+        W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^-$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
+
+        # Final state quarks
+        q2 = Fermion(q0out, vtx3).addLabel(r"{\Large $\bar{u}$}",pos=-0.10,displace=-0.08).addArrow()
+        q3 = Fermion(vtx3, q1out).addLabel(r"{\Large $d/s$}",pos=1.10,displace=+0.11).addArrow()
 
     elif index==2 or index==3:
 
@@ -95,11 +105,39 @@ def fd_lfv_c_quark(outfilename, index=0):
         styles1b = [THICK3,YELLOW]
 
         f3 = Fermion(vtx1, vtx2a).setStyles(styles0a)
-        f3 = Fermion(vtx1, vtx2a).addLabel(r"{\Large $\nu$}",pos=0.5,displace=0.29).setStyles(styles0)
-        f3bar = Fermion(vtx2a, vtx2).addLabel(r"{\Large $\bar{\nu}$}",pos=0.5,displace=0.29).setStyles(styles1)
+        #f3 = Fermion(vtx1, vtx2a).addLabel(r"{\Large $\nu$}",pos=0.5,displace=0.29).setStyles(styles0)
+        #f3bar = Fermion(vtx2a, vtx2).addLabel(r"{\Large $\bar{\nu}$}",pos=0.5,displace=0.29).setStyles(styles1)
+        f3 = Fermion(vtx1, vtx2a).addLabel(r"{\Large $\nu_{\rm M}$}",pos=1.0,displace=0.19).setStyles(styles0)
+        f3bar = Fermion(vtx2a, vtx2).setStyles(styles1)
         f3bar = Fermion(vtx2a, vtx2).setStyles(styles1a)
 
-        W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^+$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
+        W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^-$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
+
+        # Final state quarks
+        q2 = Fermion(q0out, vtx3).addLabel(r"{\Large $\bar{u}$}",pos=-0.10,displace=-0.08).addArrow()
+        q3 = Fermion(vtx3, q1out).addLabel(r"{\Large $d/s$}",pos=1.10,displace=+0.11).addArrow()
+
+    elif index==4:
+
+        vtx2a = vtx2.midpoint(vtx1)
+        f4name = r"{\Large $\ell^{+}$}"
+
+        styles1 = [THICK6,GREEN]
+        styles1a = [THICK3,WHITE]
+        styles1b = [THICK3,CYAN]
+
+        f3 = Fermion(vtx1, vtx2a).setStyles(styles1)
+        #f3 = Fermion(vtx1, vtx2a).addLabel(r"{\Large $\nu$}",pos=0.5,displace=0.29).setStyles(styles0)
+        #f3bar = Fermion(vtx2a, vtx2).addLabel(r"{\Large $\bar{\nu}$}",pos=0.5,displace=0.29).setStyles(styles1)
+        f3 = Fermion(vtx1, vtx2a).addLabel(r"{\Large $\nu_{\rm sterile}$}",pos=1.0,displace=0.19).setStyles(styles1)
+        f3bar = Fermion(vtx2a, vtx2).setStyles(styles1)
+        f3bar = Fermion(vtx2a, vtx2).setStyles(styles1)
+
+        W1 = Photon(vtx2,vtx3).addLabel(r"{\Large $W^-$}",pos=0.5,displace=+0.46).setAmplitude(0.1)
+
+        # Final state quarks
+        q2 = Fermion(q0out, vtx3).addLabel(r"{\Large $\bar{u}$}",pos=-0.10,displace=-0.08).addArrow()
+        q3 = Fermion(vtx3, q1out).addLabel(r"{\Large $d/s$}",pos=1.10,displace=+0.11).addArrow()
 
 
     f3out = Point(q0out.x()-1.0,q0out.y()+2)
@@ -109,9 +147,6 @@ def fd_lfv_c_quark(outfilename, index=0):
     f3 = Fermion(vtx1, f3out).addLabel(r"{\Large $\ell^{+}$}",pos=1.04,displace=+0.005).addArrow().setStyles(styles0)
     f4 = Fermion(f4out, vtx2).addLabel(f4name,pos=-0.11,displace=+0.005).addArrow().setStyles(styles1b)
 
-    # Final state quarks
-    q2 = Fermion(q0out, vtx3).addLabel(r"{\Large $\bar{u}$}",pos=-0.10,displace=-0.08).addArrow()
-    q3 = Fermion(vtx3, q1out).addLabel(r"{\Large $d/s$}",pos=1.10,displace=+0.11).addArrow()
 
     if index==3:
 
