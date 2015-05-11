@@ -60,7 +60,7 @@ elif element=="Ni":
 ################################################################################
 
 
-x,c0,c1,delta,delta_err,xoffset = read_datafile(infilename)
+x,c0,c1,delta,delta_err,xoffset = read_datafile(infilename,experiment,element,profile)
 
 conc = None
 if element=="Fe":
@@ -291,9 +291,9 @@ def chisq_minuit(data,p,parnames,params_dict):
 # Set up minuit
 ################################################################################
 params_dict = {}
-params_dict['mybeta'] = {'fix':False,'start_val':0.250,'limits':(0.05,2.0),'error':0.01}
+params_dict['mybeta'] = {'fix':False,'start_val':0.30,'limits':(0.05,2.0),'error':0.01}
 #params_dict['offset'] = {'fix':False,'start_val':-0.000074,'limits':(-0.000200,0.000200),'error':0.0000001}
-params_dict['offset'] = {'fix':False,'start_val':-0.000000,'limits':(-0.000200,0.000200),'error':0.0000001}
+params_dict['offset'] = {'fix':False,'start_val':1.0e-6,'limits':(-0.00200,0.00200),'error':0.00000001}
 #params_dict['mybeta'] = {'fix':False,'start_val':0.0,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 #params_dict['intercept'] = {'fix':False,'start_val':0.5,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 

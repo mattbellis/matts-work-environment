@@ -14,7 +14,7 @@ def find_nearest(array,value):
 ################################################################################
 # Read in the data file
 ################################################################################
-def read_datafile(infilename,experiment="FNDA1",element="Fe"):
+def read_datafile(infilename,experiment="FNDA1",element="Fe",profile="1"):
 
     vals = np.loadtxt(infilename)
     vals = vals.transpose()
@@ -47,8 +47,26 @@ def read_datafile(infilename,experiment="FNDA1",element="Fe"):
     dfe /= 1e6 # Convert to meters
     
     delta_fe *= 2
-    delta_fe_err *= 2
+    #delta_fe_err *= 2
 
+    index = None
+    #if 1:
+    if experiment=="FNDA1" and element=="Fe" and profile=="2":
+        index =  np.arange(0,10,1)
+        index0 = np.arange(15,len(dfe),1)
+        index = np.append(index,index0)
+        dfe = dfe[index]
+        conc_fe = conc_fe[index]
+        conc_ni = conc_ni[index]
+        delta_fe = delta_fe[index]
+        delta_fe_err = delta_fe_err[index]
+
+    if experiment=="FNDA1" and element=="Ni" and profile=="2":
+        dfe -= 1.3e-4
+
+    #print index
+    print dfe
+    #exit()
     return dfe,conc_fe/100.,conc_ni/100.,delta_fe,delta_fe_err,xoffset
 
 
