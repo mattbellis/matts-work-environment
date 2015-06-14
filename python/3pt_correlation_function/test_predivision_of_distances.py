@@ -4,7 +4,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import scipy.spatial
 from time import time
 
-ngals = 100000
+ngals = 10000
 total_calcs = float(ngals*ngals - ngals)/2.
 
 # Range of SDSS DR10
