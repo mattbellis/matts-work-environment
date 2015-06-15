@@ -4,28 +4,10 @@ from mpl_toolkits.mplot3d import Axes3D
 import scipy.spatial
 from time import time
 
-ngals = 10000
-total_calcs = float(ngals*ngals - ngals)/2.
-
-# Range of SDSS DR10
-x = (-2000.,140.)
-y = (-1720.,1780.)
-z = (755.,2500.)
-
-print "Generating the galaxies...."
-start = time()
-np.random.seed(1)
-
-gal0 = np.random.random((3,ngals))
-gal0[0] = (x[1]-x[0])*gal0[0] + x[0]
-gal0[1] = (y[1]-y[0])*gal0[1] + y[0]
-gal0[2] = (z[1]-z[0])*gal0[2] + z[0]
-
-gal0 = gal0.transpose()
-print "Generated and transposed the galaxies...."
-print "time: %f" % (time()-start)
-#print gal0
-
+################################################################################
+# Use this to define the ranges and boundaries for the volumetric 
+# ``chunks" of galaxies.
+################################################################################
 def define_ranges(vec_ranges,maxsep=150):
 
     ndim = len(vec_ranges)
@@ -52,34 +34,83 @@ def define_ranges(vec_ranges,maxsep=150):
 
     return vec_nbins,vec_binwidths
 
-print "\n"
-'''
-print "Doing it normally............"
+################################################################################
+# Start the tests
+################################################################################
+ngals = 100000
+maxsep = 300
+total_calcs = float(ngals*ngals - ngals)/2.
+
+print "Running with %d galaxies\n" % (ngals)
+
+# Range of SDSS DR10
+x = (-2000.,140.)
+y = (-1720.,1780.)
+z = (755.,2500.)
+
+################################################################################
+# Generate some fake galaxies
+################################################################################
+print "Generating the galaxies...."
 start = time()
+np.random.seed(1)
+
+gal0 = np.random.random((3,ngals))
+gal0[0] = (x[1]-x[0])*gal0[0] + x[0]
+gal0[1] = (y[1]-y[0])*gal0[1] + y[0]
+gal0[2] = (z[1]-z[0])*gal0[2] + z[0]
+
+gal0 = gal0.transpose()
+print "Generated and transposed the galaxies...."
+print "time: %f" % (time()-start)
+#print gal0
+
+print "\n"
+
+################################################################################
+# Do the calculations (DD for example) the normal way.
+################################################################################
+print "-------------------------------------\n"
+'''
+print "Doing the full calculations.\n"
+print "Calculating the distances."
+start = time()
+starta = time()
 # Do it the normal way.
 #dists = scipy.spatial.distance.cdist(gal0,gal0)
 dists = scipy.spatial.distance.pdist(gal0)
-#print "Dists:"
+print "Calculated the distances.\ttime: %f" % (time()-starta)
+
+print "Cleaning up the distances...."
+starta = time()
 dists = dists.flatten()
-print "# dists"
+index = dists<maxsep
+index *= dists!=0
+cleaned_up_distances = np.unique(dists[index])
+print "Cleaned up distances.\t\ttime: %f\n" % (time()-starta)
+
 total_calcs = len(dists)
-print total_calcs
-print "# dists<150"
-index = dists<150
-index*= dists!=0
-print len(dists[index])
-print np.sort(dists[index])[-20:-1]
-print "Did it normally!!!!!!"
-print "time: %f" % (time()-start)
+histogrammed_calcs = len(cleaned_up_distances)
+print "Total \t\t\t\ttime: %f\n" % (time()-start)
+print "Total/histogrammed calcs: %d %d %f\n" % (total_calcs,histogrammed_calcs,histogrammed_calcs/float(total_calcs))
 '''
 
+#exit()
 
+
+################################################################################
 # Do it broken up into smaller chunks
-print "\n"
-print "Doing it the chunked way.........."
+################################################################################
+print "-------------------------------------\n"
+print "Doing it the chunked way.\n"
+print "Indexing the galaxies......"
 start = time()
+starta = time()
+
+# Get the bins and bin widths
 vec_ranges = [x,y,z]
-vec_nbins,vec_binwidths = define_ranges(vec_ranges)
+vec_nbins,vec_binwidths = define_ranges(vec_ranges,maxsep=maxsep)
+# Total number of voxels.
 totbins = 1
 for v in vec_nbins:
     totbins *= v
@@ -89,6 +120,7 @@ print "totbins:"
 print vec_nbins,totbins
 print "--------"
 
+# Calculate the voxel location (3 numbers) for each galaxy.
 allbins = []
 for gal in gal0:
     bins = []
@@ -102,11 +134,13 @@ allbins = np.array(allbins)
 #print allbins
 allbins = allbins.transpose()
 #print allbins
+print "Indexed the galaxies.\t\ttime: %f\n" % (time()-starta)
 
 #print gal0
 #print gal0[allbins[0]==0]
 #print len(gal0[allbins[0]==0])
 
+print "Divide up the galaxies and copy over into arrays for easier manipulations....."
 chunked_dists = []
 #chunked_dists = np.array([])
 totgals = 0
@@ -114,7 +148,7 @@ chunked_galaxies = []
 
 # First divide up the galaxies
 print "Dividing up the galaxies...."
-print "time: %f" % (time()-start)
+starta = time()
 for i in range(vec_nbins[0]):
     chunked_galaxies.append([])
     for j in range(vec_nbins[1]):
@@ -135,12 +169,11 @@ for i in range(vec_nbins[0]):
             chunked_galaxies[i][j].append(galaxies0)
 
             totgals += len(galaxies0)
-print "Divided galaxies...."
-print "time: %f" % (time()-start)
+print "Divided the galaxies.\t\ttime: %f\n" % (time()-starta)
 
 # Then do the calculations
-print "Starting calculations........"
-print "time: %f" % (time()-start)
+print "Calculating the distances......."
+starta = time()
 for i in range(vec_nbins[0]):
     for j in range(vec_nbins[1]):
         for k in range(vec_nbins[2]):
@@ -183,7 +216,7 @@ for i in range(vec_nbins[0]):
                 #print len(dists)
                 #print "----"
                 #print len(dists)
-                index = dists<150
+                index = dists<maxsep
                 index*= dists!=0
                 dists = dists[index]
                 #print len(dists)
@@ -193,33 +226,35 @@ for i in range(vec_nbins[0]):
                 #chunked_dists = np.append(chunked_dists,dists)
             #'''
 
-    print len(chunked_dists)
+    #print len(chunked_dists)
 
             #print totgals
 
-#print len(dists[dists<150])
-print "time: %f" % (time()-start)
+print "Calculated the distances.\ttime: %f\n" % (time()-starta)
+
+print "Cleaning up the distances...."
+starta = time()
 chunked_dists = np.array(chunked_dists)
-print "# chunked dists:"
-print len(chunked_dists)
-print len(chunked_dists)/float(total_calcs)
-print "# chunked dists<150:"
-index = chunked_dists<150
-index*= chunked_dists!=0
-print len(chunked_dists[index])
-print len(np.unique(chunked_dists[index]))
-print np.unique(chunked_dists[index])[-20:-1]
-print "Did it the chunked way!!!!!"
-print "time: %f" % (time()-start)
+#chunked_dists = chunked_dists.flatten()
+index = chunked_dists<maxsep
+index *= chunked_dists!=0
+cleaned_up_distances = np.unique(chunked_dists[index])
+print "Cleaned up distances.\t\ttime: %f\n" % (time()-starta)
 
+total_calcs = len(chunked_dists)
+histogrammed_calcs = len(cleaned_up_distances)
+print "Total \t\t\t\ttime: %f\n" % (time()-start)
+print "Total/histogrammed calcs: %d %d %f\n" % (total_calcs,histogrammed_calcs,histogrammed_calcs/float(total_calcs))
 
+#exit()
 
 #vec_nbins,vec_binwidths = define_ranges(vec_ranges)
 
 
+#gal0 = gal0.transpose()
 #fig = plt.figure()
 #ax = fig.add_subplot(111, projection='3d')
-#ax.scatter(gal0[0], gal0[1], gal0[2], s=0.01)
+#ax.scatter(gal0[0], gal0[1], gal0[2], s=1.0)
 
-plt.hist(chunked_dists,bins=100)
+#plt.hist(chunked_dists,bins=100)
 plt.show()
