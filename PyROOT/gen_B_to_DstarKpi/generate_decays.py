@@ -72,7 +72,7 @@ n_Dstarcdecay = len(masses_Dstarcdecay)
 masses_D0decay = array('d', [ m_kc, m_pic ])
 n_D0decay = len(masses_D0decay)
 
-resolution = 0.100 
+resolution = 0.00000100 
 #
 # Last argument determines batch mode or not
 #
@@ -153,7 +153,8 @@ for i in range(0, 1000):
 print "maxweight: %f" % (maxweight)
      
 # Generate the events!
-outfilename = "ToyMC_LHCb_BtoDstarKpi_smeared.dat"
+#outfilename = "ToyMC_LHCb_BtoDstarKpi_smeared.dat"
+outfilename = "ToyMC_LHCb_BtoDstarKpi.dat"
 outfile = open(outfilename,'w')
 
 nevents = 0
