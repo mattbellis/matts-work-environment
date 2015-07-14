@@ -14,7 +14,7 @@ from ROOT import TGenPhaseSpace,TLorentzVector,TRandom3,gROOT,gStyle
 
 def energy(p3,mass):
     
-    return np.sqrt(mass*mass + pmag([p3]))
+    return np.sqrt(mass*mass + pmag([p3])**2)
 
 def pmag(p3s):
     px,py,pz = 0,0,0
@@ -72,6 +72,7 @@ n_Dstarcdecay = len(masses_Dstarcdecay)
 masses_D0decay = array('d', [ m_kc, m_pic ])
 n_D0decay = len(masses_D0decay)
 
+resolution = 0.100 
 #
 # Last argument determines batch mode or not
 #
@@ -87,6 +88,8 @@ event_Dstar = TGenPhaseSpace()
 event_D = TGenPhaseSpace()
 
 
+################################################################################
+################################################################################
 def Bdecay():
 
     kaons = []
@@ -120,22 +123,24 @@ def Bdecay():
         if event_Dstar.SetDecay(p_Dstar, n_Dstarcdecay, masses_Dstarcdecay, ""):
             weight *= event_Dstar.Generate()
 
-            p_D0Dstar = event.GetDecay(0) # This returns a TLorentzVector
-            p_pic = event.GetDecay(1) # This returns a TLorentzVector
+            p_D0Dstar = event_Dstar.GetDecay(0) # This returns a TLorentzVector
+            p_pic = event_Dstar.GetDecay(1) # This returns a TLorentzVector
 
             pions.append([p_pic.E(),p_pic.Px(),p_pic.Py(),p_pic.Pz(),+1,-999,-999,-999,-999,-999,-999,-999,-999])
 
             # Decay the D
             if event_D.SetDecay(p_D0Dstar, n_D0decay, masses_D0decay, ""):
-                weight *= event_Dstar.Generate()
+                weight *= event_D.Generate()
 
-                p_Kc = event.GetDecay(0) # This returns a TLorentzVector
-                p_pic = event.GetDecay(1) # This returns a TLorentzVector
+                p_Kc = event_D.GetDecay(0) # This returns a TLorentzVector
+                p_pic = event_D.GetDecay(1) # This returns a TLorentzVector
 
                 kaons.append([p_Kc.E(),p_Kc.Px(),p_Kc.Py(),p_Kc.Pz(),-1,-999,-999,-999,-999,-999,-999,-999,-999])
                 pions.append([p_pic.E(),p_pic.Px(),p_pic.Py(),p_pic.Pz(),+1,-999,-999,-999,-999,-999,-999,-999,-999])
 
     return weight,kaons,pions
+################################################################################
+################################################################################
 
 # Calculate the max weight for this topology
 maxweight = 0.0
@@ -148,7 +153,7 @@ for i in range(0, 1000):
 print "maxweight: %f" % (maxweight)
      
 # Generate the events!
-outfilename = "ToyMC_LHCb_BtoDstarKpi.dat"
+outfilename = "ToyMC_LHCb_BtoDstarKpi_smeared.dat"
 outfile = open(outfilename,'w')
 
 nevents = 0
@@ -184,6 +189,13 @@ for i in range(0, max_events):
 
         output += "%d\n" % (len(pions))
         for p in pions:
+            "---"
+            print p[0],p[1],p[2],p[3]
+            p[1] += np.random.normal(loc=0.0,scale=resolution)
+            p[2] += np.random.normal(loc=0.0,scale=resolution)
+            p[3] += np.random.normal(loc=0.0,scale=resolution)
+            p[0] = energy([p[1],p[2],p[3]],m_pic)
+            print p[0],p[1],p[2],p[3]
             output += "%f %f %f %f %d %f %f %f %f %d %d %f %f\n" % (p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11],p[12])
 
         output += "%d\n" % (len(kaons))
