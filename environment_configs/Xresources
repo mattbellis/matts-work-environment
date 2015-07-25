@@ -1,14 +1,25 @@
 ! scrollbar style - rxvt (default), plain (most compact), next, or xterm
 URxvt.scrollstyle: rxvt
 
+!Xft.dpi: 96
+!Xft.antialias: true
+Xft.rgba: none
+!Xft.hinting: true
+!Xft.autohint: true
+!Xft.hintstyle: hintslight
+Xft.hintstyle: hintsfull
+
+URxvt.saveLines:       2000
+
 URxvt.font: 10x20
 !URxvt.font: -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso8859-1
 !URxvt.font: xft:AnonymousPro:size=10
 !URxvt.font: xft:monaco:bold:size=10
+!URxvt.font: xft:Monoid:bold
+!URxvt.letterSpace: -5
 
-
-URxvt.saveLines:       2000
-URxvt.geometry:        100x28
+!URxvt.geometry:        100x28
+URxvt.geometry:        80x20
 
 
 ! Background color
