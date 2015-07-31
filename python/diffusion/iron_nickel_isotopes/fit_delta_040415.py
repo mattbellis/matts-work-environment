@@ -53,24 +53,31 @@ if element=="Fe":
     heavy_isotope = 56.
 # Ni
 elif element=="Ni":
-    cmax0 = 0.01 # fraction
-    cmin0 = 0.99 # fraction
+    cmax0 = 0.99 # fraction
+    cmin0 = 0.01 # fraction
     light_isotope = 60.
     heavy_isotope = 62.
 ################################################################################
 
 
 x,c0,c1,delta,delta_err,xoffset = read_datafile(infilename,experiment,element,profile)
+#print x
+#print c0
+#exit()
 
 conc = None
 if element=="Fe":
     conc = c0
+    '''
     if experiment=="FNDA1" and profile=="2":
-        x = x[::-1]
+        #x = x[::-1]
+        x = -x
+    '''
 elif element=="Ni":
     conc = c1
     #x *= -1.0
-    x = x[::-1]
+    # Moving this to the read in.
+    #x = x[::-1]
 
 ################################################################################
 # mybeta
@@ -83,17 +90,25 @@ elif element=="Ni":
 #lo = -1155.0e-6
 #hi = 1530.0e-6
 #xmp += 0.000060
-lo = x[0]
-hi = x[-1]
+lo = 2*x[0]
+hi = 2*x[-1]
 interface_x = 0
 npts = 100
 dx   = (hi-lo)/float(npts)
 
 xpos = np.linspace(lo,hi,npts) 
-if element=="Ni":
+print lo,hi
+#exit()
+#'''
+#if element=="Ni":
+if 0:
     xpos = xpos[::-1]
+#'''
+#'''
 elif element=="Fe" and experiment=="FNDA1" and profile=="2":
-    xpos = xpos[::-1]
+    #xpos = xpos[::-1]
+    xpos = -xpos
+#'''
 
 print lo,hi
 print xpos[0],xpos[-1]
@@ -109,7 +124,8 @@ xvals = np.linspace(lo,hi,npts)
 ################################################################################
 # Move in time
 ################################################################################
-dt   = 60.0
+#dt   = 60.0
+dt   = 300.0
 #dt   = 1.0
 #dt   = 60.0
 t0   = 0
@@ -127,7 +143,8 @@ print "dt: ",dt
 
 t = t0
 
-tag = "default"
+#tag = "default"
+tag = "dt300"
 
 #imgcount = 0
 #it = 0
@@ -293,7 +310,7 @@ def chisq_minuit(data,p,parnames,params_dict):
 params_dict = {}
 params_dict['mybeta'] = {'fix':False,'start_val':0.30,'limits':(0.05,2.0),'error':0.01}
 #params_dict['offset'] = {'fix':False,'start_val':-0.000074,'limits':(-0.000200,0.000200),'error':0.0000001}
-params_dict['offset'] = {'fix':False,'start_val':1.0e-6,'limits':(-0.00200,0.00200),'error':0.00000001}
+params_dict['offset'] = {'fix':False,'start_val':1.0e-8,'limits':(-0.00150,0.00150),'error':0.0000000001}
 #params_dict['mybeta'] = {'fix':False,'start_val':0.0,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 #params_dict['intercept'] = {'fix':False,'start_val':0.5,'limits':(-1.0,1.0),'error':0.01} # FOR CONCENTRATION DEPENDENCE
 
@@ -333,6 +350,10 @@ print errors
 
 mybeta = values['mybeta']
 offset = values['offset']
+mybetaerr = errors['mybeta']
+offseterr = errors['offset']
+
+#offset = 0
 
 final_values = []
 final_values.append(values['mybeta'])
@@ -360,59 +381,55 @@ c56fake0,c54fake0,sim_deltasfake0 = fitfunc(data,fake_values,['mybeta'],params_d
 ################################################################################
 # Plot the result
 ################################################################################
+# Convert meters back to microns
+x *= 1e6
+xpos *= 1e6
+
+# Plot the diffusion profiles.
 fig0 = plt.figure(figsize=(12,6))
 fig0.add_subplot(1,1,1)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
 
 label = r"$^{%d}$%s simulation" % (heavy_isotope,element)
-plt.plot(xpos,c56,'b-',linewidth=3,label=label)
+plt.plot(xpos-offset,c56,'b-',linewidth=3,label=label)
 plt.plot([interface_x,interface_x],[0,110.0]) # Draw line
 plt.ylim(0,1.10)
 plt.plot(x,c0,'ro',label='Fe concentration data')
 plt.plot(x,c1,'bo',label='Ni concentration data')
+print x
+print c0
+#exit()
 plt.ylabel('Concentration',fontsize=24)
-plt.xlabel('Meters',fontsize=24)
+plt.xlabel('Microns',fontsize=24)
+'''
 if experiment=="FNDA2" and element=="Ni":
     plt.legend(loc='upper right') # FNDA 2, NI
 elif experiment=="FNDA2" and element=="Fe":
     plt.legend(loc='center left') # FNDA 2, Fe
 else:
-    plt.legend(loc='center right')
+    plt.legend(loc='lower left')
+'''
+plt.legend(loc='lower left')
 
-'''
-fig0.add_subplot(1,2,2)
-label = r"$^{%d}$%s simulation" % (light_isotope,element)
-#plt.plot(xpos,c54,'b-',label='Fe54 simulation ')
-plt.plot(xpos,c54,'b-',linewidth=3,label=label)
-plt.plot([interface_x,interface_x],[0,110.0])
-plt.ylim(0,1.10)
-plt.plot(x,conc,'ro',label='microprobe data')
-plt.ylabel('Concentration')
-plt.xlabel('Meters')
-if experiment=="FNDA2" and element=="Ni":
-    plt.legend(loc='upper right') # FNDA 2, NI
-elif experiment=="FNDA2" and element=="Fe":
-    plt.legend(loc='center left') # FNDA 2, Fe
-else:
-    plt.legend(loc='center right')
-'''
 name = "%s_%s_%s_%s_diffusion_profile.png" % (element,experiment,profile,tag)
 plt.savefig(name)
 
+################################################################################
 # Plot the deltas
+################################################################################
 plt.figure(figsize=(12,6))
 #plt.plot(xpos,(c56/c54 - 1.0)*1000.0,'o')
 plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 #plotlabel = r"best fit $\delta$, $E$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
-plt.plot(xpos,sim_deltas,'-',linewidth=3,label=plotlabel)
-plt.errorbar(x+offset,delta,yerr=delta_err,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
+plt.plot(xpos-offset,sim_deltas,'-',linewidth=3,label=plotlabel)
+plt.errorbar(x,delta,yerr=delta_err,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
 #'''
 plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']+(2.0*errors['mybeta']))
 #plotlabel = r"simulated $\delta$, $E$=%3.2f" % (values['mybeta']+(2.0*errors['mybeta']))
-plt.plot(xpos,sim_deltasfake,'-',label=plotlabel)
+plt.plot(xpos-offset,sim_deltasfake,'-',label=plotlabel)
 #plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']-(2.0*errors['mybeta']))
 plotlabel = r"simulated $\delta$, $E$=%3.2f" % (values['mybeta']-(2.0*errors['mybeta']))
-plt.plot(xpos,sim_deltasfake0,'-',label=plotlabel)
+plt.plot(xpos-offset,sim_deltasfake0,'-',label=plotlabel)
 #plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.3)
 #plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
 #'''
@@ -422,18 +439,23 @@ if element=="Ni":
     plt.ylim(-20,20) # FNDA 1, Ni
 '''
 plt.ylabel(r'$\delta$',fontsize=36)
-plt.xlabel('Meters',fontsize=24)
+plt.xlabel('Microns',fontsize=24)
+'''
 if experiment=="FNDA2" and element=="Ni":
     plt.legend(loc='upper left') # FNDA 2, NI
 elif experiment=="FNDA1" and element=="Fe":
     plt.legend(loc='upper right') # FNDA 1, Fe
 else:
     plt.legend(loc='upper left')
+'''
+plt.legend(loc='lower left')
 name = "%s_%s_%s_%s_delta.png" % (element,experiment,profile,tag)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
 plt.savefig(name)
 
+################################################################################
 # Plot the deltas vs. concentration.
+################################################################################
 plt.figure(figsize=(12,6))
 plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 #plotlabel = r"best fit $\delta$, $E$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
@@ -460,9 +482,10 @@ f = open(name,'w')
 csv.writer(f).writerows(it.izip_longest(x,conc,x,conc,xpos,c56,c54,x,delta,delta_err,xpos,sim_deltas,sim_deltasfake,sim_deltasfake0))
 
 
-print experiment,element
-print "mybeta: %f" % (mybeta)
-print "offset: %f" % (offset)
+exelpr = "%s %s profile %s:" % (experiment,element,profile)
+print "%s beta = %f +/- %f    offset = %f +/- %f microns" % (exelpr,mybeta,mybetaerr,offset*1e6,offseterr*1e6)
+#print "mybeta: %f" % (mybeta)
+#print "offset: %f" % (offset)
 print "FVAL: %f" % (m.fval)
-plt.show()
+#plt.show()
 
