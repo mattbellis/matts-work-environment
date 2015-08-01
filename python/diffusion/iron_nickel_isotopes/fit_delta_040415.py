@@ -353,6 +353,7 @@ offset = values['offset']
 mybetaerr = errors['mybeta']
 offseterr = errors['offset']
 
+
 #offset = 0
 
 final_values = []
@@ -383,6 +384,7 @@ c56fake0,c54fake0,sim_deltasfake0 = fitfunc(data,fake_values,['mybeta'],params_d
 ################################################################################
 # Convert meters back to microns
 x *= 1e6
+offset *= 1e6
 xpos *= 1e6
 
 # Plot the diffusion profiles.
@@ -391,7 +393,8 @@ fig0.add_subplot(1,1,1)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
 
 label = r"$^{%d}$%s simulation" % (heavy_isotope,element)
-plt.plot(xpos-offset,c56,'b-',linewidth=3,label=label)
+# Don't put the offset in when plotting the diffusion profiles.
+plt.plot(xpos,c56,'b-',linewidth=3,label=label)
 plt.plot([interface_x,interface_x],[0,110.0]) # Draw line
 plt.ylim(0,1.10)
 plt.plot(x,c0,'ro',label='Fe concentration data')
