@@ -147,7 +147,7 @@ for i in range(0, 1000):
 print "maxweight: %f" % (maxweight)
      
 # Generate the events!
-outfilename = "ToyMC_LHCb_BtoJpsiKp.dat"
+outfilename = "ToyMC_LHCb_BtoJpsiKp_.dat"
 outfile = open(outfilename,'w')
 
 nevents = 0
@@ -159,32 +159,6 @@ for i in range(0, max_events):
     weight,kaons,pions,muons = Bdecay()
     if weight<maxweight and weight>0:
         output = "Event: %d\n" % (nevents)
-
-        '''
-        # Generate some random kaons and pions 
-        nextra = np.random.randint(0,10)
-        for j in range(nextra):
-            x = 30.*rnd.Rndm() - 15
-            y = 30.*rnd.Rndm() - 15
-            z = 30.*rnd.Rndm() - 15
-            e = energy([x,y,z],m_kc)
-            q = 2*np.random.randint(0,2)-1
-            kaons.append([e,x,y,z,q,-999,-999,-999,-999,-999,-999,-999,-999])
-        
-        nextra = np.random.randint(0,10)
-        for j in range(nextra):
-            x = 30.*rnd.Rndm() - 15
-            y = 30.*rnd.Rndm() - 15
-            z = 30.*rnd.Rndm() - 15
-            e = energy([x,y,z],m_pic)
-            q = 2*np.random.randint(0,2)-1
-            pions.append([e,x,y,z,q,-999,-999,-999,-999,-999,-999,-999,-999])
-
-        #print len(pions)
-
-        np.random.shuffle(pions)
-        np.random.shuffle(kaons)
-        '''
 
         output += "%d\n" % (len(pions))
         for p in pions:
