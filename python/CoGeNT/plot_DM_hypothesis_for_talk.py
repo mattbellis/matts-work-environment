@@ -3,6 +3,11 @@ import numpy as np
 import scipy.special as special
 import scipy.constants as constants
 import scipy.integrate as integrate
+from datetime import datetime,timedelta,date
+import matplotlib.dates as mdates
+
+import seaborn as sn
+
 
 import chris_kelso_code as dmm
 #import chris_kelso_code_cython as dmm
@@ -33,13 +38,13 @@ def main():
     parser.add_argument('--target', dest='target', type=str,\
             default='Ge', help='Which target atom (Ge (default),Xe,Na)')
     parser.add_argument('--mDM', dest='mDM', type=float,\
-            default=7.0, help='Mass of DM WIMP (default=7.0 GeV)')
+            default=15.0, help='Mass of DM WIMP (default=7.0 GeV)')
     parser.add_argument('--xsec', dest='xsec', type=float,\
             default=1e-40, help='WIMP-proton cross-section (default=1e-40)')
     parser.add_argument('--elo', dest='elo', type=float,\
-            default=0.0, help='Low energy range for your detector (default=0)')
+            default=0.5, help='Low energy range for your detector (default=0)')
     parser.add_argument('--ehi', dest='ehi', type=float,\
-            default=4.0, help='High energy range for your detector (default=4)')
+            default=3.2, help='High energy range for your detector (default=4)')
     parser.add_argument('--cogent', dest='cogent',\
             default=False, action='store_true', help='Use the CoGeNT detector for size and efficiency')
 
@@ -114,6 +119,7 @@ def main():
     ############################################################################
     # Plot the spectra
     ############################################################################
+    dumx = []
     for day in [0,60,120,180,240,300]:
         # Recoil energy range.
         Er = np.linspace(0.1,10.0,100)
@@ -153,14 +159,19 @@ def main():
         #smeared,smeared_x = cogent_convolve(Eee,dRdEr)
         #print smeared-dRdEr
 
-        leg_title = "day=%d" % (day)
+        start_date = datetime(2010,1,1,0,0,0,0)
+        d = start_date + timedelta(days=day)
+        leg_title = d.strftime('%b %d')
+        dumx.append(d)
+        #leg_title = "day=%d" % (day)
         ax1.plot(Eee,dRdEr,label=leg_title)
         #ax1.plot(Eee,smeared,'--',label='smeared')
 
     #ax0.set_xlabel('Er')
     #ax0.legend()
 
-    ax1.set_xlabel('Eee')
+    ax1.set_xlabel(r'$E_{\rm ee}$ (keV)',fontsize=18)
+    ax1.set_ylabel('# interactions (arbitrary units)',fontsize=14)
     ax1.set_xlim(elo,ehi)
     ax1.legend()
 
@@ -177,18 +188,42 @@ def main():
     func = lambda x: pu.plot_wimp_day(x,target_atom,mDM,sigma_n,e_range=[elo,ehi],model=args.model,vSag=vSag,v0Sag=v0Sag,vDeb1=vDeb1)
     plotting_utilities.plot_pdf_from_lambda(func,scale=num_wimps,fmt='k-',linewidth=3,axes=ax2,subranges=[[1,365]])
 
-    ax2.set_ylim(0.0,num_wimps/100.0)
+    #ax2.set_ylim(0.0,num_wimps/100.0)
+    ax2.set_ylim(0.0,5)
 
     #leg_title = "# WIMPs: %4.1f" % (num_wimps)
     #print leg_title
     #ax2.legend([leg_title])
 
-    ax2.set_xlabel('Day of year')
+    ax2.set_ylabel('# interactions (arbitrary units)',fontsize=14)
+    #ax2.set_xlabel('Day of year')
+    #print dumx
+    #dumy = range(len(dumx)) # many thanks to Kyss Tao for setting me straight here
+    #ax2_2 = ax2.twiny()
+    #ax2_2.plot(dumx,dumy,alpha=0)
+    #ax2_2.xaxis.set_major_formatter(mdates.DateFormatter('%m/%d/%Y'))
+    #ax2_2.xaxis.set_major_locator(mdates.MonthLocator())
+    start_date = date(2010,1,1)
+    print start_date
+    print date.today()
+    import matplotlib.dates as mdates
+    import matplotlib.ticker as ticker
+    #def todate(x, pos, today=date.today()):
+    def todate(x, pos, today=start_date):
+        return today+timedelta(days=int(x))
+    fmt = ticker.FuncFormatter(todate)
+    ax2.xaxis.set_major_formatter(fmt)
+    fig0.autofmt_xdate(rotation=45)  
 
-    dRdEr = dmm.dRdErSHM(7.0,100.0,target_atom,mDM,sigma_n)
+
+
+    dRdEr = dmm.dRdErSHM(mDM,100.0,target_atom,mDM,sigma_n)
 
     print "dRdEr: ",dRdEr
 
+    plt.tight_layout()
+    name = "%s_eandt.png" % (args.model)
+    plt.savefig(name)
     plt.show()
 
     exit()
