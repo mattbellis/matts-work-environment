@@ -223,6 +223,7 @@ def main():
 
     plt.tight_layout()
     name = "%s_eandt.png" % (args.model)
+    plt.ylim(2.2,3.2)
     plt.savefig(name)
     plt.show()
 

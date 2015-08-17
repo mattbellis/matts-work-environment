@@ -342,6 +342,7 @@ m.migrad()
 
 values = m.values
 errors = m.errors
+#errors = m.get_merrors()
 
 print "Values:"
 print values
