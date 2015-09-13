@@ -14,27 +14,27 @@ import datetime as dt
 def letter_grade(n):
 
     ret = 'F'
-    if n>=92.0 and n<200:
+    if n>=93.0 and n<200:
         ret = 'A'
-    elif n>=90.0 and n<92:
+    elif n>=90.0 and n<93:
         ret = 'A-'
     elif n>=87.0 and n<90:
         ret = 'B+'
-    elif n>=82.0 and n<87:
+    elif n>=83.0 and n<87:
         ret = 'B'
-    elif n>=80.0 and n<82:
+    elif n>=80.0 and n<83:
         ret = 'B-'
     elif n>=77.0 and n<80:
         ret = 'C+'
-    elif n>=72.0 and n<77:
+    elif n>=73.0 and n<77:
         ret = 'C'
-    elif n>=70.0 and n<72:
+    elif n>=70.0 and n<73:
         ret = 'C-'
     elif n>=67.0 and n<90:
         ret = 'D+'
-    elif n>=62.0 and n<67:
+    elif n>=63.0 and n<67:
         ret = 'D'
-    elif n>=60.0 and n<62:
+    elif n>=60.0 and n<63:
         ret = 'D-'
     else:
         ret = 'F'
@@ -206,6 +206,7 @@ class Student:
         ret = "-----------------------------------\n"
         ret += "%s %s\n" % (self.student_name[1], self.student_name[0])
 
+        '''
         # Quizzes
         #ret += " -----\nQuizzes\n -----\n"
         ret += " -----\nReading, pre-lecture quizzes, in-class activities\n -----\n"
@@ -224,12 +225,14 @@ class Student:
         averages[0] = avg
         #ret += "\tQuiz avg: %4.2f\n" % (avg)
         ret += "\n\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
+        '''
 
         # HW
-        drop_lowest_score = True
-        #drop_lowest_score = False
+        #drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
-        ret += " -----\nHomeworks\n -----\n"
+        #ret += " -----\nHomeworks\n -----\n"
+        ret += " -----\nHomeworks and quizzes\n -----\n"
         for g in self.grades.hw:
             #ret +=  "%-7s   %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
             ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
@@ -251,7 +254,8 @@ class Student:
         #drop_lowest_score = True
         picked_a_lowest = False
         #ret += " -----\nExams\n -----\n"
-        ret += " -----\nWeekly quizzes\n -----\n"
+        #ret += " -----\nWeekly quizzes\n -----\n"
+        ret += " -----\nMid-term project\n -----\n"
         #print len(self.grades.exams)
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
@@ -270,9 +274,12 @@ class Student:
                     dropped_scores += 1
             ret += "\n"
         avg = calc_average_of_grades(self.grades.exams, drop_lowest_score)
+        if avg != avg:
+            avg = -1.0
         averages[2] = avg
         #ret += "\tExams avg: %4.2f\n" % (avg)
-        ret += "\n\tWeekly quizzes avg: %4.2f\n" % (avg)  
+        #ret += "\n\tWeekly quizzes avg: %4.2f\n" % (avg)  
+        ret += "\n\tMid-term project avg: %4.2f\n" % (avg)  
 
         '''
         # Exam 2 
@@ -288,7 +295,8 @@ class Student:
 
         # Final Exam 
         drop_lowest_score = False
-        ret += " -----\nFinal exam\n -----\n"
+        #ret += " -----\nFinal exam\n -----\n"
+        ret += " -----\nFinal project\n -----\n"
         for g in self.grades.final_exam:
             ret +=  "%-7s (%10s) %s\n" % (g.grade_type,g.date,g.summary_output())
             #1
@@ -300,7 +308,10 @@ class Student:
             averages[3] = averages[2] # Set final exam grade equal to exam grade so far.
             avg = averages[3]
 
-        ret += "\tFinal exam  : %4.2f\n" % (avg)
+        if avg != avg:
+            avg = -1.0
+        #ret += "\tFinal exam  : %4.2f\n" % (avg)
+        ret += "\tFinal project  : %4.2f\n" % (avg)
 
         tot = 0.0
         tot_wt = 0.0
