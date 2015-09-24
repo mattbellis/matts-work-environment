@@ -1,5 +1,6 @@
 eval `dircolors $HOME/.dir_colors`
 
+
 alias ls 	'ls --color=auto'
 #alias gmake	'make'
 #eval `dircolors $HOME/.dir_colors`
@@ -55,3 +56,5 @@ setenv S2PLOT_PRCDRIVER s2prcwriter
 setenv S2PATH /home/bellis/s2plot
 setenv S2ARCH linux-gnu-x86_64
 setenv S2PLOT_LATEXBIN /usr/bin/
+
+setenv PRINTER RB131
