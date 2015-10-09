@@ -35,9 +35,14 @@ z = zlims[0] + (zlims[1]-zlims[0])*np.random.random(ngals)
 plt.figure(figsize=(12,6))
 plt.subplot(1,2,1)
 plt.plot(x,y,'bo',markersize=0.1)
+plt.xlabel('x (Mpc)',fontsize=18)
+plt.ylabel('y (Mpc)',fontsize=18)
 
 plt.subplot(1,2,2)
 plt.hist(z,bins=100)
+plt.xlabel('z (Mpc)',fontsize=18)
+
+plt.tight_layout()
 
 filename = "%s_data.dat" % (tag)
 np.savetxt(filename,np.transpose([x,y,z]),fmt=['%-10.4f','%-10.4f','%-10.4f'])
@@ -52,13 +57,18 @@ z = zlims[0] + (zlims[1]-zlims[0])*np.random.random(ngals)
 plt.figure(figsize=(12,6))
 plt.subplot(1,2,1)
 plt.plot(x,y,'bo',markersize=0.1)
+plt.xlabel('x (Mpc)',fontsize=18)
+plt.ylabel('y (Mpc)',fontsize=18)
 
 plt.subplot(1,2,2)
 plt.hist(z,bins=100)
+plt.xlabel('z (Mpc)',fontsize=18)
+
+plt.tight_layout()
 
 filename = "%s_random.dat" % (tag)
 np.savetxt(filename,np.transpose([x,y,z]),fmt=['%-10.4f','%-10.4f','%-10.4f'])
 
-#plt.show()
+plt.show()
 
 
