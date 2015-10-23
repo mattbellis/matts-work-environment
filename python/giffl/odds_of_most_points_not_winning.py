@@ -1,7 +1,7 @@
 import numpy as np
 import numpy.random as rnd
 
-ntrials = 10000
+ntrials = 100000
 nteams = 12
 
 mean = 100
