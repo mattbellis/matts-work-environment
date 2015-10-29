@@ -52,6 +52,8 @@ if (shExpMatch(url, "*oraweb*"))
     return proxy_yes;
 if (shExpMatch(url, "*www-group*"))
     return proxy_yes;
+if (shExpMatch(url, "*r25-web-08r2.siena.edu*"))
+    return proxy_yes;
 
 return proxy_no;
 }

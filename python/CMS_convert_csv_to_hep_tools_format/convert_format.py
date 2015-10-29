@@ -6,7 +6,8 @@ infile = open(sys.argv[1])
 outfile = open(sys.argv[2],'w')
 
 #E1,PX1,PY1,PZ1,Q1,E2,PX2,PY2,PZ2,Q2 = np.loadtxt(infile,unpack=True,skiprows=1,usecols=(3,4,5,6,10,11,12,13,14,18),delimiter=',',dtype=float)
-E1,PX1,PY1,PZ1,Q1,E2,PX2,PY2,PZ2,Q2 = np.loadtxt(infile,unpack=True,skiprows=1,usecols=(3,4,5,6,10,12,13,14,15,19),delimiter=',',dtype=str)
+E1,PX1,PY1,PZ1,Q1,E2,PX2,PY2,PZ2,Q2 = np.loadtxt(infile,unpack=True,skiprows=1,usecols=(3,4,5,6,10,11,12,13,14,18),delimiter=',',dtype=float)
+#E1,PX1,PY1,PZ1,Q1,E2,PX2,PY2,PZ2,Q2 = np.loadtxt(infile,unpack=True,skiprows=1,usecols=(3,4,5,6,10,12,13,14,15,19),delimiter=',',dtype=str)
 
 #print E1
 
@@ -19,8 +20,8 @@ for e1,px1,py1,pz1,q1,e2,px2,py2,pz2,q2 in zip(E1,PX1,PY1,PZ1,Q1,E2,PX2,PY2,PZ2,
     output += "0\n"
     # Muons (5)
     output += "2\n"
-    output += "%s %s %s %s %s\n" % (e1,px1,py1,pz1,q1)
-    output += "%s %s %s %s %s\n" % (e2,px2,py2,pz2,q2)
+    output += "%s %s %s %s %d\n" % (e1,px1,py1,pz1,int(q1))
+    output += "%s %s %s %s %d\n" % (e2,px2,py2,pz2,int(q2))
     # Electrons (5)
     output += "0\n"
     # Photons (4)
