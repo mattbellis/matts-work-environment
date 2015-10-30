@@ -17,28 +17,32 @@ def define_ranges(vec_ranges,maxsep=150):
     vec_binwidths = []
     for i in range(ndim):
 
+        print "##############################"
+        print vec_ranges[i]
+
         r = vec_ranges[i][1]-vec_ranges[i][0]
-        nbins = int(r/maxsep)# - 1
+        nbins = int(r/maxsep) + 1
         binwidth = r/nbins
 
         vec_nbins.append(nbins)
         vec_binwidths.append(binwidth)
 
-        #print "------------"
-        #print nbins
-        #print "----"
-        '''
+        print "------------"
+        print nbins
+        print binwidth
+        print "----"
+        #'''
         for j in range(0,nbins+1):
-            print binwidth*j
-        '''
+            print vec_ranges[i][0] + binwidth*j
+        #'''
 
     return vec_nbins,vec_binwidths
 
 ################################################################################
 # Start the tests
 ################################################################################
-ngals = 100000
-maxsep = 300
+ngals = 10000
+maxsep = 2000
 total_calcs = float(ngals*ngals - ngals)/2.
 
 print "Running with %d galaxies\n" % (ngals)
