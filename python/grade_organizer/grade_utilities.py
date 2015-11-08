@@ -238,7 +238,8 @@ class Student:
         ret += " -----\nHomeworks and quizzes\n -----\n"
         for g in self.grades.hw:
             #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
-            ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
+            #ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
+            ret +=  "%-4s %10s %-30s\t%s\n" % (g.grade_type,g.date,g.description,g.summary_output())
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.hw,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
