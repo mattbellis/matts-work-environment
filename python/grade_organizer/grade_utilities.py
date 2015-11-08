@@ -164,10 +164,13 @@ class Grade:
         return ret
 
     def summary_output(self):
+        '''
         ret = "%5.1f   -   %5.1f" % (100.0*self.grade_pct(),self.score)
         if self.late:
             ret += " (an additional -%4.1f for being late)" % (self.subtracted)
         ret += " out of a possible %5.1f" % (self.max_score)
+        '''
+        ret = "(%5.1f/%5.1f) %5.1f" % (self.score,self.max_score,100.0*self.grade_pct())
         return ret
 ################################################################################
 class Course_grades:
@@ -234,9 +237,8 @@ class Student:
         #ret += " -----\nHomeworks\n -----\n"
         ret += " -----\nHomeworks and quizzes\n -----\n"
         for g in self.grades.hw:
-            #ret +=  "%-7s   %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
-            ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
-            #ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
+            #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
+            ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.hw,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
@@ -260,8 +262,8 @@ class Student:
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
         for g in self.grades.exams:
-            ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
-            #ret +=  "%-7s (%10s) %s" % (g.grade_type,g.date,g.summary_output())
+            #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
+            ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
             if drop_lowest_score==True or drop_lowest_score>1 and dropped_scores<drop_lowest_score:
                 if is_lowest_grade(self.grades.exams,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
