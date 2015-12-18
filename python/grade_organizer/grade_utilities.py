@@ -231,8 +231,8 @@ class Student:
         '''
 
         # HW
-        #drop_lowest_score = True
-        drop_lowest_score = False
+        drop_lowest_score = True
+        #drop_lowest_score = False
         picked_a_lowest = False
         #ret += " -----\nHomeworks\n -----\n"
         ret += " -----\nHomeworks and quizzes\n -----\n"

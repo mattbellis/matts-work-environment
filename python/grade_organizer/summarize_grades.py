@@ -249,6 +249,8 @@ def main():
         tot_data.append(data0)
         #data1 = Box(y=exam_grades,x=exam_xvals,name="Quizzes",boxpoints='all',jitter=0.1)
         #tot_data.append(data1)
+        data1 = Box(y=exam_grades,x=exam_xvals,name="Mid-term project",boxpoints='all',jitter=0.1)
+        tot_data.append(data1)
         #data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
         if len(quiz_grades)>0:
             data2 = Box(y=quiz_grades,x=quiz_xvals,name="In-class assignments",boxpoints='all',jitter=0.1)
