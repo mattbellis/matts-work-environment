@@ -4,6 +4,8 @@ import matplotlib.cm as cm
 
 from is_prime import is_prime,is_square
 
+import lichen.lichen as lch
+
 import sys
 
 # Gen list of primes
@@ -29,7 +31,10 @@ ntots = []
 nworks = []
 maxprimes = []
 
-grid = np.zeros((maxprime,maxprime))
+#grid = np.zeros((maxprime,maxprime))
+xpts = []
+ypts = []
+
 xsquare = []
 ysquare = []
 
@@ -46,8 +51,13 @@ for i in range(0,maxprime-1):
 
         if val:
             nwork += 1
-            grid[i][j] = 1
-            grid[j][i] = 1
+            #grid[i][j] = 1
+            #grid[j][i] = 1
+            xpts.append(i)
+            ypts.append(j)
+
+            xpts.append(j)
+            ypts.append(i)
         else:
             val = is_square(c)
             if val:
@@ -71,12 +81,14 @@ print ntot-nwork
 print float(nwork)/ntot
 
 plt.figure()
-plt.imshow(grid,origin='upper',cmap = cm.Greys_r)
-plt.plot(xsquare,ysquare,'ro',markersize=1)
-plt.ylim(maxprime,0)
-plt.xlim(0,maxprime)
+#plt.imshow(grid,origin='upper',cmap = cm.Greys_r)
+#plt.plot(xsquare,ysquare,'ro',markersize=1)
+#plt.ylim(maxprime,0)
+#plt.xlim(0,maxprime)
 
-name = 'numbers_grid_%d.png' % (nprimes)
+lch.hist_2D(xpts,ypts,xbins=50,ybins=50)
+
+name = 'numbers_grid_histo_%d.png' % (nprimes)
 plt.savefig(name)
 
 plt.tight_layout()
