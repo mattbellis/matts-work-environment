@@ -13,6 +13,7 @@ numbers = np.arange(3,50000,1)
 primes = []
 for n in numbers:
     if is_prime(n):
+    #if n%2==1:
         primes.append(n)
 
 #print primes
@@ -67,7 +68,7 @@ for ik in range(0,nblocks):
                     nwork[ik][jk] += 1
                     if c>biggest_prime:
                         biggest_prime=c
-                        print c
+                        print a,b,c
 
                 else:
                     val = is_square(c)
