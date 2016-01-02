@@ -38,6 +38,8 @@ ypts = []
 xsquare = []
 ysquare = []
 
+primes_found = []
+
 nwork = 0
 ntot = 0
 for i in range(0,maxprime-1):
@@ -58,6 +60,8 @@ for i in range(0,maxprime-1):
 
             xpts.append(j)
             ypts.append(i)
+
+            primes_found.append(c)
         else:
             val = is_square(c)
             if val:
@@ -90,6 +94,9 @@ lch.hist_2D(xpts,ypts,xbins=50,ybins=50)
 
 name = 'numbers_grid_histo_%d.png' % (nprimes)
 plt.savefig(name)
+
+plt.figure()
+plt.hist(primes_found,bins=1000)
 
 plt.tight_layout()
 

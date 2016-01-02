@@ -14,6 +14,7 @@ Mrxvt.font:             10x20
 #Mrxvt.xftAntialias:        0
 #Mrxvt.xft:              1
 #Mrxvt.xftFont:          Anonymous Pro
+#Mrxvt.xftFont:          Monoid
 
 
 NIU_lecture_notes.initProfileList:  1,2,3,4
