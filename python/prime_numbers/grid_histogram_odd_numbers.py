@@ -10,7 +10,7 @@ import sys
 
 # Gen list of primes
 
-numbers = np.arange(3,100000,1)
+numbers = np.arange(3,200000,1)
 
 odds = []
 for n in numbers:
