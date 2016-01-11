@@ -18,3 +18,10 @@ def is_square(n):
         return False
 
 
+def is_odd(n):
+    if n%2 == 0:
+        return False # is odd
+    else:
+        return True
+
+
