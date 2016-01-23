@@ -74,12 +74,13 @@ n1 = len(masses1)
 masses2 = array('d', [ m_kc, m_pic ])
 n2 = len(masses2)
 
-resolution = 0.050 
+#resolution = 0.050 
+resolution = 0.00000001 
 #
 # Last argument determines batch mode or not
 #
-last_argument = len(sys.argv) - 1
-if (sys.argv[last_argument] == "batch"):
+#last_argument = len(sys.argv) - 1
+if (sys.argv[-1] == "batch"):
   batchMode = True
 
 ##############################################
@@ -94,6 +95,7 @@ event2 = TGenPhaseSpace()
 ################################################################################
 def Bdecay():
 
+    protons = []
     kaons = []
     pions = []
     muons = []
@@ -119,8 +121,8 @@ def Bdecay():
         p_Kc = event0.GetDecay(1) # This returns a TLorentzVector
         p_p = event0.GetDecay(2) # This returns a TLorentzVector
 
-        kaons.append([p_Kc.E(),p_Kc.Px(),p_Kc.Py(),p_Kc.Pz(),-1,-999,-999,-999,-999,-999,-999,-999,-999])
-        pions.append([p_p.E(),p_p.Px(),p_p.Py(),p_p.Pz(),+1,-999,-999,-999,-999,-999,-999,-999,-999])
+        kaons.append([p_Kc.E(),p_Kc.Px(),p_Kc.Py(),p_Kc.Pz(),-1])
+        protons.append([p_p.E(),p_p.Px(),p_p.Py(),p_p.Pz(),+1])
 
         # Decay the J/psi
         if event1.SetDecay(p_Jpsi, n1, masses1, ""):
@@ -129,10 +131,10 @@ def Bdecay():
             p_mu0 = event1.GetDecay(0) # This returns a TLorentzVector
             p_mu1 = event1.GetDecay(1) # This returns a TLorentzVector
 
-            muons.append([p_mu0.E(),p_mu0.Px(),p_mu0.Py(),p_mu0.Pz(),+1,-999,-999,-999,-999,-999,-999,-999,-999])
-            muons.append([p_mu1.E(),p_mu1.Px(),p_mu1.Py(),p_mu1.Pz(),-1,-999,-999,-999,-999,-999,-999,-999,-999])
+            muons.append([p_mu0.E(),p_mu0.Px(),p_mu0.Py(),p_mu0.Pz(),+1])
+            muons.append([p_mu1.E(),p_mu1.Px(),p_mu1.Py(),p_mu1.Pz(),-1])
 
-    return weight,kaons,pions,muons
+    return weight,protons,kaons,pions,muons
 ################################################################################
 ################################################################################
 
@@ -140,7 +142,7 @@ def Bdecay():
 maxweight = 0.0
 for i in range(0, 1000):
     # Keep track of the maximum weight for the event.
-    weight,kaons,pions,muons = Bdecay()
+    weight,protons,kaons,pions,muons = Bdecay()
     if weight>maxweight and weight>0:
         maxweight = weight
 
@@ -156,35 +158,9 @@ for i in range(0, max_events):
     if i%100==0:
         print i
 
-    weight,kaons,pions,muons = Bdecay()
+    weight,protons,kaons,pions,muons = Bdecay()
     if weight<maxweight and weight>0:
         output = "Event: %d\n" % (nevents)
-
-        '''
-        # Generate some random kaons and pions 
-        nextra = np.random.randint(0,10)
-        for j in range(nextra):
-            x = 30.*rnd.Rndm() - 15
-            y = 30.*rnd.Rndm() - 15
-            z = 30.*rnd.Rndm() - 15
-            e = energy([x,y,z],m_kc)
-            q = 2*np.random.randint(0,2)-1
-            kaons.append([e,x,y,z,q,-999,-999,-999,-999,-999,-999,-999,-999])
-        
-        nextra = np.random.randint(0,10)
-        for j in range(nextra):
-            x = 30.*rnd.Rndm() - 15
-            y = 30.*rnd.Rndm() - 15
-            z = 30.*rnd.Rndm() - 15
-            e = energy([x,y,z],m_pic)
-            q = 2*np.random.randint(0,2)-1
-            pions.append([e,x,y,z,q,-999,-999,-999,-999,-999,-999,-999,-999])
-
-        #print len(pions)
-
-        np.random.shuffle(pions)
-        np.random.shuffle(kaons)
-        '''
 
         output += "%d\n" % (len(pions))
         for p in pions:
@@ -195,7 +171,7 @@ for i in range(0, max_events):
             p[3] += np.random.normal(loc=0.0,scale=resolution)
             p[0] = energy([p[1],p[2],p[3]],m_p)
             #print p[0],p[1],p[2],p[3]
-            output += "%f %f %f %f %d %f %f %f %f %d %d %f %f\n" % (p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11],p[12])
+            output += "%f %f %f %f %d\n" % (p[0],p[1],p[2],p[3],p[4])
 
         output += "%d\n" % (len(kaons))
         for p in kaons:
@@ -203,7 +179,15 @@ for i in range(0, max_events):
             p[2] += np.random.normal(loc=0.0,scale=resolution)
             p[3] += np.random.normal(loc=0.0,scale=resolution)
             p[0] = energy([p[1],p[2],p[3]],m_kc)
-            output += "%f %f %f %f %d %f %f %f %f %d %d %f %f\n" % (p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11],p[12])
+            output += "%f %f %f %f %d\n" % (p[0],p[1],p[2],p[3],p[4])
+
+        output += "%d\n" % (len(protons))
+        for p in protons:
+            p[1] += np.random.normal(loc=0.0,scale=resolution)
+            p[2] += np.random.normal(loc=0.0,scale=resolution)
+            p[3] += np.random.normal(loc=0.0,scale=resolution)
+            p[0] = energy([p[1],p[2],p[3]],m_p)
+            output += "%f %f %f %f %d\n" % (p[0],p[1],p[2],p[3],p[4])
 
         # Muons
         output += "%d\n" % (len(muons))
@@ -215,7 +199,7 @@ for i in range(0, max_events):
             p[3] += np.random.normal(loc=0.0,scale=resolution)
             p[0] = energy([p[1],p[2],p[3]],m_mu)
             #print p[0],p[1],p[2],p[3]
-            output += "%f %f %f %f %d %f %f %f %f %d %d %f %f\n" % (p[0],p[1],p[2],p[3],p[4],p[5],p[6],p[7],p[8],p[9],p[10],p[11],p[12])
+            output += "%f %f %f %f %d\n" % (p[0],p[1],p[2],p[3],p[4])
 
         # Elecons
         output += "%d\n" % (0)
