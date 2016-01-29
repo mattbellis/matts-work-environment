@@ -74,8 +74,8 @@ n1 = len(masses1)
 masses2 = array('d', [ m_kc, m_pic ])
 n2 = len(masses2)
 
-#resolution = 0.050 
-resolution = 0.00000001 
+resolution = 0.005 
+#resolution = 0.00000001 
 #
 # Last argument determines batch mode or not
 #
@@ -149,7 +149,8 @@ for i in range(0, 1000):
 print "maxweight: %f" % (maxweight)
      
 # Generate the events!
-outfilename = "ToyMC_LHCb_BtoJpsiKp.dat"
+#outfilename = "ToyMC_LHCb_BtoJpsiKp.dat"
+outfilename = "ToyMC_LHCb_BtoJpsiKp_5MeV_resolution.dat"
 outfile = open(outfilename,'w')
 
 nevents = 0
