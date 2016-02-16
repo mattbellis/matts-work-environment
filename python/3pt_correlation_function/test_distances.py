@@ -28,10 +28,21 @@ def angular_sep(ra,dec):
 
     cosA = sin(d1)*sin(d2) + cos(d1)*cos(d2)*cos(r1-r2)
 
+
     A = np.arccos(cosA)
+    #print "cosA: ",cosA
+    #print "   A: ",A
 
     return A
 
+'''
+gals = [
+        [218.226380,28.818504,0.51],
+        [221.685380,28.339808,0.497408],
+        ] 
+'''
+
+#'''
 gals = [[144.461360,6.627704,0.684696],
         [218.226380,28.818504,0.676657],
         [212.589070,22.507323,0.534445],
@@ -42,6 +53,7 @@ gals = [[144.461360,6.627704,0.684696],
         [139.714610,8.968519,0.461584],
         [151.888920,40.852866,0.515396],
         [151.904610,13.562258,0.453322]] 
+#'''
 
 
 cosmo=FlatLambdaCDM(H0=70,Om0=0.3)
@@ -56,7 +68,10 @@ for g1 in gals:
         redshift1 = g1[2]
         redshift2 = g2[2]
 
+        avgredshift = (redshift1+redshift2)/2.
+
         x = cosmo.kpc_comoving_per_arcmin(redshift1).value 
+        #x = cosmo.kpc_comoving_per_arcmin(avgredshift).value 
         x *= asep_in_min/1000.0 # Convert to Mpc
 
         d1 = cosmo.comoving_distance(redshift1).value
@@ -76,6 +91,9 @@ for g1 in gals:
 
         x1,y1,z1 = radecz2xyz(g1[0],g1[1],d1)
         x2,y2,z2 = radecz2xyz(g2[0],g2[1],d2)
+
+        print x1,y1,z1
+        print x2,y2,z2
 
         sother = np.sqrt((x1-x2)**2 + (y1-y2)**2 + (z1-z2)**2 )
 

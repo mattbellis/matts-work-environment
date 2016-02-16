@@ -5,6 +5,8 @@ alias ls 	'ls --color=auto'
 #alias gmake	'make'
 #eval `dircolors $HOME/.dir_colors`
 
+alias jupyter ~/anaconda/bin/jupyter-notebook
+
 limit coredumpsize 102400 # limit size to 100M
 
 
