@@ -209,7 +209,7 @@ class Student:
         ret = "-----------------------------------\n"
         ret += "%s %s\n" % (self.student_name[1], self.student_name[0])
 
-        '''
+        #'''
         # Quizzes
         #ret += " -----\nQuizzes\n -----\n"
         ret += " -----\nReading, pre-lecture quizzes, in-class activities\n -----\n"
@@ -227,15 +227,16 @@ class Student:
         avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
         averages[0] = avg
         #ret += "\tQuiz avg: %4.2f\n" % (avg)
-        ret += "\n\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
-        '''
+        #ret += "\n\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
+        ret += "\n\tIn-class assignments, pre-lecture quizzes, etc: %4.2f\n" % (avg)
+        #'''
 
         # HW
-        drop_lowest_score = True
-        #drop_lowest_score = False
+        #drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
-        #ret += " -----\nHomeworks\n -----\n"
-        ret += " -----\nHomeworks and quizzes\n -----\n"
+        ret += " -----\nHomeworks\n -----\n"
+        #ret += " -----\nHomeworks and quizzes\n -----\n"
         for g in self.grades.hw:
             #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
             #ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
@@ -250,15 +251,15 @@ class Student:
         ret += "\n\tHW   avg: %4.2f\n" % (avg)
 
         # Exam 1 
-        drop_lowest_score = True
+        #drop_lowest_score = True
         dropped_scores = 0
         #drop_lowest_score = 1
-        #drop_lowest_score = False
+        drop_lowest_score = False
         #drop_lowest_score = True
         picked_a_lowest = False
         #ret += " -----\nExams\n -----\n"
-        #ret += " -----\nWeekly quizzes\n -----\n"
-        ret += " -----\nMid-term project\n -----\n"
+        ret += " -----\nWeekly quizzes\n -----\n"
+        #ret += " -----\nMid-term project\n -----\n"
         #print len(self.grades.exams)
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
