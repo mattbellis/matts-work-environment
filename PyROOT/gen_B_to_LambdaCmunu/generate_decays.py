@@ -76,8 +76,8 @@ n1 = len(masses1)
 #masses2 = array('d', [ m_kc, m_pic ])
 #n2 = len(masses2)
 
-#resolution = 0.005 
-resolution = 0.00000001 
+resolution = 0.005 
+#resolution = 0.00000001 
 #
 # Last argument determines batch mode or not
 #
@@ -156,6 +156,7 @@ print "maxweight: %f" % (maxweight)
 # Generate the events!
 outfilename = "ToyMC_LHCb_BtoLambdacmunu.dat"
 #outfilename = "ToyMC_LHCb_BtoLambdacmunu_5MeV_resolution.dat"
+outfilename = "ToyMC_LHCb_BtoLambdacmunu_0.5pct_resolution_100k.dat"
 outfile = open(outfilename,'w')
 
 nevents = 0
@@ -172,9 +173,9 @@ for i in range(0, max_events):
         for p in pions:
             "---"
             #print p[0],p[1],p[2],p[3]
-            p[1] += np.random.normal(loc=0.0,scale=resolution)
-            p[2] += np.random.normal(loc=0.0,scale=resolution)
-            p[3] += np.random.normal(loc=0.0,scale=resolution)
+            p[1] += np.random.normal(loc=0.0,scale=resolution*abs(p[1]))
+            p[2] += np.random.normal(loc=0.0,scale=resolution*abs(p[2]))
+            p[3] += np.random.normal(loc=0.0,scale=resolution*abs(p[3]))
             p[0] = energy([p[1],p[2],p[3]],m_pic)
             #print p[0],p[1],p[2],p[3]
             output += "%f %f %f %f %d\n" % (p[0],p[1],p[2],p[3],p[4])
