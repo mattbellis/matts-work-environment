@@ -10,6 +10,7 @@ import datetime
 import plotly
 import plotly.plotly as py
 from plotly.graph_objs import Box,Layout
+import plotly.graph_objs as go
 
 
 
@@ -214,9 +215,14 @@ def main():
             plotly_title = 'PHYS 120 class grades to date.'
             plotly_filename = 'PHYS120_S14'
         elif args.course=='phys260':
-            plotly_title = 'PHYS 260 class grades to date.'
+            plotly_title = 'PHYS 260  - Thermal Physics'
             #plotly_filename = 'PHYS260_S14'
             plotly_filename = 'PHYS260_S16'
+        elif args.course=='phys400':
+            plotly_title = 'PHYS 400 - Nuclear and Particle Physics'
+            plotly_filename = 'PHYS400_S16'
+            print plotly_title
+            print plotly_filename
         elif args.course=='phys110':
             plotly_title = 'PHYS 110 class grades to date.'
             plotly_filename = 'PHYS110_F14'
@@ -262,12 +268,9 @@ def main():
             #data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
             tot_data.append(data3)
         #tot_data = [data0]
-        #url = py.plot(tot_data,style=s,layout=l,filename=plotly_filename,fileopt='overwrite')
-        layout = Layout(title=plotly_title)
-        url = py.plot(tot_data,layout=layout,filename=plotly_filename,fileopt='overwrite')
-
-        #url = response['url']
-        #filename = response['filename']
+        layout = Layout(title=plotly_title, xaxis=dict(title="Date"))
+        figure = go.Figure(data=tot_data, layout=layout)
+        url = py.plot(figure,filename=plotly_filename,fileopt='overwrite')
 
         #print response
         print url
