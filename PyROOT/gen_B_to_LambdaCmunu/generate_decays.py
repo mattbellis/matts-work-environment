@@ -156,13 +156,14 @@ print "maxweight: %f" % (maxweight)
 # Generate the events!
 outfilename = "ToyMC_LHCb_BtoLambdacmunu.dat"
 #outfilename = "ToyMC_LHCb_BtoLambdacmunu_5MeV_resolution.dat"
-outfilename = "ToyMC_LHCb_BtoLambdacmunu_0.5pct_resolution_100k.dat"
+#outfilename = "ToyMC_LHCb_BtoLambdacmunu_0.5pct_resolution_100k.dat"
+outfilename = "ToyMC_LHCb_BtoLambdacmunu_0.5pct_resolution_1M.dat"
 outfile = open(outfilename,'w')
 
 nevents = 0
 for i in range(0, max_events):
 
-    if i%100==0:
+    if i%10000==0:
         print i
 
     weight,protons,kaons,pions,muons,electrons = Bdecay()
