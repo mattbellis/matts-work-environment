@@ -261,10 +261,11 @@ def main():
         #data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
         if len(quiz_grades)>0:
             #data2 = Box(y=quiz_grades,x=quiz_xvals,name="In-class assignments",boxpoints='all',jitter=0.1)
-            data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes and in-class assignments"}
+            data2 = Box(y=quiz_grades,x=quiz_xvals,name="Quizzes and in-class assignments", boxpoints='all',jitter=0.1)
             tot_data.append(data2)
         if len(final_exam_grades)>0:
-            data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final project",boxpoints='all',jitter=0.1)
+            #data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final project",boxpoints='all',jitter=0.1)
+            data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final exam",boxpoints='all',jitter=0.1)
             #data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
             tot_data.append(data3)
         #tot_data = [data0]

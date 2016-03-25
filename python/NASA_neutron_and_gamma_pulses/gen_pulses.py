@@ -17,7 +17,7 @@ for ncount in xrange(nmax):
     trange = tmax-tmin
 
     sigma = 1.000
-    mu = 1.000
+    mu = 0.500
     xmax = 10
     x = np.linspace(0,xmax, npts)
     y = lognorm.pdf(x, s=sigma, scale=np.exp(mu))
@@ -72,11 +72,12 @@ for ncount in xrange(nmax):
     xtot[nptsb:nptsb+npts] = x
     ytot[nptsb:nptsb+npts] = y
 
-    xtot[nptsb+npts:nptsb+npts+nptsa] = xa
-    ytot[nptsb+npts:nptsb+npts+nptsa] = noisea
+    print len(xa),nptsb+npts,nptsb+npts+nptsa,nptsb+npts+nptsa - (nptsb+npts)
+    xtot[nptsb+npts:nptsb+npts+nptsa] = xa[0:nptsb+npts+nptsa - (nptsb+npts)]
+    ytot[nptsb+npts:nptsb+npts+nptsa] = noisea[0:nptsb+npts+nptsa - (nptsb+npts)]
 
-    ytot *= -0.70
-    ytot -= 0.010
+    ytot *= -0.120
+    ytot -= 0.0005
 
     plt.subplot(2,2,3)
     plt.plot(xtot,ytot,'ko',lw=5, alpha=0.6, label='With noise before and after',markersize=1)
@@ -84,7 +85,7 @@ for ncount in xrange(nmax):
 
 
 # Digitize it
-    nsamples = 256.
+    nsamples = 4096.
     ytot *= nsamples
     ytot = ytot.astype(int)
     #print ytot
@@ -97,7 +98,7 @@ for ncount in xrange(nmax):
 
     #print len(ytot)
 
-    #plt.show()
+    plt.show()
 
 # Write out the output
     output = "LECROYWR204M,51184,Waveform\n"
