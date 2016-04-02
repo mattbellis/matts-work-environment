@@ -168,7 +168,7 @@ outfilename = "ToyMC_LHCb_BstoJpsiphi.dat"
 outfile = open(outfilename,'w')
 
 nevents = 0
-for i in range(0, max_events):
+while nevents < max_events:
 
     if i%10000==0:
         print i
