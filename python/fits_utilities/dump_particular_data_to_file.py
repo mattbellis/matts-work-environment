@@ -20,6 +20,8 @@ z = z[object_class=='GALAXY']
 ra = ra[object_class=='GALAXY']
 dec = dec[object_class=='GALAXY']
 
+for a,b,c in zip(ra,dec,z):
+    print "%f %f %f" % (a,b,c)
 
 #np.savetxt('test.out', np.transpose([ra,dec,z]),fmt='%f')
 

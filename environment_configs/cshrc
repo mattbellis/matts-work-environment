@@ -5,6 +5,8 @@ alias ls 	'ls --color=auto'
 #alias gmake	'make'
 #eval `dircolors $HOME/.dir_colors`
 
+alias jupyter ~/anaconda/bin/jupyter-notebook
+
 limit coredumpsize 102400 # limit size to 100M
 
 
@@ -19,7 +21,8 @@ setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${PATH}:"
 ## Needed to add this for latex2html to work...oh well.
 setenv RGBDEF /etc/X11/rgb.txt
 
-setenv PYTHONPATH /usr/:/usr/local:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/root5.34
+#setenv PYTHONPATH /usr/local:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/root5.34
+setenv PYTHONPATH /usr/local:/usr/local/lib//usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/home/bellis/root/lib/
 
 setenv SVN_EDITOR vi
 setenv EDITOR vi

@@ -421,21 +421,23 @@ plt.savefig(name)
 ################################################################################
 # Plot the deltas
 ################################################################################
+scaling = 0.5 # From Heather
 plt.figure(figsize=(12,6))
 #plt.plot(xpos,(c56/c54 - 1.0)*1000.0,'o')
 plotlabel = r"best fit $\delta$, $\beta$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
 #plotlabel = r"best fit $\delta$, $E$=%3.2f $\pm$ %4.3f" % (values['mybeta'],errors['mybeta'])
-plt.plot(xpos-offset,sim_deltas,'-',linewidth=3,label=plotlabel)
-plt.errorbar(x,delta,yerr=delta_err,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
+plt.plot(xpos-offset,sim_deltas*scaling,'-',linewidth=3,label=plotlabel)
+plt.errorbar(x,delta*scaling,yerr=delta_err*scaling,markersize=10,fmt='o',label=r'$\delta$ from isotope data')
 #'''
 plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']+(2.0*errors['mybeta']))
 #plotlabel = r"simulated $\delta$, $E$=%3.2f" % (values['mybeta']+(2.0*errors['mybeta']))
-plt.plot(xpos-offset,sim_deltasfake,'-',label=plotlabel)
+plt.plot(xpos-offset,sim_deltasfake*scaling,'-',label=plotlabel)
 #plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (values['mybeta']-(2.0*errors['mybeta']))
 plotlabel = r"simulated $\delta$, $E$=%3.2f" % (values['mybeta']-(2.0*errors['mybeta']))
-plt.plot(xpos-offset,sim_deltasfake0,'-',label=plotlabel)
+plt.plot(xpos-offset,sim_deltasfake0*scaling,'-',label=plotlabel)
 #plotlabel = r"simulated $\delta$, $\beta$=%3.2f" % (0.3)
 #plt.plot(xpos,sim_deltasfake1,'-',label=plotlabel)
+plt.xlim(-4000,2000)
 #'''
 '''
 plt.ylim(-40,40) # FNDA 1, Fe

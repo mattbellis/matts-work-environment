@@ -10,6 +10,7 @@ import datetime
 import plotly
 import plotly.plotly as py
 from plotly.graph_objs import Box,Layout
+import plotly.graph_objs as go
 
 
 
@@ -69,8 +70,8 @@ def main():
 
     # Grade weighting
     #final_grade_weighting = [0.10,0.25,0.35,0.30]
-    #final_grade_weighting = [0.10,0.20,0.45,0.25]
-    final_grade_weighting = [0.00,0.50,0.25,0.25] # CSIS 200, None, HW and quizzes, mid-term proj, final proj
+    final_grade_weighting = [0.10,0.20,0.45,0.25]
+    #final_grade_weighting = [0.00,0.50,0.25,0.25] # CSIS 200, None, HW and quizzes, mid-term proj, final proj
     # Quizzes
     # HWs
     # Exam 1
@@ -213,9 +214,15 @@ def main():
         if args.course=='phys120':
             plotly_title = 'PHYS 120 class grades to date.'
             plotly_filename = 'PHYS120_S14'
-        #elif args.course=='phys260':
-            #plotly_title = 'PHYS 260 class grades to date.'
+        elif args.course=='phys260':
+            plotly_title = 'PHYS 260  - Thermal Physics'
             #plotly_filename = 'PHYS260_S14'
+            plotly_filename = 'PHYS260_S16'
+        elif args.course=='phys400':
+            plotly_title = 'PHYS 400 - Nuclear and Particle Physics'
+            plotly_filename = 'PHYS400_S16'
+            print plotly_title
+            print plotly_filename
         elif args.course=='phys110':
             plotly_title = 'PHYS 110 class grades to date.'
             plotly_filename = 'PHYS110_F14'
@@ -244,27 +251,27 @@ def main():
 
         #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
         #data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
-        #data0 = Box(y=hw_grades,x=hw_xvals,name="Homework",boxpoints='all',jitter=0.1)
-        data0 = Box(y=hw_grades,x=hw_xvals,name="Homework and quizzes",boxpoints='all',jitter=0.1)
+        data0 = Box(y=hw_grades,x=hw_xvals,name="Homework",boxpoints='all',jitter=0.1)
+        #data0 = Box(y=hw_grades,x=hw_xvals,name="Homework and quizzes",boxpoints='all',jitter=0.1)
         tot_data.append(data0)
-        #data1 = Box(y=exam_grades,x=exam_xvals,name="Quizzes",boxpoints='all',jitter=0.1)
+        data1 = Box(y=exam_grades,x=exam_xvals,name="Weekly assessments",boxpoints='all',jitter=0.1)
+        tot_data.append(data1)
+        #data1 = Box(y=exam_grades,x=exam_xvals,name="Mid-term project",boxpoints='all',jitter=0.1)
         #tot_data.append(data1)
         #data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
         if len(quiz_grades)>0:
-            data2 = Box(y=quiz_grades,x=quiz_xvals,name="In-class assignments",boxpoints='all',jitter=0.1)
-            #data2 = {'y':quiz_grades,'x':quiz_xvals,'name':"Quizzes"}
+            #data2 = Box(y=quiz_grades,x=quiz_xvals,name="In-class assignments",boxpoints='all',jitter=0.1)
+            data2 = Box(y=quiz_grades,x=quiz_xvals,name="Quizzes and in-class assignments", boxpoints='all',jitter=0.1)
             tot_data.append(data2)
         if len(final_exam_grades)>0:
+            #data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final project",boxpoints='all',jitter=0.1)
             data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final exam",boxpoints='all',jitter=0.1)
             #data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
             tot_data.append(data3)
         #tot_data = [data0]
-        #url = py.plot(tot_data,style=s,layout=l,filename=plotly_filename,fileopt='overwrite')
-        layout = Layout(title=plotly_title)
-        url = py.plot(tot_data,layout=layout,filename=plotly_filename,fileopt='overwrite')
-
-        #url = response['url']
-        #filename = response['filename']
+        layout = Layout(title=plotly_title, xaxis=dict(title="Date"))
+        figure = go.Figure(data=tot_data, layout=layout)
+        url = py.plot(figure,filename=plotly_filename,fileopt='overwrite')
 
         #print response
         print url
