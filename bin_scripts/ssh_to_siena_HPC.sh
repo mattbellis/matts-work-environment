@@ -1,1 +1,1 @@
-ssh mbellis@grawp.siena.edu
+ssh -X mbellis@grawp.siena.edu
