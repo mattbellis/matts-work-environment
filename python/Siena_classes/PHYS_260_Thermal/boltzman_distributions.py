@@ -18,7 +18,7 @@ plt.figure(figsize=(8,5))
 plt.plot(v,P0,'-',linewidth=3,label='Maxwell-Boltzmann distribution (T=??? K)')
 plt.plot(v,P1,'--',linewidth=3,label='Maxwell-Boltzmann distribution (T=??? K)')
 plt.xlabel(r'$v$ (m/s)',fontsize=24)
-plt.ylabel(r'$f(v)$',fontsize=24)
+plt.ylabel(r'$D(v)$',fontsize=24)
 plt.legend(loc='upper right')
 
 xticks = np.arange(0,2000,200)

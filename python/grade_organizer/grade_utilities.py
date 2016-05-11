@@ -232,8 +232,8 @@ class Student:
         #'''
 
         # HW
-        #drop_lowest_score = True
-        drop_lowest_score = False
+        drop_lowest_score = True
+        #drop_lowest_score = False
         picked_a_lowest = False
         ret += " -----\nHomeworks\n -----\n"
         #ret += " -----\nHomeworks and quizzes\n -----\n"
@@ -251,8 +251,8 @@ class Student:
         ret += "\n\tHW   avg: %4.2f\n" % (avg)
 
         # Exam 1 
-        #drop_lowest_score = True
-        drop_lowest_score = False
+        drop_lowest_score = True
+        #drop_lowest_score = False
         dropped_scores = 0
         #drop_lowest_score = 1
         picked_a_lowest = False

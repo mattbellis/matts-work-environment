@@ -30,6 +30,8 @@ if (shExpMatch(url, "*prl*"))
     return proxy_yes;
 if (shExpMatch(url, "*ajp*"))
     return proxy_yes;
+if (shExpMatch(url, "*ournals.aps.org*"))
+    return proxy_yes;
 if (shExpMatch(url, "*nature*"))
     return proxy_yes;
 if (shExpMatch(url, "*sciencedirect*"))
