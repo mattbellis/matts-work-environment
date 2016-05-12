@@ -1,9 +1,9 @@
 import numpy as np
 import matplotlib.pylab as plt
 
-#g = -8.1
+g = -8.1
 #g = -5.0
-g = -9.8
+#g = -9.8
 
 #x0 = 15.0
 x0 = 0.0
