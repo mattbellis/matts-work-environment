@@ -52,7 +52,7 @@ radii = [ 1.7e6]
 temps = [400.0]
 
 mols = ['H2','O2','N2']
-amasses = [4*mp,32*mp,28*mp]
+amasses = [2*mp,32*mp,28*mp]
 
 
 G = constants.G
