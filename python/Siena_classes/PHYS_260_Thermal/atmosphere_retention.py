@@ -38,14 +38,22 @@ def mb_cdist(v,m,T):
 ################################################################################
 
 # Earth, moon, titan
-bodies = ['Earth','Moon','Titan']
-masses = [6e24, 7.3e22, 1.3e23]
-radii = [6e6, 1.7e6, 2.6e6]
+#bodies = ['Earth','Moon','Titan']
+#masses = [6e24, 7.3e22, 1.3e23]
+#radii = [6e6, 1.7e6, 2.6e6]
+#temps = [300.0,400.0,90.0]
+#bodies = ['Earth']
+#masses = [6e24]
+#radii = [6e6]
+#temps = [300.0]
+bodies = ['Moon']
+masses = [ 7.3e22]
+radii = [ 1.7e6]
+temps = [400.0]
 
 mols = ['H2','O2','N2']
-amasses = [4*mp,32*mp,28*mp]
+amasses = [2*mp,32*mp,28*mp]
 
-temps = [300.0,400.0,90.0]
 
 G = constants.G
 
@@ -58,7 +66,7 @@ for m,r in zip(masses,radii):
 
     vesc.append(v)
 
-    print v
+    print "vesc: ",v
 
 
 # MB distribution
@@ -73,7 +81,7 @@ for i,T in enumerate(temps):
         label = "m=%e, T=%f" % (am,T)
         # if i==2:
         if 1:
-            plt.plot(x,y,label=label)
+            plt.plot(x,y,label=label,linewidth=3)
             plt.plot((vesc[i],vesc[i]),[0,.014],'k-')
 
 for i,T in enumerate(temps):
@@ -85,12 +93,13 @@ for i,T in enumerate(temps):
 
 
 print "HEREJHRKJE"
+plt.xlim(0,4000)
 #mb = lambda x,a,t: mb_dist(x,a,t)
 #vmax = vesc[0]
 vmax = 2583.0
-print quad(mb_dist,0,vmax,(amasses[2],temps[2]))
+#print quad(mb_dist,0,vmax,(amasses[2],temps[2]))
 #print quad(mb,0,vmax,(amasses[0],temps[0]))
-print mb_cdist(vmax,amasses[2],temps[2])
+#print mb_cdist(vmax,amasses[2],temps[2])
 
 plt.legend()
 plt.show()

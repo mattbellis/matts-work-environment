@@ -52,7 +52,7 @@ for i in xrange(nentries):
     ############################################################################
     # Print out the top jets
     ############################################################################
-    output += "0\n"
+    #output += "0\n"
 
     ############################################################################
     # Print out the muons
@@ -95,15 +95,17 @@ for i in xrange(nentries):
         output += "%.4f %.4f %.4f %.4f\n" % (e,px,py,pz)
         nvals += 4
 
+    #print "MET!!!!!!!!!!!!!!!!!!!"
     px = tree.MET_px
     py = tree.MET_py
     pt = np.sqrt(px*px + py*py)
     phi = np.arccos(px/pt)
     if py<0:
         phi += 3.14149
-    #output += "%.4f %.4f\n" % (px,py)
-    output += "%d\n" % (1)
-    output += "%.4f %.4f\n" % (pt,phi)
+    output += "%.4f %.4f\n" % (px,py)
+    #print output
+    #output += "%d\n" % (1)
+    #output += "%.4f %.4f\n" % (pt,phi)
     nvals += 2
 
     #output = "%d\n%s" % (nvals,output)

@@ -6,6 +6,8 @@ proxy_no = "DIRECT";
 
 if (shExpMatch(url, "https://webscs02.slac.stanford.edu*"))
     return proxy_yes;
+if (shExpMatch(url, "*iopscience.iop.org*"))
+    return proxy_yes;
 if (shExpMatch(url, "*opticsinfobase*"))
     return proxy_yes;
 if (shExpMatch(url, "*onlinelibrary.wiley.com*"))
@@ -28,6 +30,8 @@ if (shExpMatch(url, "*prl*"))
     return proxy_yes;
 if (shExpMatch(url, "*ajp*"))
     return proxy_yes;
+if (shExpMatch(url, "*ournals.aps.org*"))
+    return proxy_yes;
 if (shExpMatch(url, "*nature*"))
     return proxy_yes;
 if (shExpMatch(url, "*sciencedirect*"))
@@ -49,6 +53,8 @@ if (shExpMatch(url, "*tislnx*"))
 if (shExpMatch(url, "*oraweb*"))
     return proxy_yes;
 if (shExpMatch(url, "*www-group*"))
+    return proxy_yes;
+if (shExpMatch(url, "*r25-web-08r2.siena.edu*"))
     return proxy_yes;
 
 return proxy_no;

@@ -58,7 +58,7 @@ print "sudo dhclient wlan0"
 
 if choice is not None:
     index = ap.index(choice)
-    cmd = ['sudo', 'iwconfig', 'wlan0', 'essid',essid[index],"ap",ap[index],"channel",channel[index]]
+    cmd = ['sudo', 'iwconfig', 'wlan0', 'essid',essid[index][1:-1],"ap",ap[index],"channel",channel[index]]
     print " ".join(cmd)
     sp.Popen(cmd,0).wait()
 else:

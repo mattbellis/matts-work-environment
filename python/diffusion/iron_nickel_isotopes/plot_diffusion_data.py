@@ -48,8 +48,8 @@ def read_in_a_microprobe_data_file(infilename,experiment="FNDA1",element="Fe"):
             y.append(concentration)
             x.append(xpos)
 
-    print x
-    print x_closest_to_crossing_point,x[x_closest_to_crossing_point]
+    #print x
+    #print x_closest_to_crossing_point,x[x_closest_to_crossing_point]
 
     y = np.array(y)
     y /= 100.0 # Convert from % to fraction
@@ -63,7 +63,7 @@ def read_in_a_microprobe_data_file(infilename,experiment="FNDA1",element="Fe"):
     if experiment=="FNDA2":
         x *= -1
 
-    print x[0],x[-1]
+    #print x[0],x[-1]
 
     return x,y
 
@@ -130,11 +130,11 @@ def read_in_an_isotope_data_file(infilename,experiment="FNDA1",element="Fe"):
     if experiment=="FNDA1":
         x = x[::-1] # Do this for FNDA 1, reverse it.
     
-    print x[0],x[-1]
+    #print x[0],x[-1]
     #exit()
     # Figure out where the crossing point is.
-    print x
-    print c
+    #print x
+    #print c
     #plt.plot(x,c)
     #plt.show()
     predicted_conc = interpolate.interp1d(x,c)
@@ -144,12 +144,12 @@ def read_in_an_isotope_data_file(infilename,experiment="FNDA1",element="Fe"):
     offset = -999
     for i in np.linspace(x[-1],x[0],1000):
         difference = abs(predicted_conc(i)-crossing_point)
-        print i,predicted_conc(i),crossing_point,difference
+        #print i,predicted_conc(i),crossing_point,difference
         if difference<min_diff:
             min_diff = difference
             offset = i
 
-    print offset
+    #print offset
     x -= offset
     #exit()
 

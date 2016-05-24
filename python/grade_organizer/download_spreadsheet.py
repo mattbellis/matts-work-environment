@@ -16,7 +16,10 @@ c.login()
 s = None
 w = None
 if course=="phys110":
-    s = c.open_by_url('https://docs.google.com/spreadsheets/d/1tF2HIqiTYcPOpJsA3pfc_jQB4W7Hxa9nE_OdxNkJq2c/edit#gid=53530124')
+    # Fall 2014
+    #s = c.open_by_url('https://docs.google.com/spreadsheets/d/1tF2HIqiTYcPOpJsA3pfc_jQB4W7Hxa9nE_OdxNkJq2c/edit#gid=53530124')
+    # Fall 2012
+    s = c.open_by_url('https://docs.google.com/spreadsheets/d/1OoB5y_FoMMbIAy_BQSL0A290HsmgVoDeDq9jY41DChQ/edit#gid=1')
     w = s.get_worksheet(1)
 elif course=="phys310":
     s = c.open_by_url('https://docs.google.com/spreadsheets/d/1tF2HIqiTYcPOpJsA3pfc_jQB4W7Hxa9nE_OdxNkJq2c/edit#gid=1083720838')

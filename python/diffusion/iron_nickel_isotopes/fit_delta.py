@@ -122,8 +122,8 @@ if len(sys.argv)>=4:
         yerris = np.delete(yerris,index)
         cis = np.delete(cis,index)
 
-print xis
-print yis
+#print xis
+#print yis
 
 
 #yerris /= yerris
@@ -136,21 +136,21 @@ print yis
 #yerris[-18:] = 5
 #xis -= 0.00007 # By hand offset
 #exit()
-print xis
-print yis
+#print xis
+#print yis
 npts = len(yis)
-print yis[-13:]
-print np.std(yis[-13:])
-print yerris[-13:]
-print np.mean(yerris[-13:])
+#print yis[-13:]
+#print np.std(yis[-13:])
+#print yerris[-13:]
+#print np.mean(yerris[-13:])
 
-print yis[0:9]
-print np.std(yis[0:9])
-print yerris[0:9]
-print np.mean(yerris[0:9])
+#print yis[0:9]
+#print np.std(yis[0:9])
+#print yerris[0:9]
+#print np.mean(yerris[0:9])
 
-print len(xis)
-print len(yis)
+#print len(xis)
+#print len(yis)
 #exit()
 
 
@@ -236,6 +236,12 @@ def fitfunc(data,p,parnames,params_dict):
     t = t0
     while t<tmax:
 
+        print t
+        print c56
+        print c54
+
+
+
         '''
         if t%10000==0:
             print "%d of %d" % (t,tmax)
@@ -248,11 +254,18 @@ def fitfunc(data,p,parnames,params_dict):
             print "D56*dt*invdx2: ",D56*(dt*invdx2)
 
         # This is the normal beta
-        #D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
+        D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
+
+        print D56
+        print mybeta
+        print heavy_isotope,light_isotope
+        #exit()
 
         # Here, we'll interpret beta as E.
-        D54 = D56*(mybeta*(np.sqrt((heavy_isotope/light_isotope)) - 1.0) + 1) # For Fe
+        #D54 = D56*(mybeta*(np.sqrt((heavy_isotope/light_isotope)) - 1.0) + 1) # For Fe
         #D54 = D56*((heavy_isotope/light_isotope)**(intercept + (mybeta*c56))) # CONCENTRATION DEPENDENT
+
+        print "DSSS",D56,D54
 
         i = 0
         for D,concentration in zip([D56,D54],[c56, c54]):
@@ -265,7 +278,18 @@ def fitfunc(data,p,parnames,params_dict):
             # All the points except the end points.
             term1 =  (D10-D01)*(c10-c01)
             term2 =  D*(c10-(2*concentration)+c01)
+            print "TERM1"
+            print term1
+            print "TERM2"
+            print term2
+            print "DTETC"
+            print dt,dx
+            print dt*(term1/(4*dx*dx) + term2/(dx*dx))
+            print "CONCENTRATION"
+            print concentration
             concentration_temp = concentration + dt*(term1/(4*dx*dx) + term2/(dx*dx))
+
+            #exit()
 
             # The end points # NOT RIGHT!!!!! BUT OK FOR NOW
             concentration_temp[0]  = concentration[0]  + (D[0]*(concentration[1] -concentration[0]))

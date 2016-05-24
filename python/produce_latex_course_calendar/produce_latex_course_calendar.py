@@ -1,9 +1,9 @@
 import datetime as dt
 import time
 
-year = 2015
+year = 2016
 starting_month = 1
-starting_day = 13
+starting_day = 19
 
 datestring = "%d %d %d" % (year, starting_month, starting_day)
 start = time.strptime(datestring,"%Y %m %d")

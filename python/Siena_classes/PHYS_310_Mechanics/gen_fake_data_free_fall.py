@@ -1,10 +1,12 @@
 import numpy as np
 import matplotlib.pylab as plt
 
-#g = -8.1
-g = -5.0
+g = -8.1
+#g = -5.0
+#g = -9.8
 
-x0 = 15.0
+#x0 = 15.0
+x0 = 0.0
 
 tpts = []
 xpts = []
@@ -22,7 +24,7 @@ for t in np.arange(0,100,0.10):
     xpts.append(x)
     xerrpts.append(xerr)
 
-    if x<0:
+    if x<-10:
         break
 
 #plt.errorbar(tpts,xpts,fmt='o',yerr=xerrpts)

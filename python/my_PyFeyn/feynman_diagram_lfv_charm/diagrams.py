@@ -1,5 +1,7 @@
 from pyfeyn.user import *
 
+from subprocess import call
+
 corners = []
 corners.append(Point(-3.5,2.5))
 corners.append(Point(-3.5,2.5))
@@ -96,6 +98,10 @@ def fd_lfv_c_quark(outfilename, index=0):
     # Write the output file
     ############################################################################
     fd.draw(outfilename + ".pdf")
+    pdfname = "%s.pdf" % (outfilename)
+    pngname = "%s.png" % (outfilename)
+
+    call(["convert", pdfname,pngname])
 
 
 
