@@ -1,9 +1,9 @@
-from distutils.core import setup
+from distutils.core import setup,Extension
 from Cython.Build import cythonize
 
 setup(ext_modules = cythonize(
-    "pymyenum.pyx",                 # our Cython source
-    sources=["myenum.h"],  # additional source file(s)
-    language="c",             # generate C code
-    ))
+    Extension("pymyenum",
+    sources=["pymyenum.pyx"],  # additional source file(s)
+    language="c++",             # generate C code
+    )))
 
