@@ -25,3 +25,27 @@ def is_odd(n):
         return True
 
 
+def get_factors(n):
+    factors = []
+    i = 2
+    max_val = int(n/i)+2
+    while i < max_val:
+        if n%i==0:
+            #print('not prime')
+            factors.append(i)
+            max_val = n/i
+            factors.append(max_val)
+        i+= 1
+
+    factors.append(n)
+    return factors
+
+def relatively_prime(a,b):
+    factorsa = get_factors(a)
+    factorsb = get_factors(b)
+
+    for i in factorsa:
+        if i in factorsb:
+            return False
+
+    return True
