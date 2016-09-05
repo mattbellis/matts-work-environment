@@ -101,7 +101,7 @@ def trace_to_radius(x0,y0,angle,current_radius,new_radius,current_vel,new_vel):
     # return the point at which it intersects the new circle and 
     # the angle at which it enters or exits that radius
     
-    print "input: ",x0,y0,angle,current_radius,new_radius
+    #print "input: ",x0,y0,angle,current_radius,new_radius
     # Extend the line
     x = 1.0
     y = new_y(x0,y0,x,angle)
@@ -113,7 +113,7 @@ def trace_to_radius(x0,y0,angle,current_radius,new_radius,current_vel,new_vel):
     
     closest = None
     if pts is not None:
-        print "intersection pts: ",pts
+        #print "intersection pts: ",pts
         closest = None
         if len(pts)==1:
             closest = pts[0]
@@ -124,7 +124,7 @@ def trace_to_radius(x0,y0,angle,current_radius,new_radius,current_vel,new_vel):
                 if new_radius==current_radius:
                     closest = pts[1]
                 else:
-                    print "THIS CLOSEST"
+                    #print "THIS CLOSEST"
                     closest = pts[0]
 
             else:
@@ -133,7 +133,7 @@ def trace_to_radius(x0,y0,angle,current_radius,new_radius,current_vel,new_vel):
                 else:
                     closest = pts[1]
                     
-    print "closest: ",closest
+    #print "closest: ",closest
     ray = [[x0,closest[0]],[y0,closest[1]]]
     rd0 = radial_pts(closest[0],closest[1])
     
@@ -146,26 +146,27 @@ def trace_to_radius(x0,y0,angle,current_radius,new_radius,current_vel,new_vel):
 
     t1 = snells(t0,current_vel,new_vel)
     norm_angle = rel_angle(cx,cy,1.0, 0.0)
-    print "norm: ",np.rad2deg(norm_angle)
-    print "t0: ",np.rad2deg(t0)
-    print "t1: ",np.rad2deg(t1)
+    #print "norm: ",np.rad2deg(norm_angle)
+    #print "t0: ",np.rad2deg(t0)
+    #print "t1: ",np.rad2deg(t1)
     if new_radius<current_radius:
-        angle -= (t1-t0) # Change in angle is the difference between t0 and t1
-        print "HERE!"
+        #angle -= (t1-t0) # Change in angle is the difference between t0 and t1
+        angle = np.pi - (np.pi - norm_angle - t1)
+        #print "HERE!"
     else:
         radial_angle = rel_angle(1.0, 0.0, cx,cy)
         if cx>0 and cy<0:
             radial_angle = -np.abs(radial_angle)
-        print "radial angle: ",np.rad2deg(radial_angle)
-        angle = radial_angle + t1
+        #print "radial angle: ",np.rad2deg(radial_angle)
+        angle = radial_angle - np.abs(t1)
         '''
         if cx>0 and cy<0:
             angle = radial_angle - t1
         else:
             angle = radial_angle + t1
         '''
-        print "there"
+        #print "there"
     #angle = norm_angle - t1
-    print "new angle: ",np.rad2deg(angle)
+    #print "new angle: ",np.rad2deg(angle)
     
     return closest[0],closest[1],angle
