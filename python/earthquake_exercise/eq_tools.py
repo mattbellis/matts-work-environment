@@ -110,13 +110,17 @@ def trace_to_radius(x0,y0,angle,current_radius,new_radius,current_vel,new_vel):
     # See if it intersects our radius
     pts = intersection(x0,y0,x,y,new_radius)
     #print pts
-    
+
     closest = None
-    if pts is not None:
+    if pts is None:
+        return None, None, angle
+    
+    elif pts is not None:
         #print "intersection pts: ",pts
         closest = None
         if len(pts)==1:
             closest = pts[0]
+            return closest[0],closest[1],angle
         if len(pts)>1:
             d0 = mag(x0-pts[0][0],y0-pts[0][1])
             d1 = mag(x0-pts[1][0],y0-pts[1][1])
