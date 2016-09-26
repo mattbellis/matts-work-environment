@@ -6,8 +6,8 @@ def draw_earth(radii):
     for i,r in enumerate(radii):
         circle = plt.Circle((0, 0), radius=r,alpha=0.05)#,fc=colors[i])
         plt.gca().add_patch(circle)
-    plt.xlim(-1.2,1.2)
-    plt.ylim(-1.2,1.2)
+    #plt.xlim(-1.2,1.2)
+    #plt.ylim(-1.2,1.2)
 
 def normal(r,x,y):
     return r
