@@ -5,7 +5,7 @@ foreach file($*)
     echo " -----------------------------------"
     echo
     echo 
-    ~/anaconda2/bin/python $file
+    ~/anaconda/bin/python $file
     echo 
     echo
 end

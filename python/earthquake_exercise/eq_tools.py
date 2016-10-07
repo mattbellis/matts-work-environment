@@ -13,8 +13,22 @@ def normal(r,x,y):
     return r
 
 def snells(theta0,v0,v1):
+    # Check for critical angle
+    '''
+    theta_c = np.arcsin(v0/v1)
+    #print "theta_c: ",theta_c
+    if theta0>theta_c:
+        print "Critical angle!: ",theta0,v1,v0,theta_c
+        return None
+    '''
+
+    #else:
     sin_theta1 = np.sin(theta0)*(v1/v0)
     theta1 = np.arcsin(sin_theta1)
+    if theta1 != theta1:
+        # This is a nan from a critical angle issue
+        return None
+    #print theta0,v1,v0,sin_theta1,theta1
     return theta1
 
 def mag(x,y):
@@ -38,6 +52,11 @@ def radial_dist(x,y):
     r2 = x*x + y*y
     r = np.sqrt(r2)
     return r
+
+def distance_traversed(xvals,yvals):
+    dx = np.abs(xvals[0]-xvals[1])
+    dy = np.abs(yvals[0]-yvals[1])
+    return np.sqrt(dx*dx + dy*dy)
 
 def vector_representation(x0,y0, x1,y1, norm=False):
     #theta = np.arctan2(y1-y0,x1-x0)
@@ -149,6 +168,11 @@ def trace_to_radius(x0,y0,angle,current_radius,new_radius,current_vel,new_vel):
     t0 = rel_angle(cx,cy,vx,vy)
 
     t1 = snells(t0,current_vel,new_vel)
+    if t1 is None:
+        # This means the incoming angle was above the critical angle
+        # and there is total internal reflection. So return some appropriate flags
+        return -999, -999, -999
+
     norm_angle = rel_angle(cx,cy,1.0, 0.0)
     #print "norm: ",np.rad2deg(norm_angle)
     #print "t0: ",np.rad2deg(t0)
