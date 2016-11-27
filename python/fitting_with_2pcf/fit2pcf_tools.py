@@ -1,6 +1,7 @@
 from scipy.spatial.distance import cdist,pdist
 import numpy as np
 
+
 ################################################################################
 def pair_counts(data0,data1,same=False):
 
@@ -49,9 +50,16 @@ def twopcf(data,random,nbins=100,cfrange=None):
     rr = rr[0].astype(float)
     dr = dr[0].astype(float)
 
+    rr[rr==0] = 0.00001
+    dr[dr==0] = 0.00001
+    dd[dd==0] = 0.00001
+
     # Do some estimate of the fractional uncertainty
     #werr = np.sqrt((np.sqrt(dd)/dd)**2 + (np.sqrt(rr)/rr)**2 + (np.sqrt(dr)/dr)**2)
-    werr = np.sqrt(dd)/dd + np.sqrt(rr)/rr + np.sqrt(dr)/dr
+    # w = ((dd + 2dr)/rr) + 1
+    ########### NEED TO CHECK THIS ##########################
+    werr = np.sqrt( (np.sqrt(dd)/rr)**2 + (2*np.sqrt(dr)/rr)**2 + (np.sqrt(rr)*(dd+2*dr)/(rr*rr))**2 ) 
+    #print werr
 
     #print type(dd)
     #print dd
@@ -60,7 +68,7 @@ def twopcf(data,random,nbins=100,cfrange=None):
     norm_rr = 0.5*(nr*nr - nr)
     norm_dr = nd*nr
 
-    print norm_dd, norm_dr, norm_rr
+    #print norm_dd, norm_dr, norm_rr
 
     dd /= norm_dd
     rr /= norm_rr
@@ -122,5 +130,27 @@ def mix_cocktail(data0,data1,nd0=10,nd1=20):
 
     return cocktail
 
+
+################################################################################
+def chisq_compare(y0, y1, y0err=None, y1err=None):
+
+    if len(y0)!=len(y1):
+        print "y0 and y1 are not the same length!"
+        print len(y0),len(y1)
+        return None,None
+
+    if y0err is None:
+        y0err = np.ones_like(y0)
+    if y1err is None:
+        y1err = np.ones_like(y1)
+
+    chi2 = 0.0
+    for a,b,aerr,berr in zip(y0,y1,y0err,y1err):
+        diff = a-b
+        chi2 += (diff*diff)/(aerr*aerr + berr*berr)
+
+    ndof = len(y0)
+
+    return chi2,ndof
 
 
