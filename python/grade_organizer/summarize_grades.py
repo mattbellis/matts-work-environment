@@ -252,19 +252,51 @@ def main():
         #response = py.plot(hw_xvals,hw_grades,style=s,layout=l,filename='grade_example',fileopt='overwrite')
         #data0 = {'y':hw_grades,'x':hw_xvals,'name':"Homework"}
         #data0 = Box(y=hw_grades,x=hw_xvals,name="Homework",boxpoints='all',jitter=0.1)
-        data0 = Box(y=hw_grades,x=hw_xvals,name="Homework and quizzes",boxpoints='all',jitter=0.1)
+        ng = len(hw_grades)
+        idx = np.arange(0,ng)
+        np.random.shuffle(idx)
+        hw_grades_rnd = [] 
+        hw_xvals_rnd = [] 
+        for i in idx:
+            hw_grades_rnd.append(hw_grades[i])
+            hw_xvals_rnd.append(hw_xvals[i])
+        data0 = Box(y=hw_grades_rnd,x=hw_xvals_rnd,name="Homework and quizzes",boxpoints='all',jitter=0.1)
         tot_data.append(data0)
-        #data1 = Box(y=exam_grades,x=exam_xvals,name="Weekly assessments",boxpoints='all',jitter=0.1)
+        #data1 = Box(y=exam_grades_rnd,x=exam_xvals_rnd,name="Weekly assessments",boxpoints='all',jitter=0.1)
         #tot_data.append(data1)
-        data1 = Box(y=exam_grades,x=exam_xvals,name="Mid-term project",boxpoints='all',jitter=0.1)
+        ng = len(exam_grades)
+        idx = np.arange(0,ng)
+        np.random.shuffle(idx)
+        exam_grades_rnd = [] 
+        exam_xvals_rnd = [] 
+        for i in idx:
+            exam_grades_rnd.append(exam_grades[i])
+            exam_xvals_rnd.append(exam_xvals[i])
+        data1 = Box(y=exam_grades_rnd,x=exam_xvals_rnd,name="Mid-term project",boxpoints='all',jitter=0.1)
         tot_data.append(data1)
         #data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
         if len(quiz_grades)>0:
+            ng = len(quiz_grades)
+            idx = np.arange(0,ng)
+            np.random.shuffle(idx)
+            quiz_grades_rnd = [] 
+            quiz_xvals_rnd = [] 
+            for i in idx:
+                quiz_grades_rnd.append(quiz_grades[i])
+                quiz_xvals_rnd.append(quiz_xvals[i])
             #data2 = Box(y=quiz_grades,x=quiz_xvals,name="In-class assignments",boxpoints='all',jitter=0.1)
-            data2 = Box(y=quiz_grades,x=quiz_xvals,name="Quizzes and in-class assignments", boxpoints='all',jitter=0.1)
+            data2 = Box(y=quiz_grades_rnd,x=quiz_xvals_rnd,name="Quizzes and in-class assignments", boxpoints='all',jitter=0.1)
             tot_data.append(data2)
         if len(final_exam_grades)>0:
-            data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final project",boxpoints='all',jitter=0.1)
+            ng = len(final_exam_grades)
+            idx = np.arange(0,ng)
+            np.random.shuffle(idx)
+            final_exam_grades_rnd = [] 
+            final_exam_xvals_rnd = [] 
+            for i in idx:
+                final_exam_grades_rnd.append(final_exam_grades[i])
+                final_exam_xvals_rnd.append(final_exam_xvals[i])
+            data3 = Box(y=final_exam_grades_rnd,x=final_exam_xvals_rnd,name="Final project",boxpoints='all',jitter=0.1)
             #data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final exam",boxpoints='all',jitter=0.1)
             #data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
             tot_data.append(data3)
