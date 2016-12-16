@@ -1,0 +1,20 @@
+\documentclass{article}
+
+\usepackage{lipsum}
+\usepackage{todonotes}
+\usepackage{pdfcomment}
+
+\begin{document}
+
+\lipsum[2]
+
+This is a sentence.\todo{This is not right and should be changed.
+Also what if this is lots of words. Does it look right?}
+
+More words to be commented on.\todo{Also what if this is lots of words. Does it look right?}
+
+\lipsum[2]
+
+This is another sentence.\pdfcomment{Note that this is other stuff.}
+
+\end{document}
