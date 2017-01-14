@@ -21,7 +21,8 @@ def main():
     start = time.clock()
     nsum = add_numbers(input_data)
     end = time.clock()
-    print "basic version: ",end-start,nsum
+    print ("basic version: ",end-start)
+    print (nsum)
 
     pool = Pool()
     start = time.clock()
@@ -29,8 +30,8 @@ def main():
     pool.close()
     pool.join()
     end = time.clock()
-    print "pool version: ",end-start
-    print results
+    print ("pool version: ",end-start)
+    print (results)
     '''
     tot = 0
     for r in results:
