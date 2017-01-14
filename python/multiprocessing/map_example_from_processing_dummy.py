@@ -21,7 +21,7 @@ def main():
     start = time.clock()
     nsum = add_numbers(input_data)
     end = time.clock()
-    print ("basic version: ",end-start)
+    print ("basic version: %f" % (end-start))
     print (nsum)
 
     pool = Pool()
