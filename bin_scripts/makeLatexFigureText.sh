@@ -20,15 +20,18 @@ shift
 foreach file($*)
   echo
   if ( $isBeamer == 1 ) then
-    echo "\\frame[T]"
+    #echo "\\frame[t]"
+    echo "\\frame"
     echo "{"
-    echo "\\frametitle{XXX}"
+    echo "\\frametitle{}"
   endif
 
   echo "\\begin{figure}[H]"
   echo "\\includegraphics[$sizewhich=$sizenum\\text$sizewhich]{$file}"
   echo "\\label{lab$count}"
-  echo "\\caption{Caption goes here}"
+  set f = `basename $file | sed "s/_/\\_/"`
+  echo "\\caption{$f}"
+  #echo "\\caption{Caption goes here}"
   echo "\\end{figure}"
   if ( $isBeamer == 1 ) then
     echo "}"

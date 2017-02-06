@@ -1,8 +1,11 @@
 eval `dircolors $HOME/.dir_colors`
 
+
 alias ls 	'ls --color=auto'
 #alias gmake	'make'
 #eval `dircolors $HOME/.dir_colors`
+
+alias jupyter ~/anaconda3/bin/jupyter-notebook
 
 limit coredumpsize 102400 # limit size to 100M
 
@@ -18,7 +21,8 @@ setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${PATH}:"
 ## Needed to add this for latex2html to work...oh well.
 setenv RGBDEF /etc/X11/rgb.txt
 
-setenv PYTHONPATH /opt/anaconda3/:/usr/local:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/root5.34
+#setenv PYTHONPATH /usr/local:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/root5.34
+setenv PYTHONPATH /opt/anaconda3/:/home/bellis/root_build/lib:/usr/local:/usr/local/lib//usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/home/bellis/root/lib/
 
 setenv SVN_EDITOR vi
 setenv EDITOR vi
@@ -46,6 +50,16 @@ setenv CUDA_HOME /usr/local/cuda-6.5/
 setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${LD_LIBRARY_PATH}
 #setenv PYTHONPATH /your/home/lib/python:${PYTHONPATH}
 
-setenv PATH /opt/anaconda3/bin/:${PATH}:/usr/local/java/bin
+
+# For Java
+setenv PATH /opt/anaconda3/bin:${PATH}:/usr/local/java/bin/
 
 setenv LD_LIBRARY_PATH /opt/anaconda3/lib/:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+
+setenv S2PLOT_PRCDRIVER s2prcwriter
+setenv S2PATH /home/bellis/s2plot
+setenv S2ARCH linux-gnu-x86_64
+setenv S2PLOT_LATEXBIN /usr/bin/
+
+setenv PRINTER RB131

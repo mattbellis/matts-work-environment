@@ -14,8 +14,10 @@ rm -rf .hgrc
 rm -rf .conkyrc
 rm -rf proxy.pac
 rm -rf ~/.matplotlib/my_matplotlibrc
+rm -rf ~/.Xresources
 
 ######### Link files ############
+ln -s ~/matts-work-environment/environment_configs/Xresources .Xresources
 ln -s ~/matts-work-environment/environment_configs/cshrc .cshrc
 ln -s ~/matts-work-environment/environment_configs/dir_colors .dir_colors
 ln -s ~/matts-work-environment/environment_configs/fluxbox_keys .fluxbox/keys

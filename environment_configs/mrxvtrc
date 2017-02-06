@@ -7,6 +7,15 @@ Mrxvt.foreground:      white
 #Mrxvt.foreground:      black
 Mrxvt.font:             10x20
 #-bg black -fg white -fn 10x20
+# DejaVu Sans Mono
+#Mrxvt.xft:         1
+#Mrxvt.xftFont:         Bitstream Vera Sans Mono
+#Mrxvt.xftSize:         8
+#Mrxvt.xftAntialias:        0
+#Mrxvt.xft:              1
+#Mrxvt.xftFont:          Anonymous Pro
+#Mrxvt.xftFont:          Monoid
+
 
 NIU_lecture_notes.initProfileList:  1,2,3,4
 Mrxvt.profile1.workingDirectory:       ~/current_lecture/lecture_notes
