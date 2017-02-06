@@ -5,7 +5,7 @@ alias ls 	'ls --color=auto'
 #alias gmake	'make'
 #eval `dircolors $HOME/.dir_colors`
 
-alias jupyter ~/anaconda2/bin/jupyter-notebook
+alias jupyter ~/anaconda3/bin/jupyter-notebook
 
 limit coredumpsize 102400 # limit size to 100M
 
@@ -22,7 +22,7 @@ setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${PATH}:"
 setenv RGBDEF /etc/X11/rgb.txt
 
 #setenv PYTHONPATH /usr/local:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/root5.34
-setenv PYTHONPATH /home/bellis/build/lib:/home/bellis/anaconda2:/usr/local:/usr/local/lib//usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/home/bellis/root/lib/
+setenv PYTHONPATH /home/bellis/root_build/lib:/home/bellis/anaconda3:/usr/local:/usr/local/lib//usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/home/bellis/root/lib/
 
 setenv SVN_EDITOR vi
 setenv EDITOR vi
@@ -51,9 +51,10 @@ setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${L
 #setenv PYTHONPATH /your/home/lib/python:${PYTHONPATH}
 
 # For Java
-setenv PATH ${PATH}:/usr/local/java/bin/:${HOME}/anaconda2/bin/
+setenv PATH ${HOME}/anaconda3/bin/:${PATH}:/usr/local/java/bin/
 
-setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${HOME}/anaconda2/:${HOME}/anaconda2/lib:/usr/lib/i386-linux-gnu/
+setenv LD_LIBRARY_PATH ${HOME}/anaconda3/:${HOME}/anaconda3/lib:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
 
 setenv S2PLOT_PRCDRIVER s2prcwriter
 setenv S2PATH /home/bellis/s2plot
