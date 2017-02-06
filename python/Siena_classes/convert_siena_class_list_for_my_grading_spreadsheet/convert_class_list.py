@@ -1,9 +1,11 @@
 import numpy as np
 import sys
 
+# This works with the .csv downloaded from 
+# Siena Class Roster 
+# Siena Class Roster with option to download to excel.
+
 infile = open(sys.argv[1])
-
-
 
 print "%s,%s,%s,%s,%s,%s,%s,%s" % ("","","","","","","","Quiz HW or Exam")
 print "%s,%s,%s,%s,%s,%s,%s,%s" % ("","","","","","","","Assignment")
@@ -12,7 +14,7 @@ print "%s,%s,%s,%s,%s,%s,%s,%d" % ("Number","Email","Last name","First name","Pr
 
 count = 0
 for line in infile:
-    vals = line.split("	")
+    vals = line.split(",")
     #print vals
     if len(vals)>1 and vals[0] != 'TERM':
         lname = vals[7]

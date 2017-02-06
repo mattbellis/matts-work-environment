@@ -23,11 +23,11 @@ For some reason, LaTeX doesn't like this.
 
 * Run the parser.
 
-    python hello_world_web_scraper.py Detail\ Class\ List.html > temp.tex
+    python siena_class_roster.py Detail\ Class\ List.html > temp.tex
 
     or 
 
-    python hello_world_web_scraper.py Siena\ Class\ Roster.html > temp.tex
+    python siena_class_roster.py Siena\ Class\ Roster.html > temp.tex
 
 
 * Build the pdf.

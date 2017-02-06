@@ -67,7 +67,7 @@ for table in tables:
                         print "\centering"
                         closed_figure = False
 
-                    if os.stat(image).st_size < 200:
+                    if os.stat(image).st_size < 300:
                         image = './file_not_found.jpg'
 
                     if icount%5==4:
