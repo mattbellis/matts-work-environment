@@ -1,4 +1,5 @@
 cd
+rm -f bin_scripts
 ln -s matts-work-environment/bin_scripts/ .
 
 ######### Remove files ############

@@ -23,6 +23,8 @@ nentries = tree.GetEntries()
 outfilename = "%s.dat" % (sys.argv[1].split('.root')[0])
 outfile = open(outfilename,'w')
 
+print "nentries: %d" % (nentries)
+
 for i in xrange(nentries):
 
     output = "Event: %d\n" % (i)
