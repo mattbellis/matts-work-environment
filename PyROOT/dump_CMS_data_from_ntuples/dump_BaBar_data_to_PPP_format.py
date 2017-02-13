@@ -1,11 +1,26 @@
 import numpy as np
 import matplotlib as plt
 
+
 import ROOT
 
 import sys
 
 import zipfile
+
+import myPIDselector
+from myPIDselector import *
+
+eps = PIDselector("e")
+
+################################################################################
+def sph2cart(pmag,costh,phi):
+    theta = np.arccos(costh)
+    x = pmag*np.sin(theta)*np.cos(phi)
+    y = pmag*np.sin(theta)*np.sin(phi)
+    z = pmag*costh
+    return x,y,z
+################################################################################
 
 f = ROOT.TFile(sys.argv[1])
 
@@ -23,96 +38,139 @@ nentries = tree.GetEntries()
 outfilename = "%s.dat" % (sys.argv[1].split('.root')[0])
 outfile = open(outfilename,'w')
 
-for i in xrange(nentries):
+for i in range(nentries):
 
     output = "Event: %d\n" % (i)
     #output = ""
     tree.GetEntry(i)
 
     nvals = 0
-    '''
-    ############################################################################
-    # Print out the not top-jets
-    ############################################################################
-    njets = tree.NJet
-    output += "%d\n" % (njets)
-    for j in xrange(njets):
-        e = tree.Jet_E[j]
-        px = tree.Jet_Px[j]
-        py = tree.Jet_Py[j]
-        pz = tree.Jet_Pz[j]
-        jet_btag = tree.Jet_btag[j]
-        output += "%.4f %.4f %.4f %.4f %.4f\n" % (e,px,py,pz,jet_btag)
-        nvals += 5
-
-        #mass = np.sqrt(e**2 - (px**2 + py**2 + pz**2))
-        #print mass
-
-    ############################################################################
-    # Print out the top jets
-    ############################################################################
-    #output += "0\n"
-    '''
+    
     ############################################################################
     # Print out the pions
     ############################################################################
     npions = tree.npi
     output += "%d\n" % (npions)
-    print output
-    #'''
-    for j in xrange(npions):
-        print tree.pienergy[j]
-        #e = tree.pion[j]
-        #px = tree.pion[j]
-        #py = tree.pion[j]
-        #pz = tree.pion[j]
-        #q = tree.pion[j]
-        #output += "%.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q)
-        #nvals += 5
-    #'''
+    for j in range(npions):
+        e = tree.pienergy[j]
+        p3 = tree.pip3[j]
+        phi = tree.piphi[j]
+        costh = tree.picosth[j]
+        px,py,pz = sph2cart(p3,costh,phi)
+        lund = tree.piLund[j]
+        q = int(lund/np.abs(lund))
+        idx = tree.piTrkIdx[j]
+        dedx = tree.TRKdedxdch[idx]
+        drc = tree.TRKDrcTh[idx]
+        beta = 1.0/np.cos(drc)/1.474
+        output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
+        nvals += 5
 
-    '''
+    ############################################################################
+    # Print out the Kaons
+    ############################################################################
+    nkaons = tree.nK
+    output += "%d\n" % (nkaons)
+    for j in range(nkaons):
+        e = tree.Kenergy[j]
+        p3 = tree.Kp3[j]
+        phi = tree.Kphi[j]
+        costh = tree.Kcosth[j]
+        px,py,pz = sph2cart(p3,costh,phi)
+        lund = tree.KLund[j]
+        q = int(lund/np.abs(lund))
+        idx = tree.KTrkIdx[j]
+        dedx = tree.TRKdedxdch[idx]
+        drc = tree.TRKDrcTh[idx]
+        beta = 1.0/np.cos(drc)/1.474
+        output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
+        nvals += 5
+
+    ############################################################################
+    # Print out the protons
+    ############################################################################
+    nprotons = tree.np
+    output += "%d\n" % (nprotons)
+    for j in range(nprotons):
+        e = tree.penergy[j]
+        p3 = tree.pp3[j]
+        phi = tree.pphi[j]
+        costh = tree.pcosth[j]
+        px,py,pz = sph2cart(p3,costh,phi)
+        lund = tree.pLund[j]
+        q = int(lund/np.abs(lund))
+        idx = tree.pTrkIdx[j]
+        dedx = tree.TRKdedxdch[idx]
+        drc = tree.TRKDrcTh[idx]
+        beta = 1.0/np.cos(drc)/1.474
+        output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
+        nvals += 5
+
+    #'''
     ############################################################################
     # Print out the muons
     ############################################################################
-    nmuons = tree.NMuon
+    nmuons = tree.nmu
     output += "%d\n" % (nmuons)
-    for j in xrange(nmuons):
-        e = tree.Muon_E[j]
-        px = tree.Muon_Px[j]
-        py = tree.Muon_Py[j]
-        pz = tree.Muon_Pz[j]
-        q = tree.Muon_Charge[j]
-        output += "%.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q)
+    for j in range(nmuons):
+        e = tree.muenergy[j]
+        p3 = tree.mup3[j]
+        phi = tree.muphi[j]
+        costh = tree.mucosth[j]
+        px,py,pz = sph2cart(p3,costh,phi)
+        lund = tree.muLund[j]
+        q = int(lund/np.abs(lund))
+        idx = tree.muTrkIdx[j]
+        dedx = tree.TRKdedxdch[idx]
+        drc = tree.TRKDrcTh[idx]
+        beta = 1.0/np.cos(drc)/1.474
+        output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
         nvals += 5
+    #'''
 
+    #'''
+
+    #'''
     ############################################################################
     # Print out the electrons
     ############################################################################
-    nelectrons = tree.NElectron
+    nelectrons = tree.ne
     output += "%d\n" % (nelectrons)
-    for j in xrange(nelectrons):
-        e = tree.Electron_E[j]
-        px = tree.Electron_Px[j]
-        py = tree.Electron_Py[j]
-        pz = tree.Electron_Pz[j]
-        q = tree.Electron_Charge[j]
-        output += "%.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q)
+    for j in range(nelectrons):
+        e = tree.eenergy[j]
+        p3 = tree.ep3[j]
+        phi = tree.ephi[j]
+        costh = tree.ecosth[j]
+        px,py,pz = sph2cart(p3,costh,phi)
+        lund = tree.eLund[j]
+        q = int(lund/np.abs(lund))
+        idx = tree.eTrkIdx[j]
+        dedx = tree.TRKdedxdch[idx]
+        drc = tree.TRKDrcTh[idx]
+        beta = 1.0/np.cos(drc)/1.474
+        bit = tree.eSelectorsMap[j]
+        print(bit)
+        eps.SetBits(bit)
+        eps.PrintSelectors()
+        output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
         nvals += 5
 
+    #''' 
     ############################################################################
     # Print out the photons
     ############################################################################
-    nphotons = tree.NPhoton
+    nphotons = tree.ngamma
     output += "%d\n" % (nphotons)
-    for j in xrange(nphotons):
-        e = tree.Photon_E[j]
-        px = tree.Photon_Px[j]
-        py = tree.Photon_Py[j]
-        pz = tree.Photon_Pz[j]
+    for j in range(nphotons):
+        e = tree.eenergy[j]
+        p3 = tree.ep3[j]
+        phi = tree.ephi[j]
+        costh = tree.ecosth[j]
+        px,py,pz = sph2cart(p3,costh,phi)
         output += "%.4f %.4f %.4f %.4f\n" % (e,px,py,pz)
         nvals += 4
 
+    ''' 
     #print "MET!!!!!!!!!!!!!!!!!!!"
     px = tree.MET_px
     py = tree.MET_py
