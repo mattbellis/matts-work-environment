@@ -12,6 +12,31 @@ import myPIDselector
 from myPIDselector import *
 
 eps = PIDselector("e")
+pps = PIDselector("p")
+pips = PIDselector("pi")
+Kps = PIDselector("K")
+mups = PIDselector("mu")
+
+particles = ["mu","e","pi","K","p"]
+
+################################################################################
+def selectPID(eps,mups,pips,Kps,pps,verbose=False):
+    verbose = True
+    max_pid = -1
+    max_particle = -1
+    for i,ps in enumerate([eps,mups,pips,Kps,pps]):
+        if verbose:
+            ps.PrintSelectors()
+        pid = ps.HighestBitFraction()
+        print pid
+        if pid>max_pid:
+            max_pid = pid
+            max_particle = i
+    print max_particle,particles[max_particle]
+    return max_particle,max_pid
+
+
+################################################################################
 
 ################################################################################
 def sph2cart(pmag,costh,phi):
@@ -63,6 +88,10 @@ for i in range(nentries):
         dedx = tree.TRKdedxdch[idx]
         drc = tree.TRKDrcTh[idx]
         beta = 1.0/np.cos(drc)/1.474
+        print "pions"
+        ebit,mubit,pibit,Kbit,pbit = tree.eSelectorsMap[j],tree.muSelectorsMap[j],tree.piSelectorsMap[j],tree.KSelectorsMap[j],tree.pSelectorsMap[j]
+        eps.SetBits(ebit); mups.SetBits(mubit); pips.SetBits(pibit); Kps.SetBits(Kbit); pps.SetBits(pbit);
+        max_particle,max_pid = selectPID(eps,mups,pips,Kps,pps,verbose=False)
         output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
         nvals += 5
 
@@ -83,6 +112,10 @@ for i in range(nentries):
         dedx = tree.TRKdedxdch[idx]
         drc = tree.TRKDrcTh[idx]
         beta = 1.0/np.cos(drc)/1.474
+        print "Kaons"
+        ebit,mubit,pibit,Kbit,pbit = tree.eSelectorsMap[j],tree.muSelectorsMap[j],tree.piSelectorsMap[j],tree.KSelectorsMap[j],tree.pSelectorsMap[j]
+        eps.SetBits(ebit); mups.SetBits(mubit); pips.SetBits(pibit); Kps.SetBits(Kbit); pps.SetBits(pbit);
+        max_particle,max_pid = selectPID(eps,mups,pips,Kps,pps,verbose=False)
         output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
         nvals += 5
 
@@ -103,6 +136,10 @@ for i in range(nentries):
         dedx = tree.TRKdedxdch[idx]
         drc = tree.TRKDrcTh[idx]
         beta = 1.0/np.cos(drc)/1.474
+        print "protons"
+        ebit,mubit,pibit,Kbit,pbit = tree.eSelectorsMap[j],tree.muSelectorsMap[j],tree.piSelectorsMap[j],tree.KSelectorsMap[j],tree.pSelectorsMap[j]
+        eps.SetBits(ebit); mups.SetBits(mubit); pips.SetBits(pibit); Kps.SetBits(Kbit); pps.SetBits(pbit);
+        max_particle,max_pid = selectPID(eps,mups,pips,Kps,pps,verbose=False)
         output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
         nvals += 5
 
@@ -124,6 +161,10 @@ for i in range(nentries):
         dedx = tree.TRKdedxdch[idx]
         drc = tree.TRKDrcTh[idx]
         beta = 1.0/np.cos(drc)/1.474
+        print "muons"
+        ebit,mubit,pibit,Kbit,pbit = tree.eSelectorsMap[j],tree.muSelectorsMap[j],tree.piSelectorsMap[j],tree.KSelectorsMap[j],tree.pSelectorsMap[j]
+        eps.SetBits(ebit); mups.SetBits(mubit); pips.SetBits(pibit); Kps.SetBits(Kbit); pps.SetBits(pbit);
+        max_particle,max_pid = selectPID(eps,mups,pips,Kps,pps,verbose=False)
         output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
         nvals += 5
     #'''
@@ -148,10 +189,10 @@ for i in range(nentries):
         dedx = tree.TRKdedxdch[idx]
         drc = tree.TRKDrcTh[idx]
         beta = 1.0/np.cos(drc)/1.474
-        bit = tree.eSelectorsMap[j]
-        print(bit)
-        eps.SetBits(bit)
-        eps.PrintSelectors()
+        print "electrons"
+        ebit,mubit,pibit,Kbit,pbit = tree.eSelectorsMap[j],tree.muSelectorsMap[j],tree.piSelectorsMap[j],tree.KSelectorsMap[j],tree.pSelectorsMap[j]
+        eps.SetBits(ebit); mups.SetBits(mubit); pips.SetBits(pibit); Kps.SetBits(Kbit); pps.SetBits(pbit);
+        max_particle,max_pid = selectPID(eps,mups,pips,Kps,pps,verbose=False)
         output += "%.4f %.4f %.4f %.4f %.4f %.4f %d\n" % (e,px,py,pz,q,beta,dedx)
         nvals += 5
 

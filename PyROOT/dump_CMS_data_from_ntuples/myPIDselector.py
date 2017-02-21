@@ -173,6 +173,25 @@ class PIDselector:
       val -= test
 
   ##############################################
+  def HighestBitSet(self):
+    '''Check what is the highest bit set.
+    Returns the highest bit or -999 if none are set'''
+    highest_bit = -999
+    for i in range(self.max_bits-1,-1,-1):
+        if(self.bits[i]>0):
+          return i+1
+    return highest_bit
+
+  ##############################################
+  def HighestBitFraction(self):
+    '''Check what is fraction of the highest bit set.
+    '''
+    highest_bit = self.HighestBitSet()
+    if highest_bit<0:
+        highest_bit = 0
+    return float(highest_bit)/self.max_bits
+
+  ##############################################
   def IsBitSet(self, val):
     '''Check if selector number \'val\' is set.
     Returns True or False.'''
