@@ -56,7 +56,8 @@ setenv PATH /opt/anaconda3/bin:${PATH}:/usr/local/java/bin/
 
 #setenv LD_LIBRARY_PATH ${HOME}/anaconda3/:${HOME}/anaconda3/lib:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
 #setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
-setenv LD_LIBRARY_PATH /opt/anaconda3/lib/:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH /opt/anaconda3/lib/:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+setenv LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/:/opt/anaconda3/lib/
 #setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
 
 setenv S2PLOT_PRCDRIVER s2prcwriter
