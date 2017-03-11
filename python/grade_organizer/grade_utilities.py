@@ -211,7 +211,7 @@ class Student:
 
         #'''
         # Quizzes
-        #ret += " -----\nQuizzes\n -----\n"
+        ret += " -----\nQuizzes\n -----\n"
         #ret += " -----\nReading, pre-lecture quizzes, in-class activities\n -----\n"
         #drop_lowest_score = True
         drop_lowest_score = False
@@ -226,14 +226,14 @@ class Student:
             ret += "\n"
         avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
         averages[0] = avg
-        #ret += "\tQuiz avg: %4.2f\n" % (avg)
+        ret += "\n\tQuiz avg: %4.2f\n" % (avg)
         #ret += "\n\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
         #ret += "\n\tIn-class assignments, pre-lecture quizzes, etc: %4.2f\n" % (avg)
         #'''
 
         # HW
-        drop_lowest_score = True
-        #drop_lowest_score = False
+        #drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
         ret += " -----\nHomeworks\n -----\n"
         #ret += " -----\nHomeworks and quizzes\n -----\n"
@@ -258,7 +258,8 @@ class Student:
         picked_a_lowest = False
         #ret += " -----\nExams\n -----\n"
         #ret += " -----\nWeekly quizzes\n -----\n"
-        ret += "\n -----\nMid-term project\n -----\n"
+        #ret += "\n -----\nMid-term project\n -----\n"
+        ret += "\n -----\nLabs\n -----\n"
         #print len(self.grades.exams)
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
@@ -395,7 +396,7 @@ class Student:
             num = g.grade_pct()
             mydict[date] = num
 
-        keys = mydict.keys()
+        keys = list(mydict.keys())
         sorted_keys = np.sort(keys)
         prev_quiz = 0.5
         prev_hw = 0.5
@@ -468,10 +469,10 @@ def email_grade_summaries(email_address,msg_from,msg_subject,msg_body,password="
         session.starttls()
         session.login(smtpuser,smtppasswd)
         session.sendmail(me, email_address, msg.as_string())
-        print "Successfully sent email"
+        print("Successfully sent email")
         session.quit()
     except smtplib.SMTPException:
-        print "Error: unable to send email"
+        print("Error: unable to send email")
 
 
 
