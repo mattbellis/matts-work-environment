@@ -21,9 +21,9 @@ def read_datafile(infilename,experiment="FNDA1",element="Fe",profile="1"):
     spot_number,posx,posy,dfe,conc_fe,conc_ni,delta_fe,delta_fe_err = vals[0:8]
     # dfe = distance from edge
 
-    print dfe
-    print conc_fe
-    print conc_ni
+    print(dfe)
+    print(conc_fe)
+    print(conc_ni)
 
     crossing_point = 40.0 # For Fe
     if element=="Fe":
@@ -31,7 +31,7 @@ def read_datafile(infilename,experiment="FNDA1",element="Fe",profile="1"):
     elif element=="Ni":
         crossing_point = 60.0 # For Ni
 
-    print "Element %s" % (element)
+    print("Element %s" % (element))
 
     # Flip the Ni x vals
     if element=="Ni":
@@ -49,8 +49,8 @@ def read_datafile(infilename,experiment="FNDA1",element="Fe",profile="1"):
     xvals = np.linspace(min(dfe),max(dfe),1000)
     idx = find_nearest(predicted_conc(xvals),crossing_point)
     xoffset = xvals[idx]
-    print "OFFSET: %f" % (xoffset)
-    print "xoffset: %f %e" % (xoffset,xoffset)
+    print("OFFSET: %f" % (xoffset))
+    print("xoffset: %f %e" % (xoffset,xoffset))
     if element=="Ni":
         dfe -= xoffset
     else:
@@ -94,7 +94,7 @@ def read_datafile(infilename,experiment="FNDA1",element="Fe",profile="1"):
 
 
     #print index
-    print dfe
+    print(dfe)
     #exit()
     return dfe,conc_fe/100.,conc_ni/100.,delta_fe,delta_fe_err,xoffset
 
@@ -111,8 +111,8 @@ if __name__=="__main__":
     plt.plot([0.0,0.0],[0,1])
     plt.plot([min(x),max(x)],[0.6,0.6])
     plt.plot([min(x),max(x)],[0.4,0.4])
-    print x
-    print c0
+    print(x)
+    print(c0)
     plt.ylim(0.0,1.1)
     plt.legend()
 
