@@ -213,8 +213,8 @@ class Student:
         # Quizzes
         ret += " -----\nQuizzes\n -----\n"
         #ret += " -----\nReading, pre-lecture quizzes, in-class activities\n -----\n"
-        #drop_lowest_score = True
-        drop_lowest_score = False
+        drop_lowest_score = True
+        #drop_lowest_score = False
         picked_a_lowest = False
         for g in self.grades.quizzes:
             #ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())

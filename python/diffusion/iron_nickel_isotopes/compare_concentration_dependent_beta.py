@@ -30,7 +30,7 @@ if len(sys.argv)>2:
     element = sys.argv[2]
 
 infilename  = "new_data_040415/data_%s_%s_profile%s.dat" % (experiment,element,profile)
-print infilename
+print(infilename)
 
 ################################################################################
 if experiment=="FNDA1":
@@ -90,7 +90,7 @@ npts = 100
 dx   = (hi-lo)/float(npts)
 
 xpos = np.linspace(lo,hi,npts) 
-print lo,hi
+print(lo,hi)
 #exit()
 #'''
 #if element=="Ni":
@@ -103,15 +103,15 @@ elif element=="Fe" and experiment=="FNDA1" and profile=="2":
     xpos = -xpos
 #'''
 
-print lo,hi
-print xpos[0],xpos[-1]
+print(lo,hi)
+print(xpos[0],xpos[-1])
 #exit()
 
 frac_interface = (interface_x-lo)/(hi-lo)
-print "frac_interface: ",frac_interface
+print("frac_interface: ",frac_interface)
 
 point_of_intial_interface = int(npts*frac_interface)
-print "point_of_intial_interface: ", point_of_intial_interface
+print("point_of_intial_interface: ", point_of_intial_interface)
 xvals = np.linspace(lo,hi,npts)
 
 ################################################################################
@@ -130,9 +130,9 @@ invdx2 = 1.0/(dx**2)
 #D = 3.17364e-10
 #D = 3.185e-10
 
-print "dx: ",dx
-print "invdx2: ",invdx2
-print "dt: ",dt
+print("dx: ",dx)
+print("invdx2: ",invdx2)
+print("dt: ",dt)
 
 t = t0
 
@@ -147,9 +147,9 @@ tag = "dt300"
 ################################################################################
 def fitfunc(data,p,parnames,params_dict,flag=0):
 
-    print '----------------------------------'
-    print ' Calculating diffusion profiles    '
-    print '----------------------------------'
+    print('----------------------------------')
+    print(' Calculating diffusion profiles    ')
+    print('----------------------------------')
 
     pn = parnames
     #print "ere"
@@ -158,6 +158,7 @@ def fitfunc(data,p,parnames,params_dict,flag=0):
 
     mybeta = p[pn.index('mybeta')]
     #intercept = p[pn.index('intercept')] # CONCENTRATION DEPENDENCE
+    #intercept =  0.00# CONCENTRATION DEPENDENCE
     #print "mybeta: ",mybeta
 
     c56 = np.zeros(npts)
@@ -183,11 +184,11 @@ def fitfunc(data,p,parnames,params_dict,flag=0):
 
         # Condition for finite element approach to be stable. 
         if len( (D56*dt*invdx2)[D56*(dt*invdx2)>0.5])>0:
-            print "D56*dt*invdx2: ",D56*(dt*invdx2)
+            print("D56*dt*invdx2: ",D56*(dt*invdx2))
 
         #################### CONC DEPENDENT BETA ###############################
         if flag==1:
-            print "HEREEREERE"
+            print("HEREEREERE")
             mybetamin = 0.1
             mybetamax = 0.5
             conc_norm = (c56-min(c56))/max(c56)
@@ -199,7 +200,7 @@ def fitfunc(data,p,parnames,params_dict,flag=0):
         ########################################################################
 
         # This is the normal beta
-        print mybeta
+        print(mybeta)
         D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
 
         #print D56
@@ -292,11 +293,11 @@ for beta in betas:
     c54s.append(c54fake)
     sim_deltas.append(sim_deltasfake)
 
-betas.append(99)
-c56fake,c54fake,sim_deltasfake = fitfunc(data,[99],['mybeta'],params_dict,flag=1)
-c56s.append(c56fake)
-c54s.append(c54fake)
-sim_deltas.append(sim_deltasfake)
+#betas.append(99)
+#c56fake,c54fake,sim_deltasfake = fitfunc(data,[99],['mybeta'],params_dict,flag=1)
+#c56s.append(c56fake)
+#c54s.append(c54fake)
+#sim_deltas.append(sim_deltasfake)
 
 
 ################################################################################
@@ -321,8 +322,8 @@ plt.plot([interface_x,interface_x],[0,110.0]) # Draw line
 plt.ylim(0,1.10)
 #plt.plot(x,c0,'ro',label='Fe concentration data')
 #plt.plot(x,c1,'bo',label='Ni concentration data')
-print x
-print c0
+print(x)
+print(c0)
 #exit()
 plt.ylabel('Concentration',fontsize=24)
 plt.xlabel('Microns',fontsize=24)
