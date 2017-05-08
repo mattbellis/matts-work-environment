@@ -104,7 +104,8 @@ def main():
                     g.set_add_index(i+1)
                     g.set_subtract_index(i+2)
                             
-                elif r=='Exam':
+                #elif r=='Exam':
+                elif r=='Lab':
                     g = Grade_file_info("exam")
                     g.set_grade_index(i)
 
