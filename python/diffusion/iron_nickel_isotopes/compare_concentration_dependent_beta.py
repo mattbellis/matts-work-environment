@@ -12,6 +12,7 @@ from plot_diffusion_data_040415 import read_datafile
 
 from scipy import interpolate
 
+intercept = 0.0
 
 experiment = "FNDA2"
 #experiment = "FNDA1"
@@ -159,6 +160,7 @@ def fitfunc(data,p,parnames,params_dict,flag=0):
     mybeta = p[pn.index('mybeta')]
     #intercept = p[pn.index('intercept')] # CONCENTRATION DEPENDENCE
     #intercept =  0.00# CONCENTRATION DEPENDENCE
+    #intercept = 0.1
     #print "mybeta: ",mybeta
 
     c56 = np.zeros(npts)
@@ -211,6 +213,7 @@ def fitfunc(data,p,parnames,params_dict,flag=0):
         # Here, we'll interpret beta as E.
         #D54 = D56*(mybeta*(np.sqrt((heavy_isotope/light_isotope)) - 1.0) + 1) # For Fe
         #D54 = D56*((heavy_isotope/light_isotope)**(intercept + (mybeta*c56))) # CONCENTRATION DEPENDENT
+        #print("intercept: ",intercept)
 
         #print "DSSS",D56,D54
 
@@ -267,7 +270,7 @@ def fitfunc(data,p,parnames,params_dict,flag=0):
 
     delta56_54 = (c56/c54 - 1.0)*1000.0
 
-    return c56,c54,delta56_54
+    return c56,c54,delta56_54,intercept
 ################################################################################
 ################################################################################
 
@@ -285,16 +288,17 @@ data = [x,1.0,1.0]
 c56s = []
 c54s = []
 sim_deltas = []
-betas = [0.30,0.35,0.40]
+betas = [0.20,0.35,0.50]
 for beta in betas:
     b = [beta]
-    c56fake,c54fake,sim_deltasfake = fitfunc(data,b,['mybeta'],params_dict)
+    c56fake,c54fake,sim_deltasfake,intercept = fitfunc(data,b,['mybeta'],params_dict)
     c56s.append(c56fake)
     c54s.append(c54fake)
     sim_deltas.append(sim_deltasfake)
 
 #betas.append(99)
 #c56fake,c54fake,sim_deltasfake = fitfunc(data,[99],['mybeta'],params_dict,flag=1)
+#c56fake,c54fake,sim_deltasfake,intercept = fitfunc(data,[99],['mybeta'],params_dict,flag=1)
 #c56s.append(c56fake)
 #c54s.append(c54fake)
 #sim_deltas.append(sim_deltasfake)
@@ -356,6 +360,8 @@ for beta,delta in zip(betas,sim_deltas):
 plt.ylabel(r'$\delta$',fontsize=36)
 plt.xlabel('Microns',fontsize=24)
 plt.legend(loc='lower left')
+print("intercept: ",intercept)
+#name = "FAKE_COMPARISON_%s_%s_%s_%s_intercept_%.2f_delta.png" % (element,experiment,profile,tag,intercept)
 name = "FAKE_COMPARISON_%s_%s_%s_%s_delta.png" % (element,experiment,profile,tag)
 plt.subplots_adjust(top=0.95,bottom=0.15,right=0.95,left=0.10)
 plt.savefig(name)
