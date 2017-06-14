@@ -20,10 +20,11 @@ setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${PATH}:"
 ## Needed to add this for latex2html to work...oh well.
 setenv RGBDEF /etc/X11/rgb.txt
 
-#setenv PYTHONPATH /usr/local:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/root5.34
+# NORMAL!!!!
 setenv PYTHONPATH /opt/anaconda3/:/usr/local/lib/root:/usr/local:/usr/local/lib/:/usr/local/lib/root/:/usr/lib/x86_64-linux-gnu
-#setenv PYTHONPATH /opt/anaconda3/:/usr/local/lib/root/:/usr/local:/usr/local/lib/:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu#:/home/bellis/root/lib/
-#setenv PYTHONPATH /opt/anaconda3/:/opt/anaconda3/lib/:/usr/local:/usr/local/lib/:/usr/local/lib/root/
+
+# MADGRAPH!!!
+#setenv PYTHONPATH /usr/local/lib/root:/usr/local:/usr/local/lib/:/usr/local/lib/root/:/usr/lib/x86_64-linux-gnu
 
 
 setenv SVN_EDITOR vi
@@ -52,9 +53,11 @@ setenv CUDA_HOME /usr/local/cuda-6.5/
 setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${LD_LIBRARY_PATH}
 #setenv PYTHONPATH /your/home/lib/python:${PYTHONPATH}
 
-
-# For Java
+# NORMAL!!!!!!!!!!!!!!!!!!!!!
 setenv PATH /opt/anaconda3/bin:${PATH}:/usr/local/java/bin/
+
+# MADGRAPH!!!!!!!!!!
+#setenv PATH ${PATH}:/usr/local/java/bin/
 
 #setenv LD_LIBRARY_PATH ${HOME}/anaconda3/:${HOME}/anaconda3/lib:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
 #setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
@@ -65,7 +68,7 @@ setenv PATH /opt/anaconda3/bin:${PATH}:/usr/local/java/bin/
 setenv LD_LIBRARY_PATH #/opt/anaconda3/lib/:/usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu/
 #setenv LD_LIBRARY_PATH /opt/anaconda3/lib/:/opt/anaconda3/:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
 #setenv LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/:/opt/anaconda3/lib/
-setenv LD_LIBRARY_PATH #/usr/lib/i386-linux-gnu/:/usr/lib/x86_64-linux-gnu/
+#setenv LD_LIBRARY_PATH #/usr/lib/i386-linux-gnu/:/usr/lib/x86_64-linux-gnu/
 #setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
 
 setenv S2PLOT_PRCDRIVER s2prcwriter

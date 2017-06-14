@@ -4,28 +4,98 @@ import pylhef
 
 import sys
 
+#p = [100.,100.,100.]
+#m = 173.
+
+################################################################################
+def lorentz_boost(pmom, rest_frame):
+
+    p = rest_frame
+    c = 1
+
+    pmag = np.sqrt(p[1]**2 + p[2]**2 + p[3]**2)
+    #E = np.sqrt((pmag*c)**2 + (m*c**2)**2)
+    E = p[0]
+
+    beta = pmag/E
+    betaX = p[1]/E
+    betaY = p[2]/E
+    betaZ = p[3]/E
+
+    gamma = np.sqrt(1 / (1-beta**2))
+
+    x = ((gamma-1) * betaX) / beta**2
+    y = ((gamma-1) * betaY) / beta**2
+    z = ((gamma-1) * betaZ) / beta**2
+
+    L = np.matrix([[gamma,      -gamma*betaX, -gamma*betaY, -gamma*betaZ],
+                [-gamma*betaX,  1 + x*betaX,      x*betaY,      x*betaZ],
+                [-gamma*betaY,      y*betaX,  1 + y*betaY,      y*betaZ],
+                [-gamma*betaZ,      z*betaX,      z*betaZ,  1 + z*betaZ]])
+
+
+    # Moving particle that will be boosted
+    #vector = np.matrix([E,p[1],p[1],p[2]])
+    vector = np.matrix(pmom)
+
+    boosted_vec = L*np.matrix.transpose(vector)
+
+    return boosted_vec
+################################################################################
+#pmom = [200, 90,50,50]
+#rest_frame = pmom
+#print(lorentz_boost(pmom,rest_frame))
+#exit()
+
+
+
+
+
 lhefile = pylhef.read(sys.argv[1])
 
-pts = []
+ebnv = []
+esm = []
 
-for event in lhefile.events:
+for count,event in enumerate(lhefile.events):
+
+    if count%1000==0:
+        print(count)
+        #if count>1000:
+            #break
+
     particles = event.particles
 
+    #print("--------")
     for particle in particles:
-        if np.abs(particle.id)>=11 and np.abs(particle.id)<=18:
+        pid = np.abs(particle.id)
+        #print(pid)
+        #if pid>=11 and pid<=18:
+        if pid==13:
             first,last = particle.first_mother,particle.last_mother
-            if first==last and np.abs(particles[first].id)==6:
+            if first==last and np.abs(particles[first-1].id)==6:
                 p = particle.p
-                Ee = p[0] # Energy
-                #Et = particles[first].p[0]
                 Mt = particles[first-1].mass
-                #Mt = 173.
-                print(particle.id,Ee,Mt)
-                #pt = np.sqrt(p[1]*p[1] + p[2]*p[2])
-                #pts.append(pt)
-                pts.append(2*Ee/Mt)
+                topp = particles[first-1].p
+                boosted = lorentz_boost(p,topp)
+                Ee = boosted.item(0,0)
+                ebnv.append(2*Ee/Mt)
+            elif first==last and np.abs(particles[first-1].id)==24:
+                #print("HERE")
+                p = particle.p
+                W = particles[first-1]
+                Wfirst = W.first_mother
+                top = particles[Wfirst-1]
+                topp = top.p
+                Mt = top.mass
+                boosted = lorentz_boost(p,topp)
+                Ee = boosted.item(0,0)
+                esm.append(2*Ee/Mt)
 
 
+
+print(len(ebnv))
+print(len(esm))
 plt.figure()
-plt.hist(pts,bins=50)
+plt.hist(ebnv,bins=50,range=(0,1),linewidth=5,fill=False,histtype='step')
+plt.hist(esm,bins=50,range=(0,1),linewidth=5,fill=False,histtype='step')
 plt.show()
