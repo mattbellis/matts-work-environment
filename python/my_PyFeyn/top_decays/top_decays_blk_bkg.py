@@ -44,6 +44,8 @@ def top_decays(outfilename, index):
       l1 = Label(r"{\Large $t$}", x=-4.0, y=1.5)
       if index==2:# or index==3:
           l2 = Label(r"{\Large $q=(\bar{b},\bar{s},\bar{d})$}", x=1, y=1.6)
+      elif index==3:
+          c3 = Circle(center=out_vtx, radius=0.1, fill=[pyx.color.cmyk.Blue], points = [out_vtx])
 
   ##############################################################################
   if index==0:

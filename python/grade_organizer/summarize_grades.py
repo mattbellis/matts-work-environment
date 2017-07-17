@@ -46,18 +46,19 @@ def main():
     ############################################################################
 
     if args.input_file_name is None:
-        print "Must pass in an input file name!"
+        print("Must pass in an input file name!")
         parser.print_help()
 
     filename = args.input_file_name
-    infile = csv.reader(open(filename, 'rb'), delimiter=',', quotechar='#')
+    infile = csv.reader(open(filename, 'r'), delimiter=',', quotechar='#')
 
     ############################################################################
     py.sign_in("MatthewBellis", "d6h4et78v5")
     #py = plotly.plotly(username_or_email="MatthewBellis", key="d6h4et78v5")
     ############################################################################
 
-    grade_titles = ["Quizzes", "Homeworks","Exam", "Final exam", "Final grade"]
+    #grade_titles = ["Quizzes", "Homeworks","Exam", "Final exam", "Final grade"]
+    grade_titles = ["Quizzes", "Homeworks","Labs", "Final exam", "Final grade"]
     student_grades = [[],[],[],[],[]]
     hw_xvals = []
     hw_grades = []
@@ -71,7 +72,8 @@ def main():
     # Grade weighting
     #final_grade_weighting = [0.10,0.25,0.35,0.30]
     #final_grade_weighting = [0.10,0.20,0.45,0.25]
-    final_grade_weighting = [0.00,0.50,0.25,0.25] # CSIS 200, None, HW and quizzes, mid-term proj, final proj
+    #final_grade_weighting = [0.00,0.50,0.25,0.25] # CSIS 200, None, HW and quizzes, mid-term proj, final proj
+    final_grade_weighting = [0.35,0.25,0.15,0.25] # PHYS 110, Quizzes, HW , Labs, Final,
     # Quizzes
     # HWs
     # Exam 1
@@ -102,7 +104,8 @@ def main():
                     g.set_add_index(i+1)
                     g.set_subtract_index(i+2)
                             
-                elif r=='Exam':
+                #elif r=='Exam':
+                elif r=='Lab':
                     g = Grade_file_info("exam")
                     g.set_grade_index(i)
 
@@ -221,11 +224,12 @@ def main():
         elif args.course=='phys400':
             plotly_title = 'PHYS 400 - Nuclear and Particle Physics'
             plotly_filename = 'PHYS400_S16'
-            print plotly_title
-            print plotly_filename
+            print(plotly_title)
+            print(plotly_filename)
         elif args.course=='phys110':
             plotly_title = 'PHYS 110 class grades to date.'
-            plotly_filename = 'PHYS110_F14'
+            #plotly_filename = 'PHYS110_F14'
+            plotly_filename = 'PHYS110_S17'
         elif args.course=='phys310':
             plotly_title = 'PHYS 310 class grades to date.'
             plotly_filename = 'PHYS310_F14'
@@ -260,7 +264,7 @@ def main():
         for i in idx:
             hw_grades_rnd.append(hw_grades[i])
             hw_xvals_rnd.append(hw_xvals[i])
-        data0 = Box(y=hw_grades_rnd,x=hw_xvals_rnd,name="Homework and quizzes",boxpoints='all',jitter=0.1)
+        data0 = Box(y=hw_grades_rnd,x=hw_xvals_rnd,name="Homework",boxpoints='all',jitter=0.1)
         tot_data.append(data0)
         #data1 = Box(y=exam_grades_rnd,x=exam_xvals_rnd,name="Weekly assessments",boxpoints='all',jitter=0.1)
         #tot_data.append(data1)
@@ -272,7 +276,7 @@ def main():
         for i in idx:
             exam_grades_rnd.append(exam_grades[i])
             exam_xvals_rnd.append(exam_xvals[i])
-        data1 = Box(y=exam_grades_rnd,x=exam_xvals_rnd,name="Mid-term project",boxpoints='all',jitter=0.1)
+        data1 = Box(y=exam_grades_rnd,x=exam_xvals_rnd,name="Lab grades",boxpoints='all',jitter=0.1)
         tot_data.append(data1)
         #data1 = {'y':exam_grades,'x':exam_xvals,'name':"Exams"}
         if len(quiz_grades)>0:
@@ -285,7 +289,7 @@ def main():
                 quiz_grades_rnd.append(quiz_grades[i])
                 quiz_xvals_rnd.append(quiz_xvals[i])
             #data2 = Box(y=quiz_grades,x=quiz_xvals,name="In-class assignments",boxpoints='all',jitter=0.1)
-            data2 = Box(y=quiz_grades_rnd,x=quiz_xvals_rnd,name="Quizzes and in-class assignments", boxpoints='all',jitter=0.1)
+            data2 = Box(y=quiz_grades_rnd,x=quiz_xvals_rnd,name="Quizzes", boxpoints='all',jitter=0.1)
             tot_data.append(data2)
         if len(final_exam_grades)>0:
             ng = len(final_exam_grades)
@@ -296,7 +300,7 @@ def main():
             for i in idx:
                 final_exam_grades_rnd.append(final_exam_grades[i])
                 final_exam_xvals_rnd.append(final_exam_xvals[i])
-            data3 = Box(y=final_exam_grades_rnd,x=final_exam_xvals_rnd,name="Final project",boxpoints='all',jitter=0.1)
+            data3 = Box(y=final_exam_grades_rnd,x=final_exam_xvals_rnd,name="Final exam",boxpoints='all',jitter=0.1)
             #data3 = Box(y=final_exam_grades,x=final_exam_xvals,name="Final exam",boxpoints='all',jitter=0.1)
             #data3 = {'y':final_exam_grades,'x':final_exam_xvals,'name':"Final exam"}
             tot_data.append(data3)
@@ -306,7 +310,7 @@ def main():
         url = py.plot(figure,filename=plotly_filename,fileopt='overwrite')
 
         #print response
-        print url
+        print(url)
         #print filename
 
     ############################################################################
@@ -409,15 +413,15 @@ def main():
         #print msg_body
         #print s.email
         if args.dump_names and args.student==None and args.gvis==False:
-            print "%d %-20s, %-20s\t%20s" % (i,s.student_name[0],s.student_name[1],s.email)
+            print("%d %-20s, %-20s\t%20s" % (i,s.student_name[0],s.student_name[1],s.email))
 
         if args.dump_grades:
-            print s.email
-            print msg_body
+            print(s.email)
+            print(msg_body)
 
         if args.student == i:
-            print s.email
-            print msg_body
+            print(s.email)
+            print(msg_body)
 
         if args.password is not None:
             do_email = False
@@ -475,7 +479,7 @@ def main():
         ret += '</body>\n'
         ret += '</html>\n'
 
-        print ret
+        print(ret)
 
 
 

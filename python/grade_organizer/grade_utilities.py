@@ -62,7 +62,8 @@ def calc_average_of_grades(grades, drop_lowest_score=False):
         scores.pop()
         scores.pop()
 
-    #print scores
+    #print(scores)
+    #print(100*np.mean(scores))
     return 100*np.mean(scores)
 
 ################################################################################
@@ -211,14 +212,15 @@ class Student:
 
         #'''
         # Quizzes
-        #ret += " -----\nQuizzes\n -----\n"
+        ret += " -----\nQuizzes\n -----\n"
         #ret += " -----\nReading, pre-lecture quizzes, in-class activities\n -----\n"
-        #drop_lowest_score = True
-        drop_lowest_score = False
+        drop_lowest_score = True
+        #drop_lowest_score = False
         picked_a_lowest = False
         for g in self.grades.quizzes:
             #ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
-            ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
+            #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
+            ret +=  "%-4s %10s %-30s\t%s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.quizzes,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
@@ -226,14 +228,16 @@ class Student:
             ret += "\n"
         avg = calc_average_of_grades(self.grades.quizzes, drop_lowest_score)
         averages[0] = avg
-        #ret += "\tQuiz avg: %4.2f\n" % (avg)
+        ret += "\n\tQuiz avg: %4.2f\n" % (avg)
         #ret += "\n\tReading, pre-lecture quizzes, computational avg: %4.2f\n" % (avg)
         #ret += "\n\tIn-class assignments, pre-lecture quizzes, etc: %4.2f\n" % (avg)
         #'''
 
         # HW
-        drop_lowest_score = True
+        #drop_lowest_score = True
         #drop_lowest_score = False
+        dropped_scores = 0
+        drop_lowest_score = 2
         picked_a_lowest = False
         ret += " -----\nHomeworks\n -----\n"
         #ret += " -----\nHomeworks and quizzes\n -----\n"
@@ -241,10 +245,19 @@ class Student:
             #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
             #ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
             ret +=  "%-4s %10s %-30s\t%s\n" % (g.grade_type,g.date,g.description,g.summary_output())
-            if drop_lowest_score==True:
+            #if drop_lowest_score==True:
+            #'''
+            if drop_lowest_score==True or drop_lowest_score>1 and dropped_scores<drop_lowest_score:
                 if is_lowest_grade(self.grades.hw,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
                     picked_a_lowest = True
+                    dropped_scores += 1
+            #'''
+            if drop_lowest_score==2 and dropped_scores<drop_lowest_score:
+                if is_next_to_lowest_grade(self.grades.hw,g):
+                    ret += "\tlowest score, will not be counted in average."
+                    #picked_a_lowest = True
+                    dropped_scores += 1
             ret += "\n"
         avg = calc_average_of_grades(self.grades.hw, drop_lowest_score)
         averages[1] = avg
@@ -258,13 +271,15 @@ class Student:
         picked_a_lowest = False
         #ret += " -----\nExams\n -----\n"
         #ret += " -----\nWeekly quizzes\n -----\n"
-        ret += "\n -----\nMid-term project\n -----\n"
+        #ret += "\n -----\nMid-term project\n -----\n"
+        ret += "\n -----\nLabs\n -----\n"
         #print len(self.grades.exams)
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
         for g in self.grades.exams:
             #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
-            ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
+            #ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
+            ret +=  "%-4s %10s %-30s\t%s\n" % ('lab',g.description,g.summary_output(),g.date)
             if drop_lowest_score==True or drop_lowest_score>1 and dropped_scores<drop_lowest_score:
                 if is_lowest_grade(self.grades.exams,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
@@ -280,6 +295,7 @@ class Student:
         if avg != avg:
             avg = -1.0
         averages[2] = avg
+        ret += "\tLabs   avg: %4.2f\n" % (avg)
         #ret += "\tExams avg: %4.2f\n" % (avg)
         #ret += "\n\tWeekly quizzes avg: %4.2f\n" % (avg)  
         #ret += "\n\tMid-term project avg: %4.2f\n" % (avg)  
@@ -298,8 +314,8 @@ class Student:
 
         # Final Exam 
         drop_lowest_score = False
-        #ret += " -----\nFinal exam\n -----\n"
-        ret += " -----\nFinal project\n -----\n"
+        ret += " -----\nFinal exam\n -----\n"
+        #ret += " -----\nFinal project\n -----\n"
         for g in self.grades.final_exam:
             ret +=  "%-7s (%10s) %s\n" % (g.grade_type,g.date,g.summary_output())
             #1
@@ -316,8 +332,8 @@ class Student:
 
         if avg != avg:
             avg = -1.0
-        #ret += "\tFinal exam  : %4.2f\n" % (avg)
-        ret += "\tFinal project  : %4.2f\n" % (avg)
+        ret += "\tFinal exam  : %4.2f\n" % (avg)
+        #ret += "\tFinal project  : %4.2f\n" % (avg)
 
         tot = 0.0
         tot_wt = 0.0
@@ -395,7 +411,7 @@ class Student:
             num = g.grade_pct()
             mydict[date] = num
 
-        keys = mydict.keys()
+        keys = list(mydict.keys())
         sorted_keys = np.sort(keys)
         prev_quiz = 0.5
         prev_hw = 0.5
@@ -468,10 +484,10 @@ def email_grade_summaries(email_address,msg_from,msg_subject,msg_body,password="
         session.starttls()
         session.login(smtpuser,smtppasswd)
         session.sendmail(me, email_address, msg.as_string())
-        print "Successfully sent email"
+        print("Successfully sent email")
         session.quit()
     except smtplib.SMTPException:
-        print "Error: unable to send email"
+        print("Error: unable to send email")
 
 
 
