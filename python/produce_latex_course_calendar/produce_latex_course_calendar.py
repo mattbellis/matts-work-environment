@@ -1,7 +1,7 @@
 import datetime as dt
 import time
 
-year = 2016
+year = 2017
 starting_month = 9
 starting_day = 6
 
@@ -10,7 +10,11 @@ start = time.strptime(datestring,"%Y %m %d")
 
 year_day = start.tm_yday
 
-tuesday = True
+monday = False
+tuesday = False
+wednesday = True
+thursday = False
+friday = False
 
 i=0
 week = 0
@@ -22,36 +26,61 @@ while i < 120:
 
     #print time.strftime("%Y %b %d",start)
     date = time.strftime("%a., %b %d",start)
-    if tuesday:
-        print "Week %0d & %s & XXX & YYY & ZZZ \\\\ " % (week,date)
+    if monday:
+        #print("Week %0d  & %s & XXX & YYY & ZZZ \\\\ " % (week,date))
+        print("Week %0d  & %s & XXX \\\\ " % (week,date))
         #print "\\hline"
-    elif thursday:
-        print "         & %s & XXX & YYY & ZZZ \\\\ " % (date)
-        print "\\hline"
+    elif wednesday:
+        #print("         & %s & XXX & YYY & ZZZ \\\\ " % (date))
+        print("         & %s & XXX \\\\ " % (date))
+    else:
+        #print("         & %s & XXX & YYY & ZZZ \\\\ " % (date))
+        print("         & %s & XXX \\\\ " % (date))
+        print("\\hline")
     '''
     else:
         print "        & %s  & XXX & YYY & ZZZ \\\\" % (date)
         print "\\hline"
     '''
 
-    if tuesday:
+    if monday:
         increment = 2
-        #increment = 1
-        #increment = 7
+        monday = False
         tuesday = False
-        wednesday = False
-        thursday = True
+        wednesday = True
+        thursday = False
+        friday = False
+        #week += 1
+    elif tuesday:
+        increment = 2
+        monday = False
+        tuesday = False
+        wednesday = True
+        thursday = False
+        friday = False
         #week += 1
     elif wednesday:
-        increment = 1
+        increment = 2
+        monday = False
         tuesday = False
         wednesday = False
-        thursday = True
+        thursday = False
+        friday = True
     elif thursday:
         increment = 5
-        tuesday = True
+        monday = False
+        tuesday = False
+        wednesday = True
+        thursday = False
+        friday = False
+        #week += 1
+    elif friday:
+        increment = 3
+        monday = True
+        tuesday = False
         wednesday = False
         thursday = False
+        friday = False
         week += 1
     #else:
         #increment = 5
