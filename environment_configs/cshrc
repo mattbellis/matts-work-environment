@@ -59,7 +59,6 @@ setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${L
 # For Java
 #setenv PATH /opt/anaconda3/bin:${PATH}:/usr/local/java/bin/
 #setenv PATH ${PATH}:/usr/local/java/bin/
-#=======
 # NORMAL!!!!!!!!!!!!!!!!!!!!!
 setenv PATH /opt/anaconda3/bin:${PATH}:/usr/local/java/bin/
 
