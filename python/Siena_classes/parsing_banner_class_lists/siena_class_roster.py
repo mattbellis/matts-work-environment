@@ -29,7 +29,7 @@ print("\setlength{\headheight}{0pt}")
 print("\setlength{\headsep}{0pt}")
 print("\\begin{document}")
 
-maxsubfigs = 25
+maxsubfigs = 20
 
 
 h2s = soup.find_all('h2')
