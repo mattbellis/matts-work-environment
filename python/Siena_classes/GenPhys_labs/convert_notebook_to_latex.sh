@@ -4,3 +4,10 @@
 # and add a 
 #    \small
 # after it. 
+#
+# Also manually change
+# matplotlib inline
+#
+# to 
+#
+# matplotlib notebook
