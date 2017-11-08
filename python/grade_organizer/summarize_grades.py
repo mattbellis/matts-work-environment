@@ -58,7 +58,8 @@ def main():
     ############################################################################
 
     #grade_titles = ["Quizzes", "Homeworks","Exam", "Final exam", "Final grade"]
-    grade_titles = ["Quizzes", "Homeworks","Labs", "Final exam", "Final grade"]
+    #grade_titles = ["Quizzes", "Homeworks","Labs", "Final exam", "Final grade"]
+    grade_titles = ["Participation", "Homeworks","Exam", "Final exam", "Final grade"]
     student_grades = [[],[],[],[],[]]
     hw_xvals = []
     hw_grades = []
@@ -73,7 +74,8 @@ def main():
     #final_grade_weighting = [0.10,0.25,0.35,0.30]
     #final_grade_weighting = [0.10,0.20,0.45,0.25]
     #final_grade_weighting = [0.00,0.50,0.25,0.25] # CSIS 200, None, HW and quizzes, mid-term proj, final proj
-    final_grade_weighting = [0.35,0.25,0.15,0.25] # PHYS 110, Quizzes, HW , Labs, Final,
+    #final_grade_weighting = [0.35,0.25,0.15,0.25] # PHYS 110, Quizzes, HW , Labs, Final,
+    final_grade_weighting = [0.05,0.25,0.25,0.45] # PHYS 470, QM, Participation, HW , Exam, Final,
     # Quizzes
     # HWs
     # Exam 1
@@ -94,7 +96,8 @@ def main():
 
                 g = None
 
-                if r=='Quiz' or r=='quiz':
+                #if r=='Quiz' or r=='quiz':
+                if r=='Participation':
                     g = Grade_file_info("quiz")
                     g.set_grade_index(i)
 
@@ -104,8 +107,8 @@ def main():
                     g.set_add_index(i+1)
                     g.set_subtract_index(i+2)
                             
-                #elif r=='Exam':
-                elif r=='Lab':
+                elif r=='Exam':
+                #elif r=='Lab':
                     g = Grade_file_info("exam")
                     g.set_grade_index(i)
 
@@ -236,6 +239,9 @@ def main():
         elif args.course=='phys260':
             plotly_title = 'PHYS 260 class grades to date.'
             plotly_filename = 'PHYS260_F15'
+        elif args.course=='phys440':
+            plotly_title = 'PHYS 440 class grades to date.'
+            plotly_filename = 'PHYS440_F17'
         elif args.course=='csis200':
             plotly_title = 'CSIS 200 class grades to date.'
             plotly_filename = 'CSIS200_F16'

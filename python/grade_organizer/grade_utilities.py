@@ -212,15 +212,17 @@ class Student:
 
         #'''
         # Quizzes
-        ret += " -----\nQuizzes\n -----\n"
+        #ret += " -----\nQuizzes\n -----\n"
+        ret += " -----\nParticipation\n -----\n"
         #ret += " -----\nReading, pre-lecture quizzes, in-class activities\n -----\n"
-        drop_lowest_score = True
-        #drop_lowest_score = False
+        #drop_lowest_score = True
+        drop_lowest_score = False
         picked_a_lowest = False
         for g in self.grades.quizzes:
             #ret +=  "%-7s %2s (%10s) %s" % (g.grade_type,g.internal_index,g.date,g.summary_output())
             #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
-            ret +=  "%-4s %10s %-30s\t%s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
+            #ret +=  "%-4s %10s %-30s\t%s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
+            ret +=  "%-4s %10s %-30s\t%s\n" % ("part",g.description,g.summary_output(),g.date)
             if drop_lowest_score==True:
                 if is_lowest_grade(self.grades.quizzes,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
@@ -237,7 +239,7 @@ class Student:
         #drop_lowest_score = True
         #drop_lowest_score = False
         dropped_scores = 0
-        drop_lowest_score = 2
+        drop_lowest_score = 1
         picked_a_lowest = False
         ret += " -----\nHomeworks\n -----\n"
         #ret += " -----\nHomeworks and quizzes\n -----\n"
@@ -269,17 +271,17 @@ class Student:
         dropped_scores = 0
         #drop_lowest_score = 1
         picked_a_lowest = False
-        #ret += " -----\nExams\n -----\n"
+        ret += " -----\nExams\n -----\n"
         #ret += " -----\nWeekly quizzes\n -----\n"
         #ret += "\n -----\nMid-term project\n -----\n"
-        ret += "\n -----\nLabs\n -----\n"
+        #ret += "\n -----\nLabs\n -----\n"
         #print len(self.grades.exams)
         if len(self.grades.exams)<=1:
             drop_lowest_score = False
         for g in self.grades.exams:
             #ret +=  "%-7s (%10s) %s\n\t%-30s " % (g.grade_type,g.date,g.summary_output(),g.description)
             #ret +=  "%-7s \t%-30s\t%s\n%-10s\n" % (g.grade_type,g.description,g.summary_output(),g.date)
-            ret +=  "%-4s %10s %-30s\t%s\n" % ('lab',g.description,g.summary_output(),g.date)
+            ret +=  "%-4s %10s %-30s\t%s\n" % ('Mid-term',g.description,g.summary_output(),g.date)
             if drop_lowest_score==True or drop_lowest_score>1 and dropped_scores<drop_lowest_score:
                 if is_lowest_grade(self.grades.exams,g) and not picked_a_lowest:
                     ret += "\tlowest score, will not be counted in average."
@@ -295,7 +297,7 @@ class Student:
         if avg != avg:
             avg = -1.0
         averages[2] = avg
-        ret += "\tLabs   avg: %4.2f\n" % (avg)
+        ret += "\tMid-terms   avg: %4.2f\n" % (avg)
         #ret += "\tExams avg: %4.2f\n" % (avg)
         #ret += "\n\tWeekly quizzes avg: %4.2f\n" % (avg)  
         #ret += "\n\tMid-term project avg: %4.2f\n" % (avg)  
