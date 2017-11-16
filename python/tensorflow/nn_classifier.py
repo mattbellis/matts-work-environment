@@ -55,6 +55,10 @@ def main():
   # Train model.
   classifier.train(input_fn=train_input_fn, steps=2000)
 
+  ########### DONE WITH TRAINING!!!! ######################
+
+  ##########  NOW ON TO TESTING HOW GOOD IT DID!!!! ######
+
   # Define the test inputs
   test_input_fn = tf.estimator.inputs.numpy_input_fn(
       x={"x": np.array(test_set.data)},
@@ -65,8 +69,11 @@ def main():
   # Evaluate accuracy.
   accuracy_score = classifier.evaluate(input_fn=test_input_fn)["accuracy"]
 
+  print()
   print("\nTest Accuracy: {0:f}\n".format(accuracy_score))
+  print()
 
+  ########### NOW TRY IT ON DATA THAT WE DON'T KNOW THE ANSWER TO ###############
   # Classify two new flower samples.
   new_samples = np.array(
       [[6.4, 3.2, 4.5, 1.5],
@@ -79,9 +86,38 @@ def main():
   predictions = list(classifier.predict(input_fn=predict_input_fn))
   predicted_classes = [p["classes"] for p in predictions]
 
+  print()
+  print(len(predictions))
+  print(predictions)
+  print()
   print(
       "New Samples, Class Predictions:    {}\n"
       .format(predicted_classes))
+
+  ########### NOW TRY IT ON THE TEST DATA 1 at a time ######################
+  # 
+  testdata = np.loadtxt(IRIS_TEST,skiprows=1,dtype=float,delimiter=',')
+  #print(testdata)
+
+  for d in testdata:
+      new_samples = np.array( [d[0:4]] , dtype=np.float32)
+      predict_input_fn = tf.estimator.inputs.numpy_input_fn(
+          x={"x": new_samples},
+          num_epochs=1,
+          shuffle=False)
+
+      predictions = list(classifier.predict(input_fn=predict_input_fn))
+      predicted_classes = [p["classes"] for p in predictions]
+      pred = predictions[0]["classes"][0].decode()
+      print('pred/actual: ',pred,int(d[4]))
+
+      #print()
+      #print(len(predictions))
+      #print(predictions)
+      #print()
+      #print(
+          #"New Samples, Class Predictions:    {}\n"
+          #.format(predicted_classes))
 
 if __name__ == "__main__":
     main()
