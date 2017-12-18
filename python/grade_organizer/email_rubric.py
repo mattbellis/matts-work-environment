@@ -16,6 +16,8 @@ infile = open(infilename)
 
 students = []
 
+nsections = 2
+
 for i,line in enumerate(infile):
 
     vals = line.split('\t')
@@ -23,10 +25,10 @@ for i,line in enumerate(infile):
     print(vals)
 
     if i==0:
-        partnames = vals[3:7]
+        partnames = vals[3:3+nsections]
 
     elif i==1:
-        partpoints = np.array(vals[3:7]).astype(int)
+        partpoints = np.array(vals[3:3+nsections]).astype(int)
         tot_available = np.sum(partpoints)
 
     else:
@@ -39,7 +41,7 @@ for i,line in enumerate(infile):
         for j in range(len(partnames)):
             tot += float(vals[j+3])
             feedback += "%s\nPoints: %.2f (out of %d)\n" % (partnames[j], float(vals[j+3]), partpoints[j])
-            feedback += "%s\n\n" % (vals[j+7])
+            feedback += "%s\n\n" % (vals[j+3+nsections])
         feedback += "\nTotal points: %.2f\n" % (tot)
 
         student["feedback"] = feedback
@@ -56,7 +58,8 @@ for student in students:
     #email = 'mbellis@siena.edu'
     print(subject)
     print(msg_body)
-    email_grade_summaries(email,'matthew.bellis@gmail.com',subject,msg_body,sys.argv[2])
+    if len(sys.argv)>2:
+        email_grade_summaries(email,'matthew.bellis@gmail.com',subject,msg_body,sys.argv[2])
 
     #break
 

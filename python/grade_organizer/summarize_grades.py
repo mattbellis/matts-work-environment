@@ -59,7 +59,8 @@ def main():
 
     #grade_titles = ["Quizzes", "Homeworks","Exam", "Final exam", "Final grade"]
     #grade_titles = ["Quizzes", "Homeworks","Labs", "Final exam", "Final grade"]
-    grade_titles = ["Participation", "Homeworks","Exam", "Final exam", "Final grade"]
+    #grade_titles = ["Participation", "Homeworks","Exam", "Final exam", "Final grade"]
+    grade_titles = ["Participation", "Homeworks","Mid-term", "Final project", "Final grade"]
     student_grades = [[],[],[],[],[]]
     hw_xvals = []
     hw_grades = []
@@ -73,9 +74,9 @@ def main():
     # Grade weighting
     #final_grade_weighting = [0.10,0.25,0.35,0.30]
     #final_grade_weighting = [0.10,0.20,0.45,0.25]
-    #final_grade_weighting = [0.00,0.50,0.25,0.25] # CSIS 200, None, HW and quizzes, mid-term proj, final proj
+    final_grade_weighting = [0.00,0.50,0.25,0.25] # CSIS 200, None, HW and quizzes, mid-term proj, final proj
     #final_grade_weighting = [0.35,0.25,0.15,0.25] # PHYS 110, Quizzes, HW , Labs, Final,
-    final_grade_weighting = [0.05,0.25,0.25,0.45] # PHYS 470, QM, Participation, HW , Exam, Final,
+    #final_grade_weighting = [0.05,0.25,0.25,0.45] # PHYS 470, QM, Participation, HW , Exam, Final,
     # Quizzes
     # HWs
     # Exam 1

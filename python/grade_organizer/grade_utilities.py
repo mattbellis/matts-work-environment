@@ -271,9 +271,9 @@ class Student:
         dropped_scores = 0
         #drop_lowest_score = 1
         picked_a_lowest = False
-        ret += " -----\nExams\n -----\n"
+        #ret += " -----\nExams\n -----\n"
         #ret += " -----\nWeekly quizzes\n -----\n"
-        #ret += "\n -----\nMid-term project\n -----\n"
+        ret += "\n -----\nMid-term project\n -----\n"
         #ret += "\n -----\nLabs\n -----\n"
         #print len(self.grades.exams)
         if len(self.grades.exams)<=1:
@@ -297,10 +297,10 @@ class Student:
         if avg != avg:
             avg = -1.0
         averages[2] = avg
-        ret += "\tMid-terms   avg: %4.2f\n" % (avg)
+        #ret += "\tMid-terms   avg: %4.2f\n" % (avg)
         #ret += "\tExams avg: %4.2f\n" % (avg)
         #ret += "\n\tWeekly quizzes avg: %4.2f\n" % (avg)  
-        #ret += "\n\tMid-term project avg: %4.2f\n" % (avg)  
+        ret += "\n\tMid-term project avg: %4.2f\n" % (avg)  
 
         '''
         # Exam 2 
@@ -316,8 +316,8 @@ class Student:
 
         # Final Exam 
         drop_lowest_score = False
-        ret += " -----\nFinal exam\n -----\n"
-        #ret += " -----\nFinal project\n -----\n"
+        #ret += " -----\nFinal exam\n -----\n"
+        ret += " -----\nFinal project\n -----\n"
         for g in self.grades.final_exam:
             ret +=  "%-7s (%10s) %s\n" % (g.grade_type,g.date,g.summary_output())
             #1
@@ -334,8 +334,8 @@ class Student:
 
         if avg != avg:
             avg = -1.0
-        ret += "\tFinal exam  : %4.2f\n" % (avg)
-        #ret += "\tFinal project  : %4.2f\n" % (avg)
+        #ret += "\tFinal exam  : %4.2f\n" % (avg)
+        ret += "\tFinal project  : %4.2f\n" % (avg)
 
         tot = 0.0
         tot_wt = 0.0
