@@ -1,9 +1,9 @@
 import datetime as dt
 import time
 
-year = 2017
-starting_month = 9
-starting_day = 6
+year = 2018
+starting_month = 1
+starting_day = 16
 
 datestring = "%d %d %d" % (year, starting_month, starting_day)
 start = time.strptime(datestring,"%Y %m %d")
@@ -11,8 +11,8 @@ start = time.strptime(datestring,"%Y %m %d")
 year_day = start.tm_yday
 
 monday = False
-tuesday = False
-wednesday = True
+tuesday = True
+wednesday = False
 thursday = False
 friday = False
 
@@ -26,17 +26,19 @@ while i < 120:
 
     #print time.strftime("%Y %b %d",start)
     date = time.strftime("%a., %b %d",start)
-    if monday:
+    if tuesday:
         #print("Week %0d  & %s & XXX & YYY & ZZZ \\\\ " % (week,date))
         print("Week %0d  & %s & XXX \\\\ " % (week,date))
         #print "\\hline"
-    elif wednesday:
+    elif thursday:
         #print("         & %s & XXX & YYY & ZZZ \\\\ " % (date))
         print("         & %s & XXX \\\\ " % (date))
+    '''
     else:
         #print("         & %s & XXX & YYY & ZZZ \\\\ " % (date))
         print("         & %s & XXX \\\\ " % (date))
         print("\\hline")
+    '''
     '''
     else:
         print "        & %s  & XXX & YYY & ZZZ \\\\" % (date)
@@ -55,8 +57,8 @@ while i < 120:
         increment = 2
         monday = False
         tuesday = False
-        wednesday = True
-        thursday = False
+        wednesday = False
+        thursday = True
         friday = False
         #week += 1
     elif wednesday:
@@ -69,8 +71,8 @@ while i < 120:
     elif thursday:
         increment = 5
         monday = False
-        tuesday = False
-        wednesday = True
+        tuesday = True
+        wednesday = False
         thursday = False
         friday = False
         #week += 1
