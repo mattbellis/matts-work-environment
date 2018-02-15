@@ -86,9 +86,16 @@ def main():
   predictions = list(classifier.predict(input_fn=predict_input_fn))
   predicted_classes = [p["classes"] for p in predictions]
 
+  # probability of being predicted as 1
+  y_prob = [p["probabilities"][1] for p in predictions]
+  x_prob = [p["probabilities"][2] for p in predictions]
+
   print()
   print(len(predictions))
   print(predictions)
+  print("probabilities")
+  print(y_prob)
+  print(x_prob)
   print()
   print(
       "New Samples, Class Predictions:    {}\n"
