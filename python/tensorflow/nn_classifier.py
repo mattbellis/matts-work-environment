@@ -67,11 +67,21 @@ def main():
       shuffle=False)
 
   # Evaluate accuracy.
-  accuracy_score = classifier.evaluate(input_fn=test_input_fn)["accuracy"]
+  score = classifier.evaluate(input_fn=test_input_fn)
+  #accuracy_score = classifier.evaluate(input_fn=test_input_fn)["accuracy"]
 
+  #score = classifier.evaluate(input_fn=input_fn_test, steps=1)
+  score_accuracy = score["accuracy"]
+  score_loss = score["loss"]
+  
   print()
-  print("\nTest Accuracy: {0:f}\n".format(accuracy_score))
+  print("Score: ", score)
+  print("Accuracy: ", score_accuracy)
+  print("Loss: ", score_loss)
   print()
+  #print()
+  #print("\nTest Accuracy: {0:f}\n".format(accuracy_score))
+  #print()
 
   ########### NOW TRY IT ON DATA THAT WE DON'T KNOW THE ANSWER TO ###############
   # Classify two new flower samples.
@@ -89,11 +99,13 @@ def main():
   # probability of being predicted as 1
   y_prob = [p["probabilities"][1] for p in predictions]
   x_prob = [p["probabilities"][2] for p in predictions]
+  z_prob = [p["probabilities"][0] for p in predictions]
 
   print()
   print(len(predictions))
   print(predictions)
   print("probabilities")
+  print(z_prob)
   print(y_prob)
   print(x_prob)
   print()
@@ -116,7 +128,11 @@ def main():
       predictions = list(classifier.predict(input_fn=predict_input_fn))
       predicted_classes = [p["classes"] for p in predictions]
       pred = predictions[0]["classes"][0].decode()
-      print('pred/actual: ',pred,int(d[4]))
+      probs = []
+      for i in range(0,3):
+          probs.append(predictions[0]["probabilities"][i])
+
+      print('pred/actual: ',pred,int(d[4]),probs[0],probs[1],probs[2])
 
       #print()
       #print(len(predictions))
