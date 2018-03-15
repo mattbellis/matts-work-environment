@@ -28,6 +28,7 @@ if ( $1 == "push" ) then
         /home/bellis/Work \
         /home/bellis/papers \
         /home/bellis/latex_stuff \
+        #/home/bellis/BaBar \
         /home/bellis/Jobs  \
         /home/bellis/stuff \
         /home/bellis/NIU \
@@ -41,6 +42,7 @@ if ( $1 == "push" ) then
 else if ( $1 == "pull" ) then
     #rsync -P -r -u -a -v --exclude '*.npy'  --exclude '*JLab*'  --exclude '*.ig' --exclude 'Event_*'   --exclude '*/core' --exclude '*talk*.pdf' --exclude '*lecture*.pdf' --exclude '*chapter*.pdf' --exclude '*/data_skims/*' --exclude '*/processing-2.0b3/*' bellis@192.168.7.23:/home/bellis/{Talks,sketchbook,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,eBooks,wallpapers,printer_drivers} \
     rsync -P -r -u -a -v --exclude '*.npy'  --exclude '*JLab*'  --exclude '*.ig' --exclude 'Event_*'   --exclude '*/core' --exclude '*talk*.pdf' --exclude '*lecture*.pdf' --exclude '*chapter*.pdf' --exclude '*/data_skims/*' --exclude '*/processing-2.0b3/*' bellis@mattbellis.dyndns-home.com:/home/bellis/{Talks,sketchbook,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,eBooks,wallpapers,printer_drivers} \
+#rsync -P -r -u -a -v --exclude '*.npy'  --exclude '*BaBar*'  --exclude '*JLab*'  --exclude '*.ig' --exclude 'Event_*'   --exclude '*/core' --exclude '*talk*.pdf' --exclude '*lecture*.pdf' --exclude '*chapter*.pdf' --exclude '*/data_skims/*' --exclude '*/processing-2.0b3/*' bellis@192.168.7.23:/home/bellis/{Talks,sketchbook,Work,NIU,BaBar,Jobs,stuff,papers,latex_stuff,bluehost_staging,Stanford,Siena,eBooks,wallpapers,printer_drivers} \
         /home/bellis
 
 else
