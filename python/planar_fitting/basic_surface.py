@@ -12,7 +12,7 @@ X = np.arange(-5, 5, 0.05)
 Y = np.arange(-5, 5, 0.05)
 X, Y = np.meshgrid(X, Y)
 Z = 0.5*np.exp((-(X-6.0)**2)/14.5)*np.exp((-(Y-1.0)**2)/1.5)
-Z += 0.5*np.exp((-(X+6.0)**2)/14.5)*np.exp((-(Y+1.0)**2)/1.5)
+Z += -0.2*np.exp((-(X+6.0)**2)/17.5)*np.exp((-(Y+1.0)**2)/1.5)
 
 # Plot the surface.
 surf = ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
