@@ -42,7 +42,7 @@ with open(infilename, 'r') as csvfile:
 
     #print(points)
 print(students)
-s = students[11]
+s = students[0]
 for key in s.keys():
     print(s[key])
 a = s["assignments"]
@@ -69,9 +69,9 @@ for a in hws:
     print(a)
 for a in qus:
     print(a)
-    print(tot/len(qus))
 for a in extras:
     print(a)
+print(tot/len(qus))
 
 #for line in open(infilename):
     #vals = line.split(',')
