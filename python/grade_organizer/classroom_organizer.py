@@ -42,12 +42,36 @@ with open(infilename, 'r') as csvfile:
 
     #print(points)
 print(students)
-s = students[0]
+s = students[11]
 for key in s.keys():
     print(s[key])
 a = s["assignments"]
+hws = []
+qus = []
+extras = []
+tot = 0
 for ai in a:
     print(ai)
+    m = ai['maxpoints']
+    p = ai['score']
+    name = ai['name']
+    if 'homework' in name.lower() or 'hw' in name.lower():
+        print(p/m)
+        hws.append([name,p/m])
+    elif 'quiz' in name.lower() or 'exam' in name.lower():
+        print(p/m)
+        tot += p/m
+        qus.append([name,p/m])
+    else:
+        extras.append([name,p/m])
+
+for a in hws:
+    print(a)
+for a in qus:
+    print(a)
+    print(tot/len(qus))
+for a in extras:
+    print(a)
 
 #for line in open(infilename):
     #vals = line.split(',')
