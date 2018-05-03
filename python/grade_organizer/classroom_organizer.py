@@ -95,6 +95,7 @@ for s in students:
     activities["homework"] = average(hws,drop=1)[-1]
     activities["quizzes"] = average(qus,drop=1)[-1]
     activities["in-class"] = 1.00
+    activities["final exam"] = 0.80
 
     tot = 0
     totw = 0
@@ -105,6 +106,6 @@ for s in students:
         tot += score*w
         totw += w
 
-    print("summary: ",'{0:20}'.format(studentname),'{:.2f}'.format(activities['homework']),'{:.2f}'.format(activities['quizzes']),'{:.2f}'.format(tot/totw))
+    print("summary: ",'{0:20}'.format(studentname),'{:.2f}'.format(activities['homework']),'{:.2f}'.format(activities['quizzes']),'{:.2f}'.format(activities['final exam']),'{:.2f}'.format(tot/totw))
 
 
