@@ -1,7 +1,6 @@
 import numpy as np
-
 import matplotlib.pylab as plt
-
+from grade_utilities import *
 import csv
 import sys
 
@@ -70,8 +69,13 @@ if idx_student is not None:
     max_student = idx_student + 1
 
 for idx in range(min_student,max_student):
+
+    output = ""
+
     s = students[idx]
     studentname = s["name"]
+    email = s["email"]
+    output += studentname + "\n"
     #s = students[0]
     #for key in s.keys():
         #print(s[key])
@@ -109,22 +113,22 @@ for idx in range(min_student,max_student):
         print(a)
     '''
 
-    print("Begin Extras")
+    print("Begin Extras ------------------------")
     for a in extras:
         print(a)
-    print("End Extras")
+    print("End Extras ------------------------")
 
     for act,label in zip([hws,qus,labs,final],["HOMEWORKS","QUIZZES","LABS","FINAL EXAM"]):
-        print('\n----------\n',label,'\n----------')
+        output += "%s %s %s" % ('\n----------\n',label,'\n----------\n')
         if type(act)==list and len(act)>0:
             if type(act[0])==list:
                 for a in act:
                     name = a[0]
                     score = a[1]
-                    print('{0:.3f}'.format(score),'{0:20s}'.format(name))
+                    output += "%s %s\n" % ('{0:5.1f}'.format(100*score),'{0:20s}'.format(name))
             else:
                 #print(act)
-                print('{0:.3f}'.format(act[1]),'{0:20s}'.format(act[0]))
+                output += "%s %s\n" % ('{0:5.1f}'.format(100*act[1]),'{0:20s}'.format(act[0]))
 
     print()
 
@@ -133,49 +137,73 @@ for idx in range(min_student,max_student):
 
     #'''
     # PHYS 260 S16
-    weighting["homework"] = 20
-    weighting["quizzes"] = 45
-    weighting["in-class"] = 10
-    weighting["final exam"] = 25
+    weighting["Homework"] = 20
+    weighting["Quizzes"] = 45
+    weighting["In-class"] = 10
+    weighting["Final exam"] = 25
 
-    activities["homework"] = average(hws,drop=1)
-    activities["quizzes"] = average(qus,drop=1)
-    activities["raw quizzes"] = average(qus,drop=0,exclude_high=2)
-    activities["in-class"] = 1.0
-    activities["final exam"] = final[-1]
+    activities["Homework"] = average(hws,drop=1)
+    activities["Quizzes"] = average(qus,drop=1)
+    activities["Raw quizzes"] = average(qus,drop=0,exclude_high=2)
+    activities["In-class"] = 1.0
+    activities["Final exam"] = final[-1]# + 0.13
     #'''
 
     # PHYS 110 S16
     '''
-    weighting["homework"] = 25
-    weighting["quizzes"] = 35
-    weighting["labs"] = 15
-    weighting["final exam"] = 25
+    weighting["Homework"] = 25
+    weighting["Quizzes"] = 35
+    weighting["Labs"] = 15
+    weighting["Final exam"] = 25
 
-    activities["homework"] = average(hws) + 0.13
-    activities["quizzes"] = average(qus,drop=1)
-    activities["raw quizzes"] = average(qus,drop=0,exclude_high=2)
-    activities["labs"] = average(labs)
-    activities["final exam"] = final[-1] + 0.08
+    activities["Homework"] = average(hws) + 0.13
+    activities["Quizzes"] = average(qus,drop=1)
+    activities["Raw quizzes"] = average(qus,drop=0,exclude_high=2)
+    activities["Labs"] = average(labs)
+    activities["Final exam"] = final[-1] + 0.08
     '''
 
     #print("QUS")
+    
 
+    output += "%s %s %s" % ('\n----------\n',"FINAL GRADE CALCULATION",'\n----------\n')
     tot = 0
     totw = 0
     for key in weighting.keys():
         score = activities[key]
         w = weighting[key]
         print(key,score)
+        output += "%s%s %s %s\n" % (w,"%", '{0:<12}'.format(key), '{0:>6.1f}'.format(100*score))
         tot += score*w
         totw += w
 
     final_grade = tot/totw
+    output += "\n%s  %s\n" % ('{0:>15}'.format('Final grade'), '{0:>6.1f}'.format(100*final_grade))
 
+    output += "\nFor reference, here is your raw quiz grade.\n"
+    output += "This is the average of your quizzes when your lowest grade is NOT dropped and \nwithout including"
+    output += "\"free\" points like the syllabus quiz or getting-to-know-you survey.\n"
+    output += "\n%s  %s\n" % ('{0:>15}'.format('Raw quizzes'), '{0:>6.1f}'.format(100*activities['Raw quizzes']))
+
+    print(output)
 
     myfmt = '{:.4f}'
-    print(myfmt.format(activities['homework']))
+    print(myfmt.format(activities['Homework']))
 
-    print("summary: ",'{0:20}'.format(studentname),'| hw: ',myfmt.format(activities['homework']),'| quizzes: ',myfmt.format(activities['quizzes']),'| raw quizzes: ',myfmt.format(activities['raw quizzes']),'| final exam: ',myfmt.format(activities['final exam']),'| final grade: ', myfmt.format(final_grade), 'diff (final-rawq): ',myfmt.format(activities['final exam'] - activities['raw quizzes']))
+    print("summary: ",'{0:20}'.format(studentname),'| hw: ',myfmt.format(activities['Homework']),'| Qzs: ',myfmt.format(activities['Quizzes']),'| raw quizzes: ',myfmt.format(activities['Raw quizzes']),'| f exam: ',myfmt.format(activities['Final exam']),'| f grade: ', myfmt.format(final_grade), 'diff (final-rawq): ',myfmt.format(activities['Final exam'] - activities['Raw quizzes']))
+
+    ############################################################################
+    # Email the summary
+    ############################################################################
+    do_email = False
+    #do_email = True
+    if do_email:
+        subject = "PHYS 110 - Final grade summary, %s" % (studentname)
+        msg_body = output
+        email = "mbellis@siena.edu" # FOR TESTING
+        email_grade_summaries(email,'matthew.bellis@gmail.com',subject,msg_body,PASSWORDHERE)
+        #exit()
+    
+
 
 

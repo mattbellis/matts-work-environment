@@ -21,7 +21,7 @@ muonpt = array('f', 16*[-1.])
 tree.Branch('muonpt', muonpt, 'muonpt[nmuon]/F')
 
 # Make some dummy events and entries
-nevents = 1000
+nevents = 10000
 
 for i in range(0,nevents):
 
