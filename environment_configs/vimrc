@@ -49,7 +49,9 @@ ab qmarks \textcolor{red}{???????}
 
 filetype indent on
 "colorscheme morning
-colorscheme elflord
+"colorscheme elflord
+colorscheme apprentice
+"colorscheme abstract
 "colorscheme pablo
 set cindent
 set cindent shiftwidth=4
