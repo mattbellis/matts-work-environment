@@ -65,7 +65,7 @@ outfile = open(outfilename,'w')
 for i in range(nentries):
 
     if i%1000==0:
-        print i
+        print(i)
 
     output = "Event: %d\n" % (i)
     #output = ""
