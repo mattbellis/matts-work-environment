@@ -14,6 +14,8 @@ from iminuit import Minuit
 
 import lichen.iminuit_fitting_utilities as fitutils
 
+np.random.seed(100)
+
 ####################################################
 # Signal
 # Gaussian (normal) function 
@@ -71,7 +73,9 @@ plt.figure()
 #lch.hist_err(x,bins=50,range=(0,4.0),color='red',ecolor='red')
 #lch.hist_err(k,bins=50,range=(0,4.0),color='blue',ecolor='blue')
 
-lch.hist_err(data,bins=50,range=(50,150.0),markersize=2)
+#lch.hist_err(data,bins=50,range=(50,150.0),markersize=2)
+plt.hist(data, bins=50,range=(50,150));
+
 
 print("min/max %f %f" % (min(data),max(data)))
 
@@ -80,15 +84,17 @@ print("min/max %f %f" % (min(data),max(data)))
 ################################################################################
 
 params_dict = {}
-params_dict['mu'] = {'fix':False,'start_val':110,'limits':(0,300.0),'error':0.01}
+params_dict['mu'] = {'fix':False,'start_val':120,'limits':(0,300.0),'error':0.01}
 params_dict['sigma'] = {'fix':False,'start_val':18.0,'limits':(0.01,30.0),'error':0.01}
-params_dict['nsig'] = {'fix':False,'start_val':100,'limits':(0,1.1*len(data)),'error':0.01}
+params_dict['nsig'] = {'fix':False,'start_val':200,'limits':(0,1.1*len(data)),'error':0.01}
+
 
 params_names,kwd = fitutils.dict2kwd(params_dict)
 
 f = fitutils.Minuit_FCN([data],params_dict,negative_log_likelihood)
 
 m = Minuit(f,**kwd)
+m.set_errordef(0.5)
 
 '''
 m = Minuit(negative_log_likelihood,mu=1.0,limit_mu=(0,3.0), \
