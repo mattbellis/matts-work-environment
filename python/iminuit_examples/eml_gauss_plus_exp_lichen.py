@@ -76,13 +76,13 @@ sigma = 0.1
 x = np.random.normal(mu,sigma,70)
 x = x[x>0]
 x = x[x<5]
-print "# signal: %d" % (len(x))
+print("# signal: %d" % (len(x)))
 
 mylambda = 1.0
 k = np.random.exponential(mylambda,1000)
 k = k[k>0]
 k = k[k<5]
-print "# bkg: %d" % (len(k))
+print("# bkg: %d" % (len(k)))
 
 plt.figure()
 #lch.hist_err(x,bins=50,range=(0,4.0),color='red',ecolor='red')
@@ -91,7 +91,7 @@ plt.figure()
 data = np.append(x,k)
 lch.hist_err(data,bins=50,range=(0,4.0),markersize=2)
 
-print "min/max %f %f" % (min(data),max(data))
+print("min/max %f %f" % (min(data),max(data)))
 
 ################################################################################
 # Now fit the data.
@@ -121,12 +121,12 @@ m = Minuit(negative_log_likelihood,mu=1.0,limit_mu=(0,3.0), \
 m.migrad()
 m.hesse()
 
-print 'fval', m.fval
+print('fval', m.fval)
 
-print m.get_fmin()
+print(m.get_fmin())
 
 values = m.values
-print values
+print(values)
 
 #frac_sig = np.cos(values['fraction'])**2
 #print frac_sig

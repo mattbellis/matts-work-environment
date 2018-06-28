@@ -1,11 +1,10 @@
-eval `dircolors $HOME/.dir_colors`
-
+eval `dircolors -c $HOME/.dir_colors`
 
 alias ls 	'ls --color=auto'
 #alias gmake	'make'
 #eval `dircolors $HOME/.dir_colors`
 
-alias jupyter ~/anaconda/bin/jupyter-notebook
+#alias jupyter /opt/anaconda3/bin/jupyter-notebook
 
 limit coredumpsize 102400 # limit size to 100M
 
@@ -21,15 +20,23 @@ setenv PATH ".:$HOME/bin:$HOME/bin_scripts:${PATH}:"
 ## Needed to add this for latex2html to work...oh well.
 setenv RGBDEF /etc/X11/rgb.txt
 
-#setenv PYTHONPATH /usr/local:/usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/root5.34
-setenv PYTHONPATH /opt/anaconda3/:/opt/anaconda3/lib/:/usr/local:/usr/local/lib//usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/home/bellis/root/lib/
+#setenv PYTHONPATH /opt/anaconda3/:/opt/anaconda3/lib/:/usr/local:/usr/local/lib//usr/local/lib/root/:${HOME}/libs/:/usr/lib/x86_64-linux-gnu:/home/bellis/root/lib/
+#setenv PYTHONPATH /opt/anaconda3/:/usr/local/lib/root:/usr/local:/usr/local/lib/:/usr/local/lib/root/:/usr/lib/x86_64-linux-gnu
+#setenv PYTHONPATH /usr/local/lib/root:/usr/local:/usr/local/lib/:/usr/local/lib/root/:/usr/lib/x86_64-linux-gnu
+# NORMAL!!!!
+setenv PYTHONPATH /opt/anaconda3/:/usr/local/lib/root:/usr/local:/usr/local/lib/:/usr/local/lib/root/:/usr/lib/x86_64-linux-gnu
+#setenv PYTHONPATH /opt/anaconda/:/usr/local/lib/root:/usr/local:/usr/local/lib/:/usr/local/lib/root/:/usr/lib/x86_64-linux-gnu
+
+# MADGRAPH!!!
+#setenv PYTHONPATH /usr/local/lib/root:/usr/local:/usr/local/lib/:/usr/local/lib/root/:/usr/lib/x86_64-linux-gnu
+
 
 setenv SVN_EDITOR vi
 setenv EDITOR vi
 
 # CUDA stuff
 #setenv PATH ${PATH}:/usr/local/cuda/bin
-setenv PATH ${PATH}:/usr/local/cuda-6.5/bin
+#setenv PATH ${PATH}:/usr/local/cuda-6.5/bin
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/local/cuda-6.5/lib64
 
 ###### G4 stuff
@@ -51,9 +58,28 @@ setenv LD_LIBRARY_PATH .:/home/bellis/python_packages/Minuit-1_7_9/src/.libs:${L
 #setenv PYTHONPATH /your/home/lib/python:${PYTHONPATH}
 
 # For Java
-setenv PATH /opt/anaconda3/bin/:${PATH}:/usr/local/java/bin/
+#setenv PATH /opt/anaconda3/bin:${PATH}:/usr/local/java/bin/
+#setenv PATH ${PATH}:/usr/local/java/bin/
+# NORMAL!!!!!!!!!!!!!!!!!!!!!
+setenv PATH /opt/anaconda3/bin:${PATH}:/usr/local/java/bin/
+#setenv PATH /opt/anaconda/bin:${PATH}:/usr/local/java/bin/
 
-setenv LD_LIBRARY_PATH #/usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH /opt/anaconda3/lib/:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH /usr/lib/i386-linux-gnu/
+# MADGRAPH!!!!!!!!!!
+#setenv PATH ${PATH}:/usr/local/java/bin/
+
+#setenv LD_LIBRARY_PATH ${HOME}/anaconda3/:${HOME}/anaconda3/lib:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH /opt/anaconda3/lib/:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/:/opt/anaconda3/lib/:/opt/anaconda3/
+#setenv LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/
+#setenv LD_LIBRARY_PATH /opt/anaconda3/lib/:/usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu/
+setenv LD_LIBRARY_PATH #/opt/anaconda3/lib/:/usr/lib/x86_64-linux-gnu:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH /opt/anaconda3/lib/:/opt/anaconda3/:${LD_LIBRARY_PATH}:/usr/lib/i386-linux-gnu/
+#setenv LD_LIBRARY_PATH /usr/lib/x86_64-linux-gnu/:/opt/anaconda3/lib/
+#setenv LD_LIBRARY_PATH #/usr/lib/i386-linux-gnu/:/usr/lib/x86_64-linux-gnu/
+#setenv LD_LIBRARY_PATH /opt/anaconda3/lib/
 
 setenv S2PLOT_PRCDRIVER s2prcwriter
 setenv S2PATH /home/bellis/s2plot

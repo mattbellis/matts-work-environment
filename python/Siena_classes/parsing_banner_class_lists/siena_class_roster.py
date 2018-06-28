@@ -1,7 +1,7 @@
 import requests 
 from bs4 import BeautifulSoup
-import HTMLParser
-from HTMLParser import HTMLParser
+import html.parser
+from html.parser import HTMLParser
 import sys
 import os
 
@@ -12,19 +12,24 @@ if os.path.exists('./Siena Class Roster_files'):
     os.rename('Siena Class Roster_files','Siena_Class_Roster_files')
 
 # Try to parse the webpage by looking for the tables.
-soup = BeautifulSoup(r)
+soup = BeautifulSoup(r,"lxml")
 
-print "\documentclass{article}"
-print "\usepackage{graphicx}"
-print "\usepackage{subfig}"
+print("\documentclass{article}")
+print("\\usepackage{graphicx}")
+print("\\usepackage{subfig}")
+print("\\usepackage{alphalph}")
+print("\\renewcommand\\thesubfigure{\\alphalph{\\value{subfigure}}}")
 
-print "\hoffset=-1.50in"
-print "\setlength{\\textwidth}{7.5in}"
-print "\setlength{\\textheight}{9in}"
-print "\setlength{\\voffset}{0pt}"
-print "\setlength{\\topmargin}{0pt}"
-print "\setlength{\headheight}{0pt}"
-print "\setlength{\headsep}{0pt}"
+print("\hoffset=-1.50in")
+print("\setlength{\\textwidth}{7.5in}")
+print("\setlength{\\textheight}{9in}")
+print("\setlength{\\voffset}{0pt}")
+print("\setlength{\\topmargin}{0pt}")
+print("\setlength{\headheight}{0pt}")
+print("\setlength{\headsep}{0pt}")
+print("\\begin{document}")
+
+maxsubfigs = 20
 
 
 h2s = soup.find_all('h2')
@@ -61,26 +66,27 @@ for table in tables:
 
 
                 if name is not None and image is not None:
-                    if icount%30==0:
-                        print "\\begin{document}"
-                        print "\\begin{figure}"
-                        print "\centering"
+                    if icount%maxsubfigs==0:
+                        #print("\\begin{document}")
+                        print("\n")
+                        print("\\begin{figure}")
+                        print("\centering")
                         closed_figure = False
 
-                    if os.stat(image).st_size < 200:
+                    if os.stat(image).st_size < 300:
                         image = './file_not_found.jpg'
 
                     if icount%5==4:
-                        print "\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\\\" % (name,image)
+                        print("\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\\\" % (name,image))
                     else:
-                        print "\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\hfill" % (name,image)
+                        print("\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\hfill" % (name,image))
 
                     image = None
                     name = None
 
-                    if icount%30==29:
-                        print "\caption{%s}" % (caption)
-                        print "\end{figure}"
+                    if icount%maxsubfigs==maxsubfigs-1:
+                        print("\caption{%s}" % (caption))
+                        print("\end{figure}")
                         closed_figure = True
                         icount = -1
 
@@ -89,7 +95,7 @@ for table in tables:
                     
 
 if not closed_figure:
-    print "\caption{%s}" % (caption)
-    print "\end{figure}"
-print "\end{document}"
+    print("\caption{%s}" % (caption))
+    print("\end{figure}")
+print("\end{document}")
 

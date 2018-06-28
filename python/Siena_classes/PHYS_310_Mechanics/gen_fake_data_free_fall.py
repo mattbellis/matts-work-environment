@@ -19,7 +19,7 @@ for t in np.arange(0,100,0.10):
     xerr = t*0.2 + 0.25
     x = np.random.normal(x,xerr)
 
-    print "%4.2f %4.2f %4.2f" % (t,x,xerr)
+    print("%4.2f %4.2f %4.2f" % (t,x,xerr))
     tpts.append(t)
     xpts.append(x)
     xerrpts.append(xerr)
@@ -31,3 +31,21 @@ for t in np.arange(0,100,0.10):
 #plt.xlabel('Time (s)',fontsize=16)
 #plt.ylabel('Height above ground (m)',fontsize=16)
 #plt.show()
+
+output = "["
+for i in xpts:
+    output += "%0.2f," % (i)
+output += "]"
+print(output)
+
+output = "["
+for i in xerrpts:
+    output += "%0.2f," % (i)
+output += "]"
+print(output)
+
+output = "["
+for i in tpts:
+    output += "%0.2f," % (i)
+output += "]"
+print(output)

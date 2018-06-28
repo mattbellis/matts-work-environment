@@ -16,6 +16,9 @@ sp.Popen(cmd,0).wait()
 cmd = ['sudo', 'iwlist', 'wlan0', 'scan']
 output = sp.Popen(cmd, stdout=sp.PIPE).communicate()[0]
 
+# Need this because in Python 3, output is a byte(?) object.
+output = output.decode()
+
 cell = []
 essid = []
 channel = []
@@ -53,17 +56,17 @@ nsignals = len(cell)
 #print encryption
 
 
-print "sudo iwconfig wlan0 essid ### ap ### channel ###"
-print "sudo dhclient wlan0"
+print("sudo iwconfig wlan0 essid ### ap ### channel ###")
+print("sudo dhclient wlan0")
 
 if choice is not None:
     index = ap.index(choice)
     cmd = ['sudo', 'iwconfig', 'wlan0', 'essid',essid[index][1:-1],"ap",ap[index],"channel",channel[index]]
-    print " ".join(cmd)
+    print(" ".join(cmd))
     sp.Popen(cmd,0).wait()
 else:
     for i in range(0,nsignals):
         output = "%d\t%20s\t%s\t%s\t%s\t%s" % (i,essid[i],strength[i],ap[i],encryption[i],channel[i])
-        print output
-    print "sudo iwconfig wlan0 essid ### ap ### channel ###"
-    print "sudo dhclient wlan0"
+        print(output)
+    print("sudo iwconfig wlan0 essid ### ap ### channel ###")
+    print("sudo dhclient wlan0")

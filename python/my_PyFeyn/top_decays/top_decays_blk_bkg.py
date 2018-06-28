@@ -27,8 +27,10 @@ def top_decays(outfilename, index):
 
   xdecay_vtx = Vertex(1.0, -1.0, mark=CIRCLE)
 
-  c1 = Circle(center=out_vtx, radius=0.1, fill=[pyx.color.cmyk.Yellow], points = [out_vtx])
-  c2 = Circle(center=xdecay_vtx, radius=0.1, fill=[color.cmyk.Green], points = [xdecay_vtx])
+  #c1 = Circle(center=out_vtx, radius=0.1, fill=[pyx.color.cmyk.Yellow], points = [out_vtx])
+  #c2 = Circle(center=xdecay_vtx, radius=0.1, fill=[color.cmyk.Green], points = [xdecay_vtx])
+  c1 = Circle(center=out_vtx, radius=0.1, fill=[pyx.color.cmyk.Red], points = [out_vtx])
+  c2 = Circle(center=xdecay_vtx, radius=0.1, fill=[color.cmyk.Blue], points = [xdecay_vtx])
 
   decay1 = Point(3,-1)
   decay2 = Point(3,-2)
@@ -40,7 +42,10 @@ def top_decays(outfilename, index):
       l2 = Label(r"{\Large $q=(b)$}", x=1, y=1.6)
   elif index==2 or index==3:
       l1 = Label(r"{\Large $t$}", x=-4.0, y=1.5)
-      l2 = Label(r"{\Large $q=(\bar{b},\bar{s},\bar{d})$}", x=1, y=1.6)
+      if index==2:# or index==3:
+          l2 = Label(r"{\Large $q=(\bar{b},\bar{s},\bar{d})$}", x=1, y=1.6)
+      elif index==3:
+          c3 = Circle(center=out_vtx, radius=0.1, fill=[pyx.color.cmyk.Blue], points = [out_vtx])
 
   ##############################################################################
   if index==0:
@@ -94,13 +99,19 @@ def top_decays(outfilename, index):
       jet_decay1 = Point(2,-1)
       jet_decay2 = Point(2,-2)
       fa2 = Fermion(in1, out1)
+      fx_decay0  = Fermion(out_vtx, Point(2.5,1)).addLabel(r"$\ell^+$", pos=1.23, displace=0.00).setStyles([APRICOT,THICK2])
+      '''
       for a in [-0.2,-0.10,0.0,0.10,0.2]:
           xout = jet_len*np.cos(a) + out1.getX()
           yout = jet_len*np.sin(a) + out1.getY()
           jet = Fermion(out1,Point(xout,yout)).setStyles([CYAN,THICK2])
-      fx  = Photon(out_vtx, xdecay_vtx).addLabel(r"$X^+ (q=+\frac{1}{3})$",pos=0.5,displace=0.9)
-      fx_decay1  = Higgs(xdecay_vtx, decay1).addLabel(r"$\nu$", pos=1.23, displace=0.00)
-      fx_decay2  = Fermion(xdecay_vtx, jet_decay2).addLabel(r"$\bar{q}=(\bar{b},\bar{s},\bar{d})$", pos=1.28, displace=0.02)
+      '''
+      fx  = Photon(out_vtx, xdecay_vtx).addLabel(r"$X^+ (q=-\frac{1}{3})$",pos=0.5,displace=0.9)
+      #fx_decay1  = Higgs(xdecay_vtx, decay1).addLabel(r"$\nu$", pos=1.23, displace=0.00)
+      fx_decay1  = Fermion(xdecay_vtx, decay1).addLabel(r"$\ell^-$", pos=1.23, displace=0.00).setStyles([APRICOT,THICK2])
+      #fx_decay2  = Fermion(xdecay_vtx, jet_decay2).addLabel(r"$\bar{q}=(\bar{b},\bar{s},\bar{d})$", pos=1.28, displace=0.02)
+      fx_decay2  = Fermion(xdecay_vtx, jet_decay2).addLabel(r"$q=(c,u)$", pos=1.28, displace=0.02)
+      #fx_decay2  = Fermion(xdecay_vtx, jet_decay2).addLabel(r"$\ell^-$", pos=1.23, displace=0.00).setStyles([APRICOT,THICK2])
       for a in [-0.2,-0.10,0.0,0.10,0.2]:
           xout = jet_len*np.cos(a) + jet_decay2.getX()
           yout = jet_len*np.sin(a) + jet_decay2.getY()
