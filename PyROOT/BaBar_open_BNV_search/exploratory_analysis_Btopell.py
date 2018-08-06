@@ -157,6 +157,10 @@ bcand = []
 bcandMES = []
 bcandDeltaE = []
 bcandMM = []
+sigbcand = []
+sigbcandMES = []
+sigbcandDeltaE = []
+sigbcandMM = []
 
 for i in range(nentries):
 
@@ -270,26 +274,37 @@ for i in range(nentries):
 
     solo = 2212
     #solo = 13
-    if qs.sum()==0 and len(pids[pids==solo])==1:
+    #if qs.sum()==0 and len(pids[pids==solo])==1:
+    if len(pids[pids==2212])==1 and len(pids[pids==13])==1:
+    #if 1:
         # B candidates
         bc = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+        sigbc = np.array([0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
         proton = None
         for p in myparticles:
             totx.append(p[1])
             toty.append(p[2])
             totz.append(p[3])
-            if p[-1] != solo:
+            if p[-1] != 2212 and p[-1] != 13:
                 bc += p
             else:
-                proton = p
+                sigbc += p
+
         bcand.append(invmass([bc]))
         dE = bc[0] - beam[0]/2.0
         bc[0] = beam[0]/2.0
         mes = invmass([bc])
         bcandMES.append(mes)
         bcandDeltaE.append(dE)
-        bcandMM.append(invmass([beam-bc-proton]))
+        bcandMM.append(invmass([beam-bc]))
 
+        sigbcand.append(invmass([sigbc]))
+        sigdE = sigbc[0] - beam[0]/2.0
+        sigbc[0] = beam[0]/2.0
+        sigmes = invmass([sigbc])
+        sigbcandMES.append(sigmes)
+        sigbcandDeltaE.append(sigdE)
+        sigbcandMM.append(invmass([beam-sigbc]))
         
 
 plt.figure()
@@ -350,6 +365,31 @@ plt.ylabel(r'p$_{z}$ [GeV/c]',fontsize=10)
 
 plt.tight_layout()
 
+###################
+plt.figure()
+plt.subplot(3,3,1)
+plt.hist(sigbcand,bins=200,range=(0,15))
+plt.xlabel(r'sigB-cand mass [GeV/c$^{2}$]',fontsize=10)
+    
+plt.subplot(3,3,2)
+plt.hist(sigbcandMES,bins=200,range=(5,5.3))
+plt.xlabel(r'sigM$_{\rm ES}$ [GeV/c$^{2}$]',fontsize=10)
+
+plt.subplot(3,3,3)
+plt.hist(sigbcandDeltaE,bins=200,range=(-10,10))
+plt.xlabel(r'sig$\Delta$E [GeV]',fontsize=10)
+
+plt.subplot(3,3,4)
+plt.hist(sigbcandMM,bins=200,range=(-5,7))
+plt.xlabel(r'sigMissing mass [GeV/c$^{2}$]',fontsize=10)
+
+plt.subplot(3,3,5)
+plt.plot(sigbcandMES,sigbcandDeltaE,'.',alpha=0.8,markersize=1.0)
+plt.xlabel(r'sigM$_{\rm ES}$ [GeV/c$^{2}$]',fontsize=10)
+plt.ylabel(r'sig$\Delta$E [GeV]',fontsize=10)
+
+
+plt.tight_layout()
 # Momentum
 
 for i,id in enumerate(particle_lunds):
