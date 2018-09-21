@@ -150,21 +150,22 @@ pdf = signal([5,0.02],xpts)
 
 #pdf = total(pars,xpts,frange=(0,10))
 
-plt.figure()
-plt.subplot(2,2,1)
-plt.plot(xpts,pdf)
-plt.ylim(0)
+#plt.figure()
+#plt.plot(xpts,pdf)
+#plt.ylim(0)
 
-plt.subplot(2,2,2)
+plt.figure()
 binwidth=(10/100)
 plt.hist(data,bins=100,range=(0,10))
 
 ysig = finalvals[2]*signal(finalvals[0:2],xpts) * binwidth
-plt.plot(xpts,ysig)
+plt.plot(xpts,ysig,linewidth=3)
 
 ybkg = finalvals[3]*np.ones(len(xpts))/(10-0) * binwidth
-plt.plot(xpts,ybkg)
+plt.plot(xpts,ybkg,linewidth=3)
 
-plt.plot(xpts,ybkg + ysig)
+#plt.plot(xpts,ybkg + ysig,linewidth=3)
+ytot = (finalvals[2] + finalvals[3])*total(finalvals,xpts,frange=(0,10)) * binwidth
+plt.plot(xpts,ytot,linewidth=3,color='k')
 
 plt.show()
