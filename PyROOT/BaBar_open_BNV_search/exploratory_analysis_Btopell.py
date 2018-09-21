@@ -172,7 +172,7 @@ for i in range(nentries):
     if i%1000==0:
         print(i)
 
-    if i>1000:
+    if i>100000:
         break
 
     output = "Event: %d\n" % (i)
