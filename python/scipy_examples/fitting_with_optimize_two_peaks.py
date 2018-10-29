@@ -7,8 +7,6 @@ from scipy.optimize import fmin_bfgs,fmin_l_bfgs_b
 
 import numpy as np
 
-from collections import OrderedDict
-
 np.random.seed(0)
 
 ################################################################################
@@ -84,20 +82,8 @@ def fitfunc(p, x):
 # Extended maximum likelihood method 
 # This is the NLL which will be minimized
 ####################################################
-def errfunc(pars, x, y, fix_or_float=[],params_dictionary=None):
+def errfunc(pars, x, y, fix_or_float=[]):
   ret = None
-
-  ##############################################################################
-  # Update the dictionary with the new parameter values
-  mapping = params_dictionary["mapping"]
-  for i,m in enumerate(mapping):
-      params_dictionary[m[0]][m[1]] = pars[i]
-
-  print(params_dictionary)
-  ##############################################################################
-
-  print("------- in errfunc --------")
-  print(pars)
 
   newpars = []
   if len(fix_or_float)==0:
@@ -112,8 +98,6 @@ def errfunc(pars, x, y, fix_or_float=[],params_dictionary=None):
       else:
         newpars.append(val)
 
-  # nums = get_numbers(params_dictionary)
-  # ntot = sum(nums)
   nsig = pars[2]
   nbkg = pars[3]
   ntot = nsig + nbkg
@@ -125,39 +109,6 @@ def errfunc(pars, x, y, fix_or_float=[],params_dictionary=None):
   print("NLL: ",ret)
   
   return ret
-################################################################################
-
-################################################################################
-# Trying something
-################################################################################
-testpars = OrderedDict()
-testpars["signal"] = OrderedDict({"number":500, "mean":1.0, "sigma":0.5})
-testpars["bkg"] = OrderedDict({"number":500})
-
-def get_numbers(params_dictionary):
-    numbers = []
-    for key in testpars:
-        print(testpars[key])
-        for k in testpars[key].keys():
-            if k=="number":
-                numbers.append(testpars[key][k])
-    return numbers
-
-nums = get_numbers(testpars)
-print(nums,sum(nums))
-
-p0 = []
-mapping = []
-for key in testpars:
-    print(testpars[key])
-    for k in testpars[key].keys():
-        p0.append(testpars[key][k])
-        mapping.append((key,k))
-
-print(p0)
-print(mapping)
-testpars['mapping'] = mapping
-#exit()
 ################################################################################
 
 pars = {}
@@ -181,7 +132,7 @@ for p in p0:
 print("Starting...")
 print(p0)
 #p1 = fmin_bfgs(errfunc, p0, args=(data, data, fix_or_float), maxiter=100, full_output=True)#, retall=True)
-p1 = fmin_l_bfgs_b(errfunc, p0, args=(data, data, fix_or_float, testpars), bounds=par_bounds, approx_grad=True)#, maxiter=100 )#,factr=0.1)
+p1 = fmin_l_bfgs_b(errfunc, p0, args=(data, data, fix_or_float), bounds=par_bounds, approx_grad=True)#, maxiter=100 )#,factr=0.1)
 print("Ending...")
 
 print(p1)
