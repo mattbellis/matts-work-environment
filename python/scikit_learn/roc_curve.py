@@ -28,13 +28,13 @@ def gen_data(means, sigmas, corrmat, num=100):
 ################################################################################
 
 ################################################################################
-def plot_corr_matrix(ccmat,labels):
+def plot_corr_matrix(ccmat,labels,title="Correlation matrix"):
     fig1 = plt.figure()
     ax1 = plt.subplot(1,1,1)
     opts = {'cmap': plt.get_cmap("RdBu"), 'vmin': -1, 'vmax': +1}
     heatmap1 = ax1.pcolor(ccmat, **opts)
     plt.colorbar(heatmap1, ax=ax1)
-    ax1.set_title("Correlations")
+    ax1.set_title(title)
 
     for ax in (ax1,):
         # shift location of ticks to center of the bins
@@ -78,12 +78,17 @@ for i in range(len(sigmas)):
         plt.plot(x,y,'.',markersize=1)
         plt.xlim(0,2)
         plt.ylim(0,2)
+        plt.xlabel(param_labels[i],fontsize=10)
+        plt.ylabel(param_labels[j],fontsize=10)
 
         corrcoefs[i].append(np.corrcoef(x,y)[0][1])
 
+
+plt.tight_layout()
+
 print(corrcoefs)
 
-fig,ax = plot_corr_matrix(corrcoefs,param_labels)
+fig,ax = plot_corr_matrix(corrcoefs,param_labels,title="Correlation matrix (signal)")
 
 
 
@@ -114,12 +119,39 @@ for i in range(len(sigmas)):
         plt.plot(x,y,'.',markersize=1)
         plt.xlim(0,2)
         plt.ylim(0,2)
+        plt.xlabel(param_labels[i],fontsize=10)
+        plt.ylabel(param_labels[j],fontsize=10)
 
         corrcoefs[i].append(np.corrcoef(x,y)[0][1])
 
+plt.tight_layout()
 print(corrcoefs)
 
-fig,ax = plot_corr_matrix(corrcoefs,param_labels)
+fig,ax = plot_corr_matrix(corrcoefs,param_labels,title="Correlation matrix (background)")
+
+################################################################################
+# Plot data
+################################################################################
+
+plt.figure()
+for i in range(len(param_labels)):
+    plt.subplot(2,2,1+i)
+    x0 = data0.transpose()[i]
+    x1 = data1.transpose()[i]
+    lo0,hi0 = min(x0),max(x0)
+    lo1,hi1 = min(x1),max(x1)
+    lo = lo0
+    if lo1<lo0:
+        lo = lo1
+    hi = hi0
+    if hi1>hi0:
+        hi = hi1
+
+    plt.hist(x0, color='r', alpha=0.5, range=(lo,hi), bins=50, histtype='stepfilled', density=True, label='signal')
+    plt.hist(x1, color='b', alpha=0.5, range=(lo,hi), bins=50, histtype='stepfilled', density=True, label='background')
+    plt.xlabel(param_labels[i])
+    plt.legend(fontsize=8)
+plt.tight_layout()
 
 
 ################################################################################
@@ -177,10 +209,20 @@ ypts1 = np.array(ypts1)
 plt.figure(figsize=(10,3))
 plt.subplot(1,3,1)
 plt.plot(xpts,ypts0)
+plt.xlabel("Cut on probability of being signal")
+plt.ylabel("# of signal remaining")
+
 plt.subplot(1,3,2)
 plt.plot(xpts,ypts1)
+plt.xlabel("Cut on probability of being signal")
+plt.ylabel("# of background remaining")
+
 plt.subplot(1,3,3)
 plt.plot(ypts1/n1,ypts0/n0)
+plt.xlabel("Fraction of background remaining")
+plt.ylabel("Fraction of signal remaining")
+
+plt.tight_layout()
 
 
 
