@@ -78,6 +78,8 @@ data = stats.norm(pars["signal"]["mean"].value,pars["signal"]["sigma"].value).rv
 data += stats.norm(pars["signal2"]["mean"].value,pars["signal2"]["sigma"].value).rvs(size=500).tolist()
 data += (10*np.random.random(1000)).tolist()
 
+print(data)
+
 initvals,finalvals = fit_emlm(pdf,pars,data)
 print("Done with fit!")
 pretty_print_parameters(pars)
