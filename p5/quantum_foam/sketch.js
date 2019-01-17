@@ -34,7 +34,7 @@ function setup() {
 
     smooth();
     
-    frameRate(10);
+    frameRate(30);
 
     mic = new p5.AudioIn();
     mic.start();
@@ -358,8 +358,8 @@ ParticleSystem.prototype.addParticlePair = function(x, y, pflag) {
     //print("new angle: "+sin(angle+1.57));
     var px0=px+pmag*cos(angle+1.57);
     var py0=py+pmag*sin(angle+1.57);
-    var ax0=-0.10*pmag*cos(angle+1.57);
-    var ay0=-0.10*pmag*sin(angle+1.57);
+    var ax0=-0.05*pmag*cos(angle+1.57);
+    var ay0=-0.05*pmag*sin(angle+1.57);
 
     var px1=px-pmag*cos(angle+1.57);
     var py1=py-pmag*sin(angle+1.57);
