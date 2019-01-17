@@ -1,4 +1,4 @@
-var ps = new ParticleSystem();
+//var ps = new ParticleSystem();
 
 var mic;
 
@@ -7,8 +7,8 @@ var t = 0.0;
 ///////////////////////////////////////////////////////////////////////////////
 // Info for particles
 ///////////////////////////////////////////////////////////////////////////////
-var x = [1000][3];
-var p = [1000][3];
+//var x = [1000][3];
+//var p = [1000][3];
 
 var quote_timer = 0;
 var quote_num = 0;
@@ -29,8 +29,12 @@ function setup() {
     // For ParticleSystem
     /////////////////////////////////////////////////////////////////////////////
     colorMode(RGB, 255, 255, 255, 100);
-    ps = new ParticleSystem(0, [width/2,height/2,0]);
+    print("setup: "+windowWidth/2+ " " + windowHeight/2+ " " + 0);
+    ps = new ParticleSystem(20, createVector(windowWidth/2,windowHeight/2,0.0));
+
     smooth();
+    
+    frameRate(10);
 
     mic = new p5.AudioIn();
     mic.start();
@@ -42,46 +46,50 @@ function draw() {
     /////////////////////////////////////////////////////////////////////////////
     // Get the amplitude of input
     /////////////////////////////////////////////////////////////////////////////
-    var tot = mic.getLevel();
-    if (tot>0.002) {
-        print("tot: "+tot);
-    }
+    var micLevel = mic.getLevel();
+    //print("tot micLevel: "+micLevel);
+    //
+    //if (micLevel>0.002) {
+        //print("micLevel: "+micLevel);
+    //}
 
     // put drawing code here
+    //print("background_color: "+background_color);
     background(background_color);
 
-    micLevel = mic.getLevel();
     stroke(255);
     fill(255);
-    ellipse(width/2, constrain(height-micLevel*height*5, 0, height), 10, 10);
+    // For debugging
+    //ellipse(width/2, constrain(height-micLevel*height*5, 0, height), 10, 10);
 
     //////////////////////////////////////////
-    // Get the Particle's going
+    // Get the Particle going
     //////////////////////////////////////////
 
-    ps.run;
+    //print("size: "+ps.size());
+    ps.run();
 
-    if (tot>0)
+    // If things are loud then make new particles
+    if (micLevel>0.010)
     {
-        //var nparticles=(tot/50);
-        var nparticles=5;
-        print("nbarticles: "+nparticles);
+        //var nparticles=(micLevel/50);
+        var num_new= int(micLevel*500);
+        //print("num_new: "+num_new);
         //println("size: "+ps.size());
-        if (ps.size() <= 10)
-        {
-            nparticles=10;
-        }
-        for (var i=0;i<nparticles;i++)
+        if (num_new <= 10)
+            num_new=10;
+
+        for (var i=0;i<num_new;i++)
         {
             var pflag=1;
-            if (tot>100)
+            if (micLevel>0.005)
             {
                 if (random(1)<0.1)
                     pflag=2;
             }
             //print("HITHERE");
-            if (ps.length<100)
-                ps.addParticle(random(windowWidth),random(windowHeight),pflag);
+            if (ps.size()<200)
+                ps.addParticlePair(random(windowWidth),random(windowHeight),pflag);
             //ps.addParticle(random(screen_width),random(screen_height),1);
         }
     }
@@ -92,7 +100,7 @@ function draw() {
 
     if (quote_timer==0) {
         quote = qft_quotes();
-        print("here!");
+        //print("here!");
     }
 
     fill(255, 255, 255,200-quote_timer);
@@ -121,13 +129,13 @@ window.onresize = function() {
 ///////////////////////////////////////////////////////////////////////////////
 function qft_quotes()
 {
-    print("Quotes!");
+    //print("Quotes!");
     var s = "";
     var r = -1;
     while (r==quote_num || r==-1)
     {
         r = ceil(random(4));
-        print("r: "+r);
+        //print("r: "+r);
     }
 
     if (r==1) {
@@ -149,7 +157,7 @@ function qft_quotes()
 // A simple Particle class
 ///////////////////////////////////////////////////////////////////////////////
 //var Particle = function(l, v, a, energy, xpflag) 
-function Particle(l, v, a, energy, xpflag) {
+var Particle = function(l, v, a, energy, xpflag) {
     //float r;
     //float timer;
     //int R;
@@ -183,31 +191,32 @@ function Particle(l, v, a, energy, xpflag) {
 }
 
 // Another constructor (the one we are using here)
-function Particle(l,red,green,blue) {
+/*
+var Particle = function(l,red,green,blue) {
     var xdir=random(-2,2);
     var ydir=random(-2,2);
     this.acc = createVector(-0.05*xdir,-0.05*ydir,0);
-    //acc = new PVector(0,0.0,0);
     this.vel = createVector(xdir,ydir,0);
     this.loc = l.copy();
+    //print("loc: "+this.loc);
+    //print("vel: "+this.vel);
+    //print("acc: "+this.acc);
     this.r = 30.0;
     this.timer = 100.0;
     this.R=red;
     this.G=green;
     this.B=blue;
-    print(B);
+    //print("blue: "+this.B);
 }
-
-Particle.prototype.run = function() {
-    print("-------------");
-    update();
-    render();
-}
+*/
 
 // Method to update location
 Particle.prototype.update = function() {
+    //print("UPDATE: "+this.loc+ " " +this.vel+" "+this.acc);
     this.vel.add(this.acc);
     this.loc.add(this.vel);
+    //print("POSTDATE: "+this.loc+ " " +this.vel+" "+this.acc);
+    //print("a: "+this.timer);
     this.timer -= 1.0;
 }
 
@@ -222,16 +231,25 @@ Particle.prototype.render = function() {
         fill(this.R,this.G,this.B,100);
     }
     ellipseMode(CENTER);
+    //print("loc.x: ",this.loc.x);
     ellipse(this.loc.x,this.loc.y,this.r,this.r);
-    pushMatrix();
+    push();
     stroke(255);
-    popMatrix();
+    pop();
     //displayVector(vel,loc.x,loc.y,10);
+}
+
+Particle.prototype.run = function() {
+    //print("-------------");
+    this.update();
+    this.render();
 }
 
 // Is the particle still useful?
 Particle.prototype.dead = function() {
-    if (this.timer <= 0.0) {
+    //print("DEAD TIMER: "+this.timer);
+    isDead = this.timer <=0.0 || this.loc.x<0 || this.loc.x>windowWidth || this.loc.y<0 || this.loc.y>windowHeight;
+    if (isDead) {
         return Boolean(1);
     } else {
         return Boolean(0);
@@ -269,11 +287,16 @@ Particle.prototype.displayVector = function(v, x, y, scayl) {
 //  var particles;    // An arraylist for all the particles
 //  var origin;        // An origin point for where particles are born
 
-function ParticleSystem(num, v) {
+var ParticleSystem = function(num, v) {
     this.particles = [];              // Initialize the arraylist
-    this.origin = v;                        // Store the origin point
+    //print("HERE v     : "+v);
+    this.origin = v.copy();                        // Store the origin point
+    //print("HERE origin: "+this.origin);
     for (var i = 0; i < num; i++) {
-        particles.add(new Particle(origin,0,191,255));    // Add "num" amount of particles to the arraylist
+        //print("Adding: "+i);
+        //this.particles.push(new Particle(this.origin,0,191,255));    // Add "num" amount of particles to the arraylist
+        this.addParticlePair(random(windowWidth),random(windowHeight),1);
+        //print("Added!");
     }
 }
 
@@ -283,49 +306,56 @@ ParticleSystem.prototype.size = function() {
 
 ParticleSystem.prototype.run = function() {
     // Cycle through the ArrayList backwards b/c we are deleting
-    print("++++++++++++++++++++");
+    //print("++++++++++++++++++++");
+    //print(this.particles.length);
     for (var i = this.particles.length-1; i >= 0; i--) {
         var p = this.particles[i];
-        print("============");
-        p.run;
-        print("=================================>");
-        if (p.dead) {
+        //print("============");
+        p.run();
+        //print("=================================>");
+        if (p.dead()) {
+            //print("REMOVING:");
             this.particles.splice(i,1);
         }
+        if (this.particles.length<50)
+            this.addParticlePair(random(windowWidth),random(windowHeight),1);
     }
 }
 
-ParticleSystem.prototype.addParticle = function() {
-    this.particles.add(new Particle(origin,0,191,255));
-    this.particles.add(new Particle(origin,255,191,0));
-}
+//ParticleSystem.prototype.addParticle = function() {
+    //this.particles.add(new Particle(origin,0,191,255));
+    //this.particles.add(new Particle(origin,255,191,0));
+//}
 
-ParticleSystem.prototype.addParticle = function(x, y,R,G, B) {
-    this.particles.push(new Particle(new PVector(x,y),R,G,B));
-    this.particles.push(new Particle(new PVector(x,y),B,G,R));
-    //print("here");
-}
+//ParticleSystem.prototype.addParticle = function(x, y,R,G, B) {
+    //this.particles.push(new Particle(new PVector(x,y),R,G,B));
+    //this.particles.push(new Particle(new PVector(x,y),B,G,R));
+    ////print("here");
+//}
 
-ParticleSystem.prototype.addParticle = function(x, y, pflag) {
+ParticleSystem.prototype.addParticlePair = function(x, y, pflag) {
     var range=1.0;
     if (abs(pflag)==1)
     {
-        range=10;
+        range=2;
     }
     else if (abs(pflag)==2)
     {
-        range=30;
+        range=4;
     }
-    var px=random(-range,range);
-    var py=random(-range,range);
+    //var px=random(-range,range);
+    //var py=random(-range,range);
+    var px=randomGaussian(0,range);
+    var py=randomGaussian(0,range);
+
     //var px=0.0;
     //var py=5.0;
     var pmag=1.0*sqrt(px*px+py*py);
     var angle=atan2(py,px);
-    print("angle: "+angle);
+    //print("angle: "+angle);
 
-    print("new angle: "+cos(angle+1.57));
-    print("new angle: "+sin(angle+1.57));
+    //print("new angle: "+cos(angle+1.57));
+    //print("new angle: "+sin(angle+1.57));
     var px0=px+pmag*cos(angle+1.57);
     var py0=py+pmag*sin(angle+1.57);
     var ax0=-0.10*pmag*cos(angle+1.57);
@@ -337,7 +367,7 @@ ParticleSystem.prototype.addParticle = function(x, y, pflag) {
     var ay1=0.10*pmag*sin(angle+1.57);
 
     var energy=40.0*sqrt(ax1*ax1+ay1*ay1);
-    print("energy: "+energy);
+    //print("energy: "+energy);
 
     if (pflag==2)
     {
@@ -345,14 +375,14 @@ ParticleSystem.prototype.addParticle = function(x, y, pflag) {
         energy = energy/3.0;
     }
 
-    particles.push(new Particle(new PVector(x,y), new PVector(px0,py0), new PVector(ax0,ay0), energy, pflag));
-    particles.push(new Particle(new PVector(x,y), new PVector(px1,py1), new PVector(ax1,ay1), energy, -pflag));
+    this.particles.push(new Particle(createVector(x,y), createVector(px0,py0), createVector(ax0,ay0), energy, pflag));
+    this.particles.push(new Particle(createVector(x,y), createVector(px1,py1), createVector(ax1,ay1), energy, -pflag));
     //print("here");
 }
 
-ParticleSystem.prototype.addParticle = function(p) {
-    this.particles.push(p);
-}
+//ParticleSystem.prototype.addParticle = function(p) {
+    //this.particles.push(p);
+//}
 
 // A method to test if the particle system still has particles
 ParticleSystem.prototype.dead = function() {
