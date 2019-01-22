@@ -70,7 +70,7 @@ function draw() {
     ps.run();
 
     // If things are loud then make new particles
-    if (micLevel>0.010)
+    if (micLevel>0.015)
     {
         //var nparticles=(micLevel/50);
         var num_new= int(micLevel*500);
@@ -82,7 +82,7 @@ function draw() {
         for (var i=0;i<num_new;i++)
         {
             var pflag=1;
-            if (micLevel>0.005)
+            if (micLevel>0.008)
             {
                 if (random(1)<0.1)
                     pflag=2;
