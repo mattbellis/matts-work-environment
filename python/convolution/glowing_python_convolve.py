@@ -11,12 +11,12 @@ def smooth(x,beta):
     # to apply the window at the borders
     s = numpy.r_[x[window_len-1:0:-1],x,x[-1:-window_len:-1]]
     w = numpy.kaiser(window_len,beta)
-    print w
-    print len(w)
-    print len(s)
+    print(w)
+    print(len(w))
+    print(len(s))
     y = numpy.convolve(w/w.sum(),s,mode='valid')
-    print len(y)
-    print len(y[5:len(y)-5])
+    print(len(y))
+    print(len(y[5:len(y)-5]))
     return y[5:len(y)-5]
 ################################################################################
 
@@ -25,7 +25,7 @@ beta = [2,4,16,32]
 pylab.figure(1)
 for b in beta:
     w = numpy.kaiser(101,b) 
-    pylab.plot(range(len(w)),w,label="beta = "+str(b))
+    pylab.plot(list(range(len(w))),w,label="beta = "+str(b))
 pylab.xlabel('n')
 pylab.ylabel('W_K')
 pylab.legend()
@@ -40,7 +40,7 @@ for i in range(100):
 # smoothing the data
 pylab.figure(2)
 pylab.plot(y,'-k',label="original signal",alpha=.3)
-print y
+print(y)
 for b in beta:
     yy = smooth(y,b) 
     #print yy
