@@ -33,7 +33,7 @@ foreach file ($*)
     if ( $sides == 'double' ) then
         lp -d$printer -n $ncopies -o sides=two-sided-long-edge $file
     else if ( $sides == 'single' ) then
-        lp -d$printer -n $ncopies $file
+        lp -d$printer -n $ncopies -o sides=one-sided $file
     endif
 
 end
