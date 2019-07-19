@@ -13,7 +13,7 @@ def main():
     aset= ROOT.RooArgSet(mass,"aset")
     data= ROOT.RooDataSet("data","data",aset)
 
-    nentries = 100
+    nentries = 10000
     x = np.random.random(nentries)
 
     for n in range (nentries):
