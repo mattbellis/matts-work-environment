@@ -53,19 +53,33 @@ for table in tables:
         for row in rows:
             cols = row.findAll('td')
         
+            #print("-------------------------")
+            rowcount = -1
+            year = "Default"
+            major = "Default"
             for col in cols:
+                rowcount += 1 
+
+                #print("COLS")
+                #print(col)
                 
                 img = col.findAll('img')
                 
                 a = col.findAll('p')
+                #print("here")
+                #print(a)
                 if len(img)>0 and img[0]['src'].find('jpg')>=0:
                     image = img[0]['src']
                     image = image.replace(' ','_')
                 if len(a)>0 and a[0]['class']==['leftaligntext']:
                     name = a[0].string
+                if rowcount == 3:
+                    major = a[0].string
+                if rowcount == 4:
+                    year = a[0].string
 
 
-                if name is not None and image is not None:
+                if name is not None and image is not None and rowcount==5:
                     if icount%maxsubfigs==0:
                         #print("\\begin{document}")
                         print("\n")
@@ -79,9 +93,11 @@ for table in tables:
                         image = './file_not_found.jpg'
 
                     if icount%5==4:
-                        print("\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\\\" % (name,image))
+                        print("\subfloat[%s, %s, %s]{\includegraphics[width=0.15\\textwidth]{%s}}\\\\" % (name,major,year,image))
+                        #print("\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\\\" % (name,image))
                     else:
-                        print("\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\hfill" % (name,image))
+                        print("\subfloat[%s, %s, %s]{\includegraphics[width=0.15\\textwidth]{%s}}\\hfill" % (name,major,year,image))
+                        #print("\subfloat[%s]{\includegraphics[width=0.15\\textwidth]{%s}}\\hfill" % (name,image))
 
                     image = None
                     name = None
