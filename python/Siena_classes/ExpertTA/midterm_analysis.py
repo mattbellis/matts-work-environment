@@ -40,18 +40,30 @@ print(sections['moustakas'])
 
 def analyze_section(section):
 
+    tot = 0
+    newtot = 0
+
     for entry in section:
         scores = entry[4:-1].astype(float)
+        tot += np.mean(scores)
+
         scores.sort()
-        print(scores)
-        print(scores[2:])
+        #print(scores)
+        #print(scores[2:])
         newmean = np.mean(scores[2:])
 
-        print(np.mean(scores), entry[-1], newmean)
+        newtot += newmean
+
+
+        print('{0:20} {1:4.2f}    {2:4.2f}'.format(entry[0], np.mean(scores), newmean))
+
+    print('{0:4.2f}   {1:4.2f}'.format(tot/len(section), newtot/len(section)))
 
 
 
 print(len(sections['bellis'][0]))
 
-analyze_section(sections['bellis'])
+for key in sections.keys():
+    print('{0} -----------------------'.format(key))
+    analyze_section(sections[key])
 
