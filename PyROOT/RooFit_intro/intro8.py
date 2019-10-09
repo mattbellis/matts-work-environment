@@ -67,46 +67,46 @@ for i in range(0,1000):
 # End loop
 
 d.Print("v") 
-print "\n"
+print("\n")
 
 # The get() function returns a pointer to the internal copy of the RooArgSet(x,y,c)
 # supplied in the constructor
 row = d.get() # RooArgSet 
 row.Print("v") 
-print "\n"
+print("\n")
 
 # Get with an argument loads a specific data point in row and returns
 # a pointer to row argset. get() always returns the same pointer, unless
 # an invalid row number is specified. In that case a null ptr is returned
 d.get(900).Print("v") 
-print "\n"
+print("\n")
 
 # *** Reducing / Appending / Merging ***
 
 # The reduce() function returns a new dataset which is a subset of the original
-print "\n>> d1 has only columns x,c" 
+print("\n>> d1 has only columns x,c") 
 d1 = d.reduce(RooArgSet(x,c)) # RooDataSet 
 d1.Print("v") 
 
-print "\n>> d2 has only column y" 
+print("\n>> d2 has only column y") 
 d2 = d.reduce(RooArgSet(y)) # RooDataSet 
 d2.Print("v") 
 
-print "\n>> d3 has only the points with y>5.17" 
+print("\n>> d3 has only the points with y>5.17") 
 d3 = d.reduce("y>5.17") # RooDataSet 
 d3.Print("v") 
 
-print "\n>> d4 has only columns x,c for data points with y>5.17" 
+print("\n>> d4 has only columns x,c for data points with y>5.17") 
 d4 = d.reduce(RooArgSet(x,c),"y>5.17")  # RooDataSet 
 d4.Print("v") 
 
 # The merge() function adds two data set column-wise
-print "\n>> merge d2(y) with d1(x,c) to form d1(x,c,y)" 
+print("\n>> merge d2(y) with d1(x,c) to form d1(x,c,y)") 
 d1.merge(d2)  
 d1.Print("v") 
 
 # The append() function addes two datasets row-wise
-print "\n>> append data points of d3 to d1" 
+print("\n>> append data points of d3 to d1") 
 d1.append(d3) 
 d1.Print("v")   
 
@@ -115,8 +115,8 @@ d1.Print("v")
 # A binned dataset can be constructed empty, from an unbinned dataset, or
 # from a ROOT native histogram (TH1,2,3)
 
-print ">> construct dh (binned) from d(unbinned) but only take the x and y dimensions," 
-print ">> the category 'c' will be projected in the filling process" 
+print(">> construct dh (binned) from d(unbinned) but only take the x and y dimensions,") 
+print(">> the category 'c' will be projected in the filling process") 
 
 # The binning of real variables (like x,y) is done using their fit range
 #get/setFitRange()' and number of specified fit bins 'get/setFitBins()'.
@@ -133,23 +133,23 @@ dh.plotOn(yframe, RooLinkedList() )  # plot projection of 2D binned data on y
 yframe.Draw() 
 
 # Examine the statistics of a binned dataset
-print ">> number of bins in dh   : " + str(dh.numEntries()) 
-print ">> sum of weights in dh   : " + str(dh.sum(kFALSE)) 
-print ">> integral over histogram: " + str(dh.sum(kTRUE)) # accounts for bin volume
+print(">> number of bins in dh   : " + str(dh.numEntries())) 
+print(">> sum of weights in dh   : " + str(dh.sum(kFALSE))) 
+print(">> integral over histogram: " + str(dh.sum(kTRUE))) # accounts for bin volume
 
 # Locate a bin from a set of coordinates and retrieve its properties
 x.setVal(0.3)
 y.setVal(20.5)
-print ">> retrieving the properties of the bin enclosing coordinate (x,y) = (0.3,20.5) " 
-print " bin center:" 
+print(">> retrieving the properties of the bin enclosing coordinate (x,y) = (0.3,20.5) ") 
+print(" bin center:") 
 dh.get(RooArgSet(x,y)).Print("v")  # load bin center coordinates in internal buffer
-print " weight = " + str(dh.weight()) # return weight of last loaded coordinates
+print(" weight = " + str(dh.weight())) # return weight of last loaded coordinates
 
 # Reduce the 2-dimensional binned dataset to a 1-dimensional binned dataset
 #
 # All reduce() methods are interfaced in RooAbsData. All reduction techniques
 # demonstrated on unbinned datasets can be applied to binned datasets as well.
-print ">> Creating 1-dimensional projection on y of dh for bins with x>0" 
+print(">> Creating 1-dimensional projection on y of dh for bins with x>0") 
 dh2 = dh.reduce( RooArgSet(y), "x>0") # RooDataHist 
 dh2.Print("v") 
 
@@ -162,7 +162,7 @@ gPad.Update()
 # *** Saving and loading from file ***
 
 # Datasets can be persisted with ROOT I/O
-print  "\n>> Persisting d via ROOT I/O" 
+print("\n>> Persisting d via ROOT I/O") 
 f = TFile ("intro8.root","RECREATE") 
 d.Write() 
 f.ls() 
@@ -177,7 +177,7 @@ if (not batchMode):
   if __name__ == '__main__':
     rep = ''
     while not rep in [ 'q', 'Q' ]:
-      rep = raw_input( 'enter "q" to quit: ' )
+      rep = input( 'enter "q" to quit: ' )
       if 1 < len(rep):
         rep = rep[0]
 
