@@ -30,13 +30,13 @@ for key in sections.keys():
         for class_names in student_listing:
             #print(class_names,name)
             if name in class_names[0]:
-                print(name)
+                #print(name)
                 sections[key].append(student_record)
 
 ################################################################################
-print(sections['bellis'])
-print(sections['yuksek'])
-print(sections['moustakas'])
+#print(sections['bellis'])
+#print(sections['yuksek'])
+#print(sections['moustakas'])
 
 def analyze_section(section):
 
@@ -55,9 +55,10 @@ def analyze_section(section):
         newtot += newmean
 
 
-        print('{0:20} {1:4.2f}    {2:4.2f}'.format(entry[0], np.mean(scores), newmean))
+        print('{0:20} {1:4.2f}    {2:4.2f}   {3:4.2f}'.format(entry[0], np.mean(scores), newmean, newmean+10))
 
     print('{0:4.2f}   {1:4.2f}'.format(tot/len(section), newtot/len(section)))
+
 
 
 
