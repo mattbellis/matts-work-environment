@@ -33,7 +33,7 @@ if len(sys.argv)>3:
     profile = sys.argv[3]
 
 infilename  = "new_data_040415/data_%s_%s_profile%s.dat" % (experiment,element,profile)
-print infilename
+print(infilename)
 
 ################################################################################
 if experiment=="FNDA1":
@@ -97,7 +97,7 @@ npts = 100
 dx   = (hi-lo)/float(npts)
 
 xpos = np.linspace(lo,hi,npts) 
-print lo,hi
+print(lo,hi)
 #exit()
 #'''
 #if element=="Ni":
@@ -110,15 +110,15 @@ elif element=="Fe" and experiment=="FNDA1" and profile=="2":
     xpos = -xpos
 #'''
 
-print lo,hi
-print xpos[0],xpos[-1]
+print(lo,hi)
+print(xpos[0],xpos[-1])
 #exit()
 
 frac_interface = (interface_x-lo)/(hi-lo)
-print "frac_interface: ",frac_interface
+print("frac_interface: ",frac_interface)
 
 point_of_intial_interface = int(npts*frac_interface)
-print "point_of_intial_interface: ", point_of_intial_interface
+print("point_of_intial_interface: ", point_of_intial_interface)
 xvals = np.linspace(lo,hi,npts)
 
 ################################################################################
@@ -137,9 +137,9 @@ invdx2 = 1.0/(dx**2)
 #D = 3.17364e-10
 #D = 3.185e-10
 
-print "dx: ",dx
-print "invdx2: ",invdx2
-print "dt: ",dt
+print("dx: ",dx)
+print("invdx2: ",invdx2)
+print("dt: ",dt)
 
 t = t0
 
@@ -154,9 +154,9 @@ tag = "dt300"
 ################################################################################
 def fitfunc(data,p,parnames,params_dict):
 
-    print '----------------------------------'
-    print ' Calculating diffusion profiles    '
-    print '----------------------------------'
+    print('----------------------------------')
+    print(' Calculating diffusion profiles    ')
+    print('----------------------------------')
 
     pn = parnames
     #print "ere"
@@ -190,7 +190,7 @@ def fitfunc(data,p,parnames,params_dict):
 
         # Condition for finite element approach to be stable. 
         if len( (D56*dt*invdx2)[D56*(dt*invdx2)>0.5])>0:
-            print "D56*dt*invdx2: ",D56*(dt*invdx2)
+            print("D56*dt*invdx2: ",D56*(dt*invdx2))
 
         # This is the normal beta
         D54 = D56*((heavy_isotope/light_isotope)**mybeta) # For Fe
@@ -272,9 +272,9 @@ def chisq_minuit(data,p,parnames,params_dict):
     #print params_dict
     c56,c54,simulated_deltas = fitfunc(data,p,parnames,params_dict)
 
-    print "values in fit: "
-    print p
-    print parnames
+    print("values in fit: ")
+    print(p)
+    print(parnames)
 
     xdata = data[0]
     ydata = data[1]
@@ -297,7 +297,7 @@ def chisq_minuit(data,p,parnames,params_dict):
             #print "INTERPOLATE: ",predicted_delta(x)
             chi2 += ((predicted_delta(x)-y)**2)/(yerr**2)
 
-    print "-------- CHI2: %f" % (chi2)
+    print("-------- CHI2: %f" % (chi2))
 
     return chi2
 
@@ -322,14 +322,14 @@ kwd['print_level'] = 2
 
 data = [x,delta,delta_err]
 
-print "HERE"
-print kwd
+print("HERE")
+print(kwd)
 
 f = fitutils.Minuit_FCN([data],params_dict,chisq_minuit)
 
 m = minuit.Minuit(f,**kwd)
 
-print "THERE"
+print("THERE")
 m.print_param()
 
 
@@ -344,10 +344,10 @@ values = m.values
 errors = m.errors
 #errors = m.get_merrors()
 
-print "Values:"
-print values
-print "Errors:"
-print errors
+print("Values:")
+print(values)
+print("Errors:")
+print(errors)
 
 mybeta = values['mybeta']
 offset = values['offset']
@@ -400,8 +400,8 @@ plt.plot([interface_x,interface_x],[0,110.0]) # Draw line
 plt.ylim(0,1.10)
 plt.plot(x,c0,'ro',label='Fe concentration data')
 plt.plot(x,c1,'bo',label='Ni concentration data')
-print x
-print c0
+print(x)
+print(c0)
 #exit()
 plt.ylabel('Concentration',fontsize=24)
 plt.xlabel('Microns',fontsize=24)
@@ -479,7 +479,7 @@ plt.savefig(name)
 #plt.plot(x,conc,'o',label='data from isotope file')
 #plt.legend()
 
-print "Final value of beta: %f" % (values['mybeta'])
+print("Final value of beta: %f" % (values['mybeta']))
 
 name = "%s_%s_%s_%s_output.csv" % (element,experiment,profile,tag)
 
@@ -489,9 +489,9 @@ csv.writer(f).writerows(it.izip_longest(x,conc,x,conc,xpos,c56,c54,x,delta,delta
 
 
 exelpr = "%s %s profile %s:" % (experiment,element,profile)
-print "%s beta = %f +/- %f    offset = %f +/- %f microns" % (exelpr,mybeta,mybetaerr,offset*1e6,offseterr*1e6)
+print("%s beta = %f +/- %f    offset = %f +/- %f microns" % (exelpr,mybeta,mybetaerr,offset*1e6,offseterr*1e6))
 #print "mybeta: %f" % (mybeta)
 #print "offset: %f" % (offset)
-print "FVAL: %f" % (m.fval)
+print("FVAL: %f" % (m.fval))
 #plt.show()
 
