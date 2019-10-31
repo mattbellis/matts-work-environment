@@ -47,38 +47,15 @@ def analyze_section(section):
     newtots = []
 
     for entry in section:
-        scores = entry[4:-1].astype(float)
-        if np.mean(scores)>0:
-            tot += np.mean(scores)
-            tots.append(np.mean(scores))
-
-        scores.sort()
-        #print(scores)
-        #print(scores[2:])
-        newmean = np.mean(scores[2:])
-        if newmean>0:
-            newtot += newmean
-            newtots.append(newmean)
-
-
-        print('{0:20} {1:4.2f}    {2:4.2f}'.format(entry[0], np.mean(scores), newmean))
-
-    print('{0:4.2f}   {1:4.2f}'.format(tot/len(section), newtot/len(section)))
-    #plt.hist(tots,range=(0,100),bins=10)
-    #plt.hist(newtots,range=(0,100),bins=10,alpha=0.3)
-    plt.plot(np.ones(len(tots)),tots,'o',alpha=0.5)
-    plt.plot(np.ones(len(tots))+1,newtots,'o',alpha=0.5)
-    plt.xlim(0,3)
-    plt.ylim(0,110)
+        scores = entry[4:-1]
+        output = "{0:12} ".format(entry[0])
+        for score in scores[0:20]:
+            output += "{0:5s} ".format(score)
+        print(output)
 
 #print(len(sections['bellis'][0]))
 
-plt.figure(figsize=(12,4))
 
 for i,key in enumerate(sections.keys()):
     print('{0} -----------------------'.format(key))
-    plt.subplot(1,3,i+1)
     analyze_section(sections[key])
-    plt.title(key)
-
-plt.show()
