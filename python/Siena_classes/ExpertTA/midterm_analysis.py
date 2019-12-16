@@ -61,7 +61,7 @@ def analyze_section(section):
             newtots.append(newmean)
 
 
-        print('{0:20} {1:4.2f}    {2:4.2f}   {3:4.2f}'.format(entry[0], np.mean(scores), newmean, newmean+10))
+        print('{0:20} {1:4.2f}    {2:4.2f}   {3:4.2f}'.format(entry[0], np.mean(scores), newmean, newmean+0))
 
     print('{0:4.2f}   {1:4.2f}'.format(tot/len(section), newtot/len(section)))
     #plt.hist(tots,range=(0,100),bins=10)
