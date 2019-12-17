@@ -48,10 +48,13 @@ def analyze_section(section):
     newtots = []
 
     for entry in section:
-        scores = entry[3:-1]
+        #print(len(entry),entry)
+        scores = entry[3:]
         output = '{0:12s}'.format(entry[0])
         # Average the pre-lecture and checkpoint questions
-        for i in range(0,len(scores[0:36]),2):
+        #print(len(scores), len(scores[0:36]),scores)
+        #for i in range(0,len(scores[0:36]),2):
+        for i in range(0,len(scores),2):
             avg = np.mean([float(scores[i][:-1]),float(scores[i+1][:-1])])
             output += ' {0:3.0f}'.format(avg)
         print(output)
