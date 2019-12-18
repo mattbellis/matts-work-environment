@@ -65,7 +65,7 @@ def analyze_section(section):
         #print(output)
         #print(scores)
         #print(scores[2:])
-        newmean = np.mean(scores[2:])
+        newmean = np.mean(scores[3:])
         if newmean>0:
             newtot += newmean
             newtots.append(newmean)
@@ -73,7 +73,7 @@ def analyze_section(section):
 
         print('{0:20} {1:4.2f}    {2:4.2f}'.format(entry[0], np.mean(scores), newmean))
 
-    print('section mean: {0:4.2f}     section mean (dropping lowest 2 question scores): {1:4.2f}'.format(tot/num_in_section, newtot/num_in_section))
+    print('section mean: {0:4.2f}     section mean (dropping lowest 3 question scores): {1:4.2f}'.format(tot/num_in_section, newtot/num_in_section))
     #print(num_in_section,len(section))
     print()
     #plt.hist(tots,range=(0,100),bins=10)
