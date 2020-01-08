@@ -142,15 +142,15 @@ for course in courses:
 
 #plt.show()
 # Combine MATH and PHYS
-df['course'][df['course']=='PHYS 110'] = 'PHYS'
-df['course'][df['course']=='PHYS 130'] = 'PHYS'
+df['course'][df['course']=='PHYS 110'] = 'Physics'
+df['course'][df['course']=='PHYS 130'] = 'Physics'
 
-df['course'][df['course']=='MATH 110'] = 'MATH'
-df['course'][df['course']=='MATH 105'] = 'MATH'
+df['course'][df['course']=='MATH 110'] = 'Math'
+df['course'][df['course']=='MATH 105'] = 'Math'
 
-df['course'][df['course']=='BIOL 110'] = 'BIOL'
-df['course'][df['course']=='CHEM 110'] = 'CHEM'
-df['course'][df['course']=='CSIS 110'] = 'CSIS'
+df['course'][df['course']=='BIOL 110'] = 'Biology'
+df['course'][df['course']=='CHEM 110'] = 'Chemistry'
+df['course'][df['course']=='CSIS 110'] = 'Comp. Sci.'
 
 print(df[df['course']=='PHYS'])
 print(df[df['course']=='MATH'])
@@ -201,14 +201,16 @@ for ethnicity in ethnicities:
     sns.barplot(x="grade", y="fraction", hue='course', data=df2[(df2['ethnicity']==ethnicity) & (df2['course'] != 'ENVA 100')],ci=None, palette='Dark2')
     #sns.barplot(x="grade", y="fraction", hue='course', data=df2[(df2['ethnicity']==ethnicity)],ci=None, palette='Set2')
     
-    plt.gcf().suptitle(ethnicity,fontsize=18)
-    plt.ylim(0,0.5)
-    #plt.ylim(0,1.1)
+    #plt.gcf().suptitle(ethnicity,fontsize=18)
+    plt.gcf().suptitle('Fraction of students receiving a given grade who are {0}'.format(ethnicity.replace(' and ',' or ').replace('UM','Underrepresented Minority').replace('MR','Mixed Race')),fontsize=18)
+    #plt.ylim(0,0.5)
+    plt.ylim(0,1.0)
     plt.xlim(-0.5,5.0)
     plt.xlabel('')
-    plt.ylabel('Frac. of students receiving grade')
+    plt.ylabel('Fraction')
+    #plt.ylabel('Frac. of students receiving grade')
     plt.tight_layout()
-    plt.savefig(ethnicity.replace('/','_') +'_SUMMARY_ZOOMED.png')
-    #plt.savefig(ethnicity.replace('/','_') +'_SUMMARY.png')
+    #plt.savefig(ethnicity.replace('/','_') +'_SUMMARY_ZOOMED.png')
+    plt.savefig(ethnicity.replace('/','_') +'_SUMMARY.png')
 
 plt.show()
