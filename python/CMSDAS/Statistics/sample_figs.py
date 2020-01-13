@@ -114,7 +114,9 @@ for i in [0,1]:
     plt.savefig('example2_data_{0}.png'.format(str(i)))
 '''
 ################################################################################
-
+# Breakdown of Higgs single bin stuff
+################################################################################
+#'''
 data = [125,25,5.5,5]
 zz = [125,6.8,5.5,0.3]
 zx = [125,2.6,5.5,0.4]
@@ -129,20 +131,33 @@ plt.errorbar(data[0],data[1],fmt='ko',xerr=data[2],yerr=0,markersize=10)
 plt.xlabel(r'M(4$\ell$) (GeV)',fontsize=18)
 plt.ylabel(r'Events',fontsize=18)
 plt.ylim(0,1.5*data[1])
+plt.xlim(100,150)
 plt.tight_layout()
+plt.savefig('higgs_example_data.png')
 
 plt.figure(figsize=(5,4))
 plt.errorbar(data[0],data[1],fmt='ko',xerr=data[2],yerr=0,markersize=10)
 plt.hist([[zz[0]],[zx[0]],[higgs125[0]]],weights=[[zz[1]],[zx[1]],[higgs125[1]]],bins=1,range=(data[0]-data[2],data[0]+data[2]),stacked=True)#,color=['r','b'])
 #plt.errorbar(zz[0],zz[1],fmt='o',xerr=zz[2],yerr=zz[3],markersize=10)
 #plt.errorbar(zx[0],zx[1],fmt='o',xerr=zx[2],yerr=zx[3],markersize=10)
+# Error smear
+llx = data[0]-data[2] # lower left,x
+lly = data[1]-1.5 # lower left,y
+width = 2*data[2] 
+height = 2*1.5
+rect = plt.Rectangle([llx,lly],width,height,fc='k',alpha=0.5,hatch='x')
+plt.gca().add_patch(rect)
+
 plt.xlabel(r'M(4$\ell$) (GeV)',fontsize=18)
 plt.ylabel(r'Events',fontsize=18)
 plt.ylim(0,1.5*data[1])
+plt.xlim(100,150)
 plt.tight_layout()
+plt.savefig('higgs_example_data_stacked.png')
 
 
-for val,color in zip([zz,zx],['#1f77b4','#ff7f03']):
+i = 0
+for val,color in zip([zz,zx,higgs125],['#1f77b4','#ff7f03','#2ca02c']):
     plt.figure(figsize=(5,4))
     
     plt.hist([val[0]],weights=[val[1]],bins=1,range=(data[0]-data[2],data[0]+data[2]),color=color)
@@ -153,12 +168,37 @@ for val,color in zip([zz,zx],['#1f77b4','#ff7f03']):
     rect = plt.Rectangle([llx,lly],width,height,fc='k',alpha=0.5,hatch='/')
     plt.gca().add_patch(rect)
     plt.ylim(0,1.2*val[1])
+    plt.xlim(100,150)
     plt.xlabel(r'M(4$\ell$) (GeV)',fontsize=18)
     plt.ylabel(r'Events',fontsize=18)
     plt.tight_layout()
+    plt.savefig('higgs_example_data_{0}.png'.format(str(i)))
+    i += 1
+#'''
 
 
+################################################################################
+# Uncertainty distributions
+################################################################################
 
+x = np.linspace(0.5,8,1000)
+
+pdf1 = stats.norm(loc=2.6,scale=0.4)
+# Mode, peak position is exp(mu-sigma^2)
+# https://en.wikipedia.org/wiki/Log-normal_distribution
+#pdf2 = stats.lognorm(s=0.4,loc=1.115,scale=np.exp(1.115))#,scale=np.exp(2.6))
+# Just trying to do it by hand
+pdf2 = stats.lognorm(s=0.4,loc=1.70,scale=1.1)
+
+plt.figure(figsize=(6,4))
+plt.plot([2.6,2.6],[0,1.5],'k--',label='Central value prediction')
+plt.plot(x,pdf1.pdf(x),'-.',linewidth=4,label='Normal distribution')
+plt.plot(x,pdf2.pdf(x),linewidth=4,label='Log-normal distribution')
+plt.xlim(0,8)
+plt.xlabel(r'# of events from $Z$ + $X$ background prediction',fontsize=14)
+plt.legend(fontsize=14)
+plt.tight_layout()
+plt.savefig('normal_lognormal.png'.format(str(i)))
 
 
 plt.show()
