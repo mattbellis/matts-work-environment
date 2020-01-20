@@ -116,7 +116,7 @@ for i in [0,1]:
 ################################################################################
 # Breakdown of Higgs single bin stuff
 ################################################################################
-#'''
+'''
 data = [125,25,5.5,5]
 zz = [125,6.8,5.5,0.3]
 zx = [125,2.6,5.5,0.4]
@@ -174,13 +174,13 @@ for val,color in zip([zz,zx,higgs125],['#1f77b4','#ff7f03','#2ca02c']):
     plt.tight_layout()
     plt.savefig('higgs_example_data_{0}.png'.format(str(i)))
     i += 1
-#'''
+'''
 
 
 ################################################################################
 # Uncertainty distributions
 ################################################################################
-
+'''
 x = np.linspace(0.5,8,1000)
 
 pdf1 = stats.norm(loc=2.6,scale=0.4)
@@ -199,6 +199,46 @@ plt.xlabel(r'# of events from $Z$ + $X$ background prediction',fontsize=14)
 plt.legend(fontsize=14)
 plt.tight_layout()
 plt.savefig('normal_lognormal.png'.format(str(i)))
+
+'''
+################################################################################
+# Poisson distribution
+################################################################################
+
+x = np.linspace(0,10,11)
+
+plt.figure(figsize=(6,4))
+tot = 0
+for i in range(1,6):
+    #plt.figure(figsize=(6,4))
+    pdf = stats.poisson(i)
+
+    #print(x)
+    #print(pdf.pmf(x))
+
+    label = r'$\lambda$ = {0}'.format(i)
+    plt.hist(x,weights=pdf.pmf(x),bins=10,range=(0,10),histtype=r'step',linewidth=4,label=label)
+    y = pdf.pmf(0)
+    tot += y
+    print(i,y,tot)
+
+#partial_tot = 0
+#for i in range(1,6):
+    #pdf = stats.poisson(i)
+    #y = pdf.pmf(0)
+    #partial_tot += y
+    #print(i,y,tot,partial_tot/tot)
+
+    plt.xlim(0,9)
+    plt.ylim(0,0.5)
+    plt.xlabel('k',fontsize=18)
+    plt.ylabel('P(k)',fontsize=18)
+    plt.legend()
+    plt.tight_layout()
+    #name = "poisson_{0}.png".format(i)
+    name = "poisson_tot.png".format(i)
+    plt.savefig(name)
+
 
 
 plt.show()
