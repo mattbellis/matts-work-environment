@@ -7,6 +7,7 @@ from email.mime.multipart import MIMEMultipart
 import base64
 import ssl
 import getpass
+import os
 
 ################################################################################
 # Reference
@@ -15,9 +16,9 @@ import getpass
 ################################################################################
 
 ################################################################################
-#course = 'phys250_s20'
-course = 'phys400_NP_s20'
-nstudents_in_group = 3
+course = 'phys250_s20'
+#course = 'phys400_NP_s20'
+nstudents_in_group = 2
 
 coursename = "PHYS 250: Intro to Computational Physics"
 if course=="phys250_s20":
@@ -51,7 +52,7 @@ def write_and_send_email(student, partners):
     message["From"] = sender_email
     message["To"] = "matthew.bellis@gmail.com"
 
-    text = "Hi {0} {1},\n\n".format(student[1],student[2])
+    text = "Hi {0},\n\n".format(student[1])
     text += "For the next class, you'll get to work with these awesome peers of yours (yes one of them is you).\n\n"
     for s in partners:
         #print(s)
@@ -72,7 +73,12 @@ def write_and_send_email(student, partners):
     message.attach(part1)
 
     for s in partners:
-        with open(course + '_files/' + s[0] + '.jpg','rb') as img:
+        filename = course + '_files/' + s[0] + '.jpg'
+
+        if not os.path.exists(filename):
+            filename = 'file_not_found.jpg'
+
+        with open(filename,'rb') as img:
             image = MIMEImage(img.read())
             image.add_header('Content-ID', '<myimage>')
             message.attach(image)
@@ -82,7 +88,8 @@ def write_and_send_email(student, partners):
     with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
         server.login(sender_email, password)
         # UNCOMMENT THIS WHEN SENDING FOR REAL
-        #receiver_email = student[3]
+        # FOR TESTING
+        receiver_email = student[3]
         server.sendmail(sender_email, receiver_email, message.as_string()
                                     )
 
