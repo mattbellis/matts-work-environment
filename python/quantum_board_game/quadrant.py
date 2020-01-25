@@ -35,4 +35,4 @@ ax.set_xlim(-1.0,-0.45)
 
 #plt.show()
 
-plt.savefig('wedge.png')
+plt.savefig('wedge.png',transparent=True)
