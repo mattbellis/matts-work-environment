@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 ################################################################################
-nplaces = 6
+nplaces = 8
 degrees = np.pi/2/nplaces
 
 vals = [np.pi/2.]
@@ -21,18 +21,25 @@ vals = np.array(vals)
 size = 0.3
 
 fig, ax = plt.subplots(dpi=200)
-#cmap = plt.get_cmap("tab20c")
-cmap = plt.get_cmap("Dark2")
-outer_colors = cmap([1,2,3])
+cmap = plt.get_cmap("tab20c")
+#outer_colors = cmap([-1,-2,-3,-4])
+#outer_colors = cmap([16,17,18,19])
+outer_colors = cmap([16,17,18])
+hatches = ['///','o','\\','O']
+#hatches = 'o'
 
-ax.pie(vals, radius=1, colors=outer_colors, wedgeprops=dict(width=size, edgecolor='w'))
-#ax.pie(vals, radius=1, wedgeprops=dict(width=size, edgecolor='w'))
+#cmap = plt.get_cmap("Dark2")
+#outer_colors = cmap([1,2,3])
+
+patches = ax.pie(vals, radius=1, colors=outer_colors, wedgeprops=dict(width=size, edgecolor='w'))
+for i,p in enumerate(patches[0]):
+    p.set_hatch(hatches[i%len(hatches)])
 
 
 ax.set(aspect="equal")
 ax.set_ylim(0.15,1.0)
 ax.set_xlim(-1.0,-0.45)
 
-#plt.show()
+plt.show()
 
 plt.savefig('wedge.png',transparent=True)
