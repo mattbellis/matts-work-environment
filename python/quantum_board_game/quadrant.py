@@ -21,10 +21,16 @@ vals = np.array(vals)
 size = 0.3
 
 fig, ax = plt.subplots(dpi=200)
+
+# https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
 cmap = plt.get_cmap("tab20c")
-#outer_colors = cmap([-1,-2,-3,-4])
 #outer_colors = cmap([16,17,18,19])
 outer_colors = cmap([16,17,18])
+
+cmap = plt.get_cmap("Dark2")
+outer_colors = cmap([1,2])
+
+# https://matplotlib.org/api/_as_gen/matplotlib.patches.Patch.html#matplotlib.patches.Patch.set_hatch
 hatches = ['///','o','\\','O']
 #hatches = 'o'
 
