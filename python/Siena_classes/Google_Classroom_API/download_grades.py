@@ -95,6 +95,10 @@ def main():
     submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
     print(submission)
 
+    for s in submission['studentSubmissions']:
+        print(s)
+        print()
+
     print()
 
     if not course:
