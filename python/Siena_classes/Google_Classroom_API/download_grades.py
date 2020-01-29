@@ -3,14 +3,32 @@
 from __future__ import print_function
 import pickle
 import os.path
+import os
 from googleapiclient import errors
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import simplejson
 
+# So weird. I need this when I have multiple oauths because otherwise, it 
+# changes the order. 
+# https://stackoverflow.com/questions/53176162/google-oauth-scope-changed-during-authentication-but-scope-is-same
+os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
+
+
+# https://developers.google.com/classroom/guides/auth
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/classroom.courses.readonly']
+#SCOPES = [ 'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly']
+#SCOPES = ['https://www.googleapis.com/auth/classroom.courses.readonly',
+          #'https://www.googleapis.com/auth/classroom.coursework.students.readonly']
+#SCOPES = ['https://www.googleapis.com/auth/classroom.courses.readonly']
+#'''
+#SCOPES = [ 'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.students.readonly']
+SCOPES =  ['https://www.googleapis.com/auth/classroom.student-submissions.students.readonly https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.students.readonly']
+#SCOPES =  'https://www.googleapis.com/auth/classroom.courses.readonly'
+#'''
+#print(SCOPES)
+#print()
 
 # For PHYS 400: Nuclear and Particle Physics
 course_id = '48793509327'
@@ -41,6 +59,7 @@ def main():
     service = build('classroom', 'v1', credentials=creds)
 
     # Get the information for the classroom
+    #'''
     course = None
     try:
         course = service.courses().get(id=course_id).execute()
@@ -55,6 +74,28 @@ def main():
     # Call the Classroom API
     #results = service.courses().list(pageSize=10).execute()
     print(course)
+    #'''
+    #work = service.courses().students().list(courseId=course_id).execute()
+    work = service.courses().courseWork().list(courseId=course_id).execute()
+    #work = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-',).execute()
+    #userId=<user ID>).execute()
+    print()
+    print(work)
+    print(work.keys())
+    workids = []
+    for w in work['courseWork']:
+        print(w)
+        print()
+        workids.append(w['id'])
+    print()
+    print(workids)
+    print()
+
+    #submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-', userId=<user ID>).execute()
+    submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
+    print(submission)
+
+    print()
 
     if not course:
         print('No courses found.')
@@ -62,5 +103,8 @@ def main():
         print('Course:')
         print(course['name'])
 
+    return submission 
+
+################################################################################
 if __name__ == '__main__':
-    main()
+    s = main()
