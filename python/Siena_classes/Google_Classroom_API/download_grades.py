@@ -12,6 +12,7 @@ import simplejson
 
 import pandas as pd
 import numpy as np
+import matplotlib,pylab as plt
 
 # So weird. I need this when I have multiple oauths because otherwise, it 
 # changes the order. 
@@ -130,3 +131,6 @@ def main():
 ################################################################################
 if __name__ == '__main__':
     s,df = main()
+    df[2] = df[2].astype(int)
+    df.boxplot(2,by=[0])
+    plt.show()
