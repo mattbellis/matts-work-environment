@@ -16,8 +16,8 @@ import os
 ################################################################################
 
 ################################################################################
-course = 'phys250_s20'
-#course = 'phys400_NP_s20'
+#course = 'phys250_s20'
+course = 'phys400_NP_s20'
 nstudents_in_group = 2
 
 coursename = "PHYS 250: Intro to Computational Physics"
