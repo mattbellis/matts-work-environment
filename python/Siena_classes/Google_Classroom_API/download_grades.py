@@ -13,6 +13,7 @@ import simplejson
 import pandas as pd
 import numpy as np
 import matplotlib,pylab as plt
+import seaborn as sns
 
 # So weird. I need this when I have multiple oauths because otherwise, it 
 # changes the order. 
@@ -102,7 +103,7 @@ def main():
     courseWorkId = []
     userId =[]
     grade = []
-    maxpoints = []
+    maxPoints = []
     date = []
 
     for s in submission['studentSubmissions']:
@@ -110,12 +111,18 @@ def main():
         print()
 
         if "assignedGrade" in list(s.keys()):
-            grade.append(s['assignedGrade'])
+            grade.append(float(s['assignedGrade']))
             courseWorkId.append(s['courseWorkId'])
             date.append(s['creationTime'])
             userId.append(s['userId'])
+            for sub in s['submissionHistory']:
+                print(sub)
+                if 'gradeHistory' in list(sub.keys()):
+                    maxPoints.append(float(sub['gradeHistory']['maxPoints']))
+                    break
 
     df = pd.DataFrame(np.array([courseWorkId, date, grade, userId]).transpose())
+    df['percentage'] = np.array(grade)/np.array(maxPoints)
 
     
     print()
@@ -131,6 +138,7 @@ def main():
 ################################################################################
 if __name__ == '__main__':
     s,df = main()
-    df[2] = df[2].astype(int)
-    df.boxplot(2,by=[0])
-    plt.show()
+    #df[2] = df[2].astype(int)
+    #df.boxplot(2,by=[0])
+    sns.boxplot(data=df,x=0,y='percentage')
+    #plt.show()
