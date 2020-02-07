@@ -10,6 +10,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 import simplejson
 
+import pandas as pd
+import numpy as np
+
 # So weird. I need this when I have multiple oauths because otherwise, it 
 # changes the order. 
 # https://stackoverflow.com/questions/53176162/google-oauth-scope-changed-during-authentication-but-scope-is-same
@@ -95,10 +98,25 @@ def main():
     submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
     print(submission)
 
+    courseWorkId = []
+    userId =[]
+    grade = []
+    maxpoints = []
+    date = []
+
     for s in submission['studentSubmissions']:
         print(s)
         print()
 
+        if "assignedGrade" in list(s.keys()):
+            grade.append(s['assignedGrade'])
+            courseWorkId.append(s['courseWorkId'])
+            date.append(s['creationTime'])
+            userId.append(s['userId'])
+
+    df = pd.DataFrame(np.array([courseWorkId, date, grade, userId]).transpose())
+
+    
     print()
 
     if not course:
@@ -107,8 +125,8 @@ def main():
         print('Course:')
         print(course['name'])
 
-    return submission 
+    return submission, df
 
 ################################################################################
 if __name__ == '__main__':
-    s = main()
+    s,df = main()
