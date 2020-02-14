@@ -39,7 +39,7 @@ print(vals)
 
 size = 0.3
 
-fig, ax = plt.subplots(dpi=200)
+fig, ax = plt.subplots(dpi=600)
 
 # https://matplotlib.org/3.1.0/tutorials/colors/colormaps.html
 ################################################################################
