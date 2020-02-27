@@ -18,7 +18,7 @@ import os
 ################################################################################
 #course = 'phys250_s20'
 course = 'phys400_NP_s20'
-nstudents_in_group = 2
+nstudents_in_group = 3
 
 coursename = "PHYS 250: Intro to Computational Physics"
 if course=="phys250_s20":
@@ -90,8 +90,7 @@ def write_and_send_email(student, partners):
         # UNCOMMENT THIS WHEN SENDING FOR REAL
         # FOR TESTING
         receiver_email = student[3]
-        server.sendmail(sender_email, receiver_email, message.as_string()
-                                    )
+        server.sendmail(sender_email, receiver_email, message.as_string())
 
 
 
@@ -116,8 +115,19 @@ nstudents = len(pin)
 indices = np.arange(0,nstudents,1)
 np.random.shuffle(indices)
 
-#print(nstudents)
-#print(indices)
+print(nstudents)
+print(lname[indices])
+for i in range(0,nstudents,nstudents_in_group):
+    print("-----")
+    for j in range(0,nstudents_in_group):
+        if i+j<nstudents:
+            idx = indices[i+j]
+            print(lname[idx])
+
+x = input("Proceed? [y/n] ")
+
+if x!="y":
+    exit()
 
 students_counted = 0
 while 1:
@@ -142,13 +152,17 @@ while 1:
         write_and_send_email(s,students_in_group)
         #exit()
 
-    if nstudents-students_counted==2 and nstudents_in_group==3:
+    if nstudents-students_counted<4 and nstudents_in_group==4:
+        nstudents_in_group=nstudents-students_counted
+        print("here: {0}".format(nstudents_in_group))
+
+    elif nstudents-students_counted==2 and nstudents_in_group==3:
         nstudents_in_group=2
         print("here: {0}".format(nstudents_in_group))
 
-    if nstudents-students_counted==3 and nstudents_in_group==2:
+    elif nstudents-students_counted==3 and nstudents_in_group==2:
         nstudents_in_group=3
 
-    if nstudents-students_counted<=0:
+    elif nstudents-students_counted<=0:
         break
 
