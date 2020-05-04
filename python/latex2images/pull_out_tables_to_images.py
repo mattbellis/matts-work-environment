@@ -38,5 +38,6 @@ for count,t in enumerate(tables):
     for cruft in glob.glob("tmp.*"):
           os.remove(cruft)
 
+
     
 
