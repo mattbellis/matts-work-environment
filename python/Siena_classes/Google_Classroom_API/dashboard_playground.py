@@ -6,6 +6,10 @@ import string
 import names
 import pandas as pd
 
+from datetime import date
+
+import seaborn as sns
+
 ################################################################################
 nstudents = 20
 breakdown = np.array([0.3, 0.35, 0.25, 0.2])
@@ -76,7 +80,7 @@ plt.tight_layout()
 # Put it into a data frame
 #####################################
 name = []
-date = []
+dates = []
 ass_type = []
 ass_name = []
 grade = []
@@ -92,8 +96,13 @@ nassignments = np.array([8, 4, 2, 0])
 assignment_types = np.array(['hw','quizzes','midterms','final exam'])
 breakdown = np.array([0.3, 0.35, 0.25, 0.2])
 
+daycount = 1
 for n,a,b in zip(nassignments,assignment_types,breakdown):
     for i in range(n):
+
+        d = date(2020, 1, daycount)
+        daycount += 1
+
         an = ''.join(random.choices(string.ascii_uppercase +
                                          string.digits, k = 7)) 
         for tname in temp_names:
@@ -102,6 +111,7 @@ for n,a,b in zip(nassignments,assignment_types,breakdown):
             ass_name.append(an)
             fraction.append(b)
             grade.append(np.random.randint(50,100))
+            dates.append(d)
 
 data = {}
 data['name'] = name
@@ -109,13 +119,29 @@ data['ass_type'] = ass_type
 data['ass_name'] = ass_name
 data['grade'] = grade
 data['fraction'] = fraction
+data['date'] = dates
 
 df = pd.DataFrame(data)
 
 # Histograms
 #df.groupby('ass_name').boxplot(column='grade')
-df.boxplot(column='grade',by='ass_name')
+#df.boxplot(column='grade',by='ass_name')
+df.boxplot(column='grade',by='date')
 
+plt.figure()
+ax = sns.boxplot(x="date", y="grade", hue='ass_type', data=df)
+plt.ylim(0,110)
+plt.legend()
+
+plt.figure()
+ax = sns.boxplot(x="name", y="grade", hue='ass_type', data=df)
+plt.ylim(0,110)
+plt.legend()
+
+plt.figure()
+ax = sns.boxplot(x="name", y="grade", data=df)
+plt.ylim(0,110)
+plt.legend()
 
 
 plt.show()
