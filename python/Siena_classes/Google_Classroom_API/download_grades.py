@@ -140,6 +140,8 @@ def main():
 
     #submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-', userId=<user ID>).execute()
     submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
+    submission2 = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-',pageToken=submission['nextPageToken']).execute()
+    ######## MAYBEWORKS NOW
     # NOT GETTING ALL SUBMISSIONS FOR STUDENTS!!!!!!!!!!!!
     # IS THIS A LIMIT????
 
@@ -153,15 +155,16 @@ def main():
     submission_dict['userId'] =[]
     submission_dict['grade'] = []
 
-    for s in submission['studentSubmissions']:
-        print("Print studentsSubmissions s in loop ---------=====")
-        print(s)
-        print()
+    for sub in [submission,submission2]:
+        for s in sub['studentSubmissions']:
+            print("Print studentsSubmissions s in loop ---------=====")
+            print(s)
+            print()
 
-        if "assignedGrade" in list(s.keys()):
-            submission_dict['grade'].append(float(s['assignedGrade']))
-            submission_dict['courseWorkId'].append(s['courseWorkId'])
-            submission_dict['userId'].append(s['userId'])
+            if "assignedGrade" in list(s.keys()):
+                submission_dict['grade'].append(float(s['assignedGrade']))
+                submission_dict['courseWorkId'].append(s['courseWorkId'])
+                submission_dict['userId'].append(s['userId'])
 
     df = pd.DataFrame.from_dict(submission_dict)
 
@@ -173,11 +176,11 @@ def main():
         print('Course:')
         print(course['name'])
 
-    return submission, df, dfst, dfwo,course['name']
+    return submission, df, dfst, dfwo,course['name'],service
 
 ################################################################################
 if __name__ == '__main__':
-    s,df,dfst,dfwo,coursename = main()
+    s,df,dfst,dfwo,coursename,service = main()
     #df[2] = df[2].astype(int)
     #df.boxplot(2,by=[0])
     #sns.boxplot(data=df,x=0,y='percentage')
