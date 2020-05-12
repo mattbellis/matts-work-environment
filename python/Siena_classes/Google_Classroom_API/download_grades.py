@@ -29,14 +29,22 @@ os.environ['OAUTHLIB_RELAX_TOKEN_SCOPE'] = '1'
 #SCOPES = ['https://www.googleapis.com/auth/classroom.courses.readonly']
 #'''
 #SCOPES = [ 'https://www.googleapis.com/auth/classroom.student-submissions.students.readonly https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.students.readonly']
-SCOPES =  ['https://www.googleapis.com/auth/classroom.student-submissions.students.readonly https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.students.readonly']
+SCOPES =  ['https://www.googleapis.com/auth/classroom.profile.photos  \
+           https://www.googleapis.com/auth/classroom.profile.emails  \
+           https://www.googleapis.com/auth/classroom.rosters.readonly  \
+           https://www.googleapis.com/auth/classroom.rosters \
+           https://www.googleapis.com/auth/classroom.student-submissions.students.readonly  \
+           https://www.googleapis.com/auth/classroom.courses.readonly  \
+           https://www.googleapis.com/auth/classroom.coursework.students.readonly']
 #SCOPES =  'https://www.googleapis.com/auth/classroom.courses.readonly'
 #'''
 #print(SCOPES)
 #print()
 
 # For PHYS 400: Nuclear and Particle Physics
-course_id = '48793509327'
+#course_id = '48793509327'
+# For PHYS 250: Intro to Computational Physics
+course_id = '48793509316'
 
 def main():
     """Shows basic usage of the Classroom API.
@@ -78,53 +86,85 @@ def main():
 
     # Call the Classroom API
     #results = service.courses().list(pageSize=10).execute()
+    print("Printing course ---------------\n")
     print(course)
     #'''
-    #work = service.courses().students().list(courseId=course_id).execute()
+    students = service.courses().students().list(courseId=course_id).execute()
     work = service.courses().courseWork().list(courseId=course_id).execute()
-    #work = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-',).execute()
-    #userId=<user ID>).execute()
+
+    ##########################################################################
+    # Make dataframe of students
+    ##########################################################################
+    print("Printing students ------------------")
+    print(students)
     print()
+    students = students['students']
+    student_dict = {}
+    student_dict['userId'] = []
+    student_dict['fullName'] = []
+    student_dict['emailAddress'] = []
+    for student in students:
+        print("Student -------------")
+        print(student)
+        student_dict['userId'].append(student['userId'])
+        student_dict['fullName'].append(student['profile']['name']['fullName'])
+        student_dict['emailAddress'].append(student['profile']['emailAddress'])
+
+    dfst = pd.DataFrame.from_dict(student_dict)
+
+    ##########################################################################
+    # Make dataframe of coursework
+    ##########################################################################
+    print("Printing coursework ------------------")
     print(work)
-    print(work.keys())
-    workids = []
-    for w in work['courseWork']:
+    print()
+    work = work['courseWork']
+    work_dict = {}
+    work_dict['id'] = []
+    work_dict['title'] = []
+    work_dict['dueDate'] = []
+    work_dict['maxPoints'] = []
+    for w in work:
+        print("Work -------------")
         print(w)
-        print()
-        workids.append(w['id'])
-    print()
-    print(workids)
-    print()
+        work_dict['id'].append(w['id'])
+        work_dict['title'].append(w['title'])
+        work_dict['dueDate'].append(w['dueDate'])
+        if 'maxPoints' in w:
+            work_dict['maxPoints'].append(w['maxPoints'])
+        else:
+            work_dict['maxPoints'].append(-1)
+
+    dfwo = pd.DataFrame.from_dict(work_dict)
+
 
     #submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-', userId=<user ID>).execute()
     submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
+    # NOT GETTING ALL SUBMISSIONS FOR STUDENTS!!!!!!!!!!!!
+    # IS THIS A LIMIT????
+
+    #submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id ).execute()
+    print("Print submission !!!!!!!!!!!!!!")
     print(submission)
 
-    courseWorkId = []
-    userId =[]
-    grade = []
-    maxPoints = []
-    date = []
+    submission_dict = {}
+
+    submission_dict['courseWorkId'] = []
+    submission_dict['userId'] =[]
+    submission_dict['grade'] = []
 
     for s in submission['studentSubmissions']:
+        print("Print studentsSubmissions s in loop ---------=====")
         print(s)
         print()
 
         if "assignedGrade" in list(s.keys()):
-            grade.append(float(s['assignedGrade']))
-            courseWorkId.append(s['courseWorkId'])
-            date.append(s['creationTime'])
-            userId.append(s['userId'])
-            for sub in s['submissionHistory']:
-                print(sub)
-                if 'gradeHistory' in list(sub.keys()):
-                    maxPoints.append(float(sub['gradeHistory']['maxPoints']))
-                    break
+            submission_dict['grade'].append(float(s['assignedGrade']))
+            submission_dict['courseWorkId'].append(s['courseWorkId'])
+            submission_dict['userId'].append(s['userId'])
 
-    df = pd.DataFrame(np.array([courseWorkId, date, grade, userId]).transpose())
-    df['percentage'] = np.array(grade)/np.array(maxPoints)
+    df = pd.DataFrame.from_dict(submission_dict)
 
-    
     print()
 
     if not course:
@@ -133,12 +173,16 @@ def main():
         print('Course:')
         print(course['name'])
 
-    return submission, df
+    return submission, df, dfst, dfwo,course['name']
 
 ################################################################################
 if __name__ == '__main__':
-    s,df = main()
+    s,df,dfst,dfwo,coursename = main()
     #df[2] = df[2].astype(int)
     #df.boxplot(2,by=[0])
-    sns.boxplot(data=df,x=0,y='percentage')
+    #sns.boxplot(data=df,x=0,y='percentage')
     #plt.show()
+    filename = coursename.replace(' ','').replace('.','') + '.h5'
+    df.to_hdf(filename, key='df', mode='w')
+    dfst.to_hdf(filename, key='dfst', mode='a')
+    dfwo.to_hdf(filename, key='dfwo', mode='a')

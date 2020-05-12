@@ -57,6 +57,7 @@ print(averages)
 
 averages = np.array(averages).transpose()
 print(averages)
+'''
 X = np.arange(ncols)
 fig = plt.figure(figsize=(12,2*nrows))
 for i in range(nrows):
@@ -74,6 +75,7 @@ for i in range(nrows):
 
     plt.ylim(0,120)
 plt.tight_layout()
+'''
 
 
 #####################################
@@ -126,7 +128,7 @@ df = pd.DataFrame(data)
 # Histograms
 #df.groupby('ass_name').boxplot(column='grade')
 #df.boxplot(column='grade',by='ass_name')
-df.boxplot(column='grade',by='date')
+#df.boxplot(column='grade',by='date')
 
 plt.figure()
 ax = sns.boxplot(x="date", y="grade", hue='ass_type', data=df)
@@ -138,10 +140,30 @@ ax = sns.boxplot(x="name", y="grade", hue='ass_type', data=df)
 plt.ylim(0,110)
 plt.legend()
 
+
 plt.figure()
 ax = sns.boxplot(x="name", y="grade", data=df)
 plt.ylim(0,110)
 plt.legend()
 
+###########################
+n = df['name'].unique()
+
+nnames = len(n)
+
+for i in range(0,nnames):
+    if i%6==0:
+        idx = False
+
+    idx |= df['name']==n[i]
+
+    if i%6==5 or i==nnames-1:
+
+        dftemp = df[idx]
+
+        plt.figure()
+        ax = sns.boxplot(x="name", y="grade", data=dftemp)
+        plt.ylim(0,110)
+        plt.legend()
 
 plt.show()
