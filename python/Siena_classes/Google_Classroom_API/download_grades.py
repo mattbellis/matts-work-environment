@@ -139,15 +139,15 @@ def main():
 
 
     #submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-', userId=<user ID>).execute()
-    submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
-    submission2 = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-',pageToken=submission['nextPageToken']).execute()
+    #submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
+    #submission2 = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-',pageToken=submission['nextPageToken']).execute()
     ######## MAYBEWORKS NOW
     # NOT GETTING ALL SUBMISSIONS FOR STUDENTS!!!!!!!!!!!!
     # IS THIS A LIMIT????
 
     #submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id ).execute()
-    print("Print submission !!!!!!!!!!!!!!")
-    print(submission)
+    #print("Print submission !!!!!!!!!!!!!!")
+    #print(submission)
 
     submission_dict = {}
 
@@ -155,7 +155,19 @@ def main():
     submission_dict['userId'] =[]
     submission_dict['grade'] = []
 
-    for sub in [submission,submission2]:
+    submission = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
+    #submission2 = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-',pageToken=submission['nextPageToken']).execute()
+    first_time = True
+    while 1:
+        if first_time:
+            sub = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-').execute()
+            first_time = False
+        else:
+            if 'nextPageToken' in sub:
+                sub = service.courses().courseWork().studentSubmissions().list( courseId=course_id, courseWorkId='-',pageToken=sub['nextPageToken']).execute()
+            else:
+                break # No more pages
+
         for s in sub['studentSubmissions']:
             print("Print studentsSubmissions s in loop ---------=====")
             print(s)

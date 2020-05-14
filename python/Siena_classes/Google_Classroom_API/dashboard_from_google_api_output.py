@@ -58,21 +58,57 @@ df['percentage'] = df['grade']/df['maxPoints']
 # Homework/quizzes 50
 # Midterm          25
 # Final            25
+weighting = {'homework':50, 'quiz':50, 'midterm':25, 'final': 25}
 
 df.loc[df['title'].str.lower().str.contains('homework'), 'assignmentType'] = "homework"
+df.loc[df['title'].str.lower().str.contains('self'), 'assignmentType'] = "homework"
+
 df.loc[df['title'].str.lower().str.contains('quiz'), 'assignmentType'] = "quiz"
 df.loc[df['title'].str.lower().str.contains('getting'), 'assignmentType'] = "quiz"
-df.loc[df['title'].str.lower().str.contains('self'), 'assignmentType'] = "quiz"
 
 df.loc[df['title'].str.lower().str.contains('midterm'), 'assignmentType'] = "midterm"
 
 df.loc[df['title'].str.lower().str.contains('final'), 'assignmentType'] = "final"
+
+# Get the dates into a pandas format and sort
+df['dueDate'] = pd.to_datetime(df['dueDate'])
+df.sort_values(by='dueDate')
+
+
+# Calculated weighted averages
+df['weight'] = 0.0
+for key in weighting.keys():
+    df.loc[df.assignmentType==key, 'weight'] = weighting[key]
+
+df['weighted'] = 0.0
+df['weighted'] = df['percentage']*df['weight']/100
+
+####### SOMETHING LIKE THIS
+g = df.groupby('fullName')
+# https://stackoverflow.com/questions/31521027/groupby-weighted-average-and-sum-in-pandas-dataframe
+# Not sure if this is right
+g.weighted.sum()/1000
+
+# For mean of subgroups
+df.loc[df['assignmentType']=='homework'].groupby('fullName').mean()
+df.loc[df['assignmentType']=='homework'].groupby('fullName')['percentage'].mean()
+
+# Is this the way to go
+dffinal = pd.DataFrame()
+dffinal['homework'] = df.loc[df['assignmentType']=='homework'].groupby('fullName')['percentage'].mean()
+dffinal['quiz'] = df.loc[df['assignmentType']=='quiz'].groupby('fullName')['percentage'].mean()
+dffinal['midterm'] = df.loc[df['assignmentType']=='midterm'].groupby('fullName')['percentage'].mean()
+dffinal['final'] = df.loc[df['assignmentType']=='final'].groupby('fullName')['percentage'].mean()
+
+exit()
+
 
 
 ################################################################################
 
 # Set colors
 cmap = plt.get_cmap("binary")
+ncategories = 4
 colors = cmap(np.arange(0,256,int(256/ncategories)))
 ################################################################################
 
@@ -89,8 +125,27 @@ grade = []
 fraction = []
 
 
+'''
+# These were working pretty well!
 assignment_types = np.array(['hw','quizzes','midterms','final exam'])
 breakdown = np.array([0.3, 0.35, 0.25, 0.2])
+
+plt.figure()
+sns.boxplot(data=df[df['assignmentType']=='homework'],x='title',y='percentage',hue='assignmentType')
+
+plt.figure()
+sns.boxplot(data=df[df['assignmentType']=='homework'],x='dueDate',y='percentage',hue='assignmentType')
+
+plt.figure()
+sns.boxplot(data=df[df['assignmentType']=='quiz'],x='title',y='percentage',hue='assignmentType')
+plt.figure()
+sns.boxplot(data=df[df['assignmentType']=='quiz'],x='dueDate',y='percentage',hue='assignmentType')
+
+plt.figure()
+sns.boxplot(data=df,x='title',y='percentage',hue='assignmentType')
+plt.figure()
+sns.boxplot(data=df,x='dueDate',y='percentage',hue='assignmentType')
+'''
 
 # Histograms
 #df.groupby('ass_name').boxplot(column='grade')
