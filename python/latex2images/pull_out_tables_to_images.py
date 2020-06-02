@@ -14,9 +14,13 @@ print(text)
 
 soup = TexSoup(text)
 
-tables = list(soup.find_all('table'))
+#tables = list(soup.find_all('table'))
+tables = list(soup.find_all('figure'))
 for count,t in enumerate(tables):
     output = "\\documentclass{article}\n"
+    output += "\\usepackage{tikz}\n"
+    output += "\\usepackage[compat=1.1.0]{tikz-feynman}\n"
+
     output += "\\begin{document}\n"
     output += "\\pagestyle{empty}\n"
     output += str(t)
