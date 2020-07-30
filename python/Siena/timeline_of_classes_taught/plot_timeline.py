@@ -6,6 +6,8 @@ import sys
 import datetime as dt
 import pandas as pd
 
+import seaborn as sns
+
 ################################################################################
 def sort_courses(courses):
 
@@ -117,6 +119,27 @@ courses.append({'id':'CSIS 200', 'name':'Software Tools for Physicists', 'type':
 
 print(courses)
 
+#############################################
+# Pandas stuff
+#############################################
+print("Building pandas stuf........")
+df_dict = {}
+for key in courses[0].keys():
+    print(key)
+    df_dict[key] = []
+
+for course in courses:
+    print(course)
+    for key in course.keys():
+        print(key)
+        df_dict[key].append(course[key])
+
+df = pd.DataFrame.from_dict(df_dict)
+
+plt.figure()
+sns.catplot(data=df, y='nstudents',x='term',hue='id',kind='bar')
+#############################################
+
 courses = sort_courses(courses)
 
 print(courses)
@@ -147,8 +170,12 @@ ax.set_yticklabels(course_names)
 plt.grid(axis='y')
 
 ax.xaxis_date()
-
 plt.tight_layout()
+
+
+
+
+
 
 plt.show()
       
