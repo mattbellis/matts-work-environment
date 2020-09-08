@@ -9,9 +9,14 @@ header = open(sys.argv[1]).readline()
 print(header)
 print(vals)
 
-col = 3
+for i,h in enumerate(header.split(',')):
+    print(i,h)
 
-assignment = header[col]
+col = 3
+if len(sys.argv)>2:
+    col = int(sys.argv[2])
+
+assignment = header.split(',')[col]
 
 print(assignment)
 print()
