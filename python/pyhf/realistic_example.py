@@ -42,12 +42,23 @@ pdf = pyhf.simplemodels.hepdata_like(signal_data=signal_data.tolist(), \
                                      bkg_uncerts=bkg_uncerts.tolist())
 
 print("Fit.......")
+data = pyhf.tensorlib.astensor(data_sample.tolist() + pdf.config.auxdata)
+
+bestfit_pars, twice_nll = pyhf.infer.mle.fit(data, pdf, return_fitted_val=True)
+
+print(bestfit_pars)
+print(twice_nll)
+
+
+
+'''
 CLs_obs, CLs_exp = pyhf.infer.hypotest(1.0, \
-                                       data_sample.tolist() + pdf.config.auxdata, \
+        data_sample.tolist() + pdf.config.auxdata, \
                                        pdf, \
                                        qtilde=True, \
                                        return_expected=True)
 print('Observed: {}, Expected: {}'.format(CLs_obs, CLs_exp))
+'''
 
 
 
