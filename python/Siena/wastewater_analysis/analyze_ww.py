@@ -29,6 +29,7 @@ locations = df['Facility']
 print(locations)
 print(locations.unique())
 
+#sampling_locations = np.sort(locations.unique())
 sampling_locations = locations.unique()
 
 plt.figure(figsize=(12,4))
@@ -48,6 +49,7 @@ for i,location in enumerate(sampling_locations):
     for r,d in zip(rs,dts):
         fmt = 'k.'
         size = 2
+        color='black'
 
         print(i,r,d)
         #if r.lower().find('no sar')>=0:
@@ -59,14 +61,17 @@ for i,location in enumerate(sampling_locations):
         elif r==1 or r==2:
             fmt = 'yo'
             size = 10
+            color='yellow'
+            #color='orange'
 
         else:
-            fmt = 'rv'
+            fmt = 'r^'
             size = 20
+            color='red'
 
         print(d)
         print(type(d))
-        plt.plot([d],[i],fmt,markersize=size)
+        plt.plot([d],[i],fmt,markersize=size,color=color)
 
 
 print(sampling_locations)
@@ -76,8 +81,9 @@ plt.yticks(x,sampling_locations,fontsize=14)
 plt.xticks(fontsize=14)
 
 custom_lines = [mlines.Line2D([], [], color='k', marker='s', linestyle='None', markersize=5, label='No SARS2 detected'),
-                mlines.Line2D([], [], color='y', marker='o', linestyle='None', markersize=8, label='SARS2 detected, not quantifiable'),
-                mlines.Line2D([], [], color='r', marker='v', linestyle='None', markersize=10, label='SARS2 detected')
+        mlines.Line2D([], [], color='yellow', marker='o', linestyle='None', markersize=8, label='SARS2 detected, not quantifiable'),
+                #mlines.Line2D([], [], color='orange', marker='o', linestyle='None', markersize=8, label='SARS2 detected, not quantifiable'),
+                mlines.Line2D([], [], color='r', marker='^', linestyle='None', markersize=10, label='SARS2 detected')
         ]
 
 plt.legend(handles=custom_lines,fontsize=18,facecolor='w')
@@ -87,5 +93,6 @@ plt.xticks(rotation=45)
 plt.tight_layout()
 
 plt.savefig('ww_summary.png')
+#plt.savefig('ww_summary2.png')
 
 plt.show()
