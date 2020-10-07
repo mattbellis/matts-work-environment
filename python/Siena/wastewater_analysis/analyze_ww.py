@@ -104,10 +104,32 @@ plt.tight_layout()
 plt.savefig('ww_summary.png')
 #plt.savefig('ww_summary2.png')
 
-plt.figure()
-for a,b in zip(locations_from_file[0],locations_from_file[1]):
-    #plt.text(0,1.0,a)
-    print(a,b)
+if locations_from_file is not None:
+    sns.set_style('white')
+    loc = locations_from_file[0]
+    descriptive_text = locations_from_file[1]
+    plt.figure(figsize=(12,5))
+    for i,location in enumerate(sampling_locations):
+        plt.plot([0.01],i,'ko',markersize=5)
+        t = location
+        if location in loc.tolist():
+            idx = loc.tolist().index(location)
+            t = descriptive_text[idx]
+        plt.text(0.05,i-0.1,t,backgroundcolor='white')
+
+    x = np.arange(0,len(sampling_locations),1)
+    plt.yticks(x,sampling_locations,fontsize=14)
+    plt.gca().xaxis.set_visible(False)
+    plt.gca().spines['top'].set_visible(False)
+    plt.gca().spines['right'].set_visible(False)
+    plt.gca().spines['left'].set_visible(False)
+    plt.gca().spines['bottom'].set_visible(False)
+    plt.title('Key for sampling locations',fontsize=18)
+
+    plt.xlim(0,1)
+
+    plt.tight_layout()
+    plt.savefig('ww_key.png')
 
 
 
