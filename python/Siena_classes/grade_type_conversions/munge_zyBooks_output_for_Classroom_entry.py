@@ -12,7 +12,7 @@ print(vals)
 for i,h in enumerate(header.split(',')):
     print(i,h)
 
-col = 3
+col = None
 if len(sys.argv)>2:
     col = int(sys.argv[2])
 
@@ -29,8 +29,11 @@ for i in range(len(vals[0])):
     c = vals[2][i]
     d = vals[col][i]
     output = '{0:16} {1:16} {2:24}'.format(a,b,c)
-    for j in range(3,ncols):
-        output += '{0:8} '.format(vals[j][i]) 
+    if col is not None:
+        output += '{0:6} '.format(vals[col][i]) 
+    else:
+        for j in range(3,ncols):
+            output += '{0:6} '.format(vals[j][i]) 
     #print("----")
     #print(a,b)
     ncols = len(vals.transpose()[i])
@@ -41,7 +44,7 @@ for i in range(len(vals[0])):
     #print(grades.shape)
     #print(grades)
     #print(np.mean(grades.astype(float)))
-    output += '{0:16.2f} '.format(np.mean(grades))
+    output += '{0:8.2f} '.format(np.mean(grades))
     print(output)
 
 
