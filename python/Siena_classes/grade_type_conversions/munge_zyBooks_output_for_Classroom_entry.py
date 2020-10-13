@@ -12,25 +12,28 @@ print(vals)
 for i,h in enumerate(header.split(',')):
     print(i,h)
 
-col = 3
-if len(sys.argv)>2:
-    col = int(sys.argv[2])
-
 ncols = len(vals)
 print("There are {0} columns".format(ncols))
 
-assignment = header.split(',')[col]
+col = None
+if len(sys.argv)>2:
+    col = int(sys.argv[2])
+    assignment = header.split(',')[col]
+    print("Outputting grades for: ")
+    print(assignment)
 
-print(assignment)
+
 print()
 for i in range(len(vals[0])):
     a = vals[0][i]
     b = vals[1][i]
     c = vals[2][i]
-    d = vals[col][i]
     output = '{0:16} {1:16} {2:24}'.format(a,b,c)
-    for j in range(3,ncols):
-        output += '{0:8} '.format(vals[j][i]) 
+    if col is not None:
+        output += '{0:8} '.format(vals[col][i]) 
+    else:
+        for j in range(3,ncols):
+            output += '{0:8} '.format(vals[j][i]) 
     #print("----")
     #print(a,b)
     ncols = len(vals.transpose()[i])
