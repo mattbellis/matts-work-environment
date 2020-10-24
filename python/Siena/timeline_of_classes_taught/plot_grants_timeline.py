@@ -74,50 +74,18 @@ def term2date(term):
 
 ################################################################################
 
-courses = []
+grants = []
 
-# type: 0 - lecture, 1 - lab, 2 - studio, 3 - tutorial
-courses.append({'id':'PHYS 310', 'name':'Mechanics', 'type':0, 'nstudents':25, 'term':'F12'})
-courses.append({'id':'PHYS 310', 'name':'Mechanics', 'type':0, 'nstudents':25, 'term':'F13'})
-courses.append({'id':'PHYS 310', 'name':'Mechanics', 'type':0, 'nstudents':25, 'term':'F14'})
-
-courses.append({'id':'PHYS 110', 'name':'General Physics Ia', 'type':0, 'nstudents':20, 'term':'F12'})
-courses.append({'id':'PHYS 110', 'name':'General Physics Ia', 'type':0, 'nstudents':20, 'term':'F14'})
-courses.append({'id':'PHYS 110', 'name':'General Physics Ia', 'type':0, 'nstudents':20, 'term':'S17'})
-courses.append({'id':'PHYS 110', 'name':'General Physics Ia', 'type':0, 'nstudents':20, 'term':'S18'})
-
-courses.append({'id':'PHYS 110', 'name':'General Physics Ia', 'type':1, 'nstudents':20, 'term':'S17'})
-
-courses.append({'id':'PHYS 130', 'name':'General Physics I', 'type':0, 'nstudents':20, 'term':'F13'})
-courses.append({'id':'PHYS 130', 'name':'General Physics I', 'type':0, 'nstudents':20, 'term':'F14'})
-
-courses.append({'id':'PHYS 140', 'name':'General Physics I', 'type':1, 'nstudents':20, 'term':'S14'})
-courses.append({'id':'PHYS 140', 'name':'General Physics I', 'type':1, 'nstudents':20, 'term':'S16'})
-
-courses.append({'id':'PHYS 220', 'name':'Modern Physics', 'type':1, 'nstudents':14, 'term':'F12'})
-
-courses.append({'id':'PHYS 120', 'name':'General Physics IIa', 'type':0, 'nstudents':15, 'term':'S13'})
-
-courses.append({'id':'PHYS 260', 'name':'Thermal Physics', 'type':0, 'nstudents':25, 'term':'S13'})
-courses.append({'id':'PHYS 260', 'name':'Thermal Physics', 'type':0, 'nstudents':25, 'term':'S14'})
-courses.append({'id':'PHYS 260', 'name':'Thermal Physics', 'type':0, 'nstudents':25, 'term':'S15'})
-courses.append({'id':'PHYS 260', 'name':'Thermal Physics', 'type':0, 'nstudents':25, 'term':'S16'})
-courses.append({'id':'PHYS 260', 'name':'Thermal Physics', 'type':0, 'nstudents':25, 'term':'S18'})
-
-courses.append({'id':'SCDV 001', 'name':'Intro to Engineering', 'type':0, 'nstudents':25, 'term':'F13'})
-
-courses.append({'id':'PHYS 015', 'name':'Quarks, Quanta, and Quasars', 'type':0, 'nstudents':25, 'term':'S17'})
-courses.append({'id':'PHYS 400', 'name':'Nuclear and Particle Physics', 'type':0, 'nstudents':25, 'term':'S16'})
-courses.append({'id':'PHYS 400', 'name':'Nuclear and Particle Physics', 'type':2, 'nstudents':2, 'term':'S17'})
-
-courses.append({'id':'PHYS 440', 'name':'Quantum Physics', 'type':0, 'nstudents':18, 'term':'F17'})
-
-courses.append({'id':'CSIS 200', 'name':'Software Tools for Physicists', 'type':0, 'nstudents':18, 'term':'F15'})
-courses.append({'id':'CSIS 200', 'name':'Software Tools for Physicists', 'type':0, 'nstudents':18, 'term':'F16'})
-courses.append({'id':'CSIS 200', 'name':'Software Tools for Physicists', 'type':0, 'nstudents':18, 'term':'F17'})
+grant = {'institution':'Siena College','funding_agency':'NSF', 'program1': 'EPP - could be None', 'progron2':'RUI', \
+        'external':True, role='PI, CO-PI, contributor', 'coPIs':None, \
+        'name':'PHY-XXXXX', 'amount':190000, 'start':datetime(2012,1,1), 'duration':deltatime(years=3), \
+        'long_description'='ddddddddddddddd', \
+        'short_description'='ddddddddddddddd'}
+grants.append(grant)
 
 
-print(courses)
+
+print(grants)
 
 #############################################
 # Pandas stuff
@@ -139,6 +107,8 @@ df = pd.DataFrame.from_dict(df_dict)
 plt.figure()
 sns.catplot(data=df, y='nstudents',x='term',hue='id',kind='bar')
 #############################################
+
+#plt.show()
 
 courses = sort_courses(courses)
 
