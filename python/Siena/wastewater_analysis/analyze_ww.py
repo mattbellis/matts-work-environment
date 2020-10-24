@@ -50,8 +50,8 @@ for i,location in enumerate(sampling_locations):
     print("-----------")
     print(location)
 
-    #rs = dftemp['Result']
-    rs = dftemp['CountCOVID']
+    rs = dftemp['Result']
+    #rs = dftemp['CountCOVID']
     #dts = pd.to_datetime(dftemp['DateReceived'])
     dts = pd.to_datetime(dftemp['DateReceived']).dt.date
 
@@ -61,13 +61,13 @@ for i,location in enumerate(sampling_locations):
         color='black'
 
         print(i,r,d)
-        #if r.lower().find('no sar')>=0:
-        if r==0:
+        if r.lower().find('no sar')>=0:
+        #if r==0:
             fmt = 'ks'
             size = 5
 
-        #elif r.lower().find('not q')>=0:
-        elif r==1 or r==2:
+        elif r.lower().find('not q')>=0:
+        #elif r==1 or r==2:
             fmt = 'yo'
             size = 10
             #color='yellow'
