@@ -11,21 +11,23 @@ np.random.seed(0)
 nbins = 15
 
 # Generate a background and signal MC sample`
-#MC_signal_events = np.random.normal(5,1.0,200)
+MC_signal_events = np.random.normal(5,1.0,200)
 #MC_signal_events = np.random.normal(5,1.0,100000)
-#MC_background_events = 10*np.random.random(1000)
+MC_background_events = 10*np.random.random(1000)
 
-MC_signal_events = 10.0 - np.random.lognormal(0,1.0,100000)
-MC_background_events = np.random.lognormal(0,1.0,1000)
+#MC_signal_events = 10.0 - np.random.lognormal(0,1.0,100000)
+#MC_background_events = np.random.lognormal(0,1.0,1000)
 
 signal = np.histogram(MC_signal_events,bins=nbins,range=(0,10))[0]
 background = np.histogram(MC_background_events,bins=nbins,range=(0,10))[0]
 
 # Generate an observed dataset with a slightly different
 # number of events
-#signal_events = np.random.normal(5,1.0,180)
-signal_events = 10.0-np.random.lognormal(0,1.0,180)
-background_events = np.random.lognormal(0,1.0,1100)
+signal_events = np.random.normal(5,1.0,180)
+background_events = 10*np.random.random(1100)
+
+#signal_events = 10.0-np.random.lognormal(0,1.0,180)
+#background_events = np.random.lognormal(0,1.0,1100)
 
 observed_events = np.array(signal_events.tolist() + background_events.tolist())
 observed_sample = np.histogram(observed_events,bins=nbins,range=(0,10))[0]
@@ -55,6 +57,8 @@ plt.subplot(1,3,3)
 plt.hist(MC_background_events,bins=nbins,range=(0,10),label='MC background')
 plt.legend()
 plt.xlim(0,10)
+
+plt.savefig('observations_and_templates.png')
 
 # Use a very naive estimate of the background
 # uncertainties
@@ -116,6 +120,7 @@ ax.bar(bins, signal, 1.0, label=r'signal', edgecolor='blue', bottom=background, 
 ax.scatter(bins, observed_sample, color='black', label='observed')
 #ax.set_ylim(0,6)
 ax.legend();
+plt.savefig('overlaid_before_fit.png')
 
 ################################################################################
 
@@ -147,6 +152,7 @@ ax.bar(bins, fit_signal, 1.0, label=r'signal', edgecolor='blue', bottom=fit_back
 ax.scatter(bins, observed_sample, color='black', label='observed')
 #ax.set_ylim(0,6)
 ax.legend();
+plt.savefig('overlaid_afterfore_fit.png')
 
 ######### FIT TO background only #################
 result, twice_nll = pyhf.infer.mle.fixed_poi_fit(
@@ -217,6 +223,7 @@ fig.set_size_inches(5, 3)
 ax.set_title(u"Hypothesis Tests")
 ax.set_xlabel(u"$\mu$")
 ax.set_ylabel(u"$\mathrm{CL}_{s}$")
+plt.savefig('brazil_plot.png')
 
 pyhf.contrib.viz.brazil.plot_results(ax, poi_values, results)
 
