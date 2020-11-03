@@ -114,11 +114,11 @@ def main():
                         "name": "background",
                         "data": bkg_sample.tolist(),
                         "modifiers": [
-                            {
-                                "name": "bkgshape",
-                                "type": "shapesys",
-                                "data": bkg_uncerts.tolist(),
-                            },
+                            #{
+                            #"name": "bkgshape",
+                            #"type": "shapesys",
+                            #"data": bkg_uncerts.tolist(),
+                            #},
                             {
                                 "name": "bkgnorm",
                                 "type": "normfactor",
