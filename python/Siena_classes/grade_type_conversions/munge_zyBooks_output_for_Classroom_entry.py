@@ -33,7 +33,7 @@ for i in range(len(vals[0])):
         output += '{0:6} '.format(vals[col][i]) 
     else:
         for j in range(3,ncols):
-            output += '{0:6} '.format(vals[j][i]) 
+            output += '{0:5} '.format(vals[j][i]) 
     #print("----")
     #print(a,b)
     ncols = len(vals.transpose()[i])
