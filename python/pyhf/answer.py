@@ -97,41 +97,30 @@ def main():
         bkg_data=bkg_sample.tolist(),
         bkg_uncerts=bkg_uncerts.tolist(),
     )
-    """
-    spec = {
-        "channels": [
-            {
-                "name": "singlechannel",
-                "samples": [
-                    {
-                        "name": "signal",
-                        "data": signal_sample.tolist(),
-                        "modifiers": [
-                            {"name": "mu", "type": "normfactor", "data": None}
-                        ],
-                    },
-                    {
-                        "name": "background",
-                        "data": bkg_sample.tolist(),
-                        "modifiers": [
-                            #{
-                            #"name": "bkgshape",
-                            #"type": "shapesys",
-                            #"data": bkg_uncerts.tolist(),
-                            #},
-                            {
-                                "name": "bkgnorm",
-                                "type": "normfactor",
-                                "data": None,
-                            }
-                        ],
-                    },
-                ],
-            }
-        ]
-    }
-
     model = pyhf.Model(spec)
+    """
+
+    spec = {'channels': [{'name': 'singlechannel',
+               'samples': [
+                   {'name': 'signal', 'data': signal_sample.tolist(),
+                            'modifiers': [{'name': 'mu', 'type': 'normfactor', 'data': None}]},
+                   {'name': 'background', 'data': bkg_sample.tolist(),
+                            'modifiers': [{'name': 'bkgnorm',
+                            'type': 'normfactor',
+                            'data': None}]
+                            #'data': bkg_sample.tolist()}]
+                            }
+                   ]
+              }
+       ]
+     }
+
+    print(spec)
+
+    print("Adding the model....")
+    model = pyhf.Model(spec)
+    print("Added the model....")
+
 
     data = pyhf.tensorlib.astensor(observed_sample.tolist() + model.config.auxdata)
 
