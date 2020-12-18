@@ -8,7 +8,7 @@ import matplotlib.pylab as plt
 #    - Get the uncertainties on the best fit signal strength
 #    - Calculate an 95% CL upper limit on the signal strength
 
-#tag = "ORIGINAL"
+# tag = "ORIGINAL"
 tag = "MODIFIED"
 
 
@@ -54,9 +54,11 @@ def main():
     observable_range = [0.0, 10.0]
     bin_width = 0.5
     _bins = np.arange(observable_range[0], observable_range[1] + bin_width, bin_width)
+    print("nbins =  {0}".format(len(_bins)))
 
-    n_bkg = 2000
-    #n_signal = int(np.sqrt(n_bkg))
+    #n_bkg = 2000
+    n_bkg = 20000
+    # n_signal = int(np.sqrt(n_bkg))
     n_signal = 200
 
     # Generate simulation
@@ -68,7 +70,8 @@ def main():
 
     # Generate observations
     signal_events = np.random.normal(5, 1.0, int(n_signal * 0.8))
-    bkg_events = 10 * np.random.random(n_bkg - 300)
+    #bkg_events = 10 * np.random.random(n_bkg - 300)
+    bkg_events = 10 * np.random.random(2000)
 
     observed_events = np.array(signal_events.tolist() + bkg_events.tolist())
     observed_sample, _ = np.histogram(observed_events, bins=_bins)
@@ -88,13 +91,14 @@ def main():
 
     # Build the model
     bkg_uncerts = np.sqrt(bkg_sample)
-    '''
+    """
     model = pyhf.simplemodels.hepdata_like(
         signal_data=signal_sample.tolist(),
         bkg_data=bkg_sample.tolist(),
         bkg_uncerts=bkg_uncerts.tolist(),
     )
-    '''
+    model = pyhf.Model(spec)
+    """
 
     spec = {'channels': [{'name': 'singlechannel',
                'samples': [
@@ -118,12 +122,15 @@ def main():
     print("Added the model....")
 
 
-
     data = pyhf.tensorlib.astensor(observed_sample.tolist() + model.config.auxdata)
 
     # Perform inference
     fit_result = pyhf.infer.mle.fit(data, model, return_uncertainties=True)
     bestfit_pars, par_uncerts = fit_result.T
+    print("bestfit_pars")
+    print(len(bestfit_pars))
+    print(bestfit_pars)
+    print()
     print(
         f"best fit parameters:\
         \n * signal strength: {bestfit_pars[0]} +/- {par_uncerts[0]}\
@@ -133,10 +140,10 @@ def main():
 
     # Visualize the results
     fit_bkg_sample = []
-    for w,b in zip(bestfit_pars[1:],bkg_sample):
-        fit_bkg_sample.append(w*b)
+    for w, b in zip(bestfit_pars[1:], bkg_sample):
+        fit_bkg_sample.append(w * b)
 
-    fit_signal_sample = bestfit_pars[0]*np.array(signal_sample)
+    fit_signal_sample = bestfit_pars[0] * np.array(signal_sample)
 
     fig, ax = plt.subplots()
     fig.set_size_inches(7, 5)
@@ -149,7 +156,6 @@ def main():
     ax.set_xlabel("Observable")
     ax.set_ylabel("Count")
     fig.savefig("components_after_fit_{0}.png".format(tag))
-
 
     # Perform hypothesis test scan
     _start = 0.0
