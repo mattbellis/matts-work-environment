@@ -104,7 +104,7 @@ def main():
                             'modifiers': [{'name': 'bkgnorm',
                             'type': 'normfactor',
                             'data': None}]
-                            #'data': bkg_sample.tolist()}]
+                            #data': bkg_sample.tolist()}]
                             }
                    ]
               }

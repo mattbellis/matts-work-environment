@@ -14,8 +14,8 @@ print(text)
 
 soup = TexSoup(text)
 
-#tables = list(soup.find_all('table'))
-tables = list(soup.find_all('figure'))
+tables = list(soup.find_all('table'))
+#tables = list(soup.find_all('figure'))
 for count,t in enumerate(tables):
     output = "\\documentclass{article}\n"
     output += "\\usepackage{tikz}\n"
