@@ -59,22 +59,28 @@ def main():
     #n_bkg = 2000
     n_bkg = 20000
     # n_signal = int(np.sqrt(n_bkg))
-    n_signal = 200
+    n_signal = 10000
 
     # Generate simulation
     bkg_simulation = 10 * np.random.random(n_bkg)
     signal_simulation = np.random.normal(5, 1.0, n_signal)
+    np.savetxt('bkg_MC_sample.dat',bkg_simulation)
+    np.savetxt('sig_MC_sample.dat',signal_simulation)
 
     bkg_sample, _ = np.histogram(bkg_simulation, bins=_bins)
     signal_sample, _ = np.histogram(signal_simulation, bins=_bins)
 
     # Generate observations
-    signal_events = np.random.normal(5, 1.0, int(n_signal * 0.8))
+    #signal_events = np.random.normal(5, 1.0, int(n_signal * 0.8))
+    signal_events = np.random.normal(5, 1.0, 1000)
     #bkg_events = 10 * np.random.random(n_bkg - 300)
-    bkg_events = 10 * np.random.random(2000)
+    bkg_events = 10 * np.random.random(200)
 
     observed_events = np.array(signal_events.tolist() + bkg_events.tolist())
     observed_sample, _ = np.histogram(observed_events, bins=_bins)
+
+    np.savetxt('observed_events.dat',observed_events)
+    exit()
 
     # Visualize the simulation and observations
     fig, ax = plt.subplots()
