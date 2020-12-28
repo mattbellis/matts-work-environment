@@ -26,8 +26,10 @@ hp.create_dataset(data, ["e", "px", "py", "pz"], group="muons", dtype=float)
 
 event = hp.create_single_event(data)
 
+print("Running over the events and filling them...")
+
 #'''
-for i in range(0, 1000):
+for i in range(0, 100000):
 
     hp.clear_event(event)
 
@@ -49,8 +51,24 @@ hdfile = hp.write_to_file("output.hdf5", data, comp_type="gzip", comp_opts=9)
 #'''
 
 
+def return_awkward_from_h5hep(data,key):
+
+    topkey = key.split('/')[0]
+    nkey = topkey + "/n"  + topkey
+    num = data[nkey]
+    vals = data[key]
+    ak_array = ak.unflatten(vals,num)
+
+    return ak_array
+
+
 data, event = hp.load('output.hdf5', verbose=False)
 
+jete = ak.unflatten(data["jet/e"],data["jet/njet"])
+print(jete)
+print(type(jete))
 
-
+jete = return_awkward_from_h5hep(data,'jet/e')
+print(jete)
+print(type(jete))
 
