@@ -12,8 +12,8 @@ np.random.seed(1)
 dpi=200
 #dpi=100
 
-#isMC = False
-isMC = True
+isMC = False
+#isMC = True
 
 
 ################################################################################
@@ -66,6 +66,20 @@ def jet(angle,mag):
     return angles,mags
 ################################################################################
 
+################################################################################
+def draw_beam(iteration = 0):
+
+    plt.gca()
+    for i in np.linspace(-4.8,4.8,40):
+        for j in range(0,10):
+            xoffset = 0.06*np.random.random()-0.03 
+            yoffset = 0.06*np.random.random()-0.03
+            if i<0:
+                plt.plot(i+xoffset+0.02*iteration,yoffset,'k.',alpha=0.5,markersize=2) 
+            else:
+                plt.plot(i+xoffset-0.02*iteration,yoffset,'k.',alpha=0.5,markersize=2) 
+
+################################################################################
 
 
 ncollisions = 32
@@ -74,7 +88,7 @@ ncollisions = 32
 #plt.figure(figsize=(12,5),dpi=dpi)
 # For singles
 gs = gridspec.GridSpec(1, 1, wspace=0, hspace=0)
-#plt.figure(figsize=(5,4),dpi=dpi)
+plt.figure(figsize=(5,4),dpi=dpi)
 
 #ncollisions = 36
 #gs = gridspec.GridSpec(6, 6, wspace=0, hspace=0)
@@ -103,9 +117,9 @@ gs = gridspec.GridSpec(1, 1, wspace=0, hspace=0)
 origin = (0,0)
 
 #event_type='data'
-#event_type='mix'
+event_type='mix'
 #event_type='top'
-event_type='qcd'
+#event_type='qcd'
 #event_type='new_physics'
 
 for nc in range(ncollisions):
@@ -133,6 +147,7 @@ for nc in range(ncollisions):
     plt.gca().spines['left'].set_visible(False)
     plt.gca().spines['right'].set_visible(False)
 
+
     if isMC:
         #plt.gca().set_facecolor('palegreen')
         plt.gca().set_facecolor('aquamarine')
@@ -142,6 +157,10 @@ for nc in range(ncollisions):
         rec = patches.FancyBboxPatch((-0.85,-0.85),1.75,1.75,fill=False,lw=4,joinstyle='round',capstyle='round')
         rec = plt.gca().add_patch(rec)
         rec.set_clip_on(False)
+
+    ###### Beam
+    draw_beam(nc)
+    #plt.plot([-1.2,1.2],[0,0],'k--') 
 
     ###### Muons
     nmuons = np.random.randint(nmuons_range[0], nmuons_range[1])
@@ -221,7 +240,7 @@ for nc in range(ncollisions):
     #tag += "_MC"
 #plt.savefig('cartoon_event_n{0}_{1}.png'.format(ncollisions,tag))
 
-if dpi<100:
+if dpi<=100:
     plt.show()
 
 
