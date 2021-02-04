@@ -175,10 +175,4 @@ ax.xaxis_date()
 plt.tight_layout()
 
 
-
-
-
-
 plt.show()
-      
-
