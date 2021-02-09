@@ -19,7 +19,7 @@ print(ybar)
 plt.figure(figsize=(6,3))
 plt.plot(xin,yin,lw=3,c='b')
 plt.plot(xout,yout,lw=3,c='b')
-plt.plot(xin,yinr,lw=3,c='r',alpha=0.2,ls='--')
+#plt.plot(xin,yinr,lw=3,c='r',alpha=0.2,ls='--')
 plt.plot(xbar,ybar,lw=3,c='b')
 plt.plot([-5,0],[0,0],lw=4,c='k')
 plt.plot([0,0],[0,3],lw=4,c='k')
@@ -42,6 +42,7 @@ plt.gca().get_xaxis().set_ticks([])
 plt.gca().get_yaxis().set_ticks([])
 
 plt.tight_layout()
+plt.savefig('quantumbarrier.png')
 
 
 plt.show()
