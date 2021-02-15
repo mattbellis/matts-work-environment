@@ -16,7 +16,7 @@ print(ybar)
 
 
 
-plt.figure(figsize=(6,3))
+plt.figure(figsize=(6,3),dpi=300)
 plt.plot(xin,yin,lw=3,c='b')
 plt.plot(xout,yout,lw=3,c='b')
 #plt.plot(xin,yinr,lw=3,c='r',alpha=0.2,ls='--')
@@ -29,7 +29,7 @@ plt.plot([2,2],[3,0],lw=4,c='k')
 plt.plot([2,5],[0,0],lw=4,c='k')
 plt.ylim(-0.5,3.5)
 
-plt.gca().set_facecolor('whitesmoke')
+#plt.gca().set_facecolor('whitesmoke')
 #plt.gca().set_facecolor('gainsboro')
 
 plt.gca().spines['top'].set_visible(False)
