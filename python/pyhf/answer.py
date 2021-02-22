@@ -8,8 +8,8 @@ import matplotlib.pylab as plt
 #    - Get the uncertainties on the best fit signal strength
 #    - Calculate an 95% CL upper limit on the signal strength
 
-#tag = "ORIGINAL"
-tag = "MODIFIED"
+tag = "ORIGINAL"
+#tag = "MODIFIED"
 
 
 def plot_hist(ax, bins, data, bottom=0, color=None, label=None):
