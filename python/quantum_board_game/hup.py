@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pylab as plt
 
+darkblue = (0/255,56/255,201/255)
+coral = (255/255,110/255,156/255)
 
 xpts = np.linspace(-3,3,1000)
 
@@ -23,10 +25,10 @@ for i in range(1,10):
 
 
 plt.figure(figsize=(6,3),dpi=300)
-plt.plot(xpts,(ytoti**2+ytotr**2)/400,lw=3,c='b')
+plt.plot(xpts,(ytoti**2+ytotr**2)/400,lw=3,c=darkblue)
 for yi,yr in zip(yptsi,yptsr):
-    plt.plot(xpts,yi,'r',alpha=0.4)
-    plt.plot(xpts,yr,'r',alpha=0.4)
+    plt.plot(xpts,yi,c=coral,alpha=0.4)
+    plt.plot(xpts,yr,c=coral,alpha=0.4)
 
 #plt.plot([0,0],[0,3],lw=4,c='k')
 #plt.plot([0,2],[3,3],lw=4,c='k')
