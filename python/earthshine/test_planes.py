@@ -7,6 +7,8 @@ from scipy.spatial import distance
 fig = plt.figure(num=1, clear=True)
 ax = fig.add_subplot(1, 1, 1, projection='3d')
 
+c = 3e8 # Speed of light m/s
+
 # Define a plane
 '''
 x = np.array([[1, 1], [3, 3]])
@@ -88,7 +90,7 @@ yline = [-7.2,10.9]
 zline = [-radii[-1]-2,radii[-1]+2]
 
 
-for ntrks in range(0,10):
+for ntrks in range(0,1):
 
     xline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     yline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
@@ -108,6 +110,14 @@ for ntrks in range(0,10):
 
     #FLATTEN A PLANE
     hits = []
+    times = []
+    dedx = []
+
+    noise_hits = []
+    noise_times = []
+    noise_dedx = []
+
+
     for plane in planes:
         p = np.array([plane[0].flatten(), plane[1].flatten(), plane[2].flatten()])
         p = p.T
@@ -131,22 +141,53 @@ for ntrks in range(0,10):
     for hit in hits:
         print(hit)
 
+    print()
+    # Sort the lists by their lowest z hit
+    sorted_hits = sorted(hits, key=lambda x:x[2])
+    # Let's make a 50 ns window
+    t0 = 50e-9*np.random.random() # Start time of first one
+    dedx0 = 50*np.random.random() + 50
+    times.append(t0)
+    dedx.append(dedx0)
+    print(sorted_hits[0],times[0])
+    for ih in range(1,len(sorted_hits)):
+        hit1 = sorted_hits[ih]
+        hit0 = sorted_hits[ih-1]
+        dx = hit1[0]-hit0[0]
+        dy = hit1[1]-hit0[1]
+        dz = hit1[2]-hit0[2]
+        d = np.sqrt(dx**2 + dy**2 + dz**2)
+        dt = d/c
+        #print(d,dt)
+        t = times[ih-1] + dt
+        times.append(t)
+        dedx1 = dedx[0] + np.random.normal(0,10)
+        dedx.append(dedx1)
+        print(hit1,times[ih],dedx[ih])
 
+    # Add some noise!
+    nnoise = np.random.randint(100)
+    for n in range(nnoise):
+        tnoise = 50*np.random.random()
+        dedxnoise = 70*np.random.random()
+        noise_times.append(tnoise)
+        noise_dedx.append(dedxnoise)
+        nplanes = len(planes)
+        plane_number = np.random.randint(0,nplanes)
+        p = planes[plane_number]
+        # p[0] is x p[1] is y p[2] is z
+        nelements0 = len(p[0]) 
+        idx = np.random.randint(0,nelements0)
+        nelements1 = len(p[0][idx]) 
+        idx1 = np.random.randint(0,nelements1)
+        print("here")
+        print(p[0][idx])
+        noise_hits.append([p[0][idx][idx1],p[1][idx][idx1],p[2][idx][idx1]])
+    
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    for hit in noise_hits:
+        print(hit)
+        plt.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=5,alpha=0.5)
 
 
 ax.set(xlabel='x', ylabel='y', zlabel='z')
