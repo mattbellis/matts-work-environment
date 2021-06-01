@@ -94,7 +94,7 @@ for ntrks in range(0,10):
     yline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     zline = [-radii[-1]-2,radii[-1]+2]
 
-    plt.plot(xline,yline,zline,color='red',linewidth=1)
+    plt.plot(xline,yline,zline,color='red',linewidth=1,alpha=0.5)
 
     npts = 1000
     xline_pts = np.linspace(xline[0],xline[1],npts)
@@ -123,7 +123,7 @@ for ntrks in range(0,10):
             if d[indices][i]<0.3:
                 print(d[indices][i])
                 hits.append([p[idx][0],p[idx][1],p[idx][2]])
-                plt.plot([p[idx][0]],[p[idx][1]],[p[idx][2]],'bo',markersize=10)
+                plt.plot([p[idx][0]],[p[idx][1]],[p[idx][2]],'bo',markersize=5)
         #plt.plot(p[idx[0]][0],'ko',markersize=20)
         #plt.plot(p[idx], 'ko',markersize=20)
 
