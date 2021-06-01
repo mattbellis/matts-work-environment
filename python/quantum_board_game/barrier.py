@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pylab as plt
 
+darkblue = (0/255,56/255,201/255)
+
 
 xin = np.linspace(-5,0,1000)
 yin = np.sin(6*xin + 1.0) + 1.5
@@ -17,10 +19,10 @@ print(ybar)
 
 
 plt.figure(figsize=(6,3),dpi=300)
-plt.plot(xin,yin,lw=3,c='b')
-plt.plot(xout,yout,lw=3,c='b')
+plt.plot(xin,yin,lw=3,c=darkblue)
+plt.plot(xout,yout,lw=3,c=darkblue)
 #plt.plot(xin,yinr,lw=3,c='r',alpha=0.2,ls='--')
-plt.plot(xbar,ybar,lw=3,c='b')
+plt.plot(xbar,ybar,lw=3,c=darkblue)
 plt.plot([-5,0],[0,0],lw=4,c='k')
 plt.plot([0,0],[0,3],lw=4,c='k')
 plt.plot([0,0],[0,3],lw=4,c='k')
