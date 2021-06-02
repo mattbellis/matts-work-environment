@@ -52,7 +52,7 @@ def rotations_of_planes(x,y,z):
                 z1[i][j] = v1[2]
 
         #ax.plot_surface(x1, y1, z1,color='grey')
-        ax.plot_wireframe(x1, y1, z1,color='tan',alpha=0.2)
+        #ax.plot_wireframe(x1, y1, z1,color='tan',alpha=0.2)
 
         planes.append([x1,y1,z1])
 
@@ -62,7 +62,9 @@ def rotations_of_planes(x,y,z):
 
 planes = []
 
-radii = [4.0, 5.0, 6.0, 7.0] # Meters
+#radii = [4.0, 5.0, 6.0, 7.0] # Meters
+radii = [4.0, 5.0, ] # Meters
+#radii = [4.0,4.05,4.10,4.15, 5.0,5.05,5.10,5.15, 6.0,6.05,6.10,6.15, 7.0,7.05,7.10,7.15] # Meters
 #radii = [4.0] # Meters
 length = 13.0/2 # Meters
 for radius in radii:
@@ -72,6 +74,7 @@ for radius in radii:
     #print(width)
 
     (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .10))
+    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.1), np.arange(-width, width+0.0001, .02))
     z = radius*np.ones(shape=x.shape)
     planes += rotations_of_planes(x,y,z)
 
@@ -90,7 +93,7 @@ yline = [-7.2,10.9]
 zline = [-radii[-1]-2,radii[-1]+2]
 
 
-for ntrks in range(0,1):
+for ntrks in range(0,5):
 
     xline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     yline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
@@ -131,6 +134,7 @@ for ntrks in range(0,1):
         #print(p[indices[0]])
         for i,idx in enumerate(indices[0]):
             if d[indices][i]<0.3:
+            #if d[indices][i]<0.1:
                 print(d[indices][i])
                 hits.append([p[idx][0],p[idx][1],p[idx][2]])
                 plt.plot([p[idx][0]],[p[idx][1]],[p[idx][2]],'bo',markersize=5)
@@ -166,7 +170,7 @@ for ntrks in range(0,1):
         print(hit1,times[ih],dedx[ih])
 
     # Add some noise!
-    nnoise = np.random.randint(100)
+    nnoise = np.random.randint(300)
     for n in range(nnoise):
         tnoise = 50*np.random.random()
         dedxnoise = 70*np.random.random()
@@ -180,14 +184,15 @@ for ntrks in range(0,1):
         idx = np.random.randint(0,nelements0)
         nelements1 = len(p[0][idx]) 
         idx1 = np.random.randint(0,nelements1)
-        print("here")
-        print(p[0][idx])
+        #print("here")
+        #print(p[0][idx])
         noise_hits.append([p[0][idx][idx1],p[1][idx][idx1],p[2][idx][idx1]])
     
 
-    for hit in noise_hits:
+    for ih,hit in enumerate(noise_hits):
         print(hit)
-        plt.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=5,alpha=0.5)
+        s = noise_dedx[ih]
+        plt.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=s/10,alpha=0.5)
 
 
 ax.set(xlabel='x', ylabel='y', zlabel='z')

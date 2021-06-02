@@ -14,8 +14,8 @@ print(text)
 
 soup = TexSoup(text)
 
-tables = list(soup.find_all('table'))
-#tables = list(soup.find_all('figure'))
+#tables = list(soup.find_all('table'))
+tables = list(soup.find_all('figure'))
 for count,t in enumerate(tables):
     output = "\\documentclass{article}\n"
     output += "\\usepackage{tikz}\n"
@@ -30,7 +30,7 @@ for count,t in enumerate(tables):
 
     outname = "file_image_{0}.png".format(count)
     if t.caption is not None:
-        outname = (str(t.caption.string)[0:40]).replace(' ','_').replace('.','') + '.png'
+        outname = (str(t.caption.string)[0:80]).replace(' ','_').replace('.','') + '.png'
 
     outfile = open("tmp.tex","w")
     outfile.write(output)

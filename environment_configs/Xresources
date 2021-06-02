@@ -12,10 +12,13 @@ Xft.hintstyle: hintsfull
 
 !URxvt.font: xft:Monospace:pixelsize=16
 !URxvt.boldFont: xft:Monospace:bold:pixelsize=16
-URxvt.font: 10x20
+
+!URxvt.font: 10x20
+
 !URxvt.boldfont: 10x20:bold
 !URxvt.font: 10x20bold
-!URxvt.font:xft:Monospace:pixelsize=15
+URxvt.font:xft:Monospace:pixelsize=16
+
 !URxvt.boldfont:xft:Monospace-Bold:pixelsize=15
 
 !URxvt.font: -misc-fixed-medium-r-normal--20-200-75-75-c-100-iso8859-1
@@ -23,6 +26,8 @@ URxvt.font: 10x20
 !URxvt.font: xft:monaco:bold:size=10
 !URxvt.font: xft:Monoid:bold
 !URxvt.letterSpace: -5
+!URxvt.font: xft:monaco:size=18
+
 
 URxvt.perl-ext-common: tabbed
 
