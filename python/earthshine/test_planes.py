@@ -9,19 +9,6 @@ ax = fig.add_subplot(1, 1, 1, projection='3d')
 
 c = 3e8 # Speed of light m/s
 
-# Define a plane
-'''
-x = np.array([[1, 1], [3, 3]])
-y = np.array([[1, 3], [1, 3]])
-z = np.array([[5, 5], [5, 5]])
-ax.plot_surface(x, y, z)
-
-x = np.array([[1, 1], [3, 3]])
-y = np.array([[1, 3], [1, 3]])
-z = np.array([[-5,-5], [-5, -5]])
-ax.plot_surface(x, y, z)
-'''
-
 ################################################################################
 # Takes in a starter plane and then rotates it around the provided angles
 ################################################################################
@@ -65,22 +52,35 @@ def generate_muon_detector_planes(x,y,z):
 
 
 planes = []
+planes_for_display = []
 
-#radii = [4.0, 5.0, 6.0, 7.0] # Meters
-radii = [4.0, 5.0, ] # Meters
+radii = [4.0, 5.0, 6.0, 7.0] # Meters
+#radii = [4.0, 5.0, ] # Meters
 #radii = [4.0,4.05,4.10,4.15, 5.0,5.05,5.10,5.15, 6.0,6.05,6.10,6.15, 7.0,7.05,7.10,7.15] # Meters
+#radii = [4.0,4.05,4.10,4.15,]
 #radii = [4.0] # Meters
 length = 13.0/2 # Meters
 for radius in radii:
 
-    #width = np.sin(np.deg2rad(30))*radius/2
     width = np.deg2rad(30)*radius/2
-    #print(width)
+    print("width: ",width)
 
-    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .10))
-    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.1), np.arange(-width, width+0.0001, .02))
+    # The real planes.
+    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
+    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
     z = radius*np.ones(shape=x.shape)
     planes += generate_muon_detector_planes(x,y,z)
+
+    # Planes just for display purposes with a much coarser binning.
+    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 1.0), np.arange(-width, width+0.0001, .2))
+    z = radius*np.ones(shape=x.shape)
+    planes_for_display += generate_muon_detector_planes(x,y,z)
+
+for p in planes_for_display:
+    x = p[0]
+    y = p[1]
+    z = p[2]
+    ax.plot_wireframe(x, y, z,color='tan',alpha=0.2)
 
 
 
@@ -91,7 +91,6 @@ for radius in radii:
 xline = [-9.8,8.3]
 yline = [-7.2,10.9]
 zline = [-radii[-1]-2,radii[-1]+2]
-
 
 for ntrks in range(0,5):
 
@@ -132,18 +131,15 @@ for ntrks in range(0,5):
         # The first entry is the indices for the points in the plane
         # The second entry is the indices for the points on the line
         #print(p[indices[0]])
+        print("p ----")
         for i,idx in enumerate(indices[0]):
             if d[indices][i]<0.3:
             #if d[indices][i]<0.1:
                 print(d[indices][i])
                 hits.append([p[idx][0],p[idx][1],p[idx][2]])
-                plt.plot([p[idx][0]],[p[idx][1]],[p[idx][2]],'bo',markersize=5)
+                #plt.plot([p[idx][0]],[p[idx][1]],[p[idx][2]],'bo',markersize=5)
         #plt.plot(p[idx[0]][0],'ko',markersize=20)
         #plt.plot(p[idx], 'ko',markersize=20)
-
-    print("--------------")
-    for hit in hits:
-        print(hit)
 
     print()
     # Sort the lists by their lowest z hit
@@ -153,7 +149,7 @@ for ntrks in range(0,5):
     dedx0 = 50*np.random.random() + 50
     times.append(t0)
     dedx.append(dedx0)
-    print(sorted_hits[0],times[0])
+    #print(sorted_hits[0],times[0])
     for ih in range(1,len(sorted_hits)):
         hit1 = sorted_hits[ih]
         hit0 = sorted_hits[ih-1]
@@ -169,11 +165,16 @@ for ntrks in range(0,5):
         dedx.append(dedx1)
         print(hit1,times[ih],dedx[ih])
 
+    print("--------------")
+    for de,hit in zip(dedx,hits):
+        print(de,hit)
+        plt.plot([hit[0]],[hit[1]],[hit[2]],'bo',markersize=de/10)
+
     # Add some noise!
     nnoise = np.random.randint(300)
     for n in range(nnoise):
         tnoise = 50*np.random.random()
-        dedxnoise = 70*np.random.random()
+        dedxnoise = 20*np.random.random()
         noise_times.append(tnoise)
         noise_dedx.append(dedxnoise)
         nplanes = len(planes)
