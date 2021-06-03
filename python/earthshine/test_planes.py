@@ -22,7 +22,10 @@ z = np.array([[-5,-5], [-5, -5]])
 ax.plot_surface(x, y, z)
 '''
 
-def rotations_of_planes(x,y,z):
+################################################################################
+# Takes in a starter plane and then rotates it around the provided angles
+################################################################################
+def generate_muon_detector_planes(x,y,z):
     planes = []
     angles = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330]
     for angle in angles:
@@ -57,6 +60,7 @@ def rotations_of_planes(x,y,z):
         planes.append([x1,y1,z1])
 
     return planes
+################################################################################
 
 
 
@@ -76,11 +80,7 @@ for radius in radii:
     (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .10))
     #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.1), np.arange(-width, width+0.0001, .02))
     z = radius*np.ones(shape=x.shape)
-    planes += rotations_of_planes(x,y,z)
-
-#(x, y) = np.meshgrid(np.arange(-20, 20.1, 1), np.arange(-0.4, 0.41, .1))
-#z = 2*np.ones(shape=x.shape)
-#rotations_of_planes(x,y,z)
+    planes += generate_muon_detector_planes(x,y,z)
 
 
 
