@@ -54,9 +54,9 @@ def generate_muon_detector_planes(x,y,z):
 planes = []
 planes_for_display = []
 
-radii = [4.0, 5.0, 6.0, 7.0] # Meters
+#radii = [4.0, 5.0, 6.0, 7.0] # Meters
 #radii = [4.0, 5.0, ] # Meters
-#radii = [4.0,4.05,4.10,4.15, 5.0,5.05,5.10,5.15, 6.0,6.05,6.10,6.15, 7.0,7.05,7.10,7.15] # Meters
+radii = [4.0,4.05,4.10,4.15, 5.0,5.05,5.10,5.15, 6.0,6.05,6.10,6.15, 7.0,7.05,7.10,7.15] # Meters
 #radii = [4.0,4.05,4.10,4.15,]
 #radii = [4.0] # Meters
 length = 13.0/2 # Meters
@@ -66,8 +66,8 @@ for radius in radii:
     print("width: ",width)
 
     # The real planes.
-    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
-    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
+    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
+    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
     z = radius*np.ones(shape=x.shape)
     planes += generate_muon_detector_planes(x,y,z)
 
@@ -92,7 +92,9 @@ xline = [-9.8,8.3]
 yline = [-7.2,10.9]
 zline = [-radii[-1]-2,radii[-1]+2]
 
-for ntrks in range(0,5):
+outfile = open("OUTPUT_FILE.dat","w")
+
+for ntrks in range(0,1):
 
     xline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     yline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
@@ -133,8 +135,8 @@ for ntrks in range(0,5):
         #print(p[indices[0]])
         print("p ----")
         for i,idx in enumerate(indices[0]):
-            if d[indices][i]<0.3:
-            #if d[indices][i]<0.1:
+            #if d[indices][i]<0.3:
+            if d[indices][i]<0.1:
                 print(d[indices][i])
                 hits.append([p[idx][0],p[idx][1],p[idx][2]])
                 #plt.plot([p[idx][0]],[p[idx][1]],[p[idx][2]],'bo',markersize=5)
@@ -166,15 +168,15 @@ for ntrks in range(0,5):
         print(hit1,times[ih],dedx[ih])
 
     print("--------------")
-    for de,hit in zip(dedx,hits):
+    for de,hit in zip(dedx,sorted_hits):
         print(de,hit)
         plt.plot([hit[0]],[hit[1]],[hit[2]],'bo',markersize=de/10)
 
     # Add some noise!
     nnoise = np.random.randint(300)
     for n in range(nnoise):
-        tnoise = 50*np.random.random()
-        dedxnoise = 20*np.random.random()
+        tnoise = 50e-9*np.random.random()
+        dedxnoise = 60*np.random.random()
         noise_times.append(tnoise)
         noise_dedx.append(dedxnoise)
         nplanes = len(planes)
@@ -195,8 +197,21 @@ for ntrks in range(0,5):
         s = noise_dedx[ih]
         plt.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=s/10,alpha=0.5)
 
+    
+    output = ""
+    # Noise is 0, signal is 1
+    noise_or_signal = 1
+    for a,b,c in zip(sorted_hits,times,dedx):
+        output += f"{ntrks},{noise_or_signal},{a[0]},{a[1]},{a[2]},{b},{c}\n"
+    noise_or_signal = 0
+    for a,b,c in zip(noise_hits,noise_times,noise_dedx):
+        output += f"{ntrks},{noise_or_signal},{a[0]},{a[1]},{a[2]},{b},{c}\n"
+    outfile.write(output)
+
+outfile.close()
 
 ax.set(xlabel='x', ylabel='y', zlabel='z')
 fig.tight_layout()
+
 
 plt.show()
