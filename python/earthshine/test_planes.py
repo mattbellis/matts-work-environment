@@ -60,6 +60,7 @@ def generate_muon_detector_planes(x,y,z):
 planes = []
 planes_for_display = []
 
+# https://twiki.cern.ch/twiki/bin/view/CMSPublic/MuonDPGPublic160729#Spatial_Resolution
 #radii = [4.0, 5.0, 6.0, 7.0] # Meters
 #radii = [4.0, 5.0, ] # Meters
 radii = [4.0,4.05,4.10,4.15, 5.0,5.05,5.10,5.15, 6.0,6.05,6.10,6.15, 7.0,7.05,7.10,7.15] # Meters
@@ -72,8 +73,8 @@ for radius in radii:
     print("width: ",width)
 
     # The real planes.
-    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
-    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
+    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
+    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
     z = radius*np.ones(shape=x.shape)
     planes += generate_muon_detector_planes(x,y,z)
 

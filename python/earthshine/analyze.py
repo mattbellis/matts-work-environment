@@ -65,11 +65,14 @@ for nval in nvals:
             r = distance([xpt0,ypt0,zpt0],[xpt1,ypt1,zpt1])
             dt = t[j] - t[i]
             if ns[j]==1:
-                plt.plot(dt,r,'ro')
+                #plt.plot(dt,r,'ro')
+                plt.errorbar(dt,r,fmt='ro',xerr=2e-9)
             else:
                 plt.plot(dt,r,'ko')
 
         plt.plot([0,50e-9],[0,50e-9*3e8],'k--')
+        plt.xlabel(r'$\Delta t$ (s)',fontsize=18)
+        plt.ylabel(r'Distance (m)',fontsize=18)
         plt.show()
 
 
