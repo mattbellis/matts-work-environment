@@ -4,6 +4,12 @@ import matplotlib.pyplot as plt
 
 from scipy.spatial import distance
 
+import sys
+
+tag = "DEFAULT"
+if len(sys.argv)>1:
+    tag = sys.argv[1]
+
 fig = plt.figure(num=1, clear=True)
 ax = fig.add_subplot(1, 1, 1, projection='3d')
 
@@ -66,13 +72,13 @@ for radius in radii:
     print("width: ",width)
 
     # The real planes.
-    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
-    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
+    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
+    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
     z = radius*np.ones(shape=x.shape)
     planes += generate_muon_detector_planes(x,y,z)
 
     # Planes just for display purposes with a much coarser binning.
-    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 1.0), np.arange(-width, width+0.0001, .2))
+    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 2.0), np.arange(-width, width+0.0001, .5))
     z = radius*np.ones(shape=x.shape)
     planes_for_display += generate_muon_detector_planes(x,y,z)
 
@@ -213,5 +219,6 @@ outfile.close()
 ax.set(xlabel='x', ylabel='y', zlabel='z')
 fig.tight_layout()
 
+plt.savefig(f'earthshine_display_{tag}.png')
 
 plt.show()
