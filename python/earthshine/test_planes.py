@@ -70,7 +70,7 @@ length = 13.0/2 # Meters
 for radius in radii:
 
     width = np.deg2rad(30)*radius/2
-    print("width: ",width)
+    print(radius, "\twidth: ",width)
 
     # The real planes.
     (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
@@ -87,8 +87,8 @@ for p in planes_for_display:
     x = p[0]
     y = p[1]
     z = p[2]
-    ax.plot_wireframe(x, y, z,color='tan',alpha=0.2)
-
+    ax.plot_wireframe(x, y, z,color='tan',alpha=0.10)
+    #ax.plot_surface(x, y, z,color='tan',alpha=0.1)
 
 
 #xline = [0,0]
@@ -101,13 +101,15 @@ zline = [-radii[-1]-2,radii[-1]+2]
 
 outfile = open("OUTPUT_FILE.dat","w")
 
-for ntrks in range(0,1):
+origin = np.array([0, 0, 0])
+
+for ntrks in range(0,20):
 
     xline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     yline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     zline = [-radii[-1]-2,radii[-1]+2]
 
-    plt.plot(xline,yline,zline,color='red',linewidth=1,alpha=0.5)
+    plt.plot(xline,yline,zline,color='red',linewidth=2,alpha=1.0)
 
     npts = 1000
     xline_pts = np.linspace(xline[0],xline[1],npts)
@@ -134,17 +136,32 @@ for ntrks in range(0,1):
         p = p.T
         #print(p)
 
+        # Transverse is z/y plane
+        '''
+        line_transverse_distance = np.sqrt((origin[1]-line.T[1])**2 + (origin[2]-line.T[2])**2)
+        mask = line_transverse_distance< 0.9*radii[0]
+
+        print(line)
+        print(len(line))
+        print(len(line.T))
+        print(len(mask))
+        print(len(mask[mask]))
+        print(len(line[mask]))
+
+        d = distance.cdist(p,line[mask])
+        '''
+
         d = distance.cdist(p,line)
         indices = np.where(d == d.min())
         #print(indices)
         # The first entry is the indices for the points in the plane
         # The second entry is the indices for the points on the line
         #print(p[indices[0]])
-        print("p ----")
+        #print("p ----")
         for i,idx in enumerate(indices[0]):
             #if d[indices][i]<0.3:
             if d[indices][i]<0.1:
-                print(d[indices][i])
+                #print(d[indices][i])
                 hits.append([p[idx][0],p[idx][1],p[idx][2]])
                 #plt.plot([p[idx][0]],[p[idx][1]],[p[idx][2]],'bo',markersize=5)
         #plt.plot(p[idx[0]][0],'ko',markersize=20)
@@ -177,7 +194,7 @@ for ntrks in range(0,1):
     print("--------------")
     for de,hit in zip(dedx,sorted_hits):
         print(de,hit)
-        plt.plot([hit[0]],[hit[1]],[hit[2]],'bo',markersize=de/10)
+        plt.plot([hit[0]],[hit[1]],[hit[2]],'bo',markersize=de/15)
 
     # Add some noise!
     nnoise = np.random.randint(300)
@@ -202,7 +219,7 @@ for ntrks in range(0,1):
     for ih,hit in enumerate(noise_hits):
         print(hit)
         s = noise_dedx[ih]
-        plt.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=s/10,alpha=0.5)
+        plt.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=s/15,alpha=0.5)
 
     
     output = ""
@@ -220,6 +237,20 @@ outfile.close()
 ax.set(xlabel='x', ylabel='y', zlabel='z')
 fig.tight_layout()
 
-plt.savefig(f'earthshine_display_{tag}.png')
+plt.savefig(f'earthshine_display_{tag}_0.png')
 
-plt.show()
+ax.azim += 30
+ax.elev -= 30
+plt.savefig(f'earthshine_display_{tag}_1.png')
+
+ax.azim = 90
+#ax.elev = 90
+plt.savefig(f'earthshine_display_{tag}_2.png')
+
+ax.azim = 0
+ax.elev = 0
+plt.savefig(f'earthshine_display_{tag}_3.png')
+
+#plt.savefig(f'earthshine_display_{tag}.png')
+
+#plt.show()

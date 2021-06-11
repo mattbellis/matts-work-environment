@@ -51,7 +51,9 @@ for nval in nvals:
 
     nseeds = len(z)
 
+    #'''
     for i in range(nseeds):
+    #for i in range(1):
         xpt0,ypt0,zpt0 = x[i],y[i],z[i]
         for j in range(nseeds):
             '''
@@ -61,6 +63,7 @@ for nval in nvals:
 
             if z[j]<z[i]:
                 continue
+
             xpt1,ypt1,zpt1 = x[j],y[j],z[j]
             r = distance([xpt0,ypt0,zpt0],[xpt1,ypt1,zpt1])
             dt = t[j] - t[i]
@@ -73,12 +76,37 @@ for nval in nvals:
         plt.plot([0,50e-9],[0,50e-9*3e8],'k--')
         plt.xlabel(r'$\Delta t$ (s)',fontsize=18)
         plt.ylabel(r'Distance (m)',fontsize=18)
-        plt.show()
+        break
+
+        #plt.show()
+    #'''
+
+    '''
+    # Find the line
+    for i in range(nseeds):
+        xpt0,ypt0,zpt0 = x[i],y[i],z[i]
+        for j in range(nseeds):
+
+            if z[j]<z[i]:
+                continue
+
+            xpt1,ypt1,zpt1 = x[j],y[j],z[j]
+            r = distance([xpt0,ypt0,zpt0],[xpt1,ypt1,zpt1])
+            dt = t[j] - t[i]
+            if ns[j]==1:
+                #plt.plot(dt,r,'ro')
+                plt.errorbar(dt,r,fmt='ro',xerr=2e-9)
+            else:
+                plt.plot(dt,r,'ko')
+    '''
 
 
 
 
 
 
+
+plt.figure()
 plt.hist(ztmp,bins=20)
+
 plt.show()
