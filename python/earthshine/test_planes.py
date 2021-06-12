@@ -10,8 +10,19 @@ tag = "DEFAULT"
 if len(sys.argv)>1:
     tag = sys.argv[1]
 
-fig = plt.figure(num=1, clear=True)
-ax = fig.add_subplot(1, 1, 1, projection='3d')
+fig = plt.figure(figsize=(12,8), num=1, clear=True)
+axes = []
+axes.append(fig.add_subplot(2, 2, 1, projection='3d'))
+axes.append(fig.add_subplot(2, 2, 2, projection='3d'))
+axes.append(fig.add_subplot(2, 2, 3, projection='3d'))
+axes.append(fig.add_subplot(2, 2, 4, projection='3d'))
+
+fig2 = plt.figure(figsize=(12,8), num=2, clear=True)
+axes2 = []
+axes2.append(fig2.add_subplot(2, 2, 1, projection='3d'))
+axes2.append(fig2.add_subplot(2, 2, 2, projection='3d'))
+axes2.append(fig2.add_subplot(2, 2, 3, projection='3d'))
+axes2.append(fig2.add_subplot(2, 2, 4, projection='3d'))
 
 c = 3e8 # Speed of light m/s
 
@@ -46,9 +57,6 @@ def generate_muon_detector_planes(x,y,z):
                 x1[i][j] = v1[0]
                 y1[i][j] = v1[1]
                 z1[i][j] = v1[2]
-
-        #ax.plot_surface(x1, y1, z1,color='grey')
-        #ax.plot_wireframe(x1, y1, z1,color='tan',alpha=0.2)
 
         planes.append([x1,y1,z1])
 
@@ -87,8 +95,9 @@ for p in planes_for_display:
     x = p[0]
     y = p[1]
     z = p[2]
-    ax.plot_wireframe(x, y, z,color='tan',alpha=0.10)
-    #ax.plot_surface(x, y, z,color='tan',alpha=0.1)
+    for ax in axes:
+        ax.plot_wireframe(x, y, z,color='tan',alpha=0.10)
+        #ax.plot_surface(x, y, z,color='tan',alpha=0.1)
 
 
 #xline = [0,0]
@@ -103,13 +112,16 @@ outfile = open("OUTPUT_FILE.dat","w")
 
 origin = np.array([0, 0, 0])
 
-for ntrks in range(0,20):
+for ntrks in range(0,1):
 
     xline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     yline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     zline = [-radii[-1]-2,radii[-1]+2]
 
-    plt.plot(xline,yline,zline,color='red',linewidth=2,alpha=1.0)
+    for ax in axes:
+        ax.plot(xline,yline,zline,color='red',linewidth=2,alpha=1.0)
+    for ax in axes2:
+        ax.plot(xline,yline,zline,color='red',linewidth=2,alpha=1.0)
 
     npts = 1000
     xline_pts = np.linspace(xline[0],xline[1],npts)
@@ -194,7 +206,10 @@ for ntrks in range(0,20):
     print("--------------")
     for de,hit in zip(dedx,sorted_hits):
         print(de,hit)
-        plt.plot([hit[0]],[hit[1]],[hit[2]],'bo',markersize=de/15)
+        for ax in axes:
+            ax.plot([hit[0]],[hit[1]],[hit[2]],'bo',markersize=de/15)
+        for ax in axes2:
+            ax.plot([hit[0]],[hit[1]],[hit[2]],'bo',markersize=de/15)
 
     # Add some noise!
     nnoise = np.random.randint(300)
@@ -219,7 +234,10 @@ for ntrks in range(0,20):
     for ih,hit in enumerate(noise_hits):
         print(hit)
         s = noise_dedx[ih]
-        plt.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=s/15,alpha=0.5)
+        for ax in axes:
+            ax.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=s/15,alpha=0.5)
+        for ax in axes2:
+            ax.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=s/15,alpha=0.5)
 
     
     output = ""
@@ -234,23 +252,36 @@ for ntrks in range(0,20):
 
 outfile.close()
 
-ax.set(xlabel='x', ylabel='y', zlabel='z')
+for ax in axes:
+    ax.set(xlabel='x [m]', ylabel='y [m]', zlabel='z [m]')
+for ax in axes2:
+    ax.set(xlabel='x [m]', ylabel='y [m]', zlabel='z [m]')
+
+#plt.savefig(f'earthshine_display_{tag}_0.png')
+
+axes[1].azim += 30
+axes[1].elev -= 30
+
+axes2[1].azim += 30
+axes2[1].elev -= 30
+#plt.savefig(f'earthshine_display_{tag}_1.png')
+
+axes[2].azim = 90
+#axes[2].elev = 90
+axes2[2].azim = 90
+#axes2[2].elev = 90
+#plt.savefig(f'earthshine_display_{tag}_2.png')
+
+axes[3].azim = 0
+axes[3].elev = 0
+axes2[3].azim = 0
+axes2[3].elev = 0
+#plt.savefig(f'earthshine_display_{tag}_3.png')
+
 fig.tight_layout()
+plt.savefig(f'earthshine_display_{tag}.png')
 
-plt.savefig(f'earthshine_display_{tag}_0.png')
+fig2.tight_layout()
+plt.savefig(f'earthshine_display_NO_PLANES_{tag}.png')
 
-ax.azim += 30
-ax.elev -= 30
-plt.savefig(f'earthshine_display_{tag}_1.png')
-
-ax.azim = 90
-#ax.elev = 90
-plt.savefig(f'earthshine_display_{tag}_2.png')
-
-ax.azim = 0
-ax.elev = 0
-plt.savefig(f'earthshine_display_{tag}_3.png')
-
-#plt.savefig(f'earthshine_display_{tag}.png')
-
-#plt.show()
+plt.show()
