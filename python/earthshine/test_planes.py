@@ -112,7 +112,7 @@ outfile = open(f"OUTPUT_FILE_{tag}.dat","w")
 
 origin = np.array([0, 0, 0])
 
-for ntrks in range(0,20):
+for ntrks in range(0,1):
 
     xline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     yline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
@@ -279,9 +279,11 @@ axes2[3].elev = 0
 #plt.savefig(f'earthshine_display_{tag}_3.png')
 
 fig.tight_layout()
+plt.figure(1)
 plt.savefig(f'earthshine_display_{tag}.png')
 
 fig2.tight_layout()
+plt.figure(2)
 plt.savefig(f'earthshine_display_NO_PLANES_{tag}.png')
 
 #plt.show()

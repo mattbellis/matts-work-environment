@@ -3,6 +3,8 @@ import matplotlib.pylab as plt
 
 import sys
 
+from scipy.spatial.distance import pdist,squareform
+
 infilename = sys.argv[1]
 
 # ns is noise-or-signal
@@ -50,10 +52,31 @@ for nval in nvals:
     print(t)
 
     nseeds = len(z)
+    #nseeds = 1
+
+    # Minkowski distance
+    print("Minkowski")
+    u = np.array([t,x,y,z]).T
+    print(u)
+    d = pdist(u,"Minkowski")
+    print(d)
+    print(np.sort(d))
+    sfd = squareform(d)
+    for r in sfd:
+        output = ""
+        for c in r:
+            if c<0.3:
+                output += f"\033[31m{c:0.2f}\033[0m "
+            else:
+                output += f"{c:0.2f} "
+        output += "\n"
+        print(output)
+    exit()
+
 
     #'''
-    for i in range(nseeds):
-    #for i in range(1):
+    #for i in range(nseeds):
+    for i in range(1):
         xpt0,ypt0,zpt0 = x[i],y[i],z[i]
         for j in range(nseeds):
             '''
@@ -76,9 +99,9 @@ for nval in nvals:
         plt.plot([0,50e-9],[0,50e-9*3e8],'k--')
         plt.xlabel(r'$\Delta t$ (s)',fontsize=18)
         plt.ylabel(r'Distance (m)',fontsize=18)
-        break
+        #break
 
-        #plt.show()
+        plt.show()
     #'''
 
     '''
