@@ -12,14 +12,7 @@ and a directory.
 
     Detail Class List_files (Siena Class Roster_files.html)
 
-* Rename the files directory (which contains the images) to remove spaces in the name.
-For some reason, LaTeX doesn't like this. 
-
-    mv Detail\ Class\ List_files Detail_Class_List_files
-
-    or 
-
-    mv Siena\ Class\ Roster_files Siena_Class_Roster_files
+* Move the file and directory to the same location as your script.
 
 * Run the parser.
 
