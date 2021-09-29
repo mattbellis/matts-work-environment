@@ -62,9 +62,9 @@ Mod4 9 :Tab 9
 
 # open a terminal
 #Mod1 F1 :Exec xterm
-#Mod1 F1 :Exec mrxvt
+Mod1 F1 :Exec mrxvt
 #Mod1 F1 :Exec rxvt-unicode
-Mod1 F1 :Exec xfce4-terminal --title tcsh -e /bin/tcsh
+#Mod1 F1 :Exec xfce4-terminal --title tcsh -e /bin/tcsh
 Mod1 F2 :Exec google-chrome
 Mod1 F3 :Exec iceweasel
 #Mod1 F4 :Exec gamix
