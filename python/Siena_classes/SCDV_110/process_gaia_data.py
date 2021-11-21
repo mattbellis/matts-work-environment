@@ -10,7 +10,7 @@ print(df.columns)
 output = ""
 for a,b,c in zip(df['ra'], df['dec'], df['phot_g_mean_mag']):
     print(a,b,c)
-    output += f"{a},{b},{c}"
+    output += f"{a},{b},{c}\n"
 
 outfile = open("gaia_10k_stars.csv",'w')
 outfile.write(output)
