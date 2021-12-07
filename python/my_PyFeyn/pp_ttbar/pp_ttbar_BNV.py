@@ -167,7 +167,7 @@ def pp_ttbar_BNV(outfilename, stage=0):
 
     # Print the file
     outfilename = "%s_%d.pdf" % (outfilename,stage)
-    print outfilename
+    print(outfilename)
     fd.draw(outfilename)
 
 

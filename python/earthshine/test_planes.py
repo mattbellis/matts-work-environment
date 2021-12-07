@@ -6,7 +6,8 @@ from scipy.spatial import distance
 
 import sys
 
-tag = "DEFAULT"
+#tag = "DEFAULT"
+tag = "FOR_PROPOSAL"
 if len(sys.argv)>1:
     tag = sys.argv[1]
 
@@ -81,8 +82,8 @@ for radius in radii:
     print(radius, "\twidth: ",width)
 
     # The real planes.
-    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
-    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
+    #(x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.05), np.arange(-width, width+0.0001, .02))
+    (x, y) = np.meshgrid(np.arange(-length, length+0.0001, 0.5), np.arange(-width, width+0.0001, .1))
     z = radius*np.ones(shape=x.shape)
     planes += generate_muon_detector_planes(x,y,z)
 
@@ -112,7 +113,9 @@ outfile = open(f"OUTPUT_FILE_{tag}.dat","w")
 
 origin = np.array([0, 0, 0])
 
-for ntrks in range(0,1):
+for ntrks in range(0,10):
+
+    print("ntrk: ",ntrks)
 
     xline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
     yline = [2*length*np.random.random()-length,2*length*np.random.random()-length]
@@ -201,11 +204,11 @@ for ntrks in range(0,1):
         times.append(t)
         dedx1 = dedx[0] + np.random.normal(0,10)
         dedx.append(dedx1)
-        print(hit1,times[ih],dedx[ih])
+        #print(hit1,times[ih],dedx[ih])
 
     print("--------------")
     for de,hit in zip(dedx,sorted_hits):
-        print(de,hit)
+        #print(de,hit)
         for ax in axes:
             ax.plot([hit[0]],[hit[1]],[hit[2]],'bo',markersize=de/15)
         for ax in axes2:
@@ -232,7 +235,7 @@ for ntrks in range(0,1):
     
 
     for ih,hit in enumerate(noise_hits):
-        print(hit)
+        #print(hit)
         s = noise_dedx[ih]
         for ax in axes:
             ax.plot([hit[0]],[hit[1]],[hit[2]],'ko',markersize=s/15,alpha=0.5)
