@@ -13,6 +13,6 @@ from pp_ttbar_BNV import *
 tag = "_blk_bkg"
 
 for i in range(0,1):
-    print i
+    print(i)
     pp_ttbar_BNV("pp_ttbar_BNV"+tag,i)
 
