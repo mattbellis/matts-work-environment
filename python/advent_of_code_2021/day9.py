@@ -100,7 +100,7 @@ print("Where are the 9's?")
 print(nines)
 
 ################################################################################
-exit()
+#exit()
 
 def walk_around(i,j,grid,nsteps=0):
     # Figure out the range in the row
@@ -118,15 +118,34 @@ def walk_around(i,j,grid,nsteps=0):
         if grid[i][hix] == True:
             break
 
+    # Figure out the range in the column
+    # Move up
+    for loy in range(i,-1,-1):
+        if loy==0:
+            break
+        if grid[loy][j] == True:
+            break
+    # Move down
+    for hiy in range(i,height,1):
+        if hiy==height-1:
+            break
+        if grid[hiy][j] == True:
+            break
+
+    # Search horizontal and then down
+    # Search horizontal and then down
     # Need an offset to start correctly in the search
-    lox+=1
+    good_grid_idx = []
+    #lox+=1
     print(f"lox:hix {lox} {hix}")
+    print(f"loy:hiy {loy} {hiy}")
     for jstep in range(lox,hix+1):
         # Move down
         for istep in range(i,height):
             #print(f"STEPPING DOWN -  istep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}\tdata: {data[istep][jstep]}\tnsteps: {nsteps}")
             if grid[istep][jstep] == False:
                 nsteps += 1
+                good_grid_idx.append([istep,jstep])
             else:
                 break
 
@@ -137,18 +156,56 @@ def walk_around(i,j,grid,nsteps=0):
             #print(f"STEPPING UP   -  istep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}\tdata: {data[istep][jstep]}\tnsteps: {nsteps}")
             if grid[istep][jstep] == False:
                 nsteps += 1
+                good_grid_idx.append([istep,jstep])
             else:
                 break
 
-    return nsteps
+    # Search vertical and then across
+    # Need an offset to start correctly in the search
+    #lox+=1
+    for istep in range(loy,hiy+1):
+        # Move right
+        for jstep in range(j,width):
+            #print(f"STEPPING DOWN -  istep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}\tdata: {data[istep][jstep]}\tnsteps: {nsteps}")
+            if grid[istep][jstep] == False:
+                nsteps += 1
+                good_grid_idx.append([istep,jstep])
+            else:
+                break
+
+        # Move left
+        for jstep in range(j-1,0,-1):
+            if j<0:
+                break
+            #print(f"STEPPING UP   -  istep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}\tdata: {data[istep][jstep]}\tnsteps: {nsteps}")
+            if grid[istep][jstep] == False:
+                nsteps += 1
+                good_grid_idx.append([istep,jstep])
+            else:
+                break
+
+    print(good_grid_idx)
+    #exit()
+    return nsteps,good_grid_idx
 
 
 all_nsteps = []
 for (i,j) in indices_of_low_points:
     nsteps = 0
-    nsteps = walk_around(i,j,nines,nsteps=nsteps)
+    nsteps,ggi = walk_around(i,j,nines,nsteps=nsteps)
     print(f"nsteps: {nsteps}")
-    all_nsteps.append(nsteps)
+    print("ggi: ")
+    print(ggi)
+    unique_ggi = []
+    for g in ggi:
+        #print(g)
+        if g not in unique_ggi:
+            unique_ggi.append(g)
+            #print("\t",unique_ggi)
+    print(unique_ggi)
+    ugnsteps = len(unique_ggi)
+    print("COUNTING THE NSTEPS: ",ugnsteps)
+    all_nsteps.append(ugnsteps)
 print(all_nsteps)
 
 sorted = np.sort(all_nsteps)
