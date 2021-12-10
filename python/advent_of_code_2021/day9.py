@@ -112,51 +112,50 @@ def walk(i,j,grid,visited,traversed=[],nsteps=0):
     # Adapted from https://www.techiedelight.com/find-shortest-path-in-maze/
     height,width = grid.shape
     print("In walk!")
-    print(i,j,height,width)
+    print(i,j,height,width,grid[i][j])
     print()
-    if nsteps>100:
+    if nsteps>2500:
         return traversed,nsteps,visited
 
     visited[i][j] = True
 
     if i<0 or i==height or j<0 or j==width:
-        print("A")
+        #print("A")
         return traversed,nsteps,visited
 
     #print("here!!!!!!!!!")
-    print(grid[i][j])
     # Stay
     if grid[i][j] == False:
-        print("A")
+        #print("A")
         traversed.append([i,j])
         #traversed = walk(i,j,grid,traversed=traversed)
         nsteps += 1
 
     # Go down 1
-    if i+1<height and grid[i+1][j] == False:
-        print("B")
+    if i+1<height and grid[i+1][j] == False and visited[i+1][j] == False:
+        #print("B")
         traversed.append([i+1,j])
         nsteps += 1
         traversed,nsteps,visited = walk(i+1,j,grid,visited,traversed=traversed,nsteps=nsteps)
 
     # Go right 1
-    if j+1<width and grid[i][j+1] == False:
-        print("D")
+    if j+1<width and grid[i][j+1] == False and visited[i][j+1] == False:
+        #print("D")
         traversed.append([i,j+1])
         nsteps += 1
         traversed,nsteps,visited = walk(i,j+1,grid,visited,traversed=traversed,nsteps=nsteps)
 
     # Go up 1
-    if i-1>=0 and grid[i-1][j] == False :
-        print("C")
+    if i-1>=0 and grid[i-1][j] == False  and visited[i-1][j] == False:
+        #print("C")
         traversed.append([i-1,j])
         nsteps += 1
         traversed,nsteps,visited = walk(i-1,j,grid,visited,traversed=traversed,nsteps=nsteps)
 
 
     # Go left 1
-    if j-1>=0 and grid[i][j-1] == False :
-        print("E")
+    if j-1>=0 and grid[i][j-1] == False  and visited[i][j-1] == False:
+        #print("E")
         traversed.append([i,j-1])
         nsteps += 1
         traversed,nsteps,visited = walk(i,j-1,grid,visited,traversed=traversed,nsteps=nsteps)
@@ -180,7 +179,8 @@ print(x)
     
 #'''
 all_nsteps = []
-for (i,j) in indices_of_low_points[0:2]:
+#for (i,j) in indices_of_low_points[0:2]:
+for (i,j) in indices_of_low_points:
     nsteps = 0
     traversed = []
     visited = np.zeros(shape=data.shape,dtype=bool)
