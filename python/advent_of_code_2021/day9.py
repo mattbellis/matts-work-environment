@@ -102,111 +102,108 @@ print(nines)
 ################################################################################
 #exit()
 
-def walk_around(i,j,grid,nsteps=0):
-    # Figure out the range in the row
-    # Move left
-    print(f"Walking around --- {i} {j}")
-    for lox in range(j,-1,-1):
-        if lox==0:
-            break
-        if grid[i][lox] == True:
-            break
-    # Move right
-    for hix in range(j,width+1,1):
-        if hix==width-1:
-            break
-        if grid[i][hix] == True:
-            break
-
-    # Figure out the range in the column
-    # Move up
-    for loy in range(i,-1,-1):
-        if loy==0:
-            break
-        if grid[loy][j] == True:
-            break
-    # Move down
-    for hiy in range(i,height,1):
-        if hiy==height-1:
-            break
-        if grid[hiy][j] == True:
-            break
-
-    # Search horizontal and then down
-    # Search horizontal and then down
-    # Need an offset to start correctly in the search
-    good_grid_idx = []
-    #lox+=1
-    print(f"lox:hix {lox} {hix}")
-    print(f"loy:hiy {loy} {hiy}")
-    for jstep in range(lox,hix+1):
-        # Move down
-        for istep in range(i,height):
-            #print(f"STEPPING DOWN -  istep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}\tdata: {data[istep][jstep]}\tnsteps: {nsteps}")
-            if grid[istep][jstep] == False:
-                nsteps += 1
-                good_grid_idx.append([istep,jstep])
-            else:
-                break
-
-        # Move up
-        for istep in range(i-1,0,-1):
-            if i<0:
-                break
-            #print(f"STEPPING UP   -  istep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}\tdata: {data[istep][jstep]}\tnsteps: {nsteps}")
-            if grid[istep][jstep] == False:
-                nsteps += 1
-                good_grid_idx.append([istep,jstep])
-            else:
-                break
-
-    # Search vertical and then across
-    # Need an offset to start correctly in the search
-    #lox+=1
-    for istep in range(loy,hiy+1):
-        # Move right
-        for jstep in range(j,width):
-            #print(f"STEPPING DOWN -  istep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}\tdata: {data[istep][jstep]}\tnsteps: {nsteps}")
-            if grid[istep][jstep] == False:
-                nsteps += 1
-                good_grid_idx.append([istep,jstep])
-            else:
-                break
-
-        # Move left
-        for jstep in range(j-1,0,-1):
-            if j<0:
-                break
-            #print(f"STEPPING UP   -  istep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}\tdata: {data[istep][jstep]}\tnsteps: {nsteps}")
-            if grid[istep][jstep] == False:
-                nsteps += 1
-                good_grid_idx.append([istep,jstep])
-            else:
-                break
-
-    print(good_grid_idx)
-    #exit()
-    return nsteps,good_grid_idx
 
 
+
+
+
+
+def walk(i,j,grid,visited,traversed=[],nsteps=0):
+    # Adapted from https://www.techiedelight.com/find-shortest-path-in-maze/
+    height,width = grid.shape
+    print("In walk!")
+    print(i,j,height,width,grid[i][j])
+    print()
+    if nsteps>2500:
+        return traversed,nsteps,visited
+
+    visited[i][j] = True
+
+    if i<0 or i==height or j<0 or j==width:
+        #print("A")
+        return traversed,nsteps,visited
+
+    #print("here!!!!!!!!!")
+    # Stay
+    if grid[i][j] == False:
+        #print("A")
+        traversed.append([i,j])
+        #traversed = walk(i,j,grid,traversed=traversed)
+        nsteps += 1
+
+    # Go down 1
+    if i+1<height and grid[i+1][j] == False and visited[i+1][j] == False:
+        #print("B")
+        traversed.append([i+1,j])
+        nsteps += 1
+        traversed,nsteps,visited = walk(i+1,j,grid,visited,traversed=traversed,nsteps=nsteps)
+
+    # Go right 1
+    if j+1<width and grid[i][j+1] == False and visited[i][j+1] == False:
+        #print("D")
+        traversed.append([i,j+1])
+        nsteps += 1
+        traversed,nsteps,visited = walk(i,j+1,grid,visited,traversed=traversed,nsteps=nsteps)
+
+    # Go up 1
+    if i-1>=0 and grid[i-1][j] == False  and visited[i-1][j] == False:
+        #print("C")
+        traversed.append([i-1,j])
+        nsteps += 1
+        traversed,nsteps,visited = walk(i-1,j,grid,visited,traversed=traversed,nsteps=nsteps)
+
+
+    # Go left 1
+    if j-1>=0 and grid[i][j-1] == False  and visited[i][j-1] == False:
+        #print("E")
+        traversed.append([i,j-1])
+        nsteps += 1
+        traversed,nsteps,visited = walk(i,j-1,grid,visited,traversed=traversed,nsteps=nsteps)
+
+    visited[i][j] = False
+
+    return traversed,nsteps,visited
+
+'''
+nsteps = 0
+traversed = []
+#x,nsteps = walk(0,1,nines,traversed=traversed)
+x,nsteps = walk(2,2,nines,traversed=traversed)
+print(nsteps)
+print(x)
+'''
+
+
+#indices_of_low_points = x
+#print(indices_of_low_points)
+    
+#'''
 all_nsteps = []
+#for (i,j) in indices_of_low_points[0:2]:
 for (i,j) in indices_of_low_points:
     nsteps = 0
-    nsteps,ggi = walk_around(i,j,nines,nsteps=nsteps)
-    print(f"nsteps: {nsteps}")
+    traversed = []
+    visited = np.zeros(shape=data.shape,dtype=bool)
+    ggi,returned_nsteps,visited = walk(i,j,nines,visited,nsteps=nsteps,traversed=traversed)
+    #print(f"nsteps: {nsteps}")
     print("ggi: ")
     print(ggi)
     unique_ggi = []
+    tempmatch = np.zeros(shape=data.shape,dtype=bool)
     for g in ggi:
         #print(g)
         if g not in unique_ggi:
             unique_ggi.append(g)
+            tempmatch[g[0]][g[1]] = True
             #print("\t",unique_ggi)
     print(unique_ggi)
     ugnsteps = len(unique_ggi)
+    #print(tempmatch)
     print("COUNTING THE NSTEPS: ",ugnsteps)
     all_nsteps.append(ugnsteps)
 print(all_nsteps)
+
+#exit()
 
 sorted = np.sort(all_nsteps)
 
@@ -217,58 +214,5 @@ for n in sorted[-3:]:
     print(n,tot)
 
 print(f"tot: {tot}")
-'''
-def walk(i,j,grid,nsteps=0,openpaths=[True,True,True,True],traversed=[]):
-    # openpaths = [right,left,up,down]
-    height,width = grid.shape
-    print("In walk!")
-    print(i,j,nsteps,height,width)
-    print()
-
-    istep = i
-    jstep = j
-
-    for idx,path in enumerate(openpaths):
-        if not path:
-            continue 
-
-        if idx==0:
-            istep += 1
-        elif idx==1:
-            istep -= 1
-        elif idx==2:
-            jstep -= 1
-        elif idx==3:
-            jstep += 1
-
-        print(f"\nidx: {idx}\tistep: {istep}\tjstep: {jstep}")
-        if istep<0 or istep==width-1 or jstep<0 or jstep==height-1:
-            print("A")
-            openpaths[idx] = False
-            nsteps = walk(i,j,grid,nsteps=nsteps,openpaths=openpaths,traversed=traversed)
-
-        print(f"idx: {idx}\tistep: {istep}\tjstep: {jstep}\tgrid: {grid[istep][jstep]}")
-        if grid[istep][jstep] is False:
-            print("B")
-
-            nsteps += 1
-
-            traversed.append([istep,jstep])
-
-            nsteps = walk(istep,jstep,grid,nsteps=nsteps,openpaths=openpaths,traversed=traversed)
-        else:
-            print("C")
-            openpaths[idx] = False
-
-    return nsteps
-
-nsteps = 0
-openpaths=[True,True,True,True]
-traversed = []
-x = walk(0,1,nines,nsteps,openpaths=openpaths,traversed=traversed)
-print(x)
-'''
-
-
-    
+#'''
 
