@@ -23,7 +23,8 @@ import pandas as pd
 def write_and_send_email(rec_email, title, name, body_text):
 
     message = MIMEMultipart("alternative")
-    message["Subject"] = "CMS Summer Internship Program for Underrepresented Minority Undergraduate Students"
+    #message["Subject"] = "Summer 2022 research opportunity for underrepresented minority undergraduate in particle physics" 
+    message["Subject"] = "CMS MREFC 2022 Summer Internship Program for Underrepresented Minority Undergraduate Students"
     message["From"] = sender_email
     #message["To"] = rec_email
     message["To"] = "matthew.bellis@gmail.com"
@@ -49,7 +50,7 @@ def write_and_send_email(rec_email, title, name, body_text):
 ################################################################################
 
 ################################################################################
-infilename = sys.argv[1]
+mailing_list_filename = sys.argv[1]
 bodytextfile = sys.argv[2]
 ################################################################################
 
@@ -62,6 +63,7 @@ receiver_email = "mbellis@siena.edu"
 port = 465
 #password = getpass.getpass("Your password: ")
 
+
 context = ssl.create_default_context()
 
 #'''
@@ -69,18 +71,24 @@ with smtplib.SMTP_SSL("smtp.gmail.com", port, context=context) as server:
     server.login(sender_email, password)
 #'''
 
-df = pd.read_csv(infilename)
+df = pd.read_csv(mailing_list_filename)
 df
+print(len(df))
+#exit()
 
 body_text = ""
 for line in open(bodytextfile,'r'):
     body_text += line
 
-print(body_text)
+#print(body_text)
 
-df = df[0:4]
+# FOR TESTING WITH JUST A FEW NAMES
+#df = df[0:4]
+#df = df[88:]
+df = df[-1:]
 
 ncontacts = len(df)
+print(f"Emailing {ncontacts} contacts")
 
 for i in range(ncontacts):
 
@@ -90,8 +98,9 @@ for i in range(ncontacts):
 
     print(rec_email,title,name)
 
-    #write_and_send_email(rec_email, title, name, body_text)
-    write_and_send_email("mbellis@siena.edu", title, name, body_text)
+    write_and_send_email(rec_email, title, name, body_text)
+    # FOR TESTING
+    #write_and_send_email("mbellis@siena.edu", title, name, body_text)
 
 
 

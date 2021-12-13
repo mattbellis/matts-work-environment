@@ -1,0 +1,96 @@
+We are very excited to announce that applications are open for the CMS MREFC
+2022 Summer Internship Program for Underrepresented Minority Undergraduate 
+Students!  We would like to ask you to encourage representative undergraduate 
+students at your institution who are pursuing their degrees in STEM fields such
+as Physics, Astronomy, Engineering, or related fields to apply. The deadline to
+apply is Jan. 31, 2022.
+
+The Compact Muon Solenoid Upgrade (CMS) Major Research Equipment and Facility
+Construction (MREFC) Project is a unique and exciting project to upgrade the
+CMS detector at the Large Hadron Collider (LHC) at CERN. The LHC is the
+largest and most powerful particle accelerator in the world. Upgrades will
+enable the CMS detector to work at higher intensity and extend our reach in
+the search for New Physics.
+
+We are reaching out to you as a faculty member at a school who educates a
+higher proportion of non-White students than many other institutions. Every 
+community benefits from a diversity of lived experiences and high-energy 
+physics is no different. Our collaboration created this internship specifically
+to solicit students who might not otherwise have considered working on this 
+type of science.
+
+These are paid positions and the funds come from an umbrella grant from the NSF, 
+specifically for upgrades to the CMS experiment. Hosting institutions have been
+selected specifically because of their commitment to providing a supportive and
+equitable environment. We plan on providing onboarding materials in advance of 
+the summer work for any students or local mentors who might be interested. 
+
+If you have any questions, please feel free to contact me (Matt Bellis, 
+mbellis@siena.edu) or Brenda Smith (bkc4@cornell.edu).
+
+Applications can be submitted here
+
+https://academicjobsonline.org/ajo/jobs/20595
+
+And more details can be found here. 
+
+https://www.classe.cornell.edu/Research/CMS/Phase2/SummerIntershipProgram.html
+
+Thank you for considering sharing this with your students. And have a great
+winter break!
+
+Matt Bellis for the CMS MREFC-EPO team
+Julie Hogan, Sal Rappoccio, Anders Ryd, and Brenda Smith
+
+
+Internships:
+
+Project leaders seek to hire several undergraduate students to work on various
+development teams during summer 2022. Internship positions are full-time (39
+hrs/wk) and involve hands-on development of hardware components
+performed in an on-campus laboratory. 
+
+The summer 2022 projects include:
+
+* Boston University (Boston, MA) - readout electronics for the pixel detector
+and track trigger,
+* Purdue University (West Lafayette, IN) - pixel detector mechanics and
+module construction
+* University of Kansas (Lawrence, KA) - readout electronics for pixel
+detector.
+
+Applicants may express interest in internships at more than one
+institution. Length of internships are 8 to 10 weeks depending on the
+institution. The program will pay the standard undergraduate summer intern
+rate at each institution, housing will be provided, and relocation costs
+will be covered or reimbursed.
+
+Training and mentorship will be provided. Interns will be matched with a
+faculty mentor and will be part of a peer cohort of summer students (from
+various programs in physics). Interns will also participate in the
+larger CMS undergraduate student cohort remote activities.
+
+Eligibility:
+
+* No prior experience in this area of specialty is required. Training and
+mentorship will be provided.
+* Qualifications include a C or higher (2.0 / 4.0 GPA) in introductory
+mechanics and electricity and magnetism, an interest in high-energy
+physics, and a willingness to learn new skills.
+* Many institutions require all employees to be fully vaccinated against
+COVID-19, or to have obtained a university-approved medical or religious
+exemption. For additional information on this requirement, visit:
+https://hr.cornell.edu/covid/university-response/vaccination
+* If accepted, you will have to show proof of health insurance coverage 
+for the period of the Internship Program. 
+* The Internship program is open only to US citizens and permanent
+residents. If accepted, you will be required to show proof of citizenship
+or permanent residency.
+* This program is intended primarily for sophomore and junior students in
+science and engineering. In exceptional cases first year students could
+have enough familiarity with physics, engineering, or computer science to
+profit from their research experience.
+* Students who have not yet enrolled as undergraduates are not eligible. In
+some cases seniors may be considered, depending on employment rules at the
+hosting institutions (in some cases graduating seniors cannot be appointed
+in undergraduate internship positions).

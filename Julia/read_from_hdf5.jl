@@ -20,12 +20,11 @@ end
 
 e = jet["e"]
 
-h = histogram(e,bins=25)
-
-savefig("julia_plot_output.png")
-
+h = histogram(e,bins=25,show=true)
 
 gui()
 
+
+savefig("julia_plot_output.png")
 
 
