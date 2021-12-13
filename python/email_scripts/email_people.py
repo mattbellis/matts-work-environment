@@ -61,8 +61,6 @@ sender_email = "matthew.bellis@gmail.com"
 receiver_email = "mbellis@siena.edu"
 port = 465
 #password = getpass.getpass("Your password: ")
-#password = "aenima77"
-password = "jpddntefrrudoybh"
 
 context = ssl.create_default_context()
 
