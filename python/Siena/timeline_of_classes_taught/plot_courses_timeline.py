@@ -55,18 +55,27 @@ def sort_courses(courses):
 ################################################################################
 def term2date(term):
 
-    year = 2000 + int(term[1:])
+    # By hand
+    #year = 2000 + int(term[1:])
+    # Read in
+    year = int(term.split()[-1])
     monthstart = 1
     monthend = 5
     daystart = 15
     dayend = 1
-    if term[0] == 'F':
+    # By hand
+    #if term[0] == 'F':
+    # Read in
+    if term.find('Fall')>=0:
         monthstart = 9
         monthend = 12
         daystart = 1
-        dayend = 1
-    day = 15
-    year = 2000 + int(term[1:])
+        dayend = 15
+    #day = 15
+    # By hand
+    #year = 2000 + int(term[1:])
+    # Read in
+    year = int(term.split()[-1])
     start = dt.datetime(year, monthstart, daystart, 0, 0)
     end = dt.datetime(year, monthend, dayend, 0, 0)
 
@@ -119,9 +128,36 @@ courses.append({'id':'CSIS 200', 'name':'Software Tools for Physicists', 'type':
 
 print(courses)
 
+################################################################################
+# Reading in from what we download from Banner
+################################################################################
+df = pd.read_html(sys.argv[1])
+df = df[-1]
+#df['name'] = df['Course Title']
+#df['id'] = df['Course']
+#df['term'] = df['Associated Term']
+courses = []
+nc = len(df)
+for i in range(nc):
+    course = {}
+    course['id'] = df['Course'].iloc[i]
+    course['name'] = df['Course Title'].iloc[i]
+    course['term'] = df['Associated Term'].iloc[i]
+    course['nstudents'] = 18
+    if df['Course Title'].iloc[i].find('Lab')>=0:
+        course['type'] = 1
+    elif df['Course'].iloc[i].find('499')>=0:
+        course['type'] = 2
+    else:
+        course['type'] = 0
+
+    courses.append(course)
+
+
 #############################################
 # Pandas stuff
 #############################################
+'''
 print("Building pandas stuf........")
 df_dict = {}
 for key in courses[0].keys():
@@ -138,6 +174,7 @@ df = pd.DataFrame.from_dict(df_dict)
 
 plt.figure()
 sns.catplot(data=df, y='nstudents',x='term',hue='id',kind='bar')
+'''
 #############################################
 
 #plt.show()
@@ -162,6 +199,8 @@ for i,course in enumerate(courses):
         fc = 'blue'
         if instance['type']==1:
             fc = 'orange'
+        elif instance['type']==2:
+            fc = 'red'
         plt.broken_barh(xranges, yrange, facecolors=fc)
 
 #course_names.reverse()
@@ -171,8 +210,12 @@ ax.set_yticks(y_pos)
 ax.set_yticklabels(course_names)
 plt.grid(axis='y')
 
+plt.xlim(dt.datetime(2012,1,1,1,1))
+
 ax.xaxis_date()
 plt.tight_layout()
+
+########################################################
 
 
 plt.show()
