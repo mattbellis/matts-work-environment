@@ -29,18 +29,29 @@ filament_name = atab['filament']
 ################################################################################
 def draw_filaments(filament_ra, filament_dec, filament_name, ax=None):
     names = np.unique(filament_name)
+    # names is just 1 entry of each name in the filament_name array
+    print(names)
 
     if ax is None:
         plt.figure(figsize=(10,10))
         ax = plt.gca()
 
-# Loop over the names and pull out the ra and dec for *just that filament*
-# Plot each one!
+    # Loop over the names and pull out the ra and dec for *just that filament*
+    # Plot each one!
     for name in names:
+
+        # This mask will select Trues and Falses
+        # and the Trues are where the filament_name equals the
+        # name that we are looping over at that time.
         mask = filament_name == name
-        f_ra = filament_ra[mask]
+        print(mask)
+
+        # ra and dec for just one filament name
+        f_ra =  filament_ra[mask]
         f_dec = filament_dec[mask]
+
         plt.plot(f_ra, f_dec, 'o', label=name)
+
     plt.legend(fontsize=8)
     plt.tight_layout()
     plt.savefig("filaments.png")
@@ -51,7 +62,7 @@ def draw_filaments(filament_ra, filament_dec, filament_name, ax=None):
 ################################################################################
 #Function is supposed to take in ra and dec values and output the closest filament to those coordinates
 ################################################################################
-def galaxy_finder(ra,dec,filament_ra, filament_dec, filament_name):
+def galaxy_finder(ra,dec, filament_ra, filament_dec, filament_name):
    
    # Initialize this with some massive value
    closest_distance = 1e20
