@@ -68,7 +68,7 @@ plt.tight_layout()
 
 plt.legend(loc='upper left',fontsize=24)
 
-fig.savefig('dept_plot_2021.png')
+fig.savefig('dept_plot_2022.png')
 
 
 '''

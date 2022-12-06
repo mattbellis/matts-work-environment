@@ -1,9 +1,9 @@
 We are very excited to announce that applications are open for the CMS MREFC
-2022 Summer Internship Program for Underrepresented Minority Undergraduate 
+2023 Summer Internship Program for Underrepresented Minority Undergraduate 
 Students!  We would like to ask you to encourage representative undergraduate 
 students at your institution who are pursuing their degrees in STEM fields such
 as Physics, Astronomy, Engineering, or related fields to apply. The deadline to
-apply is Jan. 31, 2022.
+apply is Jan. 31, 2023.
 
 The Compact Muon Solenoid Upgrade (CMS) Major Research Equipment and Facility
 Construction (MREFC) Project is a unique and exciting project to upgrade the
@@ -30,7 +30,7 @@ mbellis@siena.edu) or Brenda Smith (bkc4@cornell.edu).
 
 Applications can be submitted here
 
-https://academicjobsonline.org/ajo/jobs/20595
+https://academicjobsonline.org/ajo/jobs/23602
 
 And more details can be found here. 
 
@@ -45,52 +45,28 @@ Julie Hogan, Sal Rappoccio, Anders Ryd, and Brenda Smith
 
 Internships:
 
-Project leaders seek to hire several undergraduate students to work on various
-development teams during summer 2022. Internship positions are full-time (39
-hrs/wk) and involve hands-on development of hardware components
-performed in an on-campus laboratory. 
+Project leaders seek to hire several undergraduate students to work on various development teams throughout the summer. 
 
-The summer 2022 projects include:
+Internship positions are full-time (39 hrs/wk) and involve hands-on development of hardware components performed in an on-campus laboratory. 
 
-* Boston University (Boston, MA) - readout electronics for the pixel detector
-and track trigger,
-* Purdue University (West Lafayette, IN) - pixel detector mechanics and
-module construction
-* University of Kansas (Lawrence, KA) - readout electronics for pixel
-detector.
+The prospective summer 2023 projects include (final locations subject to change):
+* Purdue University (West Lafayette, IN) - pixel detector mechanics and module construction,
+* Rice University (Houston, TX) - pixel detector electronics,
+* Texas A&M University (Columbus, TX), project tbd,
+* The Ohio State University (Columbus, OH) - Students will participate in testing silicon pixel detector modules that are being produced for the CMS TFPX detector being constructed for the HL-LHC. Student will help develop, implement, and carry out debugging, characterization, and calibration of these modules.
+* University of California Los Angeles (Los Angeles, CA), project tbd, and
+* University of Kansas (Lawrence, KA) - Students will help to make and test high-speed micro-twisted pair electronics cables as well as study the readout signals and how they are transported from the readout chips to the optical fibers.
 
-Applicants may express interest in internships at more than one
-institution. Length of internships are 8 to 10 weeks depending on the
-institution. The program will pay the standard undergraduate summer intern
-rate at each institution, housing will be provided, and relocation costs
-will be covered or reimbursed.
+Applicants may express interest in internships at more than one institution. Length of internships are 8 to 10 weeks depending on the institution. The program will pay the standard undergraduate summer intern rate at each institution, housing will be provided, and relocation costs will be covered or reimbursed. Meal plans are not provided, but there are dining options on campus for purchase.
 
-Training and mentorship will be provided. Interns will be matched with a
-faculty mentor and will be part of a peer cohort of summer students (from
-various programs in physics). Interns will also participate in the
-larger CMS undergraduate student cohort remote activities.
+Training and mentorship will be provided. Interns will be matched with a faculty mentor and will be part of a peer cohort of summer students (from various programs in physics). Interns will also participate in the larger CMS undergraduate student cohort remote activities.
+
 
 Eligibility:
+* No prior experience in this area of specialty is required. Training and mentorship will be provided.
+* Qualifications include a C or higher (2.0 / 4.0 GPA) in introductory mechanics and electricity and magnetism, an interest in high-energy physics, and a willingness to learn new skills.
+* Many institutions require all employees to be fully vaccinated against COVID-19, or to have obtained a university-approved medical or religious exemption. For additional information on this requirement, visit: https://hr.cornell.edu/covid/university-response/vaccination
+* The Internship program is open only to US citizens and permanent residents. If accepted, you will be required to show proof of citizenship or permanent residency.
+* This program is intended primarily for sophomore and junior students in science and engineering. In exceptional cases first year students could have enough familiarity with physics, engineering, or computer science to profit from their research experience.
+* Students who have not yet enrolled as undergraduates are not eligible. In some cases seniors may be considered, depending on employment rules at the hosting institutions (in some cases graduating seniors cannot be appointed in undergraduate internship positions).
 
-* No prior experience in this area of specialty is required. Training and
-mentorship will be provided.
-* Qualifications include a C or higher (2.0 / 4.0 GPA) in introductory
-mechanics and electricity and magnetism, an interest in high-energy
-physics, and a willingness to learn new skills.
-* Many institutions require all employees to be fully vaccinated against
-COVID-19, or to have obtained a university-approved medical or religious
-exemption. For additional information on this requirement, visit:
-https://hr.cornell.edu/covid/university-response/vaccination
-* If accepted, you will have to show proof of health insurance coverage 
-for the period of the Internship Program. 
-* The Internship program is open only to US citizens and permanent
-residents. If accepted, you will be required to show proof of citizenship
-or permanent residency.
-* This program is intended primarily for sophomore and junior students in
-science and engineering. In exceptional cases first year students could
-have enough familiarity with physics, engineering, or computer science to
-profit from their research experience.
-* Students who have not yet enrolled as undergraduates are not eligible. In
-some cases seniors may be considered, depending on employment rules at the
-hosting institutions (in some cases graduating seniors cannot be appointed
-in undergraduate internship positions).
