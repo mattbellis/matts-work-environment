@@ -34,10 +34,16 @@ def traverse(node, nodenames_traversed=[], total=0):
     if type(node.name) == str: # Directory
         nodename = node.name
         print("open " + nodename + " -> " + nodename + " -> ")
-        if nodename not in nodenames_traversed:
+
+        fullnodename = ""
+        for n in node.path:
+            fullnodename += n.name + "/"
+
+        if fullnodename not in nodenames_traversed:
             print("RESETTING TOTAL!")
             total = 0
-            nodenames_traversed.append(nodename)
+            nodenames_traversed.append(fullnodename)
+
         dirs = []
         files = []
         for child in node.children:
@@ -45,20 +51,18 @@ def traverse(node, nodenames_traversed=[], total=0):
                 dirs.append(child)
             else:
                 files.append(child)
-        print("Collection of children and files")
-        print(dirs)
-        print(files)
-        #for child in node.children:
+        #print("Collection of children and files")
+        #print(dirs)
+        #print(files)
+
         for child in dirs:
             print("child: ", child)
             return_value,nodenames_traversed = traverse(child,nodenames_traversed=nodenames_traversed, total=total)
-            print(nodenames_traversed)
-            print(f"return_value: {return_value}")
-            if type(return_value) == int:
-                total += return_value
+            total += return_value
         for child in files:
             print("child: ", child)
             total += int(child.name[1])
+
         print("close " + nodename + " ->     size: " + str(total))
         if total <= 100000:
             print("THIS ONE close " + nodename + " ->     size: " + str(total))
@@ -70,10 +74,6 @@ def traverse(node, nodenames_traversed=[], total=0):
 
 
 level = 0
-is_command = True
-is_cd = True
-is_ls = True
-is_file = True
 
 fs = []
 
@@ -91,14 +91,9 @@ for line in infile:
     icount += 1
     print(f"LINE: {icount}", line)
     if line.find('$')>=0:
-        is_command = True
-        is_file = False
-        if line.find('ls')>=0:
-            is_ls = True
-            is_cd = False
-        elif line.find('cd')>=0:
-            is_ls = False
-            is_cd = True
+        if line[2:4] == 'ls':
+            1
+        elif line[2:4] == 'cd':
             if line.find('/')>=0:
                 level = 0
                 current_node = root
@@ -136,13 +131,14 @@ for line in infile:
             name = line.split()[1]
             x = Node([name, size], parent=current_node)
 
-    for pre, fill, node in RenderTree(root):
-        print("%s%s" % (pre, node.name))
+    #for pre, fill, node in RenderTree(root):
+        #print("%s%s" % (pre, node.name))
+    #print(RenderTree(root, style=AsciiStyle()))
 
     print(f"LEVEL LINE: {level} ",line)
 
-for pre, fill, node in RenderTree(root):
-    print("%s%s" % (pre, node.name))
+#for pre, fill, node in RenderTree(root):
+#    print("%s%s" % (pre, node.name))
 print()
 print()
 print(RenderTree(root, style=AsciiStyle()))
@@ -161,3 +157,12 @@ if test is not None:
     print(total_size)
     print(nodenames_traversed)
 #'''
+
+
+# Part B
+rootsize =  50216456
+totaldisk = 70000000
+
+need_to_free = 30000000 - (totaldisk - rootsize)
+print(f"Need to free: {need_to_free}")
+# 10216456

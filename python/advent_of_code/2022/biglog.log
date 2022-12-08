@@ -1,0 +1,8250 @@
+STARTING: 
+root
+Node('/root')
+LINE: 1 $ cd /
+
+At the top!
+LEVEL LINE: 0  $ cd /
+
+Node('/root')
+LINE: 2 $ ls
+
+LEVEL LINE: 0  $ ls
+
+Node('/root')
+LINE: 3 dir bqm
+
+LEVEL LINE: 0  dir bqm
+
+Node('/root')
+LINE: 4 dir ctztn
+
+LEVEL LINE: 0  dir ctztn
+
+Node('/root')
+LINE: 5 dir dbclg
+
+LEVEL LINE: 0  dir dbclg
+
+Node('/root')
+LINE: 6 dir fhndmnt
+
+LEVEL LINE: 0  dir fhndmnt
+
+Node('/root')
+LINE: 7 dir gczqbh
+
+LEVEL LINE: 0  dir gczqbh
+
+Node('/root')
+LINE: 8 276177 hvbf.lvm
+
+276177 hvbf.lvm
+
+LEVEL LINE: 0  276177 hvbf.lvm
+
+Node('/root')
+LINE: 9 dir lnsgbqp
+
+LEVEL LINE: 0  dir lnsgbqp
+
+Node('/root')
+LINE: 10 dir pblb
+
+LEVEL LINE: 0  dir pblb
+
+Node('/root')
+LINE: 11 dir pwfs
+
+LEVEL LINE: 0  dir pwfs
+
+Node('/root')
+LINE: 12 209719 rtv.cjj
+
+209719 rtv.cjj
+
+LEVEL LINE: 0  209719 rtv.cjj
+
+Node('/root')
+LINE: 13 192236 vmtnnfv.mdq
+
+192236 vmtnnfv.mdq
+
+LEVEL LINE: 0  192236 vmtnnfv.mdq
+
+Node('/root')
+LINE: 14 dir vmvpf
+
+LEVEL LINE: 0  dir vmvpf
+
+Node('/root')
+LINE: 15 dir wjgh
+
+LEVEL LINE: 0  dir wjgh
+
+Node('/root')
+LINE: 16 dir wjqsq
+
+LEVEL LINE: 0  dir wjqsq
+
+Node('/root')
+LINE: 17 $ cd bqm
+
+Going down from root to bqm
+name:  bqm
+LEVEL LINE: 1  $ cd bqm
+
+Node('/root/bqm')
+LINE: 18 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/bqm')
+LINE: 19 133711 vqv
+
+133711 vqv
+
+LEVEL LINE: 1  133711 vqv
+
+Node('/root/bqm')
+LINE: 20 263237 wwlv.vgv
+
+263237 wwlv.vgv
+
+LEVEL LINE: 1  263237 wwlv.vgv
+
+Node('/root/bqm')
+LINE: 21 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  bqm
+Parent name:  root
+Going up from bqm to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 22 $ cd ctztn
+
+Going down from root to ctztn
+name:  ctztn
+LEVEL LINE: 1  $ cd ctztn
+
+Node('/root/ctztn')
+LINE: 23 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/ctztn')
+LINE: 24 dir gpgbfzbs
+
+LEVEL LINE: 1  dir gpgbfzbs
+
+Node('/root/ctztn')
+LINE: 25 dir hfvqpt
+
+LEVEL LINE: 1  dir hfvqpt
+
+Node('/root/ctztn')
+LINE: 26 55466 jshtffs
+
+55466 jshtffs
+
+LEVEL LINE: 1  55466 jshtffs
+
+Node('/root/ctztn')
+LINE: 27 dir rgzfgz
+
+LEVEL LINE: 1  dir rgzfgz
+
+Node('/root/ctztn')
+LINE: 28 115519 wdzh.szq
+
+115519 wdzh.szq
+
+LEVEL LINE: 1  115519 wdzh.szq
+
+Node('/root/ctztn')
+LINE: 29 dir wmfvclz
+
+LEVEL LINE: 1  dir wmfvclz
+
+Node('/root/ctztn')
+LINE: 30 221554 zgwwgps.gfn
+
+221554 zgwwgps.gfn
+
+LEVEL LINE: 1  221554 zgwwgps.gfn
+
+Node('/root/ctztn')
+LINE: 31 $ cd gpgbfzbs
+
+Going down from ctztn to gpgbfzbs
+name:  gpgbfzbs
+LEVEL LINE: 2  $ cd gpgbfzbs
+
+Node('/root/ctztn/gpgbfzbs')
+LINE: 32 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/ctztn/gpgbfzbs')
+LINE: 33 354710 tlvmh.ghp
+
+354710 tlvmh.ghp
+
+LEVEL LINE: 2  354710 tlvmh.ghp
+
+Node('/root/ctztn/gpgbfzbs')
+LINE: 34 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gpgbfzbs
+Parent name:  ctztn
+Going up from gpgbfzbs to ctztn
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/ctztn')
+LINE: 35 $ cd hfvqpt
+
+Going down from ctztn to hfvqpt
+name:  hfvqpt
+LEVEL LINE: 2  $ cd hfvqpt
+
+Node('/root/ctztn/hfvqpt')
+LINE: 36 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/ctztn/hfvqpt')
+LINE: 37 dir cggfgt
+
+LEVEL LINE: 2  dir cggfgt
+
+Node('/root/ctztn/hfvqpt')
+LINE: 38 dir jshtffs
+
+LEVEL LINE: 2  dir jshtffs
+
+Node('/root/ctztn/hfvqpt')
+LINE: 39 175230 nnn.chs
+
+175230 nnn.chs
+
+LEVEL LINE: 2  175230 nnn.chs
+
+Node('/root/ctztn/hfvqpt')
+LINE: 40 13406 plqjpqss
+
+13406 plqjpqss
+
+LEVEL LINE: 2  13406 plqjpqss
+
+Node('/root/ctztn/hfvqpt')
+LINE: 41 dir pnwcq
+
+LEVEL LINE: 2  dir pnwcq
+
+Node('/root/ctztn/hfvqpt')
+LINE: 42 dir str
+
+LEVEL LINE: 2  dir str
+
+Node('/root/ctztn/hfvqpt')
+LINE: 43 $ cd cggfgt
+
+Going down from hfvqpt to cggfgt
+name:  cggfgt
+LEVEL LINE: 3  $ cd cggfgt
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 44 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 45 109434 fhww
+
+109434 fhww
+
+LEVEL LINE: 3  109434 fhww
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 46 dir glnrg
+
+LEVEL LINE: 3  dir glnrg
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 47 dir mptpfvlh
+
+LEVEL LINE: 3  dir mptpfvlh
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 48 305315 nlhfgpr.vnv
+
+305315 nlhfgpr.vnv
+
+LEVEL LINE: 3  305315 nlhfgpr.vnv
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 49 297519 tlvmh.ghp
+
+297519 tlvmh.ghp
+
+LEVEL LINE: 3  297519 tlvmh.ghp
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 50 dir vmvpf
+
+LEVEL LINE: 3  dir vmvpf
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 51 $ cd glnrg
+
+Going down from cggfgt to glnrg
+name:  glnrg
+LEVEL LINE: 4  $ cd glnrg
+
+Node('/root/ctztn/hfvqpt/cggfgt/glnrg')
+LINE: 52 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/glnrg')
+LINE: 53 345026 qzfpwv
+
+345026 qzfpwv
+
+LEVEL LINE: 4  345026 qzfpwv
+
+Node('/root/ctztn/hfvqpt/cggfgt/glnrg')
+LINE: 54 196361 rgzfgz
+
+196361 rgzfgz
+
+LEVEL LINE: 4  196361 rgzfgz
+
+Node('/root/ctztn/hfvqpt/cggfgt/glnrg')
+LINE: 55 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  glnrg
+Parent name:  cggfgt
+Going up from glnrg to cggfgt
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 56 $ cd mptpfvlh
+
+Going down from cggfgt to mptpfvlh
+name:  mptpfvlh
+LEVEL LINE: 4  $ cd mptpfvlh
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh')
+LINE: 57 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh')
+LINE: 58 dir lsbjp
+
+LEVEL LINE: 4  dir lsbjp
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh')
+LINE: 59 121174 vlbbbgnn
+
+121174 vlbbbgnn
+
+LEVEL LINE: 4  121174 vlbbbgnn
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh')
+LINE: 60 $ cd lsbjp
+
+Going down from mptpfvlh to lsbjp
+name:  lsbjp
+LEVEL LINE: 5  $ cd lsbjp
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+LINE: 61 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+LINE: 62 dir jqclpq
+
+LEVEL LINE: 5  dir jqclpq
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+LINE: 63 359939 nlhfgpr
+
+359939 nlhfgpr
+
+LEVEL LINE: 5  359939 nlhfgpr
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+LINE: 64 dir whp
+
+LEVEL LINE: 5  dir whp
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+LINE: 65 $ cd jqclpq
+
+Going down from lsbjp to jqclpq
+name:  jqclpq
+LEVEL LINE: 6  $ cd jqclpq
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/jqclpq')
+LINE: 66 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/jqclpq')
+LINE: 67 189319 mnhnclpt.qsv
+
+189319 mnhnclpt.qsv
+
+LEVEL LINE: 6  189319 mnhnclpt.qsv
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/jqclpq')
+LINE: 68 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jqclpq
+Parent name:  lsbjp
+Going up from jqclpq to lsbjp
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+LINE: 69 $ cd whp
+
+Going down from lsbjp to whp
+name:  whp
+LEVEL LINE: 6  $ cd whp
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp')
+LINE: 70 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp')
+LINE: 71 dir lgdlztb
+
+LEVEL LINE: 6  dir lgdlztb
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp')
+LINE: 72 $ cd lgdlztb
+
+Going down from whp to lgdlztb
+name:  lgdlztb
+LEVEL LINE: 7  $ cd lgdlztb
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp/lgdlztb')
+LINE: 73 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp/lgdlztb')
+LINE: 74 94150 wdzh.szq
+
+94150 wdzh.szq
+
+LEVEL LINE: 7  94150 wdzh.szq
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp/lgdlztb')
+LINE: 75 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lgdlztb
+Parent name:  whp
+Going up from lgdlztb to whp
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp')
+LINE: 76 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  whp
+Parent name:  lsbjp
+Going up from whp to lsbjp
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+LINE: 77 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lsbjp
+Parent name:  mptpfvlh
+Going up from lsbjp to mptpfvlh
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh')
+LINE: 78 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  mptpfvlh
+Parent name:  cggfgt
+Going up from mptpfvlh to cggfgt
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 79 $ cd vmvpf
+
+Going down from cggfgt to vmvpf
+name:  vmvpf
+LEVEL LINE: 4  $ cd vmvpf
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+LINE: 80 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+LINE: 81 dir pfzd
+
+LEVEL LINE: 4  dir pfzd
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+LINE: 82 66706 rgzfgz
+
+66706 rgzfgz
+
+LEVEL LINE: 4  66706 rgzfgz
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+LINE: 83 dir zrc
+
+LEVEL LINE: 4  dir zrc
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+LINE: 84 $ cd pfzd
+
+Going down from vmvpf to pfzd
+name:  pfzd
+LEVEL LINE: 5  $ cd pfzd
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+LINE: 85 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+LINE: 86 345595 bpjpm
+
+345595 bpjpm
+
+LEVEL LINE: 5  345595 bpjpm
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+LINE: 87 dir ljtdcgt
+
+LEVEL LINE: 5  dir ljtdcgt
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+LINE: 88 dir plltpvgv
+
+LEVEL LINE: 5  dir plltpvgv
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+LINE: 89 $ cd ljtdcgt
+
+Going down from pfzd to ljtdcgt
+name:  ljtdcgt
+LEVEL LINE: 6  $ cd ljtdcgt
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/ljtdcgt')
+LINE: 90 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/ljtdcgt')
+LINE: 91 134178 nlhfgpr
+
+134178 nlhfgpr
+
+LEVEL LINE: 6  134178 nlhfgpr
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/ljtdcgt')
+LINE: 92 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ljtdcgt
+Parent name:  pfzd
+Going up from ljtdcgt to pfzd
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+LINE: 93 $ cd plltpvgv
+
+Going down from pfzd to plltpvgv
+name:  plltpvgv
+LEVEL LINE: 6  $ cd plltpvgv
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/plltpvgv')
+LINE: 94 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/plltpvgv')
+LINE: 95 355576 rqj
+
+355576 rqj
+
+LEVEL LINE: 6  355576 rqj
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/plltpvgv')
+LINE: 96 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  plltpvgv
+Parent name:  pfzd
+Going up from plltpvgv to pfzd
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+LINE: 97 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  pfzd
+Parent name:  vmvpf
+Going up from pfzd to vmvpf
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+LINE: 98 $ cd zrc
+
+Going down from vmvpf to zrc
+name:  zrc
+LEVEL LINE: 5  $ cd zrc
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/zrc')
+LINE: 99 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/zrc')
+LINE: 100 45363 vqv
+
+45363 vqv
+
+LEVEL LINE: 5  45363 vqv
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/zrc')
+LINE: 101 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  zrc
+Parent name:  vmvpf
+Going up from zrc to vmvpf
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+LINE: 102 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmvpf
+Parent name:  cggfgt
+Going up from vmvpf to cggfgt
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/cggfgt')
+LINE: 103 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  cggfgt
+Parent name:  hfvqpt
+Going up from cggfgt to hfvqpt
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/ctztn/hfvqpt')
+LINE: 104 $ cd jshtffs
+
+Going down from hfvqpt to jshtffs
+name:  jshtffs
+LEVEL LINE: 3  $ cd jshtffs
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 105 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 106 dir bwbwldd
+
+LEVEL LINE: 3  dir bwbwldd
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 107 124375 fwvcbcpz.lvr
+
+124375 fwvcbcpz.lvr
+
+LEVEL LINE: 3  124375 fwvcbcpz.lvr
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 108 dir jctctjj
+
+LEVEL LINE: 3  dir jctctjj
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 109 dir jshtffs
+
+LEVEL LINE: 3  dir jshtffs
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 110 dir sngchq
+
+LEVEL LINE: 3  dir sngchq
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 111 $ cd bwbwldd
+
+Going down from jshtffs to bwbwldd
+name:  bwbwldd
+LEVEL LINE: 4  $ cd bwbwldd
+
+Node('/root/ctztn/hfvqpt/jshtffs/bwbwldd')
+LINE: 112 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/bwbwldd')
+LINE: 113 144330 vthsfg
+
+144330 vthsfg
+
+LEVEL LINE: 4  144330 vthsfg
+
+Node('/root/ctztn/hfvqpt/jshtffs/bwbwldd')
+LINE: 114 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  bwbwldd
+Parent name:  jshtffs
+Going up from bwbwldd to jshtffs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 115 $ cd jctctjj
+
+Going down from jshtffs to jctctjj
+name:  jctctjj
+LEVEL LINE: 4  $ cd jctctjj
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+LINE: 116 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+LINE: 117 dir flhrmt
+
+LEVEL LINE: 4  dir flhrmt
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+LINE: 118 dir rgzfgz
+
+LEVEL LINE: 4  dir rgzfgz
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+LINE: 119 dir vmtnnfv
+
+LEVEL LINE: 4  dir vmtnnfv
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+LINE: 120 $ cd flhrmt
+
+Going down from jctctjj to flhrmt
+name:  flhrmt
+LEVEL LINE: 5  $ cd flhrmt
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt')
+LINE: 121 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt')
+LINE: 122 132008 dgrt
+
+132008 dgrt
+
+LEVEL LINE: 5  132008 dgrt
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt')
+LINE: 123 263345 nlhfgpr.hss
+
+263345 nlhfgpr.hss
+
+LEVEL LINE: 5  263345 nlhfgpr.hss
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt')
+LINE: 124 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  flhrmt
+Parent name:  jctctjj
+Going up from flhrmt to jctctjj
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+LINE: 125 $ cd rgzfgz
+
+Going down from jctctjj to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 5  $ cd rgzfgz
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz')
+LINE: 126 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz')
+LINE: 127 214808 mcqlbzs.gwl
+
+214808 mcqlbzs.gwl
+
+LEVEL LINE: 5  214808 mcqlbzs.gwl
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz')
+LINE: 128 120157 nlhfgpr.hcs
+
+120157 nlhfgpr.hcs
+
+LEVEL LINE: 5  120157 nlhfgpr.hcs
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz')
+LINE: 129 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  jctctjj
+Going up from rgzfgz to jctctjj
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+LINE: 130 $ cd vmtnnfv
+
+Going down from jctctjj to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 5  $ cd vmtnnfv
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv')
+LINE: 131 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv')
+LINE: 132 dir rgzfgz
+
+LEVEL LINE: 5  dir rgzfgz
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv')
+LINE: 133 52978 vlbbbgnn
+
+52978 vlbbbgnn
+
+LEVEL LINE: 5  52978 vlbbbgnn
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv')
+LINE: 134 $ cd rgzfgz
+
+Going down from vmtnnfv to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 6  $ cd rgzfgz
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/rgzfgz')
+LINE: 135 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/rgzfgz')
+LINE: 136 177061 nnc
+
+177061 nnc
+
+LEVEL LINE: 6  177061 nnc
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/rgzfgz')
+LINE: 137 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  vmtnnfv
+Going up from rgzfgz to vmtnnfv
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv')
+LINE: 138 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  jctctjj
+Going up from vmtnnfv to jctctjj
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+LINE: 139 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jctctjj
+Parent name:  jshtffs
+Going up from jctctjj to jshtffs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 140 $ cd jshtffs
+
+Going down from jshtffs to jshtffs
+name:  jshtffs
+LEVEL LINE: 4  $ cd jshtffs
+
+Node('/root/ctztn/hfvqpt/jshtffs/jshtffs')
+LINE: 141 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/jshtffs')
+LINE: 142 157488 bbsfrg.bbr
+
+157488 bbsfrg.bbr
+
+LEVEL LINE: 4  157488 bbsfrg.bbr
+
+Node('/root/ctztn/hfvqpt/jshtffs/jshtffs')
+LINE: 143 166412 dhwbvggg
+
+166412 dhwbvggg
+
+LEVEL LINE: 4  166412 dhwbvggg
+
+Node('/root/ctztn/hfvqpt/jshtffs/jshtffs')
+LINE: 144 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  jshtffs
+Going up from jshtffs to jshtffs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 145 $ cd sngchq
+
+Going down from jshtffs to sngchq
+name:  sngchq
+LEVEL LINE: 4  $ cd sngchq
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq')
+LINE: 146 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq')
+LINE: 147 dir bvcsvv
+
+LEVEL LINE: 4  dir bvcsvv
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq')
+LINE: 148 dir hhd
+
+LEVEL LINE: 4  dir hhd
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq')
+LINE: 149 $ cd bvcsvv
+
+Going down from sngchq to bvcsvv
+name:  bvcsvv
+LEVEL LINE: 5  $ cd bvcsvv
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+LINE: 150 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+LINE: 151 dir gbmccf
+
+LEVEL LINE: 5  dir gbmccf
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+LINE: 152 5663 vmtnnfv
+
+5663 vmtnnfv
+
+LEVEL LINE: 5  5663 vmtnnfv
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+LINE: 153 278760 vqv
+
+278760 vqv
+
+LEVEL LINE: 5  278760 vqv
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+LINE: 154 323147 wjlm.cbw
+
+323147 wjlm.cbw
+
+LEVEL LINE: 5  323147 wjlm.cbw
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+LINE: 155 $ cd gbmccf
+
+Going down from bvcsvv to gbmccf
+name:  gbmccf
+LEVEL LINE: 6  $ cd gbmccf
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf')
+LINE: 156 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf')
+LINE: 157 dir fttnqbwp
+
+LEVEL LINE: 6  dir fttnqbwp
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf')
+LINE: 158 $ cd fttnqbwp
+
+Going down from gbmccf to fttnqbwp
+name:  fttnqbwp
+LEVEL LINE: 7  $ cd fttnqbwp
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp')
+LINE: 159 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp')
+LINE: 160 dir fhs
+
+LEVEL LINE: 7  dir fhs
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp')
+LINE: 161 $ cd fhs
+
+Going down from fttnqbwp to fhs
+name:  fhs
+LEVEL LINE: 8  $ cd fhs
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp/fhs')
+LINE: 162 $ ls
+
+LEVEL LINE: 8  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp/fhs')
+LINE: 163 137718 rgzfgz
+
+137718 rgzfgz
+
+LEVEL LINE: 8  137718 rgzfgz
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp/fhs')
+LINE: 164 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  fhs
+Parent name:  fttnqbwp
+Going up from fhs to fttnqbwp
+LEVEL LINE: 7  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp')
+LINE: 165 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  fttnqbwp
+Parent name:  gbmccf
+Going up from fttnqbwp to gbmccf
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf')
+LINE: 166 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gbmccf
+Parent name:  bvcsvv
+Going up from gbmccf to bvcsvv
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+LINE: 167 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  bvcsvv
+Parent name:  sngchq
+Going up from bvcsvv to sngchq
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq')
+LINE: 168 $ cd hhd
+
+Going down from sngchq to hhd
+name:  hhd
+LEVEL LINE: 5  $ cd hhd
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/hhd')
+LINE: 169 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/hhd')
+LINE: 170 350019 gphghhdh.rrb
+
+350019 gphghhdh.rrb
+
+LEVEL LINE: 5  350019 gphghhdh.rrb
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq/hhd')
+LINE: 171 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  hhd
+Parent name:  sngchq
+Going up from hhd to sngchq
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs/sngchq')
+LINE: 172 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  sngchq
+Parent name:  jshtffs
+Going up from sngchq to jshtffs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/jshtffs')
+LINE: 173 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  hfvqpt
+Going up from jshtffs to hfvqpt
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/ctztn/hfvqpt')
+LINE: 174 $ cd pnwcq
+
+Going down from hfvqpt to pnwcq
+name:  pnwcq
+LEVEL LINE: 3  $ cd pnwcq
+
+Node('/root/ctztn/hfvqpt/pnwcq')
+LINE: 175 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/ctztn/hfvqpt/pnwcq')
+LINE: 176 dir qtqqdd
+
+LEVEL LINE: 3  dir qtqqdd
+
+Node('/root/ctztn/hfvqpt/pnwcq')
+LINE: 177 $ cd qtqqdd
+
+Going down from pnwcq to qtqqdd
+name:  qtqqdd
+LEVEL LINE: 4  $ cd qtqqdd
+
+Node('/root/ctztn/hfvqpt/pnwcq/qtqqdd')
+LINE: 178 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/pnwcq/qtqqdd')
+LINE: 179 62319 tlvmh.ghp
+
+62319 tlvmh.ghp
+
+LEVEL LINE: 4  62319 tlvmh.ghp
+
+Node('/root/ctztn/hfvqpt/pnwcq/qtqqdd')
+LINE: 180 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  qtqqdd
+Parent name:  pnwcq
+Going up from qtqqdd to pnwcq
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/pnwcq')
+LINE: 181 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  pnwcq
+Parent name:  hfvqpt
+Going up from pnwcq to hfvqpt
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/ctztn/hfvqpt')
+LINE: 182 $ cd str
+
+Going down from hfvqpt to str
+name:  str
+LEVEL LINE: 3  $ cd str
+
+Node('/root/ctztn/hfvqpt/str')
+LINE: 183 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/ctztn/hfvqpt/str')
+LINE: 184 334780 tlvmh.ghp
+
+334780 tlvmh.ghp
+
+LEVEL LINE: 3  334780 tlvmh.ghp
+
+Node('/root/ctztn/hfvqpt/str')
+LINE: 185 dir vcdcgbtr
+
+LEVEL LINE: 3  dir vcdcgbtr
+
+Node('/root/ctztn/hfvqpt/str')
+LINE: 186 211478 vvh.tzh
+
+211478 vvh.tzh
+
+LEVEL LINE: 3  211478 vvh.tzh
+
+Node('/root/ctztn/hfvqpt/str')
+LINE: 187 dir zlsv
+
+LEVEL LINE: 3  dir zlsv
+
+Node('/root/ctztn/hfvqpt/str')
+LINE: 188 $ cd vcdcgbtr
+
+Going down from str to vcdcgbtr
+name:  vcdcgbtr
+LEVEL LINE: 4  $ cd vcdcgbtr
+
+Node('/root/ctztn/hfvqpt/str/vcdcgbtr')
+LINE: 189 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/str/vcdcgbtr')
+LINE: 190 276438 zhh.dsw
+
+276438 zhh.dsw
+
+LEVEL LINE: 4  276438 zhh.dsw
+
+Node('/root/ctztn/hfvqpt/str/vcdcgbtr')
+LINE: 191 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vcdcgbtr
+Parent name:  str
+Going up from vcdcgbtr to str
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/str')
+LINE: 192 $ cd zlsv
+
+Going down from str to zlsv
+name:  zlsv
+LEVEL LINE: 4  $ cd zlsv
+
+Node('/root/ctztn/hfvqpt/str/zlsv')
+LINE: 193 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/hfvqpt/str/zlsv')
+LINE: 194 315890 vmvpf.tcs
+
+315890 vmvpf.tcs
+
+LEVEL LINE: 4  315890 vmvpf.tcs
+
+Node('/root/ctztn/hfvqpt/str/zlsv')
+LINE: 195 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  zlsv
+Parent name:  str
+Going up from zlsv to str
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/hfvqpt/str')
+LINE: 196 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  str
+Parent name:  hfvqpt
+Going up from str to hfvqpt
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/ctztn/hfvqpt')
+LINE: 197 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  hfvqpt
+Parent name:  ctztn
+Going up from hfvqpt to ctztn
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/ctztn')
+LINE: 198 $ cd rgzfgz
+
+Going down from ctztn to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 2  $ cd rgzfgz
+
+Node('/root/ctztn/rgzfgz')
+LINE: 199 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/ctztn/rgzfgz')
+LINE: 200 dir qwzfs
+
+LEVEL LINE: 2  dir qwzfs
+
+Node('/root/ctztn/rgzfgz')
+LINE: 201 $ cd qwzfs
+
+Going down from rgzfgz to qwzfs
+name:  qwzfs
+LEVEL LINE: 3  $ cd qwzfs
+
+Node('/root/ctztn/rgzfgz/qwzfs')
+LINE: 202 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/ctztn/rgzfgz/qwzfs')
+LINE: 203 dir lzl
+
+LEVEL LINE: 3  dir lzl
+
+Node('/root/ctztn/rgzfgz/qwzfs')
+LINE: 204 $ cd lzl
+
+Going down from qwzfs to lzl
+name:  lzl
+LEVEL LINE: 4  $ cd lzl
+
+Node('/root/ctztn/rgzfgz/qwzfs/lzl')
+LINE: 205 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/ctztn/rgzfgz/qwzfs/lzl')
+LINE: 206 dir gpgccbc
+
+LEVEL LINE: 4  dir gpgccbc
+
+Node('/root/ctztn/rgzfgz/qwzfs/lzl')
+LINE: 207 259493 vmvpf.dgz
+
+259493 vmvpf.dgz
+
+LEVEL LINE: 4  259493 vmvpf.dgz
+
+Node('/root/ctztn/rgzfgz/qwzfs/lzl')
+LINE: 208 $ cd gpgccbc
+
+Going down from lzl to gpgccbc
+name:  gpgccbc
+LEVEL LINE: 5  $ cd gpgccbc
+
+Node('/root/ctztn/rgzfgz/qwzfs/lzl/gpgccbc')
+LINE: 209 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/ctztn/rgzfgz/qwzfs/lzl/gpgccbc')
+LINE: 210 124141 tlvmh.ghp
+
+124141 tlvmh.ghp
+
+LEVEL LINE: 5  124141 tlvmh.ghp
+
+Node('/root/ctztn/rgzfgz/qwzfs/lzl/gpgccbc')
+LINE: 211 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gpgccbc
+Parent name:  lzl
+Going up from gpgccbc to lzl
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/ctztn/rgzfgz/qwzfs/lzl')
+LINE: 212 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lzl
+Parent name:  qwzfs
+Going up from lzl to qwzfs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/ctztn/rgzfgz/qwzfs')
+LINE: 213 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  qwzfs
+Parent name:  rgzfgz
+Going up from qwzfs to rgzfgz
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/ctztn/rgzfgz')
+LINE: 214 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  ctztn
+Going up from rgzfgz to ctztn
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/ctztn')
+LINE: 215 $ cd wmfvclz
+
+Going down from ctztn to wmfvclz
+name:  wmfvclz
+LEVEL LINE: 2  $ cd wmfvclz
+
+Node('/root/ctztn/wmfvclz')
+LINE: 216 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/ctztn/wmfvclz')
+LINE: 217 25819 fmqtjdfd.dwp
+
+25819 fmqtjdfd.dwp
+
+LEVEL LINE: 2  25819 fmqtjdfd.dwp
+
+Node('/root/ctztn/wmfvclz')
+LINE: 218 253619 qccd.gnd
+
+253619 qccd.gnd
+
+LEVEL LINE: 2  253619 qccd.gnd
+
+Node('/root/ctztn/wmfvclz')
+LINE: 219 121087 sjsz.rtg
+
+121087 sjsz.rtg
+
+LEVEL LINE: 2  121087 sjsz.rtg
+
+Node('/root/ctztn/wmfvclz')
+LINE: 220 350518 tgs
+
+350518 tgs
+
+LEVEL LINE: 2  350518 tgs
+
+Node('/root/ctztn/wmfvclz')
+LINE: 221 dir zmft
+
+LEVEL LINE: 2  dir zmft
+
+Node('/root/ctztn/wmfvclz')
+LINE: 222 $ cd zmft
+
+Going down from wmfvclz to zmft
+name:  zmft
+LEVEL LINE: 3  $ cd zmft
+
+Node('/root/ctztn/wmfvclz/zmft')
+LINE: 223 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/ctztn/wmfvclz/zmft')
+LINE: 224 248086 vlbbbgnn
+
+248086 vlbbbgnn
+
+LEVEL LINE: 3  248086 vlbbbgnn
+
+Node('/root/ctztn/wmfvclz/zmft')
+LINE: 225 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  zmft
+Parent name:  wmfvclz
+Going up from zmft to wmfvclz
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/ctztn/wmfvclz')
+LINE: 226 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  wmfvclz
+Parent name:  ctztn
+Going up from wmfvclz to ctztn
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/ctztn')
+LINE: 227 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ctztn
+Parent name:  root
+Going up from ctztn to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 228 $ cd dbclg
+
+Going down from root to dbclg
+name:  dbclg
+LEVEL LINE: 1  $ cd dbclg
+
+Node('/root/dbclg')
+LINE: 229 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/dbclg')
+LINE: 230 dir dgm
+
+LEVEL LINE: 1  dir dgm
+
+Node('/root/dbclg')
+LINE: 231 dir rwdfw
+
+LEVEL LINE: 1  dir rwdfw
+
+Node('/root/dbclg')
+LINE: 232 182454 slctrj
+
+182454 slctrj
+
+LEVEL LINE: 1  182454 slctrj
+
+Node('/root/dbclg')
+LINE: 233 103919 tzp.dvf
+
+103919 tzp.dvf
+
+LEVEL LINE: 1  103919 tzp.dvf
+
+Node('/root/dbclg')
+LINE: 234 311601 zlbmvfq.qsh
+
+311601 zlbmvfq.qsh
+
+LEVEL LINE: 1  311601 zlbmvfq.qsh
+
+Node('/root/dbclg')
+LINE: 235 $ cd dgm
+
+Going down from dbclg to dgm
+name:  dgm
+LEVEL LINE: 2  $ cd dgm
+
+Node('/root/dbclg/dgm')
+LINE: 236 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/dbclg/dgm')
+LINE: 237 dir fflb
+
+LEVEL LINE: 2  dir fflb
+
+Node('/root/dbclg/dgm')
+LINE: 238 dir jshtffs
+
+LEVEL LINE: 2  dir jshtffs
+
+Node('/root/dbclg/dgm')
+LINE: 239 26424 shzfvbs.jrj
+
+26424 shzfvbs.jrj
+
+LEVEL LINE: 2  26424 shzfvbs.jrj
+
+Node('/root/dbclg/dgm')
+LINE: 240 $ cd fflb
+
+Going down from dgm to fflb
+name:  fflb
+LEVEL LINE: 3  $ cd fflb
+
+Node('/root/dbclg/dgm/fflb')
+LINE: 241 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/dbclg/dgm/fflb')
+LINE: 242 154495 ngzgfpt
+
+154495 ngzgfpt
+
+LEVEL LINE: 3  154495 ngzgfpt
+
+Node('/root/dbclg/dgm/fflb')
+LINE: 243 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  fflb
+Parent name:  dgm
+Going up from fflb to dgm
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/dbclg/dgm')
+LINE: 244 $ cd jshtffs
+
+Going down from dgm to jshtffs
+name:  jshtffs
+LEVEL LINE: 3  $ cd jshtffs
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 245 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 246 11509 fwvcbcpz.lvr
+
+11509 fwvcbcpz.lvr
+
+LEVEL LINE: 3  11509 fwvcbcpz.lvr
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 247 169064 hzhbhgjn.dvc
+
+169064 hzhbhgjn.dvc
+
+LEVEL LINE: 3  169064 hzhbhgjn.dvc
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 248 38675 jwcnwm.prf
+
+38675 jwcnwm.prf
+
+LEVEL LINE: 3  38675 jwcnwm.prf
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 249 dir mjb
+
+LEVEL LINE: 3  dir mjb
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 250 dir nwwcb
+
+LEVEL LINE: 3  dir nwwcb
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 251 300017 qtrqn.qdv
+
+300017 qtrqn.qdv
+
+LEVEL LINE: 3  300017 qtrqn.qdv
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 252 dir rfjdh
+
+LEVEL LINE: 3  dir rfjdh
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 253 173691 rgzfgz.wgz
+
+173691 rgzfgz.wgz
+
+LEVEL LINE: 3  173691 rgzfgz.wgz
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 254 $ cd mjb
+
+Going down from jshtffs to mjb
+name:  mjb
+LEVEL LINE: 4  $ cd mjb
+
+Node('/root/dbclg/dgm/jshtffs/mjb')
+LINE: 255 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/dbclg/dgm/jshtffs/mjb')
+LINE: 256 dir rgzfgz
+
+LEVEL LINE: 4  dir rgzfgz
+
+Node('/root/dbclg/dgm/jshtffs/mjb')
+LINE: 257 $ cd rgzfgz
+
+Going down from mjb to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 5  $ cd rgzfgz
+
+Node('/root/dbclg/dgm/jshtffs/mjb/rgzfgz')
+LINE: 258 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/dbclg/dgm/jshtffs/mjb/rgzfgz')
+LINE: 259 192387 ssm
+
+192387 ssm
+
+LEVEL LINE: 5  192387 ssm
+
+Node('/root/dbclg/dgm/jshtffs/mjb/rgzfgz')
+LINE: 260 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  mjb
+Going up from rgzfgz to mjb
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/dbclg/dgm/jshtffs/mjb')
+LINE: 261 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  mjb
+Parent name:  jshtffs
+Going up from mjb to jshtffs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 262 $ cd nwwcb
+
+Going down from jshtffs to nwwcb
+name:  nwwcb
+LEVEL LINE: 4  $ cd nwwcb
+
+Node('/root/dbclg/dgm/jshtffs/nwwcb')
+LINE: 263 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/dbclg/dgm/jshtffs/nwwcb')
+LINE: 264 312609 ggvwvdw.hhg
+
+312609 ggvwvdw.hhg
+
+LEVEL LINE: 4  312609 ggvwvdw.hhg
+
+Node('/root/dbclg/dgm/jshtffs/nwwcb')
+LINE: 265 107482 ppqmjzh
+
+107482 ppqmjzh
+
+LEVEL LINE: 4  107482 ppqmjzh
+
+Node('/root/dbclg/dgm/jshtffs/nwwcb')
+LINE: 266 204253 vlbbbgnn
+
+204253 vlbbbgnn
+
+LEVEL LINE: 4  204253 vlbbbgnn
+
+Node('/root/dbclg/dgm/jshtffs/nwwcb')
+LINE: 267 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nwwcb
+Parent name:  jshtffs
+Going up from nwwcb to jshtffs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 268 $ cd rfjdh
+
+Going down from jshtffs to rfjdh
+name:  rfjdh
+LEVEL LINE: 4  $ cd rfjdh
+
+Node('/root/dbclg/dgm/jshtffs/rfjdh')
+LINE: 269 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/dbclg/dgm/jshtffs/rfjdh')
+LINE: 270 305213 smf.jgv
+
+305213 smf.jgv
+
+LEVEL LINE: 4  305213 smf.jgv
+
+Node('/root/dbclg/dgm/jshtffs/rfjdh')
+LINE: 271 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rfjdh
+Parent name:  jshtffs
+Going up from rfjdh to jshtffs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/dbclg/dgm/jshtffs')
+LINE: 272 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  dgm
+Going up from jshtffs to dgm
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/dbclg/dgm')
+LINE: 273 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  dgm
+Parent name:  dbclg
+Going up from dgm to dbclg
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/dbclg')
+LINE: 274 $ cd rwdfw
+
+Going down from dbclg to rwdfw
+name:  rwdfw
+LEVEL LINE: 2  $ cd rwdfw
+
+Node('/root/dbclg/rwdfw')
+LINE: 275 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/dbclg/rwdfw')
+LINE: 276 dir hbsbctsr
+
+LEVEL LINE: 2  dir hbsbctsr
+
+Node('/root/dbclg/rwdfw')
+LINE: 277 145955 tqj
+
+145955 tqj
+
+LEVEL LINE: 2  145955 tqj
+
+Node('/root/dbclg/rwdfw')
+LINE: 278 dir vvthg
+
+LEVEL LINE: 2  dir vvthg
+
+Node('/root/dbclg/rwdfw')
+LINE: 279 $ cd hbsbctsr
+
+Going down from rwdfw to hbsbctsr
+name:  hbsbctsr
+LEVEL LINE: 3  $ cd hbsbctsr
+
+Node('/root/dbclg/rwdfw/hbsbctsr')
+LINE: 280 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/dbclg/rwdfw/hbsbctsr')
+LINE: 281 dir shqdr
+
+LEVEL LINE: 3  dir shqdr
+
+Node('/root/dbclg/rwdfw/hbsbctsr')
+LINE: 282 $ cd shqdr
+
+Going down from hbsbctsr to shqdr
+name:  shqdr
+LEVEL LINE: 4  $ cd shqdr
+
+Node('/root/dbclg/rwdfw/hbsbctsr/shqdr')
+LINE: 283 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/dbclg/rwdfw/hbsbctsr/shqdr')
+LINE: 284 101441 tlvmh.ghp
+
+101441 tlvmh.ghp
+
+LEVEL LINE: 4  101441 tlvmh.ghp
+
+Node('/root/dbclg/rwdfw/hbsbctsr/shqdr')
+LINE: 285 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  shqdr
+Parent name:  hbsbctsr
+Going up from shqdr to hbsbctsr
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/dbclg/rwdfw/hbsbctsr')
+LINE: 286 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  hbsbctsr
+Parent name:  rwdfw
+Going up from hbsbctsr to rwdfw
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/dbclg/rwdfw')
+LINE: 287 $ cd vvthg
+
+Going down from rwdfw to vvthg
+name:  vvthg
+LEVEL LINE: 3  $ cd vvthg
+
+Node('/root/dbclg/rwdfw/vvthg')
+LINE: 288 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/dbclg/rwdfw/vvthg')
+LINE: 289 344816 wdzh.szq
+
+344816 wdzh.szq
+
+LEVEL LINE: 3  344816 wdzh.szq
+
+Node('/root/dbclg/rwdfw/vvthg')
+LINE: 290 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vvthg
+Parent name:  rwdfw
+Going up from vvthg to rwdfw
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/dbclg/rwdfw')
+LINE: 291 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rwdfw
+Parent name:  dbclg
+Going up from rwdfw to dbclg
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/dbclg')
+LINE: 292 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  dbclg
+Parent name:  root
+Going up from dbclg to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 293 $ cd fhndmnt
+
+Going down from root to fhndmnt
+name:  fhndmnt
+LEVEL LINE: 1  $ cd fhndmnt
+
+Node('/root/fhndmnt')
+LINE: 294 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/fhndmnt')
+LINE: 295 dir lstcq
+
+LEVEL LINE: 1  dir lstcq
+
+Node('/root/fhndmnt')
+LINE: 296 dir nvlncq
+
+LEVEL LINE: 1  dir nvlncq
+
+Node('/root/fhndmnt')
+LINE: 297 dir rgzfgz
+
+LEVEL LINE: 1  dir rgzfgz
+
+Node('/root/fhndmnt')
+LINE: 298 dir ssqs
+
+LEVEL LINE: 1  dir ssqs
+
+Node('/root/fhndmnt')
+LINE: 299 dir vzpnjpsv
+
+LEVEL LINE: 1  dir vzpnjpsv
+
+Node('/root/fhndmnt')
+LINE: 300 $ cd lstcq
+
+Going down from fhndmnt to lstcq
+name:  lstcq
+LEVEL LINE: 2  $ cd lstcq
+
+Node('/root/fhndmnt/lstcq')
+LINE: 301 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/fhndmnt/lstcq')
+LINE: 302 24507 jshtffs.nrf
+
+24507 jshtffs.nrf
+
+LEVEL LINE: 2  24507 jshtffs.nrf
+
+Node('/root/fhndmnt/lstcq')
+LINE: 303 34332 lvqdthm.gwh
+
+34332 lvqdthm.gwh
+
+LEVEL LINE: 2  34332 lvqdthm.gwh
+
+Node('/root/fhndmnt/lstcq')
+LINE: 304 313126 szfqhv.jtv
+
+313126 szfqhv.jtv
+
+LEVEL LINE: 2  313126 szfqhv.jtv
+
+Node('/root/fhndmnt/lstcq')
+LINE: 305 274515 wmwpglh
+
+274515 wmwpglh
+
+LEVEL LINE: 2  274515 wmwpglh
+
+Node('/root/fhndmnt/lstcq')
+LINE: 306 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lstcq
+Parent name:  fhndmnt
+Going up from lstcq to fhndmnt
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/fhndmnt')
+LINE: 307 $ cd nvlncq
+
+Going down from fhndmnt to nvlncq
+name:  nvlncq
+LEVEL LINE: 2  $ cd nvlncq
+
+Node('/root/fhndmnt/nvlncq')
+LINE: 308 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/fhndmnt/nvlncq')
+LINE: 309 dir vmtnnfv
+
+LEVEL LINE: 2  dir vmtnnfv
+
+Node('/root/fhndmnt/nvlncq')
+LINE: 310 $ cd vmtnnfv
+
+Going down from nvlncq to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 3  $ cd vmtnnfv
+
+Node('/root/fhndmnt/nvlncq/vmtnnfv')
+LINE: 311 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/fhndmnt/nvlncq/vmtnnfv')
+LINE: 312 104013 wdzh.szq
+
+104013 wdzh.szq
+
+LEVEL LINE: 3  104013 wdzh.szq
+
+Node('/root/fhndmnt/nvlncq/vmtnnfv')
+LINE: 313 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  nvlncq
+Going up from vmtnnfv to nvlncq
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/fhndmnt/nvlncq')
+LINE: 314 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nvlncq
+Parent name:  fhndmnt
+Going up from nvlncq to fhndmnt
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/fhndmnt')
+LINE: 315 $ cd rgzfgz
+
+Going down from fhndmnt to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 2  $ cd rgzfgz
+
+Node('/root/fhndmnt/rgzfgz')
+LINE: 316 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/fhndmnt/rgzfgz')
+LINE: 317 311945 nlhfgpr.fcv
+
+311945 nlhfgpr.fcv
+
+LEVEL LINE: 2  311945 nlhfgpr.fcv
+
+Node('/root/fhndmnt/rgzfgz')
+LINE: 318 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  fhndmnt
+Going up from rgzfgz to fhndmnt
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/fhndmnt')
+LINE: 319 $ cd ssqs
+
+Going down from fhndmnt to ssqs
+name:  ssqs
+LEVEL LINE: 2  $ cd ssqs
+
+Node('/root/fhndmnt/ssqs')
+LINE: 320 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/fhndmnt/ssqs')
+LINE: 321 104254 vlbbbgnn
+
+104254 vlbbbgnn
+
+LEVEL LINE: 2  104254 vlbbbgnn
+
+Node('/root/fhndmnt/ssqs')
+LINE: 322 207441 vmpd.tdt
+
+207441 vmpd.tdt
+
+LEVEL LINE: 2  207441 vmpd.tdt
+
+Node('/root/fhndmnt/ssqs')
+LINE: 323 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ssqs
+Parent name:  fhndmnt
+Going up from ssqs to fhndmnt
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/fhndmnt')
+LINE: 324 $ cd vzpnjpsv
+
+Going down from fhndmnt to vzpnjpsv
+name:  vzpnjpsv
+LEVEL LINE: 2  $ cd vzpnjpsv
+
+Node('/root/fhndmnt/vzpnjpsv')
+LINE: 325 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/fhndmnt/vzpnjpsv')
+LINE: 326 253593 plfsrlr
+
+253593 plfsrlr
+
+LEVEL LINE: 2  253593 plfsrlr
+
+Node('/root/fhndmnt/vzpnjpsv')
+LINE: 327 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vzpnjpsv
+Parent name:  fhndmnt
+Going up from vzpnjpsv to fhndmnt
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/fhndmnt')
+LINE: 328 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  fhndmnt
+Parent name:  root
+Going up from fhndmnt to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 329 $ cd gczqbh
+
+Going down from root to gczqbh
+name:  gczqbh
+LEVEL LINE: 1  $ cd gczqbh
+
+Node('/root/gczqbh')
+LINE: 330 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/gczqbh')
+LINE: 331 dir nlhfgpr
+
+LEVEL LINE: 1  dir nlhfgpr
+
+Node('/root/gczqbh')
+LINE: 332 dir rgzfgz
+
+LEVEL LINE: 1  dir rgzfgz
+
+Node('/root/gczqbh')
+LINE: 333 dir vmtnnfv
+
+LEVEL LINE: 1  dir vmtnnfv
+
+Node('/root/gczqbh')
+LINE: 334 $ cd nlhfgpr
+
+Going down from gczqbh to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 2  $ cd nlhfgpr
+
+Node('/root/gczqbh/nlhfgpr')
+LINE: 335 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/gczqbh/nlhfgpr')
+LINE: 336 dir bwpd
+
+LEVEL LINE: 2  dir bwpd
+
+Node('/root/gczqbh/nlhfgpr')
+LINE: 337 86459 vmvpf.mwh
+
+86459 vmvpf.mwh
+
+LEVEL LINE: 2  86459 vmvpf.mwh
+
+Node('/root/gczqbh/nlhfgpr')
+LINE: 338 $ cd bwpd
+
+Going down from nlhfgpr to bwpd
+name:  bwpd
+LEVEL LINE: 3  $ cd bwpd
+
+Node('/root/gczqbh/nlhfgpr/bwpd')
+LINE: 339 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/gczqbh/nlhfgpr/bwpd')
+LINE: 340 345948 rgzfgz.qnp
+
+345948 rgzfgz.qnp
+
+LEVEL LINE: 3  345948 rgzfgz.qnp
+
+Node('/root/gczqbh/nlhfgpr/bwpd')
+LINE: 341 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  bwpd
+Parent name:  nlhfgpr
+Going up from bwpd to nlhfgpr
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/gczqbh/nlhfgpr')
+LINE: 342 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  gczqbh
+Going up from nlhfgpr to gczqbh
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/gczqbh')
+LINE: 343 $ cd rgzfgz
+
+Going down from gczqbh to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 2  $ cd rgzfgz
+
+Node('/root/gczqbh/rgzfgz')
+LINE: 344 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/gczqbh/rgzfgz')
+LINE: 345 dir rgzfgz
+
+LEVEL LINE: 2  dir rgzfgz
+
+Node('/root/gczqbh/rgzfgz')
+LINE: 346 dir sdsqqq
+
+LEVEL LINE: 2  dir sdsqqq
+
+Node('/root/gczqbh/rgzfgz')
+LINE: 347 $ cd rgzfgz
+
+Going down from rgzfgz to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 3  $ cd rgzfgz
+
+Node('/root/gczqbh/rgzfgz/rgzfgz')
+LINE: 348 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/gczqbh/rgzfgz/rgzfgz')
+LINE: 349 dir mprdrmmz
+
+LEVEL LINE: 3  dir mprdrmmz
+
+Node('/root/gczqbh/rgzfgz/rgzfgz')
+LINE: 350 331389 rbcrg.chs
+
+331389 rbcrg.chs
+
+LEVEL LINE: 3  331389 rbcrg.chs
+
+Node('/root/gczqbh/rgzfgz/rgzfgz')
+LINE: 351 191328 rpvpnprr.smn
+
+191328 rpvpnprr.smn
+
+LEVEL LINE: 3  191328 rpvpnprr.smn
+
+Node('/root/gczqbh/rgzfgz/rgzfgz')
+LINE: 352 $ cd mprdrmmz
+
+Going down from rgzfgz to mprdrmmz
+name:  mprdrmmz
+LEVEL LINE: 4  $ cd mprdrmmz
+
+Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz')
+LINE: 353 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz')
+LINE: 354 dir ncljgf
+
+LEVEL LINE: 4  dir ncljgf
+
+Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz')
+LINE: 355 $ cd ncljgf
+
+Going down from mprdrmmz to ncljgf
+name:  ncljgf
+LEVEL LINE: 5  $ cd ncljgf
+
+Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz/ncljgf')
+LINE: 356 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz/ncljgf')
+LINE: 357 309996 bjwvhw.ltr
+
+309996 bjwvhw.ltr
+
+LEVEL LINE: 5  309996 bjwvhw.ltr
+
+Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz/ncljgf')
+LINE: 358 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ncljgf
+Parent name:  mprdrmmz
+Going up from ncljgf to mprdrmmz
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz')
+LINE: 359 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  mprdrmmz
+Parent name:  rgzfgz
+Going up from mprdrmmz to rgzfgz
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/gczqbh/rgzfgz/rgzfgz')
+LINE: 360 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  rgzfgz
+Going up from rgzfgz to rgzfgz
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/gczqbh/rgzfgz')
+LINE: 361 $ cd sdsqqq
+
+Going down from rgzfgz to sdsqqq
+name:  sdsqqq
+LEVEL LINE: 3  $ cd sdsqqq
+
+Node('/root/gczqbh/rgzfgz/sdsqqq')
+LINE: 362 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/gczqbh/rgzfgz/sdsqqq')
+LINE: 363 95157 qmwcb.wsm
+
+95157 qmwcb.wsm
+
+LEVEL LINE: 3  95157 qmwcb.wsm
+
+Node('/root/gczqbh/rgzfgz/sdsqqq')
+LINE: 364 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  sdsqqq
+Parent name:  rgzfgz
+Going up from sdsqqq to rgzfgz
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/gczqbh/rgzfgz')
+LINE: 365 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  gczqbh
+Going up from rgzfgz to gczqbh
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/gczqbh')
+LINE: 366 $ cd vmtnnfv
+
+Going down from gczqbh to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 2  $ cd vmtnnfv
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 367 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 368 dir gbntbhrj
+
+LEVEL LINE: 2  dir gbntbhrj
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 369 dir nlhfgpr
+
+LEVEL LINE: 2  dir nlhfgpr
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 370 283985 ptl
+
+283985 ptl
+
+LEVEL LINE: 2  283985 ptl
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 371 dir tnljzft
+
+LEVEL LINE: 2  dir tnljzft
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 372 38026 vlbbbgnn
+
+38026 vlbbbgnn
+
+LEVEL LINE: 2  38026 vlbbbgnn
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 373 $ cd gbntbhrj
+
+Going down from vmtnnfv to gbntbhrj
+name:  gbntbhrj
+LEVEL LINE: 3  $ cd gbntbhrj
+
+Node('/root/gczqbh/vmtnnfv/gbntbhrj')
+LINE: 374 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/gczqbh/vmtnnfv/gbntbhrj')
+LINE: 375 117782 jshtffs.fpb
+
+117782 jshtffs.fpb
+
+LEVEL LINE: 3  117782 jshtffs.fpb
+
+Node('/root/gczqbh/vmtnnfv/gbntbhrj')
+LINE: 376 9101 rgzfgz.bdp
+
+9101 rgzfgz.bdp
+
+LEVEL LINE: 3  9101 rgzfgz.bdp
+
+Node('/root/gczqbh/vmtnnfv/gbntbhrj')
+LINE: 377 300155 vmtnnfv.wcq
+
+300155 vmtnnfv.wcq
+
+LEVEL LINE: 3  300155 vmtnnfv.wcq
+
+Node('/root/gczqbh/vmtnnfv/gbntbhrj')
+LINE: 378 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gbntbhrj
+Parent name:  vmtnnfv
+Going up from gbntbhrj to vmtnnfv
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 379 $ cd nlhfgpr
+
+Going down from vmtnnfv to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 3  $ cd nlhfgpr
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+LINE: 380 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+LINE: 381 dir cpglmt
+
+LEVEL LINE: 3  dir cpglmt
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+LINE: 382 65206 cwmpnz.czl
+
+65206 cwmpnz.czl
+
+LEVEL LINE: 3  65206 cwmpnz.czl
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+LINE: 383 dir gcrntzb
+
+LEVEL LINE: 3  dir gcrntzb
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+LINE: 384 $ cd cpglmt
+
+Going down from nlhfgpr to cpglmt
+name:  cpglmt
+LEVEL LINE: 4  $ cd cpglmt
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr/cpglmt')
+LINE: 385 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr/cpglmt')
+LINE: 386 288805 mghgq.msj
+
+288805 mghgq.msj
+
+LEVEL LINE: 4  288805 mghgq.msj
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr/cpglmt')
+LINE: 387 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  cpglmt
+Parent name:  nlhfgpr
+Going up from cpglmt to nlhfgpr
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+LINE: 388 $ cd gcrntzb
+
+Going down from nlhfgpr to gcrntzb
+name:  gcrntzb
+LEVEL LINE: 4  $ cd gcrntzb
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr/gcrntzb')
+LINE: 389 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr/gcrntzb')
+LINE: 390 126442 tlvmh.ghp
+
+126442 tlvmh.ghp
+
+LEVEL LINE: 4  126442 tlvmh.ghp
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr/gcrntzb')
+LINE: 391 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gcrntzb
+Parent name:  nlhfgpr
+Going up from gcrntzb to nlhfgpr
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+LINE: 392 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  vmtnnfv
+Going up from nlhfgpr to vmtnnfv
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 393 $ cd tnljzft
+
+Going down from vmtnnfv to tnljzft
+name:  tnljzft
+LEVEL LINE: 3  $ cd tnljzft
+
+Node('/root/gczqbh/vmtnnfv/tnljzft')
+LINE: 394 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/gczqbh/vmtnnfv/tnljzft')
+LINE: 395 278719 ccwfvtgh
+
+278719 ccwfvtgh
+
+LEVEL LINE: 3  278719 ccwfvtgh
+
+Node('/root/gczqbh/vmtnnfv/tnljzft')
+LINE: 396 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  tnljzft
+Parent name:  vmtnnfv
+Going up from tnljzft to vmtnnfv
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/gczqbh/vmtnnfv')
+LINE: 397 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  gczqbh
+Going up from vmtnnfv to gczqbh
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/gczqbh')
+LINE: 398 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gczqbh
+Parent name:  root
+Going up from gczqbh to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 399 $ cd lnsgbqp
+
+Going down from root to lnsgbqp
+name:  lnsgbqp
+LEVEL LINE: 1  $ cd lnsgbqp
+
+Node('/root/lnsgbqp')
+LINE: 400 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/lnsgbqp')
+LINE: 401 dir lqltnz
+
+LEVEL LINE: 1  dir lqltnz
+
+Node('/root/lnsgbqp')
+LINE: 402 dir vmtnnfv
+
+LEVEL LINE: 1  dir vmtnnfv
+
+Node('/root/lnsgbqp')
+LINE: 403 69119 vmvpf.rgd
+
+69119 vmvpf.rgd
+
+LEVEL LINE: 1  69119 vmvpf.rgd
+
+Node('/root/lnsgbqp')
+LINE: 404 $ cd lqltnz
+
+Going down from lnsgbqp to lqltnz
+name:  lqltnz
+LEVEL LINE: 2  $ cd lqltnz
+
+Node('/root/lnsgbqp/lqltnz')
+LINE: 405 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/lnsgbqp/lqltnz')
+LINE: 406 dir vmtnnfv
+
+LEVEL LINE: 2  dir vmtnnfv
+
+Node('/root/lnsgbqp/lqltnz')
+LINE: 407 dir whvdf
+
+LEVEL LINE: 2  dir whvdf
+
+Node('/root/lnsgbqp/lqltnz')
+LINE: 408 $ cd vmtnnfv
+
+Going down from lqltnz to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 3  $ cd vmtnnfv
+
+Node('/root/lnsgbqp/lqltnz/vmtnnfv')
+LINE: 409 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/lnsgbqp/lqltnz/vmtnnfv')
+LINE: 410 3012 vmtnnfv.zlv
+
+3012 vmtnnfv.zlv
+
+LEVEL LINE: 3  3012 vmtnnfv.zlv
+
+Node('/root/lnsgbqp/lqltnz/vmtnnfv')
+LINE: 411 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  lqltnz
+Going up from vmtnnfv to lqltnz
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/lnsgbqp/lqltnz')
+LINE: 412 $ cd whvdf
+
+Going down from lqltnz to whvdf
+name:  whvdf
+LEVEL LINE: 3  $ cd whvdf
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 413 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 414 dir nlhfgpr
+
+LEVEL LINE: 3  dir nlhfgpr
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 415 115838 rwqbdmfb
+
+115838 rwqbdmfb
+
+LEVEL LINE: 3  115838 rwqbdmfb
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 416 298358 tlvmh.ghp
+
+298358 tlvmh.ghp
+
+LEVEL LINE: 3  298358 tlvmh.ghp
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 417 dir vmtnnfv
+
+LEVEL LINE: 3  dir vmtnnfv
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 418 335379 vmtnnfv.ltj
+
+335379 vmtnnfv.ltj
+
+LEVEL LINE: 3  335379 vmtnnfv.ltj
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 419 129665 zglmsgf
+
+129665 zglmsgf
+
+LEVEL LINE: 3  129665 zglmsgf
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 420 $ cd nlhfgpr
+
+Going down from whvdf to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 4  $ cd nlhfgpr
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 421 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 422 12607 fwvcbcpz.lvr
+
+12607 fwvcbcpz.lvr
+
+LEVEL LINE: 4  12607 fwvcbcpz.lvr
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 423 dir lrbrcz
+
+LEVEL LINE: 4  dir lrbrcz
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 424 dir nvqzmflc
+
+LEVEL LINE: 4  dir nvqzmflc
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 425 3793 tlvmh.ghp
+
+3793 tlvmh.ghp
+
+LEVEL LINE: 4  3793 tlvmh.ghp
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 426 39593 vqv
+
+39593 vqv
+
+LEVEL LINE: 4  39593 vqv
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 427 $ cd lrbrcz
+
+Going down from nlhfgpr to lrbrcz
+name:  lrbrcz
+LEVEL LINE: 5  $ cd lrbrcz
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/lrbrcz')
+LINE: 428 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/lrbrcz')
+LINE: 429 195996 vmtnnfv.hlb
+
+195996 vmtnnfv.hlb
+
+LEVEL LINE: 5  195996 vmtnnfv.hlb
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/lrbrcz')
+LINE: 430 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lrbrcz
+Parent name:  nlhfgpr
+Going up from lrbrcz to nlhfgpr
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 431 $ cd nvqzmflc
+
+Going down from nlhfgpr to nvqzmflc
+name:  nvqzmflc
+LEVEL LINE: 5  $ cd nvqzmflc
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/nvqzmflc')
+LINE: 432 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/nvqzmflc')
+LINE: 433 190198 vmvpf
+
+190198 vmvpf
+
+LEVEL LINE: 5  190198 vmvpf
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/nvqzmflc')
+LINE: 434 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nvqzmflc
+Parent name:  nlhfgpr
+Going up from nvqzmflc to nlhfgpr
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+LINE: 435 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  whvdf
+Going up from nlhfgpr to whvdf
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 436 $ cd vmtnnfv
+
+Going down from whvdf to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 4  $ cd vmtnnfv
+
+Node('/root/lnsgbqp/lqltnz/whvdf/vmtnnfv')
+LINE: 437 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/lnsgbqp/lqltnz/whvdf/vmtnnfv')
+LINE: 438 359558 rdjqs
+
+359558 rdjqs
+
+LEVEL LINE: 4  359558 rdjqs
+
+Node('/root/lnsgbqp/lqltnz/whvdf/vmtnnfv')
+LINE: 439 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  whvdf
+Going up from vmtnnfv to whvdf
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/lnsgbqp/lqltnz/whvdf')
+LINE: 440 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  whvdf
+Parent name:  lqltnz
+Going up from whvdf to lqltnz
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/lnsgbqp/lqltnz')
+LINE: 441 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lqltnz
+Parent name:  lnsgbqp
+Going up from lqltnz to lnsgbqp
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/lnsgbqp')
+LINE: 442 $ cd vmtnnfv
+
+Going down from lnsgbqp to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 2  $ cd vmtnnfv
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 443 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 444 dir clwrz
+
+LEVEL LINE: 2  dir clwrz
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 445 362269 nphz.plr
+
+362269 nphz.plr
+
+LEVEL LINE: 2  362269 nphz.plr
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 446 dir rqbq
+
+LEVEL LINE: 2  dir rqbq
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 447 188843 tlvmh.ghp
+
+188843 tlvmh.ghp
+
+LEVEL LINE: 2  188843 tlvmh.ghp
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 448 dir wsrdwm
+
+LEVEL LINE: 2  dir wsrdwm
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 449 $ cd clwrz
+
+Going down from vmtnnfv to clwrz
+name:  clwrz
+LEVEL LINE: 3  $ cd clwrz
+
+Node('/root/lnsgbqp/vmtnnfv/clwrz')
+LINE: 450 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/clwrz')
+LINE: 451 233770 wdzh.szq
+
+233770 wdzh.szq
+
+LEVEL LINE: 3  233770 wdzh.szq
+
+Node('/root/lnsgbqp/vmtnnfv/clwrz')
+LINE: 452 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  clwrz
+Parent name:  vmtnnfv
+Going up from clwrz to vmtnnfv
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 453 $ cd rqbq
+
+Going down from vmtnnfv to rqbq
+name:  rqbq
+LEVEL LINE: 3  $ cd rqbq
+
+Node('/root/lnsgbqp/vmtnnfv/rqbq')
+LINE: 454 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/rqbq')
+LINE: 455 183770 jtnlfd
+
+183770 jtnlfd
+
+LEVEL LINE: 3  183770 jtnlfd
+
+Node('/root/lnsgbqp/vmtnnfv/rqbq')
+LINE: 456 71164 lwgqzccd.dgb
+
+71164 lwgqzccd.dgb
+
+LEVEL LINE: 3  71164 lwgqzccd.dgb
+
+Node('/root/lnsgbqp/vmtnnfv/rqbq')
+LINE: 457 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rqbq
+Parent name:  vmtnnfv
+Going up from rqbq to vmtnnfv
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 458 $ cd wsrdwm
+
+Going down from vmtnnfv to wsrdwm
+name:  wsrdwm
+LEVEL LINE: 3  $ cd wsrdwm
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 459 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 460 266826 bqg
+
+266826 bqg
+
+LEVEL LINE: 3  266826 bqg
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 461 dir nlhfgpr
+
+LEVEL LINE: 3  dir nlhfgpr
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 462 53502 nlhfgpr.slz
+
+53502 nlhfgpr.slz
+
+LEVEL LINE: 3  53502 nlhfgpr.slz
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 463 320422 qzsfvzl.wbb
+
+320422 qzsfvzl.wbb
+
+LEVEL LINE: 3  320422 qzsfvzl.wbb
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 464 dir vhq
+
+LEVEL LINE: 3  dir vhq
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 465 dir vmvpf
+
+LEVEL LINE: 3  dir vmvpf
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 466 $ cd nlhfgpr
+
+Going down from wsrdwm to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 4  $ cd nlhfgpr
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr')
+LINE: 467 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr')
+LINE: 468 dir ddlplnhp
+
+LEVEL LINE: 4  dir ddlplnhp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr')
+LINE: 469 dir nbdj
+
+LEVEL LINE: 4  dir nbdj
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr')
+LINE: 470 $ cd ddlplnhp
+
+Going down from nlhfgpr to ddlplnhp
+name:  ddlplnhp
+LEVEL LINE: 5  $ cd ddlplnhp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 471 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 472 dir czp
+
+LEVEL LINE: 5  dir czp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 473 dir dmchbv
+
+LEVEL LINE: 5  dir dmchbv
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 474 dir nlj
+
+LEVEL LINE: 5  dir nlj
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 475 299460 tlvmh.ghp
+
+299460 tlvmh.ghp
+
+LEVEL LINE: 5  299460 tlvmh.ghp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 476 dir wrqqln
+
+LEVEL LINE: 5  dir wrqqln
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 477 $ cd czp
+
+Going down from ddlplnhp to czp
+name:  czp
+LEVEL LINE: 6  $ cd czp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp')
+LINE: 478 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp')
+LINE: 479 286886 tlvmh.ghp
+
+286886 tlvmh.ghp
+
+LEVEL LINE: 6  286886 tlvmh.ghp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp')
+LINE: 480 98020 vlln
+
+98020 vlln
+
+LEVEL LINE: 6  98020 vlln
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp')
+LINE: 481 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  czp
+Parent name:  ddlplnhp
+Going up from czp to ddlplnhp
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 482 $ cd dmchbv
+
+Going down from ddlplnhp to dmchbv
+name:  dmchbv
+LEVEL LINE: 6  $ cd dmchbv
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/dmchbv')
+LINE: 483 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/dmchbv')
+LINE: 484 239186 ppjcgwq
+
+239186 ppjcgwq
+
+LEVEL LINE: 6  239186 ppjcgwq
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/dmchbv')
+LINE: 485 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  dmchbv
+Parent name:  ddlplnhp
+Going up from dmchbv to ddlplnhp
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 486 $ cd nlj
+
+Going down from ddlplnhp to nlj
+name:  nlj
+LEVEL LINE: 6  $ cd nlj
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj')
+LINE: 487 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj')
+LINE: 488 310042 nsgvvfcw.vfm
+
+310042 nsgvvfcw.vfm
+
+LEVEL LINE: 6  310042 nsgvvfcw.vfm
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj')
+LINE: 489 70206 vlbbbgnn
+
+70206 vlbbbgnn
+
+LEVEL LINE: 6  70206 vlbbbgnn
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj')
+LINE: 490 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlj
+Parent name:  ddlplnhp
+Going up from nlj to ddlplnhp
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 491 $ cd wrqqln
+
+Going down from ddlplnhp to wrqqln
+name:  wrqqln
+LEVEL LINE: 6  $ cd wrqqln
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln')
+LINE: 492 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln')
+LINE: 493 dir bdprgbp
+
+LEVEL LINE: 6  dir bdprgbp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln')
+LINE: 494 $ cd bdprgbp
+
+Going down from wrqqln to bdprgbp
+name:  bdprgbp
+LEVEL LINE: 7  $ cd bdprgbp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln/bdprgbp')
+LINE: 495 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln/bdprgbp')
+LINE: 496 42055 hjwrqzf.cqj
+
+42055 hjwrqzf.cqj
+
+LEVEL LINE: 7  42055 hjwrqzf.cqj
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln/bdprgbp')
+LINE: 497 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  bdprgbp
+Parent name:  wrqqln
+Going up from bdprgbp to wrqqln
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln')
+LINE: 498 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  wrqqln
+Parent name:  ddlplnhp
+Going up from wrqqln to ddlplnhp
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+LINE: 499 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ddlplnhp
+Parent name:  nlhfgpr
+Going up from ddlplnhp to nlhfgpr
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr')
+LINE: 500 $ cd nbdj
+
+Going down from nlhfgpr to nbdj
+name:  nbdj
+LEVEL LINE: 5  $ cd nbdj
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj')
+LINE: 501 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj')
+LINE: 502 dir cdjd
+
+LEVEL LINE: 5  dir cdjd
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj')
+LINE: 503 $ cd cdjd
+
+Going down from nbdj to cdjd
+name:  cdjd
+LEVEL LINE: 6  $ cd cdjd
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd')
+LINE: 504 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd')
+LINE: 505 330601 bzhvfzh.ldp
+
+330601 bzhvfzh.ldp
+
+LEVEL LINE: 6  330601 bzhvfzh.ldp
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd')
+LINE: 506 14662 hjhdwz.qrt
+
+14662 hjhdwz.qrt
+
+LEVEL LINE: 6  14662 hjhdwz.qrt
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd')
+LINE: 507 188113 pct
+
+188113 pct
+
+LEVEL LINE: 6  188113 pct
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd')
+LINE: 508 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  cdjd
+Parent name:  nbdj
+Going up from cdjd to nbdj
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj')
+LINE: 509 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nbdj
+Parent name:  nlhfgpr
+Going up from nbdj to nlhfgpr
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr')
+LINE: 510 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  wsrdwm
+Going up from nlhfgpr to wsrdwm
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 511 $ cd vhq
+
+Going down from wsrdwm to vhq
+name:  vhq
+LEVEL LINE: 4  $ cd vhq
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vhq')
+LINE: 512 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vhq')
+LINE: 513 348147 qsgjjzn.nft
+
+348147 qsgjjzn.nft
+
+LEVEL LINE: 4  348147 qsgjjzn.nft
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vhq')
+LINE: 514 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vhq
+Parent name:  wsrdwm
+Going up from vhq to wsrdwm
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 515 $ cd vmvpf
+
+Going down from wsrdwm to vmvpf
+name:  vmvpf
+LEVEL LINE: 4  $ cd vmvpf
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vmvpf')
+LINE: 516 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vmvpf')
+LINE: 517 192773 wdzh.szq
+
+192773 wdzh.szq
+
+LEVEL LINE: 4  192773 wdzh.szq
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vmvpf')
+LINE: 518 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmvpf
+Parent name:  wsrdwm
+Going up from vmvpf to wsrdwm
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+LINE: 519 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  wsrdwm
+Parent name:  vmtnnfv
+Going up from wsrdwm to vmtnnfv
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/lnsgbqp/vmtnnfv')
+LINE: 520 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  lnsgbqp
+Going up from vmtnnfv to lnsgbqp
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/lnsgbqp')
+LINE: 521 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lnsgbqp
+Parent name:  root
+Going up from lnsgbqp to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 522 $ cd pblb
+
+Going down from root to pblb
+name:  pblb
+LEVEL LINE: 1  $ cd pblb
+
+Node('/root/pblb')
+LINE: 523 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/pblb')
+LINE: 524 dir jshtffs
+
+LEVEL LINE: 1  dir jshtffs
+
+Node('/root/pblb')
+LINE: 525 dir pwgtvhm
+
+LEVEL LINE: 1  dir pwgtvhm
+
+Node('/root/pblb')
+LINE: 526 $ cd jshtffs
+
+Going down from pblb to jshtffs
+name:  jshtffs
+LEVEL LINE: 2  $ cd jshtffs
+
+Node('/root/pblb/jshtffs')
+LINE: 527 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/pblb/jshtffs')
+LINE: 528 dir vtthv
+
+LEVEL LINE: 2  dir vtthv
+
+Node('/root/pblb/jshtffs')
+LINE: 529 $ cd vtthv
+
+Going down from jshtffs to vtthv
+name:  vtthv
+LEVEL LINE: 3  $ cd vtthv
+
+Node('/root/pblb/jshtffs/vtthv')
+LINE: 530 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/pblb/jshtffs/vtthv')
+LINE: 531 39542 fwfz.gll
+
+39542 fwfz.gll
+
+LEVEL LINE: 3  39542 fwfz.gll
+
+Node('/root/pblb/jshtffs/vtthv')
+LINE: 532 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vtthv
+Parent name:  jshtffs
+Going up from vtthv to jshtffs
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/pblb/jshtffs')
+LINE: 533 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  pblb
+Going up from jshtffs to pblb
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/pblb')
+LINE: 534 $ cd pwgtvhm
+
+Going down from pblb to pwgtvhm
+name:  pwgtvhm
+LEVEL LINE: 2  $ cd pwgtvhm
+
+Node('/root/pblb/pwgtvhm')
+LINE: 535 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/pblb/pwgtvhm')
+LINE: 536 271449 hvfq
+
+271449 hvfq
+
+LEVEL LINE: 2  271449 hvfq
+
+Node('/root/pblb/pwgtvhm')
+LINE: 537 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  pwgtvhm
+Parent name:  pblb
+Going up from pwgtvhm to pblb
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/pblb')
+LINE: 538 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  pblb
+Parent name:  root
+Going up from pblb to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 539 $ cd pwfs
+
+Going down from root to pwfs
+name:  pwfs
+LEVEL LINE: 1  $ cd pwfs
+
+Node('/root/pwfs')
+LINE: 540 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/pwfs')
+LINE: 541 dir dnnzr
+
+LEVEL LINE: 1  dir dnnzr
+
+Node('/root/pwfs')
+LINE: 542 dir ncjzvsph
+
+LEVEL LINE: 1  dir ncjzvsph
+
+Node('/root/pwfs')
+LINE: 543 dir nlhfgpr
+
+LEVEL LINE: 1  dir nlhfgpr
+
+Node('/root/pwfs')
+LINE: 544 $ cd dnnzr
+
+Going down from pwfs to dnnzr
+name:  dnnzr
+LEVEL LINE: 2  $ cd dnnzr
+
+Node('/root/pwfs/dnnzr')
+LINE: 545 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/pwfs/dnnzr')
+LINE: 546 337565 vlbbbgnn
+
+337565 vlbbbgnn
+
+LEVEL LINE: 2  337565 vlbbbgnn
+
+Node('/root/pwfs/dnnzr')
+LINE: 547 345668 vqv
+
+345668 vqv
+
+LEVEL LINE: 2  345668 vqv
+
+Node('/root/pwfs/dnnzr')
+LINE: 548 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  dnnzr
+Parent name:  pwfs
+Going up from dnnzr to pwfs
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/pwfs')
+LINE: 549 $ cd ncjzvsph
+
+Going down from pwfs to ncjzvsph
+name:  ncjzvsph
+LEVEL LINE: 2  $ cd ncjzvsph
+
+Node('/root/pwfs/ncjzvsph')
+LINE: 550 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/pwfs/ncjzvsph')
+LINE: 551 290438 fdtftjj.sdt
+
+290438 fdtftjj.sdt
+
+LEVEL LINE: 2  290438 fdtftjj.sdt
+
+Node('/root/pwfs/ncjzvsph')
+LINE: 552 170963 tlvmh.ghp
+
+170963 tlvmh.ghp
+
+LEVEL LINE: 2  170963 tlvmh.ghp
+
+Node('/root/pwfs/ncjzvsph')
+LINE: 553 56596 vlbbbgnn
+
+56596 vlbbbgnn
+
+LEVEL LINE: 2  56596 vlbbbgnn
+
+Node('/root/pwfs/ncjzvsph')
+LINE: 554 72923 vmvpf.ldg
+
+72923 vmvpf.ldg
+
+LEVEL LINE: 2  72923 vmvpf.ldg
+
+Node('/root/pwfs/ncjzvsph')
+LINE: 555 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ncjzvsph
+Parent name:  pwfs
+Going up from ncjzvsph to pwfs
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/pwfs')
+LINE: 556 $ cd nlhfgpr
+
+Going down from pwfs to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 2  $ cd nlhfgpr
+
+Node('/root/pwfs/nlhfgpr')
+LINE: 557 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/pwfs/nlhfgpr')
+LINE: 558 321213 vqv
+
+321213 vqv
+
+LEVEL LINE: 2  321213 vqv
+
+Node('/root/pwfs/nlhfgpr')
+LINE: 559 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  pwfs
+Going up from nlhfgpr to pwfs
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/pwfs')
+LINE: 560 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  pwfs
+Parent name:  root
+Going up from pwfs to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 561 $ cd vmvpf
+
+Going down from root to vmvpf
+name:  vmvpf
+LEVEL LINE: 1  $ cd vmvpf
+
+Node('/root/vmvpf')
+LINE: 562 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/vmvpf')
+LINE: 563 dir gwbt
+
+LEVEL LINE: 1  dir gwbt
+
+Node('/root/vmvpf')
+LINE: 564 dir vmvpf
+
+LEVEL LINE: 1  dir vmvpf
+
+Node('/root/vmvpf')
+LINE: 565 dir vplm
+
+LEVEL LINE: 1  dir vplm
+
+Node('/root/vmvpf')
+LINE: 566 $ cd gwbt
+
+Going down from vmvpf to gwbt
+name:  gwbt
+LEVEL LINE: 2  $ cd gwbt
+
+Node('/root/vmvpf/gwbt')
+LINE: 567 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/vmvpf/gwbt')
+LINE: 568 209996 jrzlrp
+
+209996 jrzlrp
+
+LEVEL LINE: 2  209996 jrzlrp
+
+Node('/root/vmvpf/gwbt')
+LINE: 569 23503 vmvpf.hwn
+
+23503 vmvpf.hwn
+
+LEVEL LINE: 2  23503 vmvpf.hwn
+
+Node('/root/vmvpf/gwbt')
+LINE: 570 173320 vqv
+
+173320 vqv
+
+LEVEL LINE: 2  173320 vqv
+
+Node('/root/vmvpf/gwbt')
+LINE: 571 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gwbt
+Parent name:  vmvpf
+Going up from gwbt to vmvpf
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/vmvpf')
+LINE: 572 $ cd vmvpf
+
+Going down from vmvpf to vmvpf
+name:  vmvpf
+LEVEL LINE: 2  $ cd vmvpf
+
+Node('/root/vmvpf/vmvpf')
+LINE: 573 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/vmvpf/vmvpf')
+LINE: 574 299874 hqwppnws
+
+299874 hqwppnws
+
+LEVEL LINE: 2  299874 hqwppnws
+
+Node('/root/vmvpf/vmvpf')
+LINE: 575 177211 pcqdrn.wqd
+
+177211 pcqdrn.wqd
+
+LEVEL LINE: 2  177211 pcqdrn.wqd
+
+Node('/root/vmvpf/vmvpf')
+LINE: 576 266011 pjllm
+
+266011 pjllm
+
+LEVEL LINE: 2  266011 pjllm
+
+Node('/root/vmvpf/vmvpf')
+LINE: 577 227969 wdzh.szq
+
+227969 wdzh.szq
+
+LEVEL LINE: 2  227969 wdzh.szq
+
+Node('/root/vmvpf/vmvpf')
+LINE: 578 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmvpf
+Parent name:  vmvpf
+Going up from vmvpf to vmvpf
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/vmvpf')
+LINE: 579 $ cd vplm
+
+Going down from vmvpf to vplm
+name:  vplm
+LEVEL LINE: 2  $ cd vplm
+
+Node('/root/vmvpf/vplm')
+LINE: 580 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/vmvpf/vplm')
+LINE: 581 dir fbl
+
+LEVEL LINE: 2  dir fbl
+
+Node('/root/vmvpf/vplm')
+LINE: 582 354786 jdb
+
+354786 jdb
+
+LEVEL LINE: 2  354786 jdb
+
+Node('/root/vmvpf/vplm')
+LINE: 583 273253 nncwhbq.vzn
+
+273253 nncwhbq.vzn
+
+LEVEL LINE: 2  273253 nncwhbq.vzn
+
+Node('/root/vmvpf/vplm')
+LINE: 584 dir rgzfgz
+
+LEVEL LINE: 2  dir rgzfgz
+
+Node('/root/vmvpf/vplm')
+LINE: 585 $ cd fbl
+
+Going down from vplm to fbl
+name:  fbl
+LEVEL LINE: 3  $ cd fbl
+
+Node('/root/vmvpf/vplm/fbl')
+LINE: 586 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/vmvpf/vplm/fbl')
+LINE: 587 38301 vqv
+
+38301 vqv
+
+LEVEL LINE: 3  38301 vqv
+
+Node('/root/vmvpf/vplm/fbl')
+LINE: 588 256284 wdzh.szq
+
+256284 wdzh.szq
+
+LEVEL LINE: 3  256284 wdzh.szq
+
+Node('/root/vmvpf/vplm/fbl')
+LINE: 589 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  fbl
+Parent name:  vplm
+Going up from fbl to vplm
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/vmvpf/vplm')
+LINE: 590 $ cd rgzfgz
+
+Going down from vplm to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 3  $ cd rgzfgz
+
+Node('/root/vmvpf/vplm/rgzfgz')
+LINE: 591 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/vmvpf/vplm/rgzfgz')
+LINE: 592 60018 rdsrl.whb
+
+60018 rdsrl.whb
+
+LEVEL LINE: 3  60018 rdsrl.whb
+
+Node('/root/vmvpf/vplm/rgzfgz')
+LINE: 593 dir rgzfgz
+
+LEVEL LINE: 3  dir rgzfgz
+
+Node('/root/vmvpf/vplm/rgzfgz')
+LINE: 594 dir wgvw
+
+LEVEL LINE: 3  dir wgvw
+
+Node('/root/vmvpf/vplm/rgzfgz')
+LINE: 595 $ cd rgzfgz
+
+Going down from rgzfgz to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 4  $ cd rgzfgz
+
+Node('/root/vmvpf/vplm/rgzfgz/rgzfgz')
+LINE: 596 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/vmvpf/vplm/rgzfgz/rgzfgz')
+LINE: 597 dir gmcqfqrn
+
+LEVEL LINE: 4  dir gmcqfqrn
+
+Node('/root/vmvpf/vplm/rgzfgz/rgzfgz')
+LINE: 598 $ cd gmcqfqrn
+
+Going down from rgzfgz to gmcqfqrn
+name:  gmcqfqrn
+LEVEL LINE: 5  $ cd gmcqfqrn
+
+Node('/root/vmvpf/vplm/rgzfgz/rgzfgz/gmcqfqrn')
+LINE: 599 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/vmvpf/vplm/rgzfgz/rgzfgz/gmcqfqrn')
+LINE: 600 337129 rgzfgz.pjs
+
+337129 rgzfgz.pjs
+
+LEVEL LINE: 5  337129 rgzfgz.pjs
+
+Node('/root/vmvpf/vplm/rgzfgz/rgzfgz/gmcqfqrn')
+LINE: 601 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gmcqfqrn
+Parent name:  rgzfgz
+Going up from gmcqfqrn to rgzfgz
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/vmvpf/vplm/rgzfgz/rgzfgz')
+LINE: 602 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  rgzfgz
+Going up from rgzfgz to rgzfgz
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/vmvpf/vplm/rgzfgz')
+LINE: 603 $ cd wgvw
+
+Going down from rgzfgz to wgvw
+name:  wgvw
+LEVEL LINE: 4  $ cd wgvw
+
+Node('/root/vmvpf/vplm/rgzfgz/wgvw')
+LINE: 604 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/vmvpf/vplm/rgzfgz/wgvw')
+LINE: 605 14727 zdhwsm
+
+14727 zdhwsm
+
+LEVEL LINE: 4  14727 zdhwsm
+
+Node('/root/vmvpf/vplm/rgzfgz/wgvw')
+LINE: 606 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  wgvw
+Parent name:  rgzfgz
+Going up from wgvw to rgzfgz
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/vmvpf/vplm/rgzfgz')
+LINE: 607 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  vplm
+Going up from rgzfgz to vplm
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/vmvpf/vplm')
+LINE: 608 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vplm
+Parent name:  vmvpf
+Going up from vplm to vmvpf
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/vmvpf')
+LINE: 609 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmvpf
+Parent name:  root
+Going up from vmvpf to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 610 $ cd wjgh
+
+Going down from root to wjgh
+name:  wjgh
+LEVEL LINE: 1  $ cd wjgh
+
+Node('/root/wjgh')
+LINE: 611 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/wjgh')
+LINE: 612 dir ccgddrt
+
+LEVEL LINE: 1  dir ccgddrt
+
+Node('/root/wjgh')
+LINE: 613 dir cqh
+
+LEVEL LINE: 1  dir cqh
+
+Node('/root/wjgh')
+LINE: 614 60305 dtjctmsw.qgp
+
+60305 dtjctmsw.qgp
+
+LEVEL LINE: 1  60305 dtjctmsw.qgp
+
+Node('/root/wjgh')
+LINE: 615 dir hwr
+
+LEVEL LINE: 1  dir hwr
+
+Node('/root/wjgh')
+LINE: 616 dir jshtffs
+
+LEVEL LINE: 1  dir jshtffs
+
+Node('/root/wjgh')
+LINE: 617 335879 smfjq
+
+335879 smfjq
+
+LEVEL LINE: 1  335879 smfjq
+
+Node('/root/wjgh')
+LINE: 618 344915 vlbbbgnn
+
+344915 vlbbbgnn
+
+LEVEL LINE: 1  344915 vlbbbgnn
+
+Node('/root/wjgh')
+LINE: 619 63031 wdzh.szq
+
+63031 wdzh.szq
+
+LEVEL LINE: 1  63031 wdzh.szq
+
+Node('/root/wjgh')
+LINE: 620 dir zbmjg
+
+LEVEL LINE: 1  dir zbmjg
+
+Node('/root/wjgh')
+LINE: 621 $ cd ccgddrt
+
+Going down from wjgh to ccgddrt
+name:  ccgddrt
+LEVEL LINE: 2  $ cd ccgddrt
+
+Node('/root/wjgh/ccgddrt')
+LINE: 622 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/wjgh/ccgddrt')
+LINE: 623 148368 dpnlbg.fbb
+
+148368 dpnlbg.fbb
+
+LEVEL LINE: 2  148368 dpnlbg.fbb
+
+Node('/root/wjgh/ccgddrt')
+LINE: 624 dir vmvpf
+
+LEVEL LINE: 2  dir vmvpf
+
+Node('/root/wjgh/ccgddrt')
+LINE: 625 $ cd vmvpf
+
+Going down from ccgddrt to vmvpf
+name:  vmvpf
+LEVEL LINE: 3  $ cd vmvpf
+
+Node('/root/wjgh/ccgddrt/vmvpf')
+LINE: 626 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjgh/ccgddrt/vmvpf')
+LINE: 627 dir ptwrssn
+
+LEVEL LINE: 3  dir ptwrssn
+
+Node('/root/wjgh/ccgddrt/vmvpf')
+LINE: 628 340536 tlvmh.ghp
+
+340536 tlvmh.ghp
+
+LEVEL LINE: 3  340536 tlvmh.ghp
+
+Node('/root/wjgh/ccgddrt/vmvpf')
+LINE: 629 $ cd ptwrssn
+
+Going down from vmvpf to ptwrssn
+name:  ptwrssn
+LEVEL LINE: 4  $ cd ptwrssn
+
+Node('/root/wjgh/ccgddrt/vmvpf/ptwrssn')
+LINE: 630 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/ccgddrt/vmvpf/ptwrssn')
+LINE: 631 119875 jshtffs
+
+119875 jshtffs
+
+LEVEL LINE: 4  119875 jshtffs
+
+Node('/root/wjgh/ccgddrt/vmvpf/ptwrssn')
+LINE: 632 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ptwrssn
+Parent name:  vmvpf
+Going up from ptwrssn to vmvpf
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/ccgddrt/vmvpf')
+LINE: 633 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmvpf
+Parent name:  ccgddrt
+Going up from vmvpf to ccgddrt
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjgh/ccgddrt')
+LINE: 634 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ccgddrt
+Parent name:  wjgh
+Going up from ccgddrt to wjgh
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/wjgh')
+LINE: 635 $ cd cqh
+
+Going down from wjgh to cqh
+name:  cqh
+LEVEL LINE: 2  $ cd cqh
+
+Node('/root/wjgh/cqh')
+LINE: 636 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/wjgh/cqh')
+LINE: 637 dir blvcjl
+
+LEVEL LINE: 2  dir blvcjl
+
+Node('/root/wjgh/cqh')
+LINE: 638 158276 fjv
+
+158276 fjv
+
+LEVEL LINE: 2  158276 fjv
+
+Node('/root/wjgh/cqh')
+LINE: 639 279848 fnh.rdf
+
+279848 fnh.rdf
+
+LEVEL LINE: 2  279848 fnh.rdf
+
+Node('/root/wjgh/cqh')
+LINE: 640 dir vmtnnfv
+
+LEVEL LINE: 2  dir vmtnnfv
+
+Node('/root/wjgh/cqh')
+LINE: 641 $ cd blvcjl
+
+Going down from cqh to blvcjl
+name:  blvcjl
+LEVEL LINE: 3  $ cd blvcjl
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 642 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 643 dir cgsznlm
+
+LEVEL LINE: 3  dir cgsznlm
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 644 47381 gtcv
+
+47381 gtcv
+
+LEVEL LINE: 3  47381 gtcv
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 645 227459 rgzfgz.wvr
+
+227459 rgzfgz.wvr
+
+LEVEL LINE: 3  227459 rgzfgz.wvr
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 646 dir tgcqhcv
+
+LEVEL LINE: 3  dir tgcqhcv
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 647 dir vff
+
+LEVEL LINE: 3  dir vff
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 648 dir vmtnnfv
+
+LEVEL LINE: 3  dir vmtnnfv
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 649 dir vmvpf
+
+LEVEL LINE: 3  dir vmvpf
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 650 75937 vmvpf.psj
+
+75937 vmvpf.psj
+
+LEVEL LINE: 3  75937 vmvpf.psj
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 651 29291 wdzh.szq
+
+29291 wdzh.szq
+
+LEVEL LINE: 3  29291 wdzh.szq
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 652 dir zqmsn
+
+LEVEL LINE: 3  dir zqmsn
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 653 $ cd cgsznlm
+
+Going down from blvcjl to cgsznlm
+name:  cgsznlm
+LEVEL LINE: 4  $ cd cgsznlm
+
+Node('/root/wjgh/cqh/blvcjl/cgsznlm')
+LINE: 654 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/cgsznlm')
+LINE: 655 91350 rpmwrtm.dlr
+
+91350 rpmwrtm.dlr
+
+LEVEL LINE: 4  91350 rpmwrtm.dlr
+
+Node('/root/wjgh/cqh/blvcjl/cgsznlm')
+LINE: 656 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  cgsznlm
+Parent name:  blvcjl
+Going up from cgsznlm to blvcjl
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 657 $ cd tgcqhcv
+
+Going down from blvcjl to tgcqhcv
+name:  tgcqhcv
+LEVEL LINE: 4  $ cd tgcqhcv
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 658 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 659 dir hnrhdvff
+
+LEVEL LINE: 4  dir hnrhdvff
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 660 81404 jshtffs.msp
+
+81404 jshtffs.msp
+
+LEVEL LINE: 4  81404 jshtffs.msp
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 661 158082 jshtffs.szt
+
+158082 jshtffs.szt
+
+LEVEL LINE: 4  158082 jshtffs.szt
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 662 dir nhmqcm
+
+LEVEL LINE: 4  dir nhmqcm
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 663 dir rvfsl
+
+LEVEL LINE: 4  dir rvfsl
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 664 dir smcrnh
+
+LEVEL LINE: 4  dir smcrnh
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 665 $ cd hnrhdvff
+
+Going down from tgcqhcv to hnrhdvff
+name:  hnrhdvff
+LEVEL LINE: 5  $ cd hnrhdvff
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 666 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 667 154674 htwms.nqc
+
+154674 htwms.nqc
+
+LEVEL LINE: 5  154674 htwms.nqc
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 668 dir rslbgns
+
+LEVEL LINE: 5  dir rslbgns
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 669 192997 vlbbbgnn
+
+192997 vlbbbgnn
+
+LEVEL LINE: 5  192997 vlbbbgnn
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 670 dir vmvpf
+
+LEVEL LINE: 5  dir vmvpf
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 671 230969 vqv
+
+230969 vqv
+
+LEVEL LINE: 5  230969 vqv
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 672 195769 ztfg.mfd
+
+195769 ztfg.mfd
+
+LEVEL LINE: 5  195769 ztfg.mfd
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 673 $ cd rslbgns
+
+Going down from hnrhdvff to rslbgns
+name:  rslbgns
+LEVEL LINE: 6  $ cd rslbgns
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+LINE: 674 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+LINE: 675 236439 dwbjh.whr
+
+236439 dwbjh.whr
+
+LEVEL LINE: 6  236439 dwbjh.whr
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+LINE: 676 dir gzph
+
+LEVEL LINE: 6  dir gzph
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+LINE: 677 279480 tlvmh.ghp
+
+279480 tlvmh.ghp
+
+LEVEL LINE: 6  279480 tlvmh.ghp
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+LINE: 678 107447 vqv
+
+107447 vqv
+
+LEVEL LINE: 6  107447 vqv
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+LINE: 679 $ cd gzph
+
+Going down from rslbgns to gzph
+name:  gzph
+LEVEL LINE: 7  $ cd gzph
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/gzph')
+LINE: 680 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/gzph')
+LINE: 681 46947 tdnmmqm
+
+46947 tdnmmqm
+
+LEVEL LINE: 7  46947 tdnmmqm
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/gzph')
+LINE: 682 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gzph
+Parent name:  rslbgns
+Going up from gzph to rslbgns
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+LINE: 683 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rslbgns
+Parent name:  hnrhdvff
+Going up from rslbgns to hnrhdvff
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 684 $ cd vmvpf
+
+Going down from hnrhdvff to vmvpf
+name:  vmvpf
+LEVEL LINE: 6  $ cd vmvpf
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf')
+LINE: 685 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf')
+LINE: 686 285442 sftfzz.pzn
+
+285442 sftfzz.pzn
+
+LEVEL LINE: 6  285442 sftfzz.pzn
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf')
+LINE: 687 292269 vmtnnfv.bbc
+
+292269 vmtnnfv.bbc
+
+LEVEL LINE: 6  292269 vmtnnfv.bbc
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf')
+LINE: 688 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmvpf
+Parent name:  hnrhdvff
+Going up from vmvpf to hnrhdvff
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+LINE: 689 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  hnrhdvff
+Parent name:  tgcqhcv
+Going up from hnrhdvff to tgcqhcv
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 690 $ cd nhmqcm
+
+Going down from tgcqhcv to nhmqcm
+name:  nhmqcm
+LEVEL LINE: 5  $ cd nhmqcm
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm')
+LINE: 691 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm')
+LINE: 692 219245 hwpgpdm.qrf
+
+219245 hwpgpdm.qrf
+
+LEVEL LINE: 5  219245 hwpgpdm.qrf
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm')
+LINE: 693 130169 rsmdgwjz.rph
+
+130169 rsmdgwjz.rph
+
+LEVEL LINE: 5  130169 rsmdgwjz.rph
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm')
+LINE: 694 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nhmqcm
+Parent name:  tgcqhcv
+Going up from nhmqcm to tgcqhcv
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 695 $ cd rvfsl
+
+Going down from tgcqhcv to rvfsl
+name:  rvfsl
+LEVEL LINE: 5  $ cd rvfsl
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+LINE: 696 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+LINE: 697 263768 ctprwbl.tjt
+
+263768 ctprwbl.tjt
+
+LEVEL LINE: 5  263768 ctprwbl.tjt
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+LINE: 698 dir jshtffs
+
+LEVEL LINE: 5  dir jshtffs
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+LINE: 699 dir rgzfgz
+
+LEVEL LINE: 5  dir rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+LINE: 700 291351 vpcd.hvf
+
+291351 vpcd.hvf
+
+LEVEL LINE: 5  291351 vpcd.hvf
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+LINE: 701 $ cd jshtffs
+
+Going down from rvfsl to jshtffs
+name:  jshtffs
+LEVEL LINE: 6  $ cd jshtffs
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 702 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 703 9465 fwvcbcpz.lvr
+
+9465 fwvcbcpz.lvr
+
+LEVEL LINE: 6  9465 fwvcbcpz.lvr
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 704 dir htb
+
+LEVEL LINE: 6  dir htb
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 705 dir jshtffs
+
+LEVEL LINE: 6  dir jshtffs
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 706 202004 nrgq.cwj
+
+202004 nrgq.cwj
+
+LEVEL LINE: 6  202004 nrgq.cwj
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 707 dir vmvpf
+
+LEVEL LINE: 6  dir vmvpf
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 708 $ cd htb
+
+Going down from jshtffs to htb
+name:  htb
+LEVEL LINE: 7  $ cd htb
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+LINE: 709 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+LINE: 710 323938 gwhlttb
+
+323938 gwhlttb
+
+LEVEL LINE: 7  323938 gwhlttb
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+LINE: 711 75918 llmlgmqz.zsp
+
+75918 llmlgmqz.zsp
+
+LEVEL LINE: 7  75918 llmlgmqz.zsp
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+LINE: 712 dir nvfv
+
+LEVEL LINE: 7  dir nvfv
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+LINE: 713 117786 qjjv
+
+117786 qjjv
+
+LEVEL LINE: 7  117786 qjjv
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+LINE: 714 167090 vmvpf.qvd
+
+167090 vmvpf.qvd
+
+LEVEL LINE: 7  167090 vmvpf.qvd
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+LINE: 715 $ cd nvfv
+
+Going down from htb to nvfv
+name:  nvfv
+LEVEL LINE: 8  $ cd nvfv
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/nvfv')
+LINE: 716 $ ls
+
+LEVEL LINE: 8  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/nvfv')
+LINE: 717 135820 tlvmh.ghp
+
+135820 tlvmh.ghp
+
+LEVEL LINE: 8  135820 tlvmh.ghp
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/nvfv')
+LINE: 718 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nvfv
+Parent name:  htb
+Going up from nvfv to htb
+LEVEL LINE: 7  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+LINE: 719 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  htb
+Parent name:  jshtffs
+Going up from htb to jshtffs
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 720 $ cd jshtffs
+
+Going down from jshtffs to jshtffs
+name:  jshtffs
+LEVEL LINE: 7  $ cd jshtffs
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/jshtffs')
+LINE: 721 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/jshtffs')
+LINE: 722 240326 fhr.jbf
+
+240326 fhr.jbf
+
+LEVEL LINE: 7  240326 fhr.jbf
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/jshtffs')
+LINE: 723 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  jshtffs
+Going up from jshtffs to jshtffs
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 724 $ cd vmvpf
+
+Going down from jshtffs to vmvpf
+name:  vmvpf
+LEVEL LINE: 7  $ cd vmvpf
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/vmvpf')
+LINE: 725 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/vmvpf')
+LINE: 726 154309 fwvcbcpz.lvr
+
+154309 fwvcbcpz.lvr
+
+LEVEL LINE: 7  154309 fwvcbcpz.lvr
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/vmvpf')
+LINE: 727 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmvpf
+Parent name:  jshtffs
+Going up from vmvpf to jshtffs
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+LINE: 728 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  rvfsl
+Going up from jshtffs to rvfsl
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+LINE: 729 $ cd rgzfgz
+
+Going down from rvfsl to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 6  $ cd rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz')
+LINE: 730 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz')
+LINE: 731 dir jjfdn
+
+LEVEL LINE: 6  dir jjfdn
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz')
+LINE: 732 dir nlhfgpr
+
+LEVEL LINE: 6  dir nlhfgpr
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz')
+LINE: 733 $ cd jjfdn
+
+Going down from rgzfgz to jjfdn
+name:  jjfdn
+LEVEL LINE: 7  $ cd jjfdn
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/jjfdn')
+LINE: 734 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/jjfdn')
+LINE: 735 46675 vfwhjfl.zrz
+
+46675 vfwhjfl.zrz
+
+LEVEL LINE: 7  46675 vfwhjfl.zrz
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/jjfdn')
+LINE: 736 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jjfdn
+Parent name:  rgzfgz
+Going up from jjfdn to rgzfgz
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz')
+LINE: 737 $ cd nlhfgpr
+
+Going down from rgzfgz to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 7  $ cd nlhfgpr
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/nlhfgpr')
+LINE: 738 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/nlhfgpr')
+LINE: 739 26537 qwzcnfz
+
+26537 qwzcnfz
+
+LEVEL LINE: 7  26537 qwzcnfz
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/nlhfgpr')
+LINE: 740 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  rgzfgz
+Going up from nlhfgpr to rgzfgz
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz')
+LINE: 741 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  rvfsl
+Going up from rgzfgz to rvfsl
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+LINE: 742 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rvfsl
+Parent name:  tgcqhcv
+Going up from rvfsl to tgcqhcv
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 743 $ cd smcrnh
+
+Going down from tgcqhcv to smcrnh
+name:  smcrnh
+LEVEL LINE: 5  $ cd smcrnh
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/smcrnh')
+LINE: 744 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/smcrnh')
+LINE: 745 331015 vpttwwc.jgr
+
+331015 vpttwwc.jgr
+
+LEVEL LINE: 5  331015 vpttwwc.jgr
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv/smcrnh')
+LINE: 746 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  smcrnh
+Parent name:  tgcqhcv
+Going up from smcrnh to tgcqhcv
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+LINE: 747 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  tgcqhcv
+Parent name:  blvcjl
+Going up from tgcqhcv to blvcjl
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 748 $ cd vff
+
+Going down from blvcjl to vff
+name:  vff
+LEVEL LINE: 4  $ cd vff
+
+Node('/root/wjgh/cqh/blvcjl/vff')
+LINE: 749 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vff')
+LINE: 750 68000 ntbfs.znj
+
+68000 ntbfs.znj
+
+LEVEL LINE: 4  68000 ntbfs.znj
+
+Node('/root/wjgh/cqh/blvcjl/vff')
+LINE: 751 265866 rgzfgz.lsl
+
+265866 rgzfgz.lsl
+
+LEVEL LINE: 4  265866 rgzfgz.lsl
+
+Node('/root/wjgh/cqh/blvcjl/vff')
+LINE: 752 53570 vmvpf.ncb
+
+53570 vmvpf.ncb
+
+LEVEL LINE: 4  53570 vmvpf.ncb
+
+Node('/root/wjgh/cqh/blvcjl/vff')
+LINE: 753 74229 vqv
+
+74229 vqv
+
+LEVEL LINE: 4  74229 vqv
+
+Node('/root/wjgh/cqh/blvcjl/vff')
+LINE: 754 96730 zwq.zdb
+
+96730 zwq.zdb
+
+LEVEL LINE: 4  96730 zwq.zdb
+
+Node('/root/wjgh/cqh/blvcjl/vff')
+LINE: 755 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vff
+Parent name:  blvcjl
+Going up from vff to blvcjl
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 756 $ cd vmtnnfv
+
+Going down from blvcjl to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 4  $ cd vmtnnfv
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv')
+LINE: 757 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv')
+LINE: 758 dir rgzfgz
+
+LEVEL LINE: 4  dir rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv')
+LINE: 759 dir zmr
+
+LEVEL LINE: 4  dir zmr
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv')
+LINE: 760 $ cd rgzfgz
+
+Going down from vmtnnfv to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 5  $ cd rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+LINE: 761 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+LINE: 762 7492 fwvcbcpz.lvr
+
+7492 fwvcbcpz.lvr
+
+LEVEL LINE: 5  7492 fwvcbcpz.lvr
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+LINE: 763 dir gjg
+
+LEVEL LINE: 5  dir gjg
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+LINE: 764 dir sfrlhmm
+
+LEVEL LINE: 5  dir sfrlhmm
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+LINE: 765 $ cd gjg
+
+Going down from rgzfgz to gjg
+name:  gjg
+LEVEL LINE: 6  $ cd gjg
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg')
+LINE: 766 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg')
+LINE: 767 dir dqjfz
+
+LEVEL LINE: 6  dir dqjfz
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg')
+LINE: 768 59560 vqv
+
+59560 vqv
+
+LEVEL LINE: 6  59560 vqv
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg')
+LINE: 769 33788 wdzh.szq
+
+33788 wdzh.szq
+
+LEVEL LINE: 6  33788 wdzh.szq
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg')
+LINE: 770 $ cd dqjfz
+
+Going down from gjg to dqjfz
+name:  dqjfz
+LEVEL LINE: 7  $ cd dqjfz
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz')
+LINE: 771 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz')
+LINE: 772 dir zhtbsq
+
+LEVEL LINE: 7  dir zhtbsq
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz')
+LINE: 773 $ cd zhtbsq
+
+Going down from dqjfz to zhtbsq
+name:  zhtbsq
+LEVEL LINE: 8  $ cd zhtbsq
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz/zhtbsq')
+LINE: 774 $ ls
+
+LEVEL LINE: 8  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz/zhtbsq')
+LINE: 775 222414 cgsjvqvd.rsd
+
+222414 cgsjvqvd.rsd
+
+LEVEL LINE: 8  222414 cgsjvqvd.rsd
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz/zhtbsq')
+LINE: 776 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  zhtbsq
+Parent name:  dqjfz
+Going up from zhtbsq to dqjfz
+LEVEL LINE: 7  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz')
+LINE: 777 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  dqjfz
+Parent name:  gjg
+Going up from dqjfz to gjg
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg')
+LINE: 778 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gjg
+Parent name:  rgzfgz
+Going up from gjg to rgzfgz
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+LINE: 779 $ cd sfrlhmm
+
+Going down from rgzfgz to sfrlhmm
+name:  sfrlhmm
+LEVEL LINE: 6  $ cd sfrlhmm
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/sfrlhmm')
+LINE: 780 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/sfrlhmm')
+LINE: 781 94423 rgzfgz
+
+94423 rgzfgz
+
+LEVEL LINE: 6  94423 rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/sfrlhmm')
+LINE: 782 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  sfrlhmm
+Parent name:  rgzfgz
+Going up from sfrlhmm to rgzfgz
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+LINE: 783 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  vmtnnfv
+Going up from rgzfgz to vmtnnfv
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv')
+LINE: 784 $ cd zmr
+
+Going down from vmtnnfv to zmr
+name:  zmr
+LEVEL LINE: 5  $ cd zmr
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr')
+LINE: 785 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr')
+LINE: 786 269611 gvhrsmt.bdt
+
+269611 gvhrsmt.bdt
+
+LEVEL LINE: 5  269611 gvhrsmt.bdt
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr')
+LINE: 787 dir vmtnnfv
+
+LEVEL LINE: 5  dir vmtnnfv
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr')
+LINE: 788 $ cd vmtnnfv
+
+Going down from zmr to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 6  $ cd vmtnnfv
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv')
+LINE: 789 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv')
+LINE: 790 dir rgzfgz
+
+LEVEL LINE: 6  dir rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv')
+LINE: 791 $ cd rgzfgz
+
+Going down from vmtnnfv to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 7  $ cd rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz')
+LINE: 792 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz')
+LINE: 793 355703 fwvcbcpz.lvr
+
+355703 fwvcbcpz.lvr
+
+LEVEL LINE: 7  355703 fwvcbcpz.lvr
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz')
+LINE: 794 286378 pcf.dss
+
+286378 pcf.dss
+
+LEVEL LINE: 7  286378 pcf.dss
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz')
+LINE: 795 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  vmtnnfv
+Going up from rgzfgz to vmtnnfv
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv')
+LINE: 796 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  zmr
+Going up from vmtnnfv to zmr
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr')
+LINE: 797 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  zmr
+Parent name:  vmtnnfv
+Going up from zmr to vmtnnfv
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmtnnfv')
+LINE: 798 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  blvcjl
+Going up from vmtnnfv to blvcjl
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 799 $ cd vmvpf
+
+Going down from blvcjl to vmvpf
+name:  vmvpf
+LEVEL LINE: 4  $ cd vmvpf
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 800 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 801 336533 fwvcbcpz.lvr
+
+336533 fwvcbcpz.lvr
+
+LEVEL LINE: 4  336533 fwvcbcpz.lvr
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 802 80609 hsfnp
+
+80609 hsfnp
+
+LEVEL LINE: 4  80609 hsfnp
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 803 9548 jld.rvt
+
+9548 jld.rvt
+
+LEVEL LINE: 4  9548 jld.rvt
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 804 dir jshtffs
+
+LEVEL LINE: 4  dir jshtffs
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 805 219383 rjtrbjl.vbc
+
+219383 rjtrbjl.vbc
+
+LEVEL LINE: 4  219383 rjtrbjl.vbc
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 806 dir vmtnnfv
+
+LEVEL LINE: 4  dir vmtnnfv
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 807 182036 vmvpf
+
+182036 vmvpf
+
+LEVEL LINE: 4  182036 vmvpf
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 808 $ cd jshtffs
+
+Going down from vmvpf to jshtffs
+name:  jshtffs
+LEVEL LINE: 5  $ cd jshtffs
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+LINE: 809 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+LINE: 810 dir jshtffs
+
+LEVEL LINE: 5  dir jshtffs
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+LINE: 811 dir rtnwnqcb
+
+LEVEL LINE: 5  dir rtnwnqcb
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+LINE: 812 358722 szfhzcj.tjt
+
+358722 szfhzcj.tjt
+
+LEVEL LINE: 5  358722 szfhzcj.tjt
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+LINE: 813 167284 tlvmh.ghp
+
+167284 tlvmh.ghp
+
+LEVEL LINE: 5  167284 tlvmh.ghp
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+LINE: 814 $ cd jshtffs
+
+Going down from jshtffs to jshtffs
+name:  jshtffs
+LEVEL LINE: 6  $ cd jshtffs
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs')
+LINE: 815 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs')
+LINE: 816 68702 blcgmn
+
+68702 blcgmn
+
+LEVEL LINE: 6  68702 blcgmn
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs')
+LINE: 817 299911 jjd.pvb
+
+299911 jjd.pvb
+
+LEVEL LINE: 6  299911 jjd.pvb
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs')
+LINE: 818 243135 wdzh.szq
+
+243135 wdzh.szq
+
+LEVEL LINE: 6  243135 wdzh.szq
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs')
+LINE: 819 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  jshtffs
+Going up from jshtffs to jshtffs
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+LINE: 820 $ cd rtnwnqcb
+
+Going down from jshtffs to rtnwnqcb
+name:  rtnwnqcb
+LEVEL LINE: 6  $ cd rtnwnqcb
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb')
+LINE: 821 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb')
+LINE: 822 128787 jmvlgd.bwv
+
+128787 jmvlgd.bwv
+
+LEVEL LINE: 6  128787 jmvlgd.bwv
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb')
+LINE: 823 268582 tdpqcqfs.nzp
+
+268582 tdpqcqfs.nzp
+
+LEVEL LINE: 6  268582 tdpqcqfs.nzp
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb')
+LINE: 824 348305 vmvpf.bnl
+
+348305 vmvpf.bnl
+
+LEVEL LINE: 6  348305 vmvpf.bnl
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb')
+LINE: 825 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rtnwnqcb
+Parent name:  jshtffs
+Going up from rtnwnqcb to jshtffs
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+LINE: 826 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  vmvpf
+Going up from jshtffs to vmvpf
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 827 $ cd vmtnnfv
+
+Going down from vmvpf to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 5  $ cd vmtnnfv
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv')
+LINE: 828 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv')
+LINE: 829 dir nlhfgpr
+
+LEVEL LINE: 5  dir nlhfgpr
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv')
+LINE: 830 241246 tlvmh.ghp
+
+241246 tlvmh.ghp
+
+LEVEL LINE: 5  241246 tlvmh.ghp
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv')
+LINE: 831 $ cd nlhfgpr
+
+Going down from vmtnnfv to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 6  $ cd nlhfgpr
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/nlhfgpr')
+LINE: 832 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/nlhfgpr')
+LINE: 833 292694 tlvmh.ghp
+
+292694 tlvmh.ghp
+
+LEVEL LINE: 6  292694 tlvmh.ghp
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/nlhfgpr')
+LINE: 834 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  vmtnnfv
+Going up from nlhfgpr to vmtnnfv
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv')
+LINE: 835 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  vmvpf
+Going up from vmtnnfv to vmvpf
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/vmvpf')
+LINE: 836 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmvpf
+Parent name:  blvcjl
+Going up from vmvpf to blvcjl
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 837 $ cd zqmsn
+
+Going down from blvcjl to zqmsn
+name:  zqmsn
+LEVEL LINE: 4  $ cd zqmsn
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn')
+LINE: 838 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn')
+LINE: 839 244052 mmthhf.wmd
+
+244052 mmthhf.wmd
+
+LEVEL LINE: 4  244052 mmthhf.wmd
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn')
+LINE: 840 144084 psspc.czf
+
+144084 psspc.czf
+
+LEVEL LINE: 4  144084 psspc.czf
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn')
+LINE: 841 dir vflpgd
+
+LEVEL LINE: 4  dir vflpgd
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn')
+LINE: 842 $ cd vflpgd
+
+Going down from zqmsn to vflpgd
+name:  vflpgd
+LEVEL LINE: 5  $ cd vflpgd
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+LINE: 843 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+LINE: 844 22881 hsbbcdp.psd
+
+22881 hsbbcdp.psd
+
+LEVEL LINE: 5  22881 hsbbcdp.psd
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+LINE: 845 dir rgzfgz
+
+LEVEL LINE: 5  dir rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+LINE: 846 dir tmz
+
+LEVEL LINE: 5  dir tmz
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+LINE: 847 246706 vmvpf
+
+246706 vmvpf
+
+LEVEL LINE: 5  246706 vmvpf
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+LINE: 848 $ cd rgzfgz
+
+Going down from vflpgd to rgzfgz
+name:  rgzfgz
+LEVEL LINE: 6  $ cd rgzfgz
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+LINE: 849 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+LINE: 850 346162 jshtffs.hqw
+
+346162 jshtffs.hqw
+
+LEVEL LINE: 6  346162 jshtffs.hqw
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+LINE: 851 dir lhmh
+
+LEVEL LINE: 6  dir lhmh
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+LINE: 852 dir pfwbz
+
+LEVEL LINE: 6  dir pfwbz
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+LINE: 853 87008 tzddth.whp
+
+87008 tzddth.whp
+
+LEVEL LINE: 6  87008 tzddth.whp
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+LINE: 854 $ cd lhmh
+
+Going down from rgzfgz to lhmh
+name:  lhmh
+LEVEL LINE: 7  $ cd lhmh
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh')
+LINE: 855 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh')
+LINE: 856 dir nlhfgpr
+
+LEVEL LINE: 7  dir nlhfgpr
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh')
+LINE: 857 $ cd nlhfgpr
+
+Going down from lhmh to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 8  $ cd nlhfgpr
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr')
+LINE: 858 $ ls
+
+LEVEL LINE: 8  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr')
+LINE: 859 167305 tlvmh.ghp
+
+167305 tlvmh.ghp
+
+LEVEL LINE: 8  167305 tlvmh.ghp
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr')
+LINE: 860 dir vnsdh
+
+LEVEL LINE: 8  dir vnsdh
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr')
+LINE: 861 $ cd vnsdh
+
+Going down from nlhfgpr to vnsdh
+name:  vnsdh
+LEVEL LINE: 9  $ cd vnsdh
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/vnsdh')
+LINE: 862 $ ls
+
+LEVEL LINE: 9  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/vnsdh')
+LINE: 863 22714 tlvmh.ghp
+
+22714 tlvmh.ghp
+
+LEVEL LINE: 9  22714 tlvmh.ghp
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/vnsdh')
+LINE: 864 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vnsdh
+Parent name:  nlhfgpr
+Going up from vnsdh to nlhfgpr
+LEVEL LINE: 8  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr')
+LINE: 865 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  lhmh
+Going up from nlhfgpr to lhmh
+LEVEL LINE: 7  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh')
+LINE: 866 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lhmh
+Parent name:  rgzfgz
+Going up from lhmh to rgzfgz
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+LINE: 867 $ cd pfwbz
+
+Going down from rgzfgz to pfwbz
+name:  pfwbz
+LEVEL LINE: 7  $ cd pfwbz
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz')
+LINE: 868 $ ls
+
+LEVEL LINE: 7  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz')
+LINE: 869 163433 bzttjhqz.hpz
+
+163433 bzttjhqz.hpz
+
+LEVEL LINE: 7  163433 bzttjhqz.hpz
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz')
+LINE: 870 198604 vlbbbgnn
+
+198604 vlbbbgnn
+
+LEVEL LINE: 7  198604 vlbbbgnn
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz')
+LINE: 871 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  pfwbz
+Parent name:  rgzfgz
+Going up from pfwbz to rgzfgz
+LEVEL LINE: 6  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+LINE: 872 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  rgzfgz
+Parent name:  vflpgd
+Going up from rgzfgz to vflpgd
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+LINE: 873 $ cd tmz
+
+Going down from vflpgd to tmz
+name:  tmz
+LEVEL LINE: 6  $ cd tmz
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/tmz')
+LINE: 874 $ ls
+
+LEVEL LINE: 6  $ ls
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/tmz')
+LINE: 875 300571 bmrs
+
+300571 bmrs
+
+LEVEL LINE: 6  300571 bmrs
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/tmz')
+LINE: 876 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  tmz
+Parent name:  vflpgd
+Going up from tmz to vflpgd
+LEVEL LINE: 5  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+LINE: 877 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vflpgd
+Parent name:  zqmsn
+Going up from vflpgd to zqmsn
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl/zqmsn')
+LINE: 878 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  zqmsn
+Parent name:  blvcjl
+Going up from zqmsn to blvcjl
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/cqh/blvcjl')
+LINE: 879 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  blvcjl
+Parent name:  cqh
+Going up from blvcjl to cqh
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjgh/cqh')
+LINE: 880 $ cd vmtnnfv
+
+Going down from cqh to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 3  $ cd vmtnnfv
+
+Node('/root/wjgh/cqh/vmtnnfv')
+LINE: 881 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjgh/cqh/vmtnnfv')
+LINE: 882 dir llwmdf
+
+LEVEL LINE: 3  dir llwmdf
+
+Node('/root/wjgh/cqh/vmtnnfv')
+LINE: 883 dir pvzdlsgp
+
+LEVEL LINE: 3  dir pvzdlsgp
+
+Node('/root/wjgh/cqh/vmtnnfv')
+LINE: 884 48025 zvvrwh.dhw
+
+48025 zvvrwh.dhw
+
+LEVEL LINE: 3  48025 zvvrwh.dhw
+
+Node('/root/wjgh/cqh/vmtnnfv')
+LINE: 885 $ cd llwmdf
+
+Going down from vmtnnfv to llwmdf
+name:  llwmdf
+LEVEL LINE: 4  $ cd llwmdf
+
+Node('/root/wjgh/cqh/vmtnnfv/llwmdf')
+LINE: 886 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/cqh/vmtnnfv/llwmdf')
+LINE: 887 236755 hbfdll
+
+236755 hbfdll
+
+LEVEL LINE: 4  236755 hbfdll
+
+Node('/root/wjgh/cqh/vmtnnfv/llwmdf')
+LINE: 888 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  llwmdf
+Parent name:  vmtnnfv
+Going up from llwmdf to vmtnnfv
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/cqh/vmtnnfv')
+LINE: 889 $ cd pvzdlsgp
+
+Going down from vmtnnfv to pvzdlsgp
+name:  pvzdlsgp
+LEVEL LINE: 4  $ cd pvzdlsgp
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 890 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 891 dir drjbqvn
+
+LEVEL LINE: 4  dir drjbqvn
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 892 102548 fwvcbcpz.lvr
+
+102548 fwvcbcpz.lvr
+
+LEVEL LINE: 4  102548 fwvcbcpz.lvr
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 893 300337 gcv.bnn
+
+300337 gcv.bnn
+
+LEVEL LINE: 4  300337 gcv.bnn
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 894 dir grgc
+
+LEVEL LINE: 4  dir grgc
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 895 27918 mtnvzzc.vlj
+
+27918 mtnvzzc.vlj
+
+LEVEL LINE: 4  27918 mtnvzzc.vlj
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 896 dir nlhfgpr
+
+LEVEL LINE: 4  dir nlhfgpr
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 897 92639 wdzh.szq
+
+92639 wdzh.szq
+
+LEVEL LINE: 4  92639 wdzh.szq
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 898 152813 wmnpg
+
+152813 wmnpg
+
+LEVEL LINE: 4  152813 wmnpg
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 899 $ cd drjbqvn
+
+Going down from pvzdlsgp to drjbqvn
+name:  drjbqvn
+LEVEL LINE: 5  $ cd drjbqvn
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn')
+LINE: 900 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn')
+LINE: 901 292541 jshtffs.gjg
+
+292541 jshtffs.gjg
+
+LEVEL LINE: 5  292541 jshtffs.gjg
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn')
+LINE: 902 84918 vqv
+
+84918 vqv
+
+LEVEL LINE: 5  84918 vqv
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn')
+LINE: 903 355763 zqsmd
+
+355763 zqsmd
+
+LEVEL LINE: 5  355763 zqsmd
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn')
+LINE: 904 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  drjbqvn
+Parent name:  pvzdlsgp
+Going up from drjbqvn to pvzdlsgp
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 905 $ cd grgc
+
+Going down from pvzdlsgp to grgc
+name:  grgc
+LEVEL LINE: 5  $ cd grgc
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc')
+LINE: 906 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc')
+LINE: 907 45875 nlhfgpr.rnf
+
+45875 nlhfgpr.rnf
+
+LEVEL LINE: 5  45875 nlhfgpr.rnf
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc')
+LINE: 908 294562 slshp
+
+294562 slshp
+
+LEVEL LINE: 5  294562 slshp
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc')
+LINE: 909 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  grgc
+Parent name:  pvzdlsgp
+Going up from grgc to pvzdlsgp
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 910 $ cd nlhfgpr
+
+Going down from pvzdlsgp to nlhfgpr
+name:  nlhfgpr
+LEVEL LINE: 5  $ cd nlhfgpr
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/nlhfgpr')
+LINE: 911 $ ls
+
+LEVEL LINE: 5  $ ls
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/nlhfgpr')
+LINE: 912 310430 fpglshq
+
+310430 fpglshq
+
+LEVEL LINE: 5  310430 fpglshq
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/nlhfgpr')
+LINE: 913 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  nlhfgpr
+Parent name:  pvzdlsgp
+Going up from nlhfgpr to pvzdlsgp
+LEVEL LINE: 4  $ cd ..
+
+Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+LINE: 914 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  pvzdlsgp
+Parent name:  vmtnnfv
+Going up from pvzdlsgp to vmtnnfv
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/cqh/vmtnnfv')
+LINE: 915 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  cqh
+Going up from vmtnnfv to cqh
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjgh/cqh')
+LINE: 916 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  cqh
+Parent name:  wjgh
+Going up from cqh to wjgh
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/wjgh')
+LINE: 917 $ cd hwr
+
+Going down from wjgh to hwr
+name:  hwr
+LEVEL LINE: 2  $ cd hwr
+
+Node('/root/wjgh/hwr')
+LINE: 918 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/wjgh/hwr')
+LINE: 919 dir jshtffs
+
+LEVEL LINE: 2  dir jshtffs
+
+Node('/root/wjgh/hwr')
+LINE: 920 dir srrgj
+
+LEVEL LINE: 2  dir srrgj
+
+Node('/root/wjgh/hwr')
+LINE: 921 $ cd jshtffs
+
+Going down from hwr to jshtffs
+name:  jshtffs
+LEVEL LINE: 3  $ cd jshtffs
+
+Node('/root/wjgh/hwr/jshtffs')
+LINE: 922 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjgh/hwr/jshtffs')
+LINE: 923 275253 fwvcbcpz.lvr
+
+275253 fwvcbcpz.lvr
+
+LEVEL LINE: 3  275253 fwvcbcpz.lvr
+
+Node('/root/wjgh/hwr/jshtffs')
+LINE: 924 262142 vlqflmdn.gtd
+
+262142 vlqflmdn.gtd
+
+LEVEL LINE: 3  262142 vlqflmdn.gtd
+
+Node('/root/wjgh/hwr/jshtffs')
+LINE: 925 dir zrm
+
+LEVEL LINE: 3  dir zrm
+
+Node('/root/wjgh/hwr/jshtffs')
+LINE: 926 $ cd zrm
+
+Going down from jshtffs to zrm
+name:  zrm
+LEVEL LINE: 4  $ cd zrm
+
+Node('/root/wjgh/hwr/jshtffs/zrm')
+LINE: 927 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/hwr/jshtffs/zrm')
+LINE: 928 103078 jshtffs.ncf
+
+103078 jshtffs.ncf
+
+LEVEL LINE: 4  103078 jshtffs.ncf
+
+Node('/root/wjgh/hwr/jshtffs/zrm')
+LINE: 929 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  zrm
+Parent name:  jshtffs
+Going up from zrm to jshtffs
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/hwr/jshtffs')
+LINE: 930 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  hwr
+Going up from jshtffs to hwr
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjgh/hwr')
+LINE: 931 $ cd srrgj
+
+Going down from hwr to srrgj
+name:  srrgj
+LEVEL LINE: 3  $ cd srrgj
+
+Node('/root/wjgh/hwr/srrgj')
+LINE: 932 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjgh/hwr/srrgj')
+LINE: 933 328221 fqdmfshj.ftn
+
+328221 fqdmfshj.ftn
+
+LEVEL LINE: 3  328221 fqdmfshj.ftn
+
+Node('/root/wjgh/hwr/srrgj')
+LINE: 934 107311 lpdrrw
+
+107311 lpdrrw
+
+LEVEL LINE: 3  107311 lpdrrw
+
+Node('/root/wjgh/hwr/srrgj')
+LINE: 935 214681 ltq.gmq
+
+214681 ltq.gmq
+
+LEVEL LINE: 3  214681 ltq.gmq
+
+Node('/root/wjgh/hwr/srrgj')
+LINE: 936 321175 pzd
+
+321175 pzd
+
+LEVEL LINE: 3  321175 pzd
+
+Node('/root/wjgh/hwr/srrgj')
+LINE: 937 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  srrgj
+Parent name:  hwr
+Going up from srrgj to hwr
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjgh/hwr')
+LINE: 938 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  hwr
+Parent name:  wjgh
+Going up from hwr to wjgh
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/wjgh')
+LINE: 939 $ cd jshtffs
+
+Going down from wjgh to jshtffs
+name:  jshtffs
+LEVEL LINE: 2  $ cd jshtffs
+
+Node('/root/wjgh/jshtffs')
+LINE: 940 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/wjgh/jshtffs')
+LINE: 941 dir ngbb
+
+LEVEL LINE: 2  dir ngbb
+
+Node('/root/wjgh/jshtffs')
+LINE: 942 $ cd ngbb
+
+Going down from jshtffs to ngbb
+name:  ngbb
+LEVEL LINE: 3  $ cd ngbb
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 943 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 944 218170 lvmj.sjg
+
+218170 lvmj.sjg
+
+LEVEL LINE: 3  218170 lvmj.sjg
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 945 123373 nwv
+
+123373 nwv
+
+LEVEL LINE: 3  123373 nwv
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 946 326485 rgzfgz.gjd
+
+326485 rgzfgz.gjd
+
+LEVEL LINE: 3  326485 rgzfgz.gjd
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 947 192138 vlbbbgnn
+
+192138 vlbbbgnn
+
+LEVEL LINE: 3  192138 vlbbbgnn
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 948 dir vmtnnfv
+
+LEVEL LINE: 3  dir vmtnnfv
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 949 179027 vptgrfr
+
+179027 vptgrfr
+
+LEVEL LINE: 3  179027 vptgrfr
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 950 $ cd vmtnnfv
+
+Going down from ngbb to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 4  $ cd vmtnnfv
+
+Node('/root/wjgh/jshtffs/ngbb/vmtnnfv')
+LINE: 951 $ ls
+
+LEVEL LINE: 4  $ ls
+
+Node('/root/wjgh/jshtffs/ngbb/vmtnnfv')
+LINE: 952 206046 vnlsclvh
+
+206046 vnlsclvh
+
+LEVEL LINE: 4  206046 vnlsclvh
+
+Node('/root/wjgh/jshtffs/ngbb/vmtnnfv')
+LINE: 953 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  ngbb
+Going up from vmtnnfv to ngbb
+LEVEL LINE: 3  $ cd ..
+
+Node('/root/wjgh/jshtffs/ngbb')
+LINE: 954 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ngbb
+Parent name:  jshtffs
+Going up from ngbb to jshtffs
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjgh/jshtffs')
+LINE: 955 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  jshtffs
+Parent name:  wjgh
+Going up from jshtffs to wjgh
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/wjgh')
+LINE: 956 $ cd zbmjg
+
+Going down from wjgh to zbmjg
+name:  zbmjg
+LEVEL LINE: 2  $ cd zbmjg
+
+Node('/root/wjgh/zbmjg')
+LINE: 957 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/wjgh/zbmjg')
+LINE: 958 30152 fwvcbcpz.lvr
+
+30152 fwvcbcpz.lvr
+
+LEVEL LINE: 2  30152 fwvcbcpz.lvr
+
+Node('/root/wjgh/zbmjg')
+LINE: 959 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  zbmjg
+Parent name:  wjgh
+Going up from zbmjg to wjgh
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/wjgh')
+LINE: 960 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  wjgh
+Parent name:  root
+Going up from wjgh to root
+LEVEL LINE: 0  $ cd ..
+
+Node('/root')
+LINE: 961 $ cd wjqsq
+
+Going down from root to wjqsq
+name:  wjqsq
+LEVEL LINE: 1  $ cd wjqsq
+
+Node('/root/wjqsq')
+LINE: 962 $ ls
+
+LEVEL LINE: 1  $ ls
+
+Node('/root/wjqsq')
+LINE: 963 23196 cmvfcwp.nfz
+
+23196 cmvfcwp.nfz
+
+LEVEL LINE: 1  23196 cmvfcwp.nfz
+
+Node('/root/wjqsq')
+LINE: 964 dir lnrzw
+
+LEVEL LINE: 1  dir lnrzw
+
+Node('/root/wjqsq')
+LINE: 965 316798 nlhfgpr.spt
+
+316798 nlhfgpr.spt
+
+LEVEL LINE: 1  316798 nlhfgpr.spt
+
+Node('/root/wjqsq')
+LINE: 966 dir ntrngh
+
+LEVEL LINE: 1  dir ntrngh
+
+Node('/root/wjqsq')
+LINE: 967 284657 tlvmh.ghp
+
+284657 tlvmh.ghp
+
+LEVEL LINE: 1  284657 tlvmh.ghp
+
+Node('/root/wjqsq')
+LINE: 968 50758 vmvpf.msg
+
+50758 vmvpf.msg
+
+LEVEL LINE: 1  50758 vmvpf.msg
+
+Node('/root/wjqsq')
+LINE: 969 $ cd lnrzw
+
+Going down from wjqsq to lnrzw
+name:  lnrzw
+LEVEL LINE: 2  $ cd lnrzw
+
+Node('/root/wjqsq/lnrzw')
+LINE: 970 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/wjqsq/lnrzw')
+LINE: 971 dir crc
+
+LEVEL LINE: 2  dir crc
+
+Node('/root/wjqsq/lnrzw')
+LINE: 972 dir ddhnvwqt
+
+LEVEL LINE: 2  dir ddhnvwqt
+
+Node('/root/wjqsq/lnrzw')
+LINE: 973 dir gdhfqlln
+
+LEVEL LINE: 2  dir gdhfqlln
+
+Node('/root/wjqsq/lnrzw')
+LINE: 974 dir vmtnnfv
+
+LEVEL LINE: 2  dir vmtnnfv
+
+Node('/root/wjqsq/lnrzw')
+LINE: 975 $ cd crc
+
+Going down from lnrzw to crc
+name:  crc
+LEVEL LINE: 3  $ cd crc
+
+Node('/root/wjqsq/lnrzw/crc')
+LINE: 976 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjqsq/lnrzw/crc')
+LINE: 977 296423 vmtnnfv.prq
+
+296423 vmtnnfv.prq
+
+LEVEL LINE: 3  296423 vmtnnfv.prq
+
+Node('/root/wjqsq/lnrzw/crc')
+LINE: 978 26320 vqv
+
+26320 vqv
+
+LEVEL LINE: 3  26320 vqv
+
+Node('/root/wjqsq/lnrzw/crc')
+LINE: 979 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  crc
+Parent name:  lnrzw
+Going up from crc to lnrzw
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjqsq/lnrzw')
+LINE: 980 $ cd ddhnvwqt
+
+Going down from lnrzw to ddhnvwqt
+name:  ddhnvwqt
+LEVEL LINE: 3  $ cd ddhnvwqt
+
+Node('/root/wjqsq/lnrzw/ddhnvwqt')
+LINE: 981 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjqsq/lnrzw/ddhnvwqt')
+LINE: 982 173923 vqv
+
+173923 vqv
+
+LEVEL LINE: 3  173923 vqv
+
+Node('/root/wjqsq/lnrzw/ddhnvwqt')
+LINE: 983 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  ddhnvwqt
+Parent name:  lnrzw
+Going up from ddhnvwqt to lnrzw
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjqsq/lnrzw')
+LINE: 984 $ cd gdhfqlln
+
+Going down from lnrzw to gdhfqlln
+name:  gdhfqlln
+LEVEL LINE: 3  $ cd gdhfqlln
+
+Node('/root/wjqsq/lnrzw/gdhfqlln')
+LINE: 985 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjqsq/lnrzw/gdhfqlln')
+LINE: 986 275288 vqv
+
+275288 vqv
+
+LEVEL LINE: 3  275288 vqv
+
+Node('/root/wjqsq/lnrzw/gdhfqlln')
+LINE: 987 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  gdhfqlln
+Parent name:  lnrzw
+Going up from gdhfqlln to lnrzw
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjqsq/lnrzw')
+LINE: 988 $ cd vmtnnfv
+
+Going down from lnrzw to vmtnnfv
+name:  vmtnnfv
+LEVEL LINE: 3  $ cd vmtnnfv
+
+Node('/root/wjqsq/lnrzw/vmtnnfv')
+LINE: 989 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjqsq/lnrzw/vmtnnfv')
+LINE: 990 52004 pgtmmtrf.vfc
+
+52004 pgtmmtrf.vfc
+
+LEVEL LINE: 3  52004 pgtmmtrf.vfc
+
+Node('/root/wjqsq/lnrzw/vmtnnfv')
+LINE: 991 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  vmtnnfv
+Parent name:  lnrzw
+Going up from vmtnnfv to lnrzw
+LEVEL LINE: 2  $ cd ..
+
+Node('/root/wjqsq/lnrzw')
+LINE: 992 $ cd ..
+
+HERE:  $ cd ..
+
+Node   name:  lnrzw
+Parent name:  wjqsq
+Going up from lnrzw to wjqsq
+LEVEL LINE: 1  $ cd ..
+
+Node('/root/wjqsq')
+LINE: 993 $ cd ntrngh
+
+Going down from wjqsq to ntrngh
+name:  ntrngh
+LEVEL LINE: 2  $ cd ntrngh
+
+Node('/root/wjqsq/ntrngh')
+LINE: 994 $ ls
+
+LEVEL LINE: 2  $ ls
+
+Node('/root/wjqsq/ntrngh')
+LINE: 995 dir czt
+
+LEVEL LINE: 2  dir czt
+
+Node('/root/wjqsq/ntrngh')
+LINE: 996 185012 vlbbbgnn
+
+185012 vlbbbgnn
+
+LEVEL LINE: 2  185012 vlbbbgnn
+
+Node('/root/wjqsq/ntrngh')
+LINE: 997 $ cd czt
+
+Going down from ntrngh to czt
+name:  czt
+LEVEL LINE: 3  $ cd czt
+
+Node('/root/wjqsq/ntrngh/czt')
+LINE: 998 $ ls
+
+LEVEL LINE: 3  $ ls
+
+Node('/root/wjqsq/ntrngh/czt')
+LINE: 999 355964 cvnslv
+
+355964 cvnslv
+
+LEVEL LINE: 3  355964 cvnslv
+
+Node('/root/wjqsq/ntrngh/czt')
+LINE: 1000 143166 mwbcbphd.prr
+
+143166 mwbcbphd.prr
+
+LEVEL LINE: 3  143166 mwbcbphd.prr
+
+Node('/root/wjqsq/ntrngh/czt')
+LINE: 1001 40666 rgzfgz
+
+40666 rgzfgz
+
+LEVEL LINE: 3  40666 rgzfgz
+
+
+
+Node('/root')
+|-- Node("/root/['hvbf.lvm', 276177]")
+|-- Node("/root/['rtv.cjj', 209719]")
+|-- Node("/root/['vmtnnfv.mdq', 192236]")
+|-- Node('/root/bqm')
+|   |-- Node("/root/bqm/['vqv', 133711]")
+|   +-- Node("/root/bqm/['wwlv.vgv', 263237]")
+|-- Node('/root/ctztn')
+|   |-- Node("/root/ctztn/['jshtffs', 55466]")
+|   |-- Node("/root/ctztn/['wdzh.szq', 115519]")
+|   |-- Node("/root/ctztn/['zgwwgps.gfn', 221554]")
+|   |-- Node('/root/ctztn/gpgbfzbs')
+|   |   +-- Node("/root/ctztn/gpgbfzbs/['tlvmh.ghp', 354710]")
+|   |-- Node('/root/ctztn/hfvqpt')
+|   |   |-- Node("/root/ctztn/hfvqpt/['nnn.chs', 175230]")
+|   |   |-- Node("/root/ctztn/hfvqpt/['plqjpqss', 13406]")
+|   |   |-- Node('/root/ctztn/hfvqpt/cggfgt')
+|   |   |   |-- Node("/root/ctztn/hfvqpt/cggfgt/['fhww', 109434]")
+|   |   |   |-- Node("/root/ctztn/hfvqpt/cggfgt/['nlhfgpr.vnv', 305315]")
+|   |   |   |-- Node("/root/ctztn/hfvqpt/cggfgt/['tlvmh.ghp', 297519]")
+|   |   |   |-- Node('/root/ctztn/hfvqpt/cggfgt/glnrg')
+|   |   |   |   |-- Node("/root/ctztn/hfvqpt/cggfgt/glnrg/['qzfpwv', 345026]")
+|   |   |   |   +-- Node("/root/ctztn/hfvqpt/cggfgt/glnrg/['rgzfgz', 196361]")
+|   |   |   |-- Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh')
+|   |   |   |   |-- Node("/root/ctztn/hfvqpt/cggfgt/mptpfvlh/['vlbbbgnn', 121174]")
+|   |   |   |   +-- Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+|   |   |   |       |-- Node("/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/['nlhfgpr', 359939]")
+|   |   |   |       |-- Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/jqclpq')
+|   |   |   |       |   +-- Node("/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/jqclpq/['mnhnclpt.qsv', 189319]")
+|   |   |   |       +-- Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp')
+|   |   |   |           +-- Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp/lgdlztb')
+|   |   |   |               +-- Node("/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp/lgdlztb/['wdzh.szq', 94150]")
+|   |   |   +-- Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+|   |   |       |-- Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/['rgzfgz', 66706]")
+|   |   |       |-- Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+|   |   |       |   |-- Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/['bpjpm', 345595]")
+|   |   |       |   |-- Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/ljtdcgt')
+|   |   |       |   |   +-- Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/ljtdcgt/['nlhfgpr', 134178]")
+|   |   |       |   +-- Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/plltpvgv')
+|   |   |       |       +-- Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/plltpvgv/['rqj', 355576]")
+|   |   |       +-- Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/zrc')
+|   |   |           +-- Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/zrc/['vqv', 45363]")
+|   |   |-- Node('/root/ctztn/hfvqpt/jshtffs')
+|   |   |   |-- Node("/root/ctztn/hfvqpt/jshtffs/['fwvcbcpz.lvr', 124375]")
+|   |   |   |-- Node('/root/ctztn/hfvqpt/jshtffs/bwbwldd')
+|   |   |   |   +-- Node("/root/ctztn/hfvqpt/jshtffs/bwbwldd/['vthsfg', 144330]")
+|   |   |   |-- Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+|   |   |   |   |-- Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt')
+|   |   |   |   |   |-- Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt/['dgrt', 132008]")
+|   |   |   |   |   +-- Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt/['nlhfgpr.hss', 263345]")
+|   |   |   |   |-- Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz')
+|   |   |   |   |   |-- Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz/['mcqlbzs.gwl', 214808]")
+|   |   |   |   |   +-- Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz/['nlhfgpr.hcs', 120157]")
+|   |   |   |   +-- Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv')
+|   |   |   |       |-- Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/['vlbbbgnn', 52978]")
+|   |   |   |       +-- Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/rgzfgz')
+|   |   |   |           +-- Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/rgzfgz/['nnc', 177061]")
+|   |   |   |-- Node('/root/ctztn/hfvqpt/jshtffs/jshtffs')
+|   |   |   |   |-- Node("/root/ctztn/hfvqpt/jshtffs/jshtffs/['bbsfrg.bbr', 157488]")
+|   |   |   |   +-- Node("/root/ctztn/hfvqpt/jshtffs/jshtffs/['dhwbvggg', 166412]")
+|   |   |   +-- Node('/root/ctztn/hfvqpt/jshtffs/sngchq')
+|   |   |       |-- Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+|   |   |       |   |-- Node("/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/['vmtnnfv', 5663]")
+|   |   |       |   |-- Node("/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/['vqv', 278760]")
+|   |   |       |   |-- Node("/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/['wjlm.cbw', 323147]")
+|   |   |       |   +-- Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf')
+|   |   |       |       +-- Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp')
+|   |   |       |           +-- Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp/fhs')
+|   |   |       |               +-- Node("/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp/fhs/['rgzfgz', 137718]")
+|   |   |       +-- Node('/root/ctztn/hfvqpt/jshtffs/sngchq/hhd')
+|   |   |           +-- Node("/root/ctztn/hfvqpt/jshtffs/sngchq/hhd/['gphghhdh.rrb', 350019]")
+|   |   |-- Node('/root/ctztn/hfvqpt/pnwcq')
+|   |   |   +-- Node('/root/ctztn/hfvqpt/pnwcq/qtqqdd')
+|   |   |       +-- Node("/root/ctztn/hfvqpt/pnwcq/qtqqdd/['tlvmh.ghp', 62319]")
+|   |   +-- Node('/root/ctztn/hfvqpt/str')
+|   |       |-- Node("/root/ctztn/hfvqpt/str/['tlvmh.ghp', 334780]")
+|   |       |-- Node("/root/ctztn/hfvqpt/str/['vvh.tzh', 211478]")
+|   |       |-- Node('/root/ctztn/hfvqpt/str/vcdcgbtr')
+|   |       |   +-- Node("/root/ctztn/hfvqpt/str/vcdcgbtr/['zhh.dsw', 276438]")
+|   |       +-- Node('/root/ctztn/hfvqpt/str/zlsv')
+|   |           +-- Node("/root/ctztn/hfvqpt/str/zlsv/['vmvpf.tcs', 315890]")
+|   |-- Node('/root/ctztn/rgzfgz')
+|   |   +-- Node('/root/ctztn/rgzfgz/qwzfs')
+|   |       +-- Node('/root/ctztn/rgzfgz/qwzfs/lzl')
+|   |           |-- Node("/root/ctztn/rgzfgz/qwzfs/lzl/['vmvpf.dgz', 259493]")
+|   |           +-- Node('/root/ctztn/rgzfgz/qwzfs/lzl/gpgccbc')
+|   |               +-- Node("/root/ctztn/rgzfgz/qwzfs/lzl/gpgccbc/['tlvmh.ghp', 124141]")
+|   +-- Node('/root/ctztn/wmfvclz')
+|       |-- Node("/root/ctztn/wmfvclz/['fmqtjdfd.dwp', 25819]")
+|       |-- Node("/root/ctztn/wmfvclz/['qccd.gnd', 253619]")
+|       |-- Node("/root/ctztn/wmfvclz/['sjsz.rtg', 121087]")
+|       |-- Node("/root/ctztn/wmfvclz/['tgs', 350518]")
+|       +-- Node('/root/ctztn/wmfvclz/zmft')
+|           +-- Node("/root/ctztn/wmfvclz/zmft/['vlbbbgnn', 248086]")
+|-- Node('/root/dbclg')
+|   |-- Node("/root/dbclg/['slctrj', 182454]")
+|   |-- Node("/root/dbclg/['tzp.dvf', 103919]")
+|   |-- Node("/root/dbclg/['zlbmvfq.qsh', 311601]")
+|   |-- Node('/root/dbclg/dgm')
+|   |   |-- Node("/root/dbclg/dgm/['shzfvbs.jrj', 26424]")
+|   |   |-- Node('/root/dbclg/dgm/fflb')
+|   |   |   +-- Node("/root/dbclg/dgm/fflb/['ngzgfpt', 154495]")
+|   |   +-- Node('/root/dbclg/dgm/jshtffs')
+|   |       |-- Node("/root/dbclg/dgm/jshtffs/['fwvcbcpz.lvr', 11509]")
+|   |       |-- Node("/root/dbclg/dgm/jshtffs/['hzhbhgjn.dvc', 169064]")
+|   |       |-- Node("/root/dbclg/dgm/jshtffs/['jwcnwm.prf', 38675]")
+|   |       |-- Node("/root/dbclg/dgm/jshtffs/['qtrqn.qdv', 300017]")
+|   |       |-- Node("/root/dbclg/dgm/jshtffs/['rgzfgz.wgz', 173691]")
+|   |       |-- Node('/root/dbclg/dgm/jshtffs/mjb')
+|   |       |   +-- Node('/root/dbclg/dgm/jshtffs/mjb/rgzfgz')
+|   |       |       +-- Node("/root/dbclg/dgm/jshtffs/mjb/rgzfgz/['ssm', 192387]")
+|   |       |-- Node('/root/dbclg/dgm/jshtffs/nwwcb')
+|   |       |   |-- Node("/root/dbclg/dgm/jshtffs/nwwcb/['ggvwvdw.hhg', 312609]")
+|   |       |   |-- Node("/root/dbclg/dgm/jshtffs/nwwcb/['ppqmjzh', 107482]")
+|   |       |   +-- Node("/root/dbclg/dgm/jshtffs/nwwcb/['vlbbbgnn', 204253]")
+|   |       +-- Node('/root/dbclg/dgm/jshtffs/rfjdh')
+|   |           +-- Node("/root/dbclg/dgm/jshtffs/rfjdh/['smf.jgv', 305213]")
+|   +-- Node('/root/dbclg/rwdfw')
+|       |-- Node("/root/dbclg/rwdfw/['tqj', 145955]")
+|       |-- Node('/root/dbclg/rwdfw/hbsbctsr')
+|       |   +-- Node('/root/dbclg/rwdfw/hbsbctsr/shqdr')
+|       |       +-- Node("/root/dbclg/rwdfw/hbsbctsr/shqdr/['tlvmh.ghp', 101441]")
+|       +-- Node('/root/dbclg/rwdfw/vvthg')
+|           +-- Node("/root/dbclg/rwdfw/vvthg/['wdzh.szq', 344816]")
+|-- Node('/root/fhndmnt')
+|   |-- Node('/root/fhndmnt/lstcq')
+|   |   |-- Node("/root/fhndmnt/lstcq/['jshtffs.nrf', 24507]")
+|   |   |-- Node("/root/fhndmnt/lstcq/['lvqdthm.gwh', 34332]")
+|   |   |-- Node("/root/fhndmnt/lstcq/['szfqhv.jtv', 313126]")
+|   |   +-- Node("/root/fhndmnt/lstcq/['wmwpglh', 274515]")
+|   |-- Node('/root/fhndmnt/nvlncq')
+|   |   +-- Node('/root/fhndmnt/nvlncq/vmtnnfv')
+|   |       +-- Node("/root/fhndmnt/nvlncq/vmtnnfv/['wdzh.szq', 104013]")
+|   |-- Node('/root/fhndmnt/rgzfgz')
+|   |   +-- Node("/root/fhndmnt/rgzfgz/['nlhfgpr.fcv', 311945]")
+|   |-- Node('/root/fhndmnt/ssqs')
+|   |   |-- Node("/root/fhndmnt/ssqs/['vlbbbgnn', 104254]")
+|   |   +-- Node("/root/fhndmnt/ssqs/['vmpd.tdt', 207441]")
+|   +-- Node('/root/fhndmnt/vzpnjpsv')
+|       +-- Node("/root/fhndmnt/vzpnjpsv/['plfsrlr', 253593]")
+|-- Node('/root/gczqbh')
+|   |-- Node('/root/gczqbh/nlhfgpr')
+|   |   |-- Node("/root/gczqbh/nlhfgpr/['vmvpf.mwh', 86459]")
+|   |   +-- Node('/root/gczqbh/nlhfgpr/bwpd')
+|   |       +-- Node("/root/gczqbh/nlhfgpr/bwpd/['rgzfgz.qnp', 345948]")
+|   |-- Node('/root/gczqbh/rgzfgz')
+|   |   |-- Node('/root/gczqbh/rgzfgz/rgzfgz')
+|   |   |   |-- Node("/root/gczqbh/rgzfgz/rgzfgz/['rbcrg.chs', 331389]")
+|   |   |   |-- Node("/root/gczqbh/rgzfgz/rgzfgz/['rpvpnprr.smn', 191328]")
+|   |   |   +-- Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz')
+|   |   |       +-- Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz/ncljgf')
+|   |   |           +-- Node("/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz/ncljgf/['bjwvhw.ltr', 309996]")
+|   |   +-- Node('/root/gczqbh/rgzfgz/sdsqqq')
+|   |       +-- Node("/root/gczqbh/rgzfgz/sdsqqq/['qmwcb.wsm', 95157]")
+|   +-- Node('/root/gczqbh/vmtnnfv')
+|       |-- Node("/root/gczqbh/vmtnnfv/['ptl', 283985]")
+|       |-- Node("/root/gczqbh/vmtnnfv/['vlbbbgnn', 38026]")
+|       |-- Node('/root/gczqbh/vmtnnfv/gbntbhrj')
+|       |   |-- Node("/root/gczqbh/vmtnnfv/gbntbhrj/['jshtffs.fpb', 117782]")
+|       |   |-- Node("/root/gczqbh/vmtnnfv/gbntbhrj/['rgzfgz.bdp', 9101]")
+|       |   +-- Node("/root/gczqbh/vmtnnfv/gbntbhrj/['vmtnnfv.wcq', 300155]")
+|       |-- Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+|       |   |-- Node("/root/gczqbh/vmtnnfv/nlhfgpr/['cwmpnz.czl', 65206]")
+|       |   |-- Node('/root/gczqbh/vmtnnfv/nlhfgpr/cpglmt')
+|       |   |   +-- Node("/root/gczqbh/vmtnnfv/nlhfgpr/cpglmt/['mghgq.msj', 288805]")
+|       |   +-- Node('/root/gczqbh/vmtnnfv/nlhfgpr/gcrntzb')
+|       |       +-- Node("/root/gczqbh/vmtnnfv/nlhfgpr/gcrntzb/['tlvmh.ghp', 126442]")
+|       +-- Node('/root/gczqbh/vmtnnfv/tnljzft')
+|           +-- Node("/root/gczqbh/vmtnnfv/tnljzft/['ccwfvtgh', 278719]")
+|-- Node('/root/lnsgbqp')
+|   |-- Node("/root/lnsgbqp/['vmvpf.rgd', 69119]")
+|   |-- Node('/root/lnsgbqp/lqltnz')
+|   |   |-- Node('/root/lnsgbqp/lqltnz/vmtnnfv')
+|   |   |   +-- Node("/root/lnsgbqp/lqltnz/vmtnnfv/['vmtnnfv.zlv', 3012]")
+|   |   +-- Node('/root/lnsgbqp/lqltnz/whvdf')
+|   |       |-- Node("/root/lnsgbqp/lqltnz/whvdf/['rwqbdmfb', 115838]")
+|   |       |-- Node("/root/lnsgbqp/lqltnz/whvdf/['tlvmh.ghp', 298358]")
+|   |       |-- Node("/root/lnsgbqp/lqltnz/whvdf/['vmtnnfv.ltj', 335379]")
+|   |       |-- Node("/root/lnsgbqp/lqltnz/whvdf/['zglmsgf', 129665]")
+|   |       |-- Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+|   |       |   |-- Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/['fwvcbcpz.lvr', 12607]")
+|   |       |   |-- Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/['tlvmh.ghp', 3793]")
+|   |       |   |-- Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/['vqv', 39593]")
+|   |       |   |-- Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/lrbrcz')
+|   |       |   |   +-- Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/lrbrcz/['vmtnnfv.hlb', 195996]")
+|   |       |   +-- Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/nvqzmflc')
+|   |       |       +-- Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/nvqzmflc/['vmvpf', 190198]")
+|   |       +-- Node('/root/lnsgbqp/lqltnz/whvdf/vmtnnfv')
+|   |           +-- Node("/root/lnsgbqp/lqltnz/whvdf/vmtnnfv/['rdjqs', 359558]")
+|   +-- Node('/root/lnsgbqp/vmtnnfv')
+|       |-- Node("/root/lnsgbqp/vmtnnfv/['nphz.plr', 362269]")
+|       |-- Node("/root/lnsgbqp/vmtnnfv/['tlvmh.ghp', 188843]")
+|       |-- Node('/root/lnsgbqp/vmtnnfv/clwrz')
+|       |   +-- Node("/root/lnsgbqp/vmtnnfv/clwrz/['wdzh.szq', 233770]")
+|       |-- Node('/root/lnsgbqp/vmtnnfv/rqbq')
+|       |   |-- Node("/root/lnsgbqp/vmtnnfv/rqbq/['jtnlfd', 183770]")
+|       |   +-- Node("/root/lnsgbqp/vmtnnfv/rqbq/['lwgqzccd.dgb', 71164]")
+|       +-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+|           |-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/['bqg', 266826]")
+|           |-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/['nlhfgpr.slz', 53502]")
+|           |-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/['qzsfvzl.wbb', 320422]")
+|           |-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr')
+|           |   |-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+|           |   |   |-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/['tlvmh.ghp', 299460]")
+|           |   |   |-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp')
+|           |   |   |   |-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp/['tlvmh.ghp', 286886]")
+|           |   |   |   +-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp/['vlln', 98020]")
+|           |   |   |-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/dmchbv')
+|           |   |   |   +-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/dmchbv/['ppjcgwq', 239186]")
+|           |   |   |-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj')
+|           |   |   |   |-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj/['nsgvvfcw.vfm', 310042]")
+|           |   |   |   +-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj/['vlbbbgnn', 70206]")
+|           |   |   +-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln')
+|           |   |       +-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln/bdprgbp')
+|           |   |           +-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln/bdprgbp/['hjwrqzf.cqj', 42055]")
+|           |   +-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj')
+|           |       +-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd')
+|           |           |-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd/['bzhvfzh.ldp', 330601]")
+|           |           |-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd/['hjhdwz.qrt', 14662]")
+|           |           +-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd/['pct', 188113]")
+|           |-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vhq')
+|           |   +-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/vhq/['qsgjjzn.nft', 348147]")
+|           +-- Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vmvpf')
+|               +-- Node("/root/lnsgbqp/vmtnnfv/wsrdwm/vmvpf/['wdzh.szq', 192773]")
+|-- Node('/root/pblb')
+|   |-- Node('/root/pblb/jshtffs')
+|   |   +-- Node('/root/pblb/jshtffs/vtthv')
+|   |       +-- Node("/root/pblb/jshtffs/vtthv/['fwfz.gll', 39542]")
+|   +-- Node('/root/pblb/pwgtvhm')
+|       +-- Node("/root/pblb/pwgtvhm/['hvfq', 271449]")
+|-- Node('/root/pwfs')
+|   |-- Node('/root/pwfs/dnnzr')
+|   |   |-- Node("/root/pwfs/dnnzr/['vlbbbgnn', 337565]")
+|   |   +-- Node("/root/pwfs/dnnzr/['vqv', 345668]")
+|   |-- Node('/root/pwfs/ncjzvsph')
+|   |   |-- Node("/root/pwfs/ncjzvsph/['fdtftjj.sdt', 290438]")
+|   |   |-- Node("/root/pwfs/ncjzvsph/['tlvmh.ghp', 170963]")
+|   |   |-- Node("/root/pwfs/ncjzvsph/['vlbbbgnn', 56596]")
+|   |   +-- Node("/root/pwfs/ncjzvsph/['vmvpf.ldg', 72923]")
+|   +-- Node('/root/pwfs/nlhfgpr')
+|       +-- Node("/root/pwfs/nlhfgpr/['vqv', 321213]")
+|-- Node('/root/vmvpf')
+|   |-- Node('/root/vmvpf/gwbt')
+|   |   |-- Node("/root/vmvpf/gwbt/['jrzlrp', 209996]")
+|   |   |-- Node("/root/vmvpf/gwbt/['vmvpf.hwn', 23503]")
+|   |   +-- Node("/root/vmvpf/gwbt/['vqv', 173320]")
+|   |-- Node('/root/vmvpf/vmvpf')
+|   |   |-- Node("/root/vmvpf/vmvpf/['hqwppnws', 299874]")
+|   |   |-- Node("/root/vmvpf/vmvpf/['pcqdrn.wqd', 177211]")
+|   |   |-- Node("/root/vmvpf/vmvpf/['pjllm', 266011]")
+|   |   +-- Node("/root/vmvpf/vmvpf/['wdzh.szq', 227969]")
+|   +-- Node('/root/vmvpf/vplm')
+|       |-- Node("/root/vmvpf/vplm/['jdb', 354786]")
+|       |-- Node("/root/vmvpf/vplm/['nncwhbq.vzn', 273253]")
+|       |-- Node('/root/vmvpf/vplm/fbl')
+|       |   |-- Node("/root/vmvpf/vplm/fbl/['vqv', 38301]")
+|       |   +-- Node("/root/vmvpf/vplm/fbl/['wdzh.szq', 256284]")
+|       +-- Node('/root/vmvpf/vplm/rgzfgz')
+|           |-- Node("/root/vmvpf/vplm/rgzfgz/['rdsrl.whb', 60018]")
+|           |-- Node('/root/vmvpf/vplm/rgzfgz/rgzfgz')
+|           |   +-- Node('/root/vmvpf/vplm/rgzfgz/rgzfgz/gmcqfqrn')
+|           |       +-- Node("/root/vmvpf/vplm/rgzfgz/rgzfgz/gmcqfqrn/['rgzfgz.pjs', 337129]")
+|           +-- Node('/root/vmvpf/vplm/rgzfgz/wgvw')
+|               +-- Node("/root/vmvpf/vplm/rgzfgz/wgvw/['zdhwsm', 14727]")
+|-- Node('/root/wjgh')
+|   |-- Node("/root/wjgh/['dtjctmsw.qgp', 60305]")
+|   |-- Node("/root/wjgh/['smfjq', 335879]")
+|   |-- Node("/root/wjgh/['vlbbbgnn', 344915]")
+|   |-- Node("/root/wjgh/['wdzh.szq', 63031]")
+|   |-- Node('/root/wjgh/ccgddrt')
+|   |   |-- Node("/root/wjgh/ccgddrt/['dpnlbg.fbb', 148368]")
+|   |   +-- Node('/root/wjgh/ccgddrt/vmvpf')
+|   |       |-- Node("/root/wjgh/ccgddrt/vmvpf/['tlvmh.ghp', 340536]")
+|   |       +-- Node('/root/wjgh/ccgddrt/vmvpf/ptwrssn')
+|   |           +-- Node("/root/wjgh/ccgddrt/vmvpf/ptwrssn/['jshtffs', 119875]")
+|   |-- Node('/root/wjgh/cqh')
+|   |   |-- Node("/root/wjgh/cqh/['fjv', 158276]")
+|   |   |-- Node("/root/wjgh/cqh/['fnh.rdf', 279848]")
+|   |   |-- Node('/root/wjgh/cqh/blvcjl')
+|   |   |   |-- Node("/root/wjgh/cqh/blvcjl/['gtcv', 47381]")
+|   |   |   |-- Node("/root/wjgh/cqh/blvcjl/['rgzfgz.wvr', 227459]")
+|   |   |   |-- Node("/root/wjgh/cqh/blvcjl/['vmvpf.psj', 75937]")
+|   |   |   |-- Node("/root/wjgh/cqh/blvcjl/['wdzh.szq', 29291]")
+|   |   |   |-- Node('/root/wjgh/cqh/blvcjl/cgsznlm')
+|   |   |   |   +-- Node("/root/wjgh/cqh/blvcjl/cgsznlm/['rpmwrtm.dlr', 91350]")
+|   |   |   |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/['jshtffs.msp', 81404]")
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/['jshtffs.szt', 158082]")
+|   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/['htwms.nqc', 154674]")
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/['vlbbbgnn', 192997]")
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/['vqv', 230969]")
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/['ztfg.mfd', 195769]")
+|   |   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/['dwbjh.whr', 236439]")
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/['tlvmh.ghp', 279480]")
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/['vqv', 107447]")
+|   |   |   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/gzph')
+|   |   |   |   |   |       +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/gzph/['tdnmmqm', 46947]")
+|   |   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf')
+|   |   |   |   |       |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf/['sftfzz.pzn', 285442]")
+|   |   |   |   |       +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf/['vmtnnfv.bbc', 292269]")
+|   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm')
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm/['hwpgpdm.qrf', 219245]")
+|   |   |   |   |   +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm/['rsmdgwjz.rph', 130169]")
+|   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/['ctprwbl.tjt', 263768]")
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/['vpcd.hvf', 291351]")
+|   |   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/['fwvcbcpz.lvr', 9465]")
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/['nrgq.cwj', 202004]")
+|   |   |   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+|   |   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/['gwhlttb', 323938]")
+|   |   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/['llmlgmqz.zsp', 75918]")
+|   |   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/['qjjv', 117786]")
+|   |   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/['vmvpf.qvd', 167090]")
+|   |   |   |   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/nvfv')
+|   |   |   |   |   |   |       +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/nvfv/['tlvmh.ghp', 135820]")
+|   |   |   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/jshtffs')
+|   |   |   |   |   |   |   +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/jshtffs/['fhr.jbf', 240326]")
+|   |   |   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/vmvpf')
+|   |   |   |   |   |       +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/vmvpf/['fwvcbcpz.lvr', 154309]")
+|   |   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz')
+|   |   |   |   |       |-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/jjfdn')
+|   |   |   |   |       |   +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/jjfdn/['vfwhjfl.zrz', 46675]")
+|   |   |   |   |       +-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/nlhfgpr')
+|   |   |   |   |           +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/nlhfgpr/['qwzcnfz', 26537]")
+|   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/tgcqhcv/smcrnh')
+|   |   |   |       +-- Node("/root/wjgh/cqh/blvcjl/tgcqhcv/smcrnh/['vpttwwc.jgr', 331015]")
+|   |   |   |-- Node('/root/wjgh/cqh/blvcjl/vff')
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vff/['ntbfs.znj', 68000]")
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vff/['rgzfgz.lsl', 265866]")
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vff/['vmvpf.ncb', 53570]")
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vff/['vqv', 74229]")
+|   |   |   |   +-- Node("/root/wjgh/cqh/blvcjl/vff/['zwq.zdb', 96730]")
+|   |   |   |-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv')
+|   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/['fwvcbcpz.lvr', 7492]")
+|   |   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg')
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/['vqv', 59560]")
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/['wdzh.szq', 33788]")
+|   |   |   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz')
+|   |   |   |   |   |       +-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz/zhtbsq')
+|   |   |   |   |   |           +-- Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz/zhtbsq/['cgsjvqvd.rsd', 222414]")
+|   |   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/sfrlhmm')
+|   |   |   |   |       +-- Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/sfrlhmm/['rgzfgz', 94423]")
+|   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr')
+|   |   |   |       |-- Node("/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/['gvhrsmt.bdt', 269611]")
+|   |   |   |       +-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv')
+|   |   |   |           +-- Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz')
+|   |   |   |               |-- Node("/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz/['fwvcbcpz.lvr', 355703]")
+|   |   |   |               +-- Node("/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz/['pcf.dss', 286378]")
+|   |   |   |-- Node('/root/wjgh/cqh/blvcjl/vmvpf')
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/['fwvcbcpz.lvr', 336533]")
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/['hsfnp', 80609]")
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/['jld.rvt', 9548]")
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/['rjtrbjl.vbc', 219383]")
+|   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/['vmvpf', 182036]")
+|   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/['szfhzcj.tjt', 358722]")
+|   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/['tlvmh.ghp', 167284]")
+|   |   |   |   |   |-- Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs')
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs/['blcgmn', 68702]")
+|   |   |   |   |   |   |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs/['jjd.pvb', 299911]")
+|   |   |   |   |   |   +-- Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs/['wdzh.szq', 243135]")
+|   |   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb')
+|   |   |   |   |       |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb/['jmvlgd.bwv', 128787]")
+|   |   |   |   |       |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb/['tdpqcqfs.nzp', 268582]")
+|   |   |   |   |       +-- Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb/['vmvpf.bnl', 348305]")
+|   |   |   |   +-- Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv')
+|   |   |   |       |-- Node("/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/['tlvmh.ghp', 241246]")
+|   |   |   |       +-- Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/nlhfgpr')
+|   |   |   |           +-- Node("/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/nlhfgpr/['tlvmh.ghp', 292694]")
+|   |   |   +-- Node('/root/wjgh/cqh/blvcjl/zqmsn')
+|   |   |       |-- Node("/root/wjgh/cqh/blvcjl/zqmsn/['mmthhf.wmd', 244052]")
+|   |   |       |-- Node("/root/wjgh/cqh/blvcjl/zqmsn/['psspc.czf', 144084]")
+|   |   |       +-- Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+|   |   |           |-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/['hsbbcdp.psd', 22881]")
+|   |   |           |-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/['vmvpf', 246706]")
+|   |   |           |-- Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+|   |   |           |   |-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/['jshtffs.hqw', 346162]")
+|   |   |           |   |-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/['tzddth.whp', 87008]")
+|   |   |           |   |-- Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh')
+|   |   |           |   |   +-- Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr')
+|   |   |           |   |       |-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/['tlvmh.ghp', 167305]")
+|   |   |           |   |       +-- Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/vnsdh')
+|   |   |           |   |           +-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/vnsdh/['tlvmh.ghp', 22714]")
+|   |   |           |   +-- Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz')
+|   |   |           |       |-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz/['bzttjhqz.hpz', 163433]")
+|   |   |           |       +-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz/['vlbbbgnn', 198604]")
+|   |   |           +-- Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/tmz')
+|   |   |               +-- Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/tmz/['bmrs', 300571]")
+|   |   +-- Node('/root/wjgh/cqh/vmtnnfv')
+|   |       |-- Node("/root/wjgh/cqh/vmtnnfv/['zvvrwh.dhw', 48025]")
+|   |       |-- Node('/root/wjgh/cqh/vmtnnfv/llwmdf')
+|   |       |   +-- Node("/root/wjgh/cqh/vmtnnfv/llwmdf/['hbfdll', 236755]")
+|   |       +-- Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+|   |           |-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['fwvcbcpz.lvr', 102548]")
+|   |           |-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['gcv.bnn', 300337]")
+|   |           |-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['mtnvzzc.vlj', 27918]")
+|   |           |-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['wdzh.szq', 92639]")
+|   |           |-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['wmnpg', 152813]")
+|   |           |-- Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn')
+|   |           |   |-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn/['jshtffs.gjg', 292541]")
+|   |           |   |-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn/['vqv', 84918]")
+|   |           |   +-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn/['zqsmd', 355763]")
+|   |           |-- Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc')
+|   |           |   |-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc/['nlhfgpr.rnf', 45875]")
+|   |           |   +-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc/['slshp', 294562]")
+|   |           +-- Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/nlhfgpr')
+|   |               +-- Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/nlhfgpr/['fpglshq', 310430]")
+|   |-- Node('/root/wjgh/hwr')
+|   |   |-- Node('/root/wjgh/hwr/jshtffs')
+|   |   |   |-- Node("/root/wjgh/hwr/jshtffs/['fwvcbcpz.lvr', 275253]")
+|   |   |   |-- Node("/root/wjgh/hwr/jshtffs/['vlqflmdn.gtd', 262142]")
+|   |   |   +-- Node('/root/wjgh/hwr/jshtffs/zrm')
+|   |   |       +-- Node("/root/wjgh/hwr/jshtffs/zrm/['jshtffs.ncf', 103078]")
+|   |   +-- Node('/root/wjgh/hwr/srrgj')
+|   |       |-- Node("/root/wjgh/hwr/srrgj/['fqdmfshj.ftn', 328221]")
+|   |       |-- Node("/root/wjgh/hwr/srrgj/['lpdrrw', 107311]")
+|   |       |-- Node("/root/wjgh/hwr/srrgj/['ltq.gmq', 214681]")
+|   |       +-- Node("/root/wjgh/hwr/srrgj/['pzd', 321175]")
+|   |-- Node('/root/wjgh/jshtffs')
+|   |   +-- Node('/root/wjgh/jshtffs/ngbb')
+|   |       |-- Node("/root/wjgh/jshtffs/ngbb/['lvmj.sjg', 218170]")
+|   |       |-- Node("/root/wjgh/jshtffs/ngbb/['nwv', 123373]")
+|   |       |-- Node("/root/wjgh/jshtffs/ngbb/['rgzfgz.gjd', 326485]")
+|   |       |-- Node("/root/wjgh/jshtffs/ngbb/['vlbbbgnn', 192138]")
+|   |       |-- Node("/root/wjgh/jshtffs/ngbb/['vptgrfr', 179027]")
+|   |       +-- Node('/root/wjgh/jshtffs/ngbb/vmtnnfv')
+|   |           +-- Node("/root/wjgh/jshtffs/ngbb/vmtnnfv/['vnlsclvh', 206046]")
+|   +-- Node('/root/wjgh/zbmjg')
+|       +-- Node("/root/wjgh/zbmjg/['fwvcbcpz.lvr', 30152]")
++-- Node('/root/wjqsq')
+    |-- Node("/root/wjqsq/['cmvfcwp.nfz', 23196]")
+    |-- Node("/root/wjqsq/['nlhfgpr.spt', 316798]")
+    |-- Node("/root/wjqsq/['tlvmh.ghp', 284657]")
+    |-- Node("/root/wjqsq/['vmvpf.msg', 50758]")
+    |-- Node('/root/wjqsq/lnrzw')
+    |   |-- Node('/root/wjqsq/lnrzw/crc')
+    |   |   |-- Node("/root/wjqsq/lnrzw/crc/['vmtnnfv.prq', 296423]")
+    |   |   +-- Node("/root/wjqsq/lnrzw/crc/['vqv', 26320]")
+    |   |-- Node('/root/wjqsq/lnrzw/ddhnvwqt')
+    |   |   +-- Node("/root/wjqsq/lnrzw/ddhnvwqt/['vqv', 173923]")
+    |   |-- Node('/root/wjqsq/lnrzw/gdhfqlln')
+    |   |   +-- Node("/root/wjqsq/lnrzw/gdhfqlln/['vqv', 275288]")
+    |   +-- Node('/root/wjqsq/lnrzw/vmtnnfv')
+    |       +-- Node("/root/wjqsq/lnrzw/vmtnnfv/['pgtmmtrf.vfc', 52004]")
+    +-- Node('/root/wjqsq/ntrngh')
+        |-- Node("/root/wjqsq/ntrngh/['vlbbbgnn', 185012]")
+        +-- Node('/root/wjqsq/ntrngh/czt')
+            |-- Node("/root/wjqsq/ntrngh/czt/['cvnslv', 355964]")
+            |-- Node("/root/wjqsq/ntrngh/czt/['mwbcbphd.prr', 143166]")
+            +-- Node("/root/wjqsq/ntrngh/czt/['rgzfgz', 40666]")
+
+
+open root -> root -> 
+RESETTING TOTAL!
+child:  Node('/root/bqm')
+open bqm -> bqm -> 
+RESETTING TOTAL!
+child:  Node("/root/bqm/['vqv', 133711]")
+child:  Node("/root/bqm/['wwlv.vgv', 263237]")
+close bqm ->     size: 396948
+child:  Node('/root/ctztn')
+open ctztn -> ctztn -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/gpgbfzbs')
+open gpgbfzbs -> gpgbfzbs -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/gpgbfzbs/['tlvmh.ghp', 354710]")
+close gpgbfzbs ->     size: 354710
+child:  Node('/root/ctztn/hfvqpt')
+open hfvqpt -> hfvqpt -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/cggfgt')
+open cggfgt -> cggfgt -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/cggfgt/glnrg')
+open glnrg -> glnrg -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/cggfgt/glnrg/['qzfpwv', 345026]")
+child:  Node("/root/ctztn/hfvqpt/cggfgt/glnrg/['rgzfgz', 196361]")
+close glnrg ->     size: 541387
+child:  Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh')
+open mptpfvlh -> mptpfvlh -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp')
+open lsbjp -> lsbjp -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/jqclpq')
+open jqclpq -> jqclpq -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/jqclpq/['mnhnclpt.qsv', 189319]")
+close jqclpq ->     size: 189319
+child:  Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp')
+open whp -> whp -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp/lgdlztb')
+open lgdlztb -> lgdlztb -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/whp/lgdlztb/['wdzh.szq', 94150]")
+close lgdlztb ->     size: 94150
+THIS ONE close lgdlztb ->     size: 94150
+close whp ->     size: 94150
+THIS ONE close whp ->     size: 94150
+child:  Node("/root/ctztn/hfvqpt/cggfgt/mptpfvlh/lsbjp/['nlhfgpr', 359939]")
+close lsbjp ->     size: 643408
+child:  Node("/root/ctztn/hfvqpt/cggfgt/mptpfvlh/['vlbbbgnn', 121174]")
+close mptpfvlh ->     size: 764582
+child:  Node('/root/ctztn/hfvqpt/cggfgt/vmvpf')
+open vmvpf -> vmvpf -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd')
+open pfzd -> pfzd -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/ljtdcgt')
+open ljtdcgt -> ljtdcgt -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/ljtdcgt/['nlhfgpr', 134178]")
+close ljtdcgt ->     size: 134178
+child:  Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/plltpvgv')
+open plltpvgv -> plltpvgv -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/plltpvgv/['rqj', 355576]")
+close plltpvgv ->     size: 355576
+child:  Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/pfzd/['bpjpm', 345595]")
+close pfzd ->     size: 835349
+child:  Node('/root/ctztn/hfvqpt/cggfgt/vmvpf/zrc')
+open zrc -> zrc -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/zrc/['vqv', 45363]")
+close zrc ->     size: 45363
+THIS ONE close zrc ->     size: 45363
+child:  Node("/root/ctztn/hfvqpt/cggfgt/vmvpf/['rgzfgz', 66706]")
+close vmvpf ->     size: 947418
+child:  Node("/root/ctztn/hfvqpt/cggfgt/['fhww', 109434]")
+child:  Node("/root/ctztn/hfvqpt/cggfgt/['nlhfgpr.vnv', 305315]")
+child:  Node("/root/ctztn/hfvqpt/cggfgt/['tlvmh.ghp', 297519]")
+close cggfgt ->     size: 2965655
+child:  Node('/root/ctztn/hfvqpt/jshtffs')
+open jshtffs -> jshtffs -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/jshtffs/bwbwldd')
+open bwbwldd -> bwbwldd -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/jshtffs/bwbwldd/['vthsfg', 144330]")
+close bwbwldd ->     size: 144330
+child:  Node('/root/ctztn/hfvqpt/jshtffs/jctctjj')
+open jctctjj -> jctctjj -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt')
+open flhrmt -> flhrmt -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt/['dgrt', 132008]")
+child:  Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/flhrmt/['nlhfgpr.hss', 263345]")
+close flhrmt ->     size: 395353
+child:  Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz/['mcqlbzs.gwl', 214808]")
+child:  Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/rgzfgz/['nlhfgpr.hcs', 120157]")
+close rgzfgz ->     size: 334965
+child:  Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/rgzfgz/['nnc', 177061]")
+close rgzfgz ->     size: 177061
+child:  Node("/root/ctztn/hfvqpt/jshtffs/jctctjj/vmtnnfv/['vlbbbgnn', 52978]")
+close vmtnnfv ->     size: 230039
+close jctctjj ->     size: 960357
+child:  Node('/root/ctztn/hfvqpt/jshtffs/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node("/root/ctztn/hfvqpt/jshtffs/jshtffs/['bbsfrg.bbr', 157488]")
+child:  Node("/root/ctztn/hfvqpt/jshtffs/jshtffs/['dhwbvggg', 166412]")
+close jshtffs ->     size: 1428587
+child:  Node('/root/ctztn/hfvqpt/jshtffs/sngchq')
+open sngchq -> sngchq -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv')
+open bvcsvv -> bvcsvv -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf')
+open gbmccf -> gbmccf -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp')
+open fttnqbwp -> fttnqbwp -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp/fhs')
+open fhs -> fhs -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/gbmccf/fttnqbwp/fhs/['rgzfgz', 137718]")
+close fhs ->     size: 137718
+close fttnqbwp ->     size: 137718
+close gbmccf ->     size: 137718
+child:  Node("/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/['vmtnnfv', 5663]")
+child:  Node("/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/['vqv', 278760]")
+child:  Node("/root/ctztn/hfvqpt/jshtffs/sngchq/bvcsvv/['wjlm.cbw', 323147]")
+close bvcsvv ->     size: 745288
+child:  Node('/root/ctztn/hfvqpt/jshtffs/sngchq/hhd')
+open hhd -> hhd -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/jshtffs/sngchq/hhd/['gphghhdh.rrb', 350019]")
+close hhd ->     size: 350019
+close sngchq ->     size: 1095307
+child:  Node("/root/ctztn/hfvqpt/jshtffs/['fwvcbcpz.lvr', 124375]")
+close jshtffs ->     size: 3752956
+child:  Node('/root/ctztn/hfvqpt/pnwcq')
+open pnwcq -> pnwcq -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/pnwcq/qtqqdd')
+open qtqqdd -> qtqqdd -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/pnwcq/qtqqdd/['tlvmh.ghp', 62319]")
+close qtqqdd ->     size: 62319
+THIS ONE close qtqqdd ->     size: 62319
+close pnwcq ->     size: 62319
+THIS ONE close pnwcq ->     size: 62319
+child:  Node('/root/ctztn/hfvqpt/str')
+open str -> str -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/hfvqpt/str/vcdcgbtr')
+open vcdcgbtr -> vcdcgbtr -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/str/vcdcgbtr/['zhh.dsw', 276438]")
+close vcdcgbtr ->     size: 276438
+child:  Node('/root/ctztn/hfvqpt/str/zlsv')
+open zlsv -> zlsv -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/hfvqpt/str/zlsv/['vmvpf.tcs', 315890]")
+close zlsv ->     size: 315890
+child:  Node("/root/ctztn/hfvqpt/str/['tlvmh.ghp', 334780]")
+child:  Node("/root/ctztn/hfvqpt/str/['vvh.tzh', 211478]")
+close str ->     size: 1138586
+child:  Node("/root/ctztn/hfvqpt/['nnn.chs', 175230]")
+child:  Node("/root/ctztn/hfvqpt/['plqjpqss', 13406]")
+close hfvqpt ->     size: 8108152
+child:  Node('/root/ctztn/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node('/root/ctztn/rgzfgz/qwzfs')
+open qwzfs -> qwzfs -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/rgzfgz/qwzfs/lzl')
+open lzl -> lzl -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/rgzfgz/qwzfs/lzl/gpgccbc')
+open gpgccbc -> gpgccbc -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/rgzfgz/qwzfs/lzl/gpgccbc/['tlvmh.ghp', 124141]")
+close gpgccbc ->     size: 124141
+child:  Node("/root/ctztn/rgzfgz/qwzfs/lzl/['vmvpf.dgz', 259493]")
+close lzl ->     size: 383634
+close qwzfs ->     size: 383634
+close rgzfgz ->     size: 8846496
+child:  Node('/root/ctztn/wmfvclz')
+open wmfvclz -> wmfvclz -> 
+RESETTING TOTAL!
+child:  Node('/root/ctztn/wmfvclz/zmft')
+open zmft -> zmft -> 
+RESETTING TOTAL!
+child:  Node("/root/ctztn/wmfvclz/zmft/['vlbbbgnn', 248086]")
+close zmft ->     size: 248086
+child:  Node("/root/ctztn/wmfvclz/['fmqtjdfd.dwp', 25819]")
+child:  Node("/root/ctztn/wmfvclz/['qccd.gnd', 253619]")
+child:  Node("/root/ctztn/wmfvclz/['sjsz.rtg', 121087]")
+child:  Node("/root/ctztn/wmfvclz/['tgs', 350518]")
+close wmfvclz ->     size: 999129
+child:  Node("/root/ctztn/['jshtffs', 55466]")
+child:  Node("/root/ctztn/['wdzh.szq', 115519]")
+child:  Node("/root/ctztn/['zgwwgps.gfn', 221554]")
+close ctztn ->     size: 18701026
+child:  Node('/root/dbclg')
+open dbclg -> dbclg -> 
+RESETTING TOTAL!
+child:  Node('/root/dbclg/dgm')
+open dgm -> dgm -> 
+RESETTING TOTAL!
+child:  Node('/root/dbclg/dgm/fflb')
+open fflb -> fflb -> 
+RESETTING TOTAL!
+child:  Node("/root/dbclg/dgm/fflb/['ngzgfpt', 154495]")
+close fflb ->     size: 154495
+child:  Node('/root/dbclg/dgm/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node('/root/dbclg/dgm/jshtffs/mjb')
+open mjb -> mjb -> 
+RESETTING TOTAL!
+child:  Node('/root/dbclg/dgm/jshtffs/mjb/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node("/root/dbclg/dgm/jshtffs/mjb/rgzfgz/['ssm', 192387]")
+close rgzfgz ->     size: 192387
+close mjb ->     size: 192387
+child:  Node('/root/dbclg/dgm/jshtffs/nwwcb')
+open nwwcb -> nwwcb -> 
+RESETTING TOTAL!
+child:  Node("/root/dbclg/dgm/jshtffs/nwwcb/['ggvwvdw.hhg', 312609]")
+child:  Node("/root/dbclg/dgm/jshtffs/nwwcb/['ppqmjzh', 107482]")
+child:  Node("/root/dbclg/dgm/jshtffs/nwwcb/['vlbbbgnn', 204253]")
+close nwwcb ->     size: 624344
+child:  Node('/root/dbclg/dgm/jshtffs/rfjdh')
+open rfjdh -> rfjdh -> 
+RESETTING TOTAL!
+child:  Node("/root/dbclg/dgm/jshtffs/rfjdh/['smf.jgv', 305213]")
+close rfjdh ->     size: 305213
+child:  Node("/root/dbclg/dgm/jshtffs/['fwvcbcpz.lvr', 11509]")
+child:  Node("/root/dbclg/dgm/jshtffs/['hzhbhgjn.dvc', 169064]")
+child:  Node("/root/dbclg/dgm/jshtffs/['jwcnwm.prf', 38675]")
+child:  Node("/root/dbclg/dgm/jshtffs/['qtrqn.qdv', 300017]")
+child:  Node("/root/dbclg/dgm/jshtffs/['rgzfgz.wgz', 173691]")
+close jshtffs ->     size: 1969395
+child:  Node("/root/dbclg/dgm/['shzfvbs.jrj', 26424]")
+close dgm ->     size: 2150314
+child:  Node('/root/dbclg/rwdfw')
+open rwdfw -> rwdfw -> 
+RESETTING TOTAL!
+child:  Node('/root/dbclg/rwdfw/hbsbctsr')
+open hbsbctsr -> hbsbctsr -> 
+RESETTING TOTAL!
+child:  Node('/root/dbclg/rwdfw/hbsbctsr/shqdr')
+open shqdr -> shqdr -> 
+RESETTING TOTAL!
+child:  Node("/root/dbclg/rwdfw/hbsbctsr/shqdr/['tlvmh.ghp', 101441]")
+close shqdr ->     size: 101441
+close hbsbctsr ->     size: 101441
+child:  Node('/root/dbclg/rwdfw/vvthg')
+open vvthg -> vvthg -> 
+RESETTING TOTAL!
+child:  Node("/root/dbclg/rwdfw/vvthg/['wdzh.szq', 344816]")
+close vvthg ->     size: 344816
+child:  Node("/root/dbclg/rwdfw/['tqj', 145955]")
+close rwdfw ->     size: 592212
+child:  Node("/root/dbclg/['slctrj', 182454]")
+child:  Node("/root/dbclg/['tzp.dvf', 103919]")
+child:  Node("/root/dbclg/['zlbmvfq.qsh', 311601]")
+close dbclg ->     size: 3340500
+child:  Node('/root/fhndmnt')
+open fhndmnt -> fhndmnt -> 
+RESETTING TOTAL!
+child:  Node('/root/fhndmnt/lstcq')
+open lstcq -> lstcq -> 
+RESETTING TOTAL!
+child:  Node("/root/fhndmnt/lstcq/['jshtffs.nrf', 24507]")
+child:  Node("/root/fhndmnt/lstcq/['lvqdthm.gwh', 34332]")
+child:  Node("/root/fhndmnt/lstcq/['szfqhv.jtv', 313126]")
+child:  Node("/root/fhndmnt/lstcq/['wmwpglh', 274515]")
+close lstcq ->     size: 646480
+child:  Node('/root/fhndmnt/nvlncq')
+open nvlncq -> nvlncq -> 
+RESETTING TOTAL!
+child:  Node('/root/fhndmnt/nvlncq/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node("/root/fhndmnt/nvlncq/vmtnnfv/['wdzh.szq', 104013]")
+close vmtnnfv ->     size: 104013
+close nvlncq ->     size: 104013
+child:  Node('/root/fhndmnt/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node("/root/fhndmnt/rgzfgz/['nlhfgpr.fcv', 311945]")
+close rgzfgz ->     size: 1062438
+child:  Node('/root/fhndmnt/ssqs')
+open ssqs -> ssqs -> 
+RESETTING TOTAL!
+child:  Node("/root/fhndmnt/ssqs/['vlbbbgnn', 104254]")
+child:  Node("/root/fhndmnt/ssqs/['vmpd.tdt', 207441]")
+close ssqs ->     size: 311695
+child:  Node('/root/fhndmnt/vzpnjpsv')
+open vzpnjpsv -> vzpnjpsv -> 
+RESETTING TOTAL!
+child:  Node("/root/fhndmnt/vzpnjpsv/['plfsrlr', 253593]")
+close vzpnjpsv ->     size: 253593
+close fhndmnt ->     size: 2378219
+child:  Node('/root/gczqbh')
+open gczqbh -> gczqbh -> 
+RESETTING TOTAL!
+child:  Node('/root/gczqbh/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+RESETTING TOTAL!
+child:  Node('/root/gczqbh/nlhfgpr/bwpd')
+open bwpd -> bwpd -> 
+RESETTING TOTAL!
+child:  Node("/root/gczqbh/nlhfgpr/bwpd/['rgzfgz.qnp', 345948]")
+close bwpd ->     size: 345948
+child:  Node("/root/gczqbh/nlhfgpr/['vmvpf.mwh', 86459]")
+close nlhfgpr ->     size: 432407
+child:  Node('/root/gczqbh/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node('/root/gczqbh/rgzfgz/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz')
+open mprdrmmz -> mprdrmmz -> 
+RESETTING TOTAL!
+child:  Node('/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz/ncljgf')
+open ncljgf -> ncljgf -> 
+RESETTING TOTAL!
+child:  Node("/root/gczqbh/rgzfgz/rgzfgz/mprdrmmz/ncljgf/['bjwvhw.ltr', 309996]")
+close ncljgf ->     size: 309996
+close mprdrmmz ->     size: 309996
+child:  Node("/root/gczqbh/rgzfgz/rgzfgz/['rbcrg.chs', 331389]")
+child:  Node("/root/gczqbh/rgzfgz/rgzfgz/['rpvpnprr.smn', 191328]")
+close rgzfgz ->     size: 1265120
+child:  Node('/root/gczqbh/rgzfgz/sdsqqq')
+open sdsqqq -> sdsqqq -> 
+RESETTING TOTAL!
+child:  Node("/root/gczqbh/rgzfgz/sdsqqq/['qmwcb.wsm', 95157]")
+close sdsqqq ->     size: 95157
+THIS ONE close sdsqqq ->     size: 95157
+close rgzfgz ->     size: 1792684
+child:  Node('/root/gczqbh/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node('/root/gczqbh/vmtnnfv/gbntbhrj')
+open gbntbhrj -> gbntbhrj -> 
+RESETTING TOTAL!
+child:  Node("/root/gczqbh/vmtnnfv/gbntbhrj/['jshtffs.fpb', 117782]")
+child:  Node("/root/gczqbh/vmtnnfv/gbntbhrj/['rgzfgz.bdp', 9101]")
+child:  Node("/root/gczqbh/vmtnnfv/gbntbhrj/['vmtnnfv.wcq', 300155]")
+close gbntbhrj ->     size: 427038
+child:  Node('/root/gczqbh/vmtnnfv/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+child:  Node('/root/gczqbh/vmtnnfv/nlhfgpr/cpglmt')
+open cpglmt -> cpglmt -> 
+RESETTING TOTAL!
+child:  Node("/root/gczqbh/vmtnnfv/nlhfgpr/cpglmt/['mghgq.msj', 288805]")
+close cpglmt ->     size: 288805
+child:  Node('/root/gczqbh/vmtnnfv/nlhfgpr/gcrntzb')
+open gcrntzb -> gcrntzb -> 
+RESETTING TOTAL!
+child:  Node("/root/gczqbh/vmtnnfv/nlhfgpr/gcrntzb/['tlvmh.ghp', 126442]")
+close gcrntzb ->     size: 126442
+child:  Node("/root/gczqbh/vmtnnfv/nlhfgpr/['cwmpnz.czl', 65206]")
+close nlhfgpr ->     size: 3132582
+child:  Node('/root/gczqbh/vmtnnfv/tnljzft')
+open tnljzft -> tnljzft -> 
+RESETTING TOTAL!
+child:  Node("/root/gczqbh/vmtnnfv/tnljzft/['ccwfvtgh', 278719]")
+close tnljzft ->     size: 278719
+child:  Node("/root/gczqbh/vmtnnfv/['ptl', 283985]")
+child:  Node("/root/gczqbh/vmtnnfv/['vlbbbgnn', 38026]")
+close vmtnnfv ->     size: 6385441
+close gczqbh ->     size: 8610532
+child:  Node('/root/lnsgbqp')
+open lnsgbqp -> lnsgbqp -> 
+RESETTING TOTAL!
+child:  Node('/root/lnsgbqp/lqltnz')
+open lqltnz -> lqltnz -> 
+RESETTING TOTAL!
+child:  Node('/root/lnsgbqp/lqltnz/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node("/root/lnsgbqp/lqltnz/vmtnnfv/['vmtnnfv.zlv', 3012]")
+close vmtnnfv ->     size: 3012
+THIS ONE close vmtnnfv ->     size: 3012
+child:  Node('/root/lnsgbqp/lqltnz/whvdf')
+open whvdf -> whvdf -> 
+RESETTING TOTAL!
+child:  Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+child:  Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/lrbrcz')
+open lrbrcz -> lrbrcz -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/lrbrcz/['vmtnnfv.hlb', 195996]")
+close lrbrcz ->     size: 195996
+child:  Node('/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/nvqzmflc')
+open nvqzmflc -> nvqzmflc -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/nvqzmflc/['vmvpf', 190198]")
+close nvqzmflc ->     size: 190198
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/['fwvcbcpz.lvr', 12607]")
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/['tlvmh.ghp', 3793]")
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/nlhfgpr/['vqv', 39593]")
+close nlhfgpr ->     size: 442187
+child:  Node('/root/lnsgbqp/lqltnz/whvdf/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/vmtnnfv/['rdjqs', 359558]")
+close vmtnnfv ->     size: 801745
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/['rwqbdmfb', 115838]")
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/['tlvmh.ghp', 298358]")
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/['vmtnnfv.ltj', 335379]")
+child:  Node("/root/lnsgbqp/lqltnz/whvdf/['zglmsgf', 129665]")
+close whvdf ->     size: 2123172
+close lqltnz ->     size: 2126184
+child:  Node('/root/lnsgbqp/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node('/root/lnsgbqp/vmtnnfv/clwrz')
+open clwrz -> clwrz -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/vmtnnfv/clwrz/['wdzh.szq', 233770]")
+close clwrz ->     size: 233770
+child:  Node('/root/lnsgbqp/vmtnnfv/rqbq')
+open rqbq -> rqbq -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/vmtnnfv/rqbq/['jtnlfd', 183770]")
+child:  Node("/root/lnsgbqp/vmtnnfv/rqbq/['lwgqzccd.dgb', 71164]")
+close rqbq ->     size: 254934
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm')
+open wsrdwm -> wsrdwm -> 
+RESETTING TOTAL!
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp')
+open ddlplnhp -> ddlplnhp -> 
+RESETTING TOTAL!
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp')
+open czp -> czp -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp/['tlvmh.ghp', 286886]")
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/czp/['vlln', 98020]")
+close czp ->     size: 384906
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/dmchbv')
+open dmchbv -> dmchbv -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/dmchbv/['ppjcgwq', 239186]")
+close dmchbv ->     size: 239186
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj')
+open nlj -> nlj -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj/['nsgvvfcw.vfm', 310042]")
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/nlj/['vlbbbgnn', 70206]")
+close nlj ->     size: 380248
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln')
+open wrqqln -> wrqqln -> 
+RESETTING TOTAL!
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln/bdprgbp')
+open bdprgbp -> bdprgbp -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/wrqqln/bdprgbp/['hjwrqzf.cqj', 42055]")
+close bdprgbp ->     size: 42055
+THIS ONE close bdprgbp ->     size: 42055
+close wrqqln ->     size: 42055
+THIS ONE close wrqqln ->     size: 42055
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/ddlplnhp/['tlvmh.ghp', 299460]")
+close ddlplnhp ->     size: 1345855
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj')
+open nbdj -> nbdj -> 
+RESETTING TOTAL!
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd')
+open cdjd -> cdjd -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd/['bzhvfzh.ldp', 330601]")
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd/['hjhdwz.qrt', 14662]")
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/nlhfgpr/nbdj/cdjd/['pct', 188113]")
+close cdjd ->     size: 533376
+close nbdj ->     size: 533376
+close nlhfgpr ->     size: 1879231
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vhq')
+open vhq -> vhq -> 
+RESETTING TOTAL!
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/vhq/['qsgjjzn.nft', 348147]")
+close vhq ->     size: 348147
+child:  Node('/root/lnsgbqp/vmtnnfv/wsrdwm/vmvpf')
+open vmvpf -> vmvpf -> 
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/vmvpf/['wdzh.szq', 192773]")
+close vmvpf ->     size: 2420151
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/['bqg', 266826]")
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/['nlhfgpr.slz', 53502]")
+child:  Node("/root/lnsgbqp/vmtnnfv/wsrdwm/['qzsfvzl.wbb', 320422]")
+close wsrdwm ->     size: 5288279
+child:  Node("/root/lnsgbqp/vmtnnfv/['nphz.plr', 362269]")
+child:  Node("/root/lnsgbqp/vmtnnfv/['tlvmh.ghp', 188843]")
+close vmtnnfv ->     size: 8454279
+child:  Node("/root/lnsgbqp/['vmvpf.rgd', 69119]")
+close lnsgbqp ->     size: 10649582
+child:  Node('/root/pblb')
+open pblb -> pblb -> 
+RESETTING TOTAL!
+child:  Node('/root/pblb/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node('/root/pblb/jshtffs/vtthv')
+open vtthv -> vtthv -> 
+RESETTING TOTAL!
+child:  Node("/root/pblb/jshtffs/vtthv/['fwfz.gll', 39542]")
+close vtthv ->     size: 39542
+THIS ONE close vtthv ->     size: 39542
+close jshtffs ->     size: 39542
+THIS ONE close jshtffs ->     size: 39542
+child:  Node('/root/pblb/pwgtvhm')
+open pwgtvhm -> pwgtvhm -> 
+RESETTING TOTAL!
+child:  Node("/root/pblb/pwgtvhm/['hvfq', 271449]")
+close pwgtvhm ->     size: 271449
+close pblb ->     size: 310991
+child:  Node('/root/pwfs')
+open pwfs -> pwfs -> 
+RESETTING TOTAL!
+child:  Node('/root/pwfs/dnnzr')
+open dnnzr -> dnnzr -> 
+RESETTING TOTAL!
+child:  Node("/root/pwfs/dnnzr/['vlbbbgnn', 337565]")
+child:  Node("/root/pwfs/dnnzr/['vqv', 345668]")
+close dnnzr ->     size: 683233
+child:  Node('/root/pwfs/ncjzvsph')
+open ncjzvsph -> ncjzvsph -> 
+RESETTING TOTAL!
+child:  Node("/root/pwfs/ncjzvsph/['fdtftjj.sdt', 290438]")
+child:  Node("/root/pwfs/ncjzvsph/['tlvmh.ghp', 170963]")
+child:  Node("/root/pwfs/ncjzvsph/['vlbbbgnn', 56596]")
+child:  Node("/root/pwfs/ncjzvsph/['vmvpf.ldg', 72923]")
+close ncjzvsph ->     size: 590920
+child:  Node('/root/pwfs/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+child:  Node("/root/pwfs/nlhfgpr/['vqv', 321213]")
+close nlhfgpr ->     size: 1595366
+close pwfs ->     size: 2869519
+child:  Node('/root/vmvpf')
+open vmvpf -> vmvpf -> 
+child:  Node('/root/vmvpf/gwbt')
+open gwbt -> gwbt -> 
+RESETTING TOTAL!
+child:  Node("/root/vmvpf/gwbt/['jrzlrp', 209996]")
+child:  Node("/root/vmvpf/gwbt/['vmvpf.hwn', 23503]")
+child:  Node("/root/vmvpf/gwbt/['vqv', 173320]")
+close gwbt ->     size: 406819
+child:  Node('/root/vmvpf/vmvpf')
+open vmvpf -> vmvpf -> 
+child:  Node("/root/vmvpf/vmvpf/['hqwppnws', 299874]")
+child:  Node("/root/vmvpf/vmvpf/['pcqdrn.wqd', 177211]")
+child:  Node("/root/vmvpf/vmvpf/['pjllm', 266011]")
+child:  Node("/root/vmvpf/vmvpf/['wdzh.szq', 227969]")
+close vmvpf ->     size: 48635201
+child:  Node('/root/vmvpf/vplm')
+open vplm -> vplm -> 
+RESETTING TOTAL!
+child:  Node('/root/vmvpf/vplm/fbl')
+open fbl -> fbl -> 
+RESETTING TOTAL!
+child:  Node("/root/vmvpf/vplm/fbl/['vqv', 38301]")
+child:  Node("/root/vmvpf/vplm/fbl/['wdzh.szq', 256284]")
+close fbl ->     size: 294585
+child:  Node('/root/vmvpf/vplm/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node('/root/vmvpf/vplm/rgzfgz/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node('/root/vmvpf/vplm/rgzfgz/rgzfgz/gmcqfqrn')
+open gmcqfqrn -> gmcqfqrn -> 
+RESETTING TOTAL!
+child:  Node("/root/vmvpf/vplm/rgzfgz/rgzfgz/gmcqfqrn/['rgzfgz.pjs', 337129]")
+close gmcqfqrn ->     size: 337129
+close rgzfgz ->     size: 631714
+child:  Node('/root/vmvpf/vplm/rgzfgz/wgvw')
+open wgvw -> wgvw -> 
+RESETTING TOTAL!
+child:  Node("/root/vmvpf/vplm/rgzfgz/wgvw/['zdhwsm', 14727]")
+close wgvw ->     size: 14727
+THIS ONE close wgvw ->     size: 14727
+child:  Node("/root/vmvpf/vplm/rgzfgz/['rdsrl.whb', 60018]")
+close rgzfgz ->     size: 1001044
+child:  Node("/root/vmvpf/vplm/['jdb', 354786]")
+child:  Node("/root/vmvpf/vplm/['nncwhbq.vzn', 273253]")
+close vplm ->     size: 1923668
+close vmvpf ->     size: 98223005
+child:  Node('/root/wjgh')
+open wjgh -> wjgh -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/ccgddrt')
+open ccgddrt -> ccgddrt -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/ccgddrt/vmvpf')
+open vmvpf -> vmvpf -> 
+child:  Node('/root/wjgh/ccgddrt/vmvpf/ptwrssn')
+open ptwrssn -> ptwrssn -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/ccgddrt/vmvpf/ptwrssn/['jshtffs', 119875]")
+close ptwrssn ->     size: 119875
+child:  Node("/root/wjgh/ccgddrt/vmvpf/['tlvmh.ghp', 340536]")
+close vmvpf ->     size: 460411
+child:  Node("/root/wjgh/ccgddrt/['dpnlbg.fbb', 148368]")
+close ccgddrt ->     size: 608779
+child:  Node('/root/wjgh/cqh')
+open cqh -> cqh -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl')
+open blvcjl -> blvcjl -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/cgsznlm')
+open cgsznlm -> cgsznlm -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/cgsznlm/['rpmwrtm.dlr', 91350]")
+close cgsznlm ->     size: 91350
+THIS ONE close cgsznlm ->     size: 91350
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv')
+open tgcqhcv -> tgcqhcv -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff')
+open hnrhdvff -> hnrhdvff -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns')
+open rslbgns -> rslbgns -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/gzph')
+open gzph -> gzph -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/gzph/['tdnmmqm', 46947]")
+close gzph ->     size: 46947
+THIS ONE close gzph ->     size: 46947
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/['dwbjh.whr', 236439]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/['tlvmh.ghp', 279480]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/rslbgns/['vqv', 107447]")
+close rslbgns ->     size: 670313
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf')
+open vmvpf -> vmvpf -> 
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf/['sftfzz.pzn', 285442]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/vmvpf/['vmtnnfv.bbc', 292269]")
+close vmvpf ->     size: 1248024
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/['htwms.nqc', 154674]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/['vlbbbgnn', 192997]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/['vqv', 230969]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/hnrhdvff/['ztfg.mfd', 195769]")
+close hnrhdvff ->     size: 2692746
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm')
+open nhmqcm -> nhmqcm -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm/['hwpgpdm.qrf', 219245]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/nhmqcm/['rsmdgwjz.rph', 130169]")
+close nhmqcm ->     size: 349414
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl')
+open rvfsl -> rvfsl -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb')
+open htb -> htb -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/nvfv')
+open nvfv -> nvfv -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/nvfv/['tlvmh.ghp', 135820]")
+close nvfv ->     size: 135820
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/['gwhlttb', 323938]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/['llmlgmqz.zsp', 75918]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/['qjjv', 117786]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/htb/['vmvpf.qvd', 167090]")
+close htb ->     size: 820552
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/jshtffs/['fhr.jbf', 240326]")
+close jshtffs ->     size: 1060878
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/vmvpf')
+open vmvpf -> vmvpf -> 
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/vmvpf/['fwvcbcpz.lvr', 154309]")
+close vmvpf ->     size: 2035739
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/['fwvcbcpz.lvr', 9465]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/jshtffs/['nrgq.cwj', 202004]")
+close jshtffs ->     size: 4128638
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/jjfdn')
+open jjfdn -> jjfdn -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/jjfdn/['vfwhjfl.zrz', 46675]")
+close jjfdn ->     size: 46675
+THIS ONE close jjfdn ->     size: 46675
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/rgzfgz/nlhfgpr/['qwzcnfz', 26537]")
+close nlhfgpr ->     size: 4201850
+close rgzfgz ->     size: 8377163
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/['ctprwbl.tjt', 263768]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/rvfsl/['vpcd.hvf', 291351]")
+close rvfsl ->     size: 13060920
+child:  Node('/root/wjgh/cqh/blvcjl/tgcqhcv/smcrnh')
+open smcrnh -> smcrnh -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/smcrnh/['vpttwwc.jgr', 331015]")
+close smcrnh ->     size: 331015
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/['jshtffs.msp', 81404]")
+child:  Node("/root/wjgh/cqh/blvcjl/tgcqhcv/['jshtffs.szt', 158082]")
+close tgcqhcv ->     size: 16673581
+child:  Node('/root/wjgh/cqh/blvcjl/vff')
+open vff -> vff -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/vff/['ntbfs.znj', 68000]")
+child:  Node("/root/wjgh/cqh/blvcjl/vff/['rgzfgz.lsl', 265866]")
+child:  Node("/root/wjgh/cqh/blvcjl/vff/['vmvpf.ncb', 53570]")
+child:  Node("/root/wjgh/cqh/blvcjl/vff/['vqv', 74229]")
+child:  Node("/root/wjgh/cqh/blvcjl/vff/['zwq.zdb', 96730]")
+close vff ->     size: 558395
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg')
+open gjg -> gjg -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz')
+open dqjfz -> dqjfz -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz/zhtbsq')
+open zhtbsq -> zhtbsq -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/dqjfz/zhtbsq/['cgsjvqvd.rsd', 222414]")
+close zhtbsq ->     size: 222414
+close dqjfz ->     size: 222414
+child:  Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/['vqv', 59560]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/gjg/['wdzh.szq', 33788]")
+close gjg ->     size: 315762
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/sfrlhmm')
+open sfrlhmm -> sfrlhmm -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/sfrlhmm/['rgzfgz', 94423]")
+close sfrlhmm ->     size: 94423
+THIS ONE close sfrlhmm ->     size: 94423
+child:  Node("/root/wjgh/cqh/blvcjl/vmtnnfv/rgzfgz/['fwvcbcpz.lvr', 7492]")
+close rgzfgz ->     size: 17741003
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr')
+open zmr -> zmr -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node('/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node("/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz/['fwvcbcpz.lvr', 355703]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/vmtnnfv/rgzfgz/['pcf.dss', 286378]")
+close rgzfgz ->     size: 642081
+close vmtnnfv ->     size: 642081
+child:  Node("/root/wjgh/cqh/blvcjl/vmtnnfv/zmr/['gvhrsmt.bdt', 269611]")
+close zmr ->     size: 911692
+close vmtnnfv ->     size: 35976021
+child:  Node('/root/wjgh/cqh/blvcjl/vmvpf')
+open vmvpf -> vmvpf -> 
+child:  Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs/['blcgmn', 68702]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs/['jjd.pvb', 299911]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/jshtffs/['wdzh.szq', 243135]")
+close jshtffs ->     size: 53911095
+child:  Node('/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb')
+open rtnwnqcb -> rtnwnqcb -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb/['jmvlgd.bwv', 128787]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb/['tdpqcqfs.nzp', 268582]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/rtnwnqcb/['vmvpf.bnl', 348305]")
+close rtnwnqcb ->     size: 745674
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/['szfhzcj.tjt', 358722]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/jshtffs/['tlvmh.ghp', 167284]")
+close jshtffs ->     size: 108482122
+child:  Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node('/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/nlhfgpr/['tlvmh.ghp', 292694]")
+close nlhfgpr ->     size: 162074163
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/vmtnnfv/['tlvmh.ghp', 241246]")
+close vmtnnfv ->     size: 324096878
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/['fwvcbcpz.lvr', 336533]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/['hsfnp', 80609]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/['jld.rvt', 9548]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/['rjtrbjl.vbc', 219383]")
+child:  Node("/root/wjgh/cqh/blvcjl/vmvpf/['vmvpf', 182036]")
+close vmvpf ->     size: 486706456
+child:  Node('/root/wjgh/cqh/blvcjl/zqmsn')
+open zqmsn -> zqmsn -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd')
+open vflpgd -> vflpgd -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz')
+open rgzfgz -> rgzfgz -> 
+child:  Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh')
+open lhmh -> lhmh -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+child:  Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/vnsdh')
+open vnsdh -> vnsdh -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/vnsdh/['tlvmh.ghp', 22714]")
+close vnsdh ->     size: 22714
+THIS ONE close vnsdh ->     size: 22714
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/lhmh/nlhfgpr/['tlvmh.ghp', 167305]")
+close nlhfgpr ->     size: 190019
+close lhmh ->     size: 190019
+child:  Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz')
+open pfwbz -> pfwbz -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz/['bzttjhqz.hpz', 163433]")
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/pfwbz/['vlbbbgnn', 198604]")
+close pfwbz ->     size: 362037
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/['jshtffs.hqw', 346162]")
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/rgzfgz/['tzddth.whp', 87008]")
+close rgzfgz ->     size: 985226
+child:  Node('/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/tmz')
+open tmz -> tmz -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/tmz/['bmrs', 300571]")
+close tmz ->     size: 300571
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/['hsbbcdp.psd', 22881]")
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/vflpgd/['vmvpf', 246706]")
+close vflpgd ->     size: 1555384
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/['mmthhf.wmd', 244052]")
+child:  Node("/root/wjgh/cqh/blvcjl/zqmsn/['psspc.czf', 144084]")
+close zqmsn ->     size: 1943520
+child:  Node("/root/wjgh/cqh/blvcjl/['gtcv', 47381]")
+child:  Node("/root/wjgh/cqh/blvcjl/['rgzfgz.wvr', 227459]")
+child:  Node("/root/wjgh/cqh/blvcjl/['vmvpf.psj', 75937]")
+child:  Node("/root/wjgh/cqh/blvcjl/['wdzh.szq', 29291]")
+close blvcjl ->     size: 542329391
+child:  Node('/root/wjgh/cqh/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node('/root/wjgh/cqh/vmtnnfv/llwmdf')
+open llwmdf -> llwmdf -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/vmtnnfv/llwmdf/['hbfdll', 236755]")
+close llwmdf ->     size: 236755
+child:  Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp')
+open pvzdlsgp -> pvzdlsgp -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn')
+open drjbqvn -> drjbqvn -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn/['jshtffs.gjg', 292541]")
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn/['vqv', 84918]")
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/drjbqvn/['zqsmd', 355763]")
+close drjbqvn ->     size: 733222
+child:  Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc')
+open grgc -> grgc -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc/['nlhfgpr.rnf', 45875]")
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/grgc/['slshp', 294562]")
+close grgc ->     size: 340437
+child:  Node('/root/wjgh/cqh/vmtnnfv/pvzdlsgp/nlhfgpr')
+open nlhfgpr -> nlhfgpr -> 
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/nlhfgpr/['fpglshq', 310430]")
+close nlhfgpr ->     size: 1384089
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['fwvcbcpz.lvr', 102548]")
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['gcv.bnn', 300337]")
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['mtnvzzc.vlj', 27918]")
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['wdzh.szq', 92639]")
+child:  Node("/root/wjgh/cqh/vmtnnfv/pvzdlsgp/['wmnpg', 152813]")
+close pvzdlsgp ->     size: 3134003
+child:  Node("/root/wjgh/cqh/vmtnnfv/['zvvrwh.dhw', 48025]")
+close vmtnnfv ->     size: 545748174
+child:  Node("/root/wjgh/cqh/['fjv', 158276]")
+child:  Node("/root/wjgh/cqh/['fnh.rdf', 279848]")
+close cqh ->     size: 1088515689
+child:  Node('/root/wjgh/hwr')
+open hwr -> hwr -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/hwr/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node('/root/wjgh/hwr/jshtffs/zrm')
+open zrm -> zrm -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/hwr/jshtffs/zrm/['jshtffs.ncf', 103078]")
+close zrm ->     size: 103078
+child:  Node("/root/wjgh/hwr/jshtffs/['fwvcbcpz.lvr', 275253]")
+child:  Node("/root/wjgh/hwr/jshtffs/['vlqflmdn.gtd', 262142]")
+close jshtffs ->     size: 640473
+child:  Node('/root/wjgh/hwr/srrgj')
+open srrgj -> srrgj -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/hwr/srrgj/['fqdmfshj.ftn', 328221]")
+child:  Node("/root/wjgh/hwr/srrgj/['lpdrrw', 107311]")
+child:  Node("/root/wjgh/hwr/srrgj/['ltq.gmq', 214681]")
+child:  Node("/root/wjgh/hwr/srrgj/['pzd', 321175]")
+close srrgj ->     size: 971388
+close hwr ->     size: 1611861
+child:  Node('/root/wjgh/jshtffs')
+open jshtffs -> jshtffs -> 
+child:  Node('/root/wjgh/jshtffs/ngbb')
+open ngbb -> ngbb -> 
+RESETTING TOTAL!
+child:  Node('/root/wjgh/jshtffs/ngbb/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node("/root/wjgh/jshtffs/ngbb/vmtnnfv/['vnlsclvh', 206046]")
+close vmtnnfv ->     size: 206046
+child:  Node("/root/wjgh/jshtffs/ngbb/['lvmj.sjg', 218170]")
+child:  Node("/root/wjgh/jshtffs/ngbb/['nwv', 123373]")
+child:  Node("/root/wjgh/jshtffs/ngbb/['rgzfgz.gjd', 326485]")
+child:  Node("/root/wjgh/jshtffs/ngbb/['vlbbbgnn', 192138]")
+child:  Node("/root/wjgh/jshtffs/ngbb/['vptgrfr', 179027]")
+close ngbb ->     size: 1245239
+close jshtffs ->     size: 1091981568
+child:  Node('/root/wjgh/zbmjg')
+open zbmjg -> zbmjg -> 
+RESETTING TOTAL!
+child:  Node("/root/wjgh/zbmjg/['fwvcbcpz.lvr', 30152]")
+close zbmjg ->     size: 30152
+THIS ONE close zbmjg ->     size: 30152
+child:  Node("/root/wjgh/['dtjctmsw.qgp', 60305]")
+child:  Node("/root/wjgh/['smfjq', 335879]")
+child:  Node("/root/wjgh/['vlbbbgnn', 344915]")
+child:  Node("/root/wjgh/['wdzh.szq', 63031]")
+close wjgh ->     size: 2183552179
+child:  Node('/root/wjqsq')
+open wjqsq -> wjqsq -> 
+RESETTING TOTAL!
+child:  Node('/root/wjqsq/lnrzw')
+open lnrzw -> lnrzw -> 
+RESETTING TOTAL!
+child:  Node('/root/wjqsq/lnrzw/crc')
+open crc -> crc -> 
+RESETTING TOTAL!
+child:  Node("/root/wjqsq/lnrzw/crc/['vmtnnfv.prq', 296423]")
+child:  Node("/root/wjqsq/lnrzw/crc/['vqv', 26320]")
+close crc ->     size: 322743
+child:  Node('/root/wjqsq/lnrzw/ddhnvwqt')
+open ddhnvwqt -> ddhnvwqt -> 
+RESETTING TOTAL!
+child:  Node("/root/wjqsq/lnrzw/ddhnvwqt/['vqv', 173923]")
+close ddhnvwqt ->     size: 173923
+child:  Node('/root/wjqsq/lnrzw/gdhfqlln')
+open gdhfqlln -> gdhfqlln -> 
+RESETTING TOTAL!
+child:  Node("/root/wjqsq/lnrzw/gdhfqlln/['vqv', 275288]")
+close gdhfqlln ->     size: 275288
+child:  Node('/root/wjqsq/lnrzw/vmtnnfv')
+open vmtnnfv -> vmtnnfv -> 
+child:  Node("/root/wjqsq/lnrzw/vmtnnfv/['pgtmmtrf.vfc', 52004]")
+close vmtnnfv ->     size: 823958
+close lnrzw ->     size: 1595912
+child:  Node('/root/wjqsq/ntrngh')
+open ntrngh -> ntrngh -> 
+RESETTING TOTAL!
+child:  Node('/root/wjqsq/ntrngh/czt')
+open czt -> czt -> 
+RESETTING TOTAL!
+child:  Node("/root/wjqsq/ntrngh/czt/['cvnslv', 355964]")
+child:  Node("/root/wjqsq/ntrngh/czt/['mwbcbphd.prr', 143166]")
+child:  Node("/root/wjqsq/ntrngh/czt/['rgzfgz', 40666]")
+close czt ->     size: 539796
+child:  Node("/root/wjqsq/ntrngh/['vlbbbgnn', 185012]")
+close ntrngh ->     size: 724808
+child:  Node("/root/wjqsq/['cmvfcwp.nfz', 23196]")
+child:  Node("/root/wjqsq/['nlhfgpr.spt', 316798]")
+child:  Node("/root/wjqsq/['tlvmh.ghp', 284657]")
+child:  Node("/root/wjqsq/['vmvpf.msg', 50758]")
+close wjqsq ->     size: 2996129
+child:  Node("/root/['hvbf.lvm', 276177]")
+child:  Node("/root/['rtv.cjj', 209719]")
+child:  Node("/root/['vmtnnfv.mdq', 192236]")
+close root ->     size: 2332706762
+2332706762
+['root', 'bqm', 'ctztn', 'gpgbfzbs', 'hfvqpt', 'cggfgt', 'glnrg', 'mptpfvlh', 'lsbjp', 'jqclpq', 'whp', 'lgdlztb', 'vmvpf', 'pfzd', 'ljtdcgt', 'plltpvgv', 'zrc', 'jshtffs', 'bwbwldd', 'jctctjj', 'flhrmt', 'rgzfgz', 'vmtnnfv', 'sngchq', 'bvcsvv', 'gbmccf', 'fttnqbwp', 'fhs', 'hhd', 'pnwcq', 'qtqqdd', 'str', 'vcdcgbtr', 'zlsv', 'qwzfs', 'lzl', 'gpgccbc', 'wmfvclz', 'zmft', 'dbclg', 'dgm', 'fflb', 'mjb', 'nwwcb', 'rfjdh', 'rwdfw', 'hbsbctsr', 'shqdr', 'vvthg', 'fhndmnt', 'lstcq', 'nvlncq', 'ssqs', 'vzpnjpsv', 'gczqbh', 'nlhfgpr', 'bwpd', 'mprdrmmz', 'ncljgf', 'sdsqqq', 'gbntbhrj', 'cpglmt', 'gcrntzb', 'tnljzft', 'lnsgbqp', 'lqltnz', 'whvdf', 'lrbrcz', 'nvqzmflc', 'clwrz', 'rqbq', 'wsrdwm', 'ddlplnhp', 'czp', 'dmchbv', 'nlj', 'wrqqln', 'bdprgbp', 'nbdj', 'cdjd', 'vhq', 'pblb', 'vtthv', 'pwgtvhm', 'pwfs', 'dnnzr', 'ncjzvsph', 'gwbt', 'vplm', 'fbl', 'gmcqfqrn', 'wgvw', 'wjgh', 'ccgddrt', 'ptwrssn', 'cqh', 'blvcjl', 'cgsznlm', 'tgcqhcv', 'hnrhdvff', 'rslbgns', 'gzph', 'nhmqcm', 'rvfsl', 'htb', 'nvfv', 'jjfdn', 'smcrnh', 'vff', 'gjg', 'dqjfz', 'zhtbsq', 'sfrlhmm', 'zmr', 'rtnwnqcb', 'zqmsn', 'vflpgd', 'lhmh', 'vnsdh', 'pfwbz', 'tmz', 'llwmdf', 'pvzdlsgp', 'drjbqvn', 'grgc', 'hwr', 'zrm', 'srrgj', 'ngbb', 'zbmjg', 'wjqsq', 'lnrzw', 'crc', 'ddhnvwqt', 'gdhfqlln', 'ntrngh', 'czt']
