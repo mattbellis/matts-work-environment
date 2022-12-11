@@ -15,3 +15,10 @@ print(f"Need to free: {need_to_free}")
 python day7.py INPUT_day7.txt | grep close | grep -v THIS | sort -k5 -n
 
 
+# Day 11
+# Part A
+244*271 = 66124
+
+
+
+
