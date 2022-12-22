@@ -17,6 +17,7 @@ quizinfo = {}
 hwinfo = {}
 midterminfo = {}
 finalinfo = {}
+extracreditinfo = {}
 
 for name in colnames:
     if name.find('QUIZ')>=0:
@@ -30,6 +31,8 @@ for name in colnames:
         hwandquizinfo[name] = []
     elif name.find('PARTICIPATION')>=0 or name.find('PARTICIPATION')>=0:
         partinfo[name] = []
+    elif name.find('EXTRA')>=0:
+        extracreditinfo[name] = []
     elif name.find('MID')>=0:
         midterminfo[name] = []
     elif name.find('FINAL')>=0:
@@ -67,6 +70,11 @@ for key in partinfo.keys():
     p = float(df[key].iloc[1])
     partinfo[key] = [d,p]
     #print(key,d,p)
+for key in extracreditinfo.keys():
+    d = df[key].iloc[0]
+    p = float(df[key].iloc[1])
+    extracreditinfo[key] = [d,p]
+    #print(key,d,p)
 for key in midterminfo.keys():
     d = df[key].iloc[0]
     p = float(df[key].iloc[1])
@@ -83,7 +91,7 @@ for key in finalinfo.keys():
     finalinfo[key] = [d,p]
     print(key,d,p)
 
-def summarize(idx,info,df,drop=False,verbose=False):
+def summarize(idx,info,df,drop=0,verbose=False):
 
     dftemp = df.iloc[idx]
     lname = dftemp['Last Name']
@@ -111,12 +119,11 @@ def summarize(idx,info,df,drop=False,verbose=False):
         if verbose:
             print(f"{d:12s} max: {p:5.1f}    score: {score:5.1f}    grade: {100*grade:7.2f}      {key}")
     #print(grades)
-    if drop==True:
-        grades = np.sort(grades)[1:]
+    grades = np.sort(grades)[drop:].tolist()
     #print(grades)
     ave = np.mean(grades)
     #print(f"Average: {ave:8.2f}")
-    return ave
+    return ave,grades
 
 
 
@@ -127,20 +134,38 @@ for i in range(2,len(df)):
     lname = dftemp['Last Name']
     fname = dftemp['First Name']
 
-    hqave = summarize(i,hwandquizinfo,df,True)
-    #hqave = summarize(i,hwandquizinfo,df,False)
-    pave = summarize(i,partinfo,df)
-    have = summarize(i,hwinfo,df)
-    qave = summarize(i,quizinfo,df)
-    mave = summarize(i,midterminfo,df)
-    fave = summarize(i,finalinfo,df,verbose=False)
+    hqave,hqgr = summarize(i,hwandquizinfo,df,drop=1)
+    #hqave,hqgr = summarize(i,hwandquizinfo,df,drop=0)
+    pave,pgr = summarize(i,partinfo,df)
+    have,hgr = summarize(i,hwinfo,df)
+    qave,qgr = summarize(i,quizinfo,df,drop=0)
+    #qave,qgr = summarize(i,quizinfo,df,drop=1)
+    mave,mgr = summarize(i,midterminfo,df)
+    fave,fgr = summarize(i,finalinfo,df,verbose=False)
+    extave,exgr = summarize(i,extracreditinfo,df,verbose=False)
+
+    # Extra credits count for a hw grade
+    #print(hgr)
+    #print(gr)
+    #print(type(hgr), type(gr))
+    newhw = hqgr + exgr
+    #print(hqave)
+    hqave = np.mean(newhw)
+    #print(hqave)
     #print(midterminfo)
+
+    # Final exam uses quiz grades
+    #print("---------")
+    #print(fave)
+    fave = (3*fave + qave)/4.0
+    #print(fave)
+    #print("----")
 
     # EDAV  or PHYS 250
     ave = 0.5*hqave + 0.25*mave + 0.25*fave
     # Midterm
     #ave = (0.5*hqave + 0.25*mave)/0.75
-    print(f"{i:2d} {fname:12s} {lname:18s}   {ave:5.1f}     hw: {hqave:5.1f}    m: {mave:5.1f}    f: {fave:5.1f}     h: {have:5.1f} q: {qave:5.1f}")
+    print(f"{i:2d} {fname:12s} {lname:18s}   {ave:5.1f}     hw: {hqave:5.1f}    m: {mave:5.1f}    f: {fave:5.1f}     h: {have:5.1f} q: {qave:5.1f}  ex: {extave:5.1f}")
     # Quantum
     #ave = 0.25*have + 0.10*pave + 0.30*mave + 0.35*fave
 
