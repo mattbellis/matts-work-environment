@@ -124,7 +124,16 @@ for monkey in monkeys:
 '''
 
 # Part B
-nrounds = 20
+
+product = 19 * 3 * 11 * 17 * 5 * 2 * 13 * 7
+#product = 23 * 19 * 13 * 17
+print(f"product: {product}")
+
+#exit()
+
+#nrounds = 20
+nrounds = 10000
+#nrounds = 1
 nmonkeys = len(monkeys)
 for i in range(nrounds):
     if i%10==0:
@@ -141,6 +150,7 @@ for i in range(nrounds):
             operation = monkey['operation']
             if operation[-1] == 'old':
                 item *= item
+                #item = [item,item]
             elif operation[0] == '+':
                 item += int(operation[1])
             elif operation[0] == '*':
@@ -157,12 +167,16 @@ for i in range(nrounds):
             else:
                 idx = monkey['false']
 
+            # new item
+            if item > product:
+                item = product + item%product
             monkeys[idx]['items'].insert(0,item)
 
             monkey['ninspections'] += 1
 
 
 print()
+print("Final results: ---------------------")
 #print(monkeys)
 for monkey in monkeys:
     print(monkey)
