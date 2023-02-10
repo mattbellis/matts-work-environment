@@ -4,6 +4,8 @@ import pandas as pd
 
 import sys
 
+import grade_tools as gt
+
 infilename = sys.argv[1]
 
 df = pd.read_csv(infilename)
@@ -174,5 +176,13 @@ for i in range(2,len(df)):
     #print(f"{i:2d} {fname:12s} {lname:18s}   {ave:5.1f}     hw: {have:5.1f} p: {pave:5.1f} m: {mave:5.1f} f: {fave:5.1f}")
 
 
+print(df)
+lnames = df['Last Name'].values
+fnames = df['First Name'].values
 
+for fname,lname in zip(lnames,fnames):
+    print(f'{fname} {lname}')
+    mask = (df['Last Name']==lname) & (df['First Name']==fname)
+    dftemp = df[mask]
+    print(dftemp)
 
