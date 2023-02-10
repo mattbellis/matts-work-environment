@@ -134,8 +134,8 @@ for i in range(2,len(df)):
     lname = dftemp['Last Name']
     fname = dftemp['First Name']
 
-    hqave,hqgr = summarize(i,hwandquizinfo,df,drop=1)
-    #hqave,hqgr = summarize(i,hwandquizinfo,df,drop=0)
+    #hqave,hqgr = summarize(i,hwandquizinfo,df,drop=1)
+    hqave,hqgr = summarize(i,hwandquizinfo,df,drop=0)
     pave,pgr = summarize(i,partinfo,df)
     have,hgr = summarize(i,hwinfo,df)
     qave,qgr = summarize(i,quizinfo,df,drop=0)
@@ -148,19 +148,21 @@ for i in range(2,len(df)):
     #print(hgr)
     #print(gr)
     #print(type(hgr), type(gr))
-    newhw = hqgr + exgr
+    #newhw = hqgr + exgr
     #print(hqave)
-    hqave = np.mean(newhw)
+    #hqave = np.mean(newhw)
     #print(hqave)
     #print(midterminfo)
 
     # Final exam uses quiz grades
     #print("---------")
     #print(fave)
-    fave = (3*fave + qave)/4.0
+    #fave = (3*fave + qave)/4.0
     #print(fave)
     #print("----")
 
+    # PHYS 260
+    ave = (0.20*have + 0.45*qave)/0.65 # For midterm grades
     # EDAV  or PHYS 250
     ave = 0.5*hqave + 0.25*mave + 0.25*fave
     # Midterm
