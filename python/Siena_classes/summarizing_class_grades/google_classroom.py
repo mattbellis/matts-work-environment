@@ -164,12 +164,13 @@ for i in range(2,len(df)):
     #print("----")
 
     # PHYS 260
-    ave = (0.20*have + 0.45*qave)/0.65 # For midterm grades
+    ave = (0.20*have + 0.45*qave + 0.05*pave)/0.70 # For midterm grades
     # EDAV  or PHYS 250
-    ave = 0.5*hqave + 0.25*mave + 0.25*fave
+    #ave = 0.5*hqave + 0.25*mave + 0.25*fave
     # Midterm
     #ave = (0.5*hqave + 0.25*mave)/0.75
-    print(f"{i:2d} {fname:12s} {lname:18s}   {ave:5.1f}     hw: {hqave:5.1f}    m: {mave:5.1f}    f: {fave:5.1f}     h: {have:5.1f} q: {qave:5.1f}  ex: {extave:5.1f}")
+    #print(f"{i:2d} {fname:12s} {lname:18s}   {ave:5.1f}     hw: {hqave:5.1f}    m: {mave:5.1f}    f: {fave:5.1f}     h: {have:5.1f} q: {qave:5.1f}  ex: {extave:5.1f}")
+    print(f"{i:2d} {fname:12s} {lname:18s}   {ave:5.1f}     hw: {hqave:5.1f}    m: {mave:5.1f}    f: {fave:5.1f}     h: {have:5.1f} q: {qave:5.1f}  part: {pave:5.1f}")
     # Quantum
     #ave = 0.25*have + 0.10*pave + 0.30*mave + 0.35*fave
 
