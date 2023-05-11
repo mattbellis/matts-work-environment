@@ -29,6 +29,7 @@ docker run -it -p 8888:8888 manimcommunity/manim jupyter lab --ip=0.0.0.0
 conda create -n my-manim-environment jupyter
 conda activate my-manim-environment
 conda install -c conda-forge pycairo
+sudo apt install libsdl-pango-dev
 pip install manim-physics
 ```
 
