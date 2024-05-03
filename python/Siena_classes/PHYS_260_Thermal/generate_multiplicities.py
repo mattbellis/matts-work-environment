@@ -42,8 +42,8 @@ S_B = k*np.log(mult_B)
 S_tot = S_A+S_B
 
 plt.figure(figsize=(8,5))
-plt.plot(q*epsilon,S_A,'--',linewidth=3,label='Entropy of Solid A')
-plt.plot(q*epsilon,S_B,'-.',linewidth=3,label='Entropy of Solid B')
+plt.plot(q*epsilon,S_A,'--',linewidth=2,label='Entropy of Solid A')
+plt.plot(q*epsilon,S_B,'-.',linewidth=2,label='Entropy of Solid B')
 plt.plot(q*epsilon,S_tot,'-',linewidth=3,label='Total entropy')
 #plt.xlabel(r'$q_A\times \epsilon$ (eV)',fontsize=24)
 plt.xlabel(r'$E_A$ (eV)',fontsize=24)
