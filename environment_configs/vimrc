@@ -51,13 +51,17 @@ filetype indent on
 "colorscheme morning
 "colorscheme elflord
 "colorscheme eldar
+colorscheme gruvbox
+let g:gruvbox_contrast_dark = 'hard'
 "syntax enable
 colorscheme gruvbox
 set background=dark
 "colorscheme solarized
+"colorscheme iceberg
 "colorscheme apprentice
 "colorscheme abstract
 "colorscheme pablo
+set background=dark
 set cindent
 set cindent shiftwidth=4
 set autoindent shiftwidth=4
