@@ -98,6 +98,8 @@ LOG_100         = math.log(100)
 def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
     nBuf=BGP*3.5e13 # From BSA 4th ed. pg. 94   MAR Assumes T=0 C.  Huh
 
+    ORG_ELEC = elec
+
     #define functions INSIDE my own function!
     def comp2spd(vxIn,vyIn,vzIn):
         speed = math.sqrt(math.pow(vx,2)+math.pow(vy,2)+math.pow(vz,2))
@@ -699,7 +701,9 @@ def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
         polout.append((360)) #arbitrary number chosen to show that there was an error because there was zero electrons polarized in either direction
     '''
 
-    print(f"OUTPUT {extraelecountbuf+extraelecountrub} {extraelecountrub} {extraelecountbuf} {bufType} {ded} {j} {jpolplus} {jpolminus} {final_polarization}\n")
+    output = f"OUTPUT {ORG_ELEC} {ev} {BGP} {nRub:.2e} {rbPol} {bufType} "
+    output += f"{extraelecountbuf+extraelecountrub} {extraelecountrub} {extraelecountbuf} {bufType} {ded} {j} {jpolplus} {jpolminus} {final_polarization}"
+    print(output)
 
  #   data = np.array([zstartlist, rstartlist, phistartlist, zpollist, originlist, energyoutlist, poloutlist],dtype='f')
  #   data = data.T
