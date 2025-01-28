@@ -685,12 +685,17 @@ def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
 
     print(f"OUTPUT {extraelecountbuf+extraelecountrub} {extraelecountrub} {extraelecountbuf} {bufType} {ded} {j} {jpolplus} {jpolminus} {(jpolplus-jpolminus)/(jpolplus+jpolminus)}\n")
 
- #   data = np.array([zstartlist, rstartlist, phistartlist, zpollist, originlist, energyoutlist, poloutlist],dtype='f')
- #   data = data.T
+    data = np.array([zstartlist, rstartlist, phistartlist, zpollist, originlist, energyoutlist, poloutlist],dtype='f')
+    data = data.T
+    print("data")
+    print(data)
+    print("data")
 
     #name the file whatever you want. It saves some info about the individual electrons that came out.
 #    filename = '/content/drive/MyDrive/MCAll.csv'.format(ev, BGP, bufType, rbPol, nRub)
 #    np.savetxt(filename,data,fmt=['%.5f','%.5f','%.5f','%.5f','%.0f','%.4f','%.0f'],delimiter=",",header='A=Z Start;B=Radius Start;C=Phi Start;D=Last Polarization (Z);E=Origin (0=Fil;1=Rub;2=Buf);F=Energy Out (eV);G=Polarization')
+    filename = f'OUTPUT_energy_{ev}_BGP_{BGP}_bufType_{bufType}_rbPol_{rbPol}_nRub_{nRub}.dat'
+    np.savetxt(filename,data,fmt=['%.5f','%.5f','%.5f','%.5f','%.0f','%.4f','%.0f'],delimiter=",",header='A=Z Start;B=Radius Start;C=Phi Start;D=Last Polarization (Z);E=Origin (0=Fil;1=Rub;2=Buf);F=Energy Out (eV);G=Polarization')
 
     #saves information for the data file of the entire run
  #   energyin.append(ev)
