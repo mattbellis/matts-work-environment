@@ -1,3 +1,4 @@
+
 import numpy as np
 import random
 import math as math
@@ -83,22 +84,11 @@ jincident = 0
 jrub = 0
 jbuf = 0
 
-# Precalculate logs
-LOG_2_over__75  = math.log(2/0.75)
-LOG_3_over_2    = math.log(3/2)
-LOG_8_over_3    = math.log(8/3)
-LOG_3           = math.log(3)
-LOG_2           = math.log(2)
-LOG_8           = math.log(8)
-LOG_100         = math.log(100)
-
 
 #the main function that runs the simulation. use it multiple times to test different ev or nXXX values. I've found that using the cluster's 99 hour time limit, it is safe to stay below 12,000 electrons maximum
 #bufType is a string, either 'Nitrogen' or 'Ethene'
 def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
     nBuf=BGP*3.5e13 # From BSA 4th ed. pg. 94   MAR Assumes T=0 C.  Huh
-
-    ORG_ELEC = elec
 
     #define functions INSIDE my own function!
     def comp2spd(vxIn,vyIn,vzIn):
@@ -199,7 +189,6 @@ def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
 
         #This is the loop of each electron's joruney
         while True:
-            #print(xsave)
             if z < 0: #check if it is behind the chamber
                 ded += 1
                 break
@@ -218,15 +207,15 @@ def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
                     if origin == 0:
                         jincident += 1
                         #print('E_in')
-                        print(energy, pol)
+                        print(origin,energy, pol)
                     elif origin == 1:
                         jrub += 1
-                        print('Rb!)')
-                        print(energy, pol)
+                        #print('Rb!)')
+                        print(origin, energy, pol)
                     elif origin == 2:
                         jbuf += 1
-                        print('created!')
-                        print(energy, pol)
+                        #print('created!')
+                        print(origin, energy, pol)
                     else:
                         print("Something screwed up involving origin.")
                     zstartlist.append(zstart)
@@ -351,50 +340,43 @@ def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
                 elif energy < 1.7:
                     sigmar1 = (1.25e-14)/(energy+0.6)
                     sigmar2 = 0
-                    #sigmab1 = ((2.725e-15-10e-16)/math.log(2/.75))*math.log(energy)+(2.725e-15-((2.725e-15-10e-16)/math.log(2/.75))*math.log(2))
-                    sigmab1 = ((2.725e-15-10e-16)/LOG_2_over__75)*math.log(energy)+(2.725e-15-((2.725e-15-10e-16)/LOG_2_over__75)*LOG_2)
+                    sigmab1 = ((2.725e-15-10e-16)/math.log(2/.75))*math.log(energy)+(2.725e-15-((2.725e-15-10e-16)/math.log(2/.75))*math.log(2))
                     sigmab2 = 0
                     sigmab3 = 0
                 elif energy < 2:
                     sigmar1 = (1.25e-14)/(energy+0.6)
                     sigmar2 = 0
-                    #sigmab1 = ((2.725e-15-10e-16)/math.log(2/.75))*math.log(energy)+(2.725e-15-((2.725e-15-10e-16)/math.log(2/.75))*math.log(2))
-                    sigmab1 = ((2.725e-15-10e-16)/LOG_2_over__75)*math.log(energy)+(2.725e-15-((2.725e-15-10e-16)/LOG_2_over__75)*LOG_2)
+                    sigmab1 = ((2.725e-15-10e-16)/math.log(2/.75))*math.log(energy)+(2.725e-15-((2.725e-15-10e-16)/math.log(2/.75))*math.log(2))
                     sigmab2 = 0
                     sigmab3 = 0
                 elif energy < 3:
                     sigmar1 = (1.25e-14)/(energy+0.6)
                     sigmar2 = 0
-                    #sigmab1 = ((1.75e-15-2.725e-15)/math.log(3/2))*math.log(energy)+(1.75e-15-((1.75e-15-2.725e-15)/math.log(3/2))*math.log(3))
-                    sigmab1 = ((1.75e-15-2.725e-15)/LOG_3_over_2)*math.log(energy)+(1.75e-15-((1.75e-15-2.725e-15)/LOG_3_over_2)*LOG_3)
+                    sigmab1 = ((1.75e-15-2.725e-15)/math.log(3/2))*math.log(energy)+(1.75e-15-((1.75e-15-2.725e-15)/math.log(3/2))*math.log(3))
                     sigmab2 = 0
                     sigmab3 = 0
                 elif energy < 5:
                     sigmar1 = (1.25e-14)/(energy+0.6)
                     sigmar2 = 0
-                    #sigmab1 = ((2.825e-15-1.75e-15)/math.log(8/3))*math.log(energy)+(2.825e-15-((2.825e-15-1.75e-15)/math.log(8/3))*math.log(8))
-                    sigmab1 = ((2.825e-15-1.75e-15)/LOG_8_over_3)*math.log(energy)+(2.825e-15-((2.825e-15-1.75e-15)/LOG_8_over_3)*LOG_8)
+                    sigmab1 = ((2.825e-15-1.75e-15)/math.log(8/3))*math.log(energy)+(2.825e-15-((2.825e-15-1.75e-15)/math.log(8/3))*math.log(8))
                     sigmab2 = 0
                     sigmab3 = 0
                 elif energy < 8:
                     sigmar1 = (1.25e-14)/(energy+0.6)
                     sigmar2 = 6e-16
-                    #sigmab1 = ((2.825e-15-1.75e-15)/math.log(8/3))*math.log(energy)+(2.825e-15-((2.825e-15-1.75e-15)/math.log(8/3))*math.log(8))
-                    sigmab1 = ((2.825e-15-1.75e-15)/LOG_8_over_3)*math.log(energy)+(2.825e-15-((2.825e-15-1.75e-15)/LOG_8_over_3)*LOG_8)
+                    sigmab1 = ((2.825e-15-1.75e-15)/math.log(8/3))*math.log(energy)+(2.825e-15-((2.825e-15-1.75e-15)/math.log(8/3))*math.log(8))
                     sigmab2 = 0
                     sigmab3 = 0
                 elif energy < 10.5:
                     sigmar1 = (1.25e-14)/(energy+0.6)
                     sigmar2 = 6e-16
-                    #sigmab1 = ((7e-16-2.825e-15)/math.log(100/8))*math.log(energy)+(7e-16-((7e-16-2.825e-15)/math.log(100/8))*math.log(100))
-                    sigmab1 = ((7e-16-2.825e-15)/LOG_100_over_8)*math.log(energy)+(7e-16-((7e-16-2.825e-15)/LOG_100_over_8)*LOG_100)
+                    sigmab1 = ((7e-16-2.825e-15)/math.log(100/8))*math.log(energy)+(7e-16-((7e-16-2.825e-15)/math.log(100/8))*math.log(100))
                     sigmab2 = 0
                     sigmab3 = 0
                 else:
                     sigmar1 = (1.25e-14)/(energy+0.6)
                     sigmar2 = 6e-16
-                    #sigmab1 = ((7e-16-2.825e-15)/math.log(100/8))*math.log(energy)+(7e-16-((7e-16-2.825e-15)/math.log(100/8))*math.log(100))
-                    sigmab1 = ((7e-16-2.825e-15)/LOG_100_over_8)*math.log(energy)+(7e-16-((7e-16-2.825e-15)/LOG_100_over_8)*LOG_100)
+                    sigmab1 = ((7e-16-2.825e-15)/math.log(100/8))*math.log(energy)+(7e-16-((7e-16-2.825e-15)/math.log(100/8))*math.log(100))
                     sigmab2 = 0
                     sigmab3 = (1e-16)*(3.5e-3)*(math.log(energy/10.5)+(3.9e-1))/(0.0105*(energy/1000)*(1+math.pow(((5.64e-2)/((energy-10.5)/1000)),1.2)))
 
@@ -701,19 +683,17 @@ def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
         polout.append((360)) #arbitrary number chosen to show that there was an error because there was zero electrons polarized in either direction
     '''
 
-    output = f"OUTPUT {ORG_ELEC} {ev} {BGP} {nRub:.2e} {rbPol} {bufType} "
-    output += f"{extraelecountbuf+extraelecountrub} {extraelecountrub} {extraelecountbuf} {bufType} {ded} {j} {jpolplus} {jpolminus} {final_polarization}"
-    print(output)
+    print(f"OUTPUT {extraelecountbuf+extraelecountrub} {extraelecountrub} {extraelecountbuf} {bufType} {ded} {j} {jpolplus} {jpolminus} {(jpolplus-jpolminus)/(jpolplus+jpolminus)}\n")
 
     data = np.array([zstartlist, rstartlist, phistartlist, zpollist, originlist, energyoutlist, poloutlist],dtype='f')
     data = data.T
-
-    print("Data")
+    print("data")
     print(data)
-    print("Data")
+    print("data")
 
     #name the file whatever you want. It saves some info about the individual electrons that came out.
 #    filename = '/content/drive/MyDrive/MCAll.csv'.format(ev, BGP, bufType, rbPol, nRub)
+#    np.savetxt(filename,data,fmt=['%.5f','%.5f','%.5f','%.5f','%.0f','%.4f','%.0f'],delimiter=",",header='A=Z Start;B=Radius Start;C=Phi Start;D=Last Polarization (Z);E=Origin (0=Fil;1=Rub;2=Buf);F=Energy Out (eV);G=Polarization')
     filename = f'OUTPUT_energy_{ev}_BGP_{BGP}_bufType_{bufType}_rbPol_{rbPol}_nRub_{nRub}.dat'
     np.savetxt(filename,data,fmt=['%.5f','%.5f','%.5f','%.5f','%.0f','%.4f','%.0f'],delimiter=",",header='A=Z Start;B=Radius Start;C=Phi Start;D=Last Polarization (Z);E=Origin (0=Fil;1=Rub;2=Buf);F=Energy Out (eV);G=Polarization')
 
@@ -728,7 +708,7 @@ def testfunction(elec,ev,BGP,nRub,rbPol,bufType):
 '''
 elec= 200  #int(sys.argv[1])
 ev=   100   #float(sys.argv[2])
-BGP=   400   #float(sys.argv[3])
+BGP=   200   #float(sys.argv[3])
 nRub=  1.6e13   #float(sys.argv[4])
 rbPol= 99.9  #float(sys.argv[5]) This is actually the rubidium polarization, from 100 (assume perc4nt) to -100
 bufType= 'Nitrogen' #sys.argv[6]
@@ -740,7 +720,7 @@ nRub=  float(sys.argv[4])
 rbPol= float(sys.argv[5]) # This is actually the rubidium polarization, from 100 (assume perc4nt) to -100
 bufType= sys.argv[6]
 
-print("MAR Num Elec:", elec)
+print("MAR1MB Num Elec:", elec)
 print("Initial electron energy was",ev,"EV.")
 print("Buffer gas type was", bufType," so there")
 print(bufType, "concentration was","{:.2e}".format(BGP))
