@@ -14,11 +14,12 @@ print(text)
 
 soup = TexSoup(text)
 
-#tables = list(soup.find_all('table'))
-tables = list(soup.find_all('sidewaystable'))
+tables = list(soup.find_all('table'))
+#tables = list(soup.find_all('sidewaystable'))
 #tables = list(soup.find_all('figure'))
 for count,t in enumerate(tables):
     output = "\\documentclass{article}\n"
+    output += "\\usepackage{booktabs}\n"
     output += "\\usepackage{fullpage}\n"
     output += "\\usepackage{rotating}\n"
     output += "\\usepackage{sidecap}\n"
