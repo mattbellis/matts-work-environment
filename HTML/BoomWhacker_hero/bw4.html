@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Boomwhacker Game with Speed Control & Sound</title>
+  <style>
+    body { margin: 0; overflow: hidden; background: #000; }
+    canvas { display: block; }
+    #controls {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 4px;
+      font-family: sans-serif;
+    }
+    #controls label, #controls span {
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div id="controls">
+    <input type="file" id="csvInput" accept=".csv">
+    <button id="startButton">Start Song</button>
+    <button id="soundToggle">Sound: ON</button>
+    <br><br>
+    <label for="speedSlider">Circle Spawn Interval:</label>
+    <input type="range" id="speedSlider" min="0.125" max="2" step="0.01" value="0.5">
+    <span id="speedValue">0.50</span> sec
+  </div>
+  <canvas id="gameCanvas"></canvas>
+  <script>
+    // Set up the canvas and context
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let cueLineY;
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      cueLineY = canvas.height - canvas.height / 3;
+    }
+    resizeCanvas();
+    window.addEventListener("resize", resizeCanvas);
+
+    // Define game settings
+    const columns = 8;
+    const columnColors = [
+      "#FF0000", // C (red)
+      "#FF7F00", // D (orange)
+      "#FFFF00", // E (yellow)
+      "#00FF00", // F (green)
+      "#0000FF", // G (blue)
+      "#4B0082", // A (indigo)
+      "#8B00FF", // B (violet)
+      "#FFC0CB"  // C (pink)
+    ];
+    const noteFrequencies = [
+      261.63, 293.66, 329.63, 349.23,
+      392.00, 440.00, 493.88, 523.25
+    ];
+    const dropSpeed = 200; // pixels per second
+    const circleRadius = 20;
+
+    // Global variables for song timing
+    let spawnInterval = 0.5;  // seconds between song ticks
+    let noteDuration = spawnInterval / 2; // note duration is half of spawnInterval
+
+    // Set up audio context and sound toggle
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    let soundEnabled = true;
+    const soundToggleButton = document.getElementById("soundToggle");
+    soundToggleButton.addEventListener("click", () => {
+      soundEnabled = !soundEnabled;
+      soundToggleButton.textContent = "Sound: " + (soundEnabled ? "ON" : "OFF");
+    });
+
+    // Play note with a gain envelope for smooth sound
+    function playNote(noteIndex) {
+      if (!soundEnabled) return;
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      oscillator.frequency.value = noteFrequencies[noteIndex];
+      oscillator.type = 'sine';
+
+      const now = audioContext.currentTime;
+      gainNode.gain.setValueAtTime(0, now);
+      gainNode.gain.linearRampToValueAtTime(0.5, now + 0.01);
+      gainNode.gain.linearRampToValueAtTime(0, now + noteDuration);
+
+      oscillator.start(now);
+      oscillator.stop(now + noteDuration);
+    }
+
+    // Circle class representing each falling cue
+    class Circle {
+      constructor(column) {
+        this.column = column;
+        this.x = (column + 0.5) * (canvas.width / columns);
+        this.y = -circleRadius;
+        this.radius = circleRadius;
+        this.color = columnColors[column];
+        this.hasPlayed = false;
+      }
+      update(deltaTime) {
+        this.y += dropSpeed * deltaTime;
+        if (this.y >= cueLineY - 10 && this.y <= cueLineY + 10) {
+          this.radius = circleRadius * 1.5;
+          if (!this.hasPlayed) {
+            playNote(this.column);
+            this.hasPlayed = true;
+          }
+        } else {
+          this.radius = circleRadius;
+        }
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.closePath();
+      }
+    }
+
+    // Array to hold active circles
+    let circles = [];
+
+    // Song data handling
+    let songData = [];
+    let songIndex = 0;
+    let songInterval;
+
+    function processSongTick() {
+      if (songIndex >= songData.length) {
+        clearInterval(songInterval);
+        songInterval = null;
+        return;
+      }
+      const noteLine = songData[songIndex];
+      noteLine.forEach((note, i) => {
+        if (parseInt(note) === 1) {
+          circles.push(new Circle(i));
+        }
+      });
+      songIndex++;
+    }
+
+    function startSong() {
+      songIndex = 0;
+      if (songInterval) clearInterval(songInterval);
+      songInterval = setInterval(processSongTick, spawnInterval * 1000);
+    }
+
+    // Handle CSV file input with comment support
+    const csvInput = document.getElementById("csvInput");
+    csvInput.addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        const text = event.target.result;
+        // For each line, split off any comment (anything after "#")
+        songData = text.split("\n")
+          .map(line => {
+            // Split on '#' and take the first part, then trim
+            return line.split("#")[0].trim();
+          })
+          .filter(line => line.length > 0)
+          .map(line => line.split(",").map(item => item.trim()));
+        console.log("Loaded song data:", songData);
+      };
+      reader.readAsText(file);
+    });
+
+    const startButton = document.getElementById("startButton");
+    startButton.addEventListener("click", function() {
+      if (songData.length > 0) {
+        startSong();
+      } else {
+        alert("Please load a CSV file first.");
+      }
+    });
+
+    const speedSlider = document.getElementById("speedSlider");
+    const speedValue = document.getElementById("speedValue");
+    speedSlider.addEventListener("input", function(e) {
+      spawnInterval = parseFloat(e.target.value);
+      noteDuration = spawnInterval / 2;
+      speedValue.textContent = spawnInterval.toFixed(2);
+      if (songInterval) {
+        clearInterval(songInterval);
+        songInterval = setInterval(processSongTick, spawnInterval * 1000);
+      }
+    });
+
+    let lastTime = performance.now();
+    function gameLoop(timestamp) {
+      const deltaTime = (timestamp - lastTime) / 1000;
+      lastTime = timestamp;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      ctx.beginPath();
+      ctx.moveTo(0, cueLineY);
+      ctx.lineTo(canvas.width, cueLineY);
+      ctx.strokeStyle = "#FFFFFF";
+      ctx.lineWidth = 2;
+      ctx.stroke();
+      ctx.closePath();
+
+      circles.forEach(circle => {
+        circle.update(deltaTime);
+        circle.draw();
+      });
+      circles = circles.filter(circle => circle.y - circle.radius < canvas.height);
+      requestAnimationFrame(gameLoop);
+    }
+    requestAnimationFrame(gameLoop);
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Notes and Colors Test</title>
+  <style>
+    body { margin: 0; background: black; }
+    canvas { display: block; }
+  </style>
+</head>
+<body>
+  <canvas id="canvas"></canvas>
+  <script>
+    // Global variables
+    let notes = [];    // Will hold { name, frequency, color } for each note.
+    let circles = [];  // Each circle: { x, y, radius, note }
+    let cueLineY;      // Not used here, but declared for consistency.
+    
+    // Setup canvas and context.
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    // Resize canvas to fill window and redraw circles.
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      cueLineY = canvas.height - canvas.height / 3;
+      layoutCircles();
+      drawCircles();
+    }
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // Layout circles: fixed radius = 15, 12 per row.
+    function layoutCircles() {
+      circles = [];
+      const numPerRow = 12;
+      const total = notes.length;
+      const radius = 15; // Fixed radius; 30px diameter.
+      const rowHeight = radius * 3; // Approximately 45px per row.
+      const spacingX = canvas.width / numPerRow;
+      for (let i = 0; i < total; i++) {
+        const row = Math.floor(i / numPerRow);
+        const col = i % numPerRow;
+        const x = col * spacingX + spacingX / 2;
+        const y = row * rowHeight + rowHeight / 2;
+        circles.push({
+          x: x,
+          y: y,
+          radius: radius,
+          note: notes[i]
+        });
+      }
+    }
+    
+    // Draw circles and note names.
+    function drawCircles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      // Fill background.
+      ctx.fillStyle = 'black';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      circles.forEach(circle => {
+        // Draw circle.
+        ctx.beginPath();
+        ctx.arc(circle.x, circle.y, circle.radius, 0, Math.PI * 2);
+        // Use the note color.
+        ctx.fillStyle = circle.note.color;
+        ctx.fill();
+        ctx.closePath();
+        // Draw note name in white below the circle.
+        ctx.fillStyle = 'white';
+        ctx.font = `${circle.radius * 0.8}px sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText(circle.note.name, circle.x, circle.y + circle.radius + 15);
+      });
+    }
+    
+    // Fetch and parse the CSV file.
+   fetch('notes_and_colors.csv')
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Network response was not ok.');
+    }
+    return response.text();
+  })
+  .then(text => {
+    const lines = text.split('\n');
+    notes = [];
+    lines.forEach(line => {
+      // Trim the line. (Do not split on '#' for the entire line because the HEX code needs it.)
+      line = line.trim();
+      if (!line) return;
+      const parts = line.split(',').map(p => p.trim());
+      if (parts.length < 3) return;
+      // The first two parts: note name and frequency.
+      const noteName = parts[0].replace(/^\uFEFF/, '');
+      const frequency = parseFloat(parts[1]);
+      // For the third part, extract the HEX code using a regex.
+      let colorMatch = parts[2].match(/#[0-9A-Fa-f]{6}/);
+      let color = colorMatch ? colorMatch[0] : "#FFFFFF"; // fallback to white if not found
+      console.log("Loaded HEX code for", noteName, ":", color);
+      notes.push({ name: noteName, frequency, color });
+    });
+    console.log("Loaded notes:", notes);
+    layoutCircles();
+    drawCircles();
+  })
+  .catch(err => {
+    console.error('Error loading CSV file:', err);
+  });
+ 
+    // Set up Web Audio API.
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    let currentOscillator = null;
+    let currentPlayingNote = null;
+    
+    function playNote(note) {
+      stopNote();
+      const oscillator = audioCtx.createOscillator();
+      oscillator.frequency.value = note.frequency;
+      oscillator.type = 'sine';
+      const gainNode = audioCtx.createGain();
+      gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(0.5, audioCtx.currentTime + 0.01);
+      oscillator.connect(gainNode);
+      gainNode.connect(audioCtx.destination);
+      oscillator.start();
+      currentOscillator = oscillator;
+      currentPlayingNote = note;
+    }
+    
+    function stopNote() {
+      if (currentOscillator) {
+        currentOscillator.stop();
+        currentOscillator = null;
+        currentPlayingNote = null;
+      }
+    }
+    
+    // Utility: Check if a point (x, y) is inside a circle.
+    function isInsideCircle(x, y, circle) {
+      const dx = x - circle.x;
+      const dy = y - circle.y;
+      return dx * dx + dy * dy <= circle.radius * circle.radius;
+    }
+    
+    // Mouse event handlers.
+    let mouseDown = false;
+    canvas.addEventListener('mousedown', (e) => {
+      mouseDown = true;
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      for (let circle of circles) {
+        if (isInsideCircle(mouseX, mouseY, circle)) {
+          playNote(circle.note);
+          break;
+        }
+      }
+    });
+    
+    canvas.addEventListener('mouseup', () => {
+      mouseDown = false;
+      stopNote();
+    });
+    
+    canvas.addEventListener('mouseleave', () => {
+      mouseDown = false;
+      stopNote();
+    });
+    
+    canvas.addEventListener('mousemove', (e) => {
+      if (!mouseDown) return;
+      const rect = canvas.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      let found = false;
+      for (let circle of circles) {
+        if (isInsideCircle(mouseX, mouseY, circle)) {
+          if (!currentPlayingNote || currentPlayingNote.name !== circle.note.name) {
+            playNote(circle.note);
+          }
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        stopNote();
+      }
+    });
+  </script>
+</body>
+</html>
+
