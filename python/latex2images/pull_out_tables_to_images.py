@@ -23,6 +23,7 @@ for count,t in enumerate(tables):
     output += "\\usepackage{fullpage}\n"
     output += "\\usepackage{rotating}\n"
     output += "\\usepackage{sidecap}\n"
+    #output += "\\input babarsym.tex\n"
     output += "\\setlength{\hoffset}{-0.5in}\n"
 
     output += "\\usepackage{tikz}\n"
@@ -46,8 +47,8 @@ for count,t in enumerate(tables):
     subprocess.check_call(['pdflatex', 'tmp'])
     subprocess.check_call(['convert', '-density', '300', 'tmp.pdf', '-flatten', '-trim', '-quality', '100', outname])
 
-    for cruft in glob.glob("tmp.*"):
-          os.remove(cruft)
+    #for cruft in glob.glob("tmp.*"):
+    #      os.remove(cruft)
 
 
     
