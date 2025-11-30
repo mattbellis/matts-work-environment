@@ -26,10 +26,10 @@ foreach file($*)
     echo "\\frametitle{}"
   endif
 
-  echo "\\begin{figure}[H]"
+  echo "\\begin{figure}[h]"
   echo "\\includegraphics[$sizewhich=$sizenum\\text$sizewhich]{$file}"
-  echo "\\label{lab$count}"
-  set f = `basename $file | sed "s/_/\\_/"`
+  echo "\\label{fig:lab$count}"
+  set f = `basename $file | sed "s/\_//g"`
   echo "\\caption{$f}"
   #echo "\\caption{Caption goes here}"
   echo "\\end{figure}"

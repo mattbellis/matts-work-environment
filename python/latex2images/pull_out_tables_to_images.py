@@ -14,8 +14,9 @@ print(text)
 
 soup = TexSoup(text)
 
-tables = list(soup.find_all('table'))
+#tables = list(soup.find_all('table'))
 #tables = list(soup.find_all('sidewaystable'))
+tables = list(soup.find_all('tikzpicture'))
 #tables = list(soup.find_all('figure'))
 for count,t in enumerate(tables):
     output = "\\documentclass{article}\n"
@@ -34,6 +35,7 @@ for count,t in enumerate(tables):
     output += str(t)
     output += "\n"
     output += "\\end{document}\n"
+    print("----------------------------------------------")
     print(output)
 
     outname = "file_image_{0}.png".format(count)
