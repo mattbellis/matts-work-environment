@@ -14,8 +14,9 @@ print(text)
 
 soup = TexSoup(text)
 
-tables = list(soup.find_all('table'))
+#tables = list(soup.find_all('table'))
 #tables = list(soup.find_all('sidewaystable'))
+tables = list(soup.find_all('tikzpicture'))
 #tables = list(soup.find_all('figure'))
 for count,t in enumerate(tables):
     output = "\\documentclass{article}\n"
@@ -23,6 +24,7 @@ for count,t in enumerate(tables):
     output += "\\usepackage{fullpage}\n"
     output += "\\usepackage{rotating}\n"
     output += "\\usepackage{sidecap}\n"
+    #output += "\\input babarsym.tex\n"
     output += "\\setlength{\hoffset}{-0.5in}\n"
 
     output += "\\usepackage{tikz}\n"
@@ -33,6 +35,7 @@ for count,t in enumerate(tables):
     output += str(t)
     output += "\n"
     output += "\\end{document}\n"
+    print("----------------------------------------------")
     print(output)
 
     outname = "file_image_{0}.png".format(count)
@@ -46,8 +49,8 @@ for count,t in enumerate(tables):
     subprocess.check_call(['pdflatex', 'tmp'])
     subprocess.check_call(['convert', '-density', '300', 'tmp.pdf', '-flatten', '-trim', '-quality', '100', outname])
 
-    for cruft in glob.glob("tmp.*"):
-          os.remove(cruft)
+    #for cruft in glob.glob("tmp.*"):
+    #      os.remove(cruft)
 
 
     
