@@ -87,18 +87,27 @@ You are excluded from the list automatically, whether your signature is linked o
 
 ## Rate limiting and timing
 
-INSPIRE allows roughly **15 requests per 5 seconds** per client and returns HTTP 429 if you exceed it. The script stays under that limit in three ways:
+INSPIRE allows roughly **15 requests per 5 seconds** per client and returns HTTP 429 if you exceed it. Every request goes through a single helper, `get_json()`, which handles this in two layers.
 
-1. **A pause between pages.** Results arrive in pages, and the script follows INSPIRE's `links.next` URL from one page to the next. It sleeps 0.4 s before each next-page request, which works out to at most about 2.5 requests per second, comfortably below the limit of about 3 per second.
-2. **Small pages for collaboration papers.** A CMS paper's author list is a large response, so `--force-add-authors` asks for 5 papers per page instead of the default 25. That keeps individual responses manageable and lets the run show progress.
-3. **Fewer fields.** Every request asks only for the fields the script uses (`authors.full_name`, `authors.ids`, `affiliations`, dates and so on), not the full record. This cuts the download size several-fold.
+**Staying under the limit**
 
-As a result, `--force-add-authors CMS` over a four-year window takes several minutes. Most of that time is spent downloading author lists, not waiting on the pauses. Progress is printed every 25 papers.
+1. **Global pacing.** The script waits at least `MIN_INTERVAL` (0.4 s) between *any* two requests: pages of one search, separate record-ID lookups, and `--check` lookups alike. That caps it at about 2.5 requests per second, below INSPIRE's limit of about 3 per second, however you combine the flags.
+2. **Small pages for collaboration papers.** A CMS paper's author list is a large response, so `--force-add-authors` asks for 5 papers per page instead of the default 25.
+3. **Fewer fields.** Every request asks only for the fields the script uses, not the full record. This cuts the download size several-fold.
+4. **One connection.** A shared `requests.Session` reuses the connection to INSPIRE instead of opening a new one for each request.
 
-**Limitations of the current approach:**
+**Recovering when something goes wrong**
 
-- **No retry.** If INSPIRE does return a 429 or a server error, the script stops with an error and does not wait and retry. Just rerun it. A sturdier version would back off and retry on 429, using the `Retry-After` header when INSPIRE sends one.
-- **Separate lookups aren't paced.** The pause applies only between pages of one query. The individual searches (one per record ID in `--force-add-authors`, plus the few extra lookups in `--check`) run back to back without it. That's fine for a handful of record IDs. If you pass dozens, you could hit the limit; in that case, pass them in smaller batches.
+| Problem | What the script does |
+|---------|----------------------|
+| HTTP 429 (rate limited) | Waits for the time given in INSPIRE's `Retry-After` header. Without the header, it waits 5 s, 10 s, 20 s, 40 s and so on, then retries. |
+| HTTP 500/502/503/504 (server trouble) | Waits 1 s, 2 s, 4 s, 8 s and so on, then retries. |
+| Connection error or timeout (120 s) | Waits 1 s, 2 s, 4 s and so on, then retries. |
+| Other errors (e.g. 400 from a malformed query, 404) | Stops immediately. Retrying won't help. |
+
+Each retry prints a line such as `HTTP 429; retrying in 10 s (attempt 2/6)`. After `MAX_RETRIES` (6) failed attempts on the same request, the script stops with an error. Six attempts with doubling waits ride out a few minutes of trouble; if INSPIRE is down for longer than that, rerun the script later. Both constants are at the top of the script.
+
+In practice, `--force-add-authors CMS` over a four-year window takes several minutes. Most of that time is spent downloading author lists, not waiting on the pauses. Progress is printed every 25 papers.
 
 ## Edge effects and caveats
 

@@ -40,15 +40,56 @@ FIELDS = ",".join([
 ])
 
 
+MIN_INTERVAL = 0.4     # seconds between ANY two requests; INSPIRE allows ~15 / 5 s
+MAX_RETRIES = 6        # attempts per request before giving up
+RETRY_STATUS = {429, 500, 502, 503, 504}
+_session = requests.Session()
+_last_request = 0.0
+
+
+def get_json(url, params=None):
+    """GET with global pacing plus back-off-and-retry on rate limits and server errors."""
+    global _last_request
+    for attempt in range(MAX_RETRIES):
+        # Pacing: applies across every request the script makes, not just pages
+        wait = MIN_INTERVAL - (time.monotonic() - _last_request)
+        if wait > 0:
+            time.sleep(wait)
+        _last_request = time.monotonic()
+
+        try:
+            r = _session.get(url, params=params, timeout=120,
+                             headers={"Accept": "application/json"})
+        except (requests.ConnectionError, requests.Timeout) as e:
+            delay = 2 ** attempt
+            print(f"  network error ({e.__class__.__name__}); retrying in {delay} s")
+            time.sleep(delay)
+            continue
+
+        if r.status_code in RETRY_STATUS:
+            # Honour Retry-After when INSPIRE sends it, else exponential back-off
+            try:
+                delay = float(r.headers.get("Retry-After", ""))
+            except ValueError:
+                delay = 2 ** attempt * (5 if r.status_code == 429 else 1)
+            print(f"  HTTP {r.status_code}; retrying in {delay:.0f} s "
+                  f"(attempt {attempt + 1}/{MAX_RETRIES})")
+            time.sleep(delay)
+            continue
+
+        r.raise_for_status()   # other errors (400 bad query, 404) are not retried
+        return r.json()
+
+    raise RuntimeError(f"INSPIRE request failed after {MAX_RETRIES} attempts: {url}")
+
+
 def fetch(q, size=25, max_papers=None):
     """Yield paper metadata for an INSPIRE query, following pagination."""
     url = API
     params = {"q": q, "size": size, "sort": "mostrecent", "fields": FIELDS}
     n = 0
     while url:
-        r = requests.get(url, params=params, headers={"Accept": "application/json"})
-        r.raise_for_status()
-        data = r.json()
+        data = get_json(url, params)
         for hit in data["hits"]["hits"]:
             yield hit["metadata"]
             n += 1
@@ -56,7 +97,6 @@ def fetch(q, size=25, max_papers=None):
                 return
         url = data.get("links", {}).get("next")
         params = None          # the "next" link already carries the query
-        time.sleep(0.4)        # INSPIRE rate limit is ~15 requests / 5 s
 
 
 def is_me(a):
